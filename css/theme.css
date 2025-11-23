@@ -1,0 +1,11 @@
+```css
+:root {
+    /* (Mettez ici vos couleurs et polices définies à l'Étape 2 de la checklist) */
+    --color-primary: #3b82f6;      /* Bleu pour les boutons et titres */
+    --color-secondary: #c026d3;    /* Violet pour les liens */
+    --color-dark: #333;
+    --color-light: #f8f9fa;
+    --font-sans: Arial, sans-serif;
+    --spacing-m: 20px;
+}
+```
