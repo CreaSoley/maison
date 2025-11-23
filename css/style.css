@@ -1,1 +1,26 @@
-
+:root {
+--c1: #faf6dd;
+--c2: #d2c9bb;
+--c3: #d5d0cc;
+--c4: #a7aa93;
+--c5: #999887;
+}
+body {
+background: var(--c1);
+margin: 0;
+font-family: sans-serif;
+color: var(--c5);
+}
+header {
+background: var(--c4);
+padding: 1rem;
+text-align: center;
+color: white;
+}
+section {
+margin: 1rem;
+padding: 1rem;
+background: white;
+border-radius: 10px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
