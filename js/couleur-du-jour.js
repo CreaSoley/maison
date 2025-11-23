@@ -1,20 +1,17 @@
-// js/couleur-du-jour.js
+document.addEventListener("DOMContentLoaded", () => {
+    const couleurs = [
+        { nom: "Bleu Céleste", code: "#7FBFFF" },
+        { nom: "Rose Fuchsia", code: "#FF4FA1" },
+        { nom: "Vert Menthe", code: "#3FE0A1" },
+        { nom: "Soleil Chaud", code: "#FFCA3A" },
+        { nom: "Lavande Douce", code: "#C19BFF" }
+    ];
 
-// --- Couleur du jour ---
-function genererCouleur() {
-    // Génération aléatoire d'une couleur hexadécimale
-    const hex = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-    
-    const couleurPreview = document.getElementById("couleur-preview");
-    const codeElement = document.getElementById("code");
-    
-    if (couleurPreview) {
-        couleurPreview.style.backgroundColor = hex;
-    }
-    if (codeElement) {
-        codeElement.innerText = "Code HEX : " + hex;
-    }
-}
+    const couleur = couleurs[Math.floor(Math.random() * couleurs.length)];
 
-// Génère une couleur dès le chargement
-document.addEventListener('DOMContentLoaded', genererCouleur);
+    document.getElementById("couleur-du-jour").innerHTML = `
+        <strong>${couleur.nom}</strong>
+        <span>${couleur.code}</span>
+        <div class="color-swatch" style="background:${couleur.code}"></div>
+    `;
+});
