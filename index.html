@@ -3,38 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎨 [CreaSoley] – Univers Créatif</title>
+    <title>🎨 CreaSoley – Univers Créatif</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/theme.css">
-    <style>
-        /* Styles spécifiques de la page d'accueil */
-        .page-content {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 20px;
-        }
-        .hero { text-align: center; padding: 40px 0; }
-        /* Style pour le widget "Petit Défi" */
-        .widget-section {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 20px;
-        }
-        #widget-defis {
-            text-align: center;
-        }
-        #widget-defis h2 {
-            font-family: var(--font-subtitle);
-            color: var(--color-secondary);
-        }
-    </style>
 </head>
+
 <body class="accueil">
 
     <!-- NAVIGATION -->
     <nav class="navbar">
         <a href="index.html" class="logo-link">
-            <img src="assets/images/logo-creasoley.svg" alt="CreaSoley - Logo" class="logo-img"> <!-- Vérifiez l'extension (.png ou .svg) -->
+            <img src="assets/images/logo-creasoley.svg" alt="CreaSoley - Logo" class="logo-img">
             <span class="logo-title">CreaSoley</span>
         </a>
         <ul class="nav-menu">
@@ -46,49 +27,70 @@
         </ul>
     </nav>
 
-    <div class="page-content">
-        <!-- Section HERO -->
+    <main class="page-content">
+
+        <!-- HERO -->
         <section class="hero">
-            <h2>Bienvenue dans mon univers artistique</h2>
+            <h2>Bienvenue dans notre station de salon</h2>
             <p class="tagline">Exploration entre technique et intuition</p>
             <img src="assets/images/hero.jpg" alt="Univers créatif" class="hero-image">
         </section>
 
-        <!-- PROVERBE DU JOUR -->
-        <section class="proverbe-section">
-            <div id="proverbe-du-jour" class="box">
-                <p class="proverbe-text">Chargement du proverbe...</p>
-            </div>
-        </section>
+        <!-- === LIGNE EN 3 COLONNES === -->
+        <section class="triple-grid">
 
-        <!-- PETIT DÉFI (NOUVEAU) -->
-        <section class="widget-section">
-            <div class="box" id="widget-defis">
-                <h2>🧩 Petit Défi Créatif</h2>
+            <!-- Colonne 1 : Proverbe -->
+            <div class="box">
+                <h3>📜 Proverbe du jour</h3>
+                <p id="proverbe-du-jour" class="proverbe-text">Chargement du proverbe...</p>
+            </div>
+
+            <!-- Colonne 2 : Défi -->
+            <div class="box">
+                <h3>🧩 Défi du jour</h3>
                 <div id="resultat-defi">
                     <p>Tire un défi pour stimuler ta créativité !</p>
                 </div>
                 <button class="btn" onclick="genererDefi()">Nouveau Défi</button>
             </div>
+
+            <!-- Colonne 3 : Couleur du jour -->
+            <div class="box">
+                <h3>🎨 Couleur du jour</h3>
+                <div id="couleur-du-jour">
+                    <p>Chargement...</p>
+                </div>
+            </div>
+
         </section>
 
-        <!-- BOUTONS CTA -->
+        <!-- === ZONE WEB APP MENSUELLE === -->
+        <section class="webapp-mois">
+            <h2>🧰 Atelier du Mois</h2>
+            <div class="webapp-container">
+                <!-- Tu peux insérer ta web-app ici -->
+            </div>
+        </section>
+
+        <!-- CTA -->
         <section class="cta-buttons">
             <a href="pages/inspiration.html" class="btn">💡 Inspiration</a>
             <a href="pages/portfolio.html" class="btn">🖼️ Portfolio</a>
             <a href="pages/carnet.html" class="btn">📓 Carnet</a>
-            <a href="pages/techniques.html" class="btn">🔒 Techniques</a>
+            <a href="pages/techniques.html" class="btn">🎨 Techniques</a>
         </section>
-    </div>
+
+    </main>
 
     <footer>
-        Mon Atelier Créatif • Un projet personnel • 2025
+        Mon Atelier Créatif • Projet personnel • 2025
     </footer>
 
     <!-- SCRIPTS -->
     <script src="js/script.js"></script>
     <script src="js/proverbe-du-jour.js"></script>
+    <script src="js/defis-artistiques.js"></script>
+    <script src="js/couleur-du-jour.js"></script>
+
 </body>
 </html>
-
-
