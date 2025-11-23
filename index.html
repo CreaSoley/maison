@@ -1,121 +1,21 @@
-# index.html
-
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accueil</title>
-  <link rel="stylesheet" href="css/style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Accueil</title>
+<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header>
-    <h1>Bienvenue</h1>
-  </header>
-  <main>
-    <section id="meteo-widget"></section>
-    <section id="proverbe"></section>
-    <section id="activite"></section>
-    <section id="encart-dynamique"></section>
-  </main>
-  <script src="js/main.js"></script>
+<header>
+<h1>Bienvenue</h1>
+</header>
+<main>
+<section id="meteo-widget"></section>
+<section id="proverbe"></section>
+<section id="activite"></section>
+<section id="encart-dynamique"></section>
+</main>
+<script src="js/main.js"></script>
 </body>
 </html>
-```
-
-# css/style.css
-
-```css
-:root {
-  --c1: #faf6dd;
-  --c2: #d2c9bb;
-  --c3: #d5d0cc;
-  --c4: #a7aa93;
-  --c5: #999887;
-}
-body {
-  background: var(--c1);
-  margin: 0;
-  font-family: sans-serif;
-  color: var(--c5);
-}
-header {
-  background: var(--c4);
-  padding: 1rem;
-  text-align: center;
-  color: white;
-}
-section {
-  margin: 1rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-```
-
-# js/main.js
-
-````javascript
-console.log("🔧 main.js chargé (version sans météo)");
-
-// --- UTILITAIRE PARSE CSV ---
-function parseCSV(text) {
-  const lignes = text.split(/\r?\n/).filter(l => l.trim() !== "");
-  return lignes.slice(1).map(l => {
-    const parts = l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
-    return parts.map(p => p.replace(/(^\"|\"$)/g, '').trim());
-  });
-}
-
-// --- PROVERBE DU JOUR ---
-async function chargerProverbe() {
-  console.log("📜 Chargement du proverbe...");
-  try {
-    const response = await fetch('data/proverbes.csv');
-    const text = await response.text();
-    const rows = parseCSV(text);
-    const aujourd = new Date();
-    const cle = aujourd.getDate().toString().padStart(2,'0') + '/' + (aujourd.getMonth()+1).toString().padStart(2,'0');
-    console.log("🔎 Recherche clé:", cle);
-    const ligne = rows.find(r => r[0] === cle);
-    if (!ligne) {
-      document.getElementById('proverbe').innerHTML = `<p>Aucun proverbe pour aujourd'hui.</p>`;
-      return;
-    }
-    const [date, prov, trad] = ligne;
-    document.getElementById('proverbe').innerHTML = `
-      <h2>Proverbe du jour</h2>
-      <p>${prov}<br><em>${trad}</em></p>
-    `;
-  } catch (e) {
-    console.error("❌ Erreur chargement proverbe :", e);
-  }
-}
-
-// --- ACTIVITÉ ALÉATOIRE ---
-async function activiteAleatoire() {
-  console/page-modele.html
-```html
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Page modèle</title>
-  <link rel="stylesheet" href="../css/style.css" />
-</head>
-<body>
-  <header>
-    <h1>Titre de la page</h1>
-  </header>
-  <main>
-    <section>
-      <h2>Sous-titre</h2>
-      <p>Contenu...</p>
-    </section>
-  </main>
-</body>
-</html>
-````
