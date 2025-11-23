@@ -1,4 +1,8 @@
 // --- PROVERBE DU JOUR ---
+async function chargerProverbe() {
+const response = await fetch('data/proverbes.csv');
+const text = await response.text();
+const lignes = text.split(/
 ?
 /).slice(1);
 const aujourd = new Date();
@@ -65,6 +69,4 @@ document.getElementById('couleur').innerHTML = `
 
 
 chargerProverbe();
-activiteAleatoire();
-chargerMeteo();
 couleurAleatoire();
