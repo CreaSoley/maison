@@ -1,12 +1,10 @@
-// --- 4. Proverbe du jour (Adapté pour ignorer l'année) ---
+// --- Proverbe du jour avec traduction (CSV: Date,Proverbe,Traduction) ---
 
 function parseCSVLine(ligne) {
-    // Adapter le parsing pour votre format (date, proverbe, origine)
-    // Le code de parsing reste le même pour extraire les colonnes
     const parts = [];
     let current = "";
     let inQuotes = false;
-    
+
     for (let i = 0; i < ligne.length; i++) {
         const char = ligne[i];
 
@@ -21,68 +19,58 @@ function parseCSVLine(ligne) {
     }
     parts.push(current.trim());
 
+    // Format: [Date, Proverbe, Traduction]
     if (parts.length >= 3) {
-        // Extraction et formatage des données
-        let dateWithYear = parts[0].trim(); // ex: 01/01/2024
-        const auteur = parts[parts.length - 1].trim().replace(/"/g, '');
-        const texte = parts.slice(1, parts.length - 1).join(',').replace(/"/g, '').trim();
+        let dateBrute = parts[0].trim();
+        let texte = parts[1].trim().replace(/"/g, "");
+        let traduction = parts[2].trim().replace(/"/g, "");
 
-        // Si la date est au format jj/mm/aaaa, on extrait seulement jj/mm
-        const dateParts = dateWithYear.split('/');
-        let date_jj_mm = dateWithYear;
-
-        if (dateParts.length >= 2) {
-            // Prend jj et mm
-            date_jj_mm = `${dateParts[0].padStart(2, '0')}/${dateParts[1].padStart(2, '0')}`;
+        // format jj/mm
+        const d = dateBrute.split('/');
+        let date_jj_mm = dateBrute;
+        if (d.length >= 2) {
+            date_jj_mm = `${d[0].padStart(2, '0')}/${d[1].padStart(2, '0')}`;
         }
-        
-        return { date: date_jj_mm, texte, auteur };
+
+        return { date: date_jj_mm, texte, traduction };
     }
     return null;
 }
 
 function chargerDicton() {
-    // Le chemin est relatif à index.html
     fetch('data/proverbes.csv')
-      .then(r => r.text())
-      .then(csv => {
-        const lignes = csv.trim().split('\n');
-        
-        const tousLesProverbes = lignes
-            .map(parseCSVLine)
-            .filter(item => item !== null)
-            .slice(1); // On retire l'en-tête CSV
-        
-        // Récupérer la date du jour au format jj/mm UNIQUEMENT
-        const now = new Date();
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const dateDuJour_jj_mm = `${day}/${month}`; // ex: 01/01
+        .then(r => r.text())
+        .then(csv => {
+            const lignes = csv.trim().split('\n');
 
-        // Cherche le proverbe dont le jj/mm correspond
-        let choix = tousLesProverbes.find(p => p.date === dateDuJour_jj_mm);
+            const liste = lignes
+                .map(parseCSVLine)
+                .filter(v => v !== null)
+                .slice(1); // en-tête
 
-        if (!choix && tousLesProverbes.length > 0) {
-          // Si pas de date du jour trouvée, choisir un aléatoire
-          choix = tousLesProverbes[Math.floor(Math.random() * tousLesProverbes.length)];
-        }
+            // date du jour
+            const now = new Date();
+            const jj = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dateToday = `${jj}/${mm}`;
 
-        const element = document.getElementById("proverbe-du-jour");
-        if (choix && element) {
-            element.innerHTML = `
-              <h2>💬 Proverbe du jour</h2>
-              <p class="proverbe-text">« ${choix.texte} »</p>
-              <p class="proverbe-origin">— ${choix.auteur}</p>
+            let choix = liste.find(p => p.date === dateToday);
+            if (!choix) choix = liste[Math.floor(Math.random() * liste.length)];
+
+            const el = document.getElementById("proverbe-du-jour");
+            if (!el) return;
+
+            el.innerHTML = `
+                <h2>💬 Proverbe du jour</h2>
+                <p class="proverbe-text">« ${choix.texte} »</p>
+                <p class="proverbe-traduction">${choix.traduction}</p>
             `;
-        } else if (element) {
-            element.innerHTML = `<h2>💬 Proverbe du jour</h2><p>Aucun proverbe trouvé.</p>`;
-        }
-      })
-      .catch(error => {
-        console.error("Erreur de chargement des proverbes:", error);
-        const el = document.getElementById("proverbe-du-jour");
-        if(el) el.innerHTML = `<h2>💬 Proverbe du jour</h2><p>Erreur de chargement.</p>`;
-      });
+        })
+        .catch(err => {
+            console.error(err);
+            const el = document.getElementById("proverbe-du-jour");
+            if (el) el.innerHTML = "<p>Erreur de chargement.</p>";
+        });
 }
 
-document.addEventListener('DOMContentLoaded', chargerDicton);
+document.addEventListener("DOMContentLoaded", chargerDicton);
