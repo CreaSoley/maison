@@ -1,31 +1,76 @@
-// --- PROVERBE DU JOUR ---
-async function chargerProverbe() {
-const response = await fetch('data/proverbes.csv');
-const text = await response.text();
+console.log("🔧 main.js chargé");
+
+
+// --- UTILITAIRE PARSE CSV ---
+function parseCSV(text) {
 const lignes = text.split(/
 ?
-/).slice(1);
+/).filter(l => l.trim() !== "");
+const data = lignes.slice(1).map(l => {
+const parts = l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+return parts.map(p => p.replace(/(^\"|\"$)/g, '').trim());
+});
+return data;
+}
+
+
+// --- PROVERBE DU JOUR ---
+async function chargerProverbe() {
+console.log("📜 Chargement du proverbe...");
+try {
+const response = await fetch('data/proverbes.csv');
+const text = await response.text();
+const rows = parseCSV(text);
+
+
 const aujourd = new Date();
 const cle = aujourd.getDate().toString().padStart(2,'0') + '/' + (aujourd.getMonth()+1).toString().padStart(2,'0');
-const ligne = lignes.find(l => l.startsWith(cle));
-if (!ligne) return;
-const parts = ligne.split(',');
-const prov = parts[1];
-const trad = parts.slice(2).join(',');
-document.getElementById('proverbe').innerHTML = `<h2>Proverbe du jour</h2><p>${prov}<br><em>${trad}</em></p>`;
+
+
+console.log("🔎 Recherche clé:", cle);
+
+
+const ligne = rows.find(r => r[0] === cle);
+if (!ligne) {
+document.getElementById('proverbe').innerHTML = `<p>Aucun proverbe pour aujourd'hui.</p>`;
+console.warn("⚠️ Aucune ligne trouvée pour", cle);
+return;
+}
+
+
+const [date, prov, trad] = ligne;
+
+
+document.getElementById('proverbe').innerHTML = `
+<h2>Proverbe du jour</h2>
+<p>${prov}<br><em>${trad}</em></p>
+`;
+} catch (e) {
+console.error("❌ Erreur chargement proverbe :", e);
+}
 }
 
 
 // --- ACTIVITÉ ALÉATOIRE AVEC COULEUR ---
 async function activiteAleatoire() {
+console.log("🎲 Chargement activité...");
+try {
 const response = await fetch('data/activites.csv');
 const text = await response.text();
-const lignes = text.split(/
-?
-/).slice(1);
-const line = lignes[Math.floor(Math.random()*lignes.length)];
-if (!line) return;
-const [activite, categorie, niveau, couleur] = line.split(',');
+const rows = parseCSV(text);
+
+
+console.log("📦 Activités chargées:", rows);
+
+
+const choix = rows[Math.floor(Math.random()*rows.length)];
+if (!choix) return;
+
+
+const [activite, categorie, niveau, couleur] = choix;
+console.log("🎯 Activité tirée:", choix);
+
+
 const bloc = document.getElementById('activite');
 bloc.style.borderLeft = `10px solid ${couleur}`;
 bloc.innerHTML = `
@@ -35,38 +80,15 @@ bloc.innerHTML = `
 <p>Niveau : ${niveau}</p>
 <p>Couleur : <span style="color:${couleur}">${couleur}</span></p>
 `;
+} catch (e) {
+console.error("❌ Erreur activité :", e);
+}
 }
 
 
-// --- WIDGET METEO (API open-meteo, animations simples) ---
+// --- WIDGET METEO ---
 async function chargerMeteo() {
+console.log("⛅ Chargement météo...");
+try {
 const url = "https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&current_weather=true";
-const r = await fetch(url);
-const data = await r.json();
-const meteo = data.current_weather;
-const icon = meteo.weathercode < 3 ? '☀️' : meteo.weathercode < 50 ? '⛅' : '🌧️';
-document.getElementById('meteo-widget').innerHTML = `
-<div class="meteo-box">
-<div class="meteo-icon">${icon}</div>
-<div>
-<h2>${meteo.temperature}°C</h2>
-<p>${meteo.windspeed} km/h</p>
-</div>
-</div>`;
-}
-
-
-// --- GENERATEUR DE COULEUR ALEATOIRE ---
-function couleurAleatoire() {
-const couleur = `#${Math.floor(Math.random()*16777215).toString(16).padStart(6,'0')}`;
-const noms = ['Vert pomme','Aubergine','Rouge carmin','Bleu nuit','Sable chaud','Olive douce'];
-const nom = noms[Math.floor(Math.random()*noms.length)];
-document.getElementById('couleur').innerHTML = `
-<h2>Couleur du jour</h2>
-<div style="width:80px;height:80px;border-radius:10px;background:${couleur}"></div>
-<p>${couleur} — ${nom}</p>`;
-}
-
-
-chargerProverbe();
-couleurAleatoire();
+if (document.getElementById('couleur')) couleurAleatoire();
