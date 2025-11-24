@@ -1,87 +1,69 @@
-// -----------------------------------------------------------
-// 🔸 PROVERBE DU JOUR
-// CSV format : Date,Proverbe,Traduction
-// -----------------------------------------------------------
-
-// Parse une ligne CSV robuste (gère les guillemets)
+// Lecture robuste du CSV Proverbes
 function parseCSVLine(ligne) {
-    const parts = [];
-    let current = "";
-    let inQuotes = false;
+const parts = [];
+let current = "";
+let inQuotes = false;
 
-    for (let i = 0; i < ligne.length; i++) {
-        const char = ligne[i];
 
-        if (char === '"') {
-            inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-            parts.push(current.trim());
-            current = "";
-        } else {
-            current += char;
-        }
-    }
-    parts.push(current.trim());
-    return parts;
+for (let i = 0; i < ligne.length; i++) {
+const char = ligne[i];
+
+
+if (char === '"') {
+inQuotes = !inQuotes;
+} else if (char === ',' && !inQuotes) {
+parts.push(current.trim());
+current = "";
+} else {
+current += char;
+}
+}
+parts.push(current.trim());
+
+
+if (parts.length >= 3) {
+return {
+date: parts[0].trim(),
+texte: parts[1].trim().replace(/"/g, ""),
+traduction: parts[2].trim().replace(/"/g, "")
+};
+}
+return null;
 }
 
 
-// Chargement principal du proverbe
-function chargerProverbeDuJour() {
-    fetch("data/proverbes.csv")
-        .then(r => r.text())
-        .then(text => {
-            const lignes = text.trim().split("\n");
+async function chargerProverbe() {
+try {
+const rep = await fetch('data/proverbes.csv');
+const csv = await rep.text();
 
-            // on ignore l'en-tête
-            const donnees = lignes.slice(1)
-                .map(parseCSVLine)
-                .filter(cols => cols.length >= 3)
-                .map(cols => {
-                    const dateBrute = cols[0].trim();
-                    const texte = cols[1].replace(/"/g, "").trim();
-                    const traduction = cols[2].replace(/"/g, "").trim();
 
-                    // formatage jj/mm
-                    const d = dateBrute.split("/");
-                    let date_jj_mm = dateBrute;
-                    if (d.length === 2) {
-                        date_jj_mm = d[0].padStart(2, "0") + "/" + d[1].padStart(2, "0");
-                    }
+const lignes = csv.trim().split('\n');
+const liste = lignes.slice(1).map(parseCSVLine).filter(v => v);
 
-                    return { date: date_jj_mm, texte, traduction };
-                });
 
-            if (donnees.length === 0) return;
+const now = new Date();
+const jj = String(now.getDate()).padStart(2,'0');
+const mm = String(now.getMonth()+1).padStart(2,'0');
+const today = `${jj}/${mm}`;
 
-            // Date actuelle
-            const now = new Date();
-            const jj = String(now.getDate()).padStart(2, "0");
-            const mm = String(now.getMonth() + 1).padStart(2, "0");
-            const dateToday = `${jj}/${mm}`;
 
-            // Recherche d’un proverbe pour la date exacte
-            let choix = donnees.find(x => x.date === dateToday);
+let choix = liste.find(p => p.date === today);
+if (!choix) choix = liste[Math.floor(Math.random() * liste.length)];
 
-            // Sinon random
-            if (!choix) choix = donnees[Math.floor(Math.random() * donnees.length)];
 
-            const bloc = document.getElementById("proverbe-du-jour");
-            if (!bloc) return;
+const zone = document.getElementById('proverbe-du-jour');
+zone.innerHTML = `
+<h2>💬 Proverbe du jour</h2>
+<p class="proverbe-text">« ${choix.texte} »</p>
+<p class="proverbe-traduction">${choix.traduction}</p>
+`;
 
-            bloc.innerHTML = `
-                <h2>💬 Proverbe du jour</h2>
-                <p class="proverbe-text">« ${choix.texte} »</p>
-                <p class="proverbe-traduction">${choix.traduction}</p>
-            `;
-        })
-        .catch(err => {
-            console.error("Erreur CSV proverbes :", err);
-            const bloc = document.getElementById("proverbe-du-jour");
-            if (bloc) bloc.innerHTML = "<p>Erreur de chargement du proverbe.</p>";
-        });
+
+} catch (err) {
+document.getElementById('proverbe-du-jour').innerHTML = "Erreur de chargement.";
+}
 }
 
 
-// ⚡ Lancement automatique
-document.addEventListener("DOMContentLoaded", chargerProverbeDuJour);
+window.addEventListener('DOMContentLoaded', chargerProverbe);
