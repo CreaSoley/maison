@@ -1,35 +1,26 @@
-// js/activites-loader.js
-// Helper : parsing CSV robust (gère guillemets) et renvoie tableau d'objets { activite, categorie, niveau, couleur }
-export async function loadActivitesCSV(path = 'data/activites.csv') {
-  // parse line robust
-  function parseLine(line) {
-    const parts = [];
-    let cur = "", inQuotes = false;
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') { inQuotes = !inQuotes; }
-      else if (ch === ',' && !inQuotes) { parts.push(cur.trim()); cur = ""; }
-      else cur += ch;
+async function chargerDefi() {
+    try {
+        const response = await fetch("data/activites.csv");
+        const data = await response.text();
+
+        const lignes = data.split("\n").slice(1); // skip header
+        const alea = lignes[Math.floor(Math.random() * lignes.length)];
+        const [couleur, description, categorie, niveau] = alea.split(",");
+
+        const bloc = document.getElementById("defi-du-jour-bloc");
+
+        bloc.style.border = `4px solid ${couleur.trim()}`;
+
+        document.getElementById("defi-du-jour").innerHTML = `
+            <p><strong>${description.trim()}</strong></p>
+            <p><strong>Catégorie :</strong> ${categorie.trim()}</p>
+            <p><strong>Niveau :</strong> ${niveau.trim()}</p>
+        `;
+    } catch (err) {
+        console.error("Erreur défi :", err);
+        document.getElementById("defi-du-jour").textContent =
+            "Impossible de charger le défi.";
     }
-    parts.push(cur.trim());
-    return parts;
-  }
-
-  const res = await fetch(path);
-  if (!res.ok) throw new Error(`${path} non trouvé`);
-  const text = await res.text();
-  const lines = text.trim().split(/\r?\n/).filter(Boolean);
-  if (lines.length <= 1) return [];
-
-  const rows = lines.slice(1).map(parseLine).map(cols => {
-    // Expect: Activité,Catégorie,Niveau,Couleur
-    return {
-      activite: (cols[0] || '').replace(/"/g,'').trim(),
-      categorie: (cols[1] || '').replace(/"/g,'').trim(),
-      niveau: (cols[2] || '').replace(/"/g,'').trim(),
-      couleur: (cols[3] || '').replace(/"/g,'').trim()
-    };
-  });
-
-  return rows;
 }
+
+document.addEventListener("DOMContentLoaded", chargerDefi);
