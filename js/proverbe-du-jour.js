@@ -1,69 +1,59 @@
-// Lecture robuste du CSV Proverbes
-function parseCSVLine(ligne) {
-const parts = [];
-let current = "";
-let inQuotes = false;
+// js/proverbe-du-jour.js
+// Charge data/proverbes.csv (format: Date,Proverbe,Traduction)
+// Injecte uniquement le texte + la traduction dans #proverbe-du-jour
+(function(){
+  // parser CSV robuste (gère guillemets)
+  function parseCSVLine(line) {
+    const parts = [];
+    let cur = "", inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') { inQuotes = !inQuotes; }
+      else if (ch === ',' && !inQuotes) { parts.push(cur.trim()); cur = ""; }
+      else cur += ch;
+    }
+    parts.push(cur.trim());
+    return parts;
+  }
 
+  async function chargerProverbe() {
+    try {
+      const res = await fetch('data/proverbes.csv');
+      if (!res.ok) throw new Error('proverbes.csv non trouvé');
+      const txt = await res.text();
+      const lines = txt.trim().split(/\r?\n/).filter(Boolean);
+      if (lines.length <= 1) return;
 
-for (let i = 0; i < ligne.length; i++) {
-const char = ligne[i];
+      const rows = lines.slice(1).map(parseCSVLine).filter(r => r.length >= 3)
+        .map(cols => {
+          // cols[0]=Date (jj/mm ou jj/mm/aaaa), cols[1]=Proverbe, cols[2]=Traduction
+          const dateRaw = cols[0].trim();
+          const d = dateRaw.split('/');
+          let date_jj_mm = dateRaw;
+          if (d.length >= 2) date_jj_mm = `${String(d[0]).padStart(2,'0')}/${String(d[1]).padStart(2,'0')}`;
+          return { date: date_jj_mm, texte: cols[1].replace(/"/g,'').trim(), traduction: cols[2].replace(/"/g,'').trim() };
+        });
 
+      const now = new Date();
+      const today = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
 
-if (char === '"') {
-inQuotes = !inQuotes;
-} else if (char === ',' && !inQuotes) {
-parts.push(current.trim());
-current = "";
-} else {
-current += char;
-}
-}
-parts.push(current.trim());
+      let choix = rows.find(r => r.date === today);
+      if (!choix) choix = rows[Math.floor(Math.random()*rows.length)];
 
+      const container = document.getElementById('proverbe-du-jour');
+      if (!container) return;
 
-if (parts.length >= 3) {
-return {
-date: parts[0].trim(),
-texte: parts[1].trim().replace(/"/g, ""),
-traduction: parts[2].trim().replace(/"/g, "")
-};
-}
-return null;
-}
+      // Injecte uniquement le contenu (on suppose que le titre "Proverbe du jour" est déjà dans HTML)
+      container.innerHTML = `
+        <p class="proverbe-text">« ${choix.texte} »</p>
+        ${choix.traduction ? `<p class="proverbe-traduction">${choix.traduction}</p>` : ''}
+      `;
+    } catch (err) {
+      console.error('Erreur chargement proverbes:', err);
+      const container = document.getElementById('proverbe-du-jour');
+      if (container) container.innerHTML = `<p>Erreur de chargement du proverbe.</p>`;
+    }
+  }
 
-
-async function chargerProverbe() {
-try {
-const rep = await fetch('data/proverbes.csv');
-const csv = await rep.text();
-
-
-const lignes = csv.trim().split('\n');
-const liste = lignes.slice(1).map(parseCSVLine).filter(v => v);
-
-
-const now = new Date();
-const jj = String(now.getDate()).padStart(2,'0');
-const mm = String(now.getMonth()+1).padStart(2,'0');
-const today = `${jj}/${mm}`;
-
-
-let choix = liste.find(p => p.date === today);
-if (!choix) choix = liste[Math.floor(Math.random() * liste.length)];
-
-
-const zone = document.getElementById('proverbe-du-jour');
-zone.innerHTML = `
-<h2>💬 Proverbe du jour</h2>
-<p class="proverbe-text">« ${choix.texte} »</p>
-<p class="proverbe-traduction">${choix.traduction}</p>
-`;
-
-
-} catch (err) {
-document.getElementById('proverbe-du-jour').innerHTML = "Erreur de chargement.";
-}
-}
-
-
-window.addEventListener('DOMContentLoaded', chargerProverbe);
+  document.addEventListener('DOMContentLoaded', chargerProverbe);
+})();
