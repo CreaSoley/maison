@@ -6,8 +6,8 @@
     <title>🎨 CreaSoley – Univers Créatif</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="accueil">
@@ -18,6 +18,7 @@
             <img src="assets/images/logo-creasoley.svg" alt="CreaSoley - Logo" class="logo-img">
             <span class="logo-title">CreaSoley</span>
         </a>
+
         <ul class="nav-menu">
             <li><a href="index.html">Accueil</a></li>
             <li><a href="pages/inspiration.html">Inspiration</a></li>
@@ -33,51 +34,52 @@
         <section class="hero">
             <h2>Bienvenue dans notre station de salon</h2>
             <p class="tagline">Exploration entre technique et intuition</p>
-            <img src="assets/images/hero.jpg" alt="Univers créatif" class="hero-image">
+            <p>Univers créatif</p>
         </section>
 
-        <!-- === LIGNE EN 3 COLONNES === -->
-        <section class="triple-grid">
+        <!-- LIGNE : Proverbe • Défi • Couleur -->
+        <section class="cards-row">
 
-            <!-- Colonne 1 : Proverbe -->
-            <div class="box">
-                <h3>📜 Proverbe du jour</h3>
-                <p id="proverbe-du-jour" class="proverbe-text">Chargement du proverbe...</p>
+            <div class="card">
+                <h3>Proverbe du jour</h3>
+                <div id="proverbe-du-jour">
+                    <p class="proverbe-text">Chargement...</p>
+                </div>
             </div>
 
-            <!-- Colonne 2 : Défi -->
-            <div class="box">
-                <h3>🧩 Défi du jour</h3>
+            <div class="card">
+                <h3>Défi du jour</h3>
                 <div id="resultat-defi">
                     <p>Tire un défi pour stimuler ta créativité !</p>
                 </div>
                 <button class="btn" onclick="genererDefi()">Nouveau Défi</button>
             </div>
 
-            <!-- Colonne 3 : Couleur du jour -->
-            <div class="box">
-                <h3>🎨 Couleur du jour</h3>
+            <div class="card">
+                <h3>Couleur du jour</h3>
                 <div id="couleur-du-jour">
-                    <p>Chargement...</p>
+                    <p id="couleur-nom">Nom…</p>
+                    <p id="couleur-code">#XXXXXX</p>
+                    <div id="couleur-apercu" class="couleur-preview"></div>
                 </div>
             </div>
 
         </section>
 
-        <!-- === ZONE WEB APP MENSUELLE === -->
-        <section class="webapp-mois">
-            <h2>🧰 Atelier du Mois</h2>
-            <div class="webapp-container">
-                <!-- Tu peux insérer ta web-app ici -->
+        <!-- ATELIER DU MOIS -->
+        <section class="atelier-mois box">
+            <h3>Atelier du Mois</h3>
+            <div class="atelier-container">
+                <!-- Tu pourras intégrer ici ta web-app -->
             </div>
         </section>
 
-        <!-- CTA -->
+        <!-- CTA BUTTONS -->
         <section class="cta-buttons">
-            <a href="pages/inspiration.html" class="btn">💡 Inspiration</a>
-            <a href="pages/portfolio.html" class="btn">🖼️ Portfolio</a>
-            <a href="pages/carnet.html" class="btn">📓 Carnet</a>
-            <a href="pages/techniques.html" class="btn">🎨 Techniques</a>
+            <a href="pages/inspiration.html" class="btn cta">💡 Inspiration</a>
+            <a href="pages/portfolio.html" class="btn cta">🖼️ Portfolio</a>
+            <a href="pages/carnet.html" class="btn cta">📓 Carnet</a>
+            <a href="pages/techniques.html" class="btn cta">🎨 Techniques</a>
         </section>
 
     </main>
@@ -91,6 +93,5 @@
     <script src="js/proverbe-du-jour.js"></script>
     <script src="js/defis-artistiques.js"></script>
     <script src="js/couleur-du-jour.js"></script>
-
 </body>
 </html>
