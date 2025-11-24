@@ -94,21 +94,26 @@
     </div>
 
     <!-- ❓ DEVINETTE -->
-    <div class="bloc daily-card">
-        <h3 class="title-rock">
-            <i class="fa-solid fa-question daily-icon"></i>
-            Devinette du jour
-        </h3>
-        <div id="devinette-du-jour" class="bloc-center">
-            <p>Chargement…</p>
+<div class="bloc daily-card">
+    <h3 class="title-rock">
+        <i class="fa-solid fa-question daily-icon"></i>
+        Devinette du jour
+    </h3>
 
-            <!-- Zone réponse -->
-            <input type="text" id="reponse-devinette" placeholder="Votre réponse...">
-            <button onclick="validerDevinette()" class="btn">Valider</button>
+    <div id="devinette-du-jour" class="bloc-center">
 
-            <p id="devinette-resultat"></p>
-        </div>
+        <!-- TEXTE DE LA DEVINETTE -->
+        <p id="texte-devinette">Chargement…</p>
+
+        <!-- ZONE SAISIE RÉPONSE -->
+        <input type="text" id="reponse-devinette" placeholder="Votre réponse...">
+
+        <button onclick="validerDevinette()" class="btn">Valider</button>
+
+        <p id="devinette-resultat"></p>
     </div>
+</div>
+
 
     <!-- ⚡ DÉFI ARTISTIQUE -->
     <div class="bloc daily-card" id="defi-du-jour-bloc">
@@ -138,4 +143,5 @@
 
 </body>
 </html>
+
 
