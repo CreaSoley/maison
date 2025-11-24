@@ -1,185 +1,213 @@
-/* RESET */
+/* ------------------------------
+   RESET & BASE
+------------------------------- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ROOT COLORS */
-:root {
-    --font-sans: "Inter", sans-serif;
-
-    --color-light: #e6effc;
-    --color-dark: #1b1b1b;
-
-    --color-primary: #4a6fa5;
-    --color-secondary: #6e89b5;
-}
-
-/* BODY */
 body {
-    font-family: var(--font-sans);
-    background: var(--color-light);
-    color: var(--color-dark);
+    font-family: "Montserrat", sans-serif;
+    background: #f3f3f3;
+    color: #333;
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
-/* ACCUEIL BACKGROUND */
-body.accueil {
-    background: linear-gradient(135deg, #0f5b82, #8fb8e1);
-}
-
-/* TITRE POLICE PERSONNALISÉE */
-.title-rock {
-    font-family: 'JuneInRock', serif;
-    font-size: 2.7rem;
-    letter-spacing: 1px;
+/* ------------------------------
+   HEADER
+------------------------------- */
+header {
     text-align: center;
+    padding: 30px 10px;
+    background: url("img/haikei.svg") center/cover no-repeat;
 }
 
-/* NAVBAR */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-}
-
-.logo-img {
-    width: 90px;
+header img.logo {
+    width: 140px;
     height: auto;
+    margin-bottom: 15px;
 }
 
-@media (max-width: 600px) {
-    .logo-img {
-        width: 130px;
+@media (min-width: 768px) {
+    header img.logo {
+        width: 220px;
     }
 }
 
-.nav-menu {
+header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+}
+
+@media (min-width: 768px) {
+    header h1 {
+        font-size: 2.4rem;
+    }
+}
+
+header h2 {
+    margin-top: 5px;
+    font-size: 1.2rem;
+    color: white;
+}
+
+@media (min-width: 768px) {
+    header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ------------------------------
+   NAVIGATION
+------------------------------- */
+nav {
     display: flex;
-    gap: 25px;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 15px 10px;
 }
 
-.nav-menu a {
+nav a {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
     text-decoration: none;
-    color: var(--color-dark);
-    font-weight: bold;
-    transition: 0.2s;
+    transition: 0.3s;
 }
 
-.nav-menu a:hover {
-    color: var(--color-primary);
+nav a:hover {
+    background: rgba(255, 255, 255, 0.4);
 }
 
-/* HERO */
-.hero {
+/* ------------------------------
+   SECTIONS / BLOCS
+------------------------------- */
+.section-titre {
+    margin: 30px auto 10px;
     text-align: center;
-    padding: 2rem 1rem;
+    font-size: 1.7rem;
+    color: #2c3e50;
 }
 
-.hero h2 {
-    font-size: 3rem;
-}
-
-@media (max-width: 600px) {
-    .hero h2 {
-        font-size: 2.3rem;
-    }
-}
-
-/* BLOCS 3 COLONNES */
-.blocs-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin: 40px 0;
-}
-
-@media (max-width: 900px) {
-    .blocs-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* BLOC */
 .bloc {
-    background: rgba(255, 255, 255, 0.65);
-    border-radius: 18px;
-    padding: 25px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    transition: 0.2s ease;
+    width: 90%;
+    margin: 20px auto;
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 3px 8px #0002;
     text-align: center;
 }
 
-.bloc:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+.title-rock {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
 }
 
-/* TITRE BLOC */
-.bloc h3 {
-    margin-bottom: 12px;
-    color: var(--color-primary);
-    font-size: 1.6rem;
+/* Icônes sections */
+.title-rock img {
+    width: 26px;
+    vertical-align: middle;
+    margin-right: 6px;
 }
 
-/* COULEUR DU JOUR */
-.couleur-preview {
-    width: 45px;
-    height: 45px;
+/* ------------------------------
+   PROVERBE & DEVINETTE (centrage)
+------------------------------- */
+.bloc-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.proverbe-text {
+    font-size: 1.1rem;
+    font-style: italic;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* ------------------------------
+   DÉFI DU JOUR + Couleur
+------------------------------- */
+#defi-du-jour-bloc {
+    border: 4px solid #ccc;
+}
+
+#couleur-preview {
+    width: 60px;
+    height: 60px;
     border-radius: 10px;
     margin: 10px auto;
-    border: 3px solid var(--color-primary);
+    border: 2px solid #0003;
 }
 
-.couleur-nom {
+#couleur-nom {
     font-weight: bold;
     margin-top: 5px;
 }
 
-/* DEVINETTE INPUT */
-#devinette-reponse {
-    width: 80%;
-    padding: 10px;
-    margin: 12px 0;
-    border-radius: 10px;
-    border: 2px solid var(--color-primary);
+/* ------------------------------
+   ACTIVITÉ DU MOIS
+------------------------------- */
+#mois-section {
+    margin-top: 40px;
+    background: #eaf2ff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 3px 8px #0001;
+}
+
+#mois-section img {
+    width: 60px;
+}
+
+/* ------------------------------
+   WIDGET MÉTÉO
+------------------------------- */
+.weather-block {
+    margin: 30px auto;
+    width: 90%;
     text-align: center;
 }
 
-/* BOUTONS */
-.btn {
-    background: var(--color-primary);
-    color: white;
-    padding: 10px 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 14px;
-    font-weight: bold;
-    border: none;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: var(--color-secondary);
-}
-
-/* PETALS ANIMATION */
+/* ------------------------------
+   ANIMATION – Pétales zen
+------------------------------- */
 .petal {
     position: fixed;
-    top: -20px;
-    width: 14px;
-    height: 14px;
-    background: #ffd9ec;
+    top: -10px;
+    width: 12px;
+    height: 12px;
+    background: #f8c8dc;
     border-radius: 50%;
     opacity: 0.8;
-    animation: fall 6s linear infinite;
+    animation: fall 6s linear forwards;
+    pointer-events: none;
 }
 
 @keyframes fall {
-    0% { transform: translateY(0) translateX(0) rotate(0); }
-    100% { transform: translateY(120vh) translateX(40px) rotate(360deg); }
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+    100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+
+/* ------------------------------
+   RESPONSIVE
+------------------------------- */
+@media (min-width: 768px) {
+    .bloc {
+        width: 70%;
+    }
+
+    .proverbe-text {
+        font-size: 1.3rem;
+    }
+
+    .title-rock {
+        font-size: 1.6rem;
+    }
 }
