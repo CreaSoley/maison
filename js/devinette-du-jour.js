@@ -1,83 +1,50 @@
-// --- CHARGEMENT DU CSV ---
-async function chargerCSVDevinettes() {
-    const url = "data/devinettes.csv";
+document.addEventListener("DOMContentLoaded", () => {
 
-    const response = await fetch(url);
-    const text = await response.text();
+    fetch("data/devinettes.csv")
+        .then(res => res.text())
+        .then(text => {
+            const lignes = text.split("\n").slice(1);
+            const today = new Date();
+            const index = (today.getMonth() * 31 + today.getDate()) % lignes.length;
 
-    const lignes = text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+            const [date, dev, rep] = lignes[index].split(",");
 
-    const data = lignes.slice(1).map(l => {
-        const [date, devinette, reponse] = l.split(",");
-        return { date, devinette, reponse };
-    });
+            document.getElementById("devinette-texte").textContent = dev.trim();
 
-    return data;
-}
+            const bouton = document.getElementById("devinette-valider");
+            const feedback = document.getElementById("devinette-feedback");
 
-// --- OBTENIR LA DEVINETTE DU JOUR ---
-function obtenirDateAujourdhui() {
-    const d = new Date();
-    const j = String(d.getDate()).padStart(2, "0");
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    return `${j}/${m}`;
-}
+            bouton.addEventListener("click", () => {
+                const saisie = document.getElementById("devinette-reponse").value.trim();
 
-// --- INITIALISATION ---
-async function chargerDevinetteDuJour() {
-    const data = await chargerCSVDevinettes();
-    const today = obtenirDateAujourdhui();
+                if (saisie === "") {
+                    feedback.textContent = "Veuillez saisir une réponse.";
+                    feedback.style.color = "red";
+                    return;
+                }
 
-    const trouvée = data.find(l => l.date === today);
+                if (saisie.toLowerCase() === rep.trim().toLowerCase()) {
+                    feedback.textContent = "Bravo ! 🌿 À demain pour une nouvelle devinette.";
+                    feedback.style.color = "green";
 
-    const bloc = document.getElementById("texte-devinette");
+                    lancerPetales();
+                } else {
+                    feedback.textContent = "Ce n’est pas la bonne réponse.";
+                    feedback.style.color = "red";
+                }
+            });
+        });
+});
 
-    if (!trouvée) {
-        bloc.textContent = "Aucune devinette prévue pour aujourd'hui.";
-        return;
+/* ANIMATION ZEN */
+function lancerPetales() {
+    for (let i = 0; i < 20; i++) {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDelay = (Math.random() * 2) + "s";
+        document.body.appendChild(petal);
+
+        setTimeout(() => petal.remove(), 6000);
     }
-
-    // Affichage de la devinette
-    bloc.textContent = trouvée.devinette;
-
-    // Gestion du bouton de validation
-    document.getElementById("btn-valider").onclick = function () {
-        verifierReponse(trouvée.reponse);
-    };
 }
-
-// --- VÉRIFICATION DE LA RÉPONSE ---
-function verifierReponse(bonneReponse) {
-    const input = document.getElementById("reponse-user");
-    const message = document.getElementById("message-devinette");
-    const animation = document.getElementById("zen-animation");
-
-    const user = input.value.trim().toLowerCase();
-    const correct = bonneReponse.trim().toLowerCase();
-
-    // Champ vide
-    if (user === "") {
-        message.textContent = "Veuillez saisir une réponse.";
-        message.style.color = "darkred";
-        return;
-    }
-
-    // Bonne réponse
-    if (user === correct) {
-        message.textContent = "Super, bien joué ! 🌟 À demain pour une nouvelle devinette.";
-        message.style.color = "green";
-
-        // Animation zen
-        animation.classList.remove("zen-hidden");
-        animation.classList.add("zen-active");
-
-        return;
-    }
-
-    // Mauvaise réponse
-    message.textContent = "C'est une erreur… Essaie encore !";
-    message.style.color = "darkred";
-}
-
-// --- LANCEMENT ---
-document.addEventListener("DOMContentLoaded", chargerDevinetteDuJour);
