@@ -1,4 +1,4 @@
-const colorNames = {
+const nomCouleurs = {
     "#D7D3CF": "Sable doux",
     "#D8D0C2": "Aube ivoire",
     "#AEB1A0": "Saule argenté",
@@ -21,25 +21,31 @@ const colorNames = {
     "#F8BBD0": "Pivoine douce"
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    fetch("data/activites.csv")
-        .then(res => res.text())
-        .then(text => {
-            const lignes = text.split("\n").slice(1);
-            const today = new Date();
-            const index = (today.getMonth() * 31 + today.getDate()) % lignes.length;
+async function chargerDefi() {
+    try {
+        const res = await fetch("data/activites.csv");
+        const texte = await res.text();
 
-            const [defi, categorie, niveau, couleur] = lignes[index].split(",");
+        const lignes = texte.split("\n").slice(1);
+        const d = new Date();
+        const index = (d.getMonth() * 31 + d.getDate()) % lignes.length;
 
-            document.getElementById("defi-texte").textContent = defi;
+        const parts = lignes[index].split(",");
+        const [defi, cat, niv, couleur] = parts;
 
-            const colorBox = document.getElementById("couleur-preview");
-            colorBox.style.background = couleur.trim();
+        document.getElementById("defi-texte").textContent = defi;
 
-            const nom = colorNames[couleur.trim()] || "Couleur du jour";
-            document.getElementById("couleur-nom").textContent = nom;
+        // carré de couleur
+        const bloc = document.getElementById("defi-du-jour-bloc");
+        bloc.style.border = "4px solid " + couleur.trim();
 
-            document.getElementById("defi-du-jour-bloc").style.border =
-                "4px solid " + couleur.trim();
-        });
-});
+        const prev = document.getElementById("couleur-preview");
+        prev.style.background = couleur.trim();
+
+        document.getElementById("couleur-nom").textContent =
+            nomCouleurs[couleur.trim()] || "Couleur du jour";
+
+    } catch (err) {
+        console.error("⛔ Erreur défi :", err);
+    }
+}
