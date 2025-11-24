@@ -1,98 +1,147 @@
-// js/script.js
-// Initialise la page : charge activités (data/activites.csv) et embarque la webapp devinette dans #resultat-defi
-
-(function(){
-  // parser CSV (robuste)
-  function parseCSVLine(line) {
+/* ============================================================================
+   FONCTIONS UTILITAIRES : PARSER CSV
+============================================================================ */
+function parseCSVLine(line) {
     const parts = [];
     let cur = "", inQuotes = false;
     for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') { inQuotes = !inQuotes; }
-      else if (ch === ',' && !inQuotes) { parts.push(cur.trim()); cur = ""; }
-      else cur += ch;
+        const ch = line[i];
+        if (ch === '"') inQuotes = !inQuotes;
+        else if (ch === "," && !inQuotes) {
+            parts.push(cur.trim());
+            cur = "";
+        } else cur += ch;
     }
     parts.push(cur.trim());
     return parts;
-  }
+}
 
-  async function loadActivites(path = 'data/activites.csv') {
+/* ============================================================================
+   PROVERBE DU JOUR
+============================================================================ */
+async function chargerProverbe() {
     try {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error('activites.csv non trouvé');
-      const text = await res.text();
-      const lines = text.trim().split(/\r?\n/).filter(Boolean);
-      if (lines.length <= 1) return [];
+        const res = await fetch("data/proverbes.csv");
+        const text = await res.text();
 
-      const rows = lines.slice(1).map(parseCSVLine).map(cols => ({
-        activite: (cols[0]||'').replace(/"/g,'').trim(),
-        categorie: (cols[1]||'').replace(/"/g,'').trim(),
-        niveau: (cols[2]||'').replace(/"/g,'').trim(),
-        couleur: (cols[3]||'').replace(/"/g,'').trim()
-      }));
-      return rows;
+        const lignes = text.split("\n").slice(1);
+
+        const today = new Date();
+        const key = String(today.getDate()).padStart(2, "0") + "/" +
+                    String(today.getMonth() + 1).padStart(2, "0");
+
+        let trouve = false;
+
+        lignes.forEach(l => {
+            const [date, proverbe, traduction] = parseCSVLine(l);
+            if (date === key) {
+                document.querySelector("#proverbe-du-jour .proverbe-text").innerHTML =
+                    `<strong>« ${proverbe} »</strong><br>${traduction}`;
+                trouve = true;
+            }
+        });
+
+        if (!trouve) {
+            document.querySelector("#proverbe-du-jour .proverbe-text").textContent =
+                "Aucun proverbe pour aujourd’hui.";
+        }
+
     } catch (err) {
-      console.error('Erreur loadActivites:', err);
-      return [];
+        console.error(err);
+        document.querySelector("#proverbe-du-jour .proverbe-text").textContent =
+            "Erreur de chargement.";
     }
-  }
+}
 
-  // Affiche une activité aléatoire (sans pastille couleur)
-  async function afficherActivite() {
-    const liste = await loadActivites();
-    const cont = document.getElementById('couleur-du-jour') || document.getElementById('activite-jour') || null;
-    if (!cont) return;
-    if (!liste || liste.length === 0) {
-      cont.innerHTML = `<p>Aucune activité disponible.</p>`;
-      return;
+/* ============================================================================
+   DEVINETTE DU JOUR (CSV)
+============================================================================ */
+let reponseDuJour = "";
+
+async function chargerDevinette() {
+    try {
+        const res = await fetch("data/devinettes.csv");
+        const text = await res.text();
+
+        const lignes = text.split("\n").slice(1);
+
+        const today = new Date();
+        const key =
+            String(today.getDate()).padStart(2, "0") + "/" +
+            String(today.getMonth() + 1).padStart(2, "0");
+
+        lignes.forEach(l => {
+            const [date, devinette, reponse] = parseCSVLine(l);
+            if (date === key) {
+                document.querySelector("#devinette-question").textContent = devinette;
+                reponseDuJour = reponse.trim().toLowerCase();
+            }
+        });
+
+    } catch (err) {
+        console.error("Erreur devinette:", err);
     }
-    // Choix : aléatoire (ou by date if you prefer)
-    const choix = liste[Math.floor(Math.random() * liste.length)];
+}
 
-    cont.innerHTML = `
-      <p class="activite-texte">« ${choix.activite} »</p>
-      <p><strong>Catégorie :</strong> ${choix.categorie || '—'}</p>
-      <p><strong>Niveau :</strong> ${choix.niveau || '—'}</p>
-    `;
-  }
+function validerReponse() {
+    const input = document.getElementById("devinette-input").value.trim().toLowerCase();
+    const result = document.getElementById("devinette-resultat");
 
-  // Intégrer la webapp devinette (Google Apps Script exec) dans #resultat-defi
-  function embedDevinetteWebapp(url) {
-    const cont = document.getElementById('resultat-defi') || document.getElementById('devinette-embed') || null;
-    if (!cont) return;
+    if (input === "") {
+        result.textContent = "Veuillez saisir une réponse.";
+        return;
+    }
 
-    // sécurité : si tu préfères fetch et insérer HTML, on peut, mais généralement Apps Script renvoie HTML,
-    // ici on embed via iframe for simplicity (works if CORS/embedding allowed by the script deployment).
-    const iframe = document.createElement('iframe');
-    iframe.src = url;
-    iframe.style.width = '100%';
-    iframe.style.height = '480px';
-    iframe.style.border = '0';
-    iframe.setAttribute('title','Devinette du jour');
-    cont.innerHTML = ''; // clear
-    cont.appendChild(iframe);
-  }
+    if (input === reponseDuJour) {
+        result.textContent = "🎉 Bravo ! A demain pour une nouvelle devinette.";
+        lancerPluieZen();
+    } else {
+        result.textContent = "❌ Ce n’est pas la bonne réponse…";
+    }
+}
 
-  // Initialisation
-  document.addEventListener('DOMContentLoaded', () => {
-    afficherActivite();
+/* ============================================================================
+   ANIMATION ZEN (pluie de pétales)
+============================================================================ */
+function lancerPluieZen() {
+    for (let i = 0; i < 15; i++) {
+        const petale = document.createElement("div");
+        petale.classList.add("petale");
+        petale.style.left = Math.random() * 100 + "vw";
+        petale.style.animationDuration = 3 + Math.random() * 3 + "s";
+        document.body.appendChild(petale);
 
-    // Replace this with your real Apps Script URL (you gave: https://script.google.com/macros/..../exec)
-    const appsScriptURL = 'https://script.google.com/macros/s/AKfycbzoFRgG1z7veVxYyKIrqTpw9kiFdz_PK9pmo65vSf9qx2OLE2WHR_F-2J1FQJo1jeYDdA/exec';
-    embedDevinetteWebapp(appsScriptURL);
-  });
-/* fonctions proverbe */
-/* fonctions devinette */
-/* fonctions defi */
-/* fonctions animation zen */
+        setTimeout(() => petale.remove(), 6000);
+    }
+}
 
-/* ============================================================
-   🌿 LANCEMENT À CHARGEMENT PAGE
-============================================================ */
+/* ============================================================================
+   DEFI ARTISTIQUE
+============================================================================ */
+async function chargerDefi() {
+    try {
+        const res = await fetch("data/activites.csv");
+        const text = await res.text();
+        const lignes = text.split("\n").slice(1);
+
+        const today = new Date();
+        const index = (today.getMonth() * 31 + today.getDate()) % lignes.length;
+
+        const [activite, categorie, niveau, couleur] = parseCSVLine(lignes[index]);
+
+        document.getElementById("defi-texte").textContent = activite;
+        document.getElementById("defi-du-jour-bloc").style.borderColor = couleur;
+
+    } catch (err) {
+        console.error("Erreur défi:", err);
+    }
+}
+
+/* ============================================================================
+   LANCEMENT
+============================================================================ */
 document.addEventListener("DOMContentLoaded", () => {
     chargerProverbe();
     chargerDevinette();
     chargerDefi();
 });
-
-})();
