@@ -81,5 +81,18 @@
     const appsScriptURL = 'https://script.google.com/macros/s/AKfycbzoFRgG1z7veVxYyKIrqTpw9kiFdz_PK9pmo65vSf9qx2OLE2WHR_F-2J1FQJo1jeYDdA/exec';
     embedDevinetteWebapp(appsScriptURL);
   });
+/* fonctions proverbe */
+/* fonctions devinette */
+/* fonctions defi */
+/* fonctions animation zen */
+
+/* ============================================================
+   🌿 LANCEMENT À CHARGEMENT PAGE
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+    chargerProverbe();
+    chargerDevinette();
+    chargerDefi();
+});
 
 })();
