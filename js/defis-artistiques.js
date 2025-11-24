@@ -1,24 +1,20 @@
-function genererDefi() {
-    fetch('../data/defis-artistiques.json')
-        .then(response => response.json())
-        .then(defis => {
-            const defi = defis[Math.floor(Math.random() * defis.length)];
-            const container = document.getElementById('resultat-defi');
-            
-            if (container) {
-                container.innerHTML = `
-                    <h3>${defi.titre}</h3>
-                    <p>${defi.defi}</p>
-                    <p style="font-style: italic; color: #777;">Temps suggéré : ${defi.duree}</p>
-                `;
-            }
-        })
-        .catch(error => {
-            console.error('Erreur de chargement des défis:', error);
-            const container = document.getElementById('resultat-defi');
-            if (container) container.innerText = "Défis non disponibles.";
-        });
+// --- Défi du jour aléatoire (fallback si pas de CSV dédié) ---
+
+const defis = [
+    "Créer une forme en 30 secondes.",
+    "Dessiner en n'utilisant que des lignes droites.",
+    "Créer quelque chose avec seulement 3 couleurs.",
+    "Représenter une émotion abstraite."
+];
+
+function chargerDefi() {
+    const el = document.getElementById("defi-du-jour");
+    const index = Math.floor(Math.random() * defis.length);
+
+    el.innerHTML = `
+        <h2>🎯 Défi du jour</h2>
+        <p>${defis[index]}</p>
+    `;
 }
 
-// Optionnel: Générer un défi au chargement de la page
-document.addEventListener('DOMContentLoaded', genererDefi);
+document.addEventListener("DOMContentLoaded", chargerDefi);
