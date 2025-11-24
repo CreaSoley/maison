@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>🎨 CreaSoley – Univers Créatif</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Police June in Rock -->
     <style>
         @font-face {
             font-family: "JuneInRock";
             src: url("assets/fonts/June in Rock.otf");
         }
-        .title-rock { font-family: "JuneInRock"; }
     </style>
 </head>
 
@@ -23,8 +21,7 @@
     <!-- NAVIGATION -->
     <nav class="navbar">
         <a href="index.html" class="logo-link">
-            <img src="assets/images/creasoley-logo.webp" class="logo-img">
-            <span class="logo-title">CreaSoley</span>
+            <img src="assets/images/logo.png" alt="CreaSoley - Logo" class="logo-img">
         </a>
 
         <ul class="nav-menu">
@@ -40,57 +37,44 @@
 
         <!-- HERO -->
         <section class="hero">
-            <h2 class="title-rock hero-title">Bienvenue dans notre station de salon</h2>
+            <h2 class="title-rock">Bienvenue dans notre station de salon</h2>
             <p class="tagline">Exploration entre technique et intuition</p>
-            <p>Univers créatif</p>
         </section>
 
-        <!-- BLOCS -->
+        <!-- 3 BLOCS PRINCIPAUX -->
         <section class="blocs-container">
 
-           <!-- PROVERBE -->
-<div class="bloc">
-    <h3 class="title-rock">💠 Proverbe du jour</h3>
-    <div id="proverbe-du-jour" class="bloc-center">
-        <p id="proverbe-text">Chargement...</p>
-    </div>
-</div>
+            <!-- PROVERBE -->
+            <div class="bloc">
+                <h3 class="title-rock">💠 Proverbe du jour</h3>
+                <div id="proverbe-du-jour">
+                    <p id="proverbe-text">Chargement...</p>
+                </div>
+            </div>
 
-<!-- DEVINETTE -->
-<div class="bloc">
-    <h3 class="title-rock">💠 Devinette du jour</h3>
-    <div id="devinette-du-jour" class="bloc-center">
-        <p id="devinette-texte">Chargement…</p>
+            <!-- DEVINETTE -->
+            <div class="bloc">
+                <h3 class="title-rock">💠 Devinette du jour</h3>
+                <div id="devinette-du-jour">
+                    <p id="devinette-texte">Chargement…</p>
 
-        <input type="text" id="devinette-reponse" placeholder="Votre réponse">
-        <button id="devinette-valider" class="btn">OK</button>
+                    <input type="text" id="devinette-reponse" placeholder="Votre réponse">
+                    <button id="devinette-valider" class="btn">OK</button>
 
-        <p id="devinette-feedback"></p>
-    </div>
-</div>
+                    <p id="devinette-feedback"></p>
+                </div>
+            </div>
 
-<!-- DÉFI ARTISTIQUE -->
-<div class="bloc" id="defi-du-jour-bloc">
-    <h3 class="title-rock">💠 Défi du jour</h3>
-    <div id="defi-du-jour" class="bloc-center">
-        <p id="defi-texte">Chargement…</p>
-        <div id="couleur-du-jour">
-            <!-- Couleur + nom de couleur seront injectés -->
-        </div>
-    </div>
-</div>
+            <!-- DÉFI ARTISTIQUE -->
+            <div class="bloc" id="defi-du-jour-bloc">
+                <h3 class="title-rock">💠 Défi du jour</h3>
+                <div id="defi-du-jour">
+                    <p id="defi-texte">Chargement…</p>
 
-        </section>
-
-        <!-- ANIMATION FEUILLES -->
-        <div id="zen-animation"></div>
-
-        <!-- CTA -->
-        <section class="cta-buttons">
-            <a href="pages/inspiration.html" class="btn cta">💡 Inspiration</a>
-            <a href="pages/portfolio.html" class="btn cta">🖼️ Portfolio</a>
-            <a href="pages/carnet.html" class="btn cta">📓 Carnet</a>
-            <a href="pages/techniques.html" class="btn cta">🎨 Techniques</a>
+                    <div class="couleur-preview" id="couleur-preview"></div>
+                    <p class="couleur-nom" id="couleur-nom"></p>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -99,9 +83,10 @@
         Mon Atelier Créatif • Projet personnel • 2025
     </footer>
 
-    <!-- JS -->
-    <script src="js/main.js"></script>
+    <!-- SCRIPTS -->
+    <script src="js/proverbe-du-jour.js"></script>
+    <script src="js/devinette-du-jour.js"></script>
+    <script src="js/activites-loader.js"></script>
 
 </body>
 </html>
-
