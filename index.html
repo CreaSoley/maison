@@ -23,8 +23,8 @@
     <!-- NAVIGATION -->
     <nav class="navbar">
         <a href="index.html" class="logo-link">
-            <img src="assets/images/logo-creasoley.svg" alt="CreaSoley - Logo" class="logo-img">
-            <span class="logo-title">CreaSoley</span>
+            <img src="assets/images/logo.png" alt="CreaSoley - Logo" class="logo-img">
+            <span class="logo-title">Le p'tit logis</span>
         </a>
 
         <ul class="nav-menu">
@@ -56,20 +56,26 @@
                 </div>
             </div>
 
-            <!-- Devinette du jour -->
-<div class="bloc">
+            <!-- DEVINETTE -->
+<div class="bloc" id="bloc-devinette">
     <h3 class="title-rock">💠 Devinette du jour</h3>
 
     <div id="devinette-du-jour">
-        <p id="texte-devinette">Chargement...</p>
+        <p id="texte-devinette">Chargement…</p>
 
-        <input type="text" id="reponse-utilisateur" placeholder="Votre réponse..." />
+        <input type="text" id="reponse-user" placeholder="Votre réponse…" class="input-devinette">
 
-        <button class="btn" id="btn-valider">Valider</button>
+        <button id="btn-valider" class="btn">Valider</button>
 
-        <p id="message-devinette"></p>
+        <p id="message-devinette" class="message-devinette"></p>
+
+        <!-- Animation zen -->
+        <div id="zen-animation" class="zen-hidden">
+            🌸✨
+        </div>
     </div>
 </div>
+
 
 
             <!-- DÉFI ARTISTIQUE -->
@@ -110,4 +116,5 @@
 
 </body>
 </html>
+
 
