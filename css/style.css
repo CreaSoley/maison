@@ -10,6 +10,10 @@ body {
     background: var(--color-light);
     color: var(--color-dark);
     line-height: 1.6;
+    body.accueil {
+    background: linear-gradient(135deg, #0f5b82, #8fb8e1);
+}
+
 }
 
 /* NAVBAR */
@@ -132,7 +136,32 @@ body {
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-    .cards-row {
+   .blocs-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin: 40px 0;
+}
+
+@media (max-width: 900px) {
+    .blocs-container {
         grid-template-columns: 1fr;
+    }
+}
+
+.bloc {
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 18px;
+    padding: 25px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
+}
+
+.bloc:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
     }
 }
