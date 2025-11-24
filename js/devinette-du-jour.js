@@ -1,28 +1,68 @@
+// Fichier : js/devinette-du-jour.js
+
 document.addEventListener("DOMContentLoaded", chargerDevinette);
 
 function chargerDevinette() {
-    const zone = document.querySelector("#devinette-du-jour");
+    fetch("data/devinettes.csv")
+        .then(response => response.text())
+        .then(csv => {
+            const lignes = csv.split("\n").map(l => l.trim());
 
-    fetch("https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhxfxbN0_3pRPksQcLKJiog3wh6_k8VdeifnsBGwnpKQ9knLw5gCXPe4c4DMDteZV9vFvPf4UBacG3YDTRYdKEVc7Rue54juM5LFxUba6vRpOv1xDP2PxoiVu3ynOsUhUvarfO9pOsEH4bgN_du7UuWTczLbD0bofg7uv3mwyv4v_g71OLbU-8IyR9hIpenLSlxXX9aIRYf738jSR2WemZxJbVv9cyRFKMctVZnKZJiCgjIP5cxOE73c-nRawN4R6g4KifnFk3-V6PmJ1YoDNw-ZmI1vIShwEN3ASGh&lib=MuiZkSlYENgyCkMBX3NcyJwTqGYO7_w4Z")
-        .then(response => {
-            if (!response.ok) throw new Error("Réponse non valide");
-            return response.json();
-        })
-        .then(data => {
-            zone.innerHTML = `
-                <p><strong>${data.question}</strong></p>
-                <button class="btn" id="btn-devinette">Voir la réponse</button>
-                <p id="devinette-reponse" style="display:none;margin-top:10px;">
-                    ${data.reponse}
-                </p>
-            `;
+            // Retirer la ligne d'en-tête
+            lignes.shift();
 
-            document.getElementById("btn-devinette").addEventListener("click", () => {
-                document.getElementById("devinette-reponse").style.display = "block";
+            const today = new Date();
+            const jour = String(today.getDate()).padStart(2, '0');
+            const mois = String(today.getMonth() + 1).padStart(2, '0');
+            const dateDuJour = `${jour}/${mois}`;
+
+            let devinetteTrouvee = null;
+            let reponseCorrecte = null;
+
+            lignes.forEach(ligne => {
+                const [date, devinette, reponse] = ligne.split(",");
+
+                if (date === dateDuJour) {
+                    devinetteTrouvee = devinette;
+                    reponseCorrecte = reponse;
+                }
             });
+
+            const zoneDevinette = document.getElementById("texte-devinette");
+
+            if (devinetteTrouvee) {
+                zoneDevinette.textContent = devinetteTrouvee;
+
+                // Activer la vérification
+                const btn = document.getElementById("btn-valider");
+                const input = document.getElementById("reponse-utilisateur");
+                const message = document.getElementById("message-devinette");
+
+                btn.addEventListener("click", () => {
+                    const saisie = input.value.trim();
+
+                    if (!saisie) {
+                        message.textContent = "Veuillez saisir une réponse.";
+                        message.style.color = "darkred";
+                        return;
+                    }
+
+                    if (saisie.toLowerCase() === reponseCorrecte.toLowerCase()) {
+                        message.textContent = "Super, bien joué ! À demain pour une autre devinette 🎉";
+                        message.style.color = "green";
+                    } else {
+                        message.textContent = "C’est une erreur !";
+                        message.style.color = "darkred";
+                    }
+                });
+
+            } else {
+                zoneDevinette.textContent = "Aucune devinette prévue pour aujourd’hui.";
+            }
         })
         .catch(err => {
+            document.getElementById("texte-devinette").textContent =
+                "Impossible de charger la devinette.";
             console.error("Erreur devinette :", err);
-            zone.innerHTML = `<p style="color:red;">Impossible de charger la devinette.</p>`;
         });
 }
