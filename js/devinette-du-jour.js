@@ -1,68 +1,83 @@
-// Fichier : js/devinette-du-jour.js
+// --- CHARGEMENT DU CSV ---
+async function chargerCSVDevinettes() {
+    const url = "data/devinettes.csv";
 
-document.addEventListener("DOMContentLoaded", chargerDevinette);
+    const response = await fetch(url);
+    const text = await response.text();
 
-function chargerDevinette() {
-    fetch("data/devinettes.csv")
-        .then(response => response.text())
-        .then(csv => {
-            const lignes = csv.split("\n").map(l => l.trim());
+    const lignes = text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
 
-            // Retirer la ligne d'en-tête
-            lignes.shift();
+    const data = lignes.slice(1).map(l => {
+        const [date, devinette, reponse] = l.split(",");
+        return { date, devinette, reponse };
+    });
 
-            const today = new Date();
-            const jour = String(today.getDate()).padStart(2, '0');
-            const mois = String(today.getMonth() + 1).padStart(2, '0');
-            const dateDuJour = `${jour}/${mois}`;
-
-            let devinetteTrouvee = null;
-            let reponseCorrecte = null;
-
-            lignes.forEach(ligne => {
-                const [date, devinette, reponse] = ligne.split(",");
-
-                if (date === dateDuJour) {
-                    devinetteTrouvee = devinette;
-                    reponseCorrecte = reponse;
-                }
-            });
-
-            const zoneDevinette = document.getElementById("texte-devinette");
-
-            if (devinetteTrouvee) {
-                zoneDevinette.textContent = devinetteTrouvee;
-
-                // Activer la vérification
-                const btn = document.getElementById("btn-valider");
-                const input = document.getElementById("reponse-utilisateur");
-                const message = document.getElementById("message-devinette");
-
-                btn.addEventListener("click", () => {
-                    const saisie = input.value.trim();
-
-                    if (!saisie) {
-                        message.textContent = "Veuillez saisir une réponse.";
-                        message.style.color = "darkred";
-                        return;
-                    }
-
-                    if (saisie.toLowerCase() === reponseCorrecte.toLowerCase()) {
-                        message.textContent = "Super, bien joué ! À demain pour une autre devinette 🎉";
-                        message.style.color = "green";
-                    } else {
-                        message.textContent = "C’est une erreur !";
-                        message.style.color = "darkred";
-                    }
-                });
-
-            } else {
-                zoneDevinette.textContent = "Aucune devinette prévue pour aujourd’hui.";
-            }
-        })
-        .catch(err => {
-            document.getElementById("texte-devinette").textContent =
-                "Impossible de charger la devinette.";
-            console.error("Erreur devinette :", err);
-        });
+    return data;
 }
+
+// --- OBTENIR LA DEVINETTE DU JOUR ---
+function obtenirDateAujourdhui() {
+    const d = new Date();
+    const j = String(d.getDate()).padStart(2, "0");
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    return `${j}/${m}`;
+}
+
+// --- INITIALISATION ---
+async function chargerDevinetteDuJour() {
+    const data = await chargerCSVDevinettes();
+    const today = obtenirDateAujourdhui();
+
+    const trouvée = data.find(l => l.date === today);
+
+    const bloc = document.getElementById("texte-devinette");
+
+    if (!trouvée) {
+        bloc.textContent = "Aucune devinette prévue pour aujourd'hui.";
+        return;
+    }
+
+    // Affichage de la devinette
+    bloc.textContent = trouvée.devinette;
+
+    // Gestion du bouton de validation
+    document.getElementById("btn-valider").onclick = function () {
+        verifierReponse(trouvée.reponse);
+    };
+}
+
+// --- VÉRIFICATION DE LA RÉPONSE ---
+function verifierReponse(bonneReponse) {
+    const input = document.getElementById("reponse-user");
+    const message = document.getElementById("message-devinette");
+    const animation = document.getElementById("zen-animation");
+
+    const user = input.value.trim().toLowerCase();
+    const correct = bonneReponse.trim().toLowerCase();
+
+    // Champ vide
+    if (user === "") {
+        message.textContent = "Veuillez saisir une réponse.";
+        message.style.color = "darkred";
+        return;
+    }
+
+    // Bonne réponse
+    if (user === correct) {
+        message.textContent = "Super, bien joué ! 🌟 À demain pour une nouvelle devinette.";
+        message.style.color = "green";
+
+        // Animation zen
+        animation.classList.remove("zen-hidden");
+        animation.classList.add("zen-active");
+
+        return;
+    }
+
+    // Mauvaise réponse
+    message.textContent = "C'est une erreur… Essaie encore !";
+    message.style.color = "darkred";
+}
+
+// --- LANCEMENT ---
+document.addEventListener("DOMContentLoaded", chargerDevinetteDuJour);
