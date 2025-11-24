@@ -1,83 +1,46 @@
-// -----------------------------------------------------------
-// Script principal du site
-// - Initialise toutes les sections
-// - Charge la couleur + activité du jour via CSV
-// - Prépare l'espace "Devinette du jour"
-// -----------------------------------------------------------
-
-// --------- UTILS CSV ---------
-function parseCSVLine(line) {
-    const result = [];
-    let current = "";
-    let inQuotes = false;
-
-    for (let char of line) {
-        if (char === '"') {
-            inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
-            current = "";
-        } else {
-            current += char;
-        }
-    }
-    result.push(current.trim());
-    return result;
-}
+// =========================
+// Devinette du jour (Webapp futur)
+// =========================
+const devinettes = [
+"Je parle toutes les langues mais je n’ai pas de bouche. Qui suis‑je ? (Réponse : l’écho)",
+"Je grandis sans être vivant. Qui suis‑je ? (Réponse : un cristal)",
+"Plus je suis grande, moins on me voit. Qui suis‑je ? (Réponse : l'obscurité)"
+];
 
 
-// -----------------------------------------------------------
-// 🔵 ACTIVITÉ & COULEUR DU JOUR (via activites.csv)
-// -----------------------------------------------------------
-function chargerActiviteEtCouleur() {
-    fetch("data/activites.csv")
-        .then(r => r.text())
-        .then(text => {
-            const lignes = text.trim().split("\n").slice(1); // ignore header
-
-            const liste = lignes.map(l => {
-                const [activite, categorie, niveau, couleur] = parseCSVLine(l);
-                return { activite, categorie, niveau, couleur };
-            });
-
-            if (liste.length === 0) return;
-
-            // Choix aléatoire
-            const choix = liste[Math.floor(Math.random() * liste.length)];
-            const bloc = document.getElementById("couleur-activite");
-
-            if (!bloc) return;
-
-            bloc.innerHTML = `
-                <div class="couleur-carre" style="background:${choix.couleur}"></div>
-                <p class="code-couleur">${choix.couleur}</p>
-                <p class="activite-texte">« ${choix.activite} »</p>
-                <p><strong>Catégorie :</strong> ${choix.categorie}</p>
-                <p><strong>Niveau :</strong> ${choix.niveau}</p>
-            `;
-        })
-        .catch(err => console.error("Erreur CSV activités:", err));
-}
-
-
-
-// -----------------------------------------------------------
-// 🟣 DEVINETTE DU JOUR (placeholder — webapp à venir)
-// -----------------------------------------------------------
 function chargerDevinette() {
-    const bloc = document.getElementById("devinette-du-jour");
-    if (!bloc) return;
-
-    // Tu intégreras la webapp ici
-    bloc.innerHTML = `
-        <h2>🧩 Devinette du jour</h2>
-        <p class="devinette-placeholder">
-            (Webapp en cours de développement)
-        </p>
-    `;
+const pick = devinettes[Math.floor(Math.random() * devinettes.length)];
+document.querySelector('#devinette-du-jour p').textContent = pick;
 }
 
 
+// =========================
+// Activité du jour depuis CSV
+// =========================
+async function chargerActivite() {
+const response = await fetch('data/activites.csv');
+const text = await response.text();
+const lignes = text.trim().split('\n').slice(1);
 
-// -----------------------------------------------------------
-// 🟢 INITIALISATION GLOBALE
+
+const items = lignes.map(l => {
+const [activite, categorie, niveau, couleur] = l.split(',');
+return { activite, categorie, niveau, couleur };
+});
+
+
+const choix = items[Math.floor(Math.random() * items.length)];
+
+
+document.getElementById('couleur-box').style.background = choix.couleur;
+document.getElementById('activite-texte').textContent = `« ${choix.activite} »`;
+document.getElementById('activite-categorie').textContent = choix.categorie;
+document.getElementById('activite-niveau').textContent = choix.niveau;
+}
+
+
+// Start
+window.addEventListener('DOMContentLoaded', () => {
+chargerDevinette();
+chargerActivite();
+});
