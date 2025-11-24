@@ -1,67 +1,60 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Station de Salon – Le p'tit logis</title>
-
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Station de salon – Le p'tit logis</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+    <header>
+        <nav class="navbar">
+            <ul>
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Inspiration</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Carnet</a></li>
+                <li><a href="#">Techniques</a></li>
+            </ul>
+        </nav>
 
-<header class="header">
-    <img src="assets/images/logo.png" class="logo" alt="Logo CreaSoley">
-    <nav>
-        <ul>
-            <li><a href="#">Accueil</a></li>
-            <li><a href="#">Inspiration</a></li>
-            <li><a href="#">Portfolio</a></li>
-            <li><a href="#">Carnet</a></li>
-            <li><a href="#">Techniques</a></li>
-        </ul>
-    </nav>
-</header>
+        <div class="titre-site">
+            <h1>Station de salon</h1>
+            <h2>Le p'tit logis</h2>
+            <p class="slogan">Exploration entre technique et intuition<br/>Univers créatif</p>
+        </div>
+    </header>
 
-<section class="intro">
-    <h1>Station de salon</h1>
-    <h2>Le p'tit logis</h2>
-    <p>Exploration entre technique et intuition<br>Univers créatif</p>
-</section>
+    <main>
+        <!-- Bloc devinette du jour -->
+        <section class="bloc" id="devinette-jour">
+            <h3>Devinette du jour</h3>
+            <p id="texte-devinette">Chargement...</p>
+        </section>
 
-<section class="cards-container">
+        <!-- Bloc proverbe du jour -->
+        <section class="bloc" id="proverbe-jour">
+            <h3>Proverbe du jour</h3>
+            <p id="texte-proverbe">Chargement...</p>
+            <p id="texte-traduction" class="traduction"></p>
+        </section>
 
-    <div class="card glass fade-in" id="proverbe-du-jour">
-        <!-- JS INSÈRE LE PROVERBE -->
-    </div>
+        <!-- Bloc activité & couleur du jour -->
+        <section class="bloc" id="activite-jour">
+            <h3>Couleur & activité du jour</h3>
+            <div id="couleur-du-jour"></div>
 
-    <div class="card glass fade-in" id="defi-du-jour">
-        <!-- JS INSÈRE LE DÉFI -->
-    </div>
+            <p><strong id="activite"></strong></p>
+            <p><strong>Catégorie :</strong> <span id="categorie"></span></p>
+            <p><strong>Niveau :</strong> <span id="niveau"></span></p>
+        </section>
+    </main>
 
-    <div class="card glass fade-in" id="couleur-du-jour">
-        <!-- JS INSÈRE LA COULEUR + ACTIVITÉ -->
-    </div>
+    <footer>
+        <p>© 2025 — Le p'tit logis — Univers créatif</p>
+    </footer>
 
-</section>
-
-<section class="atelier-mois fade-in">
-    <h3>Atelier du mois</h3>
-    <div id="webapp-mensuelle"></div>
-</section>
-
-<footer class="footer">
-    <button class="btn">🖌 Techniques</button>
-    <button class="btn">📚 Carnet</button>
-    <button class="btn">💡 Inspirations</button>
-
-    <p class="copy">Mon Atelier Créatif • Projet personnel • 2025</p>
-</footer>
-
-<script src="js/script.js"></script>
-<script src="js/proverbe-du-jour.js"></script>
-<script src="js/defis-artistiques.js"></script>
-<script src="js/couleur-du-jour.js"></script>
-
+    <script src="js/script.js"></script>
+    <script src="js/proverbe-du-jour.js"></script>
 </body>
 </html>
