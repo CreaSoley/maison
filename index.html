@@ -48,29 +48,37 @@
         <!-- BLOCS -->
         <section class="blocs-container">
 
-            <!-- PROVERBE -->
-            <div class="bloc">
-                <h3 class="title-rock">💠 Proverbe du jour</h3>
-                <div id="proverbe-du-jour" class="bloc-center">
-                    <p class="proverbe-text">Chargement...</p>
-                </div>
-            </div>
+           <!-- PROVERBE -->
+<div class="bloc">
+    <h3 class="title-rock">💠 Proverbe du jour</h3>
+    <div id="proverbe-du-jour" class="bloc-center">
+        <p id="proverbe-text">Chargement...</p>
+    </div>
+</div>
 
-            <!-- DEVINETTE -->
-            <div class="bloc">
-                <h3 class="title-rock">💠 Devinette du jour</h3>
-                <div id="devinette-du-jour" class="bloc-center">
-                    <p>Chargement…</p>
-                </div>
-            </div>
+<!-- DEVINETTE -->
+<div class="bloc">
+    <h3 class="title-rock">💠 Devinette du jour</h3>
+    <div id="devinette-du-jour" class="bloc-center">
+        <p id="devinette-texte">Chargement…</p>
 
-            <!-- DEFI ARTISTIQUE -->
-            <div class="bloc" id="defi-du-jour-bloc">
-                <h3 class="title-rock">💠 Défi du jour</h3>
-                <div id="defi-du-jour" class="bloc-center">
-                    <p>Chargement…</p>
-                </div>
-            </div>
+        <input type="text" id="devinette-reponse" placeholder="Votre réponse">
+        <button id="devinette-valider" class="btn">OK</button>
+
+        <p id="devinette-feedback"></p>
+    </div>
+</div>
+
+<!-- DÉFI ARTISTIQUE -->
+<div class="bloc" id="defi-du-jour-bloc">
+    <h3 class="title-rock">💠 Défi du jour</h3>
+    <div id="defi-du-jour" class="bloc-center">
+        <p id="defi-texte">Chargement…</p>
+        <div id="couleur-du-jour">
+            <!-- Couleur + nom de couleur seront injectés -->
+        </div>
+    </div>
+</div>
 
         </section>
 
@@ -96,3 +104,4 @@
 
 </body>
 </html>
+
