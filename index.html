@@ -1,92 +1,87 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>🎨 CreaSoley – Univers Créatif</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<main class="page-content">
 
-    <style>
-        @font-face {
-            font-family: "JuneInRock";
-            src: url("assets/fonts/June in Rock.otf");
-        }
-    </style>
-</head>
 
-<body class="accueil">
+<!-- HERO -->
+<section class="hero">
+<h2 class="title-rock hero-title">Bienvenue dans notre station de salon</h2>
+<p class="tagline hero-subtitle">Exploration entre technique et intuition</p>
+<!-- Widget météo -->
+<a class="weatherwidget-io" href="https://forecast7.com/fr/49d121d40/27920/" data-label_1="27920" data-label_2="Météo" data-font="Roboto" data-icons="Climacons Animated" data-theme="marine">27920 Météo</a>
+</section>
 
-    <!-- NAVIGATION -->
-    <nav class="navbar">
-        <a href="index.html" class="logo-link">
-            <img src="assets/images/logo.png" alt="CreaSoley - Logo" class="logo-img">
-        </a>
 
-        <ul class="nav-menu">
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="pages/inspiration.html">Inspiration</a></li>
-            <li><a href="pages/portfolio.html">Portfolio</a></li>
-            <li><a href="pages/carnet.html">Carnet</a></li>
-            <li><a href="pages/techniques.html">Techniques</a></li>
-        </ul>
-    </nav>
+<!-- ZONE 3 BLOCS -->
+<section class="blocs-container">
 
-    <main class="page-content">
 
-        <!-- HERO -->
-        <section class="hero">
-            <h2 class="title-rock">Bienvenue dans notre station de salon</h2>
-            <p class="tagline">Exploration entre technique et intuition</p>
-        </section>
+<!-- PROVERBE -->
+<div class="bloc">
+<h3 class="title-rock"><span class="icon">✨</span> Proverbe du jour</h3>
+<div id="proverbe-du-jour" class="bloc-center">
+<p class="proverbe-text">Chargement...</p>
+</div>
+</div>
 
-        <!-- 3 BLOCS PRINCIPAUX -->
-        <section class="blocs-container">
 
-            <!-- PROVERBE -->
-            <div class="bloc">
-                <h3 class="title-rock">💠 Proverbe du jour</h3>
-                <div id="proverbe-du-jour">
-                    <p id="proverbe-text">Chargement...</p>
-                </div>
-            </div>
+<!-- DEVINETTE -->
+<div class="bloc">
+<h3 class="title-rock"><span class="icon">🌿</span> Devinette du jour</h3>
+<div id="devinette-du-jour" class="bloc-center">
+<p>Chargement…</p>
+</div>
+</div>
 
-            <!-- DEVINETTE -->
-            <div class="bloc">
-                <h3 class="title-rock">💠 Devinette du jour</h3>
-                <div id="devinette-du-jour">
-                    <p id="devinette-texte">Chargement…</p>
 
-                    <input type="text" id="devinette-reponse" placeholder="Votre réponse">
-                    <button id="devinette-valider" class="btn">OK</button>
+<!-- DÉFI ARTISTIQUE -->
+<div class="bloc" id="defi-du-jour-bloc">
+<h3 class="title-rock"><span class="icon">🎨</span> Défi du jour</h3>
+<div id="defi-du-jour" class="bloc-center">
+<p id="defi-texte">Chargement…</p>
+<div id="couleur-preview"></div>
+<p id="couleur-nom"></p>
+</div>
+</div>
 
-                    <p id="devinette-feedback"></p>
-                </div>
-            </div>
 
-            <!-- DÉFI ARTISTIQUE -->
-            <div class="bloc" id="defi-du-jour-bloc">
-                <h3 class="title-rock">💠 Défi du jour</h3>
-                <div id="defi-du-jour">
-                    <p id="defi-texte">Chargement…</p>
+</section>
 
-                    <div class="couleur-preview" id="couleur-preview"></div>
-                    <p class="couleur-nom" id="couleur-nom"></p>
-                </div>
-            </div>
-        </section>
 
-    </main>
+<!-- ATELIER DU MOIS -->
+<section class="atelier-mois box">
+<h3>Atelier du Mois</h3>
+<div class="atelier-container"></div>
+</section>
 
-    <footer>
-        Mon Atelier Créatif • Projet personnel • 2025
-    </footer>
 
-    <!-- SCRIPTS -->
-    <script src="js/proverbe-du-jour.js"></script>
-    <script src="js/devinette-du-jour.js"></script>
-    <script src="js/activites-loader.js"></script>
+<!-- CTA -->
+<section class="cta-buttons">
+<a href="pages/inspiration.html" class="btn cta">💡 Inspiration</a>
+<a href="pages/portfolio.html" class="btn cta">🖼️ Portfolio</a>
+<a href="pages/carnet.html" class="btn cta">📓 Carnet</a>
+<a href="pages/techniques.html" class="btn cta">🎨 Techniques</a>
+</section>
+
+
+</main>
+
+
+<footer>
+Mon Atelier Créatif • Projet personnel • 2025
+</footer>
+
+
+<!-- SCRIPTS -->
+<script src="js/script.js"></script>
+<script src="js/proverbe-du-jour.js"></script>
+<script src="js/devinette-du-jour.js"></script>
+<script src="js/activites-loader.js"></script>
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+</script>
+
 
 </body>
 </html>
