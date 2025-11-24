@@ -1,32 +1,26 @@
-// =============================
-// Défi créatif depuis activites.csv
-// =============================
+/* Couleur du jour (statique pour l'instant) */
+document.addEventListener("DOMContentLoaded", () => {
+    const couleurDiv = document.querySelector(".color-preview");
+    const code = document.getElementById("couleur-code").textContent;
 
-function genererDefi() {
-    fetch("data/activites.csv")
-        .then(r => r.text())
-        .then(csv => {
-            const lignes = csv.trim().split("\n");
-            const lignesData = lignes.slice(1); // on enlève l'en-tête
+    couleurDiv.style.setProperty("--couleur", code);
+});
 
-            if (lignesData.length === 0) return;
+/* Défi du jour (exemple simple en attendant ton API) */
+document.addEventListener("DOMContentLoaded", () => {
+    const defi = [
+        "Créer une texture avec un seul outil.",
+        "Dessiner 5 variations d’un même motif.",
+        "Faire un croquis sans lever la main.",
+        "Revisiter une œuvre que tu aimes."
+    ];
 
-            const alea = lignesData[Math.floor(Math.random() * lignesData.length)];
+    const target = document.getElementById("defi-text");
 
-            // simple split (ton CSV n'a pas de champs entre guillemets multiples)
-            const [texte, categorie, niveau, couleur] = alea.split(",");
-
-            const cont = document.getElementById("resultat-defi");
-            if (!cont) return;
-
-            cont.innerHTML = `
-                <p style="font-size:1.1rem;">${texte}</p>
-                <p style="color:#666"><strong>${categorie}</strong> • ${niveau}</p>
-            `;
-        })
-        .catch(err => {
-            console.error(err);
-            const cont = document.getElementById("resultat-defi");
-            if (cont) cont.innerHTML = "<p>Erreur lors du chargement des défis.</p>";
-        });
-}
+    if (defi.length === 0) {
+        target.textContent = "Aucun défi disponible aujourd’hui.";
+    } else {
+        const random = defi[Math.floor(Math.random() * defi.length)];
+        target.textContent = random;
+    }
+});
