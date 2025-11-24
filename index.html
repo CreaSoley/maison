@@ -36,21 +36,39 @@
             <img src="assets/images/hero.jpg" alt="Univers créatif" class="hero-image">
         </section>
 
-        <!-- PROVERBE DU JOUR -->
-        <section class="proverbe-section box">
-            <div id="proverbe-du-jour">
-                <p class="proverbe-text">Chargement du proverbe...</p>
-            </div>
-        </section>
+        <!-- === LIGNE EN 3 COLONNES === -->
+        <section class="triple-grid">
 
-        <!-- PETIT DÉFI -->
-        <section class="widget-section">
-            <div class="box" id="widget-defis">
-                <h2>🧩 Petit Défi Créatif</h2>
+            <!-- Colonne 1 : Proverbe -->
+            <div class="box">
+                <h3>📜 Proverbe du jour</h3>
+                <p id="proverbe-du-jour" class="proverbe-text">Chargement du proverbe...</p>
+            </div>
+
+            <!-- Colonne 2 : Défi -->
+            <div class="box">
+                <h3>🧩 Défi du jour</h3>
                 <div id="resultat-defi">
                     <p>Tire un défi pour stimuler ta créativité !</p>
                 </div>
                 <button class="btn" onclick="genererDefi()">Nouveau Défi</button>
+            </div>
+
+            <!-- Colonne 3 : Couleur du jour -->
+            <div class="box">
+                <h3>🎨 Couleur du jour</h3>
+                <div id="couleur-du-jour">
+                    <p>Chargement...</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- === ZONE WEB APP MENSUELLE === -->
+        <section class="webapp-mois">
+            <h2>🧰 Atelier du Mois</h2>
+            <div class="webapp-container">
+                <!-- Tu peux insérer ta web-app ici -->
             </div>
         </section>
 
@@ -71,6 +89,8 @@
     <!-- SCRIPTS -->
     <script src="js/script.js"></script>
     <script src="js/proverbe-du-jour.js"></script>
+    <script src="js/defis-artistiques.js"></script>
+    <script src="js/couleur-du-jour.js"></script>
 
 </body>
 </html>
