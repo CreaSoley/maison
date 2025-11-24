@@ -46,4 +46,140 @@ body.accueil {
     padding: 20px 40px;
 }
 
-.lo
+.logo-img {
+    width: 90px;
+    height: auto;
+}
+
+@media (max-width: 600px) {
+    .logo-img {
+        width: 130px;
+    }
+}
+
+.nav-menu {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: var(--color-dark);
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.nav-menu a:hover {
+    color: var(--color-primary);
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.hero h2 {
+    font-size: 3rem;
+}
+
+@media (max-width: 600px) {
+    .hero h2 {
+        font-size: 2.3rem;
+    }
+}
+
+/* BLOCS 3 COLONNES */
+.blocs-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin: 40px 0;
+}
+
+@media (max-width: 900px) {
+    .blocs-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* BLOC */
+.bloc {
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 18px;
+    padding: 25px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
+    text-align: center;
+}
+
+.bloc:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+/* TITRE BLOC */
+.bloc h3 {
+    margin-bottom: 12px;
+    color: var(--color-primary);
+    font-size: 1.6rem;
+}
+
+/* COULEUR DU JOUR */
+.couleur-preview {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    margin: 10px auto;
+    border: 3px solid var(--color-primary);
+}
+
+.couleur-nom {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* DEVINETTE INPUT */
+#devinette-reponse {
+    width: 80%;
+    padding: 10px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border: 2px solid var(--color-primary);
+    text-align: center;
+}
+
+/* BOUTONS */
+.btn {
+    background: var(--color-primary);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 14px;
+    font-weight: bold;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--color-secondary);
+}
+
+/* PETALS ANIMATION */
+.petal {
+    position: fixed;
+    top: -20px;
+    width: 14px;
+    height: 14px;
+    background: #ffd9ec;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: fall 6s linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0) translateX(0) rotate(0); }
+    100% { transform: translateY(120vh) translateX(40px) rotate(360deg); }
+}
