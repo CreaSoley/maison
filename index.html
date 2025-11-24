@@ -1,14 +1,17 @@
+# index.html
+
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Station de salon – Le p'tit logis</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Station de salon — Le p'tit logis</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
+    <header class="top-nav">
+        <nav>
             <ul>
                 <li><a href="#">Accueil</a></li>
                 <li><a href="#">Inspiration</a></li>
@@ -17,44 +20,219 @@
                 <li><a href="#">Techniques</a></li>
             </ul>
         </nav>
-
-        <div class="titre-site">
-            <h1>Station de salon</h1>
-            <h2>Le p'tit logis</h2>
-            <p class="slogan">Exploration entre technique et intuition<br/>Univers créatif</p>
-        </div>
     </header>
 
     <main>
-        <!-- Bloc devinette du jour -->
-        <section class="bloc" id="devinette-jour">
-            <h3>Devinette du jour</h3>
-            <p id="texte-devinette">Chargement...</p>
+        <h1 class="site-title">Station de salon</h1>
+        <h2 class="subtitle">Le p'tit logis</h2>
+        <p class="intro">Exploration entre technique et intuition<br>Univers créatif</p>
+
+        <section class="card" id="devinette-du-jour">
+            <h2>🧩 Devinette du jour</h2>
+            <p>Chargement...</p>
         </section>
 
-        <!-- Bloc proverbe du jour -->
-        <section class="bloc" id="proverbe-jour">
-            <h3>Proverbe du jour</h3>
-            <p id="texte-proverbe">Chargement...</p>
-            <p id="texte-traduction" class="traduction"></p>
+        <section class="card" id="proverbe-du-jour">
+            <h2>💬 Proverbe du jour</h2>
+            <p>Chargement...</p>
         </section>
 
-        <!-- Bloc activité & couleur du jour -->
-        <section class="bloc" id="activite-jour">
-            <h3>Couleur & activité du jour</h3>
-            <div id="couleur-du-jour"></div>
-
-            <p><strong id="activite"></strong></p>
-            <p><strong>Catégorie :</strong> <span id="categorie"></span></p>
-            <p><strong>Niveau :</strong> <span id="niveau"></span></p>
+        <section class="card" id="activite-du-jour">
+            <h2>🎨 Couleur & activité du jour</h2>
+            <div class="couleur-box" id="couleur-box"></div>
+            <p id="activite-texte"></p>
+            <p><strong>Catégorie :</strong> <span id="activite-categorie"></span></p>
+            <p><strong>Niveau :</strong> <span id="activite-niveau"></span></p>
         </section>
     </main>
 
     <footer>
-        <p>© 2025 — Le p'tit logis — Univers créatif</p>
+        © 2025 — Le p'tit logis — Univers créatif
     </footer>
 
-    <script src="js/script.js"></script>
     <script src="js/proverbe-du-jour.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
+```
+
+---
+
+# style.css
+
+```css
+/* Base */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    background: linear-gradient(90deg, rgba(42,123,155,1) 0%, rgba(186,194,190,1) 50%, rgba(133,162,212,1) 100%);
+    color: #222;
+}
+
+a { text-decoration: none; color: #222; }
+
+/* Navigation */
+.top-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    justify-content: flex-end;
+}
+
+/* Titles */
+.site-title {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 2.4rem;
+}
+
+.subtitle, .intro { text-align: center; }
+
+/* Cards */
+.card {
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.55);
+    border-radius: 18px;
+    padding: 25px;
+    margin: 30px auto;
+    width: min(90%, 900px);
+    box-shadow: 0 4px 25px rgba(0,0,0,0.12);
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Couleur */
+.couleur-box {
+    width: 100%;
+    height: 80px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px 0;
+    opacity: 0.8;
+}
+```
+
+---
+
+# js/script.js
+
+```javascript
+// =========================
+// Devinette du jour (Webapp futur)
+// =========================
+const devinettes = [
+    "Je parle toutes les langues mais je n’ai pas de bouche. Qui suis‑je ? (Réponse : l’écho)",
+    "Je grandis sans être vivant. Qui suis‑je ? (Réponse : un cristal)",
+    "Plus je suis grande, moins on me voit. Qui suis‑je ? (Réponse : l'obscurité)"
+];
+
+function chargerDevinette() {
+    const pick = devinettes[Math.floor(Math.random() * devinettes.length)];
+    document.querySelector('#devinette-du-jour p').textContent = pick;
+}
+
+// =========================
+// Activité du jour depuis CSV
+// =========================
+async function chargerActivite() {
+    const response = await fetch('data/activites.csv');
+    const text = await response.text();
+    const lignes = text.trim().split('\n').slice(1);
+
+    const items = lignes.map(l => {
+        const [activite, categorie, niveau, couleur] = l.split(',');
+        return { activite, categorie, niveau, couleur };
+    });
+
+    const choix = items[Math.floor(Math.random() * items.length)];
+
+    document.getElementById('couleur-box').style.background = choix.couleur;
+    document.getElementById('activite-texte').textContent = `« ${choix.activite} »`;
+    document.getElementById('activite-categorie').textContent = choix.categorie;
+    document.getElementById('activite-niveau').textContent = choix.niveau;
+}
+
+// Start
+window.addEventListener('DOMContentLoaded', () => {
+    chargerDevinette();
+    chargerActivite();
+});
+```
+
+---
+
+# js/proverbe-du-jour.js
+
+```javascript
+// Lecture robuste du CSV Proverbes
+function parseCSVLine(ligne) {
+    const parts = [];
+    let current = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < ligne.length; i++) {
+        const char = ligne[i];
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            parts.push(current.trim());
+            current = "";
+        } else {
+            current += char;
+        }
+    }
+    parts.push(current.trim());
+
+    if (parts.length >= 3) {
+        return {
+            date: parts[0].trim(),
+            texte: parts[1].trim().replace(/"/g, ""),
+            traduction: parts[2].trim().replace(/"/g, "")
+        };
+    }
+    return null;
+}
+
+async function chargerProverbe() {
+    try {
+        const rep = await fetch('data/proverbes.csv');
+        const csv = await rep.text();
+
+        const lignes = csv.trim().split('\n');
+        const liste = lignes.slice(1).map(parseCSVLine).filter(v => v);
+
+        const now = new Date();
+        const jj = String(now.getDate()).padStart(2,'0');
+        const mm = String(now.getMonth()+1).padStart(2,'0');
+        const today = `${jj}/${mm}`;
+
+        let choix = liste.find(p => p.date === today);
+        if (!choix) choix = liste[Math.floor(Math.random() * liste.length)];
+
+        const zone = document.getElementById('proverbe-du-jour');
+        zone.innerHTML = `
+            <h2>💬 Proverbe du jour</h2>
+            <p class="proverbe-text">« ${choix.texte} »</p>
+            <p class="proverbe-traduction">${choix.traduction}</p>
+        `;
+
+    } catch (err) {
+        document.getElementById('proverbe-du-jour').innerHTML = "Erreur de chargement.";
+    }
+}
+
+window.addEventListener('DOMContentLoaded', chargerProverbe);
+```
