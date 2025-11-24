@@ -1,87 +1,97 @@
 <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue dans notre station de salon</title>
 
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
 
-<main class="page-content">
+    <!-- Icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+    <style>
+        @font-face {
+            font-family: "JuneInRock";
+            src: url("assets/fonts/June in Rock.otf");
+        }
+        .title-rock { font-family: "JuneInRock"; }
+    </style>
+</head>
 
-<!-- HERO -->
-<section class="hero">
-<h2 class="title-rock hero-title">Bienvenue dans notre station de salon</h2>
-<p class="tagline hero-subtitle">Exploration entre technique et intuition</p>
-<!-- Widget météo -->
-<a class="weatherwidget-io" href="https://forecast7.com/fr/49d121d40/27920/" data-label_1="27920" data-label_2="Météo" data-font="Roboto" data-icons="Climacons Animated" data-theme="marine">27920 Météo</a>
-</section>
+<body class="accueil">
 
+<header class="header-title">
+    <h1 class="title-rock">Bienvenue dans notre station de salon</h1>
+    <p class="subtitle">Exploration entre technique et intuition</p>
+</header>
 
-<!-- ZONE 3 BLOCS -->
-<section class="blocs-container">
-
-
-<!-- PROVERBE -->
-<div class="bloc">
-<h3 class="title-rock"><span class="icon">✨</span> Proverbe du jour</h3>
-<div id="proverbe-du-jour" class="bloc-center">
-<p class="proverbe-text">Chargement...</p>
-</div>
-</div>
-
-
-<!-- DEVINETTE -->
-<div class="bloc">
-<h3 class="title-rock"><span class="icon">🌿</span> Devinette du jour</h3>
-<div id="devinette-du-jour" class="bloc-center">
-<p>Chargement…</p>
-</div>
-</div>
-
-
-<!-- DÉFI ARTISTIQUE -->
-<div class="bloc" id="defi-du-jour-bloc">
-<h3 class="title-rock"><span class="icon">🎨</span> Défi du jour</h3>
-<div id="defi-du-jour" class="bloc-center">
-<p id="defi-texte">Chargement…</p>
-<div id="couleur-preview"></div>
-<p id="couleur-nom"></p>
-</div>
+<!-- MÉTÉO -->
+<div class="weather-container">
+    <a class="weatherwidget-io" href="https://forecast7.com/fr/49d121d40/27920/" 
+       data-label_1="27920" data-label_2="Météo" data-font="Roboto" 
+       data-icons="Climacons Animated" data-theme="marine">27920 Météo</a>
 </div>
 
-
-</section>
-
-
-<!-- ATELIER DU MOIS -->
-<section class="atelier-mois box">
-<h3>Atelier du Mois</h3>
-<div class="atelier-container"></div>
-</section>
-
-
-<!-- CTA -->
-<section class="cta-buttons">
-<a href="pages/inspiration.html" class="btn cta">💡 Inspiration</a>
-<a href="pages/portfolio.html" class="btn cta">🖼️ Portfolio</a>
-<a href="pages/carnet.html" class="btn cta">📓 Carnet</a>
-<a href="pages/techniques.html" class="btn cta">🎨 Techniques</a>
-</section>
-
-
-</main>
-
-
-<footer>
-Mon Atelier Créatif • Projet personnel • 2025
-</footer>
-
-
-<!-- SCRIPTS -->
-<script src="js/script.js"></script>
-<script src="js/proverbe-du-jour.js"></script>
-<script src="js/devinette-du-jour.js"></script>
-<script src="js/activites-loader.js"></script>
 <script>
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+!function(d,s,id){
+    var js,fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)){
+        js=d.createElement(s);js.id=id;
+        js.src='https://weatherwidget.io/js/widget.min.js';
+        fjs.parentNode.insertBefore(js,fjs);
+    }
+}(document,'script','weatherwidget-io-js');
 </script>
 
+
+<!-- NAVIGATION -->
+<nav class="nav-menu">
+    <a href="pages/techniques-artistiques.html"><i class="fa-solid fa-palette"></i> Techniques artistiques</a>
+    <a href="pages/savons.html"><i class="fa-solid fa-soap"></i> Savons</a>
+    <a href="pages/recettes-famille.html"><i class="fa-solid fa-bowl-food"></i> Recettes de famille</a>
+    <a href="pages/lsf.html"><i class="fa-solid fa-hands"></i> LSF</a>
+</nav>
+
+
+<!-- ACTIVITÉ DU MOIS -->
+<section class="mois-bloc">
+    <h2 class="title-rock">✨ Activité du mois</h2>
+    <p class="mois-texte">
+        Une activité inspirante sera ajoutée ici chaque mois !
+    </p>
+</section>
+
+
+<!-- ENCARTS JOURNALIERS -->
+<section class="daily-section">
+
+    <!-- PROVERBE -->
+    <div class="daily-card" id="proverbe-card">
+        <i class="fa-solid fa-scroll daily-icon"></i>
+        <h3>Proverbe du jour</h3>
+        <p id="proverbe">Chargement...</p>
+    </div>
+
+    <!-- DEVINETTE -->
+    <div class="daily-card">
+        <i class="fa-solid fa-question daily-icon"></i>
+        <h3>Devinette du jour</h3>
+        <p id="devinette">Chargement...</p>
+    </div>
+
+    <!-- DÉFI -->
+    <div class="daily-card">
+        <i class="fa-solid fa-bolt daily-icon"></i>
+        <h3>Défi du jour</h3>
+        <p id="defi">Chargement...</p>
+    </div>
+
+</section>
+
+
+<script src="js/script.js"></script>
 
 </body>
 </html>
