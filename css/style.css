@@ -1,199 +1,49 @@
-/* ------------------------------
-   RESET
------------------------------- */
+/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: "Trebuchet MS", sans-serif;
-    background: #f7f3ef;
-    overflow-x: hidden; /* empêche le scroll horizontal */
+/* ROOT COLORS */
+:root {
+    --font-sans: "Inter", sans-serif;
+
+    --color-light: #e6effc;
+    --color-dark: #1b1b1b;
+
+    --color-primary: #4a6fa5;
+    --color-secondary: #6e89b5;
 }
 
-/* ------------------------------
-   NAVBAR
------------------------------- */
+/* BODY */
+body {
+    font-family: var(--font-sans);
+    background: var(--color-light);
+    color: var(--color-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ACCUEIL BACKGROUND */
+body.accueil {
+    background: linear-gradient(135deg, #0f5b82, #8fb8e1);
+}
+
+/* TITRE POLICE PERSONNALISÉE */
+.title-rock {
+    font-family: 'JuneInRock', serif;
+    font-size: 2.7rem;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* NAVBAR */
 .navbar {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 12px 20px;
-    background: #fff;
-    border-bottom: 2px solid #ddd;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.logo-link {
-    display: flex;
     align-items: center;
-    gap: 10px;
-    text-decoration: none;
+    padding: 20px 40px;
 }
 
-.logo-img {
-    height: 60px;
-    width: auto;
-}
-
-@media (min-width: 768px) {
-    .logo-img {
-        height: 85px;
-    }
-}
-
-.logo-title {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #333;
-}
-
-.nav-menu {
-    list-style: none;
-    display: flex;
-    gap: 18px;
-}
-
-.nav-menu a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #444;
-}
-
-.nav-menu a:hover {
-    color: #c5965f;
-}
-
-/* ------------------------------
-   HERO
------------------------------- */
-.hero {
-    text-align: center;
-    padding: 40px 20px 20px;
-}
-
-.hero-title {
-    font-size: 1.9rem;
-}
-
-@media (min-width: 768px) {
-    .hero-title {
-        font-size: 2.6rem; /* agrandi sur PC */
-    }
-}
-
-.tagline {
-    margin-top: 5px;
-    font-size: 1.1rem;
-    color: #5b5b5b;
-}
-
-/* ------------------------------
-   BLOCS
------------------------------- */
-.blocs-container {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
-.bloc {
-    background: #fff;
-    padding: 22px 18px;
-    margin-bottom: 25px;
-    border: 2px solid #ddd;
-    border-radius: 12px;
-    text-align: center;
-}
-
-.bloc-center {
-    text-align: center;
-}
-
-.bloc h3 {
-    margin-bottom: 12px;
-    font-size: 1.6rem;
-    color: #444;
-}
-
-/* Bordure dynamique du défi */
-#defi-du-jour-bloc {
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
-}
-
-/* ------------------------------
-   BOUTONS
------------------------------- */
-.cta-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin: 40px 0;
-}
-
-.btn.cta {
-    text-decoration: none;
-    padding: 12px 25px;
-    background: #c5965f;
-    color: white;
-    border-radius: 25px;
-    font-size: 1.1rem;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-    transition: 0.25s;
-}
-
-.btn.cta:hover {
-    background: #ad7f4e;
-}
-
-/* ------------------------------
-   ANIMATION – PLUIE DE FEUILLES
------------------------------- */
-#zen-animation {
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0;
-}
-
-.leaf {
-    position: absolute;
-    top: -50px;
-    width: 22px;
-    height: 22px;
-    background-image: url("../assets/images/leaf.webp");
-    background-size: contain;
-    background-repeat: no-repeat;
-    animation: fall linear infinite;
-    opacity: 0.9;
-}
-
-@keyframes fall {
-    0% {
-        transform: translateY(-50px) rotate(0deg);
-        opacity: 0.8;
-    }
-    100% {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-    }
-}
-
-/* ------------------------------
-   FOOTER
------------------------------- */
-footer {
-    text-align: center;
-    padding: 25px;
-    color: #777;
-    font-size: 0.9rem;
-}
+.lo
