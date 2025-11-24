@@ -23,8 +23,8 @@
     <!-- NAVIGATION -->
     <nav class="navbar">
         <a href="index.html" class="logo-link">
-            <img src="assets/images/logo.png" alt="CreaSoley - Logo" class="logo-img">
-            <span class="logo-title">Le p'tit logis</span>
+            <img src="assets/images/creasoley-logo.webp" class="logo-img">
+            <span class="logo-title">CreaSoley</span>
         </a>
 
         <ul class="nav-menu">
@@ -40,59 +40,42 @@
 
         <!-- HERO -->
         <section class="hero">
-            <h2 class="title-rock">Bienvenue dans notre station de salon</h2>
+            <h2 class="title-rock hero-title">Bienvenue dans notre station de salon</h2>
             <p class="tagline">Exploration entre technique et intuition</p>
             <p>Univers créatif</p>
         </section>
 
-        <!-- ZONE 3 BLOCS -->
+        <!-- BLOCS -->
         <section class="blocs-container">
 
             <!-- PROVERBE -->
             <div class="bloc">
-                <h3 class="title-rock">✨ Proverbe du jour</h3>
-                <div id="proverbe-du-jour">
+                <h3 class="title-rock">💠 Proverbe du jour</h3>
+                <div id="proverbe-du-jour" class="bloc-center">
                     <p class="proverbe-text">Chargement...</p>
                 </div>
             </div>
 
             <!-- DEVINETTE -->
-<div class="bloc" id="bloc-devinette">
-    <h3 class="title-rock">💠 Devinette du jour</h3>
+            <div class="bloc">
+                <h3 class="title-rock">💠 Devinette du jour</h3>
+                <div id="devinette-du-jour" class="bloc-center">
+                    <p>Chargement…</p>
+                </div>
+            </div>
 
-    <div id="devinette-du-jour">
-        <p id="texte-devinette">Chargement…</p>
-
-        <input type="text" id="reponse-user" placeholder="Votre réponse…" class="input-devinette">
-
-        <button id="btn-valider" class="btn">Valider</button>
-
-        <p id="message-devinette" class="message-devinette"></p>
-
-        <!-- Animation zen -->
-        <div id="zen-animation" class="zen-hidden">
-            🌸✨
-        </div>
-    </div>
-</div>
-
-
-
-            <!-- DÉFI ARTISTIQUE -->
+            <!-- DEFI ARTISTIQUE -->
             <div class="bloc" id="defi-du-jour-bloc">
-                <h3 class="title-rock">🎨 Défi du jour</h3>
-                <div id="defi-du-jour">
+                <h3 class="title-rock">💠 Défi du jour</h3>
+                <div id="defi-du-jour" class="bloc-center">
                     <p>Chargement…</p>
                 </div>
             </div>
 
         </section>
 
-        <!-- ATELIER DU MOIS -->
-        <section class="atelier-mois box">
-            <h3>Atelier du Mois</h3>
-            <div class="atelier-container"></div>
-        </section>
+        <!-- ANIMATION FEUILLES -->
+        <div id="zen-animation"></div>
 
         <!-- CTA -->
         <section class="cta-buttons">
@@ -108,13 +91,8 @@
         Mon Atelier Créatif • Projet personnel • 2025
     </footer>
 
-    <!-- SCRIPTS -->
-    <script src="js/script.js"></script>
-    <script src="js/proverbe-du-jour.js"></script>
-    <script src="js/devinette-du-jour.js"></script>
-    <script src="js/activites-loader.js"></script>
+    <!-- JS -->
+    <script src="js/main.js"></script>
 
 </body>
 </html>
-
-
