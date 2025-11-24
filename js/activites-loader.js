@@ -1,3 +1,6 @@
+/* ============================================================
+   🎨 Noms poétiques des couleurs
+============================================================ */
 const nomCouleurs = {
     "#D7D3CF": "Sable doux",
     "#D8D0C2": "Aube ivoire",
@@ -21,31 +24,81 @@ const nomCouleurs = {
     "#F8BBD0": "Pivoine douce"
 };
 
+/* ============================================================
+   📌 Parseur CSV robuste (gère guillemets + virgules)
+============================================================ */
+function parseCSVLine(line) {
+    const result = [];
+    let current = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+
+        if (ch === '"') {
+            inQuotes = !inQuotes; 
+        } else if (ch === "," && !inQuotes) {
+            result.push(current.trim().replace(/^"|"$/g, ""));
+            current = "";
+        } else {
+            current += ch;
+        }
+    }
+
+    result.push(current.trim().replace(/^"|"$/g, ""));
+    return result;
+}
+
+/* ============================================================
+   🎨 Défi du jour
+============================================================ */
+
 async function chargerDefi() {
     try {
         const res = await fetch("data/activites.csv");
+        if (!res.ok) throw new Error("Impossible de charger activites.csv");
+
         const texte = await res.text();
 
-        const lignes = texte.split("\n").slice(1);
+        // Nettoyage + découpe
+        const lignes = texte
+            .split(/\r?\n/)
+            .slice(1)
+            .filter(l => l.trim() !== "");
+
+        if (lignes.length === 0) return;
+
+        // Calcul du jour
         const d = new Date();
         const index = (d.getMonth() * 31 + d.getDate()) % lignes.length;
 
-        const parts = lignes[index].split(",");
-        const [defi, cat, niv, couleur] = parts;
+        const parts = parseCSVLine(lignes[index]);
+        const [defi, categorie, niveau, couleur] = parts;
 
-        document.getElementById("defi-texte").textContent = defi;
+        // injection texte
+        document.getElementById("defi-texte").textContent = defi || "Défi non disponible";
 
-        // carré de couleur
+        // couleur
+        const color = (couleur || "").trim();
         const bloc = document.getElementById("defi-du-jour-bloc");
-        bloc.style.border = "4px solid " + couleur.trim();
 
-        const prev = document.getElementById("couleur-preview");
-        prev.style.background = couleur.trim();
-
-        document.getElementById("couleur-nom").textContent =
-            nomCouleurs[couleur.trim()] || "Couleur du jour";
+        if (color) {
+            bloc.style.border = "4px solid " + color;
+            document.getElementById("couleur-preview").style.background = color;
+            document.getElementById("couleur-nom").textContent =
+                nomCouleurs[color] || `Couleur ${color}`;
+        } else {
+            document.getElementById("couleur-nom").textContent = "—";
+        }
 
     } catch (err) {
         console.error("⛔ Erreur défi :", err);
+        document.getElementById("defi-texte").textContent =
+            "Erreur lors du chargement du défi.";
     }
 }
+
+/* ============================================================
+   🚀 Lancement auto
+============================================================ */
+document.addEventListener("DOMContentLoaded", chargerDefi);
