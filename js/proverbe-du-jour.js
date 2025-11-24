@@ -1,68 +1,38 @@
-/************************************************************
- * 📜 PROVERBE DU JOUR — Version robuste + compatible CSV
- ************************************************************/
-
-// Fonction robuste pour parser une ligne CSV avec guillemets
-function parseCSVLine(line) {
-    const parts = [];
-    let cur = "";
-    let inQuotes = false;
-
-    for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-
-        if (ch === '"') {
-            inQuotes = !inQuotes; // bascule dans / hors guillemets
-            continue;
-        }
-
-        if (ch === "," && !inQuotes) {
-            parts.push(cur.trim());
-            cur = "";
-        } else {
-            cur += ch;
-        }
-    }
-
-    parts.push(cur.trim());
-    return parts;
-}
-
 async function chargerProverbe() {
     try {
         const res = await fetch("data/proverbes.csv");
         if (!res.ok) throw new Error("Fichier introuvable");
         
         const texte = await res.text();
-        const lignes = texte.trim().split(/\r?\n/).slice(1); // sauter header
 
-        const now = new Date();
-        const cle = `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}`;
+        // On gère correctement les retours chariot Windows + Mac
+        const lignes = texte.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
 
-        let trouve = false;
+        // Date du jour : JJ/MM
+        const d = new Date();
+        const cle = `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+
+        let trouvé = false;
 
         for (let ligne of lignes) {
-            if (!ligne.trim()) continue;
+            const parts = ligne.split(",");
 
-            const parts = parseCSVLine(ligne);
-
+            // sécurité si une ligne a moins de 3 éléments
             if (parts.length < 3) continue;
 
-            const date = parts[0];
-            const proverbe = parts[1];
-            const traduction = parts[2];
+            const date = parts[0].trim();
+            const proverbe = parts[1].trim();
+            const traduction = parts.slice(2).join(",").trim(); // pour gérer les virgules dans la traduction
 
-            if (date.trim() === cle) {
-                document.querySelector("#proverbe-du-jour .proverbe-text").innerHTML = `
-                    <strong>« ${proverbe.trim()} »</strong><br>
-                    ${traduction.trim()}
-                `;
-                trouve = true;
+            if (date === cle) {
+                document.querySelector("#proverbe-du-jour .proverbe-text").innerHTML =
+                    `<strong>« ${proverbe} »</strong><br>${traduction}`;
+                trouvé = true;
                 break;
             }
         }
 
-        if (!trouve) {
+        if (!trouvé) {
             document.querySelector("#proverbe-du-jour .proverbe-text").textContent =
                 "Aucun proverbe pour aujourd’hui.";
         }
@@ -74,5 +44,4 @@ async function chargerProverbe() {
     }
 }
 
-// Lancement automatique
 document.addEventListener("DOMContentLoaded", chargerProverbe);
