@@ -3,41 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créativité & Proverbes</title>
+    <title>🎨 CreaSoley – Univers Créatif</title>
 
-    <!-- Tes fichiers CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/theme.css">
 </head>
 
-<body>
+<body class="accueil">
 
-<header>
-    <h1>Créativité & Proverbes</h1>
-</header>
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="assets/images/logo-creasoley.svg" alt="CreaSoley - Logo" class="logo-img">
+            <span class="logo-title">CreaSoley</span>
+        </a>
+        <ul class="nav-menu">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="pages/inspiration.html">Inspiration</a></li>
+            <li><a href="pages/portfolio.html">Portfolio</a></li>
+            <li><a href="pages/carnet.html">Carnet</a></li>
+            <li><a href="pages/techniques.html">Techniques</a></li>
+        </ul>
+    </nav>
 
-<div class="duo-container">
+    <main class="page-content">
 
-    <!-- PROVERBE -->
-    <section id="proverbe-du-jour" class="box">
-        <h2>💬 Proverbe du jour</h2>
-        <p>Chargement…</p>
-    </section>
+        <!-- HERO -->
+        <section class="hero">
+            <h2>Bienvenue dans notre station de salon</h2>
+            <p class="tagline">Exploration entre technique et intuition</p>
+            <img src="assets/images/hero.jpg" alt="Univers créatif" class="hero-image">
+        </section>
 
-    <!-- DEFI -->
-    <section id="defi-du-jour" class="box">
-        <h2>🎨 Petit Défi Créatif</h2>
-        <p>Tire un défi pour stimuler ta créativité !</p>
+        <!-- PROVERBE DU JOUR -->
+        <section class="proverbe-section box">
+            <div id="proverbe-du-jour">
+                <p class="proverbe-text">Chargement du proverbe...</p>
+            </div>
+        </section>
 
-        <button class="btn" onclick="genererDefi()">Nouveau Défi</button>
-        <div id="resultat-defi"></div>
-    </section>
+        <!-- PETIT DÉFI -->
+        <section class="widget-section">
+            <div class="box" id="widget-defis">
+                <h2>🧩 Petit Défi Créatif</h2>
+                <div id="resultat-defi">
+                    <p>Tire un défi pour stimuler ta créativité !</p>
+                </div>
+                <button class="btn" onclick="genererDefi()">Nouveau Défi</button>
+            </div>
+        </section>
 
-</div>
+        <!-- CTA -->
+        <section class="cta-buttons">
+            <a href="pages/inspiration.html" class="btn">💡 Inspiration</a>
+            <a href="pages/portfolio.html" class="btn">🖼️ Portfolio</a>
+            <a href="pages/carnet.html" class="btn">📓 Carnet</a>
+            <a href="pages/techniques.html" class="btn">🎨 Techniques</a>
+        </section>
 
-<!-- Tes JS -->
-<script src="js/proverbe-du-jour.js"></script>
-<script src="js/script.js"></script>
+    </main>
+
+    <footer>
+        Mon Atelier Créatif • Projet personnel • 2025
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/script.js"></script>
+    <script src="js/proverbe-du-jour.js"></script>
 
 </body>
 </html>
