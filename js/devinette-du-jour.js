@@ -1,50 +1,92 @@
-document.addEventListener("DOMContentLoaded", () => {
+async function chargerDevinette() {
+    const zone = document.querySelector("#devinette-du-jour");
+    
+    try {
+        const response = await fetch("data/devinettes.csv");
+        if (!response.ok) throw new Error("Impossible de charger le fichier CSV");
 
-    fetch("data/devinettes.csv")
-        .then(res => res.text())
-        .then(text => {
-            const lignes = text.split("\n").slice(1);
-            const today = new Date();
-            const index = (today.getMonth() * 31 + today.getDate()) % lignes.length;
+        const data = await response.text();
 
-            const [date, dev, rep] = lignes[index].split(",");
+        // Nettoyage CSV
+        const lignes = data
+            .split("\n")
+            .map(l => l.trim())
+            .filter(l => l.length > 0)
+            .slice(1); // skip header
 
-            document.getElementById("devinette-texte").textContent = dev.trim();
+        // Date jj/mm
+        const today = new Date();
+        const jour = String(today.getDate()).padStart(2, "0");
+        const mois = String(today.getMonth() + 1).padStart(2, "0");
+        const cle = `${jour}/${mois}`;
 
-            const bouton = document.getElementById("devinette-valider");
-            const feedback = document.getElementById("devinette-feedback");
+        let trouve = false;
 
-            bouton.addEventListener("click", () => {
-                const saisie = document.getElementById("devinette-reponse").value.trim();
+        for (const ligne of lignes) {
 
-                if (saisie === "") {
-                    feedback.textContent = "Veuillez saisir une réponse.";
-                    feedback.style.color = "red";
-                    return;
-                }
+            // Découpage sécurisé (gère les virgules dans les devinettes)
+            const parts = ligne.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+            if (!parts || parts.length < 3) continue;
 
-                if (saisie.toLowerCase() === rep.trim().toLowerCase()) {
-                    feedback.textContent = "Bravo ! 🌿 À demain pour une nouvelle devinette.";
-                    feedback.style.color = "green";
+            const date = parts[0].replace(/"/g, "").trim();
+            const question = parts[1].replace(/"/g, "").trim();
+            const reponse = parts[2].replace(/"/g, "").trim();
 
-                    lancerPetales();
-                } else {
-                    feedback.textContent = "Ce n’est pas la bonne réponse.";
-                    feedback.style.color = "red";
-                }
-            });
-        });
-});
+            if (date === cle) {
+                afficherDevinette(question, reponse);
+                trouve = true;
+                break;
+            }
+        }
 
-/* ANIMATION ZEN */
-function lancerPetales() {
-    for (let i = 0; i < 20; i++) {
-        const petal = document.createElement("div");
-        petal.classList.add("petal");
-        petal.style.left = Math.random() * 100 + "vw";
-        petal.style.animationDelay = (Math.random() * 2) + "s";
-        document.body.appendChild(petal);
+        if (!trouve) {
+            zone.innerHTML = `<p>Aucune devinette prévue pour aujourd’hui.</p>`;
+        }
 
-        setTimeout(() => petal.remove(), 6000);
+    } catch (err) {
+        console.error("Erreur chargement devinette :", err);
+        zone.innerHTML = `<p>Erreur de chargement.</p>`;
     }
 }
+
+function afficherDevinette(question, bonneReponse) {
+    const zone = document.querySelector("#devinette-du-jour");
+
+    zone.innerHTML = `
+        <p class="question"><strong>${question}</strong></p>
+        
+        <input id="reponse-user" type="text" placeholder="Votre réponse..." />
+        
+        <button id="btn-valider">Valider</button>
+
+        <p id="message-reponse" class="msg"></p>
+    `;
+
+    document.getElementById("btn-valider").addEventListener("click", () => {
+        const saisie = document.getElementById("reponse-user").value.trim();
+
+        if (saisie === "") {
+            afficherMessage("Veuillez saisir une réponse.", "erreur");
+            return;
+        }
+
+        if (saisie.toLowerCase() === bonneReponse.toLowerCase()) {
+            afficherMessage("🎉 Bravo ! À demain pour une nouvelle devinette !", "ok");
+
+            // Lancer l’animation zen si demandée (C)
+            if (typeof declencherZen === "function") declencherZen();
+
+        } else {
+            afficherMessage("❌ Ce n'est pas la bonne réponse…", "erreur");
+        }
+    });
+}
+
+function afficherMessage(msg, type) {
+    const zone = document.getElementById("message-reponse");
+    zone.textContent = msg;
+
+    zone.className = "msg " + (type === "ok" ? "msg-ok" : "msg-erreur");
+}
+
+document.addEventListener("DOMContentLoaded", chargerDevinette);
