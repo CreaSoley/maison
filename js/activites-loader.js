@@ -1,5 +1,5 @@
 /* ============================================================
-   🎨 Noms poétiques des couleurs
+   🎨 Noms de couleurs
 ============================================================ */
 const nomCouleurs = {
     "#D7D3CF": "Sable doux",
@@ -25,7 +25,7 @@ const nomCouleurs = {
 };
 
 /* ============================================================
-   📌 Parseur CSV robuste (gère guillemets + virgules)
+   📌 Parseur CSV robuste (gère les guillemets et virgules)
 ============================================================ */
 function parseCSVLine(line) {
     const result = [];
@@ -36,69 +36,73 @@ function parseCSVLine(line) {
         const ch = line[i];
 
         if (ch === '"') {
-            inQuotes = !inQuotes; 
-        } else if (ch === "," && !inQuotes) {
-            result.push(current.trim().replace(/^"|"$/g, ""));
+            inQuotes = !inQuotes;
+        }
+        else if (ch === "," && !inQuotes) {
+            result.push(current.trim());
             current = "";
-        } else {
+        }
+        else {
             current += ch;
         }
     }
 
-    result.push(current.trim().replace(/^"|"$/g, ""));
+    result.push(current.trim());
     return result;
 }
 
 /* ============================================================
-   🎨 Défi du jour
+   ⚡ Charger le défi du jour
 ============================================================ */
-
 async function chargerDefi() {
     try {
         const res = await fetch("data/activites.csv");
-        if (!res.ok) throw new Error("Impossible de charger activites.csv");
+        if (!res.ok) throw new Error("activites.csv introuvable");
 
         const texte = await res.text();
 
-        // Nettoyage + découpe
+        // lignes propres
         const lignes = texte
             .split(/\r?\n/)
-            .slice(1)
-            .filter(l => l.trim() !== "");
+            .filter(l => l.trim() !== "")
+            .slice(1);
 
         if (lignes.length === 0) return;
 
-        // Calcul du jour
+        // index basé sur la date
         const d = new Date();
         const index = (d.getMonth() * 31 + d.getDate()) % lignes.length;
 
         const parts = parseCSVLine(lignes[index]);
-        const [defi, categorie, niveau, couleur] = parts;
 
-        // injection texte
-        document.getElementById("defi-texte").textContent = defi || "Défi non disponible";
+        const defi   = parts[0] || "Défi manquant";
+        const cat    = parts[1] || "";
+        const niveau = parts[2] || "";
+        const couleur = (parts[3] || "").trim();
 
-        // couleur
-        const color = (couleur || "").trim();
+        /* 🌈 Texte du défi */
+        document.getElementById("defi-texte").textContent = defi;
+
+        /* 🌈 Bordure colorée */
         const bloc = document.getElementById("defi-du-jour-bloc");
+        bloc.style.border = `4px solid ${couleur}`;
 
-        if (color) {
-            bloc.style.border = "4px solid " + color;
-            document.getElementById("couleur-preview").style.background = color;
-            document.getElementById("couleur-nom").textContent =
-                nomCouleurs[color] || `Couleur ${color}`;
-        } else {
-            document.getElementById("couleur-nom").textContent = "—";
-        }
+        /* 🌈 Carré de couleur */
+        const prev = document.getElementById("couleur-preview");
+        prev.style.background = couleur;
+
+        /* 🌈 Nom de la couleur */
+        document.getElementById("couleur-nom").textContent =
+            nomCouleurs[couleur] || "Couleur du jour";
 
     } catch (err) {
         console.error("⛔ Erreur défi :", err);
         document.getElementById("defi-texte").textContent =
-            "Erreur lors du chargement du défi.";
+            "Erreur de chargement.";
     }
 }
 
 /* ============================================================
-   🚀 Lancement auto
+   🚀 Auto-lancement
 ============================================================ */
 document.addEventListener("DOMContentLoaded", chargerDefi);
