@@ -1,98 +1,80 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎨 CreaSoley – Univers Créatif</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CreaSoley – Le P'tit Logis</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Polices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 
-<body class="accueil">
+<body>
+    <header class="top-bar fade-in">
+        <img src="img/logo.png" alt="CreaSoley - Logo" class="logo">
 
-    <!-- NAVIGATION -->
-    <nav class="navbar">
-        <a href="index.html" class="logo-link">
-            <img src="assets/images/logo-creasoley.svg" alt="CreaSoley - Logo" class="logo-img">
-            <span class="logo-title">CreaSoley</span>
-        </a>
+        <nav>
+            <ul>
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Inspiration</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Carnet</a></li>
+                <li><a href="#">Techniques</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <ul class="nav-menu">
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="pages/inspiration.html">Inspiration</a></li>
-            <li><a href="pages/portfolio.html">Portfolio</a></li>
-            <li><a href="pages/carnet.html">Carnet</a></li>
-            <li><a href="pages/techniques.html">Techniques</a></li>
-        </ul>
-    </nav>
+    <main>
 
-    <main class="page-content">
-
-        <!-- HERO -->
-        <section class="hero">
-            <h2>Station de salon</h2>
-             <h2>Le p'tit logis</h2>
-            <p class="tagline">Exploration entre technique et intuition</p>
-            <p>Univers créatif</p>
+        <!-- TITRE -->
+        <section class="hero fade-in">
+            <h1>Station de salon<br><span>Le p'tit logis</span></h1>
+            <p class="subtitle">Exploration entre technique et intuition — Univers créatif</p>
         </section>
 
-        <!-- LIGNE : Proverbe • Défi • Couleur -->
-        <section class="cards-row">
+        <!-- 3 CARTES -->
+        <section class="cards-container fade-in">
 
-            <div class="card">
+            <!-- Proverbe -->
+            <div class="glass-card slide-up" id="proverbe-card">
                 <h3>Proverbe du jour</h3>
-                <div id="proverbe-du-jour">
-                    <p class="proverbe-text">Chargement...</p>
-                </div>
+                <p id="proverbe-text">Chargement…</p>
+                <p id="proverbe-source" class="source"></p>
             </div>
 
-            <div class="card">
+            <!-- Défi du jour -->
+            <div class="glass-card slide-up delay-1" id="defi-card">
                 <h3>Défi du jour</h3>
-                <div id="resultat-defi">
-                    <p>Tire un défi pour stimuler ta créativité !</p>
-                </div>
-                <button class="btn" onclick="genererDefi()">Nouveau Défi</button>
+                <p id="defi-text">Chargement…</p>
             </div>
 
-            <div class="card">
+            <!-- Couleur du jour -->
+            <div class="glass-card slide-up delay-2" id="couleur-card">
                 <h3>Couleur du jour</h3>
-                <div id="couleur-du-jour">
-                    <p id="couleur-nom">Nom…</p>
-                    <p id="couleur-code">#XXXXXX</p>
-                    <div id="couleur-apercu" class="couleur-preview"></div>
-                </div>
+                <p><span id="couleur-nom">Soleil Chaud</span> <span id="couleur-code">#FFCA3A</span></p>
+
+                <div class="color-preview"></div>
             </div>
 
         </section>
 
-        <!-- ATELIER DU MOIS -->
-        <section class="atelier-mois box">
-            <h3>Atelier du Mois</h3>
-            <div class="atelier-container">
-                <!-- Tu pourras intégrer ici ta web-app -->
-            </div>
-        </section>
-
-        <!-- CTA BUTTONS -->
-        <section class="cta-buttons">
-            <a href="pages/inspiration.html" class="btn cta">💡 Inspiration</a>
-            <a href="pages/portfolio.html" class="btn cta">🖼️ Portfolio</a>
-            <a href="pages/carnet.html" class="btn cta">📓 Carnet</a>
-            <a href="pages/techniques.html" class="btn cta">🎨 Techniques</a>
+        <!-- Atelier du mois -->
+        <section class="atelier-section fade-in">
+            <h2>Atelier du Mois</h2>
+            <p class="atelier-text">À venir bientôt…</p>
         </section>
 
     </main>
 
-    <footer>
-        Mon Atelier Créatif • Projet personnel • 2025
+    <footer class="fade-in">
+        <p>Mon Atelier Créatif • Projet personnel • 2025</p>
     </footer>
 
-    <!-- SCRIPTS -->
     <script src="js/script.js"></script>
     <script src="js/proverbe-du-jour.js"></script>
-    <script src="js/defis-artistiques.js"></script>
-    <script src="js/couleur-du-jour.js"></script>
 </body>
 </html>
