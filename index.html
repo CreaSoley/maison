@@ -3,95 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenue dans notre station de salon</title>
+    <title>🎨 CreaSoley – Univers Créatif</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <!-- CSS -->
     <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/style.css">
 
-    <!-- Icônes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <!-- Police June in Rock -->
     <style>
         @font-face {
             font-family: "JuneInRock";
             src: url("assets/fonts/June in Rock.otf");
         }
-        .title-rock { font-family: "JuneInRock"; }
+        .title-rock {
+            font-family: "JuneInRock", serif;
+        }
     </style>
+
+    <!-- Icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="accueil">
 
+<!-- 🔵 HEADER -->
 <header class="header-title">
-    <h1 class="title-rock">Bienvenue dans notre station de salon</h1>
-    <p class="subtitle">Exploration entre technique et intuition</p>
-</header>
+    <h1 class="title-rock header-main-title">Bienvenue dans notre station de salon</h1>
+    <p class="header-subtitle">Exploration entre technique et intuition</p>
 
-<!-- MÉTÉO -->
-<div class="weather-container">
-    <a class="weatherwidget-io" href="https://forecast7.com/fr/49d121d40/27920/" 
-       data-label_1="27920" data-label_2="Météo" data-font="Roboto" 
-       data-icons="Climacons Animated" data-theme="marine">27920 Météo</a>
-</div>
+    <!-- 🌦 Météo -->
+    <div class="weather-container">
+        <a class="weatherwidget-io"
+            href="https://forecast7.com/fr/49d121d40/27920/"
+            data-label_1="27920"
+            data-label_2="Météo"
+            data-font="Roboto"
+            data-icons="Climacons Animated"
+            data-theme="marine">
+            27920 Météo
+        </a>
+    </div>
+</header>
 
 <script>
 !function(d,s,id){
     var js,fjs=d.getElementsByTagName(s)[0];
     if(!d.getElementById(id)){
-        js=d.createElement(s);js.id=id;
+        js=d.createElement(s);
+        js.id=id;
         js.src='https://weatherwidget.io/js/widget.min.js';
         fjs.parentNode.insertBefore(js,fjs);
     }
 }(document,'script','weatherwidget-io-js');
 </script>
 
-
-<!-- NAVIGATION -->
+<!-- 🧭 NAVIGATION -->
 <nav class="nav-menu">
-    <a href="pages/techniques-artistiques.html"><i class="fa-solid fa-palette"></i> Techniques artistiques</a>
-    <a href="pages/savons.html"><i class="fa-solid fa-soap"></i> Savons</a>
-    <a href="pages/recettes-famille.html"><i class="fa-solid fa-bowl-food"></i> Recettes de famille</a>
-    <a href="pages/lsf.html"><i class="fa-solid fa-hands"></i> LSF</a>
+    <a href="pages/techniques-artistiques.html">
+        <i class="fa-solid fa-palette"></i> Techniques artistiques
+    </a>
+    <a href="pages/savons.html">
+        <i class="fa-solid fa-soap"></i> Savons
+    </a>
+    <a href="pages/recettes-famille.html">
+        <i class="fa-solid fa-utensils"></i> Recettes de famille
+    </a>
+    <a href="pages/lsf.html">
+        <i class="fa-solid fa-hands"></i> LSF
+    </a>
 </nav>
 
-
-<!-- ACTIVITÉ DU MOIS -->
-<section class="mois-bloc">
-    <h2 class="title-rock">✨ Activité du mois</h2>
-    <p class="mois-texte">
-        Une activité inspirante sera ajoutée ici chaque mois !
-    </p>
+<!-- ⭐ ACTIVITÉ DU MOIS -->
+<section class="bloc-mois">
+    <h2 class="title-rock"><i class="fa-solid fa-star"></i> Activité du mois</h2>
+    <p>Une activité inspirante sera ajoutée ici chaque mois !</p>
 </section>
 
+<!-- 🟩 3 BLOCS JOURNALIERS -->
+<section class="blocs-container">
 
-<!-- ENCARTS JOURNALIERS -->
-<section class="daily-section">
-
-    <!-- PROVERBE -->
-    <div class="daily-card" id="proverbe-card">
-        <i class="fa-solid fa-scroll daily-icon"></i>
-        <h3>Proverbe du jour</h3>
-        <p id="proverbe">Chargement...</p>
+    <!-- 📜 PROVERBE -->
+    <div class="bloc daily-card">
+        <h3 class="title-rock">
+            <i class="fa-solid fa-scroll daily-icon"></i>
+            Proverbe du jour
+        </h3>
+        <div id="proverbe-du-jour" class="bloc-center">
+            <p class="proverbe-text">Chargement...</p>
+        </div>
     </div>
 
-    <!-- DEVINETTE -->
-    <div class="daily-card">
-        <i class="fa-solid fa-question daily-icon"></i>
-        <h3>Devinette du jour</h3>
-        <p id="devinette">Chargement...</p>
+    <!-- ❓ DEVINETTE -->
+    <div class="bloc daily-card">
+        <h3 class="title-rock">
+            <i class="fa-solid fa-question daily-icon"></i>
+            Devinette du jour
+        </h3>
+        <div id="devinette-du-jour" class="bloc-center">
+            <p>Chargement…</p>
+
+            <!-- Zone réponse -->
+            <input type="text" id="reponse-devinette" placeholder="Votre réponse...">
+            <button onclick="verifierDevinette()" class="btn">Valider</button>
+
+            <p id="devinette-resultat"></p>
+        </div>
     </div>
 
-    <!-- DÉFI -->
-    <div class="daily-card">
-        <i class="fa-solid fa-bolt daily-icon"></i>
-        <h3>Défi du jour</h3>
-        <p id="defi">Chargement...</p>
+    <!-- ⚡ DÉFI ARTISTIQUE -->
+    <div class="bloc daily-card" id="defi-du-jour-bloc">
+        <h3 class="title-rock">
+            <i class="fa-solid fa-bolt daily-icon"></i>
+            Défi du jour
+        </h3>
+        <div id="defi-du-jour" class="bloc-center">
+            <p id="defi-texte">Chargement…</p>
+
+            <!-- Couleur associée -->
+            <div id="couleur-preview"></div>
+            <p id="couleur-nom"></p>
+        </div>
     </div>
 
 </section>
 
+<footer>
+    <p>© 2025 — Le p'tit logis — Univers créatif</p>
+</footer>
 
-<script src="js/script.js"></script>
+<!-- JS -->
+<script src="js/proverbe-du-jour.js"></script>
+<script src="js/devinette-du-jour.js"></script>
+<script src="js/activites-loader.js"></script>
 
 </body>
 </html>
