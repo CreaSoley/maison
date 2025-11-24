@@ -1,82 +1,45 @@
-document.addEventListener("DOMContentLoaded", function() {
+const colorNames = {
+    "#D7D3CF": "Sable doux",
+    "#D8D0C2": "Aube ivoire",
+    "#AEB1A0": "Saule argenté",
+    "#C6D8FF": "Bleu lavande",
+    "#F2C2D4": "Rose pastel",
+    "#F9EAC3": "Crème soleil",
+    "#C8E6C9": "Vert eucalyptus",
+    "#B2DFDB": "Menthe givrée",
+    "#FFE0B2": "Pêche douce",
+    "#FFCDD2": "Pétale rosé",
+    "#D1C4E9": "Lilas tendre",
+    "#B39DDB": "Violet brume",
+    "#BBDEFB": "Bleu ciel",
+    "#C5CAE9": "Brume lunaire",
+    "#DCEDC8": "Thé matcha",
+    "#FFECB3": "Miel doré",
+    "#FFE082": "Ambre clair",
+    "#FFAB91": "Corail léger",
+    "#B2EBF2": "Aqua pure",
+    "#F8BBD0": "Pivoine douce"
+};
 
-    const nomsCouleurs = {
-        "#D7D3CF": "Gris Perle",
-        "#D8D0C2": "Sable Doux",
-        "#AEB1A0": "Vert Sauge",
-        "#C7D3E8": "Bleu Lavande",
-        "#F5E6D3": "Lin Doux",
-        "#E8D5C4": "Beige Rosé",
-        "#C6D1C3": "Feuille Pâle",
-        "#E2E8F0": "Brume Matinale",
-        "#B8C1D1": "Bleu Brume",
-        "#D4C5D9": "Mauve Thé",
-
-        "#E3DAC9": "Sable Lunaire",
-        "#B4C7C9": "Écume de Mer",
-        "#C0D6C4": "Menthe Thé",
-        "#D9E3DA": "Brume d’Herbes",
-        "#E7D9E8": "Rose Brume",
-        "#C9D4E2": "Aube Bleutée",
-        "#F2E9DD": "Neige Dorée",
-        "#D8E2CB": "Thym Doux",
-        "#BFCAD2": "Pluie Grise",
-        "#C7D9D5": "Amande d’Eau",
-        "#D9C8BA": "Argile Claire",
-        "#F3EFE2": "Nuage Vanille",
-        "#ECE2D0": "Pêche Poudrée",
-        "#C7B8A6": "Bois Blanchi",
-        "#B2BCA9": "Olive Matin",
-        "#DDE3E9": "Voile d’Hiver",
-        "#E0D4E4": "Lilas Calme",
-        "#C5D8E4": "Bleu Thé",
-        "#EDE3CE": "Lumière de Chanvre",
-        "#D1E0D0": "Sauge d’Argent"
-    };
-
-    const bloc = document.getElementById("defi-du-jour-bloc");
-    const zone = document.getElementById("defi-du-jour");
-
+document.addEventListener("DOMContentLoaded", () => {
     fetch("data/activites.csv")
-        .then(r => r.text())
+        .then(res => res.text())
         .then(text => {
-            const rows = text.split("\n").map(r => r.split(","));
-
-            // date du jour en jj/mm
+            const lignes = text.split("\n").slice(1);
             const today = new Date();
-            const d = String(today.getDate()).padStart(2, '0');
-            const m = String(today.getMonth()+1).padStart(2, '0');
-            const key = `${d}/${m}`;
+            const index = (today.getMonth() * 31 + today.getDate()) % lignes.length;
 
-            // ligne correspondant au jour
-            const index = today.getDate(); // 1 = 1er janvier
-            const row = rows[index];
+            const [defi, categorie, niveau, couleur] = lignes[index].split(",");
 
-            if (!row) {
-                zone.innerHTML = "<p>Aucune activité trouvée.</p>";
-                return;
-            }
+            document.getElementById("defi-texte").textContent = defi;
 
-            const activite = row[0];
-            const categorie = row[1];
-            const niveau = row[2];
-            const couleur = row[3].trim();
-            const nomCouleur = nomsCouleurs[couleur] || "Couleur inconnue";
+            const colorBox = document.getElementById("couleur-preview");
+            colorBox.style.background = couleur.trim();
 
-            // appliquer couleur bordure
-            bloc.style.borderColor = couleur;
+            const nom = colorNames[couleur.trim()] || "Couleur du jour";
+            document.getElementById("couleur-nom").textContent = nom;
 
-            // afficher contenu
-            zone.innerHTML = `
-                <p><strong>Activité :</strong> ${activite}</p>
-                <p><strong>Catégorie :</strong> ${categorie}</p>
-                <p><strong>Niveau :</strong> ${niveau}</p>
-                <p><strong>Couleur :</strong> ${nomCouleur} <span style="color:${couleur}; font-weight:bold;">(${couleur})</span></p>
-            `;
-        })
-        .catch(err => {
-            console.error("Erreur CSV :", err);
-            zone.innerHTML = "<p>Impossible de charger l'activité du jour.</p>";
+            document.getElementById("defi-du-jour-bloc").style.border =
+                "4px solid " + couleur.trim();
         });
-
 });
