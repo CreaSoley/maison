@@ -1,6 +1,6 @@
-/* -----------------------
-   RESET + BASE
------------------------- */
+/* -------------------------
+   RESET + TYPO
+------------------------- */
 * {
     margin: 0;
     padding: 0;
@@ -8,181 +8,156 @@
 }
 
 body {
-    font-family: "Inter", sans-serif;
-    background: radial-gradient(circle at top, #ffffff, #eaeaea);
-    color: #222;
-    padding: 0 1.2rem;
-    overflow-x: hidden;
+    font-family: "Georgia", serif;
+    background: linear-gradient(135deg, #faf7f2 0%, #e8e3dc 100%);
+    color: #333;
+    padding-bottom: 100px;
 }
 
-/* -----------------------
+/* -------------------------
    HEADER
------------------------- */
-.top-bar {
+------------------------- */
+.header {
     display: flex;
     justify-content: space-between;
+    padding: 15px 25px;
     align-items: center;
-    padding: 1.5rem 0;
 }
 
 .logo {
-    width: 145px;
+    height: 45px;
 }
 
-.top-bar ul {
+nav ul {
     display: flex;
-    gap: 1.4rem;
+    gap: 18px;
     list-style: none;
 }
 
-.top-bar a {
+nav a {
     text-decoration: none;
-    font-weight: 500;
-    color: #333;
-    transition: 0.25s ease;
+    color: #444;
+    font-weight: bold;
 }
 
-.top-bar a:hover {
-    opacity: 0.6;
-}
-
-/* -----------------------
-   HERO
------------------------- */
-.hero {
+/* -------------------------
+   INTRO
+------------------------- */
+.intro {
     text-align: center;
-    margin: 2rem auto 3rem;
+    margin: 40px 10px;
 }
 
-.hero h1 {
-    font-family: "Playfair Display", serif;
-    font-size: 2.4rem;
-}
+.intro h1 { font-size: 28px; }
+.intro h2 { font-size: 22px; margin-top: 5px; }
+.intro p { margin-top: 10px; }
 
-.hero span {
-    font-size: 1.9rem;
-}
-
-.subtitle {
-    margin-top: 0.4rem;
-    opacity: 0.8;
-    font-size: 1.1rem;
-}
-
-/* -----------------------
+/* -------------------------
    CARDS
------------------------- */
+------------------------- */
 .cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: 2rem;
-    padding: 0 0.5rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin: 30px;
 }
 
-.glass-card {
-    padding: 1.8rem;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
+.card {
+    padding: 25px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: transform .25s ease, box-shadow .25s ease;
+    min-height: 200px;
+    animation: fadeSlide .8s ease forwards;
 }
 
-.glass-card:hover {
+.card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
-.glass-card h3 {
-    font-family: "Playfair Display", serif;
-    margin-bottom: 0.7rem;
-    font-size: 1.3rem;
-}
-
-.source {
-    margin-top: 0.7rem;
-    opacity: 0.6;
-    font-size: 0.9rem;
-}
-
-/* -----------------------
-   COLOR PREVIEW
------------------------- */
-.color-preview {
-    margin-top: 1rem;
-    height: 50px;
+.color-box {
+    width: 100%;
+    height: 60px;
     border-radius: 12px;
-    background: var(--couleur, #FFCA3A);
+    margin: 10px 0;
 }
 
-/* -----------------------
+/* -------------------------
    ATELIER DU MOIS
------------------------- */
-.atelier-section {
-    margin: 4rem 0;
-    padding: 2.2rem;
-    text-align: center;
-    border-top: 2px dashed #cfcfcf;
+------------------------- */
+.atelier-mois {
+    padding: 40px;
+    margin-top: 30px;
+    border-top: 2px dashed #bbb;
 }
 
-.atelier-text {
-    margin-top: 0.5rem;
-    opacity: 0.75;
-}
-
-/* -----------------------
+/* -------------------------
    FOOTER
------------------------- */
-footer {
+------------------------- */
+.footer {
     text-align: center;
-    margin: 2rem 0 3rem;
-    font-size: 0.9rem;
-    opacity: 0.6;
+    margin-top: 40px;
 }
 
-/* -----------------------
+.btn {
+    padding: 12px 22px;
+    margin: 10px;
+    border-radius: 12px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(12px);
+    transition: .3s;
+}
+
+.btn:hover {
+    background: rgba(255,255,255,0.8);
+}
+
+.copy {
+    margin-top: 25px;
+    font-size: 12px;
+}
+
+/* -------------------------
    ANIMATIONS
------------------------- */
+------------------------- */
 .fade-in {
     opacity: 0;
-    animation: fadein 1.2s ease forwards;
+    animation: fadeIn 1s ease forwards;
 }
 
-@keyframes fadein {
+@keyframes fadeIn {
     to { opacity: 1; }
 }
 
-.slide-up {
-    opacity: 0;
-    transform: translateY(25px);
-    animation: slideup 0.9s ease forwards;
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-
-@keyframes slideup {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* -----------------------
-   RESPONSIVE TABLETTE
------------------------- */
-@media (min-width: 768px) and (max-width: 1100px) {
-    .hero h1 {
-        font-size: 2.1rem;
-    }
-
-    .glass-card {
-        padding: 1.5rem;
-    }
-
+/* -------------------------
+   RESPONSIVE 1100px
+------------------------- */
+@media (max-width: 1100px) {
     .cards-container {
-        gap: 1.5rem;
+        grid-template-columns: 1fr 1fr;
     }
+}
+
+/* -------------------------
+   RESPONSIVE 768px
+------------------------- */
+@media (max-width: 768px) {
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+    .card {
+        margin: 0 10px;
+    }
+    nav ul { display: none; }
 }
