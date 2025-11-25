@@ -189,3 +189,46 @@ footer p {
     background: #ffeef6;
     transform: translateY(-2px);
 }
+/* -----------------------------------------------------------
+   🎀 BOUTON KAWAII DELUXE
+------------------------------------------------------------*/
+.mois-btn-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.mois-btn-kawaii {
+    background: linear-gradient(135deg, #ffb7d5, #ffd7ef, #ffeef8);
+    padding: 14px 32px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #7a3e3e;
+    box-shadow: 0 6px 16px rgba(255, 155, 205, 0.45);
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+/* Effet hover */
+.mois-btn-kawaii:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 10px 22px rgba(255, 130, 180, 0.55);
+}
+
+/* Petit éclat kawaii */
+.mois-btn-kawaii::after {
+    content: "✨";
+    position: absolute;
+    right: -20px;
+    top: -10px;
+    font-size: 1.4rem;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.mois-btn-kawaii:hover::after {
+    opacity: 1;
+    transform: translate(5px, -5px);
+}
