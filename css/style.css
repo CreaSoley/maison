@@ -131,6 +131,48 @@ body.accueil {
     height: 38px;
     vertical-align: middle;
 }
+}
+
+/* -------- ESPACEMENT ENTRE LES ENCARDS -------- */
+
+.bloc.daily-card {
+    margin: 0 0.5cm;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+/* -------- CENTRAGE DU TEXTE -------- */
+
+.bloc-center,
+.daily-card p,
+.daily-card h3 {
+    text-align: center;
+}
+.mois-btn-container {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.mois-btn {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #444;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: 0.2s;
+}
+
+.mois-btn:hover {
+    background: #ffeef6;
+    transform: translateY(-2px);
+}
+.icon-kawaii {
+    width: 32px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
 
 /* -----------------------------------------------------------
    🎨 DÉFI — couleur du jour
@@ -226,21 +268,4 @@ body.accueil {
     .header-logo {
         width: 160px;
     }
-}
-
-/* -------- ESPACEMENT ENTRE LES ENCARDS -------- */
-
-.bloc.daily-card {
-    margin: 0 0.5cm;
-    padding: 25px;
-    border-radius: 12px;
-}
-
-/* -------- CENTRAGE DU TEXTE -------- */
-
-.bloc-center,
-.daily-card p,
-.daily-card h3 {
-    text-align: center;
-}
 
