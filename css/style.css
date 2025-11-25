@@ -132,6 +132,39 @@ footer {
     align-items: center;
     gap: 10px;
 }
+/* -----------------------------
+   🎨 HEADER CENTRÉ
+------------------------------*/
+.main-site-title {
+    font-family: "SpicySale", sans-serif;
+    font-size: 3rem;
+    text-align: center;
+    margin-top: 20px;
+    color: #3b3b3b;
+}
+
+.header-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header-logo {
+    width: 140px;        /* taille mobile */
+    height: auto;
+    display: block;
+    margin: 10px auto 15px auto;
+}
+
+/* Version desktop : logo plus grand */
+@media (min-width: 900px) {
+    .header-logo {
+        width: 200px;
+    }
+
+    .main-site-title {
+        font-size: 4rem;
+    }
+}
 
 /* -----------------------------------------------------------
    🟨 BLOCS JOURNALIERS
@@ -324,3 +357,40 @@ footer {
         width: 160px;
     }
 
+/* ------------------------------------
+   📦 BLOCS JOUR (proverbe / devinette / défi)
+-------------------------------------*/
+
+.blocs-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;             /* espace horizontal */
+    margin-top: 20px;
+}
+
+.daily-card {
+    width: 30%;            /* réduit la largeur */
+    min-width: 260px;      /* pour mobile */
+    padding: 20px;
+    text-align: center;
+}
+
+/* Version mobile : empilement */
+@media (max-width: 900px) {
+    .blocs-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .daily-card {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+footer p {
+    text-align: center;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #555;
+}
