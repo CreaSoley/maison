@@ -1,72 +1,380 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌟 Activité du mois</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Activité du mois — Marbrages</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/style.css">
 
-    <!-- Police SPICY -->
-    <style>
-        @font-face {
-            font-family: "Spicy";
-            src: url("../assets/fonts/Spicy Sale.ttf");
-        }
-        .title-spicy { font-family: "Spicy"; }
-    </style>
+<!-- Material Icons (utilisé par les boutons) -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+  /* --- Adaptation légère / isolation styles spécifiques à cette page --- */
+  :root{
+    --sage-bg: #f3f6f2;
+    --sage-100: #e7f0e7;
+    --sage-200: #dbe7db;
+    --sage-300: #c7d7c7;
+    --text: #2f3e34;
+    --muted: #7b8a7b;
+  }
+
+  body {
+    font-family: Inter, Arial, sans-serif;
+    background: var(--sage-bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* Container central, s'harmonise avec ton CSS global */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Toolbar (recherche / filtres / boutons) */
+  header.toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  input[type="text"], select {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--sage-300);
+    background: white;
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--sage-200);
+    border: 1px solid var(--sage-300);
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .btn:hover { background: var(--sage-100); }
+
+  /* Grid for cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    gap: 18px;
+    margin-top: 14px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid #e6efe6;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+  }
+
+  .card h3 { margin: 6px 0 10px 0; font-size: 20px; color: #23402f; }
+
+  .img-box {
+    width: 100%;
+    height: 9cm;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f0f2ef;
+    margin-bottom: 12px;
+  }
+  .img-box img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+  }
+
+  .tag-box { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .tag {
+    background: var(--sage-100);
+    border: 1px solid var(--sage-300);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .buttons-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .btn-small {
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:8px; min-width:120px; height:42px; border-radius:10px;
+    background: var(--sage-200); border:1px solid var(--sage-300); cursor:pointer;
+    padding:6px 10px; font-size:14px;
+  }
+  .btn-small img.icon { width:18px; height:18px; }
+
+  .muted { color: var(--muted); }
+
+  /* message loading / erreur */
+  .status {
+    padding: 18px;
+    background: #fff;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #e6efe6;
+  }
+
+  /* responsive tweak */
+  @media (max-width:600px){
+    .img-box { height: 40vw; }
+  }
+</style>
 </head>
+<body>
+  <div class="container">
 
-<body class="accueil">
+    <!-- HEADER (titre + logo cliquable : retour accueil) -->
+    <header class="toolbar">
+      <a href="../index.html" class="btn">← Retour</a>
 
-<!-- 🔵 HEADER -->
-<header class="header-title">
-    <div class="header-inline">
-        <a href="../index.html">
-            <img src="../assets/images/logo.png" class="header-logo" alt="logo">
-        </a>
-        <h1 class="title-spicy header-main-title">Activité du mois</h1>
-    </div>
-    <p class="header-subtitle">Exploration entre technique et intuition</p>
-</header>
+      <input id="searchInput" type="text" placeholder="Recherche rapide (nom)..." oninput="onSearchInput()">
 
+      <select id="niveauSelect" onchange="onFilterChange()">
+        <option value="">Niveau…</option>
+        <option value="débutant">débutant</option>
+        <option value="intermédiaire">intermédiaire</option>
+        <option value="avancé">avancé</option>
+      </select>
 
-<!-- 🌟 CONTENU CHARGÉ -->
-<section class="bloc-mois bloc">
-    <h2 class="title-spicy">
-        <img src="../assets/icons/activite-kawaii.png" class="icon-kawaii">
-        Activité du mois
-    </h2>
+      <select id="traceSelect" onchange="onFilterChange()">
+        <option value="">Trace…</option>
+        <option value="très fine">très fine</option>
+        <option value="fine">fine</option>
+        <option value="moyenne">moyenne</option>
+        <option value="franche">franche</option>
+        <option value="épaisse">épaisse</option>
+      </select>
 
-    <div id="activite-mois" class="activite-contenu">
-        <p>⏳ Chargement…</p>
-    </div>
+      <button class="btn" onclick="doRandom()">
+        <span class="material-icons">shuffle</span> Aléatoire
+      </button>
 
-    <!-- Bouton retour -->
-    <div class="mois-btn-container" style="margin-top:25px;">
-        <a href="../index.html" class="mois-btn">🏡 Retour à l’accueil</a>
-    </div>
-</section>
+      <button id="printBtn" class="btn" onclick="window.print()">
+        <span class="material-icons">print</span> Imprimer
+      </button>
+    </header>
 
+    <!-- ZONE PRINCIPALE -->
+    <main id="mainArea">
+      <div class="status">Chargement des techniques…</div>
+    </main>
+  </div>
 
-<footer>
-    <p>© 2025 — Le p’tit logis — Univers créatif</p>
-</footer>
-
-
-<!-- 📌 SCRIPT CHARGEMENT -->
 <script>
-fetch("###URL_WEBAPP###")
-    .then(r => r.text())
-    .then(html => {
-        document.getElementById("activite-mois").innerHTML = html;
-    })
-    .catch(err => {
-        document.getElementById("activite-mois").innerHTML =
-            "<p>❌ Impossible d’afficher l’activité.</p>";
-        console.error(err);
-    });
-</script>
+/* ===========================
+   Parser CSV robuste (compatible guillemets)
+   =========================== */
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+  if (lines.length === 0) return [];
+  const header = lines[0].split(/\s*,\s*/).map(h=>h.trim());
+  const rows = [];
+  for (let i=1;i<lines.length;i++){
+    const line = lines[i];
+    // parse respecting quotes
+    const cells = [];
+    let cur = "", inQuotes = false;
+    for (let j=0;j<line.length;j++){
+      const ch = line[j];
+      if (ch === '"' ) { inQuotes = !inQuotes; }
+      else if (ch === ',' && !inQuotes){
+        cells.push(cur.trim());
+        cur = "";
+      } else cur += ch;
+    }
+    cells.push(cur.trim());
+    // ensure at least header length
+    while (cells.length < header.length) cells.push("");
+    const obj = {
+      nom: (cells[0]||"").replace(/^"|"$/g,""),
+      description: (cells[1]||"").replace(/^"|"$/g,""),
+      trace: (cells[2]||"").replace(/^"|"$/g,""),
+      materiel: (cells[3]||"").replace(/^"|"$/g,""),
+      niveau: (cells[4]||"").replace(/^"|"$/g,""),
+      illustration: (cells[5]||"").replace(/^"|"$/g,""),
+      galerie: (cells[6]||"").replace(/^"|"$/g,""),
+      youtube: (cells[7]||"").replace(/^"|"$/g,""),
+      recettes_econo: (cells[8]||"").replace(/^"|"$/g,""),
+      recettes_premium: (cells[9]||"").replace(/^"|"$/g,""),
+      tutoriel: (cells[10]||"").replace(/^"|"$/g,"")
+    };
+    rows.push(obj);
+  }
+  return rows;
+}
 
+/* ===========================
+   Charger les données (CSV local)
+   - essaie data/marbrages.csv
+   - si échec, charge fallback sample
+   =========================== */
+let TECHS = [];
+
+async function loadData(){
+  try {
+    const res = await fetch("../data/marbrages.csv", {cache: "no-store"});
+    if (!res.ok) throw new Error("CSV not found");
+    const text = await res.text();
+    TECHS = parseCSV(text);
+    if (!TECHS || TECHS.length === 0) throw new Error("CSV vide");
+    renderCards(TECHS);
+  } catch (e) {
+    console.warn("Impossible de charger ../data/marbrages.csv : ", e);
+    // fallback sample
+    TECHS = [
+      {
+        nom: "Marbrage floral",
+        description: "Créer des motifs floraux avec technique A",
+        trace: "fine",
+        materiel: "Peinture, vernis",
+        niveau: "débutant",
+        illustration: "",
+        galerie: "",
+        youtube: "",
+        recettes_econo: "",
+        recettes_premium: "",
+        tutoriel: ""
+      },
+      {
+        nom: "Marbrage abstrait",
+        description: "Marbrage en mouvances abstraites",
+        trace: "moyenne",
+        materiel: "Encres",
+        niveau: "intermédiaire",
+        illustration: "",
+        galerie: "",
+        youtube: "",
+        recettes_econo: "",
+        recettes_premium: "",
+        tutoriel: ""
+      }
+    ];
+    renderCards(TECHS);
+  }
+}
+
+/* ===========================
+   Rendering utilities (repris de ton app)
+   =========================== */
+function safe(v){ return (v===null||v===undefined) ? "" : String(v); }
+
+function renderCards(list){
+  const main = document.getElementById("mainArea");
+  main.innerHTML = "";
+  if (!list || list.length === 0) {
+    main.innerHTML = '<p class="muted">Aucune technique trouvée.</p>';
+    return;
+  }
+
+  const grid = document.createElement("div");
+  grid.className = "cards";
+
+  list.forEach(t => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const illustration = safe(t.illustration) || "";
+    const imgHtml = `<div class="img-box"><img src="${illustration}" onerror="this.onerror=null;this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAMAAADxPgR5AAAAA1BMVEX///+nxBvIAAAAKElEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4HcGAAEe0g3KAAAAAElFTkSuQmCC';" alt="illustration"></div>`;
+
+    const tags = `
+      <div class="tag-box">
+        <div class="tag"><strong>Description :</strong> ${safe(t.description) || '<span class="muted">—</span>'}</div>
+        <div class="tag"><strong>Niveau :</strong> ${safe(t.niveau) || '<span class="muted">—</span>'}</div>
+        <div class="tag"><strong>Trace :</strong> ${safe(t.trace) || '<span class="muted">—</span>'}</div>
+        <div class="tag"><strong>Matériel :</strong> ${safe(t.materiel) || '<span class="muted">—</span>'}</div>
+      </div>
+    `;
+
+    const btns = [];
+    if (t.recettes_econo) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.recettes_econo)}')">€ Recette 1</button>`);
+    if (t.recettes_premium) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.recettes_premium)}')">€€ Recette 2</button>`);
+    if (t.youtube) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.youtube)}')"><span class="material-icons">videocam</span> Vidéo</button>`);
+    if (t.galerie) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.galerie)}')"><span class="material-icons">photo_library</span> Galerie</button>`);
+    if (t.tutoriel) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.tutoriel)}')"><span class="material-icons">school</span> Tutoriel</button>`);
+
+    card.innerHTML = `
+      <h3>${safe(t.nom)}</h3>
+      ${imgHtml}
+      ${tags}
+      <div class="buttons-row">${btns.join("")}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  main.appendChild(grid);
+}
+
+/* ===========================
+   Filtering / searching (client-side)
+   =========================== */
+function normalizeStr(s){
+  return (s||"").toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+}
+
+let searchTimeout = null;
+function onSearchInput(){
+  if (searchTimeout) clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(()=> {
+    const q = document.getElementById("searchInput").value.trim();
+    const nv = document.getElementById("niveauSelect").value;
+    const tr = document.getElementById("traceSelect").value;
+
+    let filtered = TECHS.slice();
+
+    if (q) {
+      const qn = normalizeStr(q);
+      filtered = filtered.filter(t => normalizeStr(t.nom || "").includes(qn));
+    }
+
+    if (nv) filtered = filtered.filter(t => normalizeStr(t.niveau) === normalizeStr(nv));
+    if (tr) filtered = filtered.filter(t => normalizeStr(t.trace) === normalizeStr(tr));
+
+    renderCards(filtered);
+  }, 220);
+}
+
+function onFilterChange(){
+  // just call search handler (it will read selects)
+  onSearchInput();
+}
+
+/* ===========================
+   Random
+   =========================== */
+function doRandom(){
+  if (!TECHS || TECHS.length === 0) {
+    document.getElementById("mainArea").innerHTML = '<p class="muted">Aucune technique disponible.</p>';
+    return;
+  }
+  const t = TECHS[Math.floor(Math.random() * TECHS.length)];
+  renderCards([t]);
+}
+
+/* ===========================
+   Open url helper
+   =========================== */
+function openUrl(url){
+  if (!url) return;
+  try { window.open(decodeURI(url), "_blank"); } catch (e) { window.open(url, "_blank"); }
+}
+
+/* ===========================
+   Init
+   =========================== */
+document.addEventListener("DOMContentLoaded", loadData);
+</script>
 </body>
 </html>
