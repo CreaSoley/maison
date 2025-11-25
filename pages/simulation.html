@@ -3,313 +3,279 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Activité du mois — Marbrages</title>
+<title>Marbrages Kawaii — Activité du mois</title>
 
 <link rel="stylesheet" href="../css/style.css">
 
-<!-- Material Icons (utilisé par les boutons) -->
+<!-- Icônes Material -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
-  /* --- Adaptation légère / isolation styles spécifiques à cette page --- */
-  :root{
-    --sage-bg: #f3f6f2;
-    --sage-100: #e7f0e7;
-    --sage-200: #dbe7db;
-    --sage-300: #c7d7c7;
-    --text: #2f3e34;
-    --muted: #7b8a7b;
-  }
+/* ===========================================
+   🌸 PALETTE KAWAII DELUXE
+=========================================== */
+:root{
+  --kawaii-pink: #ffd7e9;
+  --kawaii-blue: #dcecff;
+  --kawaii-lavender: #e8d7ff;
+  --kawaii-mint: #d8f7e0;
+  --kawaii-cream: #fff7e6;
+  --kawaii-shadow: rgba(0,0,0,0.08);
+  --text-soft: #444;
+}
 
-  body {
-    font-family: Inter, Arial, sans-serif;
-    background: var(--sage-bg);
-    color: var(--text);
-    margin: 0;
-    padding: 20px;
-  }
+body {
+  background: linear-gradient(135deg, #fff5fb 0%, #e4f0ff 100%);
+  margin: 0;
+  padding: 20px;
+  color: var(--text-soft);
+  font-family: Inter, sans-serif;
+}
 
-  /* Container central, s'harmonise avec ton CSS global */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+/* ===========================================
+   🌸 CONTENEUR
+=========================================== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
 
-  /* Toolbar (recherche / filtres / boutons) */
-  header.toolbar {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 18px;
-  }
+/* ===========================================
+   🌸 HEADER KAWAII
+=========================================== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
 
-  input[type="text"], select {
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--sage-300);
-    background: white;
-    height: 44px;
-    font-size: 15px;
-  }
+.btn {
+  background: var(--kawaii-pink);
+  border: none;
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-weight: bold;
+  color: #444;
+  cursor: pointer;
+  box-shadow: 0 4px 10px var(--kawaii-shadow);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    height: 44px;
-    border-radius: 12px;
-    background: var(--sage-200);
-    border: 1px solid var(--sage-300);
-    cursor: pointer;
-    font-size: 15px;
-  }
-  .btn:hover { background: var(--sage-100); }
+.btn:hover {
+  transform: translateY(-3px);
+  background: #ffcae2;
+}
 
-  /* Grid for cards */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
-    gap: 18px;
-    margin-top: 14px;
-  }
+input[type="text"], select {
+  background: white;
+  border: 2px solid var(--kawaii-blue);
+  border-radius: 14px;
+  padding: 10px 14px;
+  height: 45px;
+  font-size: 15px;
+  box-shadow: 0 3px 8px var(--kawaii-shadow);
+}
 
-  .card {
-    background: white;
-    border-radius: 14px;
-    padding: 16px;
-    border: 1px solid #e6efe6;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.04);
-  }
+/* ===========================================
+   🌸 CARTES KAWAII
+=========================================== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
 
-  .card h3 { margin: 6px 0 10px 0; font-size: 20px; color: #23402f; }
+.card {
+  background: white;
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: 0 6px 14px var(--kawaii-shadow);
+  border: 3px solid var(--kawaii-blue);
+  transition: 0.2s;
+}
 
-  .img-box {
-    width: 100%;
-    height: 9cm;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #f0f2ef;
-    margin-bottom: 12px;
-  }
-  .img-box img {
-    width: 100%; height: 100%; object-fit: cover;
-    display: block;
-  }
+.card:hover {
+  transform: translateY(-4px);
+}
 
-  .tag-box { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-  .tag {
-    background: var(--sage-100);
-    border: 1px solid var(--sage-300);
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 14px;
-  }
+.card h3 {
+  font-family: "Spicy", serif;
+  text-align: center;
+  color: #444;
+  margin-bottom: 10px;
+}
 
-  .buttons-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
-  .btn-small {
-    display:inline-flex; align-items:center; justify-content:center;
-    gap:8px; min-width:120px; height:42px; border-radius:10px;
-    background: var(--sage-200); border:1px solid var(--sage-300); cursor:pointer;
-    padding:6px 10px; font-size:14px;
-  }
-  .btn-small img.icon { width:18px; height:18px; }
+/* Image kawaii */
+.img-box {
+  border-radius: 18px;
+  overflow: hidden;
+  height: 8cm;
+  background: var(--kawaii-cream);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.06);
+}
 
-  .muted { color: var(--muted); }
+/* Étiquettes façon stickers */
+.tag-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
 
-  /* message loading / erreur */
-  .status {
-    padding: 18px;
-    background: #fff;
-    border-radius: 12px;
-    text-align: center;
-    border: 1px solid #e6efe6;
-  }
+.tag {
+  background: var(--kawaii-mint);
+  border-radius: 14px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 2px solid var(--kawaii-blue);
+}
 
-  /* responsive tweak */
-  @media (max-width:600px){
-    .img-box { height: 40vw; }
-  }
+/* Boutons dans cartes */
+.btn-small {
+  background: var(--kawaii-lavender);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px var(--kawaii-shadow);
+  transition: 0.2s;
+}
+
+.btn-small:hover {
+  background: #dfc4ff;
+  transform: translateY(-3px);
+}
+
+.status {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 10px var(--kawaii-shadow);
+  text-align: center;
+}
 </style>
 </head>
+
 <body>
-  <div class="container">
+<div class="container">
 
-    <!-- HEADER (titre + logo cliquable : retour accueil) -->
-    <header class="toolbar">
-      <a href="../index.html" class="btn">← Retour</a>
+  <header class="toolbar">
+    <a href="../index.html" class="btn">
+      <span class="material-icons">arrow_back</span> Retour
+    </a>
 
-      <input id="searchInput" type="text" placeholder="Recherche rapide (nom)..." oninput="onSearchInput()">
+    <input id="searchInput" type="text" placeholder="🔍 Recherche kawaii…" oninput="onSearchInput()">
 
-      <select id="niveauSelect" onchange="onFilterChange()">
-        <option value="">Niveau…</option>
-        <option value="débutant">débutant</option>
-        <option value="intermédiaire">intermédiaire</option>
-        <option value="avancé">avancé</option>
-      </select>
+    <select id="niveauSelect" onchange="onSearchInput()">
+      <option value="">Niveau…</option>
+      <option value="débutant">débutant</option>
+      <option value="intermédiaire">intermédiaire</option>
+      <option value="avancé">avancé</option>
+    </select>
 
-      <select id="traceSelect" onchange="onFilterChange()">
-        <option value="">Trace…</option>
-        <option value="très fine">très fine</option>
-        <option value="fine">fine</option>
-        <option value="moyenne">moyenne</option>
-        <option value="franche">franche</option>
-        <option value="épaisse">épaisse</option>
-      </select>
+    <select id="traceSelect" onchange="onSearchInput()">
+      <option value="">Trace…</option>
+      <option value="très fine">très fine</option>
+      <option value="fine">fine</option>
+      <option value="moyenne">moyenne</option>
+      <option value="franche">franche</option>
+      <option value="épaisse">épaisse</option>
+    </select>
 
-      <button class="btn" onclick="doRandom()">
-        <span class="material-icons">shuffle</span> Aléatoire
-      </button>
+    <button class="btn" onclick="doRandom()">
+      <span class="material-icons">auto_awesome</span> Surprise
+    </button>
+  </header>
 
-      <button id="printBtn" class="btn" onclick="window.print()">
-        <span class="material-icons">print</span> Imprimer
-      </button>
-    </header>
+  <main id="mainArea">
+    <div class="status">Chargement des marbrages kawaii…</div>
+  </main>
 
-    <!-- ZONE PRINCIPALE -->
-    <main id="mainArea">
-      <div class="status">Chargement des techniques…</div>
-    </main>
-  </div>
+</div>
 
 <script>
-/* ===========================
-   Parser CSV robuste (compatible guillemets)
-   =========================== */
+/* ----- CSV ----- */
 function parseCSV(text){
-  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-  if (lines.length === 0) return [];
-  const header = lines[0].split(/\s*,\s*/).map(h=>h.trim());
-  const rows = [];
-  for (let i=1;i<lines.length;i++){
-    const line = lines[i];
-    // parse respecting quotes
-    const cells = [];
-    let cur = "", inQuotes = false;
-    for (let j=0;j<line.length;j++){
-      const ch = line[j];
-      if (ch === '"' ) { inQuotes = !inQuotes; }
-      else if (ch === ',' && !inQuotes){
-        cells.push(cur.trim());
-        cur = "";
-      } else cur += ch;
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  const header = lines[0].split(",");
+  const out = [];
+
+  for (let i=1; i<lines.length; i++){
+    const raw = lines[i];
+    let cur="", q=false, arr=[];
+
+    for (let ch of raw){
+      if (ch === '"') q=!q;
+      else if (ch === "," && !q){ arr.push(cur); cur=""; }
+      else cur+=ch;
     }
-    cells.push(cur.trim());
-    // ensure at least header length
-    while (cells.length < header.length) cells.push("");
-    const obj = {
-      nom: (cells[0]||"").replace(/^"|"$/g,""),
-      description: (cells[1]||"").replace(/^"|"$/g,""),
-      trace: (cells[2]||"").replace(/^"|"$/g,""),
-      materiel: (cells[3]||"").replace(/^"|"$/g,""),
-      niveau: (cells[4]||"").replace(/^"|"$/g,""),
-      illustration: (cells[5]||"").replace(/^"|"$/g,""),
-      galerie: (cells[6]||"").replace(/^"|"$/g,""),
-      youtube: (cells[7]||"").replace(/^"|"$/g,""),
-      recettes_econo: (cells[8]||"").replace(/^"|"$/g,""),
-      recettes_premium: (cells[9]||"").replace(/^"|"$/g,""),
-      tutoriel: (cells[10]||"").replace(/^"|"$/g,"")
-    };
-    rows.push(obj);
+    arr.push(cur);
+
+    out.push({
+      nom: arr[0] || "",
+      description: arr[1] || "",
+      trace: arr[2] || "",
+      materiel: arr[3] || "",
+      niveau: arr[4] || "",
+      illustration: arr[5] || "",
+      galerie: arr[6] || "",
+      youtube: arr[7] || "",
+      recettes_econo: arr[8] || "",
+      recettes_premium: arr[9] || "",
+      tutoriel: arr[10] || ""
+    });
   }
-  return rows;
+  return out;
 }
 
-/* ===========================
-   Charger les données (CSV local)
-   - essaie data/marbrages.csv
-   - si échec, charge fallback sample
-   =========================== */
 let TECHS = [];
 
+/* ----- LOAD ----- */
 async function loadData(){
-  try {
-    const res = await fetch("../data/marbrages.csv", {cache: "no-store"});
-    if (!res.ok) throw new Error("CSV not found");
-    const text = await res.text();
-    TECHS = parseCSV(text);
-    if (!TECHS || TECHS.length === 0) throw new Error("CSV vide");
-    renderCards(TECHS);
-  } catch (e) {
-    console.warn("Impossible de charger ../data/marbrages.csv : ", e);
-    // fallback sample
-    TECHS = [
-      {
-        nom: "Marbrage floral",
-        description: "Créer des motifs floraux avec technique A",
-        trace: "fine",
-        materiel: "Peinture, vernis",
-        niveau: "débutant",
-        illustration: "",
-        galerie: "",
-        youtube: "",
-        recettes_econo: "",
-        recettes_premium: "",
-        tutoriel: ""
-      },
-      {
-        nom: "Marbrage abstrait",
-        description: "Marbrage en mouvances abstraites",
-        trace: "moyenne",
-        materiel: "Encres",
-        niveau: "intermédiaire",
-        illustration: "",
-        galerie: "",
-        youtube: "",
-        recettes_econo: "",
-        recettes_premium: "",
-        tutoriel: ""
-      }
-    ];
-    renderCards(TECHS);
-  }
+  const res = await fetch("../data/marbrages.csv");
+  const text = await res.text();
+
+  TECHS = parseCSV(text);
+  renderCards(TECHS);
 }
 
-/* ===========================
-   Rendering utilities (repris de ton app)
-   =========================== */
-function safe(v){ return (v===null||v===undefined) ? "" : String(v); }
-
+/* ----- RENDER ----- */
 function renderCards(list){
   const main = document.getElementById("mainArea");
   main.innerHTML = "";
-  if (!list || list.length === 0) {
-    main.innerHTML = '<p class="muted">Aucune technique trouvée.</p>';
-    return;
-  }
 
   const grid = document.createElement("div");
   grid.className = "cards";
 
-  list.forEach(t => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const illustration = safe(t.illustration) || "";
-    const imgHtml = `<div class="img-box"><img src="${illustration}" onerror="this.onerror=null;this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAMAAADxPgR5AAAAA1BMVEX///+nxBvIAAAAKElEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4HcGAAEe0g3KAAAAAElFTkSuQmCC';" alt="illustration"></div>`;
-
-    const tags = `
-      <div class="tag-box">
-        <div class="tag"><strong>Description :</strong> ${safe(t.description) || '<span class="muted">—</span>'}</div>
-        <div class="tag"><strong>Niveau :</strong> ${safe(t.niveau) || '<span class="muted">—</span>'}</div>
-        <div class="tag"><strong>Trace :</strong> ${safe(t.trace) || '<span class="muted">—</span>'}</div>
-        <div class="tag"><strong>Matériel :</strong> ${safe(t.materiel) || '<span class="muted">—</span>'}</div>
-      </div>
-    `;
-
-    const btns = [];
-    if (t.recettes_econo) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.recettes_econo)}')">€ Recette 1</button>`);
-    if (t.recettes_premium) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.recettes_premium)}')">€€ Recette 2</button>`);
-    if (t.youtube) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.youtube)}')"><span class="material-icons">videocam</span> Vidéo</button>`);
-    if (t.galerie) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.galerie)}')"><span class="material-icons">photo_library</span> Galerie</button>`);
-    if (t.tutoriel) btns.push(`<button class="btn-small" onclick="openUrl('${encodeURI(t.tutoriel)}')"><span class="material-icons">school</span> Tutoriel</button>`);
+  list.forEach(t=>{
+    const card=document.createElement("div");
+    card.className="card";
 
     card.innerHTML = `
-      <h3>${safe(t.nom)}</h3>
-      ${imgHtml}
-      ${tags}
-      <div class="buttons-row">${btns.join("")}</div>
+      <h3>${t.nom}</h3>
+
+      <div class="img-box">
+        <img src="${t.illustration}" alt="illustration"
+             onerror="this.src='https://via.placeholder.com/600x400?text=kawaii'">
+      </div>
+
+      <div class="tag-box">
+        <div class="tag"><strong>Description :</strong> ${t.description}</div>
+        <div class="tag"><strong>Niveau :</strong> ${t.niveau}</div>
+        <div class="tag"><strong>Trace :</strong> ${t.trace}</div>
+      </div>
+
+      <div class="buttons-row">
+        ${ t.recettes_econo ? `<button class="btn-small" onclick="openUrl('${t.recettes_econo}')">🍬 Recette</button>` : "" }
+        ${ t.youtube ? `<button class="btn-small" onclick="openUrl('${t.youtube}')">🎀 Vidéo</button>` : "" }
+      </div>
     `;
     grid.appendChild(card);
   });
@@ -317,64 +283,35 @@ function renderCards(list){
   main.appendChild(grid);
 }
 
-/* ===========================
-   Filtering / searching (client-side)
-   =========================== */
-function normalizeStr(s){
-  return (s||"").toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
-}
+/* ----- SEARCH ----- */
+function normalize(s){ return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
 
-let searchTimeout = null;
 function onSearchInput(){
-  if (searchTimeout) clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(()=> {
-    const q = document.getElementById("searchInput").value.trim();
-    const nv = document.getElementById("niveauSelect").value;
-    const tr = document.getElementById("traceSelect").value;
+  const q = normalize(document.getElementById("searchInput").value);
+  const nv = normalize(document.getElementById("niveauSelect").value);
+  const tr = normalize(document.getElementById("traceSelect").value);
 
-    let filtered = TECHS.slice();
+  let list = TECHS;
 
-    if (q) {
-      const qn = normalizeStr(q);
-      filtered = filtered.filter(t => normalizeStr(t.nom || "").includes(qn));
-    }
+  if (q) list = list.filter(t => normalize(t.nom).includes(q));
+  if (nv) list = list.filter(t => normalize(t.niveau) === nv);
+  if (tr) list = list.filter(t => normalize(t.trace) === tr);
 
-    if (nv) filtered = filtered.filter(t => normalizeStr(t.niveau) === normalizeStr(nv));
-    if (tr) filtered = filtered.filter(t => normalizeStr(t.trace) === normalizeStr(tr));
-
-    renderCards(filtered);
-  }, 220);
+  renderCards(list);
 }
 
-function onFilterChange(){
-  // just call search handler (it will read selects)
-  onSearchInput();
-}
-
-/* ===========================
-   Random
-   =========================== */
+/* ----- RANDOM ---- */
 function doRandom(){
-  if (!TECHS || TECHS.length === 0) {
-    document.getElementById("mainArea").innerHTML = '<p class="muted">Aucune technique disponible.</p>';
-    return;
-  }
-  const t = TECHS[Math.floor(Math.random() * TECHS.length)];
+  const t = TECHS[Math.floor(Math.random()*TECHS.length)];
   renderCards([t]);
 }
 
-/* ===========================
-   Open url helper
-   =========================== */
-function openUrl(url){
-  if (!url) return;
-  try { window.open(decodeURI(url), "_blank"); } catch (e) { window.open(url, "_blank"); }
-}
+/* ----- OPEN ----- */
+function openUrl(u){ window.open(u,"_blank"); }
 
-/* ===========================
-   Init
-   =========================== */
+/* INIT */
 document.addEventListener("DOMContentLoaded", loadData);
 </script>
+
 </body>
 </html>
