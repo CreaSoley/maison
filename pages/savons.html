@@ -32,26 +32,47 @@
 </header>
 
 <!-- 🌟 CONTENU DE TON ACTIVITÉ -->
-<section class="bloc-mois bloc">
-    <h2 class="title-spicy"><i class="fa-solid fa-star"></i> Creations savonnesques</h2>
+<!-- 🌈 APP MARBRAGES INSÉRÉE ICI -->
+<div class="container">
 
-    <div class="activite-contenu">
+    <!-- HEADER (titre + retour) -->
+    <header class="toolbar">
+      <a href="../index.html" class="btn">← Retour</a>
 
-    <iframe 
-        src="https://script.google.com/macros/s/AKfycby8S0R1TXP_WYsfQcv-VcFY1-rWRfgdEZBdAJ-_DnGMs5VZIHxNf7R8OneKEppR5Fo4/exec"
-        style="
-            width: 100%;
-            max-width: 900px;
-            height: 700px;
-            border: 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        ">
-    </iframe>
+      <input id="searchInput" type="text" placeholder="Recherche rapide (nom)..." oninput="onSearchInput()">
+
+      <select id="niveauSelect" onchange="onFilterChange()">
+        <option value="">Niveau…</option>
+        <option value="débutant">débutant</option>
+        <option value="intermédiaire">intermédiaire</option>
+        <option value="avancé">avancé</option>
+      </select>
+
+      <select id="traceSelect" onchange="onFilterChange()">
+        <option value="">Trace…</option>
+        <option value="très fine">très fine</option>
+        <option value="fine">fine</option>
+        <option value="moyenne">moyenne</option>
+        <option value="franche">franche</option>
+        <option value="épaisse">épaisse</option>
+      </select>
+
+      <button class="btn" onclick="doRandom()">
+        <span class="material-icons">shuffle</span> Aléatoire
+      </button>
+
+      <button id="printBtn" class="btn" onclick="window.print()">
+        <span class="material-icons">print</span> Imprimer
+      </button>
+    </header>
+
+    <!-- ZONE DES CARTES -->
+    <main id="mainArea">
+      <div class="status">Chargement des techniques…</div>
+    </main>
 
 </div>
 
-</section>
 
 <footer>
     <p>© 2025 — Le p’tit logis — Univers créatif</p>
