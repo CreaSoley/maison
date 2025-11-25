@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Activité du mois</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- Police SPICY -->
+    <style>
+        @font-face {
+            font-family: "Spicy";
+            src: url("../assets/fonts/Spicy Sale.ttf");
+        }
+        .title-spicy { font-family: "Spicy"; }
+    </style>
+</head>
+
+<body class="accueil">
+
+<!-- 🔵 HEADER -->
+<header class="header-title">
+    <div class="header-inline">
+        <a href="../index.html">
+            <img src="../assets/images/logo.png" class="header-logo" alt="logo">
+        </a>
+        <h1 class="title-spicy header-main-title">Activité du mois</h1>
+    </div>
+    <p class="header-subtitle">Exploration entre technique et intuition</p>
+</header>
+
+
+<!-- 🌟 CONTENU CHARGÉ -->
+<section class="bloc-mois bloc">
+    <h2 class="title-spicy">
+        <img src="../assets/icons/activite-kawaii.png" class="icon-kawaii">
+        Activité du mois
+    </h2>
+
+    <div id="activite-mois" class="activite-contenu">
+        <p>⏳ Chargement…</p>
+    </div>
+
+    <!-- Bouton retour -->
+    <div class="mois-btn-container" style="margin-top:25px;">
+        <a href="../index.html" class="mois-btn">🏡 Retour à l’accueil</a>
+    </div>
+</section>
+
+
+<footer>
+    <p>© 2025 — Le p’tit logis — Univers créatif</p>
+</footer>
+
+
+<!-- 📌 SCRIPT CHARGEMENT -->
+<script>
+fetch("###URL_WEBAPP###")
+    .then(r => r.text())
+    .then(html => {
+        document.getElementById("activite-mois").innerHTML = html;
+    })
+    .catch(err => {
+        document.getElementById("activite-mois").innerHTML =
+            "<p>❌ Impossible d’afficher l’activité.</p>";
+        console.error(err);
+    });
+</script>
+
+</body>
+</html>
