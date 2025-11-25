@@ -369,7 +369,7 @@ footer {
 }
 
 .daily-card {
-    width: 30%;            /* réduit la largeur */
+    width: 20%;            /* réduit la largeur */
     min-width: 260px;      /* pour mobile */
     padding: 20px;
     text-align: center;
