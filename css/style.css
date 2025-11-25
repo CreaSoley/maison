@@ -1,18 +1,11 @@
-/* -----------------------------------------------------------
-   🌈 STYLE GLOBAL – CreaSoley
-------------------------------------------------------------*/
 body.accueil {
     margin: 0;
     padding: 0;
-    font-family: "Arial", sans-serif;
+    font-family: Arial, sans-serif;
     background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
     background-attachment: fixed;
     color: #444;
 }
-
-/* -----------------------------------------------------------
-   🔤 TITRES + POLICE SPICY
-------------------------------------------------------------*/
 @font-face {
     font-family: "Spicy";
     src: url("../assets/fonts/Spicy Sale.ttf") format("truetype");
@@ -22,38 +15,36 @@ body.accueil {
     font-family: "Spicy", serif;
     font-size: 3rem;
     text-align: center;
-    margin-bottom: 0.4rem;
+    margin: 0;
     color: #444;
 }
 
 .header-subtitle {
     text-align: center;
     font-size: 1.2rem;
-    margin-top: -10px;
-    margin-bottom: 20px;
     opacity: 0.8;
+    margin-top: 8px;
+}
+.header-title {
+    text-align: center;
+    margin-top: 20px;
 }
 
-/* -----------------------------------------------------------
-   🖼 LOGO
-------------------------------------------------------------*/
 .header-logo {
-    width: 120px;
     display: block;
     margin: 15px auto;
+    width: 140px;
+    height: auto;
 }
-
-/* -----------------------------------------------------------
-   🌦 MÉTÉO
-------------------------------------------------------------*/
+@media (min-width: 900px) {
+    .header-logo {
+        width: 200px;
+    }
+}
 .weather-container {
     margin-top: 20px;
     text-align: center;
 }
-
-/* -----------------------------------------------------------
-   🧭 NAVIGATION
-------------------------------------------------------------*/
 .nav-menu {
     margin: 30px auto;
     padding: 10px;
@@ -73,193 +64,58 @@ body.accueil {
     backdrop-filter: blur(5px);
     transition: 0.25s;
 }
-
 .nav-menu a:hover {
     background: rgba(255, 255, 255, 0.9);
 }
-/* ======== TITRES — CENTRAGE DESKTOP ======== */
-@media (min-width: 900px) {
-
-    /* Centrer le header complet */
-    .header-title {
-        text-align: center !important;
-        width: 100%;
-    }
-
-    /* Le bloc logo + titre reste centré même en ligne */
-    .header-inline {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        width: 100%;
-        text-align: center;
-    }
-
-    /* Taille logo desktop */
-    .header-logo {
-        width: 120px !important;
-        height: auto;
-    }
-
-    /* Centre aussi le sous-titre */
-    .header-subtitle {
-        text-align: center;
-    }
-}
-footer {
-    text-align: center;
-    width: 100%;
-    padding: 20px 0;
-}
-
-/* -----------------------------------------------------------
-   ⭐ ACTIVITÉ DU MOIS
-------------------------------------------------------------*/
 .bloc-mois {
     margin: 25px auto;
     padding: 20px;
-    width: 85%;
-    background: rgba(255, 255, 255, 0.7);
+    width: 90%;
+    max-width: 900px;
+    background: rgba(255,255,255,0.7);
     border-radius: 15px;
     backdrop-filter: blur(6px);
 }
 
 .bloc-mois h2 {
     font-family: "Spicy", serif;
-    font-size: 1.8rem;
+    font-size: 2rem;
     display: flex;
     align-items: center;
     gap: 10px;
 }
-/* -----------------------------
-   🎨 HEADER CENTRÉ
-------------------------------*/
-.main-site-title {
-    font-family: "SpicySale", sans-serif;
-    font-size: 3rem;
-    text-align: center;
-    margin-top: 20px;
-    color: #3b3b3b;
-}
-
-.header-title {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.header-logo {
-    width: 140px;        /* taille mobile */
-    height: auto;
-    display: block;
-    margin: 10px auto 15px auto;
-}
-
-/* Version desktop : logo plus grand */
-@media (min-width: 900px) {
-    .header-logo {
-        width: 200px;
-    }
-
-    .main-site-title {
-        font-size: 4rem;
-    }
-}
-
-/* -----------------------------------------------------------
-   🟨 BLOCS JOURNALIERS
-------------------------------------------------------------*/
 .blocs-container {
     width: 90%;
     margin: 30px auto;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 25px;
 }
-.blocs-container {
-    gap: 20px !important; /* espace horizontal et vertical */
-}
-
-.bloc {
-    margin-bottom: 10px; /* espace si stacké en colonne */
-}
-
 .daily-card {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255,255,255,0.7);
     padding: 20px;
     border-radius: 15px;
-    backdrop-filter: blur(6px);
-}
-
-.daily-title {
-    font-family: "Spicy", serif;
-    font-size: 1.8rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}.bloc-center {
+    backdrop-filter: blur(5px);
     text-align: center;
+    width: 100%;
 }
+@media (min-width: 900px) {
+    .blocs-container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+    }
 
-.bloc-center p,
-.bloc-center input,
-.bloc-center button {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* -----------------------------------------------------------
-   🥰 ICÔNES KAWAII
-------------------------------------------------------------*/
-.icon-kawaii {
-    width: 38px;
-    height: 38px;
-    vertical-align: middle;
-}
-
-/* -------- ESPACEMENT ENTRE LES ENCARDS -------- */
-
-.bloc.daily-card {
-    margin: 0 0.5cm;
-    padding: 25px;
-    border-radius: 12px;
-}
-
-/* -------- CENTRAGE DU TEXTE -------- */
-
-.bloc-center,
-.daily-card p,
-.daily-card h3 {
-    text-align: center;
-}
-.mois-btn-container {
-    text-align: center;
-    margin-top: 15px;
-}
-
-.mois-btn {
-    background: white;
-    padding: 10px 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #444;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    transition: 0.2s;
-}
-
-.mois-btn:hover {
-    background: #ffeef6;
-    transform: translateY(-2px);
+    .daily-card {
+        width: 26%;
+        min-width: 260px;
+    }
 }
 .icon-kawaii {
     width: 32px;
     vertical-align: middle;
     margin-right: 8px;
 }
-
-/* -----------------------------------------------------------
-   🎨 DÉFI — couleur du jour
-------------------------------------------------------------*/
 #couleur-preview {
     width: 40px;
     height: 40px;
@@ -267,124 +123,9 @@ footer {
     margin: 10px auto;
     border: 2px solid rgba(0,0,0,0.1);
 }
-.icon-kawaii {
-    width: 32px;
-    vertical-align: middle;
-    margin-right: 8px;
-}
-
-/* -----------------------------------------------------------
-   📱 RESPONSIVE
-------------------------------------------------------------*/
 @media (max-width: 600px) {
     .title-spicy {
         font-size: 2.3rem;
-    }
-    .daily-title {
-        font-size: 1.5rem;
-    }
-}
-/* Largeur harmonisée */
-.bloc-mois,
-.daily-card {
-    width: 90%;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-}
-/* Mobile (par défaut) : blocs empilés – parfait */
-.blocs-container {
-    width: 90%;
-    margin: 30px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-/* Desktop → 3 colonnes */
-@media (min-width: 900px) {
-    .blocs-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 25px;
-    }
-
-    .daily-card {
-        width: 100%;
-        max-width: none;
-    }
-}
-/* MOBILE (par défaut) : empilé */
-.header-inline {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* DESKTOP : logo + titre côte à côte */
-@media (min-width: 900px) {
-    .header-inline {
-        flex-direction: row;
-        justify-content: center;
-        gap: 25px;
-    }
-
-    .header-main-title {
-        font-size: 3rem;
-        text-align: left;
-    }
-}
-/* -------- HEADER -------- */
-
-.header-inline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-.header-main-title {
-    text-align: center;
-}
-
-.header-logo {
-    width: 100px;
-    height: auto;
-}
-
-@media (min-width: 900px) {
-    .header-logo {
-        width: 160px;
-    }
-
-/* ------------------------------------
-   📦 BLOCS JOUR (proverbe / devinette / défi)
--------------------------------------*/
-
-.blocs-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;             /* espace horizontal */
-    margin-top: 20px;
-}
-
-.daily-card {
-    width: 20%;            /* réduit la largeur */
-    min-width: 260px;      /* pour mobile */
-    padding: 20px;
-    text-align: center;
-}
-
-/* Version mobile : empilement */
-@media (max-width: 900px) {
-    .blocs-container {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .daily-card {
-        width: 90%;
-        margin: 0 auto;
     }
 }
 footer p {
