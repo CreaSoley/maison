@@ -5,43 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎨 CreaSoley – Univers Créatif</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Police June in Rock -->
-    <style>
-        @font-face {
-            font-family: "JuneInRock";
-            src: url("assets/fonts/June in Rock.otf");
-        }
-        .title-rock {
-            font-family: "JuneInRock", serif;
-        }
-    </style>
-
-    <!-- Icônes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="accueil">
 
-<!-- 🔵 HEADER -->
+<!-- 🌼 LOGO -->
+<img src="assets/images/logo.png" class="header-logo" alt="logo">
+
+<!-- 🔵 TITRE -->
 <header class="header-title">
-    <h1 class="title-rock header-main-title">Bienvenue dans notre station de salon</h1>
+    <h1 class="title-spicy">Bienvenue dans notre station de salon</h1>
     <p class="header-subtitle">Exploration entre technique et intuition</p>
 
-    <!-- 🌦 Météo -->
+    <!-- 🌦 METEO -->
     <div class="weather-container">
         <a class="weatherwidget-io"
-            href="https://forecast7.com/fr/49d121d40/27920/"
-            data-label_1="27920"
-            data-label_2="Météo"
-            data-font="Roboto"
-            data-icons="Climacons Animated"
-            data-theme="marine">
-            27920 Météo
-        </a>
+        href="https://forecast7.com/fr/49d121d40/27920/"
+        data-label_1="27920"
+        data-label_2="Météo"
+        data-icons="Climacons Animated"
+        data-theme="marine">27920 Météo</a>
     </div>
 </header>
 
@@ -49,8 +33,7 @@
 !function(d,s,id){
     var js,fjs=d.getElementsByTagName(s)[0];
     if(!d.getElementById(id)){
-        js=d.createElement(s);
-        js.id=id;
+        js=d.createElement(s);js.id=id;
         js.src='https://weatherwidget.io/js/widget.min.js';
         fjs.parentNode.insertBefore(js,fjs);
     }
@@ -59,23 +42,22 @@
 
 <!-- 🧭 NAVIGATION -->
 <nav class="nav-menu">
-    <a href="pages/techniques-artistiques.html">
-        <i class="fa-solid fa-palette"></i> Techniques artistiques
-    </a>
-    <a href="pages/savons.html">
-        <i class="fa-solid fa-soap"></i> Savons
-    </a>
-    <a href="pages/recettes-famille.html">
-        <i class="fa-solid fa-utensils"></i> Recettes de famille
-    </a>
-    <a href="pages/lsf.html">
-        <i class="fa-solid fa-hands"></i> LSF
-    </a>
+    <a href="pages/techniques-artistiques.html">🎨 Techniques artistiques</a>
+    <a href="pages/savons.html">🧼 Savons</a>
+    <a href="pages/recettes-famille.html">🍲 Recettes de famille</a>
+    <a href="pages/lsf.html">🤟 LSF</a>
 </nav>
 
-<!-- ⭐ ACTIVITÉ DU MOIS -->
+<!-- ⭐ ACTIVITE DU MOIS -->
 <section class="bloc-mois">
-    <h2 class="title-rock"><i class="fa-solid fa-star"></i> Activité du mois</h2>
+    <h2 class="title-spicy">
+        <svg class="icon-kawaii" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="30" fill="#FFD8E8"/>
+            <rect x="22" y="10" width="20" height="40" rx="6" fill="#FFB7D5"/>
+            <rect x="26" y="45" width="12" height="10" rx="4" fill="#FFCDE8"/>
+        </svg>
+        Activité du mois
+    </h2>
     <p>Une activité inspirante sera ajoutée ici chaque mois !</p>
 </section>
 
@@ -83,9 +65,13 @@
 <section class="blocs-container">
 
     <!-- 📜 PROVERBE -->
-    <div class="bloc daily-card">
-        <h3 class="title-rock">
-            <i class="fa-solid fa-scroll daily-icon"></i>
+    <div class="daily-card">
+        <h3 class="daily-title">
+            <svg class="icon-kawaii" viewBox="0 0 64 64">
+                <rect x="10" y="10" width="44" height="44" rx="6" fill="#FFEED0"/>
+                <path d="M22 20h20M22 28h16M22 36h20" stroke="#CC9966" stroke-width="3"/>
+                <path d="M40 48l8 6" stroke="#AA7744" stroke-width="3"/>
+            </svg>
             Proverbe du jour
         </h3>
         <div id="proverbe-du-jour" class="bloc-center">
@@ -93,35 +79,36 @@
         </div>
     </div>
 
-   <!-- ❓ DEVINETTE -->
-<div class="bloc daily-card">
-    <h3 class="title-rock">
-        <i class="fa-solid fa-question daily-icon"></i>
-        Devinette du jour
-    </h3>
-
-    <div id="devinette-du-jour" class="bloc-center">
-
-        <p id="texte-devinette">Chargement…</p>
-
-        <input type="text" id="reponse-devinette" placeholder="Votre réponse...">
-
-        <button onclick="validerDevinette()" class="btn">Valider</button>
-
-        <p id="devinette-resultat"></p>
+    <!-- ❓ DEVINETTE -->
+    <div class="daily-card">
+        <h3 class="daily-title">
+            <svg class="icon-kawaii" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="28" fill="#D9E7FF"/>
+                <text x="32" y="42" font-size="40" fill="#5574C5" text-anchor="middle">?</text>
+            </svg>
+            Devinette du jour
+        </h3>
+        <div id="devinette-du-jour" class="bloc-center">
+            <p id="texte-devinette">Chargement…</p>
+            <input type="text" id="reponse-devinette" placeholder="Votre réponse...">
+            <button onclick="validerDevinette()">Valider</button>
+            <p id="devinette-resultat"></p>
+        </div>
     </div>
-</div>
 
-    <!-- ⚡ DÉFI ARTISTIQUE -->
-    <div class="bloc daily-card" id="defi-du-jour-bloc">
-        <h3 class="title-rock">
-            <i class="fa-solid fa-bolt daily-icon"></i>
+    <!-- 🎨 DEFI -->
+    <div class="daily-card" id="defi-du-jour-bloc">
+        <h3 class="daily-title">
+            <svg class="icon-kawaii" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="28" fill="#FFE3B8"/>
+                <circle cx="22" cy="22" r="6" fill="#FF7EA6"/>
+                <circle cx="42" cy="22" r="6" fill="#78C4FF"/>
+                <circle cx="32" cy="42" r="6" fill="#A8E063"/>
+            </svg>
             Défi du jour
         </h3>
         <div id="defi-du-jour" class="bloc-center">
             <p id="defi-texte">Chargement…</p>
-
-            <!-- Couleur associée -->
             <div id="couleur-preview"></div>
             <p id="couleur-nom"></p>
         </div>
@@ -140,6 +127,3 @@
 
 </body>
 </html>
-
-
-
