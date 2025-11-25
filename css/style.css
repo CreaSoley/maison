@@ -204,4 +204,43 @@ body.accueil {
         text-align: left;
     }
 }
+/* -------- HEADER -------- */
+
+.header-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.header-main-title {
+    text-align: center;
+}
+
+.header-logo {
+    width: 100px;
+    height: auto;
+}
+
+@media (min-width: 900px) {
+    .header-logo {
+        width: 160px;
+    }
+}
+
+/* -------- ESPACEMENT ENTRE LES ENCARDS -------- */
+
+.bloc.daily-card {
+    margin: 0 0.5cm;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+/* -------- CENTRAGE DU TEXTE -------- */
+
+.bloc-center,
+.daily-card p,
+.daily-card h3 {
+    text-align: center;
+}
 
