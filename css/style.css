@@ -154,3 +154,54 @@ body.accueil {
         font-size: 1.5rem;
     }
 }
+/* Largeur harmonisée */
+.bloc-mois,
+.daily-card {
+    width: 90%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Mobile (par défaut) : blocs empilés – parfait */
+.blocs-container {
+    width: 90%;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Desktop → 3 colonnes */
+@media (min-width: 900px) {
+    .blocs-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .daily-card {
+        width: 100%;
+        max-width: none;
+    }
+}
+/* MOBILE (par défaut) : empilé */
+.header-inline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* DESKTOP : logo + titre côte à côte */
+@media (min-width: 900px) {
+    .header-inline {
+        flex-direction: row;
+        justify-content: center;
+        gap: 25px;
+    }
+
+    .header-main-title {
+        font-size: 3rem;
+        text-align: left;
+    }
+}
+
