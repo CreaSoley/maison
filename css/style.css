@@ -184,6 +184,11 @@ body.accueil {
     margin: 10px auto;
     border: 2px solid rgba(0,0,0,0.1);
 }
+.icon-kawaii {
+    width: 32px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
 
 /* -----------------------------------------------------------
    📱 RESPONSIVE
