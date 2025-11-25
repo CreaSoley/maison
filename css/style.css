@@ -1,261 +1,156 @@
-/* ----------------------------------------------
-   RESET
----------------------------------------------- */
-* {
+/* -----------------------------------------------------------
+   🌈 STYLE GLOBAL – CreaSoley
+------------------------------------------------------------*/
+body.accueil {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+    background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+    background-attachment: fixed;
+    color: #444;
 }
 
-/* ----------------------------------------------
-   BODY GLOBAL
----------------------------------------------- */
-body {
-    font-family: var(--font-sans, Arial, sans-serif);
-    color: #222;
-    line-height: 1.6;
+/* -----------------------------------------------------------
+   🔤 TITRES + POLICE SPICY
+------------------------------------------------------------*/
+@font-face {
+    font-family: "Spicy";
+    src: url("../assets/fonts/Spicy Sale.ttf") format("truetype");
 }
 
-/* Dégradé uniquement sur accueil */
-body.accueil {
-    background: linear-gradient(135deg, #74a5d6, #a4c7f1);
-    min-height: 100vh;
-}
-
-/* ----------------------------------------------
-   HEADER
----------------------------------------------- */
-.header-title {
+.title-spicy {
+    font-family: "Spicy", serif;
+    font-size: 3rem;
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 15px;
-}
-
-.header-main-title {
-    font-size: 2.3rem;
-    color: white;
+    margin-bottom: 0.4rem;
+    color: #444;
 }
 
 .header-subtitle {
-    color: white;
-    font-size: 1.1rem;
-}
-
-/* ----------------------------------------------
-   METEO
----------------------------------------------- */
-.weather-container {
-    width: 100%;
     text-align: center;
-    margin-top: 10px;
+    font-size: 1.2rem;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    opacity: 0.8;
 }
 
-/* ----------------------------------------------
-   NAV MENU
----------------------------------------------- */
+/* -----------------------------------------------------------
+   🖼 LOGO
+------------------------------------------------------------*/
+.header-logo {
+    width: 120px;
+    display: block;
+    margin: 15px auto;
+}
+
+/* -----------------------------------------------------------
+   🌦 MÉTÉO
+------------------------------------------------------------*/
+.weather-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* -----------------------------------------------------------
+   🧭 NAVIGATION
+------------------------------------------------------------*/
 .nav-menu {
+    margin: 30px auto;
+    padding: 10px;
     display: flex;
     justify-content: center;
-    gap: 25px;
-    margin: 20px auto;
     flex-wrap: wrap;
+    gap: 15px;
 }
 
 .nav-menu a {
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 12px 18px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.15);
+    color: #444;
+    text-decoration: none;
+    font-weight: bold;
     backdrop-filter: blur(5px);
-    transition: 0.2s;
-}
-
-.nav-menu a i {
-    margin-right: 6px;
+    transition: 0.25s;
 }
 
 .nav-menu a:hover {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.9);
 }
 
-/* ----------------------------------------------
-   ACTIVITÉ DU MOIS
----------------------------------------------- */
+/* -----------------------------------------------------------
+   ⭐ ACTIVITÉ DU MOIS
+------------------------------------------------------------*/
 .bloc-mois {
-    background: rgba(255, 255, 255, 0.6);
-    margin: 20px auto;
+    margin: 25px auto;
     padding: 20px;
+    width: 85%;
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 15px;
-    width: 90%;
-    max-width: 900px;
-    text-align: center;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(6px);
 }
 
 .bloc-mois h2 {
+    font-family: "Spicy", serif;
     font-size: 1.8rem;
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* ----------------------------------------------
-   BLOCS JOURNALIERS
----------------------------------------------- */
+/* -----------------------------------------------------------
+   🟨 BLOCS JOURNALIERS
+------------------------------------------------------------*/
 .blocs-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
     width: 90%;
-    margin: 40px auto;
+    margin: 30px auto;
+    display: grid;
+    gap: 25px;
 }
 
-.bloc {
-    background: rgba(255, 255, 255, 0.65);
-    border-radius: 18px;
-    padding: 25px;
-    text-align: center;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    transition: 0.2s ease;
+.daily-card {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(6px);
 }
 
-.bloc:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+.daily-title {
+    font-family: "Spicy", serif;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.title-rock {
-    margin-bottom: 12px;
-    color: #1a4a7a;
+/* -----------------------------------------------------------
+   🥰 ICÔNES KAWAII
+------------------------------------------------------------*/
+.icon-kawaii {
+    width: 38px;
+    height: 38px;
+    vertical-align: middle;
 }
 
-.daily-icon {
-    margin-right: 8px;
-    color: #1a4a7a;
-}
-
-.bloc-center {
-    text-align: center;
-}
-
-/* Devinette : zone réponse */
-#reponse-devinette {
-    margin-top: 12px;
-    padding: 8px 12px;
-    width: 80%;
-    border-radius: 8px;
-    border: 1px solid #aaa;
-}
-
-#devinette-resultat {
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-/* ----------------------------------------------
-   DEFI DU JOUR : couleur dynamique
----------------------------------------------- */
+/* -----------------------------------------------------------
+   🎨 DÉFI — couleur du jour
+------------------------------------------------------------*/
 #couleur-preview {
     width: 40px;
     height: 40px;
-    border-radius: 8px;
-    margin: 12px auto 8px auto;
-    border: 3px solid #555;
+    border-radius: 6px;
+    margin: 10px auto;
+    border: 2px solid rgba(0,0,0,0.1);
 }
 
-#couleur-nom {
-    font-weight: bold;
-    color: #333;
-}
-
-/* ----------------------------------------------
-   BOUTONS
----------------------------------------------- */
-.btn {
-    background: #1a4a7a;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 12px;
-    font-weight: bold;
-    border: none;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: #2b6bb1;
-}
-
-/* ----------------------------------------------
-   FOOTER
----------------------------------------------- */
-footer {
-    margin: 40px 0 20px;
-    text-align: center;
-    color: white;
-}
-
-/* ----------------------------------------------
-   RESPONSIVE
----------------------------------------------- */
-@media (max-width: 900px) {
-    .header-main-title {
-        font-size: 1.6rem;
+/* -----------------------------------------------------------
+   📱 RESPONSIVE
+------------------------------------------------------------*/
+@media (max-width: 600px) {
+    .title-spicy {
+        font-size: 2.3rem;
     }
-
-    .blocs-container {
-        grid-template-columns: 1fr;
+    .daily-title {
+        font-size: 1.5rem;
     }
-
-    .nav-menu {
-        gap: 15px;
-    }
-
-    #reponse-devinette {
-        width: 90%;
-    }
-}
-/* === Animation Zen : pluie de feuilles === */
-.leaf {
-    position: fixed;
-    top: -40px;
-    width: 25px;
-    height: 25px;
-    background-image: url("assets/images/leaf.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    animation-name: fall;
-    animation-timing-function: linear;
-}
-
-@keyframes fall {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(110vh) rotate(360deg); }
-}
-
-/* ---------------------------
-   🌿 Pages internes
----------------------------- */
-.page-interne {
-    background: #f7f7f7;
-    padding: 20px;
-}
-
-.sub-header {
-    text-align: center;
-    padding: 30px 10px;
-}
-
-.sub-header h1 {
-    font-size: 2.2rem;
-    color: var(--color-primary);
-}
-
-.content {
-    max-width: 800px;
-    margin: 0 auto;
-    font-size: 1.1rem;
-    line-height: 1.7;
 }
