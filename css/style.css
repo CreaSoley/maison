@@ -30,11 +30,48 @@ body.accueil {
     margin-top: 20px;
 }
 
+/* ======= HEADER MOBILE — LOGO AU CENTRE + TITRE CENTRÉ ======= */
+
+.header-inline {
+    display: flex;
+    flex-direction: column;   /* mobile : empilé */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
 .header-logo {
-    display: block;
-    margin: 15px auto;
     width: 140px;
     height: auto;
+    display: block;
+    margin: 5px auto;
+}
+
+.header-main-title {
+    text-align: center;
+}
+
+
+/* ======= DESKTOP — LOGO À GAUCHE + TITRE À DROITE ======= */
+
+@media (min-width: 900px) {
+
+    .header-inline {
+        flex-direction: row;         /* côte à côte */
+        justify-content: center;     /* centré sur la page */
+        align-items: center;
+        gap: 25px;
+    }
+
+    .header-logo {
+        width: 160px;                /* plus gros sur desk */
+        margin: 0;
+    }
+
+    .header-main-title {
+        text-align: left;            /* aligné avec le logo */
+        font-size: 3.2rem;
+    }
 }
 @media (min-width: 900px) {
     .header-logo {
