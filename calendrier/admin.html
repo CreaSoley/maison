@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Calendrier</title>
+  <style>
+    body{ font-family: Arial, sans-serif; padding:18px; background:#f7f7f7; color:#111; }
+    h1{ color:#b6861f; }
+    textarea{ width:100%; height:90px; font-family: monospace; }
+    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start; }
+    label{ font-weight:700; }
+    input[type="number"]{ width:80px; }
+    .row{ margin-bottom:12px; }
+    button{ background:#b6861f; color:#000; border:0; padding:8px 12px; cursor:pointer; border-radius:6px; font-weight:700; }
+    .small{ font-size:13px; padding:6px 8px; }
+    .danger{ background:#c33; color:#fff; }
+    .note{ font-size:13px; color:#555; }
+    select{ width:200px; }
+  </style>
+</head>
+<body>
+  <h1>Gérer localement les activités</h1>
+  <p class="note">Modifie une case puis <strong>Enregistrer</strong>. Les données sont sauvegardées dans <em>localStorage</em>. Tu peux exporter JSON pour le copier dans <code>calendrier.json</code>.</p>
+
+  <div class="row">
+    <label>Jour (1-24)</label>
+    <input id="day" type="number" min="1" max="24" value="1" />
+  </div>
+
+  <div class="row">
+    <label>Date affichée</label>
+    <input id="dateTxt" type="text" placeholder="ex. Lundi 1 décembre" />
+  </div>
+
+  <div class="row">
+    <label>Texte féerique</label>
+    <textarea id="fairyTxt" placeholder="Texte du jour..."></textarea>
+  </div>
+
+  <div class="row">
+    <label>PDF (URL)</label>
+    <input id="pdfUrl" type="text" placeholder="Lien vers PDF (Drive, etc.)" />
+  </div>
+
+  <div style="margin-bottom:18px;">
+    <button onclick="save()">Enregistrer</button>
+    <button class="small" onclick="loadDay()">Charger</button>
+    <button class="small" onclick="clearAll()">Effacer tout</button>
+  </div>
+
+  <div style="margin-top:10px;">
+    <button onclick="exportJson()">Exporter JSON</button>
+    <button onclick="importFromFile()" class="small">Importer JSON</button>
+    <input id="fileInp" type="file" accept=".json" style="display:none" onchange="handleFile(event)" />
+  </div>
+
+  <pre id="preview" style="background:#fff;border:1px solid #ddd;padding:12px;margin-top:12px;max-height:320px;overflow:auto"></pre>
+
+  <script>
+    // Chargement initial
+    function getStore(){
+      const s = localStorage.getItem('calendrier_activites');
+      if (!s) {
+        const base = {};
+        for (let i=1;i<=24;i++) base[String(i)] = {date:`${i} décembre`, fairy:``, pdf:""};
+        localStorage.setItem('calendrier_activites', JSON.stringify(base));
+        return base;
+      }
+      return JSON.parse(s);
+    }
+
+    function save(){
+      const day = Number(document.getElementById('day').value);
+      if (!day || day<1 || day>24) { alert('Jour 1–24'); return; }
+      const dateTxt = document.getElementById('dateTxt').value;
+      const fairyTxt = document.getElementById('fairyTxt').value;
+      const pdf = document.getElementById('pdfUrl').value;
+      const store = getStore();
+      store[String(day)] = { date: dateTxt || `${day} décembre`, fairy: fairyTxt, pdf: pdf || "" };
+      localStorage.setItem('calendrier_activites', JSON.stringify(store));
+      previewStore();
+      alert('Enregistré localement (localStorage).');
+    }
+
+    function loadDay(){
+      const day = Number(document.getElementById('day').value);
+      const store = getStore();
+      const d = store[String(day)] || {date:`${day} décembre`, fairy:"", pdf:""};
+      document.getElementById('dateTxt').value = d.date || "";
+      document.getElementById('fairyTxt').value = d.fairy || "";
+      document.getElementById('pdfUrl').value = d.pdf || "";
+    }
+
+    function clearAll(){
+      if (!confirm('Effacer toutes les activités locales ?')) return;
+      const base = {};
+      for (let i=1;i<=24;i++) base[String(i)] = {date:`${i} décembre`, fairy:``, pdf:""};
+      localStorage.setItem('calendrier_activites', JSON.stringify(base));
+      previewStore();
+    }
+
+    function previewStore(){
+      document.getElementById('preview').innerText = JSON.stringify(getStore(), null, 2);
+    }
+    previewStore();
+
+    function exportJson(){
+      const data = JSON.stringify(getStore(), null, 2);
+      const blob = new Blob([data], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'calendrier.json'; document.body.appendChild(a); a.click();
+      a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function importFromFile(){
+      document.getElementById('fileInp').click();
+    }
+    function handleFile(e){
+      const f = e.target.files[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const obj = JSON.parse(reader.result);
+          localStorage.setItem('calendrier_activites', JSON.stringify(obj));
+          previewStore();
+          alert('Importé dans localStorage. Pour que le site public l’utilise, dépose le fichier calendrier.json dans ton repo (ou copie le JSON).');
+        } catch(err){
+          alert('Fichier JSON invalide');
+        }
+      };
+      reader.readAsText(f);
+    }
+  </script>
+</body>
+</html>
