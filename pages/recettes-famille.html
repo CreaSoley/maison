@@ -3,49 +3,65 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Recettes — Le P'tit Logis</title>
+  <title>Recettes de famille — Le P'tit Logis</title>
 
-  <meta name="description" content="Sélecteur de recettes — recherche par ingrédient, filtre par catégorie, impression.">
+  <!-- Police SPICY (fichier à placer dans /assets/fonts/) -->
+  <style>
+    @font-face {
+      font-family: "Spicy";
+      src: url("../assets/fonts/Spicy Sale.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
 
-  <!-- Material Icons (optionnel pour retour) -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+  <!-- Styles spécifiques -->
   <style>
     :root{
       --bg: #fff8fb;
-      --card-bg: #ffffff;
+      --card-bg: rgba(255,255,255,0.95);
       --muted: #6b6b6b;
+      --accent: #6a7cff;
       --kawaii-btn: linear-gradient(120deg,#fde7fb 0%,#e8f7ff 100%);
       --kawaii-badge: linear-gradient(120deg,#d8ffd6 0%,#d8f0ff 100%);
-      --shadow: 0 10px 30px rgba(0,0,0,0.07);
-      --accent: #6a7cff;
+      --shadow: 0 10px 30px rgba(0,0,0,0.06);
       --max-width: 1100px;
     }
 
-    html,body { height:100%; margin:0; padding:0; font-family: Arial, Helvetica, sans-serif; background:var(--bg); color:#222; }
+    html,body { height:100%; margin:0; padding:0; font-family: Arial, Helvetica, sans-serif; background:var(--bg); color:#222; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
-    .wrap { max-width: var(--max-width); margin:18px auto; padding:16px; }
+    .wrap { max-width: var(--max-width); margin:20px auto; padding:18px; }
 
-    /* header */
+    /* header / brand */
     .top {
       display:flex;
       align-items:center;
-      gap:16px;
+      gap:18px;
       justify-content:space-between;
       flex-wrap:wrap;
     }
     .brand {
       display:flex;
-      gap:12px;
+      gap:14px;
       align-items:center;
     }
-    .brand img { width:72px; height:auto; display:block; border-radius:10px; }
-    .brand h1 { font-size:1.6rem; margin:0; color:var(--accent); font-weight:700; }
-    .subtitle { font-size:0.95rem; color:var(--muted); margin-top:4px; }
+    .brand a { display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
+    .brand img { width:84px; height:auto; display:block; border-radius:10px; }
+    .brand h1 { font-family: "Spicy", serif; font-size:1.8rem; margin:0; color:var(--accent); }
+    .brand .subtitle { font-family: "Spicy", serif; font-size:0.95rem; margin-top:6px; color:#444; opacity:0.9; }
+
+    /* petit texte sous titre (Arial comme demandé ailleurs sur le site) */
+    .lead {
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      color: #444;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
 
     /* controls */
     .controls {
-      margin-top:14px;
+      margin-top:12px;
       display:flex;
       gap:12px;
       align-items:center;
@@ -58,8 +74,8 @@
       border:1px solid rgba(0,0,0,0.08);
       height:44px;
       font-size:15px;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.03);
       background: white;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.03);
     }
 
     .btn {
@@ -96,7 +112,7 @@
       border: 1px solid rgba(0,0,0,0.03);
     }
 
-    .card h3 { margin:0; font-size:1.15rem; display:flex; align-items:center; gap:8px; }
+    .card h3 { margin:0; font-size:1.15rem; display:flex; align-items:center; gap:8px; font-weight:800; }
     .meta { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .badge {
       padding:6px 10px;
@@ -151,10 +167,19 @@
     /* responsive tweaks */
     @media (max-width:900px) {
       .img-box { height:44vw; }
-      .brand img { width:60px; }
-      .brand h1 { font-size:1.3rem; }
+      .brand img { width:68px; }
+      .brand h1 { font-size:1.4rem; }
       .controls { flex-direction:column; align-items:stretch; gap:10px; }
       .top { gap:10px; }
+    }
+
+    /* small visual helper for empty states */
+    .status {
+      padding:14px;
+      text-align:center;
+      background:rgba(255,255,255,0.9);
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.04);
     }
   </style>
 </head>
@@ -164,19 +189,24 @@
     <!-- header -->
     <div class="top">
       <div class="brand">
-        <!-- logo cliquable vers la page d'accueil (change le chemin si besoin) -->
-        <a href="index.html" title="Retour à l'accueil"><img src="assets/images/logo.png" alt="logo"></a>
+        <!-- logo cliquable vers la page d'accueil -->
+        <a href="../index.html" title="Retour à l'accueil">
+          <img src="../assets/images/logo.png" alt="logo">
+        </a>
         <div>
-          <h1>Recettes</h1>
-          <div class="subtitle">Recherche rapide, filtre par catégorie — trouve ta recette parfaite ✨</div>
+          <h1>Recettes de famille</h1>
+          <div class="subtitle">cuisiné avec amour</div>
         </div>
       </div>
 
-      <div>
+      <div style="display:flex; gap:10px; align-items:center;">
         <button class="btn" onclick="doRandom()" title="Recette surprise">✨ Surprise</button>
         <button class="btn" onclick="window.print()" title="Imprimer la page">🖨️ Imprimer</button>
       </div>
     </div>
+
+    <!-- lead text -->
+    <p class="lead" style="text-align:center;">Cuisiné avec amour</p>
 
     <!-- controls -->
     <div class="controls" role="region" aria-label="Recherche et filtres">
@@ -188,33 +218,32 @@
 
     <!-- listing -->
     <main id="mainArea" class="main-area">
-      <p class="muted">Chargement des recettes…</p>
+      <div class="status">Chargement des recettes…</div>
     </main>
   </div>
 
+  <!-- Script : charge ../data/recettes.csv (depuis pages/ -> ../data/recettes.csv) -->
   <script>
-    /* ---------------------------------------
-       Recettes (static CSV loader) — client-side
+    /* ============================================
+       Lecteur CSV robuste + UI pour recettes
        CSV attendu : nom,categorie,personnes,ingredients,recette,photo
-       Chemin CSV : /data/recettes.csv
-       --------------------------------------- */
+       Chemin utilisé : ../data/recettes.csv
+    ============================================ */
 
-    // Parse CSV line robustly (guillemets)
+    // Parse CSV line respecting quotes (columns with commas)
     function parseCSV(text) {
       const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
       if (!lines.length) return [];
-      const header = lines[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // handle quotes
+      const headers = lines[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h=>h.trim());
       const rows = [];
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i];
         if (!line.trim()) continue;
-        // split that respects quotes
         const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => {
           let s = c.trim();
           if (s.startsWith('"') && s.endsWith('"')) s = s.slice(1, -1);
           return s.replace(/""/g, '"');
         });
-        // ensure at least 6 columns
         while (cols.length < 6) cols.push("");
         rows.push({
           nom: cols[0] || "",
@@ -230,24 +259,23 @@
 
     async function loadCSV() {
       try {
-        const res = await fetch('/data/recettes.csv', { cache: 'no-store' });
-        if (!res.ok) throw new Error('CSV introuvable : ' + res.status);
+        const res = await fetch('../data/recettes.csv', { cache: 'no-store' });
+        if (!res.ok) throw new Error('CSV introuvable (' + res.status + ')');
         const txt = await res.text();
-        const data = parseCSV(txt);
-        if (!data || data.length === 0) {
-          document.getElementById('mainArea').innerHTML = '<p class="muted">Aucune recette dans le fichier CSV.</p>';
+        RECIPES = parseCSV(txt);
+        if (!RECIPES || RECIPES.length === 0) {
+          document.getElementById('mainArea').innerHTML = '<div class="status">Aucune recette trouvée dans le CSV.</div>';
           return;
         }
-        RECIPES = data;
         buildCategoryList();
         renderList(RECIPES);
       } catch (err) {
         console.error(err);
-        document.getElementById('mainArea').innerHTML = '<p class="muted">Erreur de chargement du CSV (vérifie /data/recettes.csv).</p>';
+        document.getElementById('mainArea').innerHTML = '<div class="status">Erreur de chargement du CSV — vérifie <code>/data/recettes.csv</code></div>';
       }
     }
 
-    // globals
+    // Globals
     let RECIPES = [];
     let CATS = [];
 
@@ -259,7 +287,6 @@
       });
       CATS = Array.from(set).sort();
       const sel = document.getElementById('categorySelect');
-      // keep first option
       sel.innerHTML = '<option value="">Toutes les catégories</option>';
       CATS.forEach(cat => {
         const o = document.createElement('option');
@@ -269,14 +296,14 @@
       });
     }
 
-    // render
     function renderList(list) {
       const main = document.getElementById('mainArea');
       main.innerHTML = '';
       if (!list || list.length === 0) {
-        main.innerHTML = '<p class="muted">Aucune recette trouvée.</p>';
+        main.innerHTML = '<div class="status">Aucune recette trouvée.</div>';
         return;
       }
+
       const grid = document.createElement('div');
       grid.className = 'cards';
 
@@ -290,11 +317,10 @@
         const imgBox = document.createElement('div');
         imgBox.className = 'img-box';
         const img = document.createElement('img');
-        img.src = r.photo && r.photo.trim() ? r.photo.trim() : 'assets/images/placeholder.png';
+        img.src = r.photo && r.photo.trim() ? r.photo.trim() : '../assets/images/placeholder.png';
         img.alt = r.nom || 'image recette';
-        // ensure proportion (contain)
         img.style.objectFit = 'contain';
-        img.onerror = function(){ this.onerror=null; this.src='assets/images/placeholder.png'; };
+        img.onerror = function(){ this.onerror=null; this.src='../assets/images/placeholder.png'; };
         imgBox.appendChild(img);
 
         const meta = document.createElement('div');
@@ -311,11 +337,10 @@
         steps.className = 'recipe-steps';
         steps.innerHTML = `<strong>📝 Préparation</strong><div style="margin-top:8px;">${nl2br(escapeHtml(r.recette || '—'))}</div>`;
 
-        // buttons
         const buttons = document.createElement('div');
         buttons.className = 'buttons-row';
 
-        // gallery (opens image)
+        // galerie (ouvre l'image dans un onglet)
         if (r.photo && r.photo.trim()) {
           const g = document.createElement('button');
           g.className = 'btn-small';
@@ -324,14 +349,14 @@
           buttons.appendChild(g);
         }
 
-        // print single
+        // imprimer la fiche (ouvre une nouvelle fenêtre d'impression)
         const pbtn = document.createElement('button');
         pbtn.className = 'btn-small';
         pbtn.innerHTML = '🖨️ Imprimer la fiche';
         pbtn.onclick = () => printRecipe(r);
         buttons.appendChild(pbtn);
 
-        // append all
+        // assemble
         card.appendChild(title);
         card.appendChild(imgBox);
         card.appendChild(meta);
@@ -348,20 +373,23 @@
     // helpers
     function nl2br(s){ return String(s).replace(/\r?\n/g, '<br>'); }
     function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
-    // open url safely
     function openUrl(u){ try { window.open(decodeURIComponent(u), '_blank'); } catch(e){ window.open(u, '_blank'); } }
 
-    // search & filter
+    // search & filter wiring
     let searchTimer = null;
-    document.getElementById && document.getElementById('searchInput') && (document.getElementById('searchInput').oninput = onSearchChange);
-    document.getElementById && document.getElementById('categorySelect') && (document.getElementById('categorySelect').onchange = onSearchChange);
+    document.addEventListener('DOMContentLoaded', () => {
+      const s = document.getElementById('searchInput');
+      const c = document.getElementById('categorySelect');
+      if (s) s.oninput = onSearchChange;
+      if (c) c.onchange = onSearchChange;
+      loadCSV();
+    });
 
     function onSearchChange(){
       if (searchTimer) clearTimeout(searchTimer);
       searchTimer = setTimeout(()=> {
-        const q = document.getElementById('searchInput').value.trim().toLowerCase();
-        const cat = document.getElementById('categorySelect').value;
+        const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+        const cat = (document.getElementById('categorySelect').value || '').trim();
         let filtered = RECIPES.slice();
 
         if (q) {
@@ -371,26 +399,25 @@
           filtered = filtered.filter(r => (r.categorie||'').toLowerCase() === cat.toLowerCase());
         }
         renderList(filtered);
-      }, 200);
+      }, 180);
     }
 
-    // random recipe
+    // random
     function doRandom(){
       if (!RECIPES || RECIPES.length === 0) return;
       const r = RECIPES[Math.floor(Math.random() * RECIPES.length)];
       renderList([r]);
-      // scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // print single recipe (open new window with print)
+    // print single recipe (open new window + print)
     function printRecipe(r){
       const doc = window.open('', '_blank', 'width=800,height=900');
       const html = `<!doctype html>
 <html><head><meta charset="utf-8"><title>${escapeHtml(r.nom)}</title>
 <style>
   body{ font-family: Arial, sans-serif; padding:20px; color:#222; }
-  h1{ margin:0 0 6px 0; font-size:24px; color:var(--accent); }
+  h1{ margin:0 0 6px 0; font-size:24px; color:${escapeHtml('#6a7cff')}; }
   .meta{ color:#666; margin-bottom:12px; }
   .img{ width:100%; max-height:420px; object-fit:contain; margin-bottom:12px; border-radius:8px; background:#fafafa; padding:6px; }
   .section{ margin-bottom:14px; }
@@ -399,7 +426,7 @@
 </head><body>
   <h1>${escapeHtml(r.nom)}</h1>
   <div class="meta">Catégorie: ${escapeHtml(r.categorie || '—')} • Pour: ${escapeHtml(r.personnes || '—')}</div>
-  <img src="${r.photo || 'assets/images/placeholder.png'}" class="img" onerror="this.onerror=null;this.src='assets/images/placeholder.png'">
+  <img src="${r.photo || '../assets/images/placeholder.png'}" class="img" onerror="this.onerror=null;this.src='../assets/images/placeholder.png'">
   <div class="section"><strong>Ingrédients :</strong><pre>${escapeHtml(r.ingredients || '—')}</pre></div>
   <div class="section"><strong>Préparation :</strong><pre>${escapeHtml(r.recette || '—')}</pre></div>
   <script>setTimeout(()=>{window.print();},400); window.onafterprint=()=>window.close();<\/script>
@@ -408,16 +435,6 @@
       doc.document.write(html);
       doc.document.close();
     }
-
-    // init on load
-    window.addEventListener('load', () => {
-      // connect inputs
-      const s = document.getElementById('searchInput');
-      const c = document.getElementById('categorySelect');
-      if (s) s.oninput = onSearchChange;
-      if (c) c.onchange = onSearchChange;
-      loadCSV();
-    });
   </script>
 </body>
 </html>
