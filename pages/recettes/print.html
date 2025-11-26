@@ -1,150 +1,144 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Impression — Recette</title>
+<meta charset="UTF-8">
+<title>Impression recette</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-  body {
+body {
     font-family: Arial, sans-serif;
-    padding: 30px;
-    max-width: 800px;
-    margin: auto;
+    margin: 40px;
     color: #333;
-  }
+}
 
-  h1 {
+h1 {
     text-align: center;
-    font-size: 2.4rem;
-    margin-bottom: 20px;
-  }
+    margin-bottom: 25px;
+    font-size: 2rem;
+}
 
-  .people {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 20px;
-  }
-
-  .photo {
+.photo-box {
     width: 100%;
-    height: 300px;
-    border-radius: 14px;
+    height: 280px;
+    border-radius: 12px;
     overflow: hidden;
-    margin-bottom: 20px;
-  }
-  .photo img {
+    margin-bottom: 25px;
+}
+
+.photo-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
+    display: block;
+}
 
-  h2 {
-    margin-top: 25px;
-    font-size: 1.6rem;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 6px;
-  }
-
-  ul, ol {
-    font-size: 1.2rem;
-    margin-top: 10px;
-    line-height: 1.5;
-  }
-
-  .error {
-    margin-top: 60px;
+.section-title {
     font-size: 1.4rem;
-    text-align: center;
-    color: #999;
-  }
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+}
 
-  @media print {
-    body { padding: 0; }
-  }
+ul, ol {
+    font-size: 1.1rem;
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 20px;
+    }
+}
 </style>
 </head>
 <body>
 
-<h1 id="title">Chargement…</h1>
-<div class="people" id="people"></div>
-<div class="photo"><img id="photo" src="" alt=""></div>
+<h1 id="recette-title">Recette</h1>
 
-<h2>Ingrédients</h2>
-<ul id="ingredients"></ul>
+<div class="photo-box">
+    <img id="recette-photo" src="" alt="">
+</div>
 
-<h2>Préparation</h2>
-<ol id="recette"></ol>
+<div>
+    <div class="section-title">Ingrédients</div>
+    <ul id="ingredients-list"></ul>
 
-<p class="error" id="error" style="display:none;">Impossible de charger cette recette.</p>
+    <div class="section-title">Préparation</div>
+    <ol id="preparation-list"></ol>
+</div>
 
 <script>
-async function loadCSV() {
-  const url = new URL(window.location.href);
-  const nomRecette = url.searchParams.get("nom");
-  if (!nomRecette) return showError();
+function parseCSV(text){
+    const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
+    const head = lines.shift().split(",");
 
-  let text;
-  try {
-    const res = await fetch("../data/recettes.csv", { cache: "no-store" });
-    text = await res.text();
-  } catch(e){
-    return showError();
-  }
-
-  const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
-  const header = lines.shift().split(",");
-  const rows = lines.map(l => parseCSVLine(l));
-
-  const recette = rows.find(r => r.nom?.trim().toLowerCase() === nomRecette.trim().toLowerCase());
-  if (!recette) return showError();
-
-  document.getElementById("title").textContent = recette.nom;
-  document.getElementById("people").textContent = recette.personnes ? (recette.personnes+" personnes") : "";
-  document.getElementById("photo").src = recette.photo || "";
-
-  // ingrédients → liste
-  recette.ingredients.split("\n").forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    document.getElementById("ingredients").appendChild(li);
-  });
-
-  // étapes → liste numérotée
-  recette.recette.split("\n").forEach(et => {
-    const li = document.createElement("li");
-    li.textContent = et;
-    document.getElementById("recette").appendChild(li);
-  });
+    return lines.map(line=>{
+        const cells = parseLine(line);
+        return {
+            nom: cells[0]||"",
+            categorie: cells[1]||"",
+            personnes: cells[2]||"",
+            ingredients: (cells[3]||"").replace(/\\n/g,"\n"),
+            recette: (cells[4]||"").replace(/\\n/g,"\n"),
+            photo: cells[5]||""
+        };
+    });
 }
 
-function parseCSVLine(l){
-  const parts = [];
-  let cur = "", q = false;
-  for (let i=0;i<l.length;i++){
-    const c = l[i];
-    if (c === '"') q = !q;
-    else if (c === ',' && !q){ parts.push(cur); cur=""; }
-    else cur += c;
-  }
-  parts.push(cur);
-
-  return {
-    nom: parts[0]?.replace(/^"|"$/g,"") ?? "",
-    categorie: parts[1]?.replace(/^"|"$/g,"") ?? "",
-    personnes: parts[2]?.replace(/^"|"$/g,"") ?? "",
-    ingredients: parts[3]?.replace(/^"|"$/g,"") ?? "",
-    recette: parts[4]?.replace(/^"|"$/g,"") ?? "",
-    photo: parts[5]?.replace(/^"|"$/g,"") ?? ""
-  };
+function parseLine(l){
+    const out=[]; let cur=""; let q=false;
+    for(let c of l){
+        if(c=='"') q=!q;
+        else if(c=="," && !q){ out.push(cur); cur=""; }
+        else cur+=c;
+    }
+    out.push(cur);
+    return out;
 }
 
-function showError(){
-  document.getElementById("error").style.display = "block";
+async function load(){
+    const params = new URLSearchParams(location.search);
+    const nom = decodeURIComponent(params.get("nom") || "");
+
+    const res = await fetch("../data/recettes.csv",{cache:"no-store"});
+    const text = await res.text();
+    const data = parseCSV(text);
+
+    const r = data.find(x => x.nom === nom);
+
+    if(!r){
+        document.body.innerHTML = "<p>Recette introuvable.</p>";
+        return;
+    }
+
+    document.getElementById("recette-title").textContent = r.nom;
+    document.getElementById("recette-photo").src = r.photo;
+
+    /* ingrédients */
+    const ingList = document.getElementById("ingredients-list");
+    r.ingredients.split("\n").forEach(i=>{
+        if(i.trim() !== ""){
+            const li = document.createElement("li");
+            li.textContent = i.trim();
+            ingList.appendChild(li);
+        }
+    });
+
+    /* préparation */
+    const prepList = document.getElementById("preparation-list");
+    r.recette.split("\n").forEach(i=>{
+        if(i.trim() !== ""){
+            const li = document.createElement("li");
+            li.textContent = i.trim();
+            prepList.appendChild(li);
+        }
+    });
 }
 
-loadCSV();
+load();
 </script>
 
 </body>
