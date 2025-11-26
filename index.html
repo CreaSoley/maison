@@ -1,159 +1,344 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎨 CreaSoley – Univers Créatif</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Recettes de famille</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../css/style.css">
+
+<!-- Police Spicy -->
+<style>
+@font-face {
+    font-family: "Spicy";
+    src: url("../assets/fonts/Spicy Sale.ttf");
+}
+
+:root{
+  --card-bg: #ffffff;
+  --grad-rose: linear-gradient(120deg,#f6d1f7 0%,#fcd6d6 100%);
+  --grad-bleu: linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%);
+  --text: #2f3e34;
+}
+
+body{
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+}
+
+.container{
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+.header-inline{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.header-logo{
+  width: 80px;
+  cursor: pointer;
+}
+
+.title-spicy{
+  font-family: "Spicy";
+  font-size: 2.6rem;
+  margin: 0;
+}
+
+.header-sub{
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: -5px;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+/* Toolbar */
+.toolbar{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+input[type="text"], select{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  height:44px;
+  font-size:15px;
+}
+
+/* Cartes */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:18px;
+  margin-top:14px;
+}
+
+.card{
+  background:var(--card-bg);
+  border-radius:14px;
+  padding:16px;
+  border:1px solid #ececec;
+  box-shadow:0 3px 8px rgba(0,0,0,0.05);
+  transition:transform .2s;
+}
+.card:hover{ transform:translateY(-4px); }
+
+.card h3{
+  margin:6px 0 10px 0;
+  font-size:20px;
+  color:#333;
+  text-align:center;
+}
+
+/* Photo */
+.img-box{
+  width:100%;
+  height:200px;
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:12px;
+}
+.img-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Infos */
+.tag-box{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:12px;
+}
+
+.tag{
+  padding:10px;
+  border-radius:10px;
+  background:#fafafa;
+  border:1px solid #e3e3e3;
+  font-size:14px;
+}
+
+/* Boutons */
+.btn, .btn-small{
+  padding:10px 16px;
+  border-radius:12px;
+  background:var(--grad-bleu);
+  border:0;
+  cursor:pointer;
+  font-size:15px;
+  color:#000;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.buttons-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+
+/* Bouton WhatsApp kawaii */
+.whatsapp-btn{
+  background:var(--grad-rose);
+  border:0;
+  padding:8px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* RESPONSIVE */
+@media (max-width:600px){
+  .header-inline{
+    flex-direction:column;
+  }
+  .header-logo{ width:90px; }
+  .title-spicy{ font-size:2.2rem; }
+}
+
+</style>
 </head>
+<body>
 
-<body class="accueil">
+<div class="container">
 
-<!-- 🔵 TITRE -->
-<!-- 🔵 HEADER -->
-<!-- 🔵 HEADER GLOBAL -->
-<header class="header-title">
-    <div class="header-inline">
-        <img src="assets/images/logo.png" class="header-logo" alt="logo">
-        <h1 class="title-spicy header-main-title">Le P’tit Logis</h1>
-    </div>
+  <!-- HEADER -->
+  <div class="header-inline">
+      <a href="../index.html"><img src="../assets/images/logo.png" class="header-logo"></a>
+      <h1 class="title-spicy">Recettes de famille</h1>
+  </div>
 
-    <p class="header-subtitle">Créer, aimer, savourer</p>
-</header>
+  <p class="header-sub">cuisiné avec amour 💕</p>
 
-    <!-- 🌦 Météo -->
-    <div class="weather-container">
-        <a class="weatherwidget-io"
-           href="https://forecast7.com/fr/49d121d40/27920/"
-           data-label_1="27920"
-           data-label_2="Météo"
-           data-font="Roboto"
-           data-icons="Climacons Animated"
-           data-theme="marine">
-           27920 Météo
-        </a>
-    </div>
+  <!-- Toolbar -->
+  <div class="toolbar">
+      <input id="searchInput" type="text" placeholder="Recherche rapide (nom ou ingrédient)..." oninput="doSearch()">
 
-</header>
+      <select id="catSelect" onchange="doSearch()">
+        <option value="">Catégorie…</option>
+        <option>Dessert</option>
+        <option>Plat</option>
+        <option>Goûter</option>
+        <option>Petit-déjeuner</option>
+        <option>Boisson</option>
+        <option>Léger</option>
+        <option>Hiver</option>
+      </select>
 
-<script>
-!function(d,s,id){
-    var js,fjs=d.getElementsByTagName(s)[0];
-    if(!d.getElementById(id)){
-        js=d.createElement(s);js.id=id;
-        js.src='https://weatherwidget.io/js/widget.min.js';
-        fjs.parentNode.insertBefore(js,fjs);
-    }
-}(document,'script','weatherwidget-io-js');
-</script>
+      <button class="btn" onclick="randomRecipe()">🎲 Recette surprise</button>
+  </div>
 
-<!-- 🧭 NAVIGATION -->
-<nav class="nav-menu">
-    <a href="pages/techniques-artistiques.html">🎨 Techniques artistiques</a>
-    <a href="pages/savons.html">🧼 Savons</a>
-    <a href="pages/recettes/index.html">🍲 Recettes de famille</a>
-    <a href="pages/lsf.html">🤟 LSF</a>
-</nav>
+  <main id="mainArea">
+    <p style="color:#777;">Chargement des recettes…</p>
+  </main>
 
-<!-- ⭐ ACTIVITE DU MOIS -->
-<section class="bloc-mois">
-    <h2 class="title-spicy"><img src="assets/icons/activite-kawaii.png" class="icon-kawaii"> Activite du mois</h2>
-
-    <p class="mois-texte">
-        ✨ Ce mois-ci : <strong>Calendrier de l'Avent</strong> !
-    </p>
-
-    <div class="mois-btn-container">
-    <button class="mois-btn-kawaii" onclick="window.location.href='pages/simulation.html'">
-        🎁 Voir l’activité
-    </button>
 </div>
 
-</section>
+<script>
+let RECETTES = [];
 
-<!-- 🟩 3 BLOCS JOURNALIERS -->
-<section class="blocs-container">
+/* Lecture CSV */
+async function loadCSV(){
+  try{
+    const res = await fetch("../data/recettes.csv",{cache:"no-store"});
+    const text = await res.text();
+    RECETTES = parseCSV(text);
+    renderCards(RECETTES);
+  }catch(e){
+    document.getElementById("mainArea").innerHTML = "<p>Impossible de charger le fichier CSV.</p>";
+  }
+}
 
-    <!-- 📜 PROVERBE -->
-    <div class="daily-card">
-        <h3 class="daily-title">
-            <svg class="icon-kawaii" viewBox="0 0 64 64">
-                <rect x="10" y="10" width="44" height="44" rx="6" fill="#FFEED0"/>
-                <path d="M22 20h20M22 28h16M22 36h20" stroke="#CC9966" stroke-width="3"/>
-                <path d="M40 48l8 6" stroke="#AA7744" stroke-width="3"/>
-            </svg>
-            Proverbe du jour
-        </h3>
-        <div id="proverbe-du-jour" class="bloc-center">
-            <p class="proverbe-text">Chargement...</p>
-        </div>
-    </div>
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
+  const head = lines.shift().split(",");
 
-    <!-- ❓ DEVINETTE -->
-    <div class="daily-card">
-        <h3 class="daily-title">
-            <svg class="icon-kawaii" viewBox="0 0 64 64">
-                <circle cx="32" cy="32" r="28" fill="#D9E7FF"/>
-                <text x="32" y="42" font-size="40" fill="#5574C5" text-anchor="middle">?</text>
-            </svg>
-            Devinette du jour
-        </h3>
-        <div id="devinette-du-jour" class="bloc-center">
-            <p id="texte-devinette">Chargement…</p>
-            <input type="text" id="reponse-devinette" placeholder="Votre réponse...">
-            <button onclick="validerDevinette()">Valider</button>
-            <p id="devinette-resultat"></p>
-        </div>
-    </div>
+  return lines.map(line=>{
+    const cells = parseLine(line);
+    return {
+      nom: cells[0]||"",
+      categorie: cells[1]||"",
+      personnes: cells[2]||"",
+      ingredients: (cells[3]||"").replace(/\\n/g,"\n"),
+      recette: (cells[4]||"").replace(/\\n/g,"\n"),
+      photo: cells[5]||""
+    };
+  });
+}
 
-    <!-- 🎨 DEFI -->
-    <div class="daily-card" id="defi-du-jour-bloc">
-        <h3 class="daily-title">
-            <svg class="icon-kawaii" viewBox="0 0 64 64">
-                <circle cx="32" cy="32" r="28" fill="#FFE3B8"/>
-                <circle cx="22" cy="22" r="6" fill="#FF7EA6"/>
-                <circle cx="42" cy="22" r="6" fill="#78C4FF"/>
-                <circle cx="32" cy="42" r="6" fill="#A8E063"/>
-            </svg>
-            Défi du jour
-        </h3>
-        <div id="defi-du-jour" class="bloc-center">
-            <p id="defi-texte">Chargement…</p>
-            <div id="couleur-preview"></div>
-            <p id="couleur-nom"></p>
-        </div>
-    </div>
+function parseLine(l){
+  const out=[]; let cur=""; let q=false;
+  for(let c of l){
+    if(c=='"') q=!q;
+    else if(c=="," && !q){ out.push(cur); cur=""; }
+    else cur+=c;
+  }
+  out.push(cur);
+  return out;
+}
 
-</section>
+/* Rendu cartes */
+function renderCards(list){
+  const main = document.getElementById("mainArea");
+  main.innerHTML = "";
 
-<footer>
-    <p>© 2025 — Le p'tit logis — Univers créatif</p>
-</footer>
+  if(list.length===0){
+    main.innerHTML = "<p>Aucune recette trouvée.</p>";
+    return;
+  }
 
-<!-- JS -->
-<script src="js/proverbe-du-jour.js"></script>
-<script src="js/devinette-du-jour.js"></script>
-<script src="js/activites-loader.js"></script>
+  const grid = document.createElement("div");
+  grid.className = "cards";
+
+  list.forEach(r=>{
+    const card = document.createElement("div");
+    card.className="card";
+
+    card.innerHTML=`
+      <h3>${r.nom}</h3>
+
+      <div class="img-box">
+        <img src="${r.photo}" alt="">
+      </div>
+
+      <div class="tag-box">
+        <div class="tag">👨‍👩‍👧 Portions : ${r.personnes}</div>
+        <div class="tag">📂 Catégorie : ${r.categorie}</div>
+
+        <div class="tag"><b>🥣 Ingrédients :</b><br>${r.ingredients.replace(/\n/g,"<br>")}</div>
+
+        <div class="tag"><b>🍳 Préparation :</b><br>${r.recette.replace(/\n/g,"<br>")}</div>
+      </div>
+
+      <div class="buttons-row">
+        <button class="btn-small" onclick="printOne('${encodeURIComponent(r.nom)}')">🖨️ Imprimer</button>
+
+        <button class="whatsapp-btn" onclick="shareWA('${encodeURIComponent(r.nom)}')">
+          💚 WhatsApp
+        </button>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  main.appendChild(grid);
+}
+
+/* Recherche */
+function doSearch(){
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const cat = document.getElementById("catSelect").value;
+
+  let res = RECETTES.filter(r =>{
+    const matchText =
+      r.nom.toLowerCase().includes(q) ||
+      r.ingredients.toLowerCase().includes(q);
+
+    const matchCat = !cat || r.categorie === cat;
+
+    return matchText && matchCat;
+  });
+
+  renderCards(res);
+}
+
+/* Recette surprise */
+function randomRecipe(){
+  if(RECETTES.length===0) return;
+  const r = RECETTES[Math.floor(Math.random()*RECETTES.length)];
+  renderCards([r]);
+}
+
+/* Impression */
+function printOne(nom){
+  window.open(`print.html?nom=${nom}`,"_blank");
+}
+
+/* WhatsApp */
+function shareWA(nom){
+  const url = `print.html?nom=${nom}`;
+  const txt = "🍽️ Essaie cette recette : " + location.origin + "/" + url;
+  window.open("https://wa.me/?text="+encodeURIComponent(txt));
+}
+
+loadCSV();
+</script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
