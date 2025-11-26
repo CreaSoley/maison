@@ -20,6 +20,13 @@
     margin-bottom: 20px;
   }
 
+  .people {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
   .photo {
     width: 100%;
     height: 300px;
@@ -46,5 +53,99 @@
     line-height: 1.5;
   }
 
-  .people {
-    font
+  .error {
+    margin-top: 60px;
+    font-size: 1.4rem;
+    text-align: center;
+    color: #999;
+  }
+
+  @media print {
+    body { padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<h1 id="title">Chargement…</h1>
+<div class="people" id="people"></div>
+<div class="photo"><img id="photo" src="" alt=""></div>
+
+<h2>Ingrédients</h2>
+<ul id="ingredients"></ul>
+
+<h2>Préparation</h2>
+<ol id="recette"></ol>
+
+<p class="error" id="error" style="display:none;">Impossible de charger cette recette.</p>
+
+<script>
+async function loadCSV() {
+  const url = new URL(window.location.href);
+  const nomRecette = url.searchParams.get("nom");
+  if (!nomRecette) return showError();
+
+  let text;
+  try {
+    const res = await fetch("../data/recettes.csv", { cache: "no-store" });
+    text = await res.text();
+  } catch(e){
+    return showError();
+  }
+
+  const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
+  const header = lines.shift().split(",");
+  const rows = lines.map(l => parseCSVLine(l));
+
+  const recette = rows.find(r => r.nom?.trim().toLowerCase() === nomRecette.trim().toLowerCase());
+  if (!recette) return showError();
+
+  document.getElementById("title").textContent = recette.nom;
+  document.getElementById("people").textContent = recette.personnes ? (recette.personnes+" personnes") : "";
+  document.getElementById("photo").src = recette.photo || "";
+
+  // ingrédients → liste
+  recette.ingredients.split("\n").forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    document.getElementById("ingredients").appendChild(li);
+  });
+
+  // étapes → liste numérotée
+  recette.recette.split("\n").forEach(et => {
+    const li = document.createElement("li");
+    li.textContent = et;
+    document.getElementById("recette").appendChild(li);
+  });
+}
+
+function parseCSVLine(l){
+  const parts = [];
+  let cur = "", q = false;
+  for (let i=0;i<l.length;i++){
+    const c = l[i];
+    if (c === '"') q = !q;
+    else if (c === ',' && !q){ parts.push(cur); cur=""; }
+    else cur += c;
+  }
+  parts.push(cur);
+
+  return {
+    nom: parts[0]?.replace(/^"|"$/g,"") ?? "",
+    categorie: parts[1]?.replace(/^"|"$/g,"") ?? "",
+    personnes: parts[2]?.replace(/^"|"$/g,"") ?? "",
+    ingredients: parts[3]?.replace(/^"|"$/g,"") ?? "",
+    recette: parts[4]?.replace(/^"|"$/g,"") ?? "",
+    photo: parts[5]?.replace(/^"|"$/g,"") ?? ""
+  };
+}
+
+function showError(){
+  document.getElementById("error").style.display = "block";
+}
+
+loadCSV();
+</script>
+
+</body>
+</html>
