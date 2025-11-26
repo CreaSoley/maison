@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+/* --------------------------- */
+/* STYLE ÉCRAN (pré-impression) */
+/* --------------------------- */
 body {
     font-family: Arial, sans-serif;
     margin: 40px;
@@ -20,10 +23,11 @@ h1 {
 
 .photo-box {
     width: 100%;
-    height: 280px;
+    max-height: 280px;
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 25px;
+    background: #f0f0f0;
 }
 
 .photo-box img {
@@ -35,21 +39,75 @@ h1 {
 
 .section-title {
     font-size: 1.4rem;
-    margin-top: 20px;
-    margin-bottom: 8px;
+    margin-top: 25px;
+    margin-bottom: 10px;
     font-weight: bold;
     border-bottom: 2px solid #ccc;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
 }
 
 ul, ol {
     font-size: 1.1rem;
+    line-height: 1.5;
 }
 
+/* --------------------------- */
+/* STYLE POUR IMPRESSION A4     */
+/* --------------------------- */
 @media print {
+
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+
     body {
         margin: 0;
-        padding: 20px;
+        padding: 0;
+        font-size: 12pt;
+        color: #000;
+    }
+
+    h1 {
+        font-size: 24pt;
+        margin-bottom: 15px;
+    }
+
+    /* --- Image optimisée impression --- */
+    .photo-box {
+        width: 100%;
+        max-height: 180px !important;
+        margin-bottom: 15px;
+    }
+
+    .photo-box img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important; /* montre l’image entière */
+    }
+
+    /* Renforce la lisibilité */
+    .section-title {
+        font-size: 16pt;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #000;
+        padding-bottom: 3px;
+    }
+
+    ul, ol {
+        font-size: 13pt;
+        line-height: 1.6;
+    }
+
+    /* Empêche les coupures absurdes */
+    li {
+        page-break-inside: avoid;
+    }
+
+    /* Évite un gros espace vide en bas de page */
+    .section {
+        page-break-inside: avoid;
     }
 }
 </style>
@@ -62,15 +120,18 @@ ul, ol {
     <img id="recette-photo" src="" alt="">
 </div>
 
-<div>
+<div class="section">
     <div class="section-title">Ingrédients</div>
     <ul id="ingredients-list"></ul>
+</div>
 
+<div class="section">
     <div class="section-title">Préparation</div>
     <ol id="preparation-list"></ol>
 </div>
 
 <script>
+/* --- PARSE CSV EXACTEMENT COMME AVANT --- */
 function parseCSV(text){
     const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
     const head = lines.shift().split(",");
