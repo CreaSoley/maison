@@ -1,26 +1,80 @@
 {
-  "1":  { "date": "Lundi 1 décembre",  "fairy": "Formule du jour 1 — petite surprise ✨", "pdf": "" },
-  "2":  { "date": "Mardi 2 décembre",  "fairy": "Formule du jour 2 — activité créative 🎨", "pdf": "" },
-  "3":  { "date": "Mercredi 3 décembre","fairy": "Formule du jour 3 — bricolage simple", "pdf": "" },
-  "4":  { "date": "Jeudi 4 décembre",  "fairy": "Formule du jour 4 — conte à partager", "pdf": "" },
-  "5":  { "date": "Vendredi 5 décembre", "fairy": "Formule du jour 5 — recette rapide", "pdf": "" },
-  "6":  { "date": "Samedi 6 décembre", "fairy": "Formule du jour 6 — activité plein air", "pdf": "" },
-  "7":  { "date": "Dimanche 7 décembre","fairy": "Formule du jour 7 — jeu en famille", "pdf": "" },
-  "8":  { "date": "Lundi 8 décembre",  "fairy": "Formule du jour 8 — atelier dessin", "pdf": "" },
-  "9":  { "date": "Mardi 9 décembre",  "fairy": "Formule du jour 9 — mini défi", "pdf": "" },
-  "10": { "date": "Mercredi 10 décembre","fairy": "Formule du jour 10 — bricolage recyclé", "pdf": "" },
-  "11": { "date": "Jeudi 11 décembre", "fairy": "Formule du jour 11 — chanson", "pdf": "" },
-  "12": { "date": "Vendredi 12 décembre","fairy": "Formule du jour 12 — recette sucrée", "pdf": "" },
-  "13": { "date": "Samedi 13 décembre", "fairy": "Formule du jour 13 — activité sensorielle", "pdf": "" },
-  "14": { "date": "Dimanche 14 décembre","fairy": "Formule du jour 14 — conte de Noël", "pdf": "" },
-  "15": { "date": "Lundi 15 décembre",  "fairy": "Formule du jour 15 — petite surprise", "pdf": "" },
-  "16": { "date": "Mardi 16 décembre",  "fairy": "Formule du jour 16 — atelier papier", "pdf": "" },
-  "17": { "date": "Mercredi 17 décembre","fairy": "Formule du jour 17 — jeu de société", "pdf": "" },
-  "18": { "date": "Jeudi 18 décembre", "fairy": "Formule du jour 18 — bricolage bois", "pdf": "" },
-  "19": { "date": "Vendredi 19 décembre","fairy": "Formule du jour 19 — activité lumineuse", "pdf": "" },
-  "20": { "date": "Samedi 20 décembre", "fairy": "Formule du jour 20 — mini spectacle", "pdf": "" },
-  "21": { "date": "Dimanche 21 décembre","fairy": "Formule du jour 21 — lecture partagée", "pdf": "" },
-  "22": { "date": "Lundi 22 décembre",  "fairy": "Formule du jour 22 — atelier collage", "pdf": "" },
-  "23": { "date": "Mardi 23 décembre",  "fairy": "Formule du jour 23 — préparation finale", "pdf": "" },
-  "24": { "date": "Mercredi 24 décembre","fairy": "Formule du jour 24 — Grande surprise ! 🎁", "pdf": "" }
-}
+  "1": {
+    "date": "1er décembre",
+    "fairy": "Micro-enchantement : transforme un simple crayon en baguette magique personnalisée.",
+    "pdf": "https://drive.google.com/file/d/14viIGR4ubSNKLJhdTC8x5fQLuH_34pO6/view?usp=sharing"
+  },
+  "2": {
+    "date": "2 décembre",
+    "fairy": "Métamorphose express : un rouleau devient un mignon renne décoratif.",
+    "pdf": "https://drive.google.com/file/d/1jdAphFUhhUMNaOWmnK6d2n62cd7tA4xh/view?usp=sharing"
+  },
+  "3": {
+    "date": "3 décembre",
+    "fairy": "Étoiles et sapins en fil magique : mini-suspensions féériques.",
+    "pdf": "https://drive.google.com/file/d/1kNu1P16NIHu2EG1Q7hDh6G94pt5bQ7wH/view?usp=sharing"
+  },
+  "4": {
+    "date": "4 décembre",
+    "fairy": "Façonne un petit totem en pâte enchantée.",
+    "pdf": "https://drive.google.com/file/d/1yFIm422_pFArEyh51KrCLXB0g9otofE9/view?usp=sharing"
+  },
+  "5": {
+    "date": "5 décembre",
+    "fairy": "Talisman de pages : transforme un trombone en adorable marque-page renard.",
+    "pdf": "https://drive.google.com/file/d/1seFFdvF974ugiSM_Wcgzs4TgE_zcuttk/view?usp=sharing"
+  },
+  "6": {
+    "date": "6 décembre",
+    "fairy": "Crée une étoile scintillante en bâtonnets magiques.",
+    "pdf": "https://drive.google.com/file/d/1nvHL0lB0Nbbc6gxFwsVYcEzQFyqUViTp/view?usp=sharing"
+  },
+  "7": {
+    "date": "7 décembre",
+    "fairy": "Fabrique un petit sapin en feutrine et pompons enchantés.",
+    "pdf": "https://drive.google.com/file/d/1mtcL4BsOLzSsa5SqsF0YtSnolU2qP7JE/view?usp=sharing"
+  },
+  "8": {
+    "date": "8 décembre",
+    "fairy": "Pompon enchanté : crée un mini bonhomme d’hiver en fil doux.",
+    "pdf": "https://drive.google.com/file/d/1jrSCGZSOmyafkLJrmUZJKlEG2eG6GJ5e/view?usp=sharing"
+  },
+  "9": {
+    "date": "9 décembre",
+    "fairy": "Couronne miniature : fleurs séchées et magie hivernale.",
+    "pdf": "https://drive.google.com/file/d/1oYpPyJ2_CL4kHqY2Qn1VfH0m11VXM8v4/view?usp=sharing"
+  },
+  "10": {
+    "date": "10 décembre",
+    "fairy": "Petite luciole d’hiver : un pot se transforme en veilleuse féérique.",
+    "pdf": "https://drive.google.com/file/d/1eTeRZSY8IIjK00bCJtZPg0LCgN8uEqW7/view?usp=sharing"
+  },
+  "11": {
+    "date": "11 décembre",
+    "fairy": "Mini décor polaire : un petit paysage enneigé sous cloche.",
+    "pdf": "https://drive.google.com/file/d/1SHvX7EPtQ55UysN-B5AEAI2tQKbbGfTA/view?usp=sharing"
+  },
+  "12": {
+    "date": "12 décembre",
+    "fairy": "Flocon enchanté en perles : délicatesse givrée.",
+    "pdf": "https://drive.google.com/file/d/1GyRqliSWeKHssK7hBdgru6r8BB6pwuYQ/view?usp=sharing"
+  },
+  "13": {
+    "date": "13 décembre",
+    "fairy": "Peinture magique : crée une carte hivernale au blanc éclatant.",
+    "pdf": "https://drive.google.com/file/d/1FmdKWhpUUvV6z1sD_MI7NYbzCHpm5MPf/view?usp=sharing"
+  },
+  "14": {
+    "date": "14 décembre",
+    "fairy": "Suspension de Noël : mini lune et étoiles dorées.",
+    "pdf": "https://drive.google.com/file/d/1Yd_asdRqMzoVwm9O9JTZhCrcng0yJoxE/view?usp=sharing"
+  },
+  "15": {
+    "date": "15 décembre",
+    "fairy": "Bonhomme rigolo : transforme trois bouchons en petit personnage.",
+    "pdf": "https://drive.google.com/file/d/1LbJLjW6DCzPyREloSgX2wq9VaMytwAm8/view?usp=sharing"
+  },
+  "16": {
+    "date": "16 décembre",
+    "fairy": "Sachet parfumé : crée ta petite pochette senteur d’hiver.",
+    "pdf": "https
