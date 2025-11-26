@@ -338,9 +338,9 @@ date,devinette,réponse
 01/12,2 / 10 / 12 / 17 / 18 / 19 / Quel est le prochain nombre dans cette suite logique ?,200
 02/12,À une course cycliste - tu doubles le premier. Quelle est ta place dans la course ?,Premier
 03/12,Le thermomètre montre +10°C. Combien de degrés montreront deux thermomètres ?,+10°C
-04/12,Un fermier a 17 vaches, elles meurent toutes sauf 9. Combien en reste-t-il ?,9
-05/12,3 poissons sont dans un seau, l’un d'entre eux meurt, combien en reste-t-il ?,3
-06/12,J'ai des branches, mais pas de feuille. Qui suis-je ?,des lunettes
+04/12,Un fermier a 17 vaches - elles meurent toutes sauf 9. Combien en reste-t-il ?,9
+05/12,3 poissons sont dans un seau - l’un d'entre eux meurt- combien en reste-t-il ?,3
+06/12,J'ai des branches mais pas de feuille. Qui suis-je ?,des lunettes
 07/12,J'ai des dents mais je ne mange pas. Qui suis-je ?,le peigne
 08/12,Je donne l'heure et on me donne un nom d'oiseau. Qui suis-je ?,le coucou
 09/12,Je porte des lunettes mais je n’y vois rien. Qui suis-je ?,le nez
@@ -366,4 +366,5 @@ date,devinette,réponse
 29/12,Girafe = 3 - Éléphant = 3 - Hippopotame = 5 - Lion = … ,2
 30/12,Qu’est ce qui est plus grand que la Tour Eiffel mais infiniment moins lourd ?,son ombre
 31/12,Qu'est-ce qui peut être dans la mer et dans le ciel ?,une étoile
+
 
