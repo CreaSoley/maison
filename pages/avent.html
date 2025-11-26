@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Marbrages — Activité du mois</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+/* ---------------------- */
+/* 🌸 HEADER KAWAII LOGO  */
+/* ---------------------- */
+.header-marbrage {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.header-logo {
+  width: 130px;
+  cursor: pointer;
+}
+
+.header-title {
+  font-family: "Spicy", serif;
+  font-size: 3rem;
+  margin: 0;
+  color: #444;
+}
+
+/* Desktop : logo + titre sur une ligne */
+@media (min-width: 900px) {
+  .header-inline {
+    flex-direction: row;
+  }
+}
+
+/* ---------------------- */
+/*     🎀 STYLE KAWAII     */
+/* ---------------------- */
+:root{
+  --gradient-badge: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  --gradient-btn: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  --shadow-kawaii: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+body {
+  background: linear-gradient(135deg, #fff5fb, #eaf2ff);
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* CONTENEUR */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* BARRE D'OUTILS */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+input[type="text"], select {
+  background: white;
+  border: 2px solid #d6e5ff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: var(--shadow-kawaii);
+  height: 42px;
+}
+
+/* ---------------------- */
+/*      🌼 CARTES         */
+/* ---------------------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.card {
+  background: white;
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: var(--shadow-kawaii);
+  border: 3px solid #e3ecff;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* TITRE */
+.card h3 {
+  font-family: "Spicy", serif;
+  font-size: 1.7rem;
+  text-align: center;
+  margin-top: 0;
+}
+
+/* IMAGE — conserver proportions */
+.img-box {
+  width: 100%;
+  height: 9cm;
+  border-radius: 18px;
+  background: #fff7f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;  /* -> plus de déformation */
+}
+
+/* BADGES */
+.tag {
+  background-image: var(--gradient-badge);
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  display: inline-block;
+  margin: 4px;
+  font-weight: 600;
+}
+
+/* ---------------------- */
+/*      💖 BOUTONS        */
+/* ---------------------- */
+.btn-small {
+  background-image: var(--gradient-btn);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: var(--shadow-kawaii);
+  margin: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-small:hover {
+  transform: translateY(-3px);
+}
+
+.material-icons {
+  font-size: 18px;
+}
+
+/* ============================
+   IFRAME-MODAL pour WebApp
+   ============================ */
+#webappOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,20,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+#webappFrame {
+  width: 100%;
+  max-width: 1100px;
+  height: 85vh;
+  border-radius: 14px;
+  border: none;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  background: white;
+}
+
+/* close button top-right */
+.overlay-close {
+  position: absolute;
+  right: 26px;
+  top: 18px;
+  background: white;
+  border-radius: 999px;
+  padding: 6px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.overlay-close span {
+  font-size: 20px;
+  color: #444;
+}
+
+/* petite note responsive */
+@media (max-width:640px){
+  .img-box { height: 160px; }
+  .header-title { font-size: 2.2rem; }
+  #webappFrame { height: 92vh; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- 🌸 HEADER AVEC LOGO + SPICY -->
+  <header class="header-marbrage">
+    <div class="header-inline">
+      <a href="../index.html">
+        <img src="../assets/images/logo.png" class="header-logo" alt="Retour">
+      </a>
+      <h1 class="header-title">Marbrages</h1>
+    </div>
+  </header>
+
+  <!-- 🌈 BARRE OUTILS -->
+  <header class="toolbar">
+    <input id="searchInput" type="text" placeholder="🔍 Recherche…" oninput="onSearchInput()">
+
+    <select id="niveauSelect" onchange="onSearchInput()">
+      <option value="">Niveau…</option>
+      <option value="débutant">débutant</option>
+      <option value="intermédiaire">intermédiaire</option>
+      <option value="avancé">avancé</option>
+    </select>
+
+    <select id="traceSelect" onchange="onSearchInput()">
+      <option value="">Trace…</option>
+      <option value="très fine">très fine</option>
+      <option value="fine">fine</option>
+      <option value="moyenne">moyenne</option>
+      <option value="franche">franche</option>
+      <option value="épaisse">épaisse</option>
+    </select>
+
+    <button class="btn-small" onclick="doRandom()">
+      <span class="material-icons">auto_awesome</span> Surprendre
+    </button>
+
+    <!-- BOUTON pour ouvrir la WebApp (modal ou activities) -->
+    <button class="btn-small" onclick="openWebApp('modal')">
+      <span class="material-icons">open_in_new</span> Ouvrir modal WebApp
+    </button>
+
+    <button class="btn-small" onclick="openWebApp('activities')">
+      <span class="material-icons">settings</span> Gérer les activités
+    </button>
+  </header>
+
+  <main id="mainArea" aria-live="polite">
+    <div class="status">Chargement…</div>
+  </main>
+
+</div>
+
+<!-- Overlay IFRAME qui charge la WebApp Google -->
+<div id="webappOverlay" role="dialog" aria-hidden="true">
+  <div class="overlay-close" onclick="closeWebApp()" title="Fermer"><span>✕</span></div>
+  <iframe id="webappFrame" src="" title="WebApp"></iframe>
+</div>
+
+<script>
+/* ===========================
+   🌸 Parsing CSV (inchangé)
+   =========================== */
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+  if (lines.length === 0) return [];
+  const header = lines[0].split(",");
+
+  const rows = [];
+
+  for (let i=1; i<lines.length; i++){
+    const raw = lines[i];
+    if (!raw.trim()) continue;
+
+    const cells = [];
+    let cur = "";
+    let inQuotes = false;
+
+    for (let j=0; j<raw.length; j++){
+      const ch = raw[j];
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes){
+        cells.push(cur.trim());
+        cur = "";
+      } else cur += ch;
+    }
+    cells.push(cur.trim());
+
+    while (cells.length < header.length) cells.push("");
+
+    rows.push({
+      nom: cells[0],
+      description: cells[1],
+      trace: cells[2],
+      materiel: cells[3],
+      niveau: cells[4],
+      illustration: cells[5],
+      galerie: cells[6],
+      youtube: cells[7],
+      recettes_econo: cells[8],
+      recettes_premium: cells[9],
+      tutoriel: cells[10]
+    });
+  }
+
+  return rows;
+}
+
+let TECHS = [];
+
+/* ===========================
+   Charger le CSV réel (depuis /data/marbrages.csv)
+   =========================== */
+async function loadData(){
+  try {
+    const res = await fetch("../data/marbrages.csv", { cache: "no-store" });
+    if (!res.ok) throw new Error("CSV non trouvé");
+    const text = await res.text();
+    TECHS = parseCSV(text);
+    renderCards(TECHS);
+  } catch(e){
+    console.error(e);
+    document.getElementById("mainArea").innerHTML = "<p>Impossible de charger les données.</p>";
+  }
+}
+
+/* ===========================
+   🌸 Icônes kawaii
+   =========================== */
+const IC = {
+  recette: "💶",
+  recette2: "💎",
+  youtube: "🎥",
+  galerie: "🖼",
+  tutoriel: "📘",
+  materiel: "🎨",
+  trace: "🌈",
+  niveau: "🌟",
+};
+
+function safe(v){ return v ? v : ""; }
+
+function renderCards(list){
+  const main = document.getElementById("mainArea");
+  main.innerHTML = "";
+
+  const grid = document.createElement("div");
+  grid.className = "cards";
+
+  list.forEach(t => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const imgHTML = `
+      <div class="img-box">
+        <img src="${safe(t.illustration)}"
+             alt="Illustration"
+             onerror="this.src='../assets/images/placeholder.png'">
+      </div>`;
+
+    const infoHTML = `
+      <span class="tag">${IC.description || "📝"} ${safe(t.description)}</span>
+      <span class="tag">${IC.niveau} ${safe(t.niveau)}</span>
+      <span class="tag">${IC.trace} ${safe(t.trace)}</span>
+      <span class="tag">${IC.materiel} ${safe(t.materiel)}</span>
+    `;
+
+    const btns = [];
+
+    if (t.recettes_econo)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.recettes_econo}')">${IC.recette} €</button>`);
+
+    if (t.recettes_premium)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.recettes_premium}')">${IC.recette2} €€</button>`);
+
+    if (t.youtube)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.youtube}')">${IC.youtube} Vidéo</button>`);
+
+    if (t.galerie)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.galerie}')">${IC.galerie} Galerie</button>`);
+
+    if (t.tutoriel)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.tutoriel}')">${IC.tutoriel} Tutoriel</button>`);
+
+    card.innerHTML = `
+      <h3>${safe(t.nom)}</h3>
+      ${imgHTML}
+      <div style="margin-top:12px;">${infoHTML}</div>
+      <div style="margin-top:14px;">${btns.join("")}</div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  main.appendChild(grid);
+}
+
+/* ===========================
+   🔍 Recherche + filtres
+   =========================== */
+function normalize(s){
+  return s ? s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase() : "";
+}
+
+function onSearchInput(){
+  const q = normalize(document.getElementById("searchInput").value);
+  const nv = normalize(document.getElementById("niveauSelect").value);
+  const tr = normalize(document.getElementById("traceSelect").value);
+
+  let out = TECHS.filter(t =>
+    (!q || normalize(t.nom).includes(q) || normalize(t.description).includes(q)) &&
+    (!nv || normalize(t.niveau) === nv) &&
+    (!tr || normalize(t.trace) === tr)
+  );
+
+  renderCards(out);
+}
+
+/* ===========================
+   🎲 Technique aléatoire
+   =========================== */
+function doRandom(){
+  if (TECHS.length === 0) return;
+  const t = TECHS[Math.floor(Math.random()*TECHS.length)];
+  renderCards([t]);
+}
+
+/* ===========================
+   🔗 Ouverture sécurisée
+   =========================== */
+function openUrl(url){
+  // si url commence par "/" → relative à site
+  try { window.open(url, "_blank"); } catch(e){ console.error(e); }
+}
+
+/* ===========================
+   🌐 INTÉGRATION WEBAPP via IFRAME
+   ===========================
+   - WebApp URL (fourni)
+   - on ouvre overlay et on charge ?page=modal ou ?page=activities
+*/
+const WEBAPP_BASE = "https://script.google.com/macros/s/AKfycbwR_LgEJcSO_pqo2WvTt43xrY5UU3TkZLzs9ToieuTgae1DTITOB1JzGF00SGTwQfbTXw/exec";
+
+function openWebApp(page){
+  // page value: "modal" or "activities"
+  const overlay = document.getElementById("webappOverlay");
+  const frame = document.getElementById("webappFrame");
+
+  // Compose URL : quand on ouvre depuis GitHub Pages, ajouter param embed=1 pour dégager le header si besoin
+  const u = WEBAPP_BASE + "?page=" + encodeURIComponent(page) + "&embed=1";
+  frame.src = u;
+  overlay.style.display = "flex";
+  overlay.setAttribute("aria-hidden", "false");
+
+  // Trap focus for accessibility (simple)
+  setTimeout(() => frame.focus(), 300);
+}
+
+function closeWebApp(){
+  const overlay = document.getElementById("webappOverlay");
+  const frame = document.getElementById("webappFrame");
+  frame.src = "about:blank";
+  overlay.style.display = "none";
+  overlay.setAttribute("aria-hidden", "true");
+}
+
+/* ===========================
+   🚀 Init
+   =========================== */
+document.addEventListener("DOMContentLoaded", loadData);
+</script>
+</body>
+</html>
