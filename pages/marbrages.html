@@ -169,6 +169,190 @@ input[type="text"], select {
 }
 </style>
 </head>
+<script>
+/* ===========================
+   🌸 Chargement & parsing CSV
+   =========================== */
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+  if (lines.length === 0) return [];
+  const header = lines[0].split(",");
+
+  const rows = [];
+
+  for (let i=1; i<lines.length; i++){
+    const raw = lines[i];
+    if (!raw.trim()) continue;
+
+    const cells = [];
+    let cur = "";
+    let inQuotes = false;
+
+    for (let j=0; j<raw.length; j++){
+      const ch = raw[j];
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes){
+        cells.push(cur.trim());
+        cur = "";
+      } else cur += ch;
+    }
+    cells.push(cur.trim());
+
+    while (cells.length < header.length) cells.push("");
+
+    rows.push({
+      nom: cells[0],
+      description: cells[1],
+      trace: cells[2],
+      materiel: cells[3],
+      niveau: cells[4],
+      illustration: cells[5],
+      galerie: cells[6],
+      youtube: cells[7],
+      recettes_econo: cells[8],
+      recettes_premium: cells[9],
+      tutoriel: cells[10]
+    });
+  }
+
+  return rows;
+}
+
+let TECHS = [];
+
+/* ===========================
+   Charger le CSV réel
+   =========================== */
+async function loadData(){
+  try {
+    const res = await fetch("../data/marbrages.csv", { cache: "no-store" });
+    const text = await res.text();
+    TECHS = parseCSV(text);
+    renderCards(TECHS);
+  } catch(e){
+    document.getElementById("mainArea").innerHTML = "<p>Impossible de charger les données.</p>";
+  }
+}
+
+/* ===========================
+   🌸 Icônes kawaii
+   =========================== */
+const IC = {
+  recette: "💶",
+  recette2: "💎",
+  youtube: "🎥",
+  galerie: "🖼",
+  tutoriel: "📘",
+  materiel: "🎨",
+  trace: "🌈",
+  niveau: "🌟",
+};
+
+/* ===========================
+   🌸 Création des cartes
+   =========================== */
+function safe(v){ return v ? v : ""; }
+
+function renderCards(list){
+  const main = document.getElementById("mainArea");
+  main.innerHTML = "";
+
+  const grid = document.createElement("div");
+  grid.className = "cards";
+
+  list.forEach(t => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const imgHTML = `
+      <div class="img-box">
+        <img src="${safe(t.illustration)}"
+             alt="Illustration"
+             onerror="this.src='../assets/images/placeholder.png'">
+      </div>`;
+
+    const infoHTML = `
+      <span class="tag">${IC.description || "📝"} ${safe(t.description)}</span>
+      <span class="tag">${IC.niveau} ${safe(t.niveau)}</span>
+      <span class="tag">${IC.trace} ${safe(t.trace)}</span>
+      <span class="tag">${IC.materiel} ${safe(t.materiel)}</span>
+    `;
+
+    const btns = [];
+
+    if (t.recettes_econo)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.recettes_econo}')">${IC.recette} €</button>`);
+
+    if (t.recettes_premium)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.recettes_premium}')">${IC.recette2} €€</button>`);
+
+    if (t.youtube)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.youtube}')">${IC.youtube} Vidéo</button>`);
+
+    if (t.galerie)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.galerie}')">${IC.galerie} Galerie</button>`);
+
+    if (t.tutoriel)
+      btns.push(`<button class="btn-small" onclick="openUrl('${t.tutoriel}')">${IC.tutoriel} Tutoriel</button>`);
+
+    card.innerHTML = `
+      <h3>${safe(t.nom)}</h3>
+      ${imgHTML}
+      <div style="margin-top:12px;">${infoHTML}</div>
+      <div style="margin-top:14px;">${btns.join("")}</div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  main.appendChild(grid);
+}
+
+/* ===========================
+   🔍 Recherche + filtres
+   =========================== */
+function normalize(s){
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+}
+
+function onSearchInput(){
+  const q = normalize(document.getElementById("searchInput").value);
+  const nv = normalize(document.getElementById("niveauSelect").value);
+  const tr = normalize(document.getElementById("traceSelect").value);
+
+  let out = TECHS.filter(t =>
+    (!q || normalize(t.nom).includes(q)) &&
+    (!nv || normalize(t.niveau) === nv) &&
+    (!tr || normalize(t.trace) === tr)
+  );
+
+  renderCards(out);
+}
+
+/* ===========================
+   🎲 Technique aléatoire
+   =========================== */
+function doRandom(){
+  if (TECHS.length === 0) return;
+  const t = TECHS[Math.floor(Math.random()*TECHS.length)];
+  renderCards([t]);
+}
+
+/* ===========================
+   🔗 Ouverture sécurisée
+   =========================== */
+function openUrl(url){
+  window.open(url,"_blank");
+}
+
+/* ===========================
+   🚀 Init
+   =========================== */
+document.addEventListener("DOMContentLoaded", loadData);
+</script>
+</body>
+</html>
 
 <body>
 
