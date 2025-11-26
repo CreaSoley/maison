@@ -1,1 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Marbrages — Activité du mois</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+/* ---------------------- */
+/* 🌸 HEADER KAWAII LOGO  */
+/* ---------------------- */
+.header-marbrage {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.header-logo {
+  width: 130px;
+  cursor: pointer;
+}
+
+.header-title {
+  font-family: "Spicy", serif;
+  font-size: 3rem;
+  margin: 0;
+  color: #444;
+}
+
+/* Desktop : logo + titre sur une ligne */
+@media (min-width: 900px) {
+  .header-inline {
+    flex-direction: row;
+  }
+}
+
+/* ---------------------- */
+/*     🎀 STYLE KAWAII     */
+/* ---------------------- */
+:root{
+  --gradient-badge: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  --gradient-btn: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  --shadow-kawaii: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+body {
+  background: linear-gradient(135deg, #fff5fb, #eaf2ff);
+}
+
+/* CONTENEUR */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+/* BARRE D'OUTILS */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+input[type="text"], select {
+  background: white;
+  border: 2px solid #d6e5ff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: var(--shadow-kawaii);
+  height: 42px;
+}
+
+/* ---------------------- */
+/*      🌼 CARTES         */
+/* ---------------------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.card {
+  background: white;
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: var(--shadow-kawaii);
+  border: 3px solid #e3ecff;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* TITRE */
+.card h3 {
+  font-family: "Spicy", serif;
+  font-size: 1.7rem;
+  text-align: center;
+  margin-top: 0;
+}
+
+/* IMAGE — conserver proportions */
+.img-box {
+  width: 100%;
+  height: 9cm;
+  border-radius: 18px;
+  background: #fff7f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;  /* -> plus de déformation */
+}
+
+/* BADGES */
+.tag {
+  background-image: var(--gradient-badge);
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  display: inline-block;
+  margin: 4px;
+  font-weight: 600;
+}
+
+/* ---------------------- */
+/*      💖 BOUTONS        */
+/* ---------------------- */
+.btn-small {
+  background-image: var(--gradient-btn);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: var(--shadow-kawaii);
+  margin: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-small:hover {
+  transform: translateY(-3px);
+}
+
+.material-icons {
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- 🌸 HEADER AVEC LOGO + SPICY -->
+  <header class="header-marbrage">
+    <div class="header-inline">
+      <a href="../index.html">
+        <img src="../assets/images/logo.png" class="header-logo" alt="Retour">
+      </a>
+      <h1 class="header-title">Marbrages</h1>
+    </div>
+  </header>
+
+  <!-- 🌈 BARRE OUTILS -->
+  <header class="toolbar">
+    <input id="searchInput" type="text" placeholder="🔍 Recherche…" oninput="onSearchInput()">
+
+    <select id="niveauSelect" onchange="onSearchInput()">
+      <option value="">Niveau…</option>
+      <option value="débutant">débutant</option>
+      <option value="intermédiaire">intermédiaire</option>
+      <option value="avancé">avancé</option>
+    </select>
+
+    <select id="traceSelect" onchange="onSearchInput()">
+      <option value="">Trace…</option>
+      <option value="très fine">très fine</option>
+      <option value="fine">fine</option>
+      <option value="moyenne">moyenne</option>
+      <option value="franche">franche</option>
+      <option value="épaisse">épaisse</option>
+    </select>
+
+    <button class="btn-small" onclick="doRandom()">
+      <span class="material-icons">auto_awesome</span> Surprendre
+    </button>
+  </header>
+
+  <main id="mainArea">
+    <div class="status">Chargement…</div>
+  </main>
+
+</div>
 
