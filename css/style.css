@@ -242,3 +242,13 @@ footer p {
     opacity: 0;
     transform: scale(0.9);
 }
+#nouveau-defi-btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #333;
+    color: white;
+    font-size: 16px;
+    margin-top: 12px;
+}
