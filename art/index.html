@@ -1,20 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Catalogue Techniques Artistiques</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <header class="appbar">
-    <a class="logo" href="index.html" title="Accueil">
-      <img src="assets/images/logo.png" alt="logo" class="logo-img"> 
-      <span class="brand-title spicy">CREATIONS ARTISTIQUES</span>
-    </a>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Marbrages — Activité du mois</title>
 
-    <div class="appbar-right">
+<link rel="stylesheet" href="../css/style.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+/* ---------------------- */
+/* 🌸 HEADER KAWAII LOGO  */
+/* ---------------------- */
+.header-marbrage {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.header-logo {
+  width: 130px;
+  cursor: pointer;
+}
+
+.header-title {
+  font-family: "Spicy", serif;
+  font-size: 3rem;
+  margin: 0;
+  color: #444;
+}
+
+/* Desktop : logo + titre sur une ligne */
+@media (min-width: 900px) {
+  .header-inline {
+    flex-direction: row;
+  }
+}
       <!-- Search with inline SVG icon -->
       <div class="search-wrapper" aria-hidden="false" role="search" style="display:flex;align-items:center;gap:8px;">
         <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
