@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Catalogue Techniques Artistiques</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header class="appbar">
+    <a class="logo" href="index.html" title="Accueil">
+      <img src="assets/images/logo.png" alt="logo" class="logo-img"> 
+      <span class="brand-title spicy">CREATIONS ARTISTIQUES</span>
+    </a>
+
+    <div class="appbar-right">
+      <!-- Search with inline SVG icon -->
+      <div class="search-wrapper" aria-hidden="false" role="search" style="display:flex;align-items:center;gap:8px;">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+
+        <input id="quickSearch" class="searchTop" type="search" placeholder="Rechercher par nom ou matériel..." aria-label="Recherche rapide">
+      </div>
+
+      <!-- Surprise button (SVG inline kawaii) -->
+      <button id="btnRandom" class="btn ghost kawaii" title="Technique surprise" aria-label="Technique surprise">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2v4"></path>
+          <path d="M12 18v4"></path>
+          <path d="M4 12h4"></path>
+          <path d="M16 12h4"></path>
+          <path d="M5 5l3 3"></path>
+          <path d="M16 16l3 3"></path>
+        </svg>
+        Surprise
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="controls" role="region" aria-label="Contrôles">
+      <div class="control-item">
+        <label class="small">Technique</label>
+        <select id="selectTechnique"><option value="">— aucune —</option></select>
+      </div>
+
+      <div class="control-item">
+        <label class="small">Catégorie</label>
+        <select id="selectCategory"><option value="">— aucune —</option></select>
+      </div>
+
+      <div class="control-item">
+        <label class="small">Niveau</label>
+        <select id="selectLevel"><option value="">— aucun —</option></select>
+      </div>
+
+      <div style="display:flex;align-items:flex-end;gap:8px">
+        <!-- Afficher button (SVG inline kawaii) -->
+        <button id="btnDisplay" class="btn primary kawaii" title="Afficher" aria-label="Afficher">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="6"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          Afficher
+        </button>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div style="min-width:220px">
+        <label class="small">Recherche rapide</label>
+        <div class="small-note">Utilisez la barre de recherche en haut.</div>
+      </div>
+    </section>
+
+    <div id="displayArea" class="content">
+      <div id="emptyState" class="empty">
+        <div style="font-size:30px; color:#9aa3ff">🔎</div>
+        <div style="font-weight:600;margin-top:8px">Tapez un mot-clé ou utilisez les filtres</div>
+        <div style="margin-top:6px;color:var(--muted)">Les techniques seront affichées ici.</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
