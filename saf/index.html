@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Catalogue Techniques Artistiques</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header class="appbar">
+    <a class="logo" href="index.html" title="Accueil">
+      <img src="assets/images/logo.png" alt="logo" class="logo-img"> 
+      <span class="brand-title spicy">CREATIONS ARTISTIQUES</span>
+    </a>
+
+    <div class="appbar-right">
+      <input id="quickSearch" class="searchTop" type="search" placeholder="🔎 Rechercher par nom ou matériel..." aria-label="Recherche rapide">
+      <button id="btnRandom" class="btn ghost kawaii" title="Technique surprise">🌈✨ Surprise</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="controls" role="region" aria-label="Contrôles">
+      <div class="control-item">
+        <label class="small">Technique</label>
+        <select id="selectTechnique"><option value="">— aucune —</option></select>
+      </div>
+
+      <div class="control-item">
+        <label class="small">Catégorie</label>
+        <select id="selectCategory"><option value="">— aucune —</option></select>
+      </div>
+
+      <div class="control-item">
+        <label class="small">Niveau</label>
+        <select id="selectLevel"><option value="">— aucun —</option></select>
+      </div>
+
+      <div style="display:flex;align-items:flex-end;gap:8px">
+        <button id="btnDisplay" class="btn primary kawaii" title="Afficher">🔍 Afficher</button>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div style="min-width:220px">
+        <label class="small">Recherche rapide</label>
+        <div class="small-note">Utilisez la barre de recherche en haut.</div>
+      </div>
+    </section>
+
+    <div id="displayArea" class="content">
+      <div id="emptyState" class="empty">
+        <div style="font-size:30px; color:#9aa3ff">🔎</div>
+        <div style="font-weight:600;margin-top:8px">Tapez un mot-clé ou utilisez les filtres</div>
+        <div style="margin-top:6px;color:var(--muted)">Les techniques seront affichées ici.</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
