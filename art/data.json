@@ -1,5 +1,18 @@
 [
   {
+    "nom": "Acrylique",
+    "categorie": "Arts visuels",
+    "description": "La peinture acrylique sèche rapidement et permet de travailler en couches superposées, opaques ou transparentes. Sa polyvalence permet d’obtenir des effets texturés, lisses ou graphiques. C’est une technique idéale pour expérimenter, car elle supporte bien les corrections et permet une grande liberté d’expression, du figuratif à l’abstrait.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Peintures acryliques\n• Pinceaux variés\n• Spatules\n• Toile, papier acrylique ou carton entoilé\n• Palette\n• Eau et medium acrylique",
+    "youtube": "https://youtube.com/playlist?list=PLSzTh1pVt2FHxK_oRWa35mVXOKudmR1Sa&si=IOxYkFSB3ImthANy",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLSzTh1pVt2FHxK_oRWa35mVXOKudmR1Sa&si=IOxYkFSB3ImthANy"
+    ],
+    "photos": "https://i.pinimg.com/1200x/20/9a/79/209a7984997708fdd313e5c827788f55.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/acrylique/"
+  },
+  {
     "nom": "Altered art",
     "categorie": "Arts textiles & décoratives",
     "description": "L’altered art consiste à transformer un objet existant en œuvre créative par superposition, collage, peinture et détournement. Chaque pièce devient un support d’expression unique, mêlant récupération, expérimentation et imagination. Cette technique encourage la liberté totale et la réinvention d’objets du quotidien en pièces artistiques surprenantes.",
@@ -9,6 +22,19 @@
     "youtubeList": [],
     "photos": "",
     "galerie": ""
+  },
+  {
+    "nom": "Aquarelle",
+    "categorie": "Arts visuels",
+    "description": "Technique à l’eau jouant sur transparence et nuances. L’artiste superpose des lavis, réserves et dégradés pour créer des effets délicats. Convient aux paysages, botanique et illustration expressive. L’aquarelle repose sur la transparence et le travail humide. Les pigments se diffusent dans l’eau pour créer des dégradés délicats et des textures naturelles. Cette technique demande légèreté et anticipation, mais permet aussi des effets spontanés. Elle favorise une approche intuitive et poétique de la peinture.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Aquarelles en godets ou tubes\n• Pinceaux souples\n• Papier aquarelle 300 g/m²\n• Palette\n• Eau, sopalin, ruban de masquage",
+    "youtube": "https://youtube.com/playlist?list=PLXi9OpPr9d9wzqMK_BwQpRh2x9z6LAU73&si=Y6ca3FXcbW3EHY9k",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLXi9OpPr9d9wzqMK_BwQpRh2x9z6LAU73&si=Y6ca3FXcbW3EHY9k"
+    ],
+    "photos": "https://i.pinimg.com/736x/65/ee/4b/65ee4b37c8576d111305e85f2d2255f2.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/aquarelle/"
   },
   {
     "nom": "Arm knitting",
@@ -22,13 +48,26 @@
     "galerie": ""
   },
   {
+    "nom": "ATC",
+    "categorie": "Arts du livre & papier",
+    "description": "Les ATC sont de petites cartes artistiques créées pour être échangées. Elles permettent d’expérimenter différentes techniques sur un format miniature : peinture, collage, dessin ou textures. Leur taille réduite encourage la créativité rapide et spontanée, tout en favorisant le partage avec d’autres artistes.",
+    "niveau": "Débutant",
+    "materiel": "• Cartes 6,4 × 8,9 cm\n• Peintures, encres, feutres\n• Collages, tampons\n• Ciseaux, colle\n• Pochette de protection",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/1200x/7c/20/ce/7c20cee310f299da42039f07c0582001.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/atc/"
+  },
+  {
     "nom": "Broderie de perles",
     "categorie": "Arts textiles & décoratives",
     "description": "La broderie de perles consiste à coudre des perles une par une ou en lignes pour créer motifs et textures brillantes. Patiente et minutieuse, cette technique offre des effets luxueux et raffinés. Elle permet de personnaliser vêtements, bijoux ou décorations avec éclat et précision.",
     "niveau": "Intermédiaire",
     "materiel": "• Tissu tendu dans un tambour\n• Aiguille fine\n• Perles (rocaille, verre…)\n• Fil nylon ou polyester\n• Crayon pour tracer le motif",
     "youtube": "https://www.youtube.com/@jamiecloudeakin8543",
-    "youtubeList": ["https://www.youtube.com/@jamiecloudeakin8543"],
+    "youtubeList": [
+      "https://www.youtube.com/@jamiecloudeakin8543"
+    ],
     "photos": "",
     "galerie": ""
   },
@@ -42,6 +81,32 @@
     "youtubeList": [],
     "photos": "",
     "galerie": ""
+  },
+  {
+    "nom": "Calligraphie",
+    "categorie": "Arts visuels",
+    "description": "La calligraphie est l’art de dessiner l’écriture en jouant sur l’épaisseur des traits et le rythme du geste. Elle demande patience, contrôle et fluidité. Cette pratique méditative permet de créer des compositions élégantes, décoratives ou expressives en variant styles, inclinaisons et ornements typographiques.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Plume, porte-plume ou brush pen\n• Encre\n• Papier lisse\n• Guide-lignes\n• Récipient d’eau et chiffon",
+    "youtube": "https://youtube.com/playlist?list=PLNJGJpNu7lUGDH1rtfktCe_mxQ2iHuJwg&si=27cWig2TihkPqDR-",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLNJGJpNu7lUGDH1rtfktCe_mxQ2iHuJwg&si=27cWig2TihkPqDR-"
+    ],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/calligraphie/"
+  },
+  {
+    "nom": "Collage artistique",
+    "categorie": "Arts du livre & papier",
+    "description": "Le collage artistique assemble des fragments d’images, textures et formes pour créer une composition cohérente ou surréaliste. Cette technique libre et intuitive invite au jeu visuel, au détournement et à l’exploration symbolique. Elle permet de raconter des histoires en mêlant réalités, rêves et associations inattendues.",
+    "niveau": "Débutant",
+    "materiel": "• Images, magazines, papiers variés\n• Ciseaux, cutter\n• Colle papier\n• Support (papier, carton, toile)\n• Matériel optionnel : peinture, tampons",
+    "youtube": "https://youtube.com/playlist?list=PLlzmX5fo4ovDXQU2GO68z1f2AUwaJ-KQh&si=z_zbudM6PAt5liTV",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLlzmX5fo4ovDXQU2GO68z1f2AUwaJ-KQh&si=z_zbudM6PAt5liTV"
+    ],
+    "photos": "https://i.pinimg.com/1200x/46/09/ce/4609ce3acefe09b6b4cc7abd9d8aadb6.jpg",
+    "galerie": "https://fr.pinterest.com/MegKote/projet-artistique-2025/collage/"
   },
   {
     "nom": "Coloriage artistique",
@@ -67,7 +132,19 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Crochet",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Le crochet utilise un crochet unique pour créer des mailles formant tissus, formes ou objets en volume. Accessible et rythmé, il permet de réaliser amigurumis, accessoires ou vêtements. Le geste répétitif est apaisant, et les possibilités créatives sont très vastes, du simple granny square aux pièces élaborées.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Crochet (taille selon laine)\n• Pelotes de laine ou coton\n• Aiguille à laine\n• Marqueurs de maille (optionnel)",
+    "youtube": "https://youtube.com/playlist?list=PLPmQNUe1zBmWtGfyYvCwPDnyDxFNn4o4Z&si=IsBlV3Miya_ANCZP",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLPmQNUe1zBmWtGfyYvCwPDnyDxFNn4o4Z&si=IsBlV3Miya_ANCZP"
+    ],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/crochet/"
+  },
   {
     "nom": "Cyanotype sur papier",
     "categorie": "Arts du livre & papier",
@@ -81,7 +158,17 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Découpage",
+    "categorie": "Arts du livre & papier",
+    "description": "Le découpage consiste à découper minutieusement des motifs pour les assembler en scènes décoratives ou superpositions fines. Cette technique demande patience et précision tout en offrant une grande liberté créative. Les compositions finales peuvent être délicates, narratives ou très graphiques, selon les images sélectionnées.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Ciseaux fins ou cutter de précision\n• Images ou motifs à découper\n• Colle\n• Support (bois, carton, papier)\n• Vernis-colle (optionnel)",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/736x/ae/57/a1/ae57a1687ac198e0df6291ff5f890118.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/d%C3%A9coupage/"
+  },
   {
     "nom": "Embossage à chaud",
     "categorie": "Arts visuels",
@@ -95,7 +182,58 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Encre à alcool",
+    "categorie": "Arts visuels",
+    "description": "Les encres à alcool produisent des effets vibrants et organiques sur un support non poreux. Elles se diffusent, fusionnent et créent des marbrures colorées uniques. La technique est très intuitive et idéale pour des œuvres abstraites, des fonds ou des éléments décoratifs modernes.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Encres à alcool\n• Papier synthétique (Yupo)\n• Souffleur ou paille\n• Alcool isopropylique\n• Pinceaux\n• Gants",
+    "youtube": "https://youtube.com/playlist?list=PLlzmX5fo4ovAJ6eArh58DBTwtiDhWcX0D&si=gf6S5-sJT6qCxteI",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLlzmX5fo4ovAJ6eArh58DBTwtiDhWcX0D&si=gf6S5-sJT6qCxteI"
+    ],
+    "photos": "https://i.pinimg.com/736x/2c/3f/0e/2c3f0e8ef3e4bb3abc723add9a3ec5cb.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/encres-%C3%A0-lalcool/"
+  },
+  {
+    "nom": "Encre de Chine",
+    "categorie": "Arts visuels",
+    "description": "L’encre de Chine permet des traits profonds, précis et contrastés. Très utilisée pour le dessin, la calligraphie et l’illustration, elle offre un rendu graphique puissant. Jouant sur les densités, lavis et nuances de noir, elle combine rigueur du trait et fluidité expressive.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Bâton ou flacon d’encre de Chine\n• Pinceaux souples\n• Papier absorbant\n• Pierre à encre (si bâton)\n• Plume (optionnelle)",
+    "youtube": "https://youtube.com/playlist?list=PLQHKSQTCZPYzL8_vXx50EgbR66W0TzC85&si=3kK1AEdgidbWH_XL",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLQHKSQTCZPYzL8_vXx50EgbR66W0TzC85&si=3kK1AEdgidbWH_XL"
+    ],
+    "photos": "https://i.pinimg.com/1200x/4a/4c/53/4a4c538d3b04cbf990be07c704238fcc.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/encre-de-chine/"
+  },
+  {
+    "nom": "Encres en spray",
+    "categorie": "Arts visuels",
+    "description": "Les encres en spray permettent de couvrir rapidement de grandes surfaces avec des effets diffus, dynamiques ou superposés. Elles fonctionnent parfaitement avec pochoirs, textures et fonds de pages. Technique expressive, idéale pour mixed media, journaling ou décorations vibrantes.",
+    "niveau": "Débutant",
+    "materiel": "• Encres en spray\n• Gants\n• Pochoirs\n• Papier épais\n• Protection de surface\n• Masques adhésifs",
+    "youtube": "https://youtube.com/playlist?list=PLnhg9IHBz5K2p39umagjx3jjbzhNyfNfp&si=Wh2eblaie7JDJqH-",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLnhg9IHBz5K2p39umagjx3jjbzhNyfNfp&si=Wh2eblaie7JDJqH-"
+    ],
+    "photos": "https://i.pinimg.com/1200x/19/83/89/198389375ff725757adcfa35220b39eb.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/encre-en-spray/"
+  },
+  {
+    "nom": "Enluminure",
+    "categorie": "Arts visuels",
+    "description": "L’enluminure est l’art ancien d’illustrer textes et manuscrits avec détails précieux et dorures. Elle demande précision, patience et finesse. Les motifs floraux, lettrines ou symboles prennent vie grâce à des couleurs intenses et des métaux brillants. Un travail minutieux, riche d’histoire.",
+    "niveau": "Intermédiaire/Avancé",
+    "materiel": "• Feuilles épaisses\n• Dorure (feuille d’or ou mixtion)\n• Pigments\n• Encre\n• Pinceaux fins\n• Plume\n• Assiette à polir",
+    "youtube": "https://youtube.com/playlist?list=PLPe-i5VyhTdarZCVbowiorIqYoEu3QIfu&si=a8qr28lqel5XBEnQ",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLPe-i5VyhTdarZCVbowiorIqYoEu3QIfu&si=a8qr28lqel5XBEnQ"
+    ],
+    "photos": "https://i.pinimg.com/1200x/25/e6/fd/25e6fd7815d3f420c0a9828acb46e423.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/enluminures/"
+  },
   {
     "nom": "Feutrage",
     "categorie": "Arts textiles & décoratives",
@@ -107,20 +245,44 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Frottage",
     "categorie": "Arts du livre & papier",
     "description": "Le frottage consiste à révéler les textures d’un objet en frottant un médium sur du papier posé dessus. Les motifs apparaissent comme par magie, créant compositions surprenantes. Technique simple, expérimentale et idéale pour stimuler l’imagination.",
     "niveau": "Débutant",
     "materiel": "• Crayons\n• Fusain ou craies\n• Papiers texturés ou objets à relief\n• Feuilles de papier",
-
     "youtube": "",
     "youtubeList": [],
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Fusain",
+    "categorie": "Arts visuels",
+    "description": "Le fusain offre un rendu doux, velouté ou très contrasté, parfait pour portraits et ombres. Son aspect poudreux permet de modeler formes et volumes grâce à l’estompe. Expressive et sensible, cette technique autorise gestes larges et corrections faciles.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Bâtons de fusain\n• Fusain compressé\n• Estompe\n• Gomme mie de pain\n• Fixatif\n• Papier grainé",
+    "youtube": "https://youtube.com/playlist?list=PLXi9OpPr9d9xKjHq-LtNeDSHlNSBvA0m1&si=qryu26uD_td7Q7ge",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLXi9OpPr9d9xKjHq-LtNeDSHlNSBvA0m1&si=qryu26uD_td7Q7ge"
+    ],
+    "photos": "https://i.pinimg.com/736x/42/47/6a/42476a5520cf474a512fb74e97b90de0.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/fusain/"
+  },
+  {
+    "nom": "Gelly plate",
+    "categorie": "Arts du livre & papier",
+    "description": "La Gelly Plate permet d’imprimer facilement des motifs et textures par monotype. Les couches de peinture se superposent et s’impriment avec des effets organiques. Technique ludique, idéale pour fonds d’art journal ou compositions abstraites.",
+    "niveau": "Débutant",
+    "materiel": "• Gelli plate\n• Encres ou peintures\n• Rouleau (brayer)\n• Pochoirs\n• Textures\n• Papier",
+    "youtube": "https://youtube.com/playlist?list=PLlzmX5fo4ovC55ig52i65DVxFL6fuAHNQ, https://www.youtube.com/@PaintedPaperStudio",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLlzmX5fo4ovC55ig52i65DVxFL6fuAHNQ",
+      "https://www.youtube.com/@PaintedPaperStudio"
+    ],
+    "photos": "https://i.pinimg.com/1200x/a4/30/74/a430745e01ab5e99dd244b57da027519.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/gelli-plate/"
+  },
   {
     "nom": "Gouache",
     "categorie": "Arts visuels",
@@ -134,7 +296,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Graphite / crayon",
     "categorie": "Arts visuels",
@@ -148,7 +309,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Gravure / estampage métal",
     "categorie": "Arts textiles & décoratives",
@@ -160,7 +320,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Illustrations digitales",
     "categorie": "Arts visuels",
@@ -174,7 +333,19 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Junk journal",
+    "categorie": "Arts du livre & papier",
+    "description": "Un junk journal est un carnet créé à partir de matériaux récupérés. Chaque page devient un collage de textures et souvenirs. C’est un espace créatif libre, poétique et éclectique.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Papiers recyclés\n• Chutes\n• Enveloppes\n• Ficelles\n• Reliure\n• Colle\n• Ciseaux",
+    "youtube": "https://youtube.com/playlist?list=PLCMF4dKQt-_mAog41t6-V0cioyACtDKtO&si=Bdxsy9ZheBTx1kOH",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLCMF4dKQt-_mAog41t6-V0cioyACtDKtO&si=Bdxsy9ZheBTx1kOH"
+    ],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/junk-journal/"
+  },
   {
     "nom": "Kirigami",
     "categorie": "Arts du livre & papier",
@@ -188,7 +359,19 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Linogravure / gravure",
+    "categorie": "Arts visuels",
+    "description": "La linogravure consiste à creuser un motif dans du linoléum et à l’imprimer. Elle produit images graphiques, contrastées et artisanales.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Plaque lino\n• Gouges\n• Encre d’impression\n• Rouleau\n• Presse ou cuillère",
+    "youtube": "https://youtube.com/playlist?list=PLr2uTCnd8an-zq2cGpKBsYbIVxPyfTWgn&si=sQAc-g8XkBY0Sb7i",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLr2uTCnd8an-zq2cGpKBsYbIVxPyfTWgn&si=sQAc-g8XkBY0Sb7i"
+    ],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/linogravure/"
+  },
   {
     "nom": "Livres d’artiste",
     "categorie": "Arts du livre & papier",
@@ -202,7 +385,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Mandala",
     "categorie": "Arts visuels",
@@ -216,11 +398,49 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Marbrure japonaise",
+    "categorie": "Arts du livre & papier",
+    "description": "Les encres flottent à la surface de l’eau et forment volutes délicates. Le papier posé dessus capture ces motifs uniques.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Encres spéciales\n• Eau\n• Pinceaux fins\n• Papier absorbant",
+    "youtube": "https://youtu.be/qwaLFLbqJQg?si=LrnA6LZ-YEF_OwCT",
+    "youtubeList": [
+      "https://youtu.be/qwaLFLbqJQg?si=LrnA6LZ-YEF_OwCT"
+    ],
+    "photos": "https://i.pinimg.com/736x/d9/8e/62/d98e625ccf409efea1bc6ea7ff9b2cbd.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/marbrure-japonaise/"
+  },
+  {
+    "nom": "Micro-Macramé",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Technique de nœuds réalisés avec des fils très fins pour créer bijoux et petits ornements. Elle demande précision et régularité, permettant de travailler motifs délicats, perles et textures fines. Idéal pour créer des pièces légères et détaillées.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Fils fins (0,5–1 mm)\n• Perles à petit trou\n• Planche ou support de fixation\n• Aiguilles ou épingles",
+    "youtube": "https://youtube.com/playlist?list=PLZ4t0QlifaIbmtv36s8tMPEQbQtuDiDaj&si=TL0Zai8ARQtuvyRr",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLZ4t0QlifaIbmtv36s8tMPEQbQtuDiDaj&si=TL0Zai8ARQtuvyRr"
+    ],
+    "photos": "https://i.pinimg.com/736x/e9/7f/e7/e97fe70b648412e54bc84700fe43aab4.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/micro-macram%C3%A9/"
+  },
+  {
+    "nom": "Mixed media",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Technique combinant peinture, collage, encres et textures dans une même œuvre. Elle encourage l’expérimentation, les superpositions et les contrastes pour produire des créations riches et expressives. Parfaite pour un travail intuitif et très personnel.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Peintures variées\n• Collages, papiers, textures\n• Encres, feutres\n• Gesso, pâte à structure",
+    "youtube": "https://youtube.com/playlist?list=PLlzmX5fo4ovAX-FrGpDojcbfVnXCqXBDP&si=IzsQUdTf_QyFNlAN",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLlzmX5fo4ovAX-FrGpDojcbfVnXCqXBDP&si=IzsQUdTf_QyFNlAN"
+    ],
+    "photos": "https://i.pinimg.com/736x/a4/c6/14/a4c6144e8eef4c4e4ca7556c66a76b3d.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/mix-media/"
+  },
   {
     "nom": "One stroke",
     "categorie": "Arts visuels",
-    "description": "Méthode consistant à charger un pinceau avec deux couleurs pour obtenir dégradés, ombres et lumières en un seul geste. Technique rapide et élégante basée sur la fluidité et la précision.",
+    "description": "Méthode consistant à charger un pinceau avec deux couleurs pour obtenir dégradés, ombres et lumières en un seul geste. Idéal pour motifs floraux décoratifs. Technique rapide et élégante basée sur la fluidité et la précision.",
     "niveau": "Débutant/Intermédiaire",
     "materiel": "• Pinceaux plats spécifiques\n• Peinture acrylique\n• Palette\n• Support (papier, bois, toile)",
     "youtube": "https://youtube.com/playlist?list=PLtmQ8_bTcaKkMdiDizWmgIblmQ1BsVfh8&si=p0WzmEdZZVYWX30l",
@@ -230,7 +450,19 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Origami",
+    "categorie": "Arts du livre & papier",
+    "description": "Art du pliage du papier permettant de créer formes, animaux et objets sans colle ni découpe. Fondé sur la précision et la logique des plis. Technique méditative et accessible, offrant une infinité de modèles du simple au complexe.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Feuilles d’origami carrées\n• Pliant ou outil d’os (optionnel)\n• Surface plane",
+    "youtube": "https://youtube.com/playlist?list=PL83B4618216D7989B&si=-AnN1ZFiLtPNXuAk",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PL83B4618216D7989B&si=-AnN1ZFiLtPNXuAk"
+    ],
+    "photos": "https://i.pinimg.com/736x/9a/87/d8/9a87d83f6d7515bc7bfe5381f036abfa.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/origami/"
+  },
   {
     "nom": "Papercraft",
     "categorie": "Arts du livre & papier",
@@ -244,11 +476,23 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Pastel à l'huile",
+    "categorie": "Arts visuels",
+    "description": "Médium crémeux offrant couleurs intenses, superpositions faciles et fondus doux. Permet textures riches et effets expressifs. Technique intuitive idéale pour œuvres vibrantes mêlant traits marqués et zones estompées.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Pastels à l’huile\n• Papier texturé\n• Estompes ou chiffons\n• Vernis fixatif spécial pastel",
+    "youtube": "https://youtube.com/playlist?list=PLmikuDF3-4IVJ_BglZYrVLeIbxNuec6In&si=QgRospcwfSBL6bdg",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLmikuDF3-4IVJ_BglZYrVLeIbxNuec6In&si=QgRospcwfSBL6bdg"
+    ],
+    "photos": "https://i.pinimg.com/736x/f6/fe/51/f6fe517b5e9aa3da64109ddc6a108270.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/pastels-%C3%A0-lhuile/"
+  },
   {
     "nom": "Patchwork / quilting",
     "categorie": "Arts textiles & décoratives",
-    "description": "Assemblage de tissus formant motifs géométriques puis quilting traversant plusieurs couches. Technique précise alliant créativité textile et savoir-faire.",
+    "description": "Assemblage de tissus formant motifs géométriques puis quilting traversant plusieurs couches. Technique précise alliant créativité textile et savoir-faire. Parfaite pour réaliser couvertures, panneaux décoratifs et projets uniques.",
     "niveau": "Intermédiaire",
     "materiel": "• Tissus assortis\n• Machine à coudre ou aiguille\n• Règle patchwork, cutter rotatif\n• Molleton et fil",
     "youtube": "",
@@ -256,7 +500,32 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Pâte à structure",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Pâte épaisse permettant de créer reliefs et textures en 3D. Elle s’applique au couteau ou à travers un pochoir puis se peint une fois sèche. Idéale pour fonds expressifs, effets de matière et projets mixed media.",
+    "niveau": "Débutant",
+    "materiel": "• Pâte à structure ou modeling paste\n• Spatules ou couteaux\n• Pochoirs (optionnel)\n• Support rigide",
+    "youtube": "https://youtube.com/playlist?list=PL0uGphG1YQdGCjU5jbb9wXIMnUgPc08fW&si=5oTbZXyDE0ImbDnL",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PL0uGphG1YQdGCjU5jbb9wXIMnUgPc08fW&si=5oTbZXyDE0ImbDnL"
+    ],
+    "photos": "https://i.pinimg.com/736x/88/a0/fb/88a0fb2a1a9631cf218a2373706f2b7f.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/modeling-paste/"
+  },
+  {
+    "nom": "Peinture à l’huile",
+    "categorie": "Arts visuels",
+    "description": "Peinture aux couleurs profondes et au séchage lent, permettant fondus subtils, glacis et empâtements. Très polyvalente, elle offre maîtrise de la lumière et des textures. Technique traditionnelle, adaptée à des œuvres détaillées ou expressives.",
+    "niveau": "Intermédiaire/Avancé",
+    "materiel": "• Peintures à l’huile\n• Pinceaux et couteaux\n• Médiums (huile, essences)\n• Toile ou panneau",
+    "youtube": "https://youtube.com/playlist?list=PLSzTh1pVt2FHhozKD132r2Uz9o5bptNpL&si=01WwmHA7bM0VprjG",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLSzTh1pVt2FHhozKD132r2Uz9o5bptNpL&si=01WwmHA7bM0VprjG"
+    ],
+    "photos": "https://i.pinimg.com/736x/67/75/f3/6775f3934a7c31482e1f1ff44af49060.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/peinture-%C3%A0-lhuile/"
+  },
   {
     "nom": "Pointillisme",
     "categorie": "Arts visuels",
@@ -270,7 +539,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Pop-up (livres animés)",
     "categorie": "Arts du livre & papier",
@@ -284,7 +552,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Poterie",
     "categorie": "Arts du livre & papier",
@@ -296,7 +563,17 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Pouring",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Technique où la peinture fluide est coulée sur la toile pour créer effets marbrés et cellules organiques. Processus intuitif laissant place au hasard. Parfait pour abstractions vibrantes et dynamiques.",
+    "niveau": "Débutant",
+    "materiel": "• Acryliques fluidifiées\n• Médium pouring\n• Gobelets, bâtonnets\n• Toile ou support",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/acrylic-pouring/"
+  },
   {
     "nom": "Punch needle",
     "categorie": "Arts textiles & décoratives",
@@ -308,7 +585,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Quilling",
     "categorie": "Arts du livre & papier",
@@ -322,7 +598,45 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Reliure artistique",
+    "categorie": "Arts du livre & papier",
+    "description": "Création de carnets et livres faits main, mêlant couture, collage et travail du papier. Permet de choisir format, matériaux et finitions. Technique artisanale valorisant la créativité dans l’objet-livre.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Papiers intérieurs\n• Aiguilles et fil de reliure\n• Cartons pour couverture\n• Colle, plioir, presse",
+    "youtube": "https://youtube.com/playlist?list=PLQzfr9QzZFLIteO67E-dMBrGYHcK-HAJn&si=maJ_9O8hkWM-zvu0",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLQzfr9QzZFLIteO67E-dMBrGYHcK-HAJn&si=maJ_9O8hkWM-zvu0"
+    ],
+    "photos": "https://i.pinimg.com/736x/24/7f/e4/247fe46848341e739d12356f714204a9.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/reliure-artistique/"
+  },
+  {
+    "nom": "Repoussage",
+    "categorie": "Arts textiles & décoratives",
+    "description": "",
+    "niveau": "Intermédiaire",
+    "materiel": "",
+    "youtube": "https://youtube.com/playlist?list=PLO3w1OQypr_F4x6pko2qNUhXFwgq4AYnv&si=OR1VbCUpMZXqx6Vn",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLO3w1OQypr_F4x6pko2qNUhXFwgq4AYnv&si=OR1VbCUpMZXqx6Vn"
+    ],
+    "photos": "https://i.pinimg.com/1200x/76/a8/22/76a8228fcf2d846faebf5706b8d4527e.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/repoussage-du-cuir/"
+  },
+  {
+    "nom": "Scrapbooking",
+    "categorie": "Arts du livre & papier",
+    "description": "Art d’assembler photos, papiers décoratifs et éléments créatifs pour créer des pages souvenirs. Technique chaleureuse mêlant mise en page, narration visuelle et décoration. Elle permet de personnaliser albums, carnets ou cartes avec un style graphique, romantique ou moderne.",
+    "niveau": "Débutant",
+    "materiel": "• Papier scrap\n• Photos\n• Colle, ciseaux\n• Tampons, embellissements",
+    "youtube": "https://youtube.com/playlist?list=PLN3G0hWxPB2EmxPyIrfnkwYEES1bPFnHe&si=hpvXQ1ZntBvzKeMo",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLN3G0hWxPB2EmxPyIrfnkwYEES1bPFnHe&si=hpvXQ1ZntBvzKeMo"
+    ],
+    "photos": "https://i.pinimg.com/1200x/5f/a3/44/5fa344430abee2925491395fa741c9c8.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/scrapbooking/"
+  },
   {
     "nom": "Serviettage",
     "categorie": "Arts du livre & papier",
@@ -334,7 +648,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Sketchnotes",
     "categorie": "Arts visuels",
@@ -348,7 +661,41 @@
     "photos": "",
     "galerie": ""
   },
-
+  {
+    "nom": "Stamping",
+    "categorie": "Arts du livre & papier",
+    "description": "Technique utilisant des tampons encrés pour créer motifs répétés ou illustrations rapides. Permet textures, fonds, lettrages ou compositions décoratives. Très utilisée en carterie, scrapbooking et journaling. Simple et polyvalente.",
+    "niveau": "Débutant",
+    "materiel": "• Tampons en caoutchouc ou clear\n• Encres\n• Bloc acrylique (clear stamps)\n• Papier adapté",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/tampon/"
+  },
+  {
+    "nom": "Stencil art",
+    "categorie": "Arts visuels",
+    "description": "Art utilisant des pochoirs pour créer motifs nets ou superposés. Les couleurs sont appliquées par tamponnage, brossage ou spray. Technique idéale pour motifs précis, effets urbains, fonds graphiques et compositions rapides.",
+    "niveau": "Débutant",
+    "materiel": "• Pochoirs\n• Encres, peinture ou spray\n• Brosses / éponges\n• Support papier ou toile",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/stencil-art/"
+  },
+  {
+    "nom": "Sumi-e",
+    "categorie": "Arts visuels",
+    "description": "Peinture japonaise minimaliste utilisant encre noire et gestes fluides. Les traits expriment mouvement, esprit et simplicité. Fondée sur respiration, observation et équilibre, elle privilégie l’essentiel plutôt que le détail.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Encre noire\n• Pinceaux souples\n• Papier de riz\n• Pierre à encre",
+    "youtube": "https://youtube.com/playlist?list=PL3fDA44YlqruDua8il073dUR94WQDKNIT&si=pyzxC2NpIA17nUM_",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PL3fDA44YlqruDua8il073dUR94WQDKNIT&si=pyzxC2NpIA17nUM_"
+    ],
+    "photos": "https://i.pinimg.com/1200x/10/4e/5f/104e5fd475840633fc26a756b105396b.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/sumi-e/"
+  },
   {
     "nom": "Tamponnage / carving",
     "categorie": "Arts du livre & papier",
@@ -362,11 +709,10 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Tapisserie",
     "categorie": "Arts textiles & décoratives",
-    "description": "Broderie réalisée sur canevas, formant surfaces denses et motifs colorés. Technique répétitive et relaxante donnant œuvres décoratives texturées, coussins ou panneaux.",
+    "description": "Broderie réalisée sur canevas, formant surfaces denses et motifs colorés. Technique répétitive et relaxante donnant œuvres décoratives texturées, coussins ou panneaux. Permet jeux de couleurs et motifs géométriques.",
     "niveau": "Intermédiaire/Avancé",
     "materiel": "• Toile canevas\n• Fils laine ou coton\n• Aiguille tapisserie\n• Ciseau",
     "youtube": "",
@@ -374,7 +720,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Tataki zomé",
     "categorie": "Arts textiles & décoratives",
@@ -386,11 +731,10 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Teinture textile",
     "categorie": "Arts textiles & décoratives",
-    "description": "Méthodes de coloration du tissu par immersion, nouage ou réserves. Permet motifs vibrants, dégradés ou effets tie-dye. Technique créative offrant résultats uniques et durables.",
+    "description": "Méthodes de coloration du tissu par immersion, nouage ou réserves. Permet motifs vibrants, dégradés ou effets tie-dye. Technique créative offrant résultats uniques et durables, adaptée aux vêtements, accessoires ou décorations.",
     "niveau": "Débutant",
     "materiel": "• Teintures (reactive, végétale…)\n• Bassines\n• Tissus naturels\n• Gants, bâton de mélange",
     "youtube": "",
@@ -398,7 +742,6 @@
     "photos": "",
     "galerie": ""
   },
-
   {
     "nom": "Tissage",
     "categorie": "Arts textiles & décoratives",
@@ -409,5 +752,154 @@
     "youtubeList": [],
     "photos": "",
     "galerie": ""
+  },
+  {
+    "nom": "Travail du cuir",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Travail artisanal consistant à couper, percer, modeler et coudre le cuir pour créer accessoires ou objets décoratifs. Technique demandant précision et patience. Résultat solide, durable et esthétique.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Chutes de cuir\n• Alênes, aiguilles cuir\n• Fil ciré\n• Outils de coupe",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/736x/de/5b/4b/de5b4ba90835a6da403add8f0c36b8b1.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/travail-du-cuir/"
+  },
+  {
+    "nom": "Tricot",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Technique textile utilisant deux aiguilles pour former mailles successives. Permet vêtements, accessoires ou décorations. Activité rythmée, apaisante et modulable, offrant textures variées et créations personnalisées.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Aiguilles à tricoter\n• Laine\n• Anneaux marqueurs (optionnel)\n• Aiguille à laine",
+    "youtube": "https://youtube.com/playlist?list=PLSqE_JDO3cOmrm5pdL1r1oMqbY99YZCAK&si=eTxsFlMAIxFBYHTH",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLSqE_JDO3cOmrm5pdL1r1oMqbY99YZCAK&si=eTxsFlMAIxFBYHTH"
+    ],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/tricot/"
+  },
+  {
+    "nom": "Zentangle",
+    "categorie": "Arts visuels",
+    "description": "Méthode de dessin répétitif utilisant motifs abstraits et structurés. Très méditative, elle aide à la concentration et à la détente. Chaque motif se combine pour créer une composition harmonieuse sans pression de résultat.",
+    "niveau": "Débutant",
+    "materiel": "• Feutre fin\n• Crayon gris\n• Petits carrés de papier\n• Estompe",
+    "youtube": "https://youtube.com/playlist?list=PLvLIvOFxRJxsgj-hKMJyLe3adUd65Kxok&si=R2Ksph54yW5Lxk79",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLvLIvOFxRJxsgj-hKMJyLe3adUd65Kxok&si=R2Ksph54yW5Lxk79"
+    ],
+    "photos": "https://i.pinimg.com/1200x/f7/d5/d3/f7d5d34be8d14cb54369edea2c710182.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/zentangle/"
+  },
+  {
+    "nom": "ZIA",
+    "categorie": "Arts visuels",
+    "description": "Extension créative du Zentangle mêlant motifs structurés avec couleurs, illustrations et compositions libres. Plus artistique et expressive, elle permet d’explorer formats variés, superpositions et ambiances colorées tout en conservant l’esprit relaxant du Zentangle.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Feutres de différents formats\n• Papier ou carnet\n• Crayons couleur ou aquarelle\n• Estompe",
+    "youtube": "https://youtube.com/playlist?list=PLNBTD31lzklpL9aIYo6O_2ngU4OFwbLt_&si=qmobr5J6nkXlU1wq",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLNBTD31lzklpL9aIYo6O_2ngU4OFwbLt_&si=qmobr5J6nkXlU1wq"
+    ],
+    "photos": "https://i.pinimg.com/1200x/3d/69/a4/3d69a435c9f8de7e84aaa65289f936bf.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/zia/"
+  },
+  {
+    "nom": "Encre",
+    "categorie": "Arts visuels",
+    "description": "La technique à l’encre repose sur la fluidité et la spontanéité. En jouant sur les dilutions, les coulures et les transparences, on obtient des effets organiques ou très graphiques. L’encre permet d’exprimer des émotions brutes tout en conservant une grande précision. C’est une pratique intuitive et expressive.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Encres (aquarelle, acrylique ou encre de Chine)\n• Pinceaux fins et larges\n• Pipettes ou plumes\n• Papier épais ou papier aquarelle\n• Récipients pour dilutions\n• Ruban adhésif pour fixer le support",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/736x/2e/15/16/2e151612b9f0d3495f2315a1aedcee36.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/encre/"
+  },
+  {
+    "nom": "Mosaïque",
+    "categorie": "Arts textiles & décoratives",
+    "description": "La mosaïque consiste à assembler de petites pièces colorées pour former un motif ou une image. Cette technique demande patience et attention, tout en offrant un résultat très tactile et durable. C’est un art méditatif où chaque fragment trouve sa place pour créer une composition harmonieuse et unique.",
+    "niveau": "Intermédiaire/Avancé",
+    "materiel": "• Tesselles (verre, céramique, pierre)\n• Pince à mosaïque\n• Support rigide (bois, MDF)\n• Colle forte ou ciment-colle\n• Joint à carrelage\n• Spatule, éponge, gants",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/736x/91/aa/b1/91aab19daf0bad9645745cc3d422b1ce.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/mosa%C3%AFque/"
+  },
+  {
+    "nom": "Neuroartr",
+    "categorie": "Arts visuels",
+    "description": "Le neuroart utilise des lignes “neurographiques” courbes et intuitives qui se croisent, s’arrondissent et se colorent. Cette méthode favorise la détente, la prise de recul et l’expression émotionnelle. Les formes se transforment petit à petit en un paysage interne coloré, révélant un processus créatif presque méditatif.",
+    "niveau": "Débutant",
+    "materiel": "• Feuilles blanches épaisses\n• Feutres noirs pour le tracé\n• Feutres ou crayons de couleur\n• Règle (optionnelle)\n• Marqueurs à pointe fine",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/736x/75/88/5f/75885fc72c82e9b42d6b3e75fe8fa85f.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/neuroart/"
+  },
+  {
+    "nom": "Sigils",
+    "categorie": "Arts visuels",
+    "description": "Les sigils sont des symboles personnels créés à partir d’une intention transformée en forme graphique. Le processus mêle créativité, symbolisme et introspection. En simplifiant et stylisant les lettres, on obtient un signe unique qui agit comme un ancrage visuel lié à une intention ou un objectif.",
+    "niveau": "Débutant",
+    "materiel": "• Feuilles simples ou papier épais\n• Stylos, feutres ou encre\n• Règle et compas (optionnel)\n• Bougie (optionnelle, si rituel associé)",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/736x/7a/8a/e6/7a8ae6076191e0870bcf9ac7a68dab90.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/sigils/"
+  },
+  {
+    "nom": "Art journal",
+    "categorie": "Arts visuels",
+    "description": "L’art journal combine écriture, dessin, collage et peinture dans un carnet personnel. C’est un espace d’expression libre où consigner émotions, réflexions et expérimentations artistiques. Cette pratique évolutive permet d’explorer sa créativité sans pression, page après page, en mêlant visuel et texte de manière intime et intuitive.",
+    "niveau": "Débutant",
+    "materiel": "• Carnet ou journal à pages épaisses\n• Collages, feutres, peintures, tampons\n• Ciseaux, colle\n• Stickers, masking tape\n• Photos, papiers variés",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/736x/9e/e1/4b/9ee14bdae1a40c4e3bf8c9bf447bd0d3.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/art-journal/"
+  },
+  {
+    "nom": "Collage digital",
+    "categorie": "Arts visuels",
+    "description": "Le collage digital permet d’assembler des images numériques, textures, photos et typographies pour créer des compositions originales. Cette technique offre une grande liberté de manipulation, d’effets et de superpositions. Elle allie imagination et outils numériques pour créer des visuels modernes, surréalistes ou poétiques, rapidement modifiables.",
+    "niveau": "Débutant",
+    "materiel": "• Logiciel graphique (Procreate, Photoshop, Canva…)\n• Banque d’images (libres ou personnelles)\n• Tablette graphique ou ordinateur\n• Stylet (optionnel)",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/1200x/64/06/b7/6406b7113e51ce22de9b4235950ff95d.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/collage-digital/"
+  },
+  {
+    "nom": "Up cycling",
+    "categorie": "Arts textiles & décoratives",
+    "description": "L’upcycling consiste à transformer des objets destinés au rebut en créations originales et utiles. Cette approche écologique stimule la créativité en redonnant vie à des matériaux oubliés. Chaque transformation devient une pièce unique, mêlant récupération, design et expression personnelle tout en réduisant les déchets.",
+    "niveau": "Débutant",
+    "materiel": "• Objets usagés (vêtements, meubles, boîtes…)\n• Peintures, vernis\n• Colle forte\n• Ciseaux, cutter\n• Tissus, papiers, matériaux variés\n• Outils selon projet (pinceaux, tournevis, aiguille…)",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "https://i.pinimg.com/1200x/55/ba/8b/55ba8b3d129148d6c0350ba63f7d6993.jpg",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/up-cycling/"
+  },
+  {
+    "nom": "Attrappe-rêve",
+    "categorie": "Arts textiles & décoratives",
+    "description": "L’attrape-rêves est une création artisanale composée d’un cercle tissé en forme de toile, décoré de plumes et de perles. Réaliser un attrape-rêves est une activité apaisante et symbolique, invitant à se concentrer sur les gestes répétitifs et l’harmonie des matériaux pour créer un objet protecteur et décoratif.",
+    "niveau": "Débutant",
+    "materiel": "• Cercle en métal ou en bois\n• Fil ou corde fine\n• Plumes\n• Perles\n• Rubans, dentelle\n• Ciseaux, colle",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/attrape-reve/"
+  },
+  {
+    "nom": "Pyrogravure",
+    "categorie": "Arts textiles & décoratives",
+    "description": "La pyrogravure consiste à dessiner en brûlant légèrement la surface du bois grâce à un outil chauffant. Elle permet d’obtenir des traits précis, des ombrages et des textures uniques. Cette technique demande calme et contrôle et offre des créations chaleureuses et durables au rendu naturel et authentique.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Pyrograveur électrique\n• Pointes interchangeables\n• Plaques de bois brut (tilleul, bouleau…)\n• Papier carbone (optionnel)\n• Crayon pour esquisse\n• Vernis de protection",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": "https://fr.pinterest.com/artcreatifmeg/pyrogravure/"
   }
 ]
