@@ -1,0 +1,1045 @@
+[
+ {
+   "Activité": "Dessine la première plante que tu vois.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Très facile",
+   "Code": "#FF5733",
+   "Couleur": "Rouge mandarine"
+ },
+ {
+   "Activité": "Ferme les yeux et dessine un portrait.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#FF6F61",
+   "Couleur": "Corail vif"
+ },
+ {
+   "Activité": "Dessine un objet à portée de main sans lever le crayon.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#FF8D72",
+   "Couleur": "Saumon doux"
+ },
+ {
+   "Activité": "Dessine ta main en regardant ta main, pas ton papier.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#FFA07A",
+   "Couleur": "Saumon clair"
+ },
+ {
+   "Activité": "Dessine ton humeur du moment sous forme d’abstraction.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#FFC1A1",
+   "Couleur": "Pêche pastel"
+ },
+ {
+   "Activité": "Dessine un animal réel, mais avec des proportions exagérées.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#FFD7B5",
+   "Couleur": "Abricot crème"
+ },
+ {
+   "Activité": "Dessine une chaise comme si elle appartenait à un dessin animé.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#FFE8CC",
+   "Couleur": "Beige pastel"
+ },
+ {
+   "Activité": "Dessine un objet en 30 traits maximum.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#FFF2E0",
+   "Couleur": "Ivoire doux"
+ },
+ {
+   "Activité": "Dessine ton objet préféré en miniature.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#FFF8E6",
+   "Couleur": "Crème légère"
+ },
+ {
+   "Activité": "Dessine ton téléphone comme s’il venait du futur.",
+   "Catégorie": "Observation",
+   "Niveau": "Facile",
+   "Code": "#FFFBEF",
+   "Couleur": "Blanc cassé chaud"
+ },
+ {
+   "Activité": "Dessine un paysage imaginaire en 1 minute.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#F9E79F",
+   "Couleur": "Jaune pastel"
+ },
+ {
+   "Activité": "Transforme des formes aléatoires en personnages.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#F7DC6F",
+   "Couleur": "Jaune sable"
+ },
+ {
+   "Activité": "Dessine une fleur sans regarder ta feuille.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#F4D03F",
+   "Couleur": "Jaune soleil"
+ },
+ {
+   "Activité": "Dessine une scène en triangles.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Intermédiaire",
+   "Code": "#F1C40F",
+   "Couleur": "Or vif"
+ },
+ {
+   "Activité": "Dessine ton reflet dans une surface improvisée.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#D4AC0D",
+   "Couleur": "Ocre doré"
+ },
+ {
+   "Activité": "Dessine ce que tu entends.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#B7950B",
+   "Couleur": "Or antique"
+ },
+ {
+   "Activité": "Dessine une spirale et remplis-la de textures.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#FDEBD0",
+   "Couleur": "Amande douce"
+ },
+ {
+   "Activité": "Dessine une maison en 10 secondes puis améliore-la.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#FAD7A0",
+   "Couleur": "Miel pâle"
+ },
+ {
+   "Activité": "Dessine un robot inspiré d’un objet proche.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#F5CBA7",
+   "Couleur": "Caramel pastel"
+ },
+ {
+   "Activité": "Dessine un paysage avec des lignes droites.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#EDBB99",
+   "Couleur": "Caramel doux"
+ },
+ {
+   "Activité": "Dessine ton animal préféré sans le regarder.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#E59866",
+   "Couleur": "Cannelle claire"
+ },
+ {
+   "Activité": "Dessine un aliment que tu aimes.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#DC7633",
+   "Couleur": "Orange terre"
+ },
+ {
+   "Activité": "Dessine une carte au trésor de ton environnement.",
+   "Catégorie": "Écriture",
+   "Niveau": "Facile",
+   "Code": "#D35400",
+   "Couleur": "Orange brûlé"
+ },
+ {
+   "Activité": "Dessine un monstre amical.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#BA4A00",
+   "Couleur": "Ambre profond"
+ },
+ {
+   "Activité": "Dessine un objet comme si tu avais 5 ans.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#A04000",
+   "Couleur": "Terre rousse"
+ },
+ {
+   "Activité": "Dessine un objet comme s’il valait 1 million d’euros.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#873600",
+   "Couleur": "Marron chaud"
+ },
+ {
+   "Activité": "Dessine des bulles et remplis-les d’émotions.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#6E2C00",
+   "Couleur": "Chocolat brun"
+ },
+ {
+   "Activité": "Dessine une silhouette de fenêtre.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#D98880",
+   "Couleur": "Rose thé"
+ },
+ {
+   "Activité": "Transforme un nuage en une autre forme.",
+   "Catégorie": "Écriture",
+   "Niveau": "Très facile",
+   "Code": "#F1948A",
+   "Couleur": "Rose tendre"
+ },
+ {
+   "Activité": "Crée une BD en 3 cases.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Intermédiaire",
+   "Code": "#F5B7B1",
+   "Couleur": "Rose poudré"
+ },
+ {
+   "Activité": "Écris une phrase commençant par 'Aujourd’hui je choisis...'.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#FADBD8",
+   "Couleur": "Rose quartz"
+ },
+ {
+   "Activité": "Écris un haïku.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#FDEDEC",
+   "Couleur": "Rose perle"
+ },
+ {
+   "Activité": "Crée une mini-histoire avec 5 mots.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Intermédiaire",
+   "Code": "#F9EBEA",
+   "Couleur": "Rose ivoire"
+ },
+ {
+   "Activité": "Décris ton environnement comme un extraterrestre.",
+   "Catégorie": "Écriture",
+   "Niveau": "Facile",
+   "Code": "#C39BD3",
+   "Couleur": "Lavande douce"
+ },
+ {
+   "Activité": "Résume ton humeur par une métaphore.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#BB8FCE",
+   "Couleur": "Mauve pastel"
+ },
+ {
+   "Activité": "Écris 3 phrases avec des mots de 4 lettres max.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#A569BD",
+   "Couleur": "Violet tendre"
+ },
+ {
+   "Activité": "Écris sans t’arrêter pendant 1 minute.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Très facile",
+   "Code": "#8E44AD",
+   "Couleur": "Violet royal"
+ },
+ {
+   "Activité": "Invente un proverbe.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#7D3C98",
+   "Couleur": "Violet intense"
+ },
+ {
+   "Activité": "Écris 10 rimes.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Intermédiaire",
+   "Code": "#6C3483",
+   "Couleur": "Prune sombre"
+ },
+ {
+   "Activité": "Écris une lettre à ton toi futur.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#F5EEF8",
+   "Couleur": "Lavande pâle"
+ },
+ {
+   "Activité": "Crée un slogan pour un objet.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#EBDEF0",
+   "Couleur": "Parme pastel"
+ },
+ {
+   "Activité": "Liste 5 choses belles.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#E8DAEF",
+   "Couleur": "Lilas doux"
+ },
+ {
+   "Activité": "Transforme un fait banal en phrase littéraire.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#D7BDE2",
+   "Couleur": "Lilas brume"
+ },
+ {
+   "Activité": "Décris un bruit poétiquement.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#D2B4DE",
+   "Couleur": "Parme brumeux"
+ },
+ {
+   "Activité": "Dialogue entre deux objets.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#A3E4D7",
+   "Couleur": "Menthe fraîche"
+ },
+ {
+   "Activité": "Décris la journée d’une chaussure.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Très facile",
+   "Code": "#76D7C4",
+   "Couleur": "Menthe douce"
+ },
+ {
+   "Activité": "Micro-histoire en 3 lignes.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Très facile",
+   "Code": "#48C9B0",
+   "Couleur": "Vert jade"
+ },
+ {
+   "Activité": "Pose une question philosophique.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#1ABC9C",
+   "Couleur": "Turquoise"
+ },
+ {
+   "Activité": "Devine un secret d’un arbre.",
+   "Catégorie": "Écriture",
+   "Niveau": "Très facile",
+   "Code": "#17A589",
+   "Couleur": "Émeraude claire"
+ },
+ {
+   "Activité": "Invente un titre de film.",
+   "Catégorie": "Observation",
+   "Niveau": "Facile",
+   "Code": "#148F77",
+   "Couleur": "Vert océan"
+ },
+ {
+   "Activité": "Dessine un objet de mémoire.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#117864",
+   "Couleur": "Vert profond"
+ },
+ {
+   "Activité": "Dessine une ombre.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#0E6251",
+   "Couleur": "Vert foncé"
+ },
+ {
+   "Activité": "Décris 5 textures autour de toi.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#D1F2EB",
+   "Couleur": "Vert pastel"
+ },
+ {
+   "Activité": "Touche un objet et dessine-le.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#EAFAF1",
+   "Couleur": "Vert neige"
+ },
+ {
+   "Activité": "Dessine un détail exagéré.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Intermédiaire",
+   "Code": "#D4EFDF",
+   "Couleur": "Menthe glacée"
+ },
+ {
+   "Activité": "Liste 10 objets d’une même couleur.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#ABEBC6",
+   "Couleur": "Pistache"
+ },
+ {
+   "Activité": "Décris un rayon de lumière.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#82E0AA",
+   "Couleur": "Vert anis"
+ },
+ {
+   "Activité": "Transforme une forme naturelle en dessin.",
+   "Catégorie": "Écriture",
+   "Niveau": "Très facile",
+   "Code": "#58D68D",
+   "Couleur": "Vert pomme"
+ },
+ {
+   "Activité": "Croque un mouvement.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#2ECC71",
+   "Couleur": "Vert herbe"
+ },
+ {
+   "Activité": "Transforme 5 sons en symboles.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#28B463",
+   "Couleur": "Vert forêt clair"
+ },
+ {
+   "Activité": "Transforme un doodle en personnage.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#239B56",
+   "Couleur": "Sapin clair"
+ },
+ {
+   "Activité": "Fusionne deux animaux.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#1D8348",
+   "Couleur": "Sapin"
+ },
+ {
+   "Activité": "Transforme un mot en dessin.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#186A3B",
+   "Couleur": "Forêt profonde"
+ },
+ {
+   "Activité": "Crée une carte postale imaginaire.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#145A32",
+   "Couleur": "Forêt sombre"
+ },
+ {
+   "Activité": "Dessine seulement avec des spirales.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#D5F5E3",
+   "Couleur": "Vert mousse pastel"
+ },
+ {
+   "Activité": "Dessine un objet réparé étrangement.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#AED6F1",
+   "Couleur": "Bleu clair"
+ },
+ {
+   "Activité": "Transforme ton prénom en logo.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#85C1E9",
+   "Couleur": "Bleu ciel"
+ },
+ {
+   "Activité": "Dessine un objet vivant.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#5DADE2",
+   "Couleur": "Bleu azur"
+ },
+ {
+   "Activité": "Simplifie un objet en icône.",
+   "Catégorie": "Dessin",
+   "Niveau": "Facile",
+   "Code": "#3498DB",
+   "Couleur": "Bleu brillant"
+ },
+ {
+   "Activité": "Dessine un personnage à partir d’un emoji.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#2E86C1",
+   "Couleur": "Bleu vif"
+ },
+ {
+   "Activité": "Dessine une pièce d’une autre planète.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#2874A6",
+   "Couleur": "Bleu profond"
+ },
+ {
+   "Activité": "Transforme une tache en dessin.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#21618C",
+   "Couleur": "Bleu nuit clair"
+ },
+ {
+   "Activité": "Dessine un labyrinthe simple.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#1B4F72",
+   "Couleur": "Bleu nuit"
+ },
+ {
+   "Activité": "Ville composée uniquement de cercles.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#154360",
+   "Couleur": "Bleu marine"
+ },
+ {
+   "Activité": "Potion magique et bouteille.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#EBF5FB",
+   "Couleur": "Bleu neige"
+ },
+ {
+   "Activité": "Dessine 5 objets en 1 minute.",
+   "Catégorie": "Dessin",
+   "Niveau": "Facile",
+   "Code": "#D6EAF8",
+   "Couleur": "Bleu pastel"
+ },
+ {
+   "Activité": "Autoportrait en 20 secondes.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#D4E6F1",
+   "Couleur": "Bleu ardoise clair"
+ },
+ {
+   "Activité": "Animal en 15 secondes.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#A9CCE3",
+   "Couleur": "Bleu brume"
+ },
+ {
+   "Activité": "3 versions d’un dessin à vitesse différente.",
+   "Catégorie": "Écriture",
+   "Niveau": "Très facile",
+   "Code": "#7FB3D5",
+   "Couleur": "Bleu pâle"
+ },
+ {
+   "Activité": "Mini-paysage en 1 minute.",
+   "Catégorie": "Dessin",
+   "Niveau": "Facile",
+   "Code": "#FDEBD0",
+   "Couleur": "Beige rosé"
+ },
+ {
+   "Activité": "Dessine la météo.",
+   "Catégorie": "Écriture",
+   "Niveau": "Facile",
+   "Code": "#FADBD8",
+   "Couleur": "Rose ivoire"
+ },
+ {
+   "Activité": "Dessine ton humeur en une forme.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#EBDEF0",
+   "Couleur": "Mauve pâle"
+ },
+ {
+   "Activité": "Dessine un aliment en 20 sec.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#EAECEE",
+   "Couleur": "Gris très clair"
+ },
+ {
+   "Activité": "Montagne en 10 lignes.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#D5DBDB",
+   "Couleur": "Gris perle"
+ },
+ {
+   "Activité": "Geste unique continu.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#CACFD2",
+   "Couleur": "Gris doux"
+ },
+ {
+   "Activité": "Dessine un objet sous angle étrange.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Intermédiaire",
+   "Code": "#ABB2B9",
+   "Couleur": "Gris bleu"
+ },
+ {
+   "Activité": "Trace le contour d’un objet posé.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#AEB6BF",
+   "Couleur": "Gris acier"
+ },
+ {
+   "Activité": "Invente une nouvelle fonction à un objet.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#85929E",
+   "Couleur": "Gris froid"
+ },
+ {
+   "Activité": "Imagine la vie d’un objet.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#5D6D7E",
+   "Couleur": "Gris ardoise"
+ },
+ {
+   "Activité": "Crée un motif inspiré d’un objet.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#34495E",
+   "Couleur": "Bleu acier"
+ },
+ {
+   "Activité": "Version mignonne d’un objet.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Intermédiaire",
+   "Code": "#2C3E50",
+   "Couleur": "Bleu nuit graphite"
+ },
+ {
+   "Activité": "Version maléfique d’un objet.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#17202A",
+   "Couleur": "Noir bleuté"
+ },
+ {
+   "Activité": "Version futuriste d’un objet classique.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#FBFCFC",
+   "Couleur": "Blanc froid"
+ },
+ {
+   "Activité": "Combine deux objets.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#F4F6F7",
+   "Couleur": "Gris neige"
+ },
+ {
+   "Activité": "Dessine un objet en lévitation.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#E5E7E9",
+   "Couleur": "Gris clair chaud"
+ },
+ {
+   "Activité": "Écris un mot décoré.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Intermédiaire",
+   "Code": "#CCD1D1",
+   "Couleur": "Gris brouillard"
+ },
+ {
+   "Activité": "Prénom en style médiéval.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#BFC9CA",
+   "Couleur": "Gris pierre"
+ },
+ {
+   "Activité": "Tag artistique.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#AAB7B8",
+   "Couleur": "Gris galet"
+ },
+ {
+   "Activité": "Mot en simple/décoré/stylisé.",
+   "Catégorie": "Écriture",
+   "Niveau": "Très facile",
+   "Code": "#99A3A4",
+   "Couleur": "Gris minéral"
+ },
+ {
+   "Activité": "Mot en miroir.",
+   "Catégorie": "Observation",
+   "Niveau": "Facile",
+   "Code": "#7F8C8D",
+   "Couleur": "Gris urbain"
+ },
+ {
+   "Activité": "Lettres transformées en créatures.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#707B7C",
+   "Couleur": "Gris béton"
+ },
+ {
+   "Activité": "Journée en typographie expressive.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#616A6B",
+   "Couleur": "Gris anthracite doux"
+ },
+ {
+   "Activité": "Invente 5 lettres d’un alphabet.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Très facile",
+   "Code": "#4D5656",
+   "Couleur": "Gris anthracite"
+ },
+ {
+   "Activité": "Lettres déformées.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#2F3636",
+   "Couleur": "Gris profond"
+ },
+ {
+   "Activité": "Crée un monogramme.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#212F3C",
+   "Couleur": "Noir ardoise"
+ },
+ {
+   "Activité": "Gribouillis + zones colorées.",
+   "Catégorie": "Écriture",
+   "Niveau": "Très facile",
+   "Code": "#1C2833",
+   "Couleur": "Noir pétrole"
+ },
+ {
+   "Activité": "Composition avec 10 lignes.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#FDEDEC",
+   "Couleur": "Rose lait"
+ },
+ {
+   "Activité": "Feuille pleine de cercles.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#F6DDCC",
+   "Couleur": "Vanille rosée"
+ },
+ {
+   "Activité": "Formes géométriques chevauchées.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#E8F8F5",
+   "Couleur": "Aqua pastel"
+ },
+ {
+   "Activité": "Dessine uniquement des carrés.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Facile",
+   "Code": "#FEF9E7",
+   "Couleur": "Jaune crème"
+ },
+ {
+   "Activité": "Motif répétitif.",
+   "Catégorie": "Dessin",
+   "Niveau": "Facile",
+   "Code": "#FEF5E7",
+   "Couleur": "Pêche ivoire"
+ },
+ {
+   "Activité": "Dessin basé sur un rythme.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#EBF5E2",
+   "Couleur": "Vert ivoire"
+ },
+ {
+   "Activité": "Explosion abstraite.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#EAF2F8",
+   "Couleur": "Bleu ivoire"
+ },
+ {
+   "Activité": "Vague stylisée.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Facile",
+   "Code": "#FCF3CF",
+   "Couleur": "Jaune sable doux"
+ },
+ {
+   "Activité": "Sentiment en diagramme.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#F9E79F",
+   "Couleur": "Jaune pastel vif"
+ },
+ {
+   "Activité": "Dessine ton stress version drôle.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#FDEBD0",
+   "Couleur": "Sable pâle"
+ },
+ {
+   "Activité": "Dessine ce qui te calme.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#FDF2E9",
+   "Couleur": "Amande crème"
+ },
+ {
+   "Activité": "Dessine une victoire récente.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#F8F9F9",
+   "Couleur": "Neige neutre"
+ },
+ {
+   "Activité": "Dessine ce que tu veux attirer.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#E8E8E8",
+   "Couleur": "Gris ultra clair"
+ },
+ {
+   "Activité": "Endroit sûr en dessin.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#D0D3D4",
+   "Couleur": "Gris brume moyenne"
+ },
+ {
+   "Activité": "Dessine un rêve.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#B3B6B7",
+   "Couleur": "Gris argent"
+ },
+ {
+   "Activité": "Dessine une émotion en couleurs.",
+   "Catégorie": "Écriture",
+   "Niveau": "Très facile",
+   "Code": "#979A9A",
+   "Couleur": "Gris métal"
+ },
+ {
+   "Activité": "Liste 5 sources d’énergie.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#7B7D7D",
+   "Couleur": "Gris urbain foncé"
+ },
+ {
+   "Activité": "Version super-héros de toi.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#626567",
+   "Couleur": "Gris industriel"
+ },
+ {
+   "Activité": "Dessine une amulette.",
+   "Catégorie": "Observation",
+   "Niveau": "Intermédiaire",
+   "Code": "#4D5656",
+   "Couleur": "Graphite doux"
+ },
+ {
+   "Activité": "Poisson en une ligne.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#424949",
+   "Couleur": "Graphite"
+ },
+ {
+   "Activité": "Paysage dans un coin.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#1B2631",
+   "Couleur": "Marine noire"
+ },
+ {
+   "Activité": "Visage géométrique.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#212121",
+   "Couleur": "Noir soft"
+ },
+ {
+   "Activité": "Drapeau de ton humeur.",
+   "Catégorie": "Écriture",
+   "Niveau": "Intermédiaire",
+   "Code": "#000000",
+   "Couleur": "Noir pur"
+ },
+ {
+   "Activité": "Dessine ton repas préféré.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#FFEBEE",
+   "Couleur": "Rose porcelaine"
+ },
+ {
+   "Activité": "Météo imaginaire.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#FFF8E1",
+   "Couleur": "Or pâle"
+ },
+ {
+   "Activité": "Signature artistique.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#FFF3E0",
+   "Couleur": "Abricot clair"
+ },
+ {
+   "Activité": "Objet fragmenté.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Intermédiaire",
+   "Code": "#E3F2FD",
+   "Couleur": "Bleu givré"
+ },
+ {
+   "Activité": "Symbole du mois.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Intermédiaire",
+   "Code": "#E8EAF6",
+   "Couleur": "Lavande grise"
+ },
+ {
+   "Activité": "Bonhomme bâton expressif.",
+   "Catégorie": "Dessin",
+   "Niveau": "Intermédiaire",
+   "Code": "#F3E5F5",
+   "Couleur": "Mauve lait"
+ },
+ {
+   "Activité": "Animal jamais vu.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Facile",
+   "Code": "#FF5733",
+   "Couleur": "Rouge mandarine"
+ },
+ {
+   "Activité": "Horloge énergétique.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#FF6F61",
+   "Couleur": "Corail vif"
+ },
+ {
+   "Activité": "Première idée venue.",
+   "Catégorie": "Jeu rapide",
+   "Niveau": "Très facile",
+   "Code": "#FF8D72",
+   "Couleur": "Saumon doux"
+ },
+ {
+   "Activité": "Ton environnement en mode jeu vidéo.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#FFA07A",
+   "Couleur": "Saumon clair"
+ },
+ {
+   "Activité": "Objet kawaii.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Intermédiaire",
+   "Code": "#FFC1A1",
+   "Couleur": "Pêche pastel"
+ },
+ {
+   "Activité": "Illusion simple.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Très facile",
+   "Code": "#FFD7B5",
+   "Couleur": "Abricot crème"
+ },
+ {
+   "Activité": "Mini mandala.",
+   "Catégorie": "Dessin",
+   "Niveau": "Facile",
+   "Code": "#FFE8CC",
+   "Couleur": "Beige pastel"
+ },
+ {
+   "Activité": "Lettre en animal.",
+   "Catégorie": "Observation",
+   "Niveau": "Très facile",
+   "Code": "#FFF2E0",
+   "Couleur": "Ivoire doux"
+ },
+ {
+   "Activité": "Boisson en personnage.",
+   "Catégorie": "Dessin",
+   "Niveau": "Très facile",
+   "Code": "#FFF8E6",
+   "Couleur": "Crème légère"
+ },
+ {
+   "Activité": "Micro vs géant en dessin.",
+   "Catégorie": "Créativité libre",
+   "Niveau": "Très facile",
+   "Code": "#FFFBEF",
+   "Couleur": "Blanc cassé chaud"
+ },
+ {
+   "Activité": "Monstre à 3 émotions.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Intermédiaire",
+   "Code": "#F9E79F",
+   "Couleur": "Jaune pastel"
+ },
+ {
+   "Activité": "Véhicule imaginaire.",
+   "Catégorie": "Écriture",
+   "Niveau": "Facile",
+   "Code": "#FBFCFC",
+   "Couleur": "Blanc froid"
+ },
+ {
+   "Activité": "Fantôme amical.",
+   "Catégorie": "Relaxation",
+   "Niveau": "Très facile",
+   "Code": "#F4F6F7",
+   "Couleur": "Gris neige"
+ },
+ {
+   "Activité": "Dessine un trésor.",
+   "Catégorie": "Observation",
+   "Niveau": "Facile",
+   "Code": "#E5E7E9",
+   "Couleur": "Gris clair chaud"
+ }
+]
