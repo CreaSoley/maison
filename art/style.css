@@ -100,3 +100,63 @@ h3{margin:0;font-size:20px}
 
 /* cute icon styling (optionnel small) */
 .material-icons{vertical-align:middle}
+/* === Desktop header centré === */
+@media (min-width: 768px) {
+  .appbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .logo-img {
+    height: 60px;      /* plus grand */
+  }
+
+  .brand-title {
+    font-size: 1.8rem; /* titre plus grand */
+  }
+
+  /* La partie droite ne doit plus pousser le logo */
+  .appbar-right {
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
+/* === Mobile améliorations === */
+@media (max-width: 767px) {
+
+  .search-wrapper {
+    flex: 1;
+    max-width: 100%;
+  }
+
+  #quickSearch {
+    font-size: 1rem;
+    padding: 10px 12px;
+    width: 100%;
+  }
+
+  /* Empêcher le bouton surprise de dépasser horizontalement */
+  .appbar-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  #btnRandom {
+    white-space: nowrap;
+    padding: 8px 12px;
+  }
+}
+
