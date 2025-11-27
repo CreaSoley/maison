@@ -232,3 +232,13 @@ footer p {
     opacity: 1;
     transform: translate(5px, -5px);
 }
+/* Animation du défi */
+#defi-du-jour-bloc {
+    transition: transform 0.4s ease, opacity 0.4s ease, border-color 0.4s ease;
+    opacity: 1;
+}
+
+.bloc-animate {
+    opacity: 0;
+    transform: scale(0.9);
+}
