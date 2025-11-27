@@ -1,0 +1,413 @@
+[
+  {
+    "nom": "Altered art",
+    "categorie": "Arts textiles & décoratives",
+    "description": "L’altered art consiste à transformer un objet existant en œuvre créative par superposition, collage, peinture et détournement. Chaque pièce devient un support d’expression unique, mêlant récupération, expérimentation et imagination. Cette technique encourage la liberté totale et la réinvention d’objets du quotidien en pièces artistiques surprenantes.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Vieux livres, objets, cartes, boîtes…\n• Peinture, encres, tampons\n• Ciseaux, cutter\n• Colle, gesso, medium gel\n• Collages, images, fragments divers",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+  {
+    "nom": "Arm knitting",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Le arm knitting permet de tricoter uniquement avec les bras, créant des mailles géantes et des textures volumineuses. Rapide et accessible, il permet de réaliser couvertures, écharpes ou plaids en peu de temps. Cette technique physique et ludique donne un rendu moderne et chaleureux.",
+    "niveau": "Débutant",
+    "materiel": "• Laine très épaisse (type jumbo)\n• Bras comme aiguilles\n• Ciseaux\n• Aiguille à laine (optionnelle)",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+  {
+    "nom": "Broderie de perles",
+    "categorie": "Arts textiles & décoratives",
+    "description": "La broderie de perles consiste à coudre des perles une par une ou en lignes pour créer motifs et textures brillantes. Patiente et minutieuse, cette technique offre des effets luxueux et raffinés. Elle permet de personnaliser vêtements, bijoux ou décorations avec éclat et précision.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Tissu tendu dans un tambour\n• Aiguille fine\n• Perles (rocaille, verre…)\n• Fil nylon ou polyester\n• Crayon pour tracer le motif",
+    "youtube": "https://www.youtube.com/@jamiecloudeakin8543",
+    "youtubeList": ["https://www.youtube.com/@jamiecloudeakin8543"],
+    "photos": "",
+    "galerie": ""
+  },
+  {
+    "nom": "Broderie traditionnelle",
+    "categorie": "Arts textiles & décoratives",
+    "description": "La broderie traditionnelle utilise différents points—feston, tige, nœud, passé plat—pour créer motifs décoratifs sur tissu. Cette technique allie précision et créativité. Elle est idéale pour personnaliser objets textiles ou simplement pour se détendre. Le geste répétitif favorise concentration et apaisement, tout en produisant un résultat délicat.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Tambour à broder\n• Aiguilles\n• Fils (coton, soie…)\n• Tissu (lin, coton)\n• Ciseaux de broderie\n• Crayon effaçable",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+  {
+    "nom": "Coloriage artistique",
+    "categorie": "Arts visuels",
+    "description": "Le coloriage artistique explore la couleur, les ombrages et les dégradés pour donner vie à des illustrations détaillées. Cette activité relaxante stimule la concentration et l’harmonie visuelle. Elle permet d’expérimenter palettes, contrastes et techniques d’ombrage pour créer des pages expressives, vibrantes et personnelles.",
+    "niveau": "Débutant",
+    "materiel": "• Livres ou dessins imprimés\n• Crayons de couleur, feutres, aquarelle\n• Estompe, gomme\n• Papier épais (si impression maison)",
+    "youtube": "https://youtube.com/playlist?list=PLzxkLWoZuV05sdKW1977F1_QNq_sUL4b0&si=IJotmi8fT-sJCQPN",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLzxkLWoZuV05sdKW1977F1_QNq_sUL4b0&si=IJotmi8fT-sJCQPN"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+  {
+    "nom": "Couture créative",
+    "categorie": "Arts textiles & décoratives",
+    "description": "La couture créative permet de réaliser accessoires, déco ou vêtements en mêlant formes, textures et couleurs. Elle laisse libre cours à l’imagination, du simple tote bag aux pièces plus complexes. Cette technique valorise le fait-main, la personnalisation et la transformation de tissus en objets uniques.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Machine à coudre ou aiguille\n• Tissus variés\n• Fil assorti\n• Épingles, ciseaux, mètre ruban\n• Patron (optionnel)",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Cyanotype sur papier",
+    "categorie": "Arts du livre & papier",
+    "description": "Le cyanotype est un procédé photographique ancien produisant une image bleu profond. Le papier enduit de solution sensible est exposé à la lumière avec des objets posés dessus, créant silhouettes et ombres. Le rinçage révèle un bleu intense et poétique. Une technique simple, magique et expérimentale.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Kit de solutions photosensibles\n• Pinceau ou bac pour enduire\n• Papier épais\n• Objets ou végétaux\n• Plaque de verre\n• Lumière UV ou soleil\n• Eau pour rinçage",
+    "youtube": "https://youtube.com/playlist?list=PLPN-X5shpgMTztRn73WcylUjBxAjLnLEO&si=kZUHR8D1pBsESOlF",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLPN-X5shpgMTztRn73WcylUjBxAjLnLEO&si=kZUHR8D1pBsESOlF"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Embossage à chaud",
+    "categorie": "Arts visuels",
+    "description": "L’embossage à chaud crée un relief brillant ou texturé en chauffant une poudre spéciale déposée sur une encre collante. Cette technique transforme rapidement un motif en élément décoratif élégant. Idéale pour cartes, lettrages ou embellissements, elle ajoute une touche professionnelle et tactile aux créations.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Poudre à embosser\n• Encre à séchage lent (type Versamark)\n• Pistolet chauffant\n• Tampons\n• Papier épais\n• Pinceau fin",
+    "youtube": "https://youtube.com/playlist?list=PLsfJ4IM8u8rVvHuMHnSov4PXBaQXS0CYQ&si=ro0LItywzbkf7mOo",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLsfJ4IM8u8rVvHuMHnSov4PXBaQXS0CYQ&si=ro0LItywzbkf7mOo"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Feutrage",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Le feutrage transforme la laine en matière dense en l’agglomérant par pression, friction ou piquage. Il permet de créer figurines, accessoires ou décors textile. Technique sensorielle et relaxante, elle offre une grande liberté de formes et textures.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Laine cardée\n• Aiguilles de feutrage\n• Support mousse\n• Eau chaude + savon (pour feutrage humide)",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Frottage",
+    "categorie": "Arts du livre & papier",
+    "description": "Le frottage consiste à révéler les textures d’un objet en frottant un médium sur du papier posé dessus. Les motifs apparaissent comme par magie, créant compositions surprenantes. Technique simple, expérimentale et idéale pour stimuler l’imagination.",
+    "niveau": "Débutant",
+    "materiel": "• Crayons\n• Fusain ou craies\n• Papiers texturés ou objets à relief\n• Feuilles de papier",
+
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Gouache",
+    "categorie": "Arts visuels",
+    "description": "Comparable à l’aquarelle mais opaque, la gouache offre couleurs intenses et corrections faciles. Elle permet détails, aplats et superpositions. Technique idéale pour illustrations expressives, affiches ou études.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Gouache en tubes\n• Pinceaux\n• Palette\n• Papier épais\n• Eau",
+    "youtube": "https://youtube.com/playlist?list=PLXi9OpPr9d9wAt8Ct7DJcHxTSNEW6Ruo2&si=IcopDfEFgUqj_2mu",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLXi9OpPr9d9wAt8Ct7DJcHxTSNEW6Ruo2&si=IcopDfEFgUqj_2mu"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Graphite / crayon",
+    "categorie": "Arts visuels",
+    "description": "Le graphite permet dessins précis, ombrages subtils et rendus réalistes. Très polyvalent, il s’adapte du croquis rapide au dessin détaillé. Les différentes duretés offrent gamme complète d’intensité.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Crayons HB à 8B\n• Gomme\n• Taille-crayon\n• Estompe\n• Papier lisse",
+    "youtube": "https://youtube.com/playlist?list=PLXi9OpPr9d9xKjHq-LtNeDSHlNSBvA0m1&si=qryu26uD_td7Q7ge",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLXi9OpPr9d9xKjHq-LtNeDSHlNSBvA0m1&si=qryu26uD_td7Q7ge"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Gravure / estampage métal",
+    "categorie": "Arts textiles & décoratives",
+    "description": "L’estampage métal consiste à repousser ou graver la surface pour créer reliefs et motifs. Cette technique tactile donne des effets raffinés et décoratifs, parfaits pour objets, bijoux ou carnets.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Feuilles de métal souple\n• Stylet\n• Plaques texturées\n• Outils d’embossage\n• Patines",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Illustrations digitales",
+    "categorie": "Arts visuels",
+    "description": "L’illustration digitale offre liberté totale : couleurs, textures, calques, corrections. Elle permet de créer visuels modernes, précis ou stylisés, tout en conservant un aspect artistique grâce aux brushes variés.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Tablette graphique\n• Logiciel (Procreate, Photoshop…)\n• Stylet",
+    "youtube": "https://youtube.com/playlist?list=PLvDSYqFjjGrhgQ21XS86ia0zGxAjwlemO&si=bYjgZqdweqVg6neU",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLvDSYqFjjGrhgQ21XS86ia0zGxAjwlemO&si=bYjgZqdweqVg6neU"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Kirigami",
+    "categorie": "Arts du livre & papier",
+    "description": "Le kirigami combine découpe et pliage pour créer motifs ajourés, architectures ou cartes 3D. Technique délicate nécessitant précision.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Papier fin\n• Cutter de précision\n• Tapis de coupe",
+    "youtube": "https://youtube.com/playlist?list=PL6GxmFW6SOeIBtMPUaYZK7RXn9YjbRQjp&si=FEtP9_EjTlVmJAo0",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PL6GxmFW6SOeIBtMPUaYZK7RXn9YjbRQjp&si=FEtP9_EjTlVmJAo0"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Livres d’artiste",
+    "categorie": "Arts du livre & papier",
+    "description": "Le livre d’artiste est une œuvre en soi, mêlant texte, images et construction du livre. Forme libre, personnelle et expérimentale.",
+    "niveau": "Intermédiaire/Avancé",
+    "materiel": "• Papiers variés\n• Reliure\n• Encres\n• Collages\n• Outils de coupe",
+    "youtube": "https://youtu.be/b2KFWjS2qrg?si=f4W8c9ZOGzSrkbPr",
+    "youtubeList": [
+      "https://youtu.be/b2KFWjS2qrg?si=f4W8c9ZOGzSrkbPr"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Mandala",
+    "categorie": "Arts visuels",
+    "description": "Dessiner un mandala consiste à créer une structure circulaire harmonieuse. Technique méditative, répétitive et apaisante.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Compas\n• Règles\n• Crayons\n• Stylos fins\n• Papier",
+    "youtube": "https://youtube.com/playlist?list=PLNBTD31lzkloQdXSR6GO3ASmQz50rSFFW&si=nFQr1V-_w93iW4Pn",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLNBTD31lzkloQdXSR6GO3ASmQz50rSFFW&si=nFQr1V-_w93iW4Pn"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "One stroke",
+    "categorie": "Arts visuels",
+    "description": "Méthode consistant à charger un pinceau avec deux couleurs pour obtenir dégradés, ombres et lumières en un seul geste. Technique rapide et élégante basée sur la fluidité et la précision.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Pinceaux plats spécifiques\n• Peinture acrylique\n• Palette\n• Support (papier, bois, toile)",
+    "youtube": "https://youtube.com/playlist?list=PLtmQ8_bTcaKkMdiDizWmgIblmQ1BsVfh8&si=p0WzmEdZZVYWX30l",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLtmQ8_bTcaKkMdiDizWmgIblmQ1BsVfh8&si=p0WzmEdZZVYWX30l"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Papercraft",
+    "categorie": "Arts du livre & papier",
+    "description": "Construction d’objets 3D en papier à partir de patrons. Les pièces découpées, pliées et collées forment maquettes, figurines ou décorations géométriques. Technique demandant précision et patience pour des volumes nets et esthétiques.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Papier épais\n• Ciseaux ou cutter\n• Colle forte ou double-face\n• Règle et plioir",
+    "youtube": "https://youtube.com/playlist?list=PLo2Z-Li8zwDR82vp32Oid5Q9sRtZnRafy&si=qkIEI_07k0pBB5Qh",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLo2Z-Li8zwDR82vp32Oid5Q9sRtZnRafy&si=qkIEI_07k0pBB5Qh"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Patchwork / quilting",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Assemblage de tissus formant motifs géométriques puis quilting traversant plusieurs couches. Technique précise alliant créativité textile et savoir-faire.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Tissus assortis\n• Machine à coudre ou aiguille\n• Règle patchwork, cutter rotatif\n• Molleton et fil",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Pointillisme",
+    "categorie": "Arts visuels",
+    "description": "Technique picturale basée sur l’application de points juxtaposés. Le mélange des couleurs se fait visuellement. Demande minutie et patience, offrant un rendu lumineux vibrant et très graphique.",
+    "niveau": "Intermédiaire",
+    "materiel": "• Feutres fins ou peinture\n• Pinceaux ronds\n• Papier ou toile\n• Gabarits (optionnel)",
+    "youtube": "https://youtube.com/playlist?list=PLR9eSkPP-fKR1Itng4d_u9lET91ZgDV_5&si=q0mRRB5ABNuJSyTy",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLR9eSkPP-fKR1Itng4d_u9lET91ZgDV_5&si=q0mRRB5ABNuJSyTy"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Pop-up (livres animés)",
+    "categorie": "Arts du livre & papier",
+    "description": "Art du découpage et des pliages permettant des éléments en volume qui se déploient en ouvrant une page. Technique combinant créativité et ingénierie du papier. Utilisée pour livres animés et cartes surprenantes.",
+    "niveau": "Intermédiaire/Avancé",
+    "materiel": "• Papier/carton fin\n• Cutter de précision\n• Colle liquide\n• Règle et plioir",
+    "youtube": "https://youtube.com/playlist?list=PLUKN01naXHX5fO0txrVscdjetojHfDIDG&si=k-oyEwLCaaSUsiBx",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLUKN01naXHX5fO0txrVscdjetojHfDIDG&si=k-oyEwLCaaSUsiBx"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Poterie",
+    "categorie": "Arts du livre & papier",
+    "description": "Modelage de l’argile à la main ou au tour. Après séchage et cuisson, les pièces sont décorées et émaillées. Pratique sensorielle et artisanale offrant des formes uniques, utilitaires ou décoratives.",
+    "niveau": "Débutant",
+    "materiel": "• Argile\n• Outils de modelage\n• Tour de potier (optionnel)\n• Four céramique\n• Engobes, émaux",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Punch needle",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Création de boucles de fil formant motifs en relief. Technique simple et relaxante produisant surfaces texturées, coussins, décorations murales. Permet un rendu doux et moderne.",
+    "niveau": "Débutant",
+    "materiel": "• Aiguille punch needle\n• Tissu serré (moine, burlap)\n• Fil épais ou laine\n• Tambour",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Quilling",
+    "categorie": "Arts du livre & papier",
+    "description": "Art d’enrouler des bandes de papier pour former spirales et formes décoratives. Assemblées, elles créent motifs fins, typographies ou illustrations légères. Technique minutieuse offrant élégance et précision.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Bandes de papier\n• Outil enrouleur\n• Colle fine\n• Pince fine",
+    "youtube": "https://youtube.com/playlist?list=PLj6plVlqOPyuDV5_FK1PDx2x8dPmd4B5z&si=KSXw63Olcmuw0QhD",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLj6plVlqOPyuDV5_FK1PDx2x8dPmd4B5z&si=KSXw63Olcmuw0QhD"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Serviettage",
+    "categorie": "Arts du livre & papier",
+    "description": "Technique décorative consistant à coller de fines couches de serviettes sur un support pour obtenir un effet peint. Idéale pour personnaliser objets, boîtes ou mobilier léger. Simple d’accès, elle offre un rendu délicat et détaillé.",
+    "niveau": "Débutant",
+    "materiel": "• Serviettes imprimées\n• Colle-vernis\n• Support (bois, verre, carton)\n• Pinceaux doux",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Sketchnotes",
+    "categorie": "Arts visuels",
+    "description": "Méthode visuelle combinant mots, schémas, pictogrammes et couleurs pour synthétiser des idées. Elle aide à mémoriser, organiser et clarifier les informations. Une technique ludique et efficace pour prise de notes créative, ateliers ou projets personnels.",
+    "niveau": "Débutant",
+    "materiel": "• Carnet ou feuilles\n• Feutres fins\n• Stabilos / brush pens\n• Règle (optionnelle)",
+    "youtube": "https://youtube.com/playlist?list=PLQbZaZ098poLux1BT46LPm6WfHLof4xaK&si=_T_iv9W3eEsjYOE6",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLQbZaZ098poLux1BT46LPm6WfHLof4xaK&si=_T_iv9W3eEsjYOE6"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Tamponnage / carving",
+    "categorie": "Arts du livre & papier",
+    "description": "Technique consistant à sculpter ses propres tampons en gomme pour obtenir motifs uniques. Après gravure, le tampon s’encre et s’imprime sur papier ou tissu. Permet créations personnalisées et répétables, idéale pour journaling, textile ou papeterie.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Gomme à graver\n• Gouges\n• Encreurs\n• Bloc de montage (optionnel)",
+    "youtube": "https://youtube.com/playlist?list=PLcoYsQ1qtslDg_BqLI4uaZCL9-9-tTvf3&si=QaaY6tnkV-Vk1xRn",
+    "youtubeList": [
+      "https://youtube.com/playlist?list=PLcoYsQ1qtslDg_BqLI4uaZCL9-9-tTvf3&si=QaaY6tnkV-Vk1xRn"
+    ],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Tapisserie",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Broderie réalisée sur canevas, formant surfaces denses et motifs colorés. Technique répétitive et relaxante donnant œuvres décoratives texturées, coussins ou panneaux.",
+    "niveau": "Intermédiaire/Avancé",
+    "materiel": "• Toile canevas\n• Fils laine ou coton\n• Aiguille tapisserie\n• Ciseau",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Tataki zomé",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Technique japonaise de teinture par martelage. Les pigments des plantes se transfèrent sur le tissu grâce aux impacts du marteau. Donne empreintes naturelles, aléatoires et poétiques. Une pratique simple, sensorielle et écologique.",
+    "niveau": "Débutant",
+    "materiel": "• Feuilles végétales fraîches\n• Tissu clair en fibres naturelles\n• Marteau\n• Planche de bois",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Teinture textile",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Méthodes de coloration du tissu par immersion, nouage ou réserves. Permet motifs vibrants, dégradés ou effets tie-dye. Technique créative offrant résultats uniques et durables.",
+    "niveau": "Débutant",
+    "materiel": "• Teintures (reactive, végétale…)\n• Bassines\n• Tissus naturels\n• Gants, bâton de mélange",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  },
+
+  {
+    "nom": "Tissage",
+    "categorie": "Arts textiles & décoratives",
+    "description": "Technique textile construisant un tissu en croisant fils de chaîne et de trame. Permet compositions décoratives, panneaux muraux ou objets utilitaires. Très méditative, jouant sur couleurs, textures et rythmes.",
+    "niveau": "Débutant/Intermédiaire",
+    "materiel": "• Métier à tisser\n• Fils de trame et chaîne\n• Aiguille ou navette\n• Peigne",
+    "youtube": "",
+    "youtubeList": [],
+    "photos": "",
+    "galerie": ""
+  }
+]
