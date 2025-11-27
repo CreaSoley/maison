@@ -1,127 +1,280 @@
-/* ========================
-Polices
-======================== */
+/* ======================
+   Theme & font
+   ====================== */
+/* --- Police SPICY (unique, propre) --- */
 @font-face {
-font-family: "Spicy";
-src: url("assets/fonts/Spicy Sale.ttf") format("truetype");
-font-display: swap;
+  font-family: "Spicy";
+  src: url("assets/fonts/Spicy Sale.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-
-body {
-margin: 0;
-padding: 0;
-background: #fcf7ff;
-font-family: "Inter", sans-serif;
+:root{
+  --bg:#fbf7ff;
+  --surface:#fff;
+  --primary:#7b5cff;
+  --muted:#6b7280;
+  --accent1: linear-gradient(90deg,#a2f5d9,#bcd8ff);
+  --card-radius:12px;
+  --shadow: 0 10px 30px rgba(20,24,40,0.06);
+  --kawaii-glow: 0 8px 28px rgba(123,92,255,0.12);
+  --btn-gradient: linear-gradient(90deg,#ffd6e0,#84d9ff);
 }
 
-
-/* ========================
-Header
-======================== */
-.topbar {
-display: flex;
-align-items: center;
-gap: 15px;
-padding: 20px 30px;
+/* Reset */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:#111;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-
-.logo {
-width: 55px;
-height: 55px;
-border-radius: 50%;
-object-fit: contain;
+/* ======================
+   Appbar / header
+   ====================== */
+.appbar{
+  position:sticky;
+  top:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 20px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.85));
+  border-bottom:1px solid rgba(16,24,40,0.04);
+  z-index:60;
 }
 
-
-.header-title {
-font-family: "Spicy", cursive;
-font-size: 28px;
-color: #7f63ff;
-letter-spacing: 1px;
+/* logo block */
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+}
+.logo-img{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  object-fit:contain;       /* <--- corrected: contain keeps the image visible */
+  display:block;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+  background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6));
+  padding:6px;              /* small inner padding so circular border doesn't crop */
+  border:0;
 }
 
+/* Brand title uses SPICY */
+.brand-title{
+  font-size:22px;
+  color:var(--primary);
+  letter-spacing:1px;
+  margin:0;
+}
+.spicy{ font-family:"Spicy", Inter, sans-serif; font-weight:400; }
 
-/* ========================
-Zone de recherche & boutons
-======================== */
-.search-area {
-display: flex;
-gap: 12px;
-padding: 20px;
-justify-content: center;
-align-items: center;
+/* Appbar right area (search + actions) */
+.appbar-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-left:auto;
+  width:100%;
+  max-width:900px;
 }
 
+/* search wrapper + icon */
+.search-wrapper{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:1;
+  max-width:720px;
+}
+.search-icon{
+  width:18px;
+  height:18px;
+  color: #9aa3ff;
+  flex-shrink:0;
+}
+.searchTop{
+  flex:1;
+  padding:12px 14px;
+  border-radius:999px;
+  border:1px solid rgba(16,24,40,0.04);
+  background:#fff;
+  box-shadow:0 6px 18px rgba(15,20,40,0.03);
+  font-size:14px;
+}
+.searchTop::placeholder{ color:#9aa3b5 }
 
-#search {
-width: 45%;
-padding: 12px 18px;
-border-radius: 20px;
-border: none;
-background: white;
-box-shadow: 0 5px 15px rgba(120, 90, 255, 0.12);
+/* ======================
+   Buttons
+   ====================== */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  background:var(--btn-gradient);
+  color:#0a0a0a;
+  box-shadow:0 6px 18px rgba(15,20,40,0.03);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.btn svg{ width:18px; height:18px; display:inline-block; vertical-align:middle; }
+.btn.kawaii{ border-radius:18px; padding:10px 14px; }
+
+/* ghost / primary variants */
+.btn.ghost{
+  background:transparent;
+  border:1px solid rgba(123,92,255,0.12);
+  color:var(--primary);
+}
+.btn.primary{
+  background: linear-gradient(90deg,#ffd6e0,#84d9ff);
 }
 
-
-.btn {
-display: flex;
-align-items: center;
-gap: 8px;
-padding: 10px 18px;
-border-radius: 20px;
-border: none;
-cursor: pointer;
-background: linear-gradient(90deg, #c3a7ff, #9dd0ff);
-color: #3a2f6a;
-font-size: 14px;
-box-shadow: 0 4px 15px rgba(150, 100, 255, 0.15);
-transition: transform 0.2s ease;
+/* hover micro-lift for buttons (desktop) */
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(120,80,255,0.12);
 }
 
-
-.btn:hover {
-transform: translateY(-3px);
-}
-
-
-/* Soft hover suppression mobile */
+/* disable hover transform on touch devices to avoid jumpiness */
 @media (hover: none) {
-.btn:hover {
-transform: none;
+  .btn:hover{ transform:none; box-shadow:0 6px 18px rgba(15,20,40,0.03); }
 }
 
-/* ========================
-Cartes techniques
-======================== */
-.cards {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-gap: 20px;
-padding: 30px;
+/* ======================
+   Container & controls
+   ====================== */
+.container{ max-width:1100px; margin:20px auto; padding:0 16px; }
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  padding:18px;
+  background:var(--surface);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  align-items:end;
+}
+.control-item{ min-width:200px; }
+.small{ display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+select,input{ width:100%; padding:10px; border-radius:10px; border:1px solid #e6e9ef; background:white; }
+
+/* ======================
+   Content / Empty state
+   ====================== */
+.content{ margin-top:16px; }
+.empty{
+  padding:40px;
+  text-align:center;
+  color:var(--muted);
+  background:linear-gradient(90deg, rgba(123,92,255,0.03), rgba(123,92,255,0.01));
+  border-radius:12px;
 }
 
-.card {
-background: #fff;
-border-radius: 20px;
-padding: 20px;
-box-shadow: 0 6px 20px rgba(120, 90, 255, 0.10);
-transition: transform 0.25s ease, box-shadow 0.25s ease;
+/* ======================
+   Grid & Card styles
+   ====================== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+@media(max-width:900px){ .grid{ grid-template-columns:1fr } }
+
+/* base card */
+.card{
+  background:var(--surface);
+  border-radius:12px;
+  padding:16px;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  transition:transform .25s ease, box-shadow .25s ease;
+  will-change:transform,box-shadow;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:visible;
 }
 
-.card:hover {
-transform: translateY(-4px);
-box-shadow: 0 10px 25px rgba(150, 100, 255, 0.15);
+/* hover effect — much softer than before, and no scale to preserve size */
+.card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(150,100,255,0.12);
 }
 
+/* Disable hover on touch devices */
 @media (hover: none) {
-.card:hover {
-transform: none;
-box-shadow: none;
+  .card:hover{ transform:none; box-shadow:var(--shadow); }
 }
-.card h3 {
-font-family: "Spicy", cursive;
-color: #7a54ff;
-margin-top: 0;
+
+/* Photo */
+.photo{
+  width:200px;
+  height:200px;
+  border-radius:12px;
+  overflow:hidden;
+  background:#f1f3f7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.photo img{ width:100%; height:100%; object-fit:cover; }
+
+/* Titles in Spicy Sale */
+h3{ margin:0; font-size:20px; }
+.card h3, .brand-title{ font-family:"Spicy", Inter, sans-serif; }
+
+/* meta and actions */
+.meta{ color:var(--muted); font-size:13px; margin-top:6px; }
+.actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+.print-btn{ padding:8px 12px; border-radius:12px; border:none; cursor:pointer; background:linear-gradient(90deg,#bdf6d6,#bcd8ff); font-weight:700; }
+.link-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:12px;
+  border:none;
+  text-decoration:none;
+  background:linear-gradient(90deg,#fff2f8,#eaf7ff);
+  color:#0a0a0a;
+  font-weight:700;
+}
+
+/* adapt list inside card */
+.card ul{ margin:6px 0 0 18px; padding:0; color:#333; }
+.card pre{ white-space:pre-wrap; font-family:inherit; background:transparent; padding:0; margin:0; }
+
+/* small-note */
+.small-note{ font-size:13px; color:var(--muted); }
+
+/* material icons vertical align */
+.material-icons{ vertical-align:middle; }
+
+/* utility: spacer */
+.spacer{ flex:1; }
+
+/* tiny adjustments for search wrapper and svg alignment */
+.search-wrapper { align-items:center; width:100%; }
+.search-wrapper .search-icon { margin-left:6px; margin-right:6px; color:#c7d2ff; }
+
+/* responsive tweaks */
+@media (max-width:720px){
+  .appbar-right{ max-width:unset; margin-left:8px; }
+  .searchTop{ max-width:100%; }
+  .logo-img{ width:48px; height:48px; }
+  .brand-title{ font-size:18px; }
 }
