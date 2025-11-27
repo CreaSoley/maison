@@ -15,8 +15,28 @@
     </a>
 
     <div class="appbar-right">
-      <input id="quickSearch" class="searchTop" type="search" placeholder="🔎 Rechercher par nom ou matériel..." aria-label="Recherche rapide">
-      <button id="btnRandom" class="btn ghost kawaii" title="Technique surprise">🌈✨ Surprise</button>
+      <!-- Search with inline SVG icon -->
+      <div class="search-wrapper" aria-hidden="false" role="search" style="display:flex;align-items:center;gap:8px;">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+
+        <input id="quickSearch" class="searchTop" type="search" placeholder="Rechercher par nom ou matériel..." aria-label="Recherche rapide">
+      </div>
+
+      <!-- Surprise button (SVG inline kawaii) -->
+      <button id="btnRandom" class="btn ghost kawaii" title="Technique surprise" aria-label="Technique surprise">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2v4"></path>
+          <path d="M12 18v4"></path>
+          <path d="M4 12h4"></path>
+          <path d="M16 12h4"></path>
+          <path d="M5 5l3 3"></path>
+          <path d="M16 16l3 3"></path>
+        </svg>
+        Surprise
+      </button>
     </div>
   </header>
 
@@ -38,7 +58,14 @@
       </div>
 
       <div style="display:flex;align-items:flex-end;gap:8px">
-        <button id="btnDisplay" class="btn primary kawaii" title="Afficher">🔍 Afficher</button>
+        <!-- Afficher button (SVG inline kawaii) -->
+        <button id="btnDisplay" class="btn primary kawaii" title="Afficher" aria-label="Afficher">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="6"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          Afficher
+        </button>
       </div>
 
       <div class="spacer"></div>
