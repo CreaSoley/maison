@@ -1,194 +1,175 @@
 let DATA = [];
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadData();
+document.addEventListener('DOMContentLoaded', () => {
   bindUI();
+  loadData();
 });
 
-// 🔹 Charger le JSON
-function loadData() {
-  fetch("data.json")
-    .then(res => res.json())
-    .then(json => {
-      DATA = json;
+function bindUI(){
+  document.getElementById('btnDisplay').addEventListener('click', applyFilters);
+  document.getElementById('btnRandom').addEventListener('click', pickRandom);
+  document.getElementById('quickSearch').addEventListener('input', quickSearch);
+  document.getElementById('selectTechnique').addEventListener('change', ()=>{
+    const v = document.getElementById('selectTechnique').value;
+    if (v) showTechnique(v);
+  });
+}
 
+function loadData(){
+  fetch('data.json')
+    .then(r => r.json())
+    .then(json => {
+      DATA = json || [];
       populateSelectors();
       showEmpty();
+    })
+    .catch(err => {
+      console.error('Erreur chargement data.json', err);
+      document.getElementById('displayArea').innerHTML = '<div class="empty">Impossible de charger les données.</div>';
     });
 }
 
-function bindUI() {
-  document.getElementById("btnDisplay").onclick = applyFilters;
-  document.getElementById("btnRandom").onclick = pickRandom;
-  document.getElementById("quickSearch").oninput = quickSearch;
+function populateSelectors(){
+  const selTech = document.getElementById('selectTechnique');
+  const selCat = document.getElementById('selectCategory');
+  const selLev = document.getElementById('selectLevel');
 
-  document.getElementById("selectTechnique").onchange = () => {
-    const v = document.getElementById("selectTechnique").value;
-    if (v) showTechnique(v);
-  };
+  selTech.innerHTML = '<option value="">— aucune —</option>' + DATA.map(t => `<option value="${escapeHtml(t.nom)}">${escapeHtml(t.nom)}</option>`).join('');
+
+  const cats = Array.from(new Set(DATA.map(t => t.categorie || '').filter(Boolean))).sort();
+  selCat.innerHTML = '<option value="">— aucune —</option>' + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+
+  const levs = Array.from(new Set(DATA.map(t => t.niveau || '').filter(Boolean))).sort();
+  selLev.innerHTML = '<option value="">— aucun —</option>' + levs.map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
 }
 
-// 🔹 Sélecteurs
-function populateSelectors() {
-  const selTech = document.getElementById("selectTechnique");
-  const selCat = document.getElementById("selectCategory");
-  const selLev = document.getElementById("selectLevel");
+/* Filters */
+function applyFilters(){
+  const name = document.getElementById('selectTechnique').value;
+  const cat = document.getElementById('selectCategory').value;
+  const lev = document.getElementById('selectLevel').value;
 
-  selTech.innerHTML = `<option value="">— aucune —</option>` +
-    DATA.map(t => `<option value="${t.nom}">${t.nom}</option>`).join("");
+  if (name) { showTechnique(name); return; }
 
-  const cats = [...new Set(DATA.map(t => t.categorie))].sort();
-  selCat.innerHTML = `<option value="">— aucune —</option>` +
-    cats.map(c => `<option>${c}</option>`).join("");
-
-  const levs = [...new Set(DATA.map(t => t.niveau))].sort();
-  selLev.innerHTML = `<option value="">— aucun —</option>` +
-    levs.map(l => `<option>${l}</option>`).join("");
-}
-
-// 🔹 Actions
-function applyFilters() {
-  const name = document.getElementById("selectTechnique").value;
-  const cat = document.getElementById("selectCategory").value;
-  const lev = document.getElementById("selectLevel").value;
-
-  if (name) return showTechnique(name);
-
-  let list = DATA;
-  if (cat) list = list.filter(t => t.categorie === cat);
-  if (lev) list = list.filter(t => t.niveau === lev);
+  let list = DATA.slice();
+  if (cat) list = list.filter(t => String(t.categorie) === String(cat));
+  if (lev) list = list.filter(t => String(t.niveau) === String(lev));
 
   renderGrid(list);
 }
 
-function quickSearch(e) {
-  const q = e.target.value.toLowerCase().trim();
-  if (!q) return showEmpty();
-
-  const matches = DATA.filter(t =>
-    t.nom.toLowerCase().includes(q) ||
-    t.materiel.toLowerCase().includes(q)
-  );
+function quickSearch(e){
+  const q = (e.target.value || '').toLowerCase().trim();
+  if (!q) { showEmpty(); return; }
+  const matches = DATA.filter(t => {
+    const nom = (t.nom||'').toString().toLowerCase();
+    const mat = (t.materiel||'').toString().toLowerCase();
+    return nom.includes(q) || mat.includes(q);
+  });
   renderGrid(matches);
 }
 
-function pickRandom() {
-  if (!DATA.length) return;
-  const r = DATA[Math.floor(Math.random() * DATA.length)];
+function pickRandom(){
+  if (!DATA.length) return alert('Aucune technique disponible');
+  const r = DATA[Math.floor(Math.random()*DATA.length)];
+  document.getElementById('selectTechnique').value = r.nom;
   showTechnique(r.nom);
 }
 
-function showEmpty() {
-  document.getElementById("displayArea").innerHTML =
-    document.getElementById("emptyState").outerHTML;
-}
-
-function renderGrid(list) {
-  const area = document.getElementById("displayArea");
-
-  if (!list.length) {
-    area.innerHTML = `<div class="card">Aucun résultat.</div>`;
+/* Render grid / card */
+function renderGrid(list){
+  const area = document.getElementById('displayArea');
+  if (!list || list.length === 0){
+    area.innerHTML = '<div class="card">Aucun résultat.</div>';
     return;
   }
-
-  area.innerHTML = `
-    <div class="grid">
-      ${list.map(t => renderCard(t)).join("")}
-    </div>
-  `;
+  area.innerHTML = `<div class="grid">${list.map(t => renderCardHtml(t)).join('')}</div>`;
 }
 
-function showTechnique(name) {
-  const t = DATA.find(x => x.nom === name);
-  if (!t)
-    return (document.getElementById("displayArea").innerHTML =
-      `<div class="card">Technique introuvable</div>`);
-
-  document.getElementById("displayArea").innerHTML = `
-    <div class="card">
-      ${renderCard(t)}
-    </div>
-  `;
+function showTechnique(name){
+  const t = DATA.find(x => String(x.nom) === String(name));
+  if (!t) { document.getElementById('displayArea').innerHTML = '<div class="card">Technique introuvable</div>'; return; }
+  document.getElementById('displayArea').innerHTML = `<div class="card">${renderCardHtml(t)}</div>`;
 }
 
-// 🔹 Carte
-function renderCard(t) {
-  const photo = t.photos
-    ? `<img src="${t.photos}" />`
-    : `<span style="color:#bbb;font-size:13px">Pas d’image</span>`;
+function renderCardHtml(t){
+  const photoHtml = t.photos ? `<div class="photo"><img src="${escapeHtml(t.photos)}" alt="${escapeHtml(t.nom)}"></div>` : `<div class="photo"><span style="color:#bbb;font-size:13px">Pas d'image</span></div>`;
+  const videoBtn = t.youtube ? `<a class="link-btn" href="${escapeHtml(t.youtube)}" target="_blank" rel="noopener">🎬 Vidéo</a>` : '';
+  const galleryBtn = t.galerie ? `<a class="link-btn" href="${escapeHtml(t.galerie)}" target="_blank" rel="noopener">🖼️ Galerie</a>` : '';
 
-  const videoButtons = t.youtube
-    ? `<a class="link-btn video-btn" href="${t.youtube}" target="_blank">
-         <span class="material-icons">play_circle</span> Vidéo
-       </a>`
-    : "";
-
-  const galleryButton = t.galerie
-    ? `<a class="link-btn gallery-btn" href="${t.galerie}" target="_blank">
-         <span class="material-icons">photo_library</span> Galerie
-       </a>`
-    : "";
-
-  // Matériel → liste à puces
-  const materielList = t.materiel
-    .split("\n")
-    .filter(x => x.trim() !== "")
-    .map(x => `<li>• ${x.trim()}</li>`)
-    .join("");
+  const materielList = (t.materiel||'').toString().split('\n').filter(x=>x.trim()).map(x=>`<li>${escapeHtml(x.trim())}</li>`).join('');
 
   return `
-    <div class="photo">${photo}</div>
+    ${photoHtml}
     <div style="flex:1">
-      <h3>${t.nom}</h3>
-      <div class="meta">${t.categorie} • ${t.niveau}</div>
+      <h3>${escapeHtml(t.nom)}</h3>
+      <div class="meta">${escapeHtml(t.categorie)} • ${escapeHtml(t.niveau)}</div>
 
-      <p style="margin-top:10px">${t.description}</p>
+      <p style="margin-top:10px">${escapeHtml(t.description)}</p>
 
-      <p><strong>Matériel :</strong></p>
-      <ul>${materielList}</ul>
+      <p style="margin-top:8px"><strong>Matériel :</strong></p>
+      <ul>${materielList || '<li>Aucun renseignement</li>'}</ul>
 
-      <div style="margin-top:10px">${videoButtons} ${galleryButton}</div>
+      <div style="margin-top:10px">${videoBtn} ${galleryBtn}</div>
 
       <div class="actions">
-        <button class="print-btn" onclick="printCard('${t.nom}')">
-          <span class="material-icons">print</span> Imprimer
-        </button>
+        <button class="print-btn" data-name="${escapeHtml(t.nom)}">🖨️✨ Imprimer</button>
       </div>
     </div>
   `;
 }
 
-// 🔹 Impression
-function printCard(name) {
-  const t = DATA.find(x => x.nom === name);
-  if (!t) return;
+/* print (delegated handler) */
+document.addEventListener('click', function(e){
+  const p = e.target.closest('.print-btn');
+  if (p){
+    const name = p.getAttribute('data-name');
+    printCard(name);
+  }
+});
+
+/* Print window */
+function printCard(name){
+  const t = DATA.find(x => String(x.nom) === String(name));
+  if (!t) return alert('Technique introuvable');
 
   const html = `
-    <html>
-    <head>
-      <title>${t.nom}</title>
-      <style>
-        body { font-family:Arial; padding:20px; }
-        img { max-width:300px; }
-      </style>
-    </head>
-    <body>
-      <h1>${t.nom}</h1>
-      <div><strong>Catégorie :</strong> ${t.categorie}</div>
-      <div><strong>Niveau :</strong> ${t.niveau}</div><br>
-
-      ${t.photos ? `<img src="${t.photos}" />` : ""}
-
-      <p>${t.description}</p>
-
-      <h3>Matériel :</h3>
-      <pre>${t.materiel}</pre>
-    </body>
-    </html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>${escapeHtml(t.nom)}</title>
+    <style>
+      body{font-family:Inter,Arial; padding:20px; color:#111}
+      h1{font-family:Spicy,Inter,Arial; font-size:28px; color:#5b3bd3}
+      img{max-width:320px; display:block; margin:10px 0; border-radius:10px}
+      pre{white-space:pre-wrap; font-family:inherit}
+    </style>
+  </head>
+  <body>
+    <h1>${escapeHtml(t.nom)}</h1>
+    <div><strong>Catégorie :</strong> ${escapeHtml(t.categorie)}</div>
+    <div><strong>Niveau :</strong> ${escapeHtml(t.niveau)}</div>
+    ${ t.photos ? `<img src="${escapeHtml(t.photos)}" alt="${escapeHtml(t.nom)}">` : '' }
+    <p>${escapeHtml(t.description)}</p>
+    <h3>Matériel</h3>
+    <pre>${escapeHtml(t.materiel || '')}</pre>
+  </body>
+  </html>
   `;
-
-  const w = window.open("", "_blank");
+  const w = window.open('', '_blank');
   w.document.write(html);
   w.document.close();
+  w.focus();
   w.print();
+}
+
+/* Utilities */
+function escapeHtml(s){
+  if (s === undefined || s === null) return '';
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,"&#39;");
 }
