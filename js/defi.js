@@ -1,7 +1,7 @@
-let activites = []; // cache du JSON
+let activites = []; // stock JSON en mémoire
 
 /* ============================================================
-   ⚡ Charger JSON au lancement
+   ⚡ Charger les données JSON
 ============================================================ */
 async function chargerJson() {
     try {
@@ -13,8 +13,7 @@ async function chargerJson() {
 }
 
 /* ============================================================
-   🎯 Afficher un défi
-   (index choisi par date OU aléatoire)
+   🎯 Afficher un défi avec animation
 ============================================================ */
 function afficherDefi(index) {
     const item = activites[index];
@@ -22,24 +21,25 @@ function afficherDefi(index) {
 
     const bloc = document.getElementById("defi-du-jour-bloc");
 
-    // Animation : fade + zoom OUT
+    // Animation sortante
     bloc.classList.add("bloc-animate");
 
-    // Attendre la fin du fade-out
     setTimeout(() => {
-        /* 🌈 Mise à jour du contenu */
+
+        // Mise à jour du contenu
         document.getElementById("defi-texte").textContent = item["Activité"];
         document.getElementById("couleur-preview").style.background = item["Code"];
         document.getElementById("couleur-nom").textContent = item["Couleur"];
         bloc.style.border = `4px solid ${item["Code"]}`;
 
-        // Fade + zoom IN
+        // Animation entrante
         bloc.classList.remove("bloc-animate");
-    }, 300);
+
+    }, 250);
 }
 
 /* ============================================================
-   📅 Défi du jour (index basé sur la date)
+   📅 Défi du jour basé sur la date
 ============================================================ */
 function defiDuJour() {
     const d = new Date();
@@ -47,10 +47,14 @@ function defiDuJour() {
 }
 
 /* ============================================================
-   🎲 Tirage aléatoire pour le bouton
+   🎲 Générer un défi aléatoire différent du précédent
 ============================================================ */
-function defiAleatoire() {
-    return Math.floor(Math.random() * activites.length);
+function defiAleatoire(indexActuel) {
+    let idx;
+    do {
+        idx = Math.floor(Math.random() * activites.length);
+    } while (idx === indexActuel);
+    return idx;
 }
 
 /* ============================================================
@@ -59,11 +63,11 @@ function defiAleatoire() {
 document.addEventListener("DOMContentLoaded", async () => {
     await chargerJson();
 
-    // Charger défi du jour
-    afficherDefi(defiDuJour());
+    let indexActuel = defiDuJour();
+    afficherDefi(indexActuel);
 
-    // Activer le bouton
     document.getElementById("nouveau-defi-btn").addEventListener("click", () => {
-        afficherDefi(defiAleatoire());
+        indexActuel = defiAleatoire(indexActuel);
+        afficherDefi(indexActuel);
     });
 });
