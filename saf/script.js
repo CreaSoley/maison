@@ -34,12 +34,15 @@ function populateSelectors(){
   const selTech = document.getElementById('selectTechnique');
   const selLev = document.getElementById('selectLevel');
 
+  // 💡 Correction : NE PAS échapper la valeur, seulement le texte affiché
   selTech.innerHTML = '<option value="">— aucune —</option>' 
-    + DATA.map(t => `<option value="${escapeHtml(t.nom)}">${escapeHtml(t.nom)}</option>`).join('');
+    + DATA.map(t => `<option value="${t.nom}">${escapeHtml(t.nom)}</option>`).join('');
 
   const levs = Array.from(new Set(DATA.map(t => t.niveau || '').filter(Boolean))).sort();
+
+  // 💡 Correction identique pour les niveaux
   selLev.innerHTML = '<option value="">— aucun —</option>' 
-    + levs.map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+    + levs.map(l => `<option value="${l}">${escapeHtml(l)}</option>`).join('');
 }
 
 /* Filters */
