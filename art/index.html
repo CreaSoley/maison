@@ -1,70 +1,75 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Techniques — Catalogue</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catalogue Techniques Artistiques</title>
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
   <header class="appbar">
     <div class="brand">
-      <span class="material-icons logo-ico">palette</span>
-      <div>
-        <h1>Techniques — Catalogue</h1>
-        <div class="subtitle">Inspiration & fiches — static · GitHub Pages</div>
-      </div>
+      <span class="material-icons" style="color:var(--primary)">palette</span>
+      <h1>Catalogue Techniques Artistiques</h1>
     </div>
 
-    <div class="spacer"></div>
+    <input id="quickSearch" type="text" placeholder="Rechercher par nom ou matériel..." class="searchTop" />
 
-    <input id="quickSearchTop" placeholder="Rechercher par nom ou matériel..." aria-label="Recherche rapide" />
-
-    <button id="btnRandomTop" class="btn ghost" title="Technique aléatoire">
+    <button id="btnRandom" class="btn ghost" title="Technique aléatoire">
       <span class="material-icons">shuffle</span>
     </button>
   </header>
 
   <main class="container">
-    <section class="controls" role="region" aria-label="Contrôles">
+
+    <!-- Filtres -->
+    <section class="controls">
       <div class="control-item">
         <label class="small">Technique</label>
-        <select id="selectTechnique"><option value="">— aucune —</option></select>
+        <select id="selectTechnique">
+          <option value="">— aucune —</option>
+        </select>
       </div>
 
       <div class="control-item">
         <label class="small">Catégorie</label>
-        <select id="selectCategory"><option value="">— aucune —</option></select>
+        <select id="selectCategory">
+          <option value="">— aucune —</option>
+        </select>
       </div>
 
       <div class="control-item">
         <label class="small">Niveau</label>
-        <select id="selectLevel"><option value="">— aucun —</option></select>
+        <select id="selectLevel">
+          <option value="">— aucun —</option>
+        </select>
       </div>
 
-      <div style="display:flex;align-items:flex-end">
-        <button class="btn" id="btnDisplay"><span class="material-icons">visibility</span>Afficher</button>
-      </div>
+      <button id="btnDisplay" class="btn">
+        <span class="material-icons">visibility</span>
+        Afficher
+      </button>
 
       <div class="spacer"></div>
 
-      <div class="small-note">Filtres + recherche · Impression disponible sur chaque carte</div>
+      <div class="note-box">
+        <label class="small">Recherche rapide</label>
+        <div class="small-note">Utilisez la barre de recherche du haut.</div>
+      </div>
     </section>
 
-    <div id="displayArea">
+    <div id="displayArea" class="content">
       <div id="emptyState" class="empty">
-        <div style="font-size:28px;color:#9aa3ff">🔎</div>
-        <div style="font-weight:600;margin-top:8px">Tapez un mot-clé ou utilisez les filtres pour afficher des techniques</div>
-        <div style="color:var(--muted);margin-top:6px">Les techniques s'afficheront ici après une recherche ou après avoir cliqué sur Afficher.</div>
+        <div style="font-size:30px; color:#9aa3ff">🔎</div>
+        <div style="font-weight:600; margin-top:8px">Tapez un mot-clé ou utilisez les filtres</div>
+        <div style="margin-top:6px; color:var(--muted)">Les techniques seront affichées ici.</div>
       </div>
     </div>
-  </main>
 
-  <footer class="footer">
-    <div>Prêt à l’emploi — déposez ce repo sur GitHub Pages</div>
-  </footer>
+  </main>
 
   <script src="script.js"></script>
 </body>
