@@ -116,11 +116,11 @@ h3{margin:0;font-size:20px}
   }
 
   .logo-img {
-    height: 60px;      /* plus grand */
+    height: 100px;      /* plus grand */
   }
 
   .brand-title {
-    font-size: 1.8rem; /* titre plus grand */
+    font-size: 2.1rem; /* titre plus grand */
   }
 
   /* La partie droite ne doit plus pousser le logo */
