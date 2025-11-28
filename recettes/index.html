@@ -1,172 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recettes</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recettes – Créations Savonnesques</title>
 
-<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 
-<!-- PapaParse (parseur CSV professionnel) -->
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
-<style>
-/* Style minimal intégré pour test : tu pourras remettre ton style.css ensuite */
-body { font-family: Arial, sans-serif; margin: 20px; background:#fafafa; }
-#controls { display:flex; gap:10px; margin-bottom:20px; }
-.recette-card {
-  background:white; padding:20px; border-radius:12px;
-  margin-bottom:20px; 
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-.recette-img {
-  width:100%; border-radius:12px; margin-bottom:10px; object-fit:cover;
-  max-height:250px;
-}
-.recette-title { font-size:24px; margin-bottom:5px; }
-.recette-buttons { margin-top:15px; display:flex; gap:10px; }
-button {
-  padding:8px 14px; border:none; border-radius:6px; cursor:pointer;
-}
-.btn-print { background:#444; color:white; }
-.btn-whatsapp { background:#25D366; color:white; }
-.no-img {
-  width:100%; height:150px; background:#ddd; border-radius:12px;
-  display:flex; align-items:center; justify-content:center;
-  color:#666; font-style:italic;
-}
-</style>
-
+  <!-- PapaParse pour parser proprement le CSV -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
 
-<h1>Recettes</h1>
+<header class="appbar" role="banner">
+  <div class="appbar-inner">
+    <a class="logo" href="index.html" title="Accueil">
+      <img src="assets/images/logo.png" alt="logo" class="logo-img">
+      <span class="brand-title">CREATIONS SAVONNESQUES</span>
+    </a>
 
-<div id="controls">
-  <input id="quickSearch" type="text" placeholder="Recherche rapide…">
-  <select id="filterCategory">
-    <option value="">Toutes catégories</option>
-  </select>
-  <button id="btnRandom">Recette Surprise 🎲</button>
-</div>
+    <div class="header-actions">
+      <a class="btn btn-primary add-recette" href="https://docs.google.com/forms/d/e/1FAIpQLSeOqzP8CeV-CAoV1-Xhha-D1PtXrtp5YFpz1Dzi5izvDOsYHQ/viewform?usp=header" target="_blank" rel="noopener">➕ Ajouter une recette</a>
+    </div>
+  </div>
 
-<div id="displayArea"></div>
+  <div class="top-controls">
+    <input id="quickSearch" class="searchTop" type="search" placeholder="🔍 Recherche (titre, ingrédients)..." aria-label="Recherche rapide">
+    <select id="filterCategory" aria-label="Filtrer par catégorie">
+      <option value="">Toutes catégories</option>
+    </select>
 
-<script>
-/* URL du CSV */
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHntlP8qAseSjxxISs_fyoV12Ie8JZPXelkOWpXemy_HRCEYzs7UliTG2nTushmYjWH2gOYIknEczq/pub?gid=813880666&single=true&output=csv";
+    <!-- Surprise : placé inline sur desktop, mais moved under search on small screens via CSS -->
+    <button id="btnRandom" class="btn btn-surprise">🌈 Surprise</button>
+  </div>
+</header>
 
-let recettes = [];
+<main class="container" role="main">
+  <div id="displayArea" class="recipes-grid" aria-live="polite"></div>
+</main>
 
-/* ----------------------------------------------------------
-   CHARGEMENT AVEC PAPAPARSE
------------------------------------------------------------ */
-Papa.parse(CSV_URL, {
-  download: true,
-  header: true,
-  skipEmptyLines: true,
-  complete: function(results) {
-    recettes = results.data;
-    fillCategoryFilter();
-    displayRecettes(recettes);
-  }
-});
-
-/* ----------------------------------------------------------
-   FILTRE CATÉGORIES
------------------------------------------------------------ */
-function fillCategoryFilter() {
-  const select = document.getElementById("filterCategory");
-  const categories = [...new Set(recettes.map(r => r["Catégorie"]))];
-  categories.forEach(cat => {
-    if (!cat.trim()) return;
-    let opt = document.createElement("option");
-    opt.value = cat;
-    opt.textContent = cat;
-    select.appendChild(opt);
-  });
-}
-
-/* ----------------------------------------------------------
-   AFFICHAGE DES RECETTES
------------------------------------------------------------ */
-function displayRecettes(list) {
-  const area = document.getElementById("displayArea");
-  area.innerHTML = "";
-
-  if (!list.length) {
-    area.innerHTML = "<p>Aucune recette trouvée.</p>";
-    return;
-  }
-
-  list.forEach(r => {
-    const card = document.createElement("div");
-    card.className = "recette-card";
-
-    const imageHTML = r["Photo"]
-      ? `<img class="recette-img" src="${r["Photo"]}" alt="">`
-      : `<div class="no-img">Aucune image</div>`;
-
-    card.innerHTML = `
-      ${imageHTML}
-      <h2 class="recette-title">${r["Titre"]}</h2>
-
-      <p><strong>Catégorie :</strong> ${r["Catégorie"] || ""}</p>
-      <p><strong>Nombre de personnes :</strong> ${r["Nombre de personnes"] || ""}</p>
-
-      <h3>Ingrédients</h3>
-      <p>${(r["Ingrédients"] || "").replace(/\n/g, "<br>")}</p>
-
-      <h3>Matériel</h3>
-      <p>${(r["Matériel"] || "").replace(/\n/g, "<br>")}</p>
-
-      <h3>Étapes</h3>
-      <p>${(r["Étapes"] || "").replace(/\n/g, "<br>")}</p>
-
-      <div class="recette-buttons">
-        <button class="btn-print" onclick="print()">🖨️ Imprimer</button>
-        <button class="btn-whatsapp" onclick="shareWhatsApp('${encodeURIComponent(r["Titre"])}')">📱 WhatsApp</button>
-      </div>
-    `;
-    area.appendChild(card);
-  });
-}
-
-/* ----------------------------------------------------------
-   PARTAGE
------------------------------------------------------------ */
-function shareWhatsApp(txt) {
-  window.open(`https://wa.me/?text=${txt}`, "_blank");
-}
-
-/* ----------------------------------------------------------
-   RECHERCHE
------------------------------------------------------------ */
-document.getElementById("quickSearch").addEventListener("input", (e) => {
-  const q = e.target.value.toLowerCase();
-  displayRecettes(recettes.filter(r =>
-    (r["Titre"] || "").toLowerCase().includes(q) ||
-    (r["Ingrédients"] || "").toLowerCase().includes(q)
-  ));
-});
-
-/* ----------------------------------------------------------
-   FILTRE CATÉGORIE
------------------------------------------------------------ */
-document.getElementById("filterCategory").addEventListener("change", (e) => {
-  const cat = e.target.value;
-  if (!cat) return displayRecettes(recettes);
-  displayRecettes(recettes.filter(r => r["Catégorie"] === cat));
-});
-
-/* ----------------------------------------------------------
-   RECETTE SURPRISE
------------------------------------------------------------ */
-document.getElementById("btnRandom").addEventListener("click", () => {
-  const r = recettes[Math.floor(Math.random() * recettes.length)];
-  displayRecettes([r]);
-});
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
