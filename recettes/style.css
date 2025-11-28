@@ -1,156 +1,254 @@
-/* -----------------------------------------
+/* -------------------------
    VARIABLES
------------------------------------------- */
-:root {
-  --primary: #9aa3ff;
-  --primary-dark: #7b83ff;
-  --bg: #fafafa;
-  --text: #2c2c2c;
-  --muted: #888;
-  --radius: 14px;
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
-
-  --grad-green: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+--------------------------*/
+:root{
+  --primary:#9aa3ff;
+  --primary-dark:#7b83ff;
+  --muted:#777;
+  --bg:#fafafa;
+  --card-bg:#fff;
+  --radius:12px;
+  --shadow: 0 6px 18px rgba(35,35,90,0.06);
+  --grad: linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%);
+  --print-font: "Georgia", serif;
 }
 
-/* Police Spicy Sale */
-@font-face {
-  font-family: "Spicy";
+/* Spicy font (assure-toi d'avoir assets/fonts/Spicy Sale.ttf) */
+@font-face{
+  font-family:"SpicySale";
   src: url("assets/fonts/Spicy Sale.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-/* Reset */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: "Inter", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-  padding-top: 95px;
+/* Reset simple */
+*{box-sizing:border-box}
+body{
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:#222;
+  margin:0;
+  padding:0;
 }
 
-/* -----------------------------------------
-   HEADER
------------------------------------------- */
-.appbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: white;
-  padding: 10px 16px;
+/* ---------- APPBAR / HEADER ---------- */
+.appbar{
+  position:sticky;
+  top:0;
+  background:white;
   box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  z-index:50;
+  padding:10px 16px;
+}
+.appbar-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  max-width:1100px;
+  margin:0 auto;
+}
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:inherit;
+}
+.logo-img{
+  height:56px;
+  width:auto;
+  display:block;
+}
+.brand-title{
+  font-family:"SpicySale", serif;
+  font-size:28px;
+  color:var(--primary-dark);
+  line-height:1;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
+/* Header actions (add recipe) */
+.header-actions{ display:flex; align-items:center; gap:8px; }
+
+/* ---------- CONTROLS ---------- */
+.top-controls{
+  max-width:1100px;
+  margin:10px auto 0;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding-bottom:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.searchTop{
+  min-width:240px;
+  max-width:460px;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #e6e6e6;
+}
+select{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #e6e6e6;
 }
 
-.logo-img { height: 55px; }
-
-.brand-title {
-  font-family: "Spicy", sans-serif;
-  font-size: 32px;
-  color: var(--primary-dark);
+/* Buttons common */
+.btn{
+  padding:8px 12px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+.btn-primary{
+  background:var(--primary);
+  color:white;
+  box-shadow: 0 4px 10px rgba(122,122,255,0.12);
+}
+.btn-surprise{
+  background:var(--primary-dark);
+  color:white;
+}
+.add-recette{
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:10px;
+  text-decoration:none;
+  color:white;
+  background: var(--grad);
 }
 
-/* MOBILE : titre plus petit */
-@media (max-width: 600px) {
-  .brand-title { font-size: 22px; }
-  .logo-img { height: 42px; }
+/* ---------- LAYOUT MAIN ---------- */
+.container{
+  max-width:1100px;
+  margin:18px auto 60px;
+  padding:0 16px;
 }
 
-/* -----------------------------------------
-   BARRE DE RECHERCHE + FILTRES
------------------------------------------- */
-.top-controls {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
+/* Grid of recipe cards */
+.recipes-grid{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
 }
 
-.searchTop {
-  padding: 8px 12px;
-  border-radius: var(--radius);
-  border: 1px solid #ddd;
-  min-width: 200px;
+/* ---------- RECIPE CARD ---------- */
+.recette-card{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  background:var(--card-bg);
+  padding:16px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
 }
 
-select {
-  padding: 8px 12px;
-  border-radius: var(--radius);
-  border: 1px solid #ddd;
+/* Image behavior:
+   - mobile: full width above (we'll stack via media query)
+   - desktop: left small square approx 9cm (~340px) while keeping proportions
+*/
+.recette-img{
+  width:100%;
+  height:auto;
+  border-radius:10px;
+  object-fit:cover;
+  flex-shrink:0;
 }
 
-/* -----------------------------------------
-   BOUTONS
------------------------------------------- */
-.btn {
-  padding: 8px 14px;
-  border-radius: var(--radius);
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
+/* content area */
+.recette-content{
+  flex:1;
 }
 
-/* Gradient spécial */
-.btn-gradient {
-  background-image: var(--grad-green);
-  color: white;
+/* title */
+.recette-title{
+  font-family:"SpicySale", serif;
+  font-size:22px;
+  color:var(--primary-dark);
+  margin:0 0 6px 0;
 }
 
-/* Bouton Surprise */
-.btn-surprise {
-  background: var(--primary);
-  color: white;
+/* small headings */
+.recette-sub{
+  font-weight:700;
+  margin-top:8px;
+  margin-bottom:6px;
+  color:var(--primary-dark);
 }
 
-/* -----------------------------------------
-   CARDS
------------------------------------------- */
-.card {
-  background: white;
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  margin: 20px 0;
+/* buttons row */
+.recette-buttons{
+  margin-top:12px;
+  display:flex;
+  gap:8px;
 }
 
-.card img {
-  width: 100%;
-  border-radius: var(--radius);
-  margin-bottom: 12px;
+/* Gradient styled print/whatsapp buttons */
+.btn-print, .btn-whatsapp {
+  padding:8px 12px;
+  border-radius:10px;
+  color:white;
+  border:none;
+  cursor:pointer;
+  background-image: var(--grad);
+  font-weight:700;
+}
+.btn-print { background-image: var(--grad); }
+.btn-whatsapp { background-image: var(--grad); }
+
+/* no-image placeholder */
+.no-img{
+  width:100%;
+  height:160px;
+  border-radius:10px;
+  background:#efefef;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#777;
 }
 
-.card-title {
-  font-family: "Spicy";
-  font-size: 26px;
-  color: var(--primary-dark);
-  margin-bottom: 10px;
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:900px){
+  .recette-card{
+    flex-direction:column;
+  }
+  .recette-img{
+    width:100%;
+    height:auto;
+    max-height:360px;
+  }
+  /* move surprise button below search: top-controls wraps naturally (already) */
 }
 
-.card-section-title {
-  font-weight: bold;
-  margin: 6px 0;
-  color: var(--primary-dark);
+@media (min-width:901px){
+  /* desktop layout: image left as square ~340px (≈9cm) */
+  .recette-img{
+    width:340px;      /* approx 9cm at 96dpi */
+    height:340px;
+    object-fit:cover;
+  }
 }
 
-/* Listes */
-ul, ol { padding-left: 20px; }
+/* center logo+title on narrower screens */
+@media (max-width:600px){
+  .appbar-inner{ flex-direction:column; gap:8px; align-items:center; }
+  .logo-img{ height:48px; }
+  .brand-title{ font-size:20px; text-align:center; }
+}
 
-/* Boutons bas carte */
-.card-buttons {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
+/* spacing inside card paragraphs */
+.recette-content p{ margin:6px 0; color:#222; }
+
+/* ---------- PRINT STYLES ---------- */
+@media print {
+  /* hide header, controls, filters, buttons */
+  .appbar, .top-controls, .recette-buttons, .add-recette { display:none !important; }
+  body { background: white; color: #000; }
+  .container { margin:0; padding:0; }
+  .recette-card { box-shadow:none; border: none; page-break-inside: avoid; margin-bottom: 18px; }
+  .recette-img { max-width: 100%; height: auto; }
+  .recette-title { font-family: var(--print-font); font-size: 22px; color:#000; }
 }
