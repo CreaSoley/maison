@@ -1,4 +1,4 @@
-const CSV_URL = "COLLE_ICI_TON_CSV"; // <--- IMPORTANT
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHntlP8qAseSjxxISs_fyoV12Ie8JZPXelkOWpXemy_HRCEYzs7UliTG2nTushmYjWH2gOYIknEczq/pub?gid=813880666&single=true&output=csv"; // <--- IMPORTANT
 
 let recettes = [];
 
