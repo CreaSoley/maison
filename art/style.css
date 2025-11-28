@@ -159,4 +159,32 @@ h3{margin:0;font-size:20px}
     padding: 8px 12px;
   }
 }
+/* Réorganisation du header : logo/titre en haut, recherche + surprise en dessous */
+.appbar {
+  flex-direction: column;
+  align-items: center;
+}
 
+/* Le logo reste centré naturellement */
+.logo {
+  margin-bottom: 10px;
+}
+
+/* La zone recherche + bouton passe en ligne, mais centrée */
+.appbar-right {
+  width: 100%;
+  max-width: 480px; 
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-left: 0; /* supprime le push à droite */
+  position: static !important; /* supprime le déplacement absolutisé */
+}
+
+/* Sur desktop, on centre tout sans remettre les éléments sur une ligne horizontale */
+@media (min-width: 768px) {
+  .appbar {
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+}
