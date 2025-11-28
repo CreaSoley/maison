@@ -34,15 +34,17 @@ function populateSelectors(){
   const selTech = document.getElementById('selectTechnique');
   const selLev = document.getElementById('selectLevel');
 
-  // 💡 Correction : NE PAS échapper la valeur, seulement le texte affiché
   selTech.innerHTML = '<option value="">— aucune —</option>' 
     + DATA.map(t => `<option value="${t.nom}">${escapeHtml(t.nom)}</option>`).join('');
 
   const levs = Array.from(new Set(DATA.map(t => t.niveau || '').filter(Boolean))).sort();
-
-  // 💡 Correction identique pour les niveaux
   selLev.innerHTML = '<option value="">— aucun —</option>' 
     + levs.map(l => `<option value="${l}">${escapeHtml(l)}</option>`).join('');
+}
+
+/* Affiche message vide */
+function showEmpty() {
+  document.getElementById('displayArea').innerHTML = '<div class="empty">Aucune donnée à afficher.</div>';
 }
 
 /* Filters */
@@ -103,35 +105,34 @@ function showTechnique(name){
 /* Construction HTML d’une carte */
 function renderCardHtml(t){
 
+  // Photo
   const photoHtml = t.photos 
-    ? `<div class="photo"><img src="${escapeHtml(t.photos)}" alt="${escapeHtml(t.nom)}"></div>`
+    ? `<div class="photo"><img src="${t.photos}" alt="${escapeHtml(t.nom)}"></div>`
     : `<div class="photo"><span style="color:#bbb;font-size:13px">Pas d'image</span></div>`;
 
+  // Liens
   const videoBtn = t.youtube 
-    ? `<a class="link-btn" href="${escapeHtml(t.youtube)}" target="_blank" rel="noopener">🎬 Vidéo</a>` 
+    ? `<a class="link-btn" href="${t.youtube}" target="_blank" rel="noopener">🎬 Vidéo</a>` 
     : '';
-
   const galleryBtn = t.galerie 
-    ? `<a class="link-btn" href="${escapeHtml(t.galerie)}" target="_blank" rel="noopener">🖼️ Galerie</a>` 
+    ? `<a class="link-btn" href="${t.galerie}" target="_blank" rel="noopener">🖼️ Galerie</a>` 
     : '';
-
   const recetteEco = t.recettes_econo 
-    ? `<a class="link-btn" href="${escapeHtml(t.recettes_econo)}" target="_blank">💧 Recette Écono</a>` 
+    ? `<a class="link-btn" href="${t.recettes_econo}" target="_blank">💧 Recette Écono</a>` 
     : '';
-
   const recettePremium = t.recettes_premium 
-    ? `<a class="link-btn" href="${escapeHtml(t.recettes_premium)}" target="_blank">🌟 Recette Premium</a>` 
+    ? `<a class="link-btn" href="${t.recettes_premium}" target="_blank">🌟 Recette Premium</a>` 
     : '';
-
   const tuto = t.tutoriel 
-    ? `<a class="link-btn" href="${escapeHtml(t.tutoriel)}" target="_blank">📘 Tutoriel</a>` 
+    ? `<a class="link-btn" href="${t.tutoriel}" target="_blank">📘 Tutoriel</a>` 
     : '';
 
+  // Matériel
   const materielList = (t.materiel||'')
       .toString()
       .split('\n')
-      .filter(x=>x.trim())
-      .map(x=>`<li>${escapeHtml(x.trim())}</li>`)
+      .filter(x => x.trim())
+      .map(x => `<li>${escapeHtml(x.trim())}</li>`)
       .join('');
 
   return `
@@ -183,17 +184,26 @@ function printCard(name){
       h1{font-family:Spicy,Inter,Arial; font-size:28px; color:#5b3bd3}
       img{max-width:320px; display:block; margin:10px 0; border-radius:10px}
       pre{white-space:pre-wrap; font-family:inherit}
+      a{color:#111; text-decoration:none}
     </style>
   </head>
   <body>
     <h1>${escapeHtml(t.nom)}</h1>
     <div><strong>Niveau :</strong> ${escapeHtml(t.niveau)}</div>
 
-    ${ t.photos ? `<img src="${escapeHtml(t.photos)}" alt="${escapeHtml(t.nom)}">` : '' }
+    ${ t.photos ? `<img src="${t.photos}" alt="${escapeHtml(t.nom)}">` : '' }
 
     <p>${escapeHtml(t.description)}</p>
+
     <h3>Matériel</h3>
     <pre>${escapeHtml(t.materiel || '')}</pre>
+
+    ${ t.youtube ? `<p>🎬 Vidéo : ${t.youtube}</p>` : '' }
+    ${ t.galerie ? `<p>🖼️ Galerie : ${t.galerie}</p>` : '' }
+    ${ t.recettes_econo ? `<p>💧 Recette Écono : ${t.recettes_econo}</p>` : '' }
+    ${ t.recettes_premium ? `<p>🌟 Recette Premium : ${t.recettes_premium}</p>` : '' }
+    ${ t.tutoriel ? `<p>📘 Tutoriel : ${t.tutoriel}</p>` : '' }
+
   </body>
   </html>
   `;
