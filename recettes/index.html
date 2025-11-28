@@ -1,56 +1,100 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Recettes</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .recette { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; border-radius: 8px; }
-    .recette img { max-width: 300px; display: block; margin-top: 10px; }
+    /* Cartes recettes harmonisées */
+    .recette-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .recette-card img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 8px 0;
+    }
+    .recette-card h3 {
+      margin: 0 0 6px 0;
+    }
+    .recette-card p {
+      margin: 4px 0;
+    }
+    .recette-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .recette-buttons button {
+      cursor: pointer;
+      border: none;
+      background: #6c63ff;
+      color: white;
+      border-radius: 5px;
+      padding: 6px 12px;
+      font-size: 0.9em;
+    }
+    .recette-buttons button:hover {
+      background: #5950d4;
+    }
   </style>
 </head>
 <body>
+  <header class="appbar">
+    <a class="logo" href="index.html" title="Accueil">
+      <img src="assets/images/logo.png" alt="logo" class="logo-img"> 
+      <span class="brand-title spicy">CREATIONS SAVONNESQUES</span>
+    </a>
+  </header>
 
-<h1>Ajouter une recette</h1>
-<p>Cliquez sur le bouton pour remplir le formulaire :</p>
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSeOqzP8CeV-CAoV1-Xhha-D1PtXrtp5YFpz1Dzi5izvDOsYHQ/viewform?usp=sharing&ouid=104505989590711216146" target="_blank">
-  <button>Ajouter une recette</button>
-</a>
+  <main class="container">
+    <section style="margin:20px 0;">
+      <a href="COLLE_ICI_LE_LIEN_GOOGLE_FORM" target="_blank">
+        <button class="btn primary kawaii">➕ Ajouter une recette</button>
+      </a>
+    </section>
 
-<h2>Recettes existantes</h2>
-<div id="liste-recettes">
-  <!-- Les recettes s'afficheront ici -->
-</div>
+    <section id="liste-recettes" class="content">
+      <!-- Les cartes recettes seront insérées ici -->
+    </section>
+  </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.6.0/tabletop.min.js"></script>
-<script>
-const publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1HUZrTtoXd9QqCp0hiwNzUiXmESnANMRCAZBD46t7Uk0/edit?usp=sharing';
+  <script>
+    const csvUrl = 'COLLE_ICI_LE_LIEN_CSV';
 
-function init() {
-  Tabletop.init({
-    key: publicSpreadsheetUrl,
-    simpleSheet: true
-  }).then(data => {
-    const container = document.getElementById('liste-recettes');
-    container.innerHTML = '';
-    data.forEach(recette => {
-      const div = document.createElement('div');
-      div.className = 'recette';
-      div.innerHTML = `
-        <h3>${recette.Titre}</h3>
-        <p><strong>Catégorie :</strong> ${recette.Catégorie}</p>
-        <p><strong>Nombre de personnes :</strong> ${recette['Nombre de personnes']}</p>
-        <p><strong>Ingrédients :</strong><br>${recette.Ingrédients.replace(/\n/g,'<br>')}</p>
-        <p><strong>Étapes :</strong><br>${recette.Étapes.replace(/\n/g,'<br>')}</p>
-        ${recette['Image URL'] ? `<img src="${recette['Image URL']}" alt="${recette.Titre}">` : ''}
-      `;
-      container.appendChild(div);
-    });
-  }).catch(err => console.error('Erreur Tabletop.js :', err));
-}
-
-window.addEventListener('DOMContentLoaded', init);
-</script>
-
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(csvText => {
+        const data = Papa.parse(csvText, { header: true }).data;
+        const container = document.getElementById('liste-recettes');
+        container.innerHTML = '';
+        data.forEach(recette => {
+          const div = document.createElement('div');
+          div.className = 'recette-card';
+          div.innerHTML = `
+            <h3>${recette.Titre}</h3>
+            <p><strong>Catégorie :</strong> ${recette.Catégorie}</p>
+            <p><strong>Nombre de personnes :</strong> ${recette['Nombre de personnes']}</p>
+            <p><strong>Ingrédients :</strong><br>${recette.Ingrédients.replace(/\n/g,'<br>')}</p>
+            <p><strong>Étapes :</strong><br>${recette.Étapes.replace(/\n/g,'<br>')}</p>
+            ${recette['Image URL'] ? `<img src="${recette['Image URL']}" alt="${recette.Titre}">` : ''}
+            <div class="recette-buttons">
+              <button onclick="window.print()">🖨️ Imprimer</button>
+              <button onclick="window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent('Recette: ${recette.Titre} - Voir sur le site!'))">💬 WhatsApp</button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      })
+      .catch(err => console.error('Erreur CSV:', err));
+  </script>
 </body>
 </html>
