@@ -1,30 +1,31 @@
 async function chargerProverbe() {
     try {
-        const res = await fetch("data/proverbes.csv");
+        // Charger le CSV
+        const res = await fetch("./data/proverbes.csv");
         if (!res.ok) throw new Error("Fichier introuvable");
-        
+
         const texte = await res.text();
 
-        // On gère correctement les retours chariot Windows + Mac
+        // Séparer les lignes et supprimer les lignes vides, en ignorant l'entête
         const lignes = texte.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
+        if (!lignes.length) throw new Error("CSV vide");
 
-        // Date du jour : JJ/MM
+        // Calculer le jour de l'année (1-366)
         const d = new Date();
-        const cle = `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+        const debutAnnee = new Date(d.getFullYear(), 0, 0);
+        const diff = d - debutAnnee;
+        const unJour = 1000 * 60 * 60 * 24;
+        const jourAnnee = Math.floor(diff / unJour); // 1er janvier = 1
 
+        // Chercher la ligne correspondante
         let trouvé = false;
-
         for (let ligne of lignes) {
-            const parts = ligne.split(",");
+            const parts = ligne.split(",").map(s => s.trim());
+            const numero = parseInt(parts[0], 10);
 
-            // sécurité si une ligne a moins de 3 éléments
-            if (parts.length < 3) continue;
-
-            const date = parts[0].trim();
-            const proverbe = parts[1].trim();
-            const traduction = parts.slice(2).join(",").trim(); // pour gérer les virgules dans la traduction
-
-            if (date === cle) {
+            if (numero === jourAnnee) {
+                const proverbe = parts[1] || "";
+                const traduction = parts.slice(2).join(",") || "";
                 document.querySelector("#proverbe-du-jour .proverbe-text").innerHTML =
                     `<strong>« ${proverbe} »</strong><br>${traduction}`;
                 trouvé = true;
