@@ -22,13 +22,16 @@ async function chargerDevinette() {
         const devinette = devinettes[index];
 
         // Afficher l'énigme et stocker la réponse
-        document.getElementById("texte-devinette").textContent = devinette.enigme;
+        const texteEl = document.getElementById("texte-devinette");
         const input = document.getElementById("reponse-devinette");
+        const resultat = document.getElementById("devinette-resultat");
+
+        texteEl.textContent = devinette.enigme;
         input.value = "";
         input.dataset.reponse = (devinette.reponse || "").trim().toLowerCase();
 
         // Vider le message résultat
-        document.getElementById("devinette-resultat").textContent = "";
+        resultat.textContent = "";
 
     } catch (err) {
         console.error("⛔ Erreur devinette :", err);
@@ -42,7 +45,6 @@ async function chargerDevinette() {
 ============================================================ */
 
 function seedRandomIndex(seed, max) {
-    // Fonction simple de génération pseudo-aléatoire
     const x = Math.sin(seed) * 10000;
     return Math.floor((x - Math.floor(x)) * max);
 }
@@ -59,4 +61,14 @@ function validerDevinette() {
     const fourni = input.value.trim().toLowerCase();
 
     if (fourni === "") {
-        resultat.textContent = "Veuillez saisir une réponse.
+        resultat.textContent = "Veuillez saisir une réponse.";
+        resultat.style.color = "red";
+        return;
+    }
+
+    if (fourni === attendu) {
+        resultat.textContent = "🎉 Bravo ! À demain pour une autre devinette !";
+        resultat.style.color = "green";
+        lancerPluieZen();
+    } else {
+        resultat.textC
