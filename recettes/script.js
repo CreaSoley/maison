@@ -1,124 +1,157 @@
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHntlP8qAseSjxxISs_fyoV12Ie8JZPXelkOWpXemy_HRCEYzs7UliTG2nTushmYjWH2gOYIknEczq/pub?gid=813880666&single=true&output=csv"; // <--- IMPORTANT
+/* ----------------------------------------------------------
+   CONFIGURATION
+----------------------------------------------------------- */
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHntlP8qAseSjxxISs_fyoV12Ie8JZPXelkOWpXemy_HRCEYzs7UliTG2nTushmYjWH2gOYIknEczq/pub?gid=813880666&single=true&output=csv";
 
 let recettes = [];
 
-// Charger CSV
-fetch(CSV_URL)
-  .then(res => res.text())
-  .then(data => {
-    recettes = parseCSV(data);
-    renderRecettes(recettes);
-    remplirFiltres(recettes);
-  });
+/* ----------------------------------------------------------
+   CHARGEMENT CSV
+----------------------------------------------------------- */
+async function loadCSV() {
+  const response = await fetch(CSV_URL);
+  const text = await response.text();
 
-// Convertit CSV → objets JS
-function parseCSV(csv) {
-  const lines = csv.split("\n").map(l => l.trim());
-  const headers = lines[0].split(",");
+  // Convertir en lignes
+  const rows = text.split("\n").map(r => r.trim());
+  
+  // Lire en-têtes
+  const headers = rows[0].split(",");
 
-  return lines.slice(1).map(line => {
-    const cols = line.split(",");
-    let obj = {};
+  // Convertir en objets
+  recettes = rows.slice(1).map(row => {
+    const values = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/); // CSV sécurisé
+    const obj = {};
 
     headers.forEach((h, i) => {
-      obj[h.trim()] = cols[i] ? cols[i].replace(/^"|"$/g, "") : "";
+      obj[h.trim()] = values[i] ? values[i].replace(/^"|"$/g, "") : "";
     });
 
     return obj;
   });
+
+  fillCategoryFilter();
+  displayRecettes(recettes);
 }
 
-// -------------------------------
-// RENDER DES RECETTES
-// -------------------------------
-function renderRecettes(list) {
+/* ----------------------------------------------------------
+   REMPLIR FILTRE CATÉGORIES
+----------------------------------------------------------- */
+function fillCategoryFilter() {
+  const select = document.getElementById("filterCategory");
+  const categories = [...new Set(recettes.map(r => r["Catégorie"]))].sort();
+
+  categories.forEach(cat => {
+    if (cat.trim() !== "") {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      select.appendChild(opt);
+    }
+  });
+}
+
+/* ----------------------------------------------------------
+   AFFICHAGE DES RECETTES
+----------------------------------------------------------- */
+function displayRecettes(list) {
   const area = document.getElementById("displayArea");
   area.innerHTML = "";
 
-  if (list.length === 0) {
-    area.innerHTML = "<p style='text-align:center;color:#888'>Aucune recette trouvée</p>";
+  if (!list.length) {
+    area.innerHTML = `<p style="text-align:center;margin-top:20px;color:#888">Aucune recette trouvée.</p>`;
     return;
   }
 
   list.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "card";
+    const card = document.createElement("div");
+    card.className = "recette-card";
 
-    // ingrédients → séparés par retour à la ligne
-    const ingredients = r.ingredients ? r.ingredients.split("\\n").map(i => `<li>${i}</li>`).join("") : "";
+    const imageHTML = r["Photo"]
+      ? `<img src="${r["Photo"]}" class="recette-img" alt="Photo de ${r["Titre"]}">`
+      : `<div class="no-img">Aucune image</div>`;
 
-    // étapes → idem
-    const etapes = r.etapes ? r.etapes.split("\\n").map(i => `<li>${i}</li>`).join("") : "";
+    card.innerHTML = `
+      ${imageHTML}
 
-    div.innerHTML = `
-      ${r.image ? `<img src="${r.image}" alt="">` : ""}
-      <div class="card-title">${r.titre}</div>
+      <h2 class="recette-title">${r["Titre"]}</h2>
+      <p><strong>Catégorie :</strong> ${r["Catégorie"]}</p>
+      <p><strong>Nombre de personnes :</strong> ${r["Nombre de personnes"]}</p>
 
-      <div class="card-section-title">Catégorie</div>
-      <p>${r.categorie}</p>
+      <h3>Ingrédients</h3>
+      <p>${r["Ingrédients"].replace(/\n/g, "<br>")}</p>
 
-      <div class="card-section-title">Ingrédients</div>
-      <ul>${ingredients}</ul>
+      <h3>Matériel</h3>
+      <p>${r["Matériel"].replace(/\n/g, "<br>")}</p>
 
-      <div class="card-section-title">Étapes</div>
-      <ol>${etapes}</ol>
+      <h3>Étapes</h3>
+      <p>${r["Étapes"].replace(/\n/g, "<br>")}</p>
 
-      <div class="card-buttons">
-        <button class="btn btn-gradient" onclick="window.print()">🖨️ Imprimer</button>
-        <button class="btn btn-gradient" onclick="shareWhatsApp('${r.titre}')">📲 WhatsApp</button>
+      <div class="recette-buttons">
+        <button class="btn-print" onclick="printRecette('${r["Titre"]}')">🖨️ Imprimer</button>
+        <button class="btn-whatsapp" onclick="shareWhatsApp('${encodeURIComponent(r["Titre"])}')">📱 WhatsApp</button>
       </div>
     `;
 
-    area.appendChild(div);
+    area.appendChild(card);
   });
 }
 
-// -------------------------------
-// WHATSAPP SHARE
-// -------------------------------
+/* ----------------------------------------------------------
+   IMPRIMER UNE RECETTE
+----------------------------------------------------------- */
+function printRecette(titre) {
+  window.print();
+}
+
+/* ----------------------------------------------------------
+   PARTAGE WHATSAPP
+----------------------------------------------------------- */
 function shareWhatsApp(titre) {
-  const url = encodeURIComponent(window.location.href);
-  const text = encodeURIComponent("Je te partage une recette : " + titre);
-  window.open(`https://wa.me/?text=${text}%20${url}`);
+  const url = `https://wa.me/?text=Voici une recette : ${titre}`;
+  window.open(url, "_blank");
 }
 
-// -------------------------------
-// RECHERCHE RAPIDE
-// -------------------------------
-document.getElementById("quickSearch").addEventListener("input", e => {
+/* ----------------------------------------------------------
+   RECHERCHE RAPIDE
+----------------------------------------------------------- */
+document.getElementById("quickSearch").addEventListener("input", (e) => {
   const q = e.target.value.toLowerCase();
+
   const filtered = recettes.filter(r =>
-    r.titre.toLowerCase().includes(q) ||
-    r.ingredients.toLowerCase().includes(q)
+    r["Titre"].toLowerCase().includes(q) ||
+    r["Ingrédients"].toLowerCase().includes(q) ||
+    r["Catégorie"].toLowerCase().includes(q)
   );
-  renderRecettes(filtered);
+
+  displayRecettes(filtered);
 });
 
-// -------------------------------
-// FILTRES
-// -------------------------------
-function remplirFiltres(recettes) {
-  const selectCat = document.getElementById("filterCategory");
-  const cats = [...new Set(recettes.map(r => r.categorie))];
-
-  cats.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    selectCat.appendChild(opt);
-  });
-}
-
-document.getElementById("filterCategory").addEventListener("change", e => {
+/* ----------------------------------------------------------
+   FILTRE PAR CATÉGORIE
+----------------------------------------------------------- */
+document.getElementById("filterCategory").addEventListener("change", (e) => {
   const cat = e.target.value;
-  const res = cat ? recettes.filter(r => r.categorie === cat) : recettes;
-  renderRecettes(res);
+
+  if (!cat) {
+    displayRecettes(recettes);
+    return;
+  }
+
+  const filtered = recettes.filter(r => r["Catégorie"] === cat);
+  displayRecettes(filtered);
 });
 
-// -------------------------------
-// BOUTON SURPRISE
-// -------------------------------
+/* ----------------------------------------------------------
+   BOUTON SURPRISE
+----------------------------------------------------------- */
 document.getElementById("btnRandom").addEventListener("click", () => {
+  if (recettes.length === 0) return;
   const r = recettes[Math.floor(Math.random() * recettes.length)];
-  renderRecettes([r]);
+  displayRecettes([r]);
 });
+
+/* ----------------------------------------------------------
+   LANCEMENT
+----------------------------------------------------------- */
+loadCSV();
