@@ -1,0 +1,240 @@
+/* -----------------------------------------
+   VARIABLES GLOBALES
+------------------------------------------ */
+:root {
+  --primary: #9aa3ff;
+  --primary-dark: #7b83ff;
+  --bg: #fafafa;
+  --text: #2c2c2c;
+  --muted: #888;
+  --radius: 14px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --font-title: "Poppins", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  padding-top: 80px;
+}
+
+/* -----------------------------------------
+   HEADER (APPBAR)
+------------------------------------------ */
+.appbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: white;
+  padding: 10px 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 50;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 12px;
+}
+
+.logo-img {
+  height: 48px;
+}
+
+.brand-title {
+  font-family: var(--font-title);
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: var(--primary-dark);
+}
+
+/* MOBILE - titre centré et logo au dessus */
+@media (max-width: 600px) {
+  .logo {
+    flex-direction: column;
+    align-items: center;
+  }
+  .brand-title {
+    font-size: 16px;
+  }
+}
+
+/* -----------------------------------------
+   ZONE DE RECHERCHE (TOP SEARCH)
+------------------------------------------ */
+.searchTop {
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.2s;
+}
+
+.searchTop:focus {
+  border-color: var(--primary);
+}
+
+/* -----------------------------------------
+   BOUTONS
+------------------------------------------ */
+.btn {
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn.primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn.ghost:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* Style kawaii */
+.kawaii {
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+/* -----------------------------------------
+   LAYOUT GÉNÉRAL
+------------------------------------------ */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label.small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* -----------------------------------------
+   CARTES TECHNIQUES / RECETTES
+------------------------------------------ */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-family: var(--font-title);
+  margin-bottom: 10px;
+  color: var(--primary-dark);
+}
+
+.card img {
+  width: 100%;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+}
+
+.card-section-title {
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  color: var(--primary-dark);
+}
+
+/* -----------------------------------------
+   BOUTONS SPÉCIAUX (IMPRIMER / WHATSAPP)
+------------------------------------------ */
+.btn-print,
+.btn-share {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  display: inline-block;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.btn-print {
+  background: #eaeaea;
+  color: #333;
+}
+
+.btn-share {
+  background: #25D366;
+  color: white;
+}
+
+/* Sur mobile : boutons côte à côte */
+@media (max-width: 600px) {
+  .btn-print, .btn-share {
+    width: 48%;
+    text-align: center;
+  }
+}
+
+/* -----------------------------------------
+   ÉTAT VIDE (empty)
+------------------------------------------ */
+.empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--muted);
+}
+
+/* -----------------------------------------
+   LISTE D'INGRÉDIENTS / ÉTAPES
+------------------------------------------ */
+ul.ingredients,
+ol.etapes {
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+.ingredients li,
+.etapes li {
+  margin-bottom: 4px;
+}
