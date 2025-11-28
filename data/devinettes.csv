@@ -3,29 +3,29 @@ date,devinette,réponse
 01/01,Je parle sans bouche et j'entends sans oreilles. Qui suis-je ?,un écho
 02/01,Qu'est-ce qui a des yeux mais ne voit pas ?,une pomme de terre
 03/01,Qu'est-ce qui a des clefs mais n'ouvre aucune porte ?,un piano
-04/01,Qu'est-ce qui va de mer en mer mais reste toujours au même endroit ?,un bateau
-05/01,"""Qu'est-ce qui a une tête, un corps et quatre pattes mais ne vit pas ?""",un lit
+04/01,Il y a 7 bancs dans le parc et 3 bancs ont été peints. Combien reste-t-il de bancs dans le parc ?,7
+05/01,Quel poisson s'arrête très souvent ?,la raie
 06/01,Qu'est-ce qui monte toujours mais descend jamais ?,un âge
-07/01,"""Plus tu en enlèves, plus il devient lourd. C'est quoi ?""",un trou
+07/01,Plus tu en enlèves, plus il devient gros. C'est quoi ?,un trou
 08/01,Qu'est-ce qui a des dents mais ne mange jamais ?,une peigne
-09/01,Qu'est-ce qui a des mains mais ne peut pas applaudir ?,une horloge
-10/01,Qu'est-ce qui a un cou mais pas de tête ?,une bouteille
+09/01,Je commence la nuit et je termine le matin. Qui suis-je ?,n
+10/01,Quelle est la lettre préférée des bûcherons ?,h
 11/01,Je suis toujours devant toi mais tu ne peux jamais me voir. Qui suis-je ?,ton avenir
-12/01,"""Qu'est-ce qui arrive une fois dans une minute, deux fois dans un moment mais jamais dans mille ans ?""",la lettre M
-13/01,Qu'est-ce qui a des branches mais pas de feuilles ?,une banque
-14/01,Qu'est-ce qui a un anneau mais pas de doigt ?,un téléphone
+12/01,"""Qu'est-ce qui arrive une fois dans une minute, deux fois dans un moment mais jamais dans cent ans ?""",la lettre M
+13/01,Qu'est-ce qu'un hippopotame qui fait du camping ?,un hippocampe
+14/01,Je suis Tintin mais je ne suis pas Tintin. Qui suis-je ?,Milou
 15/01,Je suis légère comme une plume mais personne ne peut me retenir très longtemps. Qui suis-je ?,ma respiration
 16/01,Qu'est-ce qui a des os mais pas de chair ?,un squelette
 17/01,Qu'est-ce qui a des feuilles mais n'est pas un arbre ?,un livre
-18/01,Qu'est-ce qui a une langue mais ne peut pas parler ?,une chaussure
-19/01,Qu'est-ce qui a un pied mais pas de jambe ?,un escabeau
-20/01,Qu'est-ce qui a des yeux mais ne peut pas voir ?,une aiguille
-21/01,Qu'est-ce qui court sans jambes ?,un nez
-22/01,Qu'est-ce qui a un cou mais pas de tête ni de corps ?,une chemise
-23/01,Qu'est-ce qui a des ongles mais pas de doigts ?,un tableau
-24/01,Qu'est-ce qui a des côtes mais pas de chair ?,un parapluie
-25/01,Qu'est-ce qui a un bec mais ne chante pas ?,un tuyau
-26/01,Qu'est-ce qui a des dents mais ne mord pas ?,une scie
+18/01,Mes villes sont vides, mes montagnes sont plates, mes océans et mes fleuves sont secs. Qui suis-je ?,une carte
+19/01,Je suis commune à Mercure, Terre et Jupiter, mais exclue de Vénus et Neptune. Qui suis-je ?,r
+20/01,Qu'est-ce qui a 13 carreaux mais pas de fenêtres ?,un jeu de cartes
+21/01,Plus je deviens vieux, plus je deviens fort, qui suis-je ?,un fromage
+22/01,Qu'est-ce qui tombe mais ne se blesse jamais ?,la nuit
+23/01,Qu'est-ce qui grossit mais ne prend jamais de poids ?,une loupe
+24/01,Je suis là où le présent est après le passé et le futur avant le passé. Qui suis-je ?,un dictionnaire
+25/01,Je pars toujours en dernier, pourtant on ne peut me retenir très longtemps. Qui suis-je ?,le soufle
+26/01,Qu'est-ce qui peut remplir tout un espace sans prendre de place ?,la lumière
 27/01,Qu'est-ce qui pleure sans yeux ?,un nuage
 28/01,Qu'est-ce qui a des plumes mais ne vole pas ?,un plumeau
 29/01,Qu'est-ce qui a une queue mais pas de corps ?,une pièce de monnaie
@@ -366,6 +366,7 @@ date,devinette,réponse
 29/12,Girafe = 3 - Éléphant = 3 - Hippopotame = 5 - Lion = … ,2
 30/12,Qu’est ce qui est plus grand que la Tour Eiffel mais infiniment moins lourd ?,son ombre
 31/12,Qu'est-ce qui peut être dans la mer et dans le ciel ?,une étoile
+
 
 
 
