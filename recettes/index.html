@@ -1,11 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Recettes – Créations Savonnesques</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Police pour icônes (optionnel) -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ----------------------------------------------------------
+     HEADER
+----------------------------------------------------------- -->
 <header class="appbar">
-  <a class="logo" href="index.html">
-    <img src="assets/images/logo.png" class="logo-img">
-    <span class="brand-title">CREATIONS SAVONNESQUES</span>
+  <a class="logo" href="index.html" title="Accueil">
+    <img src="assets/images/logo.png" alt="logo" class="logo-img">
+    <span class="brand-title">CREATIONS culinaires</span>
   </a>
 
   <div class="top-controls">
-    <input id="quickSearch" class="searchTop" type="search" placeholder="🔍 Recherche...">
+    <input id="quickSearch" class="searchTop" type="search"
+           placeholder="🔍 Recherche...">
 
     <select id="filterCategory">
       <option value="">Toutes catégories</option>
@@ -15,8 +35,17 @@
   </div>
 </header>
 
+<!-- ----------------------------------------------------------
+     CONTENU
+----------------------------------------------------------- -->
 <main class="container">
   <div id="displayArea"></div>
 </main>
 
+<!-- ----------------------------------------------------------
+     SCRIPT PRINCIPAL
+----------------------------------------------------------- -->
 <script src="script.js"></script>
+
+</body>
+</html>
