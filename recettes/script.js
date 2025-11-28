@@ -5,7 +5,7 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHntlP8qAseSjx
 
 let recettes = [];
 
-/* ----------------------------------------------------------
+/* ---------------------------------------------------------
    CHARGEMENT CSV
 ----------------------------------------------------------- */
 async function loadCSV() {
