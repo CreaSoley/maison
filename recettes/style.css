@@ -1,5 +1,5 @@
 /* -----------------------------------------
-   VARIABLES GLOBALES
+   VARIABLES
 ------------------------------------------ */
 :root {
   --primary: #9aa3ff;
@@ -9,27 +9,29 @@
   --muted: #888;
   --radius: 14px;
   --shadow: 0 2px 8px rgba(0,0,0,0.08);
-  --font-title: "Poppins", sans-serif;
-  --font-body: "Inter", sans-serif;
+
+  --grad-green: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+/* Police Spicy Sale */
+@font-face {
+  font-family: "Spicy";
+  src: url("assets/fonts/Spicy Sale.ttf") format("truetype");
 }
 
 /* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: var(--font-body);
+  font-family: "Inter", sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
-  padding-top: 80px;
+  padding-top: 95px;
 }
 
 /* -----------------------------------------
-   HEADER (APPBAR)
+   HEADER
 ------------------------------------------ */
 .appbar {
   position: fixed;
@@ -39,53 +41,54 @@ body {
   padding: 10px 16px;
   box-shadow: var(--shadow);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  z-index: 50;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  text-decoration: none;
   gap: 12px;
+  text-decoration: none;
 }
 
-.logo-img {
-  height: 48px;
-}
+.logo-img { height: 55px; }
 
 .brand-title {
-  font-family: var(--font-title);
-  font-size: 20px;
-  letter-spacing: 1px;
+  font-family: "Spicy", sans-serif;
+  font-size: 32px;
   color: var(--primary-dark);
 }
 
-/* MOBILE - titre centré et logo au dessus */
+/* MOBILE : titre plus petit */
 @media (max-width: 600px) {
-  .logo {
-    flex-direction: column;
-    align-items: center;
-  }
-  .brand-title {
-    font-size: 16px;
-  }
+  .brand-title { font-size: 22px; }
+  .logo-img { height: 42px; }
 }
 
 /* -----------------------------------------
-   ZONE DE RECHERCHE (TOP SEARCH)
+   BARRE DE RECHERCHE + FILTRES
 ------------------------------------------ */
-.searchTop {
-  padding: 6px 10px;
-  border-radius: var(--radius);
-  border: 1px solid #ddd;
-  outline: none;
-  transition: 0.2s;
+.top-controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.searchTop:focus {
-  border-color: var(--primary);
+.searchTop {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
+  min-width: 200px;
+}
+
+select {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
 }
 
 /* -----------------------------------------
@@ -100,76 +103,27 @@ body {
   transition: 0.2s;
 }
 
-.btn.primary {
+/* Gradient spécial */
+.btn-gradient {
+  background-image: var(--grad-green);
+  color: white;
+}
+
+/* Bouton Surprise */
+.btn-surprise {
   background: var(--primary);
   color: white;
 }
 
-.btn.primary:hover {
-  background: var(--primary-dark);
-}
-
-.btn.ghost {
-  background: transparent;
-  border: 2px solid var(--primary);
-  color: var(--primary);
-}
-
-.btn.ghost:hover {
-  background: var(--primary);
-  color: white;
-}
-
-/* Style kawaii */
-.kawaii {
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-}
-
 /* -----------------------------------------
-   LAYOUT GÉNÉRAL
------------------------------------------- */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: flex-end;
-  margin-bottom: 20px;
-}
-
-.control-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-label.small {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* -----------------------------------------
-   CARTES TECHNIQUES / RECETTES
+   CARDS
 ------------------------------------------ */
 .card {
   background: white;
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: var(--shadow);
-  margin-bottom: 20px;
-}
-
-.card-title {
-  font-size: 20px;
-  font-family: var(--font-title);
-  margin-bottom: 10px;
-  color: var(--primary-dark);
+  margin: 20px 0;
 }
 
 .card img {
@@ -178,63 +132,25 @@ label.small {
   margin-bottom: 12px;
 }
 
+.card-title {
+  font-family: "Spicy";
+  font-size: 26px;
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+}
+
 .card-section-title {
   font-weight: bold;
-  margin-top: 12px;
-  margin-bottom: 6px;
+  margin: 6px 0;
   color: var(--primary-dark);
 }
 
-/* -----------------------------------------
-   BOUTONS SPÉCIAUX (IMPRIMER / WHATSAPP)
------------------------------------------- */
-.btn-print,
-.btn-share {
+/* Listes */
+ul, ol { padding-left: 20px; }
+
+/* Boutons bas carte */
+.card-buttons {
+  display: flex;
+  gap: 8px;
   margin-top: 10px;
-  padding: 8px 12px;
-  border-radius: var(--radius);
-  display: inline-block;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.btn-print {
-  background: #eaeaea;
-  color: #333;
-}
-
-.btn-share {
-  background: #25D366;
-  color: white;
-}
-
-/* Sur mobile : boutons côte à côte */
-@media (max-width: 600px) {
-  .btn-print, .btn-share {
-    width: 48%;
-    text-align: center;
-  }
-}
-
-/* -----------------------------------------
-   ÉTAT VIDE (empty)
------------------------------------------- */
-.empty {
-  text-align: center;
-  padding: 40px 0;
-  color: var(--muted);
-}
-
-/* -----------------------------------------
-   LISTE D'INGRÉDIENTS / ÉTAPES
------------------------------------------- */
-ul.ingredients,
-ol.etapes {
-  padding-left: 20px;
-  margin-top: 8px;
-}
-
-.ingredients li,
-.etapes li {
-  margin-bottom: 4px;
 }
