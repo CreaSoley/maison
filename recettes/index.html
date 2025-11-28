@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Recettes</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .recette { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; border-radius: 8px; }
+    .recette img { max-width: 300px; display: block; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h1>Ajouter une recette</h1>
+<p>Cliquez sur le bouton pour remplir le formulaire :</p>
+<a href="COLLE_ICI_LE_LIEN_GOOGLE_FORM" target="_blank">
+  <button>Ajouter une recette</button>
+</a>
+
+<h2>Recettes existantes</h2>
+<div id="liste-recettes">
+  <!-- Les recettes s'afficheront ici -->
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.6.0/tabletop.min.js"></script>
+<script>
+const publicSpreadsheetUrl = 'COLLE_ICI_LE_LIEN_VERS_GOOGLE_SHEET';
+
+function init() {
+  Tabletop.init({
+    key: publicSpreadsheetUrl,
+    simpleSheet: true
+  }).then(data => {
+    const container = document.getElementById('liste-recettes');
+    container.innerHTML = '';
+    data.forEach(recette => {
+      const div = document.createElement('div');
+      div.className = 'recette';
+      div.innerHTML = `
+        <h3>${recette.Titre}</h3>
+        <p><strong>Catégorie :</strong> ${recette.Catégorie}</p>
+        <p><strong>Nombre de personnes :</strong> ${recette['Nombre de personnes']}</p>
+        <p><strong>Ingrédients :</strong><br>${recette.Ingrédients.replace(/\n/g,'<br>')}</p>
+        <p><strong>Étapes :</strong><br>${recette.Étapes.replace(/\n/g,'<br>')}</p>
+        ${recette['Image URL'] ? `<img src="${recette['Image URL']}" alt="${recette.Titre}">` : ''}
+      `;
+      container.appendChild(div);
+    });
+  }).catch(err => console.error('Erreur Tabletop.js :', err));
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
