@@ -105,32 +105,28 @@ function showTechnique(name){
 /* Construction HTML d’une carte */
 function renderCardHtml(t){
 
-  // Photo
- /* PHOTO (depuis JSON "illustration") */
-const photoSrc = Array.isArray(t.illustration) ? t.illustration[0] : t.illustration;
+  /* PHOTO depuis "illustration" */
+  const photoSrc = Array.isArray(t.illustration) ? t.illustration[0] : t.illustration;
 
-const photoHtml = photoSrc
-  ? `<div class="photo"><img src="${photoSrc}" alt="${escapeHtml(t.nom)}"></div>`
-  : `<div class="photo"><span style="color:#bbb;font-size:13px">Pas d'image</span></div>`;
+  const photoHtml = photoSrc
+    ? `<div class="photo"><img src="${photoSrc}" alt="${escapeHtml(t.nom)}"></div>`
+    : `<div class="photo"><span style="color:#bbb;font-size:13px">Pas d'image</span></div>`;
 
-  // Liens
   const videoBtn = t.youtube 
-    ? `<a class="link-btn" href="${t.youtube}" target="_blank" rel="noopener">🎬 Vidéo</a>` 
-    : '';
-  const galleryBtn = t.galerie 
-    ? `<a class="link-btn" href="${t.galerie}" target="_blank" rel="noopener">🖼️ Galerie</a>` 
-    : '';
-  const recetteEco = t.recettes_econo 
-    ? `<a class="link-btn" href="${t.recettes_econo}" target="_blank">💧 Recette Écono</a>` 
-    : '';
-  const recettePremium = t.recettes_premium 
-    ? `<a class="link-btn" href="${t.recettes_premium}" target="_blank">🌟 Recette Premium</a>` 
-    : '';
-  const tuto = t.tutoriel 
-    ? `<a class="link-btn" href="${t.tutoriel}" target="_blank">📘 Tutoriel</a>` 
-    : '';
+    ? `<a class="link-btn" href="${t.youtube}" target="_blank" rel="noopener">🎬 Vidéo</a>` : '';
 
-  // Matériel
+  const galleryBtn = t.galerie 
+    ? `<a class="link-btn" href="${t.galerie}" target="_blank" rel="noopener">🖼️ Galerie</a>` : '';
+
+  const recetteEco = t.recettes_econo 
+    ? `<a class="link-btn" href="${t.recettes_econo}" target="_blank">💧 Recette Écono</a>` : '';
+
+  const recettePremium = t.recettes_premium 
+    ? `<a class="link-btn" href="${t.recettes_premium}" target="_blank">🌟 Recette Premium</a>` : '';
+
+  const tuto = t.tutoriel 
+    ? `<a class="link-btn" href="${t.tutoriel}" target="_blank">📘 Tutoriel</a>` : '';
+
   const materielList = (t.materiel||'')
       .toString()
       .split('\n')
@@ -145,6 +141,8 @@ const photoHtml = photoSrc
       <div class="meta">${escapeHtml(t.niveau)}</div>
 
       <p style="margin-top:10px">${escapeHtml(t.description)}</p>
+
+      <p style="margin-top:8px"><strong>Trace :</strong> ${escapeHtml(t.trace || '')}</p>
 
       <p style="margin-top:8px"><strong>Matériel :</strong></p>
       <ul>${materielList || '<li>Aucun renseignement</li>'}</ul>
@@ -177,6 +175,8 @@ function printCard(name){
   const t = DATA.find(x => String(x.nom) === String(name));
   if (!t) return alert('Technique introuvable');
 
+  const photoSrc = Array.isArray(t.illustration) ? t.illustration[0] : t.illustration;
+
   const html = `
   <html>
   <head>
@@ -184,29 +184,22 @@ function printCard(name){
     <title>${escapeHtml(t.nom)}</title>
     <style>
       body{font-family:Inter,Arial; padding:20px; color:#111}
-      h1{font-family:Spicy,Inter,Arial; font-size:28px; color:#5b3bd3}
-      img{max-width:320px; display:block; margin:10px 0; border-radius:10px}
+      h1{font-family:Spicy,Inter,Arial; font-size:32px; color:#5b3bd3}
+      img{max-width:350px; display:block; margin:10px 0; border-radius:10px}
       pre{white-space:pre-wrap; font-family:inherit}
-      a{color:#111; text-decoration:none}
     </style>
   </head>
   <body>
     <h1>${escapeHtml(t.nom)}</h1>
-    <div><strong>Niveau :</strong> ${escapeHtml(t.niveau)}</div>
 
-    ${ t.photos ? `<img src="${t.photos}" alt="${escapeHtml(t.nom)}">` : '' }
+    ${ photoSrc ? `<img src="${photoSrc}" alt="${escapeHtml(t.nom)}">` : '' }
+
+    ${ t.trace ? `<p><strong>Trace :</strong> ${escapeHtml(t.trace)}</p>` : '' }
 
     <p>${escapeHtml(t.description)}</p>
 
     <h3>Matériel</h3>
     <pre>${escapeHtml(t.materiel || '')}</pre>
-
-    ${ t.youtube ? `<p>🎬 Vidéo : ${t.youtube}</p>` : '' }
-    ${ t.galerie ? `<p>🖼️ Galerie : ${t.galerie}</p>` : '' }
-    ${ t.recettes_econo ? `<p>💧 Recette Écono : ${t.recettes_econo}</p>` : '' }
-    ${ t.recettes_premium ? `<p>🌟 Recette Premium : ${t.recettes_premium}</p>` : '' }
-    ${ t.tutoriel ? `<p>📘 Tutoriel : ${t.tutoriel}</p>` : '' }
-
   </body>
   </html>
   `;
@@ -228,3 +221,4 @@ function escapeHtml(s){
     .replace(/"/g,'&quot;')
     .replace(/'/g,"&#39;");
 }
+
