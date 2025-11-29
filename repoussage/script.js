@@ -6,7 +6,7 @@ let TODAY = 1;
 /* ---------- chargement des données ---------- */
 async function loadActivities() {
   try {
-    const res = await fetch('maison/repoussage/repoussage.json', { cache: "no-store" });
+    const res = await fetch('repoussage.json', { cache: "no-store" });
     if (!res.ok) throw new Error("Fichier JSON introuvable");
     const raw = await res.json();
     ACTIVITIES = {};
@@ -19,7 +19,8 @@ async function loadActivities() {
       };
     });
   } catch (e) {
-    // fallback : générer 24 cases vides si JSON absent
+    console.error("Erreur JSON:", e);
+    // fallback
     for (let i = 1; i <= 24; i++) {
       ACTIVITIES[String(i)] = { date: `${i} décembre`, fairy: `Contenu du jour ${i}`, pdf: "" };
     }
@@ -29,9 +30,8 @@ async function loadActivities() {
 /* ---------- calcul Aujourd'hui (1..24) ---------- */
 function calcTodayNumber() {
   const today = new Date();
-  const month = today.getMonth() + 1; // 1..12
+  const month = today.getMonth() + 1;
   const day = today.getDate();
-
   if (month < 12) return 1;
   if (month > 12 || day > 24) return 24;
   return day;
@@ -51,7 +51,7 @@ function format3Lines(dateStr) {
     moisStr = parts[1] || 'décembre';
   }
   const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-  const d = new Date(new Date().getFullYear(), 11, jourNum); // mois décembre fixe
+  const d = new Date(new Date().getFullYear(), 11, jourNum);
   const jourSemaine = jours[d.getDay()];
   const jourAff = (jourNum === 1) ? "1er" : jourNum;
   return `${jourSemaine}\n${jourAff}\n${moisStr}`;
@@ -66,7 +66,7 @@ function initCalendar() {
     const shortDate = format3Lines(act.date || `${d} décembre`);
     const div = document.createElement('div');
     div.className = 'door';
-    if (d <= TODAY) div.classList.add('halo'); // jours accessibles
+    if (d <= TODAY) div.classList.add('halo');
     div.innerHTML = `<div class="label">${shortDate}</div>`;
     div.onclick = () => openDay(d);
     cal.appendChild(div);
@@ -94,8 +94,7 @@ function openDay(day) {
   text.innerText = act.fairy || "Aucun contenu pour l'instant.";
   pdfZone.innerHTML = "";
   if (act.pdf) {
-    const safe = act.pdf.replace('/open?', '/uc?');
-    pdfZone.innerHTML = `<a class="pdfBtn" href="${safe}" target="_blank" rel="noreferrer noopener">Voir la ressource</a>`;
+    pdfZone.innerHTML = `<a class="pdfBtn" href="${act.pdf}" target="_blank" rel="noreferrer noopener">Voir la ressource</a>`;
   }
 
   modal.style.display = 'flex';
@@ -115,7 +114,7 @@ window.addEventListener('click', (e) => {
   if (e.target === modal) closeModal();
 });
 
-/* ---------- animation particules dorées globales ---------- */
+/* ---------- particules dorées globales ---------- */
 function initMagicParticles() {
   const canvas = document.getElementById('snowCanvas');
   if (!canvas) return;
@@ -160,26 +159,24 @@ function initMagicParticles() {
   step();
 }
 
-/* ---------- étincelles autour des cases ouvertes ---------- */
+/* ---------- étincelles sur cases ouvertes ---------- */
 function initDoorSparks() {
   const doors = document.querySelectorAll('.door.halo');
   doors.forEach(door => {
     const sparks = [];
-    const container = door;
     for (let i = 0; i < 10; i++) {
       const spark = document.createElement('div');
       spark.className = 'sparkle';
       spark.style.left = `${Math.random() * 100}%`;
       spark.style.top = `${Math.random() * 100}%`;
       spark.style.width = spark.style.height = `${2 + Math.random() * 4}px`;
-      container.appendChild(spark);
+      door.appendChild(spark);
       sparks.push({
         el: spark,
         x: parseFloat(spark.style.left),
         y: parseFloat(spark.style.top),
         dx: (Math.random() - 0.5) * 0.5,
-        dy: (Math.random() - 0.5) * 0.5,
-        alpha: 0.5 + Math.random() * 0.5
+        dy: (Math.random() - 0.5) * 0.5
       });
     }
 
@@ -193,7 +190,6 @@ function initDoorSparks() {
         if (s.y > 100) s.y = 0;
         s.el.style.left = s.x + "%";
         s.el.style.top = s.y + "%";
-        s.el.style.opacity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005 + s.x);
       });
       requestAnimationFrame(animateSparks);
     }
@@ -201,7 +197,7 @@ function initDoorSparks() {
   });
 }
 
-/* ---------- init global ---------- */
+/* ---------- init ---------- */
 (async function () {
   await loadActivities();
   TODAY = calcTodayNumber();
