@@ -1,6 +1,6 @@
 async function chargerDevinette() {
     try {
-        const res = await fetch("devinettes.json");
+        const res = await fetch("js/devinettes.json");
         if (!res.ok) throw new Error("Fichier devinettes introuvable");
 
         const devinettes = await res.json();
