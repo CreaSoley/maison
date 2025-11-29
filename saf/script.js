@@ -106,12 +106,12 @@ function showTechnique(name){
 function renderCardHtml(t){
 
   // Photo
-  const photoSrc = Array.isArray(t.photos) ? t.photos[0] : t.photos;
+ /* PHOTO (depuis JSON "illustration") */
+const photoSrc = Array.isArray(t.illustration) ? t.illustration[0] : t.illustration;
 
 const photoHtml = photoSrc
   ? `<div class="photo"><img src="${photoSrc}" alt="${escapeHtml(t.nom)}"></div>`
   : `<div class="photo"><span style="color:#bbb;font-size:13px">Pas d'image</span></div>`;
- class="photo"><span style="color:#bbb;font-size:13px">Pas d'image</span></div>`;
 
   // Liens
   const videoBtn = t.youtube 
