@@ -2,7 +2,7 @@
   --or:#f7d794;
   --cuivre:#e0a86d;
   --noir:rgba(0,0,0,0.85);
-  --fond:#060403;
+  --fond:#ffffff;
   --goldHalo: rgba(245,205,92,0.95);
   --gap:15px;
   --fontMain: "Gochi Hand", Arial, sans-serif;
@@ -12,8 +12,8 @@
 body{
   margin:0;
   min-height:100vh;
-  background: radial-gradient(ellipse at center, #0b0b0b 0%, #060403 60%);
-  color: white;
+  background: linear-gradient(135deg, #ffe6f0, #fffae6, #e6fff9, #f0e6ff); /* arc-en-ciel clair */
+  color: #333;
   font-family: var(--fontMain);
   overflow-x:hidden;
 }
@@ -21,9 +21,9 @@ body{
 #pageTitle{
   text-align:center;
   font-size:40px;
-  color:var(--or);
+  color:#e07b39;
   margin:18px 8px;
-  text-shadow:0 0 8px rgba(247,215,148,0.15);
+  text-shadow:0 0 6px rgba(255,255,255,0.5);
 }
 
 /* calendar grid */
@@ -46,16 +46,16 @@ body{
   width:100%;
   padding-top:100%; /* square */
   position:relative;
-  background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(10,10,10,0.85));
+  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.9));
   border-radius:12px;
-  border:2px solid rgba(245,205,92,0.25);
+  border:2px solid rgba(255,200,100,0.5);
   cursor:pointer;
   transition: transform .18s ease, box-shadow .18s ease;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 40px rgba(245,205,92,0.06) inset;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2), 0 0 20px rgba(255,215,92,0.06) inset;
   overflow:hidden;
 }
 
-.door:hover{ transform:translateY(-6px) scale(1.02); }
+.door:hover{ transform:translateY(-4px) scale(1.02); }
 
 .door .label{
   position:absolute;
@@ -65,7 +65,7 @@ body{
   justify-content:center;
   flex-direction:column;
   font-size:18px;
-  color:var(--or);
+  color: #e07b39;
   padding:10px;
   text-align:center;
   line-height:1.05;
@@ -74,15 +74,26 @@ body{
 
 /* halo glow for opened/available doors */
 .halo{
-  box-shadow: 0 0 22px rgba(247,215,148,0.28), 0 0 44px rgba(247,215,148,0.12);
+  box-shadow: 0 0 20px rgba(245,205,92,0.4), 0 0 40px rgba(245,205,92,0.15);
   transform:scale(1.01);
+}
+
+/* sparkles on doors */
+.door .sparkle{
+  position: absolute;
+  border-radius: 50%;
+  background: gold;
+  pointer-events: none;
+  opacity: 0.8;
+  width: 4px;
+  height: 4px;
 }
 
 /* modal */
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.78);
+  background:rgba(0,0,0,0.6);
   display:none;
   align-items:center;
   justify-content:center;
@@ -91,25 +102,25 @@ body{
 }
 
 .modal-content{
-  background:#121212;
-  border:2px solid var(--or);
+  background:#ffffff;
+  border:2px solid #e07b39;
   border-radius:12px;
   padding:22px;
   max-width:640px;
   width:100%;
   text-align:center;
-  box-shadow:0 0 26px rgba(247,215,148,0.12);
+  box-shadow:0 0 26px rgba(255,200,100,0.3);
 }
 
 .modal h2{
   margin:6px 0 12px;
-  font-size:32px;
-  color:var(--or);
+  font-size:28px;
+  color:#e07b39;
 }
 
 .texte{
-  font-size:20px;
-  color:#fff;
+  font-size:18px;
+  color:#333;
   margin:8px 0 12px;
   white-space:pre-line;
 }
@@ -119,12 +130,12 @@ body{
   display:inline-block;
   margin-top:12px;
   padding:10px 16px;
-  background:var(--or);
-  color:black;
+  background:#e07b39;
+  color:white;
   font-weight:700;
   text-decoration:none;
   border-radius:8px;
-  font-size:18px;
+  font-size:16px;
   transition:transform .12s;
 }
 .pdfBtn:hover{ transform:translateY(-3px); }
@@ -132,8 +143,8 @@ body{
 /* close */
 .btn-close{
   margin-top:18px;
-  font-size:18px;
-  background:var(--cuivre);
+  font-size:16px;
+  background:#f7d794;
   color:black;
   border:0;
   padding:8px 14px;
@@ -141,7 +152,7 @@ body{
   cursor:pointer;
 }
 
-/* snow canvas */
+/* canvas for particles */
 #snowCanvas{
   position:fixed;
   inset:0;
@@ -158,5 +169,5 @@ body{
   font-family:Arial, sans-serif;
   font-size:14px;
 }
-.credits a{ color:#f5e7b3; text-decoration:none; }
+.credits a{ color:#e07b39; text-decoration:none; }
 .credits a:hover{ text-decoration:underline; }
