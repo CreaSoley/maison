@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calendrier de l'Avent Féérique</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1 id="pageTitle">Calendrier de l’Avent Féérique</h1>
+
+  <canvas id="snowCanvas"></canvas>
+  <div id="calendar" class="calendar"></div>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div id="modalContent" class="modal-content">
+      <h2 id="modalTitle"></h2>
+      <div class="texte" id="modalText"></div>
+      <div id="pdfZone"></div>
+      <button id="closeBtn" class="btn-close">Fermer</button>
+    </div>
+  </div>
+
+  <div class="credits">
+    <a href="admin.html" title="Gérer localement les activités">⚙️ Gérer (local)</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
