@@ -1,162 +1,184 @@
-:root{
-  --or:#f7d794;
-  --cuivre:#e0a86d;
-  --noir:rgba(0,0,0,0.85);
-  --fond:#060403;
-  --goldHalo: rgba(245,205,92,0.95);
-  --gap:15px;
-  --fontMain: "Gochi Hand", Arial, sans-serif;
+/* --------------------------------------------------------------
+   POLICES
+-------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Spicy";
+  src: url("https://fonts.gstatic.com/s/specialelite/v9/9-wW4zu3WNoD5e2G4ZsP1r4OuKU.woff2") format("woff2");
 }
 
-*{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
-  background: radial-gradient(ellipse at center, #0b0b0b 0%, #060403 60%);
-  color: white;
-  font-family: var(--fontMain);
-  overflow-x:hidden;
+body {
+  margin: 0;
+  background: #f7f0ff;
+  font-family: Inter, Arial, sans-serif;
+  color: #111;
 }
 
-#pageTitle{
-  text-align:center;
-  font-size:40px;
-  color:var(--or);
-  margin:18px 8px;
-  text-shadow:0 0 8px rgba(247,215,148,0.15);
+/* --------------------------------------------------------------
+   HEADER
+-------------------------------------------------------------- */
+
+.appbar {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border-radius: 0 0 22px 22px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
-/* calendar grid */
-.calendar{
-  width:92%;
-  max-width:1100px;
-  margin:20px auto 60px;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:var(--gap);
-  align-items:stretch;
+.logo-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: white;
+  border: 4px solid rgba(255,255,255,0.8);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
-/* responsive */
-@media(max-width:900px){ .calendar{ grid-template-columns:repeat(4,1fr); } }
-@media(max-width:600px){ .calendar{ grid-template-columns:repeat(3,1fr); } }
-@media(max-width:450px){ .calendar{ grid-template-columns:repeat(2,1fr); } }
-
-.door{
-  width:100%;
-  padding-top:100%; /* square */
-  position:relative;
-  background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(10,10,10,0.85));
-  border-radius:12px;
-  border:2px solid rgba(245,205,92,0.25);
-  cursor:pointer;
-  transition: transform .18s ease, box-shadow .18s ease;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 40px rgba(245,205,92,0.06) inset;
-  overflow:hidden;
+.title {
+  margin-left: 12px;
+  font-family: Spicy, Inter, Arial;
+  font-size: 34px;
+  color: #8d62f2;
+  text-transform: uppercase;
+  line-height: 1.1;
 }
 
-.door:hover{ transform:translateY(-6px) scale(1.02); }
-
-.door .label{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  font-size:18px;
-  color:var(--or);
-  padding:10px;
-  text-align:center;
-  line-height:1.05;
-  white-space:pre-line;
+.appbar-right {
+  margin-left: auto;
 }
 
-/* halo glow for opened/available doors */
-.halo{
-  box-shadow: 0 0 22px rgba(247,215,148,0.28), 0 0 44px rgba(247,215,148,0.12);
-  transform:scale(1.01);
+/* Desktop : centrer logo + titre */
+@media (min-width: 900px) {
+  .appbar {
+    justify-content: center;
+  }
+  .appbar-right {
+    position: absolute;
+    right: 20px;
+  }
 }
 
-/* modal */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.78);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:100;
-  padding:20px;
+/* --------------------------------------------------------------
+   SEARCH BAR
+-------------------------------------------------------------- */
+
+.search-container {
+  padding: 15px;
 }
 
-.modal-content{
-  background:#121212;
-  border:2px solid var(--or);
-  border-radius:12px;
-  padding:22px;
-  max-width:640px;
-  width:100%;
-  text-align:center;
-  box-shadow:0 0 26px rgba(247,215,148,0.12);
+#search {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 17px;
+  border: none;
+  box-shadow: 0 0 0 2px #e5d5ff inset;
 }
 
-.modal h2{
-  margin:6px 0 12px;
-  font-size:32px;
-  color:var(--or);
+/* --------------------------------------------------------------
+   CARDS
+-------------------------------------------------------------- */
+
+.cards {
+  padding: 20px;
+  display: grid;
+  gap: 26px;
 }
 
-.texte{
-  font-size:20px;
-  color:#fff;
-  margin:8px 0 12px;
-  white-space:pre-line;
+.card {
+  background: white;
+  padding: 16px;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+  display: flex;
+  gap: 18px;
+  overflow: hidden;
 }
 
-/* pdf btn */
-.pdfBtn{
-  display:inline-block;
-  margin-top:12px;
-  padding:10px 16px;
-  background:var(--or);
-  color:black;
-  font-weight:700;
-  text-decoration:none;
-  border-radius:8px;
-  font-size:18px;
-  transition:transform .12s;
-}
-.pdfBtn:hover{ transform:translateY(-3px); }
-
-/* close */
-.btn-close{
-  margin-top:18px;
-  font-size:18px;
-  background:var(--cuivre);
-  color:black;
-  border:0;
-  padding:8px 14px;
-  border-radius:8px;
-  cursor:pointer;
+/* photo */
+.photo {
+  width: 320px;
+  height: 280px;
+  border-radius: 14px;
+  overflow: hidden;
 }
 
-/* snow canvas */
-#snowCanvas{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:10;
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* small credits link */
-.credits{
-  position:fixed;
-  right:12px;
-  bottom:14px;
-  z-index:120;
-  font-family:Arial, sans-serif;
-  font-size:14px;
+/* titre et meta */
+.card h3 {
+  margin: 0;
+  font-size: 28px;
+  font-family: Spicy, Inter, Arial;
+  color: #5b3bd3;
+  text-transform: uppercase;
 }
-.credits a{ color:#f5e7b3; text-decoration:none; }
-.credits a:hover{ text-decoration:underline; }
+
+.meta {
+  margin-top: 4px;
+  font-size: 15px;
+  color: #777;
+}
+
+/* Matériel */
+.card ul {
+  margin-top: 6px;
+  padding-left: 22px;
+}
+
+.card ul li {
+  margin-bottom: 4px;
+}
+
+/* --------------------------------------------------------------
+   ACTION BUTTONS
+-------------------------------------------------------------- */
+
+.link-btn, .print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #f1ecff;
+  color: #444;
+  border-radius: 14px;
+  font-size: 15px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Desktop : afficher les boutons en cartes type grille */
+@media (min-width: 900px) {
+  .actions {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .link-btn, .print-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Mobile: layout vertical */
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+  }
+  .photo {
+    width: 100%;
+    height: 220px;
+  }
+}
