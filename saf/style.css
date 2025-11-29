@@ -32,7 +32,16 @@ body{margin:0;font-family:Inter,Roboto,Arial,sans-serif;background:var(--bg);col
 }
 
 .logo{display:flex;align-items:center;gap:14px;text-decoration:none}
-.logo-img{width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 6px 18px rgba(0,0,0,0.06);border:4px solid rgba(255,255,255,0.8)}
+.logo-img{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  object-fit:contain; /* au lieu de cover */
+  background:white;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+  border:4px solid rgba(255,255,255,0.8);
+}
+
 .brand-title{font-size:22px;color:var(--primary);letter-spacing:1px}
 .spicy{font-family:"Spicy", Inter, sans-serif;font-weight:400}
 
