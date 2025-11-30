@@ -3,121 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌍 Apprentissage des langues</title>
+    <title>Apprentissage des langues</title>
 
-    <link rel="stylesheet" href="css/langues.css">
-    <link rel="stylesheet" href="css/style.css"> <!-- ta feuille globale -->
+    <link rel="stylesheet" href="css/languages.css">
 </head>
-<body class="accueil">
 
-<header class="header-title">
-    <div class="header-inline">
-        <!-- LOGO CLIQUABLE -->
-        <a href="index.html">
-            <img src="assets/logo.png" class="header-logo" alt="logo">
-        </a>
-        <h1 class="title-spicy header-main-title">Apprentissage des Langues</h1>
-    </div>
+<body>
 
-    <p class="header-subtitle">Découvre, écoute, apprends</p>
+<header class="header">
+    <a href="../index.html">
+        <img src="assets/logo.png" alt="Logo" class="logo">
+    </a>
 </header>
 
-<!-- ======= DRAPEAUX ======= -->
-<section class="flags-container">
-    <div class="flag-item" data-lang="en">
-        <img src="assets/flags/en.png" alt="Anglais">
-        <span>Anglais</span>
-    </div>
-    <div class="flag-item" data-lang="de">
-        <img src="assets/flags/de.png" alt="Allemand">
-        <span>Allemand</span>
-    </div>
-    <div class="flag-item" data-lang="es">
-        <img src="assets/flags/es.png" alt="Espagnol">
-        <span>Espagnol</span>
-    </div>
-    <div class="flag-item" data-lang="lsf">
+<h1 class="page-title">Apprentissage des langues</h1>
+
+<!-- DRAPEAUX -->
+<div class="flags-container">
+    <button class="flag-item" data-lang="en">
+        <img src="assets/flags/en.png" alt="English">
+    </button>
+
+    <button class="flag-item" data-lang="de">
+        <img src="assets/flags/de.png" alt="Deutsch">
+    </button>
+
+    <button class="flag-item" data-lang="es">
+        <img src="assets/flags/es.png" alt="Español">
+    </button>
+
+    <button class="flag-item" data-lang="lsf">
         <img src="assets/flags/lsf.png" alt="Langue des signes">
-        <span>LSF</span>
-    </div>
-</section>
+    </button>
+</div>
 
-<!-- ======= PANNEAUX MÉLANGUES ======= -->
-<section id="lang-panels-group">
+<!-- PANNEAUX (contenu chargé en JS) -->
+<div class="lang-panel" id="lang-en"></div>
+<div class="lang-panel" id="lang-de"></div>
+<div class="lang-panel" id="lang-es"></div>
+<div class="lang-panel" id="lang-lsf"></div>
 
-    <!-- PANEL TYPE (dupliqué pour chaque langue ci-dessous) -->
-    <div class="lang-panel" id="lang-en" aria-hidden="true">
-        <h2 class="title-spicy">Anglais</h2>
-
-        <div class="lang-grid">
-
-            <!-- HISTOIRE DU JOUR -->
-            <div class="mini-card">
-                <h3>📖 Histoire du jour</h3>
-                <button class="btn-load-video" data-type="stories">Lance l'histoire</button>
-                <div class="video-placeholder"></div>
-            </div>
-
-            <!-- RECETTE DU JOUR -->
-            <div class="mini-card">
-                <h3>🍽️ Recette du jour</h3>
-                <button class="btn-load-video" data-type="recipes">Lance la vidéo</button>
-                <div class="video-placeholder"></div>
-            </div>
-
-            <!-- MOTS À APPRENDRE -->
-            <div class="mini-card">
-                <h3>📝 Mots du jour</h3>
-                <ul class="mots-list"></ul>
-                <button class="btn-new-mots">Nouveaux mots</button>
-            </div>
-
-        </div>
-
-        <!-- BIBLIOTHÈQUE -->
-        <h3 class="bib-title">📚 Ressources</h3>
-        <ul class="resources-list"></ul>
-    </div>
-
-    <!-- COPIER/COLLER LES PANNEAUX POUR CHAQUE LANGUE -->
-
-    <div class="lang-panel" id="lang-de" aria-hidden="true">
-        <h2 class="title-spicy">Allemand</h2>
-        <div class="lang-grid">
-            <div class="mini-card"><h3>📖 Histoire du jour</h3><button class="btn-load-video" data-type="stories">Lance l'histoire</button><div class="video-placeholder"></div></div>
-            <div class="mini-card"><h3>🍽️ Recette du jour</h3><button class="btn-load-video" data-type="recipes">Lance la vidéo</button><div class="video-placeholder"></div></div>
-            <div class="mini-card"><h3>📝 Mots du jour</h3><ul class="mots-list"></ul><button class="btn-new-mots">Nouveaux mots</button></div>
-        </div>
-        <h3 class="bib-title">📚 Ressources</h3>
-        <ul class="resources-list"></ul>
-    </div>
-
-    <div class="lang-panel" id="lang-es" aria-hidden="true">
-        <h2 class="title-spicy">Espagnol</h2>
-        <div class="lang-grid">
-            <div class="mini-card"><h3>📖 Histoire du jour</h3><button class="btn-load-video" data-type="stories">Lance l'histoire</button><div class="video-placeholder"></div></div>
-            <div class="mini-card"><h3>🍽️ Recette du jour</h3><button class="btn-load-video" data-type="recipes">Lance la vidéo</button><div class="video-placeholder"></div></div>
-            <div class="mini-card"><h3>📝 Mots du jour</h3><ul class="mots-list"></ul><button class="btn-new-mots">Nouveaux mots</button></div>
-        </div>
-        <h3 class="bib-title">📚 Ressources</h3>
-        <ul class="resources-list"></ul>
-    </div>
-
-    <div class="lang-panel" id="lang-lsf" aria-hidden="true">
-        <h2 class="title-spicy">Langue des Signes FR</h2>
-        <div class="lang-grid">
-            <div class="mini-card"><h3>📖 Histoire du jour</h3><button class="btn-load-video" data-type="stories">Lance l'histoire</button><div class="video-placeholder"></div></div>
-            <div class="mini-card"><h3>🍽️ Recette du jour</h3><button class="btn-load-video" data-type="recipes">Lance la vidéo</button><div class="video-placeholder"></div></div>
-            <div class="mini-card"><h3>📝 Mots du jour</h3><ul class="mots-list"></ul><button class="btn-new-mots">Nouveaux mots</button></div>
-        </div>
-        <h3 class="bib-title">📚 Ressources</h3>
-        <ul class="resources-list"></ul>
-    </div>
-
-</section>
-
-<!-- SCRIPT PRINCIPAL -->
 <script src="js/languages.js" type="module"></script>
-
 </body>
 </html>
