@@ -80,8 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       // Remarque : adapte DATA_BASE si ton dossier data est ailleurs
       const [stories, recipes, mots, resources] = await Promise.all([
-        fetch(DATA_BASE + "stories.json").then(r => r.ok ? r.json() : {}),
-        fetch(DATA_BASE + "recipes.json").then(r => r.ok ? r.json() : {}),
+        fetch(DATA_BASE + "data/stories.json").then(r => r.ok ? r.json() : {}),
+        fetch(DATA_BASE + "js/data/recipes.json").then(r => r.ok ? r.json() : {}),
         fetch(DATA_BASE + "mots.json").then(r => r.ok ? r.json() : {}),
         fetch(DATA_BASE + "resources.json").then(r => r.ok ? r.json() : {}),
       ]);
