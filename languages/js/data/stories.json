@@ -1,1 +1,16 @@
+{
+  "en": [
+    { "title": "Short story 1", "embed": "https://www.youtube.com/embed/VIDEO_ID1" },
+    { "title": "Short story 2", "embed": "https://www.youtube.com/embed/VIDEO_ID2" }
+  ],
+  "de": [
+    { "title": "Kurzgeschichte 1", "embed": "https://www.youtube.com/embed/VIDEO_ID3" }
+  ],
+  "es": [
+    { "title": "Historia 1", "embed": "https://www.youtube.com/embed/VIDEO_ID4" }
+  ],
+  "lsf": [
+    { "title": "Histoire LSF 1", "embed": "https://www.youtube.com/embed/VIDEO_ID5" }
+  ]
+}
 
