@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LSF — Exercices & ressources</title>
+
+<style>
+/* ----------------- FOND & TYPO ----------------- */
+:root{
+  --max-width:1100px;
+  --page-pad:18px;
+}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,240,250,0.65), rgba(240,255,250,0.65));
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  color:#333;
+  padding:20px;
+}
+
+/* Spicy font - essaye d'inclure Spicy Sale.ttf dans le dossier, sinon fallback Arial */
+@font-face{
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf") format("truetype"),
+       url("assets/fonts/Spicy Sale.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* titre principal (spicy) */
+.title-spicy{
+  font-family: "Spicy", Arial, sans-serif;
+  font-size:2.6rem;
+  text-align:center;
+  margin:8px 0 26px 0; /* espace entre titre et le reste (augmenté) */
+  color:#3b3b3b;
+  letter-spacing:0.5px;
+}
+
+/* logo centré */
+.header-top{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+
+/* ---------- Apparition (réutilisable) ---------- */
+.appear-anim{ opacity:0; transform:translateY(18px); animation:fadeInUp .6s forwards ease-out; }
+@keyframes fadeInUp{ to{ opacity:1; transform:translateY(0);} }
+
+/* ---------- BOUTON BIBLIOTHEQUE ---------- */
+.playlist-bar{ text-align:center; margin-bottom:18px; }
+.playlist-btn{
+  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  padding:10px 22px;
+  border-radius:28px;
+  border:none;
+  font-size:1.05rem;
+  cursor:pointer;
+  color:#233;
+  font-weight:700;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.playlist-btn:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 12px 26px rgba(0,0,0,0.18); }
+
+/* ---------- CONTENEUR VIDEOS ---------- */
+.container{ width:90%; max-width:var(--max-width); margin:0 auto; }
+.videos-wrapper{ margin-top:22px; }
+
+/* grid responsive : 1 colonne mobile, 3 colonnes desktop */
+.videos-container{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:22px;
+}
+@media (min-width:900px){
+  .videos-container{ grid-template-columns: repeat(3, 1fr); gap:26px; }
+}
+
+/* chaque bloc vidéo (titre + iframe) */
+.video-card{
+  background: rgba(255,255,255,0.85);
+  border-radius:14px;
+  padding:12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  text-align:center;
+  min-height: 210px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* titre du petit bloc (avec icone kawaii) - spicy only for title text */
+.video-card h3{
+  margin:0;
+  font-family:"Spicy", Arial, sans-serif;
+  font-size:1.05rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:#3b3b3b;
+}
+
+/* lecteur responsive */
+.video-frame{
+  width:100%;
+  height:0;
+  padding-bottom:56.25%; /* 16:9 */
+  position:relative;
+  border-radius:10px;
+  overflow:hidden;
+}
+.video-frame iframe{
+  position:absolute;
+  left:0; top:0;
+  width:100%; height:100%;
+  border:0;
+}
+
+/* ---------- BIBLIOTHEQUE (etagere) ---------- */
+.biblio-box{
+  margin:34px auto;
+  padding:18px;
+  width:90%;
+  max-width:var(--max-width);
+  background: rgba(255,255,255,0.9);
+  border-radius:14px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 26px rgba(0,0,0,0.06);
+  text-align:center;
+}
+.biblio-title{ font-family:"Spicy", Arial, sans-serif; font-size:1.35rem; margin:6px 0 14px 0; }
+
+/* etagere + bois */
+.biblio-shelf{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  padding:20px 12px 36px 12px;
+  position:relative;
+}
+.biblio-shelf::after{
+  content:"";
+  position:absolute;
+  left:6px; right:6px; bottom:4px;
+  height:36px;
+  background: url('wood.jpg');
+  background-size:cover;
+  border-radius:8px;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.18) inset;
+}
+
+/* livre (desktop) */
+.biblio-book{
+  width:86px;
+  height:140px;
+  border-radius:6px;
+  position:relative;
+  cursor:pointer;
+  text-decoration:none;
+  color:white;
+  font-family:Arial, sans-serif;
+  font-size:0.88rem;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  padding:10px 8px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  box-shadow: 3px 6px 16px rgba(0,0,0,0.18);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+.biblio-book::before{
+  content:"";
+  position:absolute;
+  left:0; top:0;
+  width:12px; height:100%;
+  border-radius:6px 0 0 6px;
+  background: rgba(0,0,0,0.12);
+}
+.biblio-book:hover{ transform: rotate(-4deg) scale(1.06); box-shadow: 6px 12px 28px rgba(0,0,0,0.24); }
+
+/* couleurs couvertures */
+.c1{ background:#ff9aa2; } .c2{ background:#ffdac1; } .c3{ background:#e2f0cb; }
+.c4{ background:#b5ead7; } .c5{ background:#c7ceea; }
+
+/* tooltip kawaii */
+.biblio-book[data-title]:hover::after{
+  content: attr(data-title);
+  position:absolute;
+  bottom:160px;
+  left:50%;
+  transform: translateX(-50%);
+  background:white;
+  color:#333;
+  padding:7px 12px;
+  border-radius:10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  white-space:nowrap;
+  font-size:0.92rem;
+}
+
+/* ---- mobile : livres plus petits et côte à côte ---- */
+@media (max-width:600px){
+  .title-spicy{ font-size:2rem; margin-bottom:8px; }
+  .biblio-book{
+    width:64px; height:110px;
+    font-size:0.78rem;
+    padding:8px 6px;
+  }
+  .biblio-shelf{ gap:12px; padding-bottom:20px; }
+  .videos-container{ gap:16px; }
+  .video-card{ min-height:180px; padding:10px; }
+}
+
+/* petit style utilitaire */
+.small-note{ font-size:0.9rem; opacity:0.85; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header-top container">
+  <img src="logo.png" alt="logo" style="width:140px;max-width:30%;" class="appear-anim">
+  <div class="title-spicy appear-anim" style="animation-delay:0.08s;">Langue Française des Signes</div>
+</div>
+
+<!-- bouton bibliothèque (au-dessus des vidéos) -->
+<div class="playlist-bar container appear-anim" style="animation-delay:0.12s;">
+  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 Bibliothèque</button>
+</div>
+
+<!-- VIDEOS : conteneur prêt à recevoir les 3 tirages (JS) -->
+<div class="videos-wrapper container appear-anim" style="animation-delay:0.16s;">
+  <div class="videos-container" id="videos-container">
+    <!-- JS injecte 3 .video-card ici -->
+  </div>
+</div>
+
+<!-- BIBLIOTHEQUE -->
+<div id="biblio" class="biblio-box appear-anim" style="animation-delay:0.2s;">
+  <div class="biblio-title">Bibliothèque de ressources</div>
+  <div class="biblio-shelf" id="biblio-shelf">
+    <!-- livres : tu peux remplacer les href par tes liens -->
+    <a href="https://www.youtube.com/@signesvous2211/featured" class="biblio-book c1" data-title="Grammaire LSF">Grammaire</a>
+    <a href="https://www.youtube.com/@aymelinelsf" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulaire</a>
+    <a href="https://www.youtube.com/@MAELanguedesSignes" class="biblio-book c3" data-title="Histoires en LSF">Histoires</a>
+    <a href="https://www.youtube.com/@DicoplusLSF" class="biblio-book c4" data-title="Recettes en LSF">Recettes</a>
+    <a href="https://www.youtube.com/@HautlesmainsLSF" class="biblio-book c5" data-title="Expressions utiles">Expressions</a>
+  </div>
+</div>
+
+<!-- ---------- SCRIPTS : chargement JSON et tirage quotidien ---------- -->
+<script>
+/*
+  Fonction utilitaire : charge un JSON local et sélectionne un item aléatoire stable par jour.
+  - jsonPath : chemin du json (ex: "lsfrecettes.json")
+  - storageKey : nom de la clé localStorage unique ("recette", "histoire", "exercice")
+  - container : élément DOM où injecter le rendu
+  - icon : emoji à afficher devant le titre
+*/
+async function loadDailyVideo({ jsonPath, storageKey, container, icon, defaultTitle }) {
+  try {
+    const resp = await fetch(jsonPath);
+    if (!resp.ok) throw new Error("fetch failed");
+    const list = await resp.json();
+    if (!Array.isArray(list) || list.length === 0) throw new Error("JSON vide ou invalide");
+
+    // date en yyyy-mm-dd
+    const today = new Date().toISOString().slice(0,10);
+    let saved = localStorage.getItem(storageKey + "-index");
+    let savedDate = localStorage.getItem(storageKey + "-date");
+
+    let index;
+    if (saved && savedDate === today && !isNaN(Number(saved)) && Number(saved) < list.length) {
+      index = Number(saved);
+    } else {
+      index = Math.floor(Math.random() * list.length);
+      localStorage.setItem(storageKey + "-index", String(index));
+      localStorage.setItem(storageKey + "-date", today);
+    }
+
+    const item = list[index];
+    const title = item.titre || defaultTitle;
+    const videoSrc = item.video || "";
+
+    // construction HTML
+    container.innerHTML = `
+      <div class="video-card">
+        <h3>${icon} ${escapeHtml(title)}</h3>
+        <div class="video-frame" aria-live="polite">
+          <iframe src="${escapeAttr(videoSrc)}" title="${escapeAttr(title)}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="small-note">Sélection du jour — stable pour ${today}</div>
+      </div>
+    `;
+  } catch (err) {
+    container.innerHTML = `
+      <div class="video-card">
+        <h3>${icon} ${escapeHtml(defaultTitle)}</h3>
+        <p>Impossible de charger la vidéo. Vérifie que <code>${jsonPath}</code> existe et est bien formatté.</p>
+      </div>
+    `;
+    console.error(err);
+  }
+}
+
+/* simples échappements pour sécurité dans les insertions */
+function escapeHtml(s){
+  if(!s) return "";
+  return String(s).replace(/[&<>'"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c];
+  });
+}
+function escapeAttr(s){
+  if(!s) return "";
+  return String(s).replace(/"/g,'&quot;');
+}
+
+/* init : crée 3 containers et appelle loadDailyVideo pour chacun */
+(function initDailyVideos(){
+  const parent = document.getElementById("videos-container");
+  parent.innerHTML = `
+    <div id="recette-block" class="video-slot"></div>
+    <div id="histoire-block" class="video-slot"></div>
+    <div id="exercice-block" class="video-slot"></div>
+  `;
+
+  // remplacer par les noms exacts de tes fichiers JSON au même niveau
+  loadDailyVideo({
+    jsonPath: "lsfrecettes.json",
+    storageKey: "lsf-recette",
+    container: document.getElementById("recette-block"),
+    icon: "🍰",
+    defaultTitle: "Recette du jour"
+  });
+
+  loadDailyVideo({
+    jsonPath: "lsfhistoires.json",
+    storageKey: "lsf-histoire",
+    container: document.getElementById("histoire-block"),
+    icon: "📖",
+    defaultTitle: "Histoire du jour"
+  });
+
+  loadDailyVideo({
+    jsonPath: "lsfexercices.json",
+    storageKey: "lsf-exercice",
+    container: document.getElementById("exercice-block"),
+    icon: "💪",
+    defaultTitle: "Exercice du jour"
+  });
+})();
+</script>
+
+</body>
+</html>
