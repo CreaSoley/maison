@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤟 LSF – Exercices et ressources</title>
     <link rel="stylesheet" href="css/style.css">
+<style>
+/* --- Apparition --- */
+.appear-anim { opacity:0; transform: translateY(20px); animation: fadeInUp .8s forwards ease-out; }
+@keyframes fadeInUp { to { opacity:1; transform: translateY(0);} }
+
+/* --- Mise en page desktop 3 colonnes --- */
+@media (min-width:900px){
+  .blocs-container { flex-direction:row; gap:25px; }
+  .daily-card { width:30%; }
+}
+
+/* --- Bibliothèque réaliste --- */
+.bibliotheque { margin:40px auto; padding:20px; width:90%; max-width:1000px; background:rgba(255,255,255,0.7); border-radius:15px; backdrop-filter:blur(6px); text-align:center; }
+.livres-container { display:flex; justify-content:center; gap:25px; flex-wrap:wrap; margin-top:20px; }
+.livre { display:block; width:90px; height:140px; background:#d38b5d; border-radius:4px 6px 6px 4px; box-shadow:4px 4px 10px rgba(0,0,0,0.2); position:relative; text-decoration:none; color:#fff; font-weight:bold; writing-mode:vertical-rl; text-orientation:mixed; padding:10px 5px; transition:.3s; }
+.livre::before { content:""; position:absolute; left:0; top:0; width:12px; height:100%; background:#c47a4c; border-radius:4px 0 0 4px; }
+.livre:hover { transform: rotate(-3deg) scale(1.05); box-shadow:6px 6px 14px rgba(0,0,0,0.3); }
+</style>
 </head>
 <body class="accueil">
 
