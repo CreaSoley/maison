@@ -3,296 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LSF — Bibliothèque & Vidéos</title>
+<title>LSF</title>
+
 <style>
-/* --- Fond arc‑en‑ciel léger --- */
-body {
-  margin:0;
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,240,250,0.6), rgba(240,255,250,0.6));
-  background-attachment: fixed;
-  font-family: Arial, sans-serif;
-}
 
-/* Police Spicy */
+/* -------------------------------------------------------
+   POLICE SPICY
+-------------------------------------------------------- */
 @font-face {
-  font-family:"Spicy";
-  src:url("spicy.ttf") format("truetype");
-}
-.title-spicy {
-  font-family: "Spicy", Arial, sans-serif;
-  font-size:2rem;
-  text-align:center;
-  margin-top:20px;
+    font-family: 'Spicy';
+    src: url('Spicy Sale.ttf') format('truetype');
 }
 
-/* Logo */
-.logo {
-  display:block;
-  margin:20px auto;
-  width:120px;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: white;
+    background-image: linear-gradient(120deg, rgba(255,0,150,0.15), rgba(0,180,255,0.15));
 }
 
-/* --- Animation d’apparition --- */
-.appear-anim {
-  opacity:0;
-  transform: translateY(20px);
-  animation: fadeInUp .8s forwards ease-out;
-}
-@keyframes fadeInUp {
-  to { opacity:1; transform: translateY(0);} 
-}
-
-/* --- Vidéos --- */
-.videos-container {
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-  width:90%;
-  max-width:1000px;
-  margin:0 auto;
-}
-.video-item iframe {
-  width:100%;
-  aspect-ratio:16/9;
-  border-radius:12px;
-  box-shadow:0 4px 14px rgba(0,0,0,0.15);
+/* -------------------------------------------------------
+   TITRE PRINCIPAL
+-------------------------------------------------------- */
+.section-title {
+    font-family: 'Spicy';
+    font-size: 2.4rem;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
-/* Desktop en grille */
-@media (min-width:900px){
-  .videos-container {
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:25px;
-  }
+/* -------------------------------------------------------
+   BLOC VIDÉO
+-------------------------------------------------------- */
+.video-block {
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto 45px auto;
 }
 
-/* --- Bouton Bibliothèque kawaii --- */
-.playlist-bar {
-  text-align:center;
-  margin:30px 0;
-}
-.playlist-btn {
-  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-  padding:12px 28px;
-  border-radius:30px;
-  border:none;
-  font-size:1.2rem;
-  cursor:pointer;
-  color:#444;
-  font-weight:bold;
-  box-shadow:0 4px 12px rgba(0,0,0,0.15);
-  transition:all .25s;
-}
-.playlist-btn:hover{
-  transform:translateY(-3px) scale(1.03);
-  box-shadow:0 8px 16px rgba(0,0,0,0.2);
+.block-title {
+    font-family: 'Spicy';
+    font-size: 1.9rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-/* --- Bibliothèque kawaii --- */
-.biblio-box {
-  margin:40px auto;
-  padding:20px;
-  width:90%;
-  max-width:1100px;
-  background:rgba(255,255,255,0.7);
-  border-radius:15px;
-  backdrop-filter:blur(6px);
-  text-align:center;
-}
-.biblio-title {
-  font-family:"Spicy", Arial, sans-serif;
-  font-size:1.8rem;
-  margin-bottom:20px;
-}
-.biblio-shelf {
-  display:flex;
-  justify-content:center;
-  gap:25px;
-  flex-wrap:wrap;
-  margin-top:20px;
-  padding-bottom:40px;
-  position:relative;
-}
-.biblio-shelf::after{
-  content:"";
-  position:absolute;
-  bottom:0;
-  left:0;
-  width:100%;
-  height:40px;
-  background:url('wood.jpg');
-  background-size:cover;
-  box-shadow:0 -4px 10px rgba(0,0,0,0.3) inset;
-  border-radius:6px;
+.block-title img {
+    width: 34px;
+    margin-right: 10px;
 }
 
-/* --- Livres kawaii --- */
-.biblio-book{
-  width:95px;
-  height:150px;
-  border-radius:6px;
-  position:relative;
-  cursor:pointer;
-  text-decoration:none;
-  color:white;
-  font-family:Arial;
-  font-size:0.9rem;
-  writing-mode:vertical-rl;
-  text-orientation:mixed;
-  padding:12px 8px;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  box-shadow:4px 4px 14px rgba(0,0,0,0.25);
-  transition:.3s;
-  touch-action:none;
+/* SOUS-TITRE (titre réel de la vidéo du JSON) */
+.video-title {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    margin-bottom: 10px;
 }
-.biblio-book:hover{
-  transform:rotate(-4deg) scale(1.07);
-  box-shadow:8px 8px 20px rgba(0,0,0,0.35);
-}
-.biblio-book::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:14px;
-  height:100%;
-  border-radius:6px 0 0 6px;
-  background:rgba(0,0,0,0.15);
-}
-/* couleurs */
-.c1 { background:#ff9aa2; }
-.c2 { background:#ffdac1; }
-.c3 { background:#e2f0cb; }
-.c4 { background:#b5ead7; }
-.c5 { background:#c7ceea; }
 
-/* Tooltip kawaii */
-.biblio-book[data-title]:hover::after{
-  content:attr(data-title);
-  position:absolute;
-  bottom:160px;
-  left:50%;
-  transform:translateX(-50%);
-  background:white;
-  color:#444;
-  padding:8px 12px;
-  border-radius:10px;
-  font-size:0.9rem;
-  box-shadow:0 4px 12px rgba(0,0,0,0.2);
-  white-space:nowrap;
-  animation:fadeIn .3s ease-out;
+.video-title img {
+    width: 22px;
+    margin-right: 6px;
 }
-@keyframes fadeIn{from{opacity:0; transform:translate(-50%,10px);} to{opacity:1; transform:translate(-50%,0);} }
-@media (min-width:900px){.playlist-bar{display:none;}}
-@media (max-width:600px){.biblio-book{width:65px;height:100px;font-size:0.7rem;}}
+
+.video-frame {
+    width: 100%;
+    min-height: 330px;
+    border: none;
+    border-radius: 12px;
+}
+
+/* -------------------------------------------------------
+   BOUTON BIBLIOTHÈQUE (mobile only)
+-------------------------------------------------------- */
+#btnBibli {
+    display: none;
+    margin: 25px auto;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1.1rem;
+    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+    animation: pulse 3s infinite ease-in-out;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 800px) {
+    #btnBibli {
+        display: block;
+    }
+}
+
+/* -------------------------------------------------------
+   BIBLIOTHÈQUE VISUELLE
+-------------------------------------------------------- */
+.library {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 60px auto;
+    text-align: center;
+}
+
+.shelf {
+    width: 100%;
+    height: 120px;
+    background: url('wood.png');
+    background-size: cover;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.book {
+    width: 90px;
+    height: 110px;
+    background: #ffb6c1;
+    border-radius: 4px;
+    cursor: grab;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.book:hover {
+    transform: scale(1.1);
+}
+
+.book::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: -25px;
+    font-size: 0.8rem;
+    width: 100%;
+    left: 0;
+    text-align: center;
+}
+
+/* mobile : livres plus petits */
+@media (max-width: 600px) {
+    .book {
+        width: 60px;
+        height: 80px;
+    }
+    .book::after {
+        font-size: 0.6rem;
+    }
+}
+
 </style>
+
 </head>
 <body>
 
-<img src="logo.png" class="logo appear-anim">
-<div class="title-spicy appear-anim">Langue Française des Signes</div>
+<h2 class="section-title">Langue des Signes Française</h2>
 
-<!-- VIDEOS -->
-<h2 class="section-title spicy">Langue des Signes Française</h2>
+<button id="btnBibli">📚 Bibliothèque</button>
 
 <!-- ========================================================= -->
-<!-- ===============      RECETTE DU JOUR     ================ -->
+<!-- ===============     RECETTE DU JOUR     ================= -->
 <!-- ========================================================= -->
 <div class="video-block">
-    <h3 class="block-title spicy">
-        <img src="icons/recette.svg" class="icon" alt="">
+    <h3 class="block-title">
+        <img src="icons/recette.svg" alt="">
         Recette du jour
     </h3>
 
     <div class="video-title">
-        <img src="icons/recette.svg" class="icon-title" alt="">
-        <span class="video-title-text">Titre de la vidéo…</span>
+        <img src="icons/recette.svg" alt="">
+        <span class="video-title-text" id="titleRecette">Titre…</span>
     </div>
 
-    <iframe
-        id="videoRecette"
-        class="video-frame"
-        src=""
-        allowfullscreen>
-    </iframe>
+    <iframe id="videoRecette" class="video-frame" src="" allowfullscreen></iframe>
 </div>
 
-
 <!-- ========================================================= -->
-<!-- ===============      HISTOIRE DU JOUR     =============== -->
+<!-- ===============     HISTOIRE DU JOUR     =============== -->
 <!-- ========================================================= -->
 <div class="video-block">
-    <h3 class="block-title spicy">
-        <img src="icons/histoire.svg" class="icon" alt="">
+    <h3 class="block-title">
+        <img src="icons/histoire.svg" alt="">
         Histoire du jour
     </h3>
 
     <div class="video-title">
-        <img src="icons/histoire.svg" class="icon-title" alt="">
-        <span class="video-title-text">Titre de la vidéo…</span>
+        <img src="icons/histoire.svg" alt="">
+        <span class="video-title-text" id="titleHistoire">Titre…</span>
     </div>
 
-    <iframe
-        id="videoHistoire"
-        class="video-frame"
-        src=""
-        allowfullscreen>
-    </iframe>
+    <iframe id="videoHistoire" class="video-frame" src="" allowfullscreen></iframe>
 </div>
 
-
 <!-- ========================================================= -->
-<!-- ===============     EXERCICE DU JOUR      =============== -->
+<!-- ===============     EXERCICE DU JOUR     =============== -->
 <!-- ========================================================= -->
 <div class="video-block">
-    <h3 class="block-title spicy">
-        <img src="icons/exercice.svg" class="icon" alt="">
+    <h3 class="block-title">
+        <img src="icons/exercice.svg" alt="">
         Exercice du jour
     </h3>
 
     <div class="video-title">
-        <img src="icons/exercice.svg" class="icon-title" alt="">
-        <span class="video-title-text">Titre de la vidéo…</span>
+        <img src="icons/exercice.svg" alt="">
+        <span class="video-title-text" id="titleExercice">Titre…</span>
     </div>
 
-    <iframe
-        id="videoExercice"
-        class="video-frame"
-        src=""
-        allowfullscreen>
-    </iframe>
+    <iframe id="videoExercice" class="video-frame" src="" allowfullscreen></iframe>
 </div>
 
-
-<!-- BUTTON -->
-<div class="playlist-bar">
-  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 Bibliothèque</button>
-</div>
-
-<!-- BIBLIOTHEQUE -->
-<div id="biblio" class="biblio-box appear-anim">
-  <div class="biblio-title">Bibliothèque de ressources</div>
-  <div class="biblio-shelf">
-    <a href="#" class="biblio-book c1" data-title="Grammaire LSF">Grammaire</a>
-    <a href="#" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulaire</a>
-    <a href="#" class="biblio-book c3" data-title="Histoires en LSF">Histoires</a>
-    <a href="#" class="biblio-book c4" data-title="Recettes en LSF">Recettes</a>
-    <a href="#" class="biblio-book c5" data-title="Expressions utiles">Expressions</a>
-  </div>
+<!-- ========================================================= -->
+<!-- ===============     BIBLIOTHÈQUE     ==================== -->
+<!-- ========================================================= -->
+<div class="library" id="bibli">
+    <div class="shelf">
+        <div class="book" data-title="Histoire 1"></div>
+        <div class="book" data-title="Recette 1"></div>
+        <div class="book" data-title="Exercice 1"></div>
+    </div>
 </div>
 
 <script>
-async function loadTitles(){
-  try{
-    const r1=await fetch('lsfrecettes.json'); const j1=await r1.json(); document.getElementById('title1').textContent='🍽️ '+j1.titre;
-    const r2=await fetch('lsfhistoires.json'); const j2=await r2.json(); document.getElementById('title2').textContent='📖 '+j2.titre;
-    const r3=await fetch('lsfexercices.json'); const j3=await r3.json(); document.getElementById('title3').textContent='💪 '+j3.titre;
-  }catch(e){console.log(e);}
+// Ta logique JS peut rester IDENTIQUE à avant.
+// Exemple (à adapter selon ton JSON) :
+
+function loadVideo(type, jsonFile, iframeId, titleId) {
+    fetch(jsonFile)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById(iframeId).src =
+                "https://www.youtube.com/embed/" + data.videoId;
+
+            document.getElementById(titleId).textContent = data.titre;
+        });
 }
-loadTitles();
+
+loadVideo("recette", "lsfrecettes.json", "videoRecette", "titleRecette");
+loadVideo("histoire", "lsfhistoires.json", "videoHistoire", "titleHistoire");
+loadVideo("exercice", "lsfexercices.json", "videoExercice", "titleExercice");
 </script>
+
 </body>
 </html>
