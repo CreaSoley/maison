@@ -1,128 +1,123 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Apprendre les langues — Le P'tit Logis</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Apprentissage des langues</title>
 
-  <link rel="stylesheet" href="css/languages.css">
+    <link rel="stylesheet" href="css/langues.css">
+    <link rel="stylesheet" href="css/style.css"> <!-- ta feuille globale -->
 </head>
-<body class="langues-page">
+<body class="accueil">
 
-  <header class="header-title">
+<header class="header-title">
     <div class="header-inline">
-      <img src="../assets/images/logo.png" class="header-logo" alt="logo site">
-      <h1 class="title-spicy header-main-title">Apprendre les langues</h1>
+        <!-- LOGO CLIQUABLE -->
+        <a href="index.html">
+            <img src="assets/images/logo.png" class="header-logo" alt="logo">
+        </a>
+        <h1 class="title-spicy header-main-title">Apprentissage des Langues</h1>
     </div>
-    <p class="header-subtitle">Anglais · Allemand · Espagnol · LSF</p>
-  </header>
 
-  <main class="container">
+    <p class="header-subtitle">Découvre, écoute, apprends</p>
+</header>
 
-    <!-- Bandeau drapeaux -->
-    <section class="flags-row" role="tablist" aria-label="Choisir une langue">
-      <button class="flag-item" data-lang="en" aria-controls="lang-en" role="tab">
-        <img src="assets/flags/en.png" alt="Drapeau anglais">
+<!-- ======= DRAPEAUX ======= -->
+<section class="flags-container">
+    <div class="flag-item" data-lang="en">
+        <img src="assets/flags/en.png" alt="Anglais">
         <span>Anglais</span>
-      </button>
-      <button class="flag-item" data-lang="de" aria-controls="lang-de" role="tab">
-        <img src="assets/flags/de.png" alt="Drapeau allemand">
+    </div>
+    <div class="flag-item" data-lang="de">
+        <img src="assets/flags/de.png" alt="Allemand">
         <span>Allemand</span>
-      </button>
-      <button class="flag-item" data-lang="es" aria-controls="lang-es" role="tab">
-        <img src="assets/flags/es.png" alt="Drapeau espagnol">
+    </div>
+    <div class="flag-item" data-lang="es">
+        <img src="assets/flags/es.png" alt="Espagnol">
         <span>Espagnol</span>
-      </button>
-      <button class="flag-item" data-lang="lsf" aria-controls="lang-lsf" role="tab">
-        <img src="assets/flags/lsf.png" alt="Drapeau LSF">
+    </div>
+    <div class="flag-item" data-lang="lsf">
+        <img src="assets/flags/lsf.png" alt="Langue des signes">
         <span>LSF</span>
-      </button>
-    </section>
+    </div>
+</section>
 
-    <!-- Contenus — un container par langue, identique en structure -->
-    <section id="lang-en" class="lang-panel active" role="tabpanel" aria-hidden="false">
-      <div class="lang-grid">
-        <!-- Histoire -->
-        <article class="mini-card">
-          <h3>Histoire du jour</h3>
-          <div class="iframe-wrap">
-            <div class="video-placeholder" data-loaded="false">
-              <!-- iframe chargé dynamiquement -->
+<!-- ======= PANNEAUX MÉLANGUES ======= -->
+<section id="lang-panels-group">
+
+    <!-- PANEL TYPE (dupliqué pour chaque langue ci-dessous) -->
+    <div class="lang-panel" id="lang-en" aria-hidden="true">
+        <h2 class="title-spicy">Anglais</h2>
+
+        <div class="lang-grid">
+
+            <!-- HISTOIRE DU JOUR -->
+            <div class="mini-card">
+                <h3>📖 Histoire du jour</h3>
+                <button class="btn-load-video" data-type="stories">Lance l'histoire</button>
+                <div class="video-placeholder"></div>
             </div>
-          </div>
-          <button class="btn-load-video" data-type="stories">Lance l'histoire</button>
-        </article>
 
-        <!-- Recette -->
-        <article class="mini-card">
-          <h3>Recette du jour</h3>
-          <div class="iframe-wrap">
-            <div class="video-placeholder" data-loaded="false"></div>
-          </div>
-          <button class="btn-load-video" data-type="recipes">Lance la recette</button>
-        </article>
+            <!-- RECETTE DU JOUR -->
+            <div class="mini-card">
+                <h3>🍽️ Recette du jour</h3>
+                <button class="btn-load-video" data-type="recipes">Lance la vidéo</button>
+                <div class="video-placeholder"></div>
+            </div>
 
-        <!-- 3 mots -->
-        <article class="mini-card">
-          <h3>3 mots à apprendre</h3>
-          <ul class="mots-list">
-            <li>...</li>
-            <li>...</li>
-            <li>...</li>
-          </ul>
-          <button class="btn-new-mots">Nouveaux mots</button>
-        </article>
-      </div>
+            <!-- MOTS À APPRENDRE -->
+            <div class="mini-card">
+                <h3>📝 Mots du jour</h3>
+                <ul class="mots-list"></ul>
+                <button class="btn-new-mots">Nouveaux mots</button>
+            </div>
 
-      <!-- Bibliothèque -->
-      <aside class="library">
-        <h4>Banque de ressources</h4>
-        <div class="shelves">
-          <!-- liens générés dynamiquement -->
-          <ul class="resources-list"></ul>
         </div>
-      </aside>
-    </section>
 
-    <!-- Clone les sections pour les autres langues (de, es, lsf) -->
-    <section id="lang-de" class="lang-panel" role="tabpanel" aria-hidden="true">
-      <!-- même contenu, JS va remplir -->
-      <div class="lang-grid">
-        <article class="mini-card"><h3>Histoire du jour</h3><div class="iframe-wrap"><div class="video-placeholder" data-loaded="false"></div></div><button class="btn-load-video" data-type="stories">Lance l'histoire</button></article>
-        <article class="mini-card"><h3>Recette du jour</h3><div class="iframe-wrap"><div class="video-placeholder" data-loaded="false"></div></div><button class="btn-load-video" data-type="recipes">Lance la recette</button></article>
-        <article class="mini-card"><h3>3 mots à apprendre</h3><ul class="mots-list"><li>...</li><li>...</li><li>...</li></ul><button class="btn-new-mots">Nouveaux mots</button></article>
-      </div>
-      <aside class="library"><h4>Banque de ressources</h4><div class="shelves"><ul class="resources-list"></ul></div></aside>
-    </section>
+        <!-- BIBLIOTHÈQUE -->
+        <h3 class="bib-title">📚 Ressources</h3>
+        <ul class="resources-list"></ul>
+    </div>
 
-    <section id="lang-es" class="lang-panel" role="tabpanel" aria-hidden="true">
-      <div class="lang-grid">
-        <article class="mini-card"><h3>Histoire du jour</h3><div class="iframe-wrap"><div class="video-placeholder" data-loaded="false"></div></div><button class="btn-load-video" data-type="stories">Lance l'histoire</button></article>
-        <article class="mini-card"><h3>Recette du jour</h3><div class="iframe-wrap"><div class="video-placeholder" data-loaded="false"></div></div><button class="btn-load-video" data-type="recipes">Lance la recette</button></article>
-        <article class="mini-card"><h3>3 mots à apprendre</h3><ul class="mots-list"><li>...</li><li>...</li><li>...</li></ul><button class="btn-new-mots">Nouveaux mots</button></article>
-      </div>
-      <aside class="library"><h4>Banque de ressources</h4><div class="shelves"><ul class="resources-list"></ul></div></aside>
-    </section>
+    <!-- COPIER/COLLER LES PANNEAUX POUR CHAQUE LANGUE -->
 
-    <section id="lang-lsf" class="lang-panel" role="tabpanel" aria-hidden="true">
-      <div class="lang-grid">
-        <article class="mini-card"><h3>Histoire du jour</h3><div class="iframe-wrap"><div class="video-placeholder" data-loaded="false"></div></div><button class="btn-load-video" data-type="stories">Lance l'histoire</button></article>
-        <article class="mini-card"><h3>Recette du jour</h3><div class="iframe-wrap"><div class="video-placeholder" data-loaded="false"></div></div><button class="btn-load-video" data-type="recipes">Lance la recette</button></article>
-        <article class="mini-card"><h3>3 mots à apprendre</h3><ul class="mots-list"><li>...</li><li>...</li><li>...</li></ul><button class="btn-new-mots">Nouveaux mots</button></article>
-      </div>
-      <aside class="library"><h4>Banque de ressources</h4><div class="shelves"><ul class="resources-list"></ul></div></aside>
-    </section>
+    <div class="lang-panel" id="lang-de" aria-hidden="true">
+        <h2 class="title-spicy">Allemand</h2>
+        <div class="lang-grid">
+            <div class="mini-card"><h3>📖 Histoire du jour</h3><button class="btn-load-video" data-type="stories">Lance l'histoire</button><div class="video-placeholder"></div></div>
+            <div class="mini-card"><h3>🍽️ Recette du jour</h3><button class="btn-load-video" data-type="recipes">Lance la vidéo</button><div class="video-placeholder"></div></div>
+            <div class="mini-card"><h3>📝 Mots du jour</h3><ul class="mots-list"></ul><button class="btn-new-mots">Nouveaux mots</button></div>
+        </div>
+        <h3 class="bib-title">📚 Ressources</h3>
+        <ul class="resources-list"></ul>
+    </div>
 
-  </main>
+    <div class="lang-panel" id="lang-es" aria-hidden="true">
+        <h2 class="title-spicy">Espagnol</h2>
+        <div class="lang-grid">
+            <div class="mini-card"><h3>📖 Histoire du jour</h3><button class="btn-load-video" data-type="stories">Lance l'histoire</button><div class="video-placeholder"></div></div>
+            <div class="mini-card"><h3>🍽️ Recette du jour</h3><button class="btn-load-video" data-type="recipes">Lance la vidéo</button><div class="video-placeholder"></div></div>
+            <div class="mini-card"><h3>📝 Mots du jour</h3><ul class="mots-list"></ul><button class="btn-new-mots">Nouveaux mots</button></div>
+        </div>
+        <h3 class="bib-title">📚 Ressources</h3>
+        <ul class="resources-list"></ul>
+    </div>
 
-  <footer><p>© 2025 — Le p'tit logis — Langues</p></footer>
+    <div class="lang-panel" id="lang-lsf" aria-hidden="true">
+        <h2 class="title-spicy">Langue des Signes FR</h2>
+        <div class="lang-grid">
+            <div class="mini-card"><h3>📖 Histoire du jour</h3><button class="btn-load-video" data-type="stories">Lance l'histoire</button><div class="video-placeholder"></div></div>
+            <div class="mini-card"><h3>🍽️ Recette du jour</h3><button class="btn-load-video" data-type="recipes">Lance la vidéo</button><div class="video-placeholder"></div></div>
+            <div class="mini-card"><h3>📝 Mots du jour</h3><ul class="mots-list"></ul><button class="btn-new-mots">Nouveaux mots</button></div>
+        </div>
+        <h3 class="bib-title">📚 Ressources</h3>
+        <ul class="resources-list"></ul>
+    </div>
 
-  <script src="js/languages.js" defer></script>
+</section>
 
-
-<!-- TON SCRIPT MODULE POUR LES LANGUES -->
+<!-- SCRIPT PRINCIPAL -->
 <script src="js/languages.js" type="module"></script>
 
 </body>
 </html>
-
