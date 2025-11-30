@@ -1,0 +1,18 @@
+{
+  "en": [
+    { "title": "BBC Learning English", "href": "https://www.bbc.co.uk/learningenglish" },
+    { "title": "Simple English Videos", "href": "https://www.youtube.com/user/videolearner" }
+  ],
+  "de": [
+    { "title": "Deutsche Welle - Learn German", "href": "https://www.dw.com/en/learn-german/s-2469" }
+  ],
+  "es": [
+    { "title": "Notes in Spanish", "href": "https://www.notesinspanish.com/" }
+  ],
+  "lsf": [
+    { "title": "Fondation Voltaire", "href": "https://lsf.fondation-voltaire.fr/landing" }
+     { "title": "Dico LSF Metz", "href": "https://lsfdico.injs-metz.fr/" }
+    { "title": "Pisourd", "href": "https://www.pisourd.ch//" }
+  ]
+}
+
