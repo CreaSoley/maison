@@ -1,1 +1,16 @@
+{
+  "en": [
+    { "title": "BBC Learning English", "href": "https://www.bbc.co.uk/learningenglish" },
+    { "title": "Simple English Videos", "href": "https://www.youtube.com/user/videolearner" }
+  ],
+  "de": [
+    { "title": "Deutsche Welle - Learn German", "href": "https://www.dw.com/en/learn-german/s-2469" }
+  ],
+  "es": [
+    { "title": "Notes in Spanish", "href": "https://www.notesinspanish.com/" }
+  ],
+  "lsf": [
+    { "title": "Ressource LSF 1", "href": "#" }
+  ]
+}
 
