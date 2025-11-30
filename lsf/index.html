@@ -1,27 +1,77 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤟 LSF – Exercices et ressources</title>
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LSF — Bibliothèque & Vidéos</title>
 <style>
 /* --- Fond arc‑en‑ciel léger --- */
-body.accueil {
+body {
+  margin:0;
   background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,240,250,0.6), rgba(240,255,250,0.6));
   background-attachment: fixed;
+  font-family: Arial, sans-serif;
 }
 
-/* --- Police Spicy + fallback Arial --- */
+/* Police Spicy */
 @font-face {
   font-family:"Spicy";
-  src:url("assets/fonts/Spicy Sale.ttf") format("truetype");
+  src:url("spicy.ttf") format("truetype");
 }
-body { font-family: Arial, sans-serif; }
-.title-spicy { font-family:"Spicy", Arial, sans-serif; }
+.title-spicy {
+  font-family: "Spicy", Arial, sans-serif;
+  font-size:2rem;
+  text-align:center;
+  margin-top:20px;
+}
 
-/* --- Bouton bibliothèque kawaii --- */
-.playlist-bar { text-align:center; margin-bottom:20px; }
+/* Logo */
+.logo {
+  display:block;
+  margin:20px auto;
+  width:120px;
+}
+
+/* --- Animation d’apparition --- */
+.appear-anim {
+  opacity:0;
+  transform: translateY(20px);
+  animation: fadeInUp .8s forwards ease-out;
+}
+@keyframes fadeInUp {
+  to { opacity:1; transform: translateY(0);} 
+}
+
+/* --- Vidéos --- */
+.videos-container {
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  width:90%;
+  max-width:1000px;
+  margin:0 auto;
+}
+.video-item iframe {
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:12px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.15);
+}
+
+/* Desktop en grille */
+@media (min-width:900px){
+  .videos-container {
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:25px;
+  }
+}
+
+/* --- Bouton Bibliothèque kawaii --- */
+.playlist-bar {
+  text-align:center;
+  margin:30px 0;
+}
 .playlist-btn {
   background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
   padding:12px 28px;
@@ -39,31 +89,46 @@ body { font-family: Arial, sans-serif; }
   box-shadow:0 8px 16px rgba(0,0,0,0.2);
 }
 
-/* --- Étagère bois --- */
-.livres-container {
+/* --- Bibliothèque kawaii --- */
+.biblio-box {
+  margin:40px auto;
+  padding:20px;
+  width:90%;
+  max-width:1100px;
+  background:rgba(255,255,255,0.7);
+  border-radius:15px;
+  backdrop-filter:blur(6px);
+  text-align:center;
+}
+.biblio-title {
+  font-family:"Spicy", Arial, sans-serif;
+  font-size:1.8rem;
+  margin-bottom:20px;
+}
+.biblio-shelf {
   display:flex;
   justify-content:center;
-  gap:30px;
+  gap:25px;
   flex-wrap:wrap;
-  margin-top:30px;
+  margin-top:20px;
   padding-bottom:40px;
   position:relative;
 }
-.livres-container::after{
+.biblio-shelf::after{
   content:"";
   position:absolute;
   bottom:0;
   left:0;
   width:100%;
-  height:35px;
-  background:url('assets/images/wood.jpg');
+  height:40px;
+  background:url('wood.jpg');
   background-size:cover;
   box-shadow:0 -4px 10px rgba(0,0,0,0.3) inset;
-  border-radius:5px;
+  border-radius:6px;
 }
 
-/* --- Livres améliorés et colorés --- */
-.livre{
+/* --- Livres kawaii --- */
+.biblio-book{
   width:95px;
   height:150px;
   border-radius:6px;
@@ -80,15 +145,14 @@ body { font-family: Arial, sans-serif; }
   justify-content:center;
   align-items:flex-start;
   box-shadow:4px 4px 14px rgba(0,0,0,0.25);
-  transition:all .3s;
+  transition:.3s;
+  touch-action:none;
 }
-.livre:hover{
+.biblio-book:hover{
   transform:rotate(-4deg) scale(1.07);
   box-shadow:8px 8px 20px rgba(0,0,0,0.35);
 }
-
-/* tranche du livre */
-.livre::before{
+.biblio-book::before{
   content:"";
   position:absolute;
   left:0;
@@ -98,16 +162,15 @@ body { font-family: Arial, sans-serif; }
   border-radius:6px 0 0 6px;
   background:rgba(0,0,0,0.15);
 }
+/* couleurs */
+.c1 { background:#ff9aa2; }
+.c2 { background:#ffdac1; }
+.c3 { background:#e2f0cb; }
+.c4 { background:#b5ead7; }
+.c5 { background:#c7ceea; }
 
-/* Couleurs variées */
-.livre.c1 { background:#ff9aa2; }
-.livre.c2 { background:#ffdac1; }
-.livre.c3 { background:#e2f0cb; }
-.livre.c4 { background:#b5ead7; }
-.livre.c5 { background:#c7ceea; }
-
-/* --- Tooltip kawaii --- */
-.livre[data-title]:hover::after{
+/* Tooltip kawaii */
+.biblio-book[data-title]:hover::after{
   content:attr(data-title);
   position:absolute;
   bottom:160px;
@@ -123,90 +186,36 @@ body { font-family: Arial, sans-serif; }
   animation:fadeIn .3s ease-out;
 }
 @keyframes fadeIn{from{opacity:0; transform:translate(-50%,10px);} to{opacity:1; transform:translate(-50%,0);} }
-
-/* Livres glissables */
-.livre { touch-action:none; }
-</style>
-/* --- Apparition --- */
-.appear-anim { opacity:0; transform: translateY(20px); animation: fadeInUp .8s forwards ease-out; }
-@keyframes fadeInUp { to { opacity:1; transform: translateY(0);} }
-
-/* --- Mise en page desktop 3 colonnes --- */
-@media (min-width:900px){
-  .blocs-container { flex-direction:row; gap:25px; }
-  .daily-card { width:30%; }
-}
-
-/* --- Bibliothèque réaliste --- */
-.bibliotheque { margin:40px auto; padding:20px; width:90%; max-width:1000px; background:rgba(255,255,255,0.7); border-radius:15px; backdrop-filter:blur(6px); text-align:center; }
-.livres-container { display:flex; justify-content:center; gap:25px; flex-wrap:wrap; margin-top:20px; }
-.livre { display:block; width:90px; height:140px; background:#d38b5d; border-radius:4px 6px 6px 4px; box-shadow:4px 4px 10px rgba(0,0,0,0.2); position:relative; text-decoration:none; color:#fff; font-weight:bold; writing-mode:vertical-rl; text-orientation:mixed; padding:10px 5px; transition:.3s; }
-.livre::before { content:""; position:absolute; left:0; top:0; width:12px; height:100%; background:#c47a4c; border-radius:4px 0 0 4px; }
-.livre:hover { transform: rotate(-3deg) scale(1.05); box-shadow:6px 6px 14px rgba(0,0,0,0.3); }
 </style>
 </head>
-<body class="accueil">
+<body>
 
-<header class="header-title">
-    <div class="header-inline">
-        <img src="assets/images/logo.png" class="header-logo" alt="logo">
-        <h1 class="title-spicy header-main-title">LSF – Ressources</h1>
-    </div>
-    <p class="header-subtitle">Exercices, histoires & vocabulaire</p>
-</header>
+<img src="logo.png" class="logo appear-anim">
+<div class="title-spicy appear-anim">Langue Française des Signes</div>
 
-<section class="blocs-container appear-anim">
+<!-- VIDEOS -->
+<div class="videos-container appear-anim">
+  <div class="video-item"><iframe src="https://www.youtube.com/embed/VID1"></iframe></div>
+  <div class="video-item"><iframe src="https://www.youtube.com/embed/VID2"></iframe></div>
+  <div class="video-item"><iframe src="https://www.youtube.com/embed/VID3"></iframe></div>
+</div>
 
-    <!-- 📚 PLAYLISTS KAWAII -->
-    <div class="playlist-bar">
-        <button class="playlist-btn" onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })">📚 Bibliothèque</button>
-    </div>
+<!-- BUTTON -->
+<div class="playlist-bar">
+  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 Bibliothèque</button>
+</div>
 
-    <div class="daily-card">
-        <h3 class="daily-title">🍰 Recette du jour</h3>
-        <div id="recette-container" class="bloc-center">
-            <p>Chargement...</p>
-        </div>
-    </div>
-
-    <div class="daily-card">
-        <h3 class="daily-title">📖 Histoire du jour</h3>
-        <div id="histoire-container" class="bloc-center">
-            <p>Chargement...</p>
-        </div>
-    </div>
-
-    <div class="daily-card">
-        <h3 class="daily-title">💪 Exercice du jour</h3>
-        <div id="exercice-container" class="bloc-center">
-            <p>Chargement...</p>
-        </div>
-    </div>
-
-</section>
-
-<!-- 📚 BIBLIOTHÈQUE DE RESSOURCES -->
-<section class="bibliotheque appear-anim">
-    <h2 class="title-spicy">📚 Bibliothèque LSF</h2>
-    <div class="livres-container">
-        <a href="#" class="livre">📘</a>
-        <a href="#" class="livre">📙</a>
-        <a href="#" class="livre">📗</a>
-        <a href="#" class="livre">📕</a>
-    </div>
-</section>
-
-<footer>
-    <p>© 2025 — Le p'tit logis — Ressources LSF</p>
-</footer>
-
-<script src="js/recette.js"></script>
-<script src="js/histoire.js"></script>
-<script src="js/exercice.js"></script>
-
-<script src="recette.js"></script>
-<script src="histoire.js"></script>
-<script src="exercice.js"></script>
+<!-- BIBLIOTHEQUE -->
+<div id="biblio" class="biblio-box appear-anim">
+  <div class="biblio-title">Bibliothèque de ressources</div>
+  <div class="biblio-shelf">
+    <a href="#" class="biblio-book c1" data-title="Grammaire LSF">Grammaire</a>
+    <a href="#" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulaire</a>
+    <a href="#" class="biblio-book c3" data-title="Histoires en LSF">Histoires</a>
+    <a href="#" class="biblio-book c4" data-title="Recettes en LSF">Recettes</a>
+    <a href="#" class="biblio-book c5" data-title="Expressions utiles">Expressions</a>
+  </div>
+</div>
 
 </body>
 </html>
