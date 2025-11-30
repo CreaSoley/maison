@@ -1,67 +1,105 @@
 // js/languages.js
+// Version robuste : pas de top-level await, gère focus quand on cache un panneau.
+// Assure-toi que ce fichier est chargé avec <script type="module"> (ou non, il fonctionne aussi).
+
 document.addEventListener("DOMContentLoaded", () => {
-  const flags = document.querySelectorAll(".flag-item");
-  const panels = document.querySelectorAll(".lang-panel");
+  const flags = Array.from(document.querySelectorAll(".flag-item"));
+  const panels = Array.from(document.querySelectorAll(".lang-panel"));
 
-  // mapping langue -> clé dans JSON
-  const LANGS = {
-    en: "en",
-    de: "de",
-    es: "es",
-    lsf: "lsf"
-  };
+  // Par défaut si JSON est à ../js/data/ depuis languages/ => ajuster si nécessaire
+  const DATA_BASE = (() => {
+    // si ce fichier est dans /js/ et index dans /languages/, utilisez: '../js/data/'
+    // si vous avez mis data dans languages/js/data/ => changez en 'js/data/'
+    return "../js/data/"; // adapte selon ton arborescence
+  })();
 
-  // événement pour changer de langue
+  // attach keyboard + click behavior on flags
   flags.forEach(btn => {
     btn.addEventListener("click", () => {
       const lang = btn.dataset.lang;
-      switchTo(lang);
+      activateLang(lang, btn);
+    });
+    btn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        btn.click();
+      }
     });
   });
 
-  // par défaut : anglais (ou active première)
-  const firstLang = document.querySelector(".flag-item").dataset.lang;
-  switchTo(firstLang);
+  // lancement initial (wrap dans IIFE async pour éviter top-level await issues)
+  (async () => {
+    const first = flags.length ? flags[0].dataset.lang : null;
+    if (first) await activateLang(first, flags[0]);
+  })();
 
-  async function switchTo(lang) {
-    panels.forEach(p => {
-      const id = p.id.replace("lang-","");
-      if (id === lang) {
+  // Active le panneau pour une langue (gère affichage + chargement)
+  async function activateLang(lang, flagBtn) {
+    for (const p of panels) {
+      const idLang = p.id.replace("lang-", "");
+      if (idLang === lang) {
+        // show this panel
         p.classList.add("active");
-        p.style.display = ""; // restore
-        p.setAttribute("aria-hidden","false");
+        p.style.display = "";
+        // remove aria-hidden from the active panel
+        p.setAttribute("aria-hidden", "false");
+
+        // move focus into the panel for accessibility (to prevent aria-hidden focus warnings)
+        // focus the first interactive element (btn-load-video or first button)
+        setTimeout(() => {
+          const firstFocusable = p.querySelector("button, a, [tabindex]:not([tabindex='-1'])");
+          if (firstFocusable) firstFocusable.focus();
+        }, 50);
+
         if (!p.dataset.loaded) {
           await populatePanel(p, lang);
           p.dataset.loaded = "1";
         }
       } else {
+        // before hiding check if panel contains activeElement
+        if (p.contains(document.activeElement)) {
+          // move focus back to the flag button (if provided) or to body
+          try {
+            if (flagBtn && typeof flagBtn.focus === "function") {
+              flagBtn.focus();
+            } else {
+              document.body.focus();
+            }
+          } catch (err) {
+            // ignore
+          }
+        }
         p.classList.remove("active");
         p.style.display = "none";
-        p.setAttribute("aria-hidden","true");
+        p.setAttribute("aria-hidden", "true");
       }
-    });
+    }
   }
 
   async function populatePanel(panelEl, lang) {
-    // charger 4 fichiers JSON : stories, recipes, mots, ressources
     try {
+      // Remarque : adapte DATA_BASE si ton dossier data est ailleurs
       const [stories, recipes, mots, resources] = await Promise.all([
-        fetch(`js/data/stories.json`).then(r => r.json()),
-        fetch(`js/data/recipes.json`).then(r => r.json()),
-        fetch(`js/data/mots.json`).then(r => r.json()),
-        fetch(`js/data/resources.json`).then(r => r.json()),
+        fetch(DATA_BASE + "stories.json").then(r => r.ok ? r.json() : {}),
+        fetch(DATA_BASE + "recipes.json").then(r => r.ok ? r.json() : {}),
+        fetch(DATA_BASE + "mots.json").then(r => r.ok ? r.json() : {}),
+        fetch(DATA_BASE + "resources.json").then(r => r.ok ? r.json() : {}),
       ]);
 
-      // initialiser boutons vidéo
+      // boutons video
       const btns = panelEl.querySelectorAll(".btn-load-video");
-      btns.forEach(btn => {
-        btn.addEventListener("click", () => {
-          const type = btn.dataset.type; // 'stories' ou 'recipes'
-          const placeholder = btn.closest(".lang-grid").querySelectorAll(".video-placeholder")[ Array.from(btn.closest(".lang-grid").children).indexOf(btn.closest(".mini-card")) ];
-          // Pick item
-          const pool = (type === "stories") ? stories[lang] || [] : recipes[lang] || [];
+      btns.forEach((btn, idx) => {
+        // remove previous listeners if any by cloning node
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        newBtn.addEventListener("click", () => {
+          const type = newBtn.dataset.type;
+          // trouver le placeholder associé : on prend le .video-placeholder le plus proche dans la même mini-card
+          const miniCard = newBtn.closest(".mini-card");
+          const placeholder = miniCard ? miniCard.querySelector(".video-placeholder") : null;
+          const pool = (type === "stories") ? (stories[lang] || []) : (recipes[lang] || []);
           if (!pool || pool.length === 0) {
-            placeholder.innerHTML = `<p>Pas de vidéo disponible.</p>`;
+            if (placeholder) placeholder.innerHTML = "<p>Pas de vidéo disponible.</p>";
             return;
           }
           const index = seededIndexForToday(pool.length);
@@ -70,11 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
 
-      // boutons nouveaux mots
+      // nouveaux mots
       panelEl.querySelectorAll(".btn-new-mots").forEach(btn => {
-        btn.addEventListener("click", () => {
-          fillMots(panelEl, mots, lang);
-        });
+        btn.addEventListener("click", () => fillMots(panelEl, mots, lang));
       });
 
       // remplir la première fois
@@ -88,71 +124,70 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadVideoInPlaceholder(placeholderEl, vid) {
-    // vid doit contenir : { embed: "https://www.youtube.com/embed/ID", title: "..."}
-    // ne pas autoplay : on n'ajoute pas de param autoplay=1
+    if (!placeholderEl) return;
     placeholderEl.innerHTML = "";
-    const wrap = document.createElement("div");
-    wrap.className = "video-frame";
+    // vid.embed ou vid.embedUrl ou vid.embed (supporte embed clé)
+    const src = vid.embed || vid.src || vid.embedUrl || "";
+    if (!src) {
+      placeholderEl.innerHTML = "<p>Vidéo introuvable.</p>";
+      return;
+    }
     const iframe = document.createElement("iframe");
-    iframe.setAttribute("src", vid.embed);
-    iframe.setAttribute("title", vid.title || "Vidéo");
+    iframe.src = src;
+    iframe.title = vid.title || "Vidéo";
     iframe.setAttribute("loading", "lazy");
     iframe.setAttribute("allowfullscreen", "");
-    iframe.setAttribute("referrerpolicy","no-referrer");
-    // sandbox si tu veux restreindre : iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
-    wrap.appendChild(iframe);
-    placeholderEl.appendChild(wrap);
+    iframe.style.width = "100%";
+    iframe.style.border = "0";
+    // set a fixed min height
+    iframe.style.minHeight = "160px";
+    placeholderEl.appendChild(iframe);
     placeholderEl.dataset.loaded = "true";
   }
 
   function fillMots(panelEl, motsJson, lang) {
     const listEl = panelEl.querySelector(".mots-list");
+    if (!listEl) return;
     listEl.innerHTML = "";
-    const pool = motsJson[lang] || [];
-    if (pool.length === 0) {
+    const pool = (motsJson && motsJson[lang]) ? motsJson[lang] : [];
+    if (!pool.length) {
       listEl.innerHTML = "<li>Aucun mot disponible pour l'instant.</li>";
       return;
     }
-    // Choisir 3 mots aléatoires (sans répétition)
     const selected = pickNRandom(pool, 3, seededIndexForToday(pool.length));
     selected.forEach(item => {
       const li = document.createElement("li");
-      li.innerHTML = `<strong>${item.word}</strong> — <em>${item.translation || ""}</em>`;
+      li.innerHTML = `<span><strong>${escapeHtml(item.word)}</strong></span><span style="opacity:0.8">${escapeHtml(item.translation || "")}</span>`;
       listEl.appendChild(li);
     });
   }
 
   function fillResources(panelEl, resourcesJson, lang) {
     const listEl = panelEl.querySelector(".resources-list");
+    if (!listEl) return;
     listEl.innerHTML = "";
-    const pool = resourcesJson[lang] || [];
+    const pool = (resourcesJson && resourcesJson[lang]) ? resourcesJson[lang] : [];
     if (!pool.length) {
       listEl.innerHTML = "<li>Aucune ressource pour l'instant.</li>";
       return;
     }
     pool.forEach(r => {
       const li = document.createElement("li");
-      li.innerHTML = `<a href="${r.href}" target="_blank" rel="noopener noreferrer">${r.title}</a>`;
+      li.innerHTML = `<a href="${escapeAttr(r.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.title)}</a>`;
       listEl.appendChild(li);
     });
   }
 
-  // UTILITAIRES
-
-  // index pseudo-aléatoire stable par jour : basé sur la date pour rotation quotidienne
+  // helpers
   function seededIndexForToday(max) {
     const d = new Date();
-    const seed = Math.floor(d.getFullYear() * 1000 + d.getMonth() * 50 + d.getDate());
-    return seedRandomIndex(seed, max);
+    const seed = d.getFullYear()*1000 + (d.getMonth()+1)*50 + d.getDate();
+    return seedRandomIndex(seed, Math.max(1, max));
   }
-
   function seedRandomIndex(seed, max) {
-    // simple PRNG
     const x = Math.sin(seed) * 10000;
     return Math.floor((x - Math.floor(x)) * max);
   }
-
-  // pick N unique random items; startIndex used as offset to vary day-by-day
   function pickNRandom(arr, n, startIndex = 0) {
     const res = [];
     const len = arr.length;
@@ -162,6 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return res;
   }
+  function escapeHtml(s){ return String(s || "").replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+  function escapeAttr(s){ return escapeHtml(s).replace(/"/g,'&quot;'); }
 
-});
-
+}); // DOMContentLoaded end
