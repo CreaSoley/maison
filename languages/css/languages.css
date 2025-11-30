@@ -1,142 +1,211 @@
-/* =======================================================
-   langues.css — Styles complets pour la page "Apprentissage des langues"
-   Place ce fichier dans : css/langues.css
-   ======================================================= */
-
-/* ---------- FONTS ---------- */
+/* -----------------------------
+   FONTS
+------------------------------ */
 @font-face {
-  font-family: "Spicy";
-  src: url("../assets/fonts/Spicy Sale.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+  font-family: "Spicy Sale";
+  src: url("../fonts/Spicy Sale.ttf") format("truetype");
 }
 
-/* ---------- BASE ---------- */
-:root{
-  --bg-gradient: linear-gradient(135deg,#fdfcfb 0%, #e9e0d3 100%);
-  --card-bg: rgba(255,255,255,0.86);
-  --muted: #6b6b6b;
-  --accent: #ff9ab8;
-  --accent-2: #ffd7ef;
-  --shadow: 0 8px 22px rgba(0,0,0,0.06);
-  --radius: 14px;
-}
-
-html,body{
-  height:100%;
-  margin:0;
-  padding:0;
-  background: var(--bg-gradient);
-  font-family: "Inter", Arial, sans-serif;
-  color: #2f2f2f;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
-/* reuse site-wide classes where appropriate */
-.header-title { text-align:center; margin-top:20px; padding: 8px 12px; }
-.header-inline { display:flex; gap:18px; align-items:center; justify-content:center; flex-wrap:wrap; }
-.header-logo { width:120px; height:auto; display:block; }
-.header-subtitle { margin-top:6px; opacity:0.85; color:var(--muted); }
-
-/* Spicy title */
-.title-spicy {
-  font-family: "Spicy", serif;
-  font-size: 2.4rem;
+/* -----------------------------
+   RESET & BODY
+------------------------------ */
+* {
   margin: 0;
-  color: #3b3b3b;
-  line-height:1;
-  text-align:center;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* page container */
-.flags-container {
-  max-width:1100px;
-  margin: 18px auto;
-  display:flex;
-  gap:18px;
-  justify-content:center;
-  flex-wrap:wrap;
-  padding: 0 12px;
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* ---------- DRAPEAUX (boutons) ---------- */
-.flag-item {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-  background: var(--card-bg);
-  padding: 10px 12px;
-  border-radius: 12px;
-  cursor:pointer;
-  width:110px;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s;
-  border: 2px solid transparent;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-  text-align:center;
-}
-.flag-item img {
-  display:block;
-  width:76px;
-  height:76px;
-  object-fit:cover;
-  border-radius:8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-.flag-item span {
-  font-weight:700;
-  font-size:0.95rem;
-  color:#333;
+/* -----------------------------
+   LOGO
+------------------------------ */
+header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-/* hover/focus */
-.flag-item:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); border-color: #ffecf2; }
-.flag-item:focus { outline: none; box-shadow: 0 12px 28px rgba(0,0,0,0.08), 0 0 0 3px rgba(255,150,190,0.18); border-color: rgba(255,150,190,0.28); }
-
-/* ---------- PANNEAUX LANGUES ---------- */
-#lang-panels-group { max-width:1100px; margin: 22px auto 60px auto; padding: 0 12px; }
-
-/* each panel */
-.lang-panel {
-  display: none; /* actif via .active ajouté par JS */
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 18px;
-  margin-bottom: 26px;
-  box-shadow: var(--shadow);
-  transition: transform .28s ease, opacity .28s ease;
-}
-.lang-panel.active { display:block; }
-
-/* header inside panel */
-.lang-panel > h2.title-spicy {
-  font-size: 1.9rem;
-  margin-bottom: 12px;
-  text-align:left;
+header img {
+  width: 160px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-/* grid of 3 mini-cards */
+header img:hover {
+  transform: scale(1.05);
+}
+
+/* -----------------------------
+   TITRE SPICY
+------------------------------ */
+h1 {
+  font-family: "Spicy Sale", cursive;
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 25px;
+  color: #e63946;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* -----------------------------
+   GRILLE DES LANGUES
+------------------------------ */
 .lang-grid {
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  align-items:start;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 40px;
 }
 
-/* desktop: 3 columns */
-@media (min-width: 900px) {
-  .lang-grid {
-    grid-template-columns: repeat(3, 1fr);
+.lang-card {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.lang-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.lang-card img {
+  width: 80px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.lang-card span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* -----------------------------
+   PANNEAUX DE LANGUE
+------------------------------ */
+.lang-panel {
+  display: none;
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  margin-bottom: 40px;
+}
+
+.lang-panel.active {
+  display: block;
+}
+
+/* -----------------------------
+   SOUS-TITRES
+------------------------------ */
+.lang-panel h2 {
+  font-size: 2rem;
+  color: #1d3557;
+  margin-bottom: 15px;
+}
+
+/* -----------------------------
+   SECTION LISTE
+------------------------------ */
+.section {
+  margin-bottom: 30px;
+}
+
+.section h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #457b9d;
+}
+
+.section ul {
+  list-style: none;
+  padding-left: 10px;
+}
+
+.section ul li {
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+/* -----------------------------
+   BOUTONS
+------------------------------ */
+.btn {
+  display: inline-block;
+  background: #e63946;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  margin: 15px 0;
+  transition: background 0.3s ease;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #b61f2c;
+}
+
+/* Bouton retour */
+.btn-back {
+  background: #457b9d;
+}
+
+.btn-back:hover {
+  background: #1d3557;
+}
+
+/* -----------------------------
+   VIDEOS
+------------------------------ */
+.video-wrapper {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.video-wrapper iframe {
+  width: 100%;
+  max-width: 700px;
+  height: 380px;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* -----------------------------
+   RESPONSIVE
+------------------------------ */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2.3rem;
+  }
+
+  .lang-card img {
+    width: 60px;
+  }
+
+  .video-wrapper iframe {
+    height: 240px;
   }
 }
-
-/* mini-card */
-.mini-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,246,244,0.95));
-  padding: 14px;
-  border-radius: 12px;
-  min-height: 180px;
-  display:flex;
-  fle
