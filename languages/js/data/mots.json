@@ -1,1 +1,23 @@
+{
+  "en": [
+    { "word": "Apple", "translation": "Pomme" },
+    { "word": "House", "translation": "Maison" },
+    { "word": "Friend", "translation": "Ami" },
+    { "word": "Happy", "translation": "Heureux" }
+  ],
+  "de": [
+    { "word": "Apfel", "translation": "Pomme" },
+    { "word": "Haus", "translation": "Maison" },
+    { "word": "Freund", "translation": "Ami" }
+  ],
+  "es": [
+    { "word": "Manzana", "translation": "Pomme" },
+    { "word": "Casa", "translation": "Maison" },
+    { "word": "Amigo", "translation": "Ami" }
+  ],
+  "lsf": [
+    { "word": "Signer1", "translation": "Mot1" },
+    { "word": "Signer2", "translation": "Mot2" }
+  ]
+}
 
