@@ -1,16 +1,17 @@
 {
   "en": [
-    { "title": "Short story 1", "embed": "https://www.youtube.com/embed/VIDEO_ID1" },
-    { "title": "Short story 2", "embed": "https://www.youtube.com/embed/VIDEO_ID2" }
+    { "embed": "https://www.youtube.com/embed/-2wgpd1m8mY", "title": "The Midnight Adventure" },
+    { "embed": "https://www.youtube.com/embed/ViqGaMSPO5jE", "title": "A Day at the Park" }
   ],
   "de": [
-    { "title": "Kurzgeschichte 1", "embed": "https://www.youtube.com/embed/VIDEO_ID3" }
+    { "embed": "https://www.youtube.com/embed/V8rvJRrZQO0", "title": "Die Schneekönigin" }
   ],
   "es": [
-    { "title": "Historia 1", "embed": "https://www.youtube.com/embed/VIDEO_ID4" }
+     { "embed": "https://www.youtube.com/embed/-2wgpd1m8mY", "title": "The Midnight Adventure" },
+    { "embed": "https://www.youtube.com/embed/ViqGaMSPO5jE", "title": "A Day at the Park" }
   ],
   "lsf": [
-    { "title": "Histoire LSF 1", "embed": "https://www.youtube.com/embed/VIDEO_ID5" }
+     { "embed": "https://www.youtube.com/embed/-2wgpd1m8mY", "title": "The Midnight Adventure" },
+    { "embed": "https://www.youtube.com/embed/ViqGaMSPO5jE", "title": "A Day at the Park" }
   ]
 }
-
