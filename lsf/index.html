@@ -6,6 +6,127 @@
     <title>🤟 LSF – Exercices et ressources</title>
     <link rel="stylesheet" href="css/style.css">
 <style>
+/* --- Fond arc‑en‑ciel léger --- */
+body.accueil {
+  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,240,250,0.6), rgba(240,255,250,0.6));
+  background-attachment: fixed;
+}
+
+/* --- Police Spicy + fallback Arial --- */
+@font-face {
+  font-family:"Spicy";
+  src:url("assets/fonts/Spicy Sale.ttf") format("truetype");
+}
+body { font-family: Arial, sans-serif; }
+.title-spicy { font-family:"Spicy", Arial, sans-serif; }
+
+/* --- Bouton bibliothèque kawaii --- */
+.playlist-bar { text-align:center; margin-bottom:20px; }
+.playlist-btn {
+  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  padding:12px 28px;
+  border-radius:30px;
+  border:none;
+  font-size:1.2rem;
+  cursor:pointer;
+  color:#444;
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  transition:all .25s;
+}
+.playlist-btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* --- Étagère bois --- */
+.livres-container {
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap:wrap;
+  margin-top:30px;
+  padding-bottom:40px;
+  position:relative;
+}
+.livres-container::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:35px;
+  background:url('assets/images/wood.jpg');
+  background-size:cover;
+  box-shadow:0 -4px 10px rgba(0,0,0,0.3) inset;
+  border-radius:5px;
+}
+
+/* --- Livres améliorés et colorés --- */
+.livre{
+  width:95px;
+  height:150px;
+  border-radius:6px;
+  position:relative;
+  cursor:pointer;
+  text-decoration:none;
+  color:white;
+  font-family:Arial;
+  font-size:0.9rem;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  padding:12px 8px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  box-shadow:4px 4px 14px rgba(0,0,0,0.25);
+  transition:all .3s;
+}
+.livre:hover{
+  transform:rotate(-4deg) scale(1.07);
+  box-shadow:8px 8px 20px rgba(0,0,0,0.35);
+}
+
+/* tranche du livre */
+.livre::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:14px;
+  height:100%;
+  border-radius:6px 0 0 6px;
+  background:rgba(0,0,0,0.15);
+}
+
+/* Couleurs variées */
+.livre.c1 { background:#ff9aa2; }
+.livre.c2 { background:#ffdac1; }
+.livre.c3 { background:#e2f0cb; }
+.livre.c4 { background:#b5ead7; }
+.livre.c5 { background:#c7ceea; }
+
+/* --- Tooltip kawaii --- */
+.livre[data-title]:hover::after{
+  content:attr(data-title);
+  position:absolute;
+  bottom:160px;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  color:#444;
+  padding:8px 12px;
+  border-radius:10px;
+  font-size:0.9rem;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  white-space:nowrap;
+  animation:fadeIn .3s ease-out;
+}
+@keyframes fadeIn{from{opacity:0; transform:translate(-50%,10px);} to{opacity:1; transform:translate(-50%,0);} }
+
+/* Livres glissables */
+.livre { touch-action:none; }
+</style>
 /* --- Apparition --- */
 .appear-anim { opacity:0; transform: translateY(20px); animation: fadeInUp .8s forwards ease-out; }
 @keyframes fadeInUp { to { opacity:1; transform: translateY(0);} }
