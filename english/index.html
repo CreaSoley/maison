@@ -239,10 +239,10 @@ body{
   <div class="biblio-title">Resource Library</div>
   <div class="biblio-shelf" id="biblio-shelf">
     <a href="https://www.youtube.com/@signesvous2211/featured" target="_blank" class="biblio-book c1" data-title="Grammaire LSF">Grammar</a>
-    <a href="https://www.youtube.com/@aymelinelsf" target="_blank" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulary/a>
-    <a href="https://www.youtube.com/@MAELanguedesSignes" target="_blank" class="biblio-book c3" data-title="Histoires en LSF">History</a>
+    <a href="https://www.youtube.com/@bbclearningenglish/playlists" target="_blank" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulary/</a>
+    <a href="https://www.youtube.com/@EnglishPhrasesHub-b1x" target="_blank" class="biblio-book c3" data-title="Histoires en LSF">History</a>
     <a href="https://www.youtube.com/@DicoplusLSF" target="_blank" class="biblio-book c4" data-title="Recettes en LSF">Reciepes</a>
-    <a href="https://www.youtube.com/@HautlesmainsLSF" target="_blank" class="biblio-book c5" data-title="Expressions utiles">Expressions</a>
+    <a href="https://youtube.com/playlist?list=PLrHBWMAalmGhyZ0nshpP_fQxWFcYnxGrD&si=6dxbWntuMKxbRm7t" target="_blank" class="biblio-book c5" data-title="Expressions utiles">Pronounciation</a>
   </div>
 </div>
 
@@ -301,9 +301,9 @@ function escapeAttr(s){ if(!s) return ""; return String(s).replace(/"/g,'&quot;'
     <div id="exercice-block" class="video-slot"></div>
   `;
 
-  loadDailyVideo({ jsonPath: "lsfrecettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Daily Recipe" });
-  loadDailyVideo({ jsonPath: "lsfhistoires.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "Daily Story" });
-  loadDailyVideo({ jsonPath: "lsfexercices.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "Daily exercice" });
+  loadDailyVideo({ jsonPath: "enrecettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Daily Recipe" });
+  loadDailyVideo({ jsonPath: "enstories.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "Daily Story" });
+  loadDailyVideo({ jsonPath: "enexercices.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "Daily exercice" });
 })();
 </script>
 
