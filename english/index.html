@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LSF — Exercices & ressources</title>
+
+<style>
+:root{
+  --max-width:1100px;
+  --page-pad:18px;
+}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,240,250,0.65), rgba(240,255,250,0.65));
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  color:#333;
+  padding:20px;
+}
+
+@font-face{
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf") format("truetype"),
+       url("assets/fonts/Spicy Sale.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.title-spicy{
+  font-family: "Spicy", Arial, sans-serif;
+  font-size:2.6rem;
+  text-align:center;
+  margin:8px 0 26px 0;
+  color:#3b3b3b;
+  letter-spacing:0.5px;
+}
+
+.header-top{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+  .logo {
+  display: flex;
+  justify-content: center;
+}
+  
+.appear-anim{ opacity:0; transform:translateY(18px); animation:fadeInUp .6s forwards ease-out; }
+@keyframes fadeInUp{ to{ opacity:1; transform:translateY(0);} }
+
+/* bouton bibliothèque visible seulement mobile */
+.playlist-bar{ text-align:center; margin-bottom:18px; }
+@media (min-width:900px){ .playlist-bar{ display:none; } }
+
+.playlist-btn{
+  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  padding:10px 22px;
+  border-radius:28px;
+  border:none;
+  font-size:1.05rem;
+  cursor:pointer;
+  color:#233;
+  font-weight:700;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.playlist-btn:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 12px 26px rgba(0,0,0,0.18); }
+
+.container{ width:90%; max-width:var(--max-width); margin:0 auto; }
+.videos-wrapper{ margin-top:22px; }
+
+.videos-container{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:22px;
+}
+@media (min-width:900px){
+  .videos-container{ grid-template-columns: repeat(3, 1fr); gap:26px; }
+}
+
+.video-card{
+  background: rgba(255,255,255,0.85);
+  border-radius:14px;
+  padding:12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  text-align:center;
+  min-height: 210px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* titres videos → Arial */
+.video-card h3{
+  margin:0;
+  font-family: Arial, sans-serif;
+  font-size:1.05rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:#3b3b3b;
+}
+
+.video-frame{
+  width:100%;
+  height:0;
+  padding-bottom:56.25%;
+  position:relative;
+  border-radius:10px;
+  overflow:hidden;
+}
+.video-frame iframe{
+  position:absolute;
+  left:0; top:0;
+  width:100%; height:100%;
+  border:0;
+}
+
+.biblio-box{
+  margin:34px auto;
+  padding:18px;
+  width:90%;
+  max-width:var(--max-width);
+  background: rgba(255,255,255,0.9);
+  border-radius:14px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 26px rgba(0,0,0,0.06);
+  text-align:center;
+}
+.biblio-title{ font-family:"Spicy", Arial, sans-serif; font-size:1.35rem; margin:6px 0 14px 0; }
+
+.biblio-shelf{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  padding:20px 12px 36px 12px;
+  position:relative;
+}
+.biblio-shelf::after{
+  content:"";
+  position:absolute;
+  left:6px; right:6px; bottom:4px;
+  height:36px;
+  background: url('wood.jpg');
+  background-size:cover;
+  border-radius:8px;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.18) inset;
+}
+
+.biblio-book{
+  width:86px;
+  height:140px;
+  border-radius:6px;
+  position:relative;
+  cursor:pointer;
+  text-decoration:none;
+  color:white;
+  font-family:Arial, sans-serif;
+  font-size:0.88rem;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  padding:10px 8px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  box-shadow: 3px 6px 16px rgba(0,0,0,0.18);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+
+.biblio-book:hover{ transform: rotate(-4deg) scale(1.06); box-shadow: 6px 12px 28px rgba(0,0,0,0.24); }
+
+.biblio-book::before{
+  content:"";
+  position:absolute;
+  left:0; top:0;
+  width:12px; height:100%;
+  border-radius:6px 0 0 6px;
+  background: rgba(0,0,0,0.12);
+}
+
+.c1{ background:#ff9aa2; } .c2{ background:#ffdac1; } .c3{ background:#e2f0cb; }
+.c4{ background:#b5ead7; } .c5{ background:#c7ceea; }
+
+.biblio-book[data-title]:hover::after{
+  content: attr(data-title);
+  position:absolute;
+  bottom:160px;
+  left:50%;
+  transform: translateX(-50%);
+  background:white;
+  color:#333;
+  padding:7px 12px;
+  border-radius:10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  white-space:nowrap;
+  font-size:0.92rem;
+}
+
+@media (max-width:600px){
+  .title-spicy{ font-size:2rem; margin-bottom:8px; }
+  .biblio-book{
+    width:58px; height:98px;
+    font-size:0.75rem;
+    padding:7px 5px;
+  }
+  .biblio-shelf{ gap:10px; padding-bottom:18px; }
+  .videos-container{ gap:16px; }
+  .video-card{ min-height:180px; padding:10px; }
+}
+
+.small-note{ font-size:0.9rem; opacity:0.85; margin-top:8px; display:none; }
+@media (min-width:900px){ .video-card{ min-height:320px; padding:16px; } }
+</style>
+</head>
+<body>
+
+<div class="header-top container">
+  <a href="../index.html">
+   <img src="logo.png" alt="logo" style="width:200px;max-width:60%;" class="appear-anim">
+    </a>
+  <div class="title-spicy appear-anim" style="animation-delay:0.08s;">Langue Francaise des Signes</div>
+</div>
+
+<div class="playlist-bar container appear-anim" style="animation-delay:0.12s;">
+  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 Bibliothèque</button>
+</div>
+
+<div class="videos-wrapper container appear-anim" style="animation-delay:0.16s;">
+  <div class="videos-container" id="videos-container"></div>
+</div>
+
+<div id="biblio" class="biblio-box appear-anim" style="animation-delay:0.2s;">
+  <div class="biblio-title">Bibliotheque de ressources</div>
+  <div class="biblio-shelf" id="biblio-shelf">
+    <a href="https://www.youtube.com/@signesvous2211/featured" target="_blank" class="biblio-book c1" data-title="Grammaire LSF">Grammaire</a>
+    <a href="https://www.youtube.com/@aymelinelsf" target="_blank" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulaire</a>
+    <a href="https://www.youtube.com/@MAELanguedesSignes" target="_blank" class="biblio-book c3" data-title="Histoires en LSF">Histoires</a>
+    <a href="https://www.youtube.com/@DicoplusLSF" target="_blank" class="biblio-book c4" data-title="Recettes en LSF">Recettes</a>
+    <a href="https://www.youtube.com/@HautlesmainsLSF" target="_blank" class="biblio-book c5" data-title="Expressions utiles">Expressions</a>
+  </div>
+</div>
+
+<script>
+async function loadDailyVideo({ jsonPath, storageKey, container, icon, defaultTitle }) {
+  try {
+    const resp = await fetch(jsonPath);
+    if (!resp.ok) throw new Error("fetch failed");
+    const list = await resp.json();
+    if (!Array.isArray(list) || list.length === 0) throw new Error("JSON vide ou invalide");
+
+    const today = new Date().toISOString().slice(0,10);
+    let saved = localStorage.getItem(storageKey + "-index");
+    let savedDate = localStorage.getItem(storageKey + "-date");
+
+    let index;
+    if (saved && savedDate === today && !isNaN(Number(saved)) && Number(saved) < list.length) {
+      index = Number(saved);
+    } else {
+      index = Math.floor(Math.random() * list.length);
+      localStorage.setItem(storageKey + "-index", String(index));
+      localStorage.setItem(storageKey + "-date", today);
+    }
+
+    const item = list[index];
+    const title = item.titre || defaultTitle;
+    const videoSrc = item.video || "";
+
+    container.innerHTML = `
+      <div class="video-card">
+        <h3>${icon} ${escapeHtml(defaultTitle)}</h3>
+        <div class="video-frame" aria-live="polite">
+          <iframe src="${escapeAttr(videoSrc)}" title="${escapeAttr(title)}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    container.innerHTML = `
+      <div class="video-card">
+        <h3>${icon} ${escapeHtml(defaultTitle)}</h3>
+        <p>Impossible de charger la vidéo.</p>
+      </div>
+    `;
+    console.error(err);
+  }
+}
+
+function escapeHtml(s){ if(!s) return ""; return String(s).replace(/[&<>'"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c])); }
+function escapeAttr(s){ if(!s) return ""; return String(s).replace(/"/g,'&quot;'); }
+
+(function initDailyVideos(){
+  const parent = document.getElementById("videos-container");
+  parent.innerHTML = `
+    <div id="recette-block" class="video-slot"></div>
+    <div id="histoire-block" class="video-slot"></div>
+    <div id="exercice-block" class="video-slot"></div>
+  `;
+
+  loadDailyVideo({ jsonPath: "lsfrecettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Recette du jour" });
+  loadDailyVideo({ jsonPath: "lsfhistoires.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "Histoire du jour" });
+  loadDailyVideo({ jsonPath: "lsfexercices.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "Exercice du jour" });
+})();
+</script>
+
+</body>
+</html>
