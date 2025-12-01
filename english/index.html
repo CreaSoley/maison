@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>LSF — Exercices & ressources</title>
+<title>English — exercises and resources</title>
 
 <style>
 :root{
@@ -224,11 +224,11 @@ body{
   <a href="../index.html">
    <img src="logo.png" alt="logo" style="width:200px;max-width:60%;" class="appear-anim">
     </a>
-  <div class="title-spicy appear-anim" style="animation-delay:0.08s;">Langue Francaise des Signes</div>
+  <div class="title-spicy appear-anim" style="animation-delay:0.08s;">English</div>
 </div>
 
 <div class="playlist-bar container appear-anim" style="animation-delay:0.12s;">
-  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 Bibliothèque</button>
+  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 Library</button>
 </div>
 
 <div class="videos-wrapper container appear-anim" style="animation-delay:0.16s;">
@@ -236,12 +236,12 @@ body{
 </div>
 
 <div id="biblio" class="biblio-box appear-anim" style="animation-delay:0.2s;">
-  <div class="biblio-title">Bibliotheque de ressources</div>
+  <div class="biblio-title">Resource Library</div>
   <div class="biblio-shelf" id="biblio-shelf">
-    <a href="https://www.youtube.com/@signesvous2211/featured" target="_blank" class="biblio-book c1" data-title="Grammaire LSF">Grammaire</a>
-    <a href="https://www.youtube.com/@aymelinelsf" target="_blank" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulaire</a>
-    <a href="https://www.youtube.com/@MAELanguedesSignes" target="_blank" class="biblio-book c3" data-title="Histoires en LSF">Histoires</a>
-    <a href="https://www.youtube.com/@DicoplusLSF" target="_blank" class="biblio-book c4" data-title="Recettes en LSF">Recettes</a>
+    <a href="https://www.youtube.com/@signesvous2211/featured" target="_blank" class="biblio-book c1" data-title="Grammaire LSF">Grammar</a>
+    <a href="https://www.youtube.com/@aymelinelsf" target="_blank" class="biblio-book c2" data-title="Vocabulaire débutant">Vocabulary/a>
+    <a href="https://www.youtube.com/@MAELanguedesSignes" target="_blank" class="biblio-book c3" data-title="Histoires en LSF">History</a>
+    <a href="https://www.youtube.com/@DicoplusLSF" target="_blank" class="biblio-book c4" data-title="Recettes en LSF">Reciepes</a>
     <a href="https://www.youtube.com/@HautlesmainsLSF" target="_blank" class="biblio-book c5" data-title="Expressions utiles">Expressions</a>
   </div>
 </div>
@@ -301,9 +301,9 @@ function escapeAttr(s){ if(!s) return ""; return String(s).replace(/"/g,'&quot;'
     <div id="exercice-block" class="video-slot"></div>
   `;
 
-  loadDailyVideo({ jsonPath: "lsfrecettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Recette du jour" });
-  loadDailyVideo({ jsonPath: "lsfhistoires.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "Histoire du jour" });
-  loadDailyVideo({ jsonPath: "lsfexercices.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "Exercice du jour" });
+  loadDailyVideo({ jsonPath: "lsfrecettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Daily Recipe" });
+  loadDailyVideo({ jsonPath: "lsfhistoires.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "Daily Story" });
+  loadDailyVideo({ jsonPath: "lsfexercices.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "Daily exercice" });
 })();
 </script>
 
