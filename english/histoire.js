@@ -2,7 +2,7 @@ async function chargerHistoire() {
     const container = document.getElementById("histoire-container");
 
     try {
-        const response = await fetch("lsfhistoires.json");
+        const response = await fetch("enstories.json");
         const data = await response.json();
 
         // clé du jour
