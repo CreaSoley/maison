@@ -2,7 +2,7 @@ async function chargerRecette() {
     const container = document.getElementById("recette-container");
 
     try {
-        const response = await fetch("lsfrecettes.json");
+        const response = await fetch("enrecettes.json");
         const data = await response.json();
 
         // clé du jour
