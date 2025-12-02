@@ -230,7 +230,7 @@ body{
   <a href="../index.html">
    <img src="logo.png" alt="logo" style="width:200px;max-width:60%;" class="appear-anim">
     </a>
-  <div class="title-spicy appear-anim gradient-spanish" style="animation-delay:0.08s;">Español</div>
+  <div class="title-spicy appear-anim gradient-spanish" style="animation-delay:0.08s;">Espanol</div>
 </div>
 
 <div class="playlist-bar container appear-anim" style="animation-delay:0.12s;">
@@ -244,11 +244,11 @@ body{
 <div id="biblio" class="biblio-box appear-anim" style="animation-delay:0.2s;">
   <div class="biblio-title">biblioteca de recursos</div>
   <div class="biblio-shelf" id="biblio-shelf">
-    <a href="https://www.anglaisfacile.com/free/news/pdf.php" target="_blank" class="biblio-book c1" data-title="English grammar learning cards">Grammar</a>
-    <a href="https://www.youtube.com/@bbclearningenglish/playlists" target="_blank" class="biblio-book c2" data-title="Beginner vocabulary">Vocabulary/</a>
-    <a href="https://www.youtube.com/@EnglishPhrasesHub-b1x" target="_blank" class="biblio-book c3" data-title="Improve english comprehension">Stories/a>
-    <a href="https://www.gordonramsay.com/gr/recipes/roast-beef-with-caramelised-onion-gravy/" target="_blank" class="biblio-book c4" data-title="Cooking with Gordon Ramsay">Reciepes</a>
-    <a href="https://youtube.com/playlist?list=PLrHBWMAalmGhyZ0nshpP_fQxWFcYnxGrD&si=6dxbWntuMKxbRm7t" target="_blank" class="biblio-book c5" data-title="Improve english pronounciation">Pronounciation</a>
+    <a href="https://www.youtube.com/@practiquemos" target="_blank" class="biblio-book c1" data-title="Lecciones de gramática y vocabulario español con ejemplos y práctica.">Gramática y vocabulario</a>
+    <a href="https://www.youtube.com/@bbclearningenglish/playlists" target="_blank" class="biblio-book c2" data-title="Historias divertidas y comentarios interesantes">Español en contexto/</a>
+    <a href="https://www.rtve.es" target="_blank" class="biblio-book c3" data-title="Plataforma de radio y televisión pública española">Cultura/a>
+    <a href="https://spanishsabores.com/" target="_blank" class="biblio-book c4" data-title="Un magnífico blog sobre cultura gastronómica">Cultura gastronómica</a>
+    <a href="https://www.youtube.com/@ButterflySpanish/featured" target="_blank" class="biblio-book c5" data-title="Spanish lessons that cover grammar, pronunciation, vocabulary">Pronunciación</a>
   </div>
 </div>
 
@@ -307,7 +307,7 @@ function escapeAttr(s){ if(!s) return ""; return String(s).replace(/"/g,'&quot;'
     <div id="exercice-block" class="video-slot"></div>
   `;
 
-  loadDailyVideo({ jsonPath: "escette.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Receta del dia" });
+  loadDailyVideo({ jsonPath: "esrecette.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Receta del dia" });
   loadDailyVideo({ jsonPath: "eshistoria.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "Historia del dia" });
   loadDailyVideo({ jsonPath: "esexercices.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "ejercicio del dia" });
 })();
