@@ -201,8 +201,8 @@ body{
   white-space:nowrap;
   font-size:0.92rem;
 }
-  .gradient-deutsch {
-  background-image: linear-gradient(to right, #000000, #290f15, #4b111e, #6e1024, #920d24, #a91c23, #bf2d1f, #d43e17, #e15712, #ec6e0b, #f68403, #ff9b00);
+  .gradient-spanish {
+  background-image: linear-gradient(to right, #aa151b, #c44513, #d96e03, #e89600, #f1bf00);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -230,11 +230,11 @@ body{
   <a href="../index.html">
    <img src="logo.png" alt="logo" style="width:200px;max-width:60%;" class="appear-anim">
     </a>
-  <div class="title-spicy appear-anim gradient-deutsch" style="animation-delay:0.08s;">Deutsch</div>
+  <div class="title-spicy appear-anim gradient-spanish" style="animation-delay:0.08s;">Español</div>
 </div>
 
 <div class="playlist-bar container appear-anim" style="animation-delay:0.12s;">
-  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 Bibliothek</button>
+  <button class="playlist-btn" onclick="document.getElementById('biblio').scrollIntoView({behavior:'smooth'});">📚 biblioteca</button>
 </div>
 
 <div class="videos-wrapper container appear-anim" style="animation-delay:0.16s;">
@@ -242,7 +242,7 @@ body{
 </div>
 
 <div id="biblio" class="biblio-box appear-anim" style="animation-delay:0.2s;">
-  <div class="biblio-title">Ressourcenbibliothek</div>
+  <div class="biblio-title">biblioteca de recursos</div>
   <div class="biblio-shelf" id="biblio-shelf">
     <a href="https://www.anglaisfacile.com/free/news/pdf.php" target="_blank" class="biblio-book c1" data-title="English grammar learning cards">Grammar</a>
     <a href="https://www.youtube.com/@bbclearningenglish/playlists" target="_blank" class="biblio-book c2" data-title="Beginner vocabulary">Vocabulary/</a>
@@ -307,9 +307,9 @@ function escapeAttr(s){ if(!s) return ""; return String(s).replace(/"/g,'&quot;'
     <div id="exercice-block" class="video-slot"></div>
   `;
 
-  loadDailyVideo({ jsonPath: "decettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Tagesrezept" });
-  loadDailyVideo({ jsonPath: "destories.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "tägliche Geschichte" });
-  loadDailyVideo({ jsonPath: "deexercice.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "tägliche Praxis" });
+  loadDailyVideo({ jsonPath: "escette.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Receta del dia" });
+  loadDailyVideo({ jsonPath: "eshistoria.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "Historia del dia" });
+  loadDailyVideo({ jsonPath: "esexercices.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "ejercicio del dia" });
 })();
 </script>
 
