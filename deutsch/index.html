@@ -301,7 +301,7 @@ function escapeAttr(s){ if(!s) return ""; return String(s).replace(/"/g,'&quot;'
     <div id="exercice-block" class="video-slot"></div>
   `;
 
-  loadDailyVideo({ jsonPath: "derecettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Tagesrezept" });
+  loadDailyVideo({ jsonPath: "decettes.json", storageKey: "lsf-recette", container: document.getElementById("recette-block"), icon: "🍰", defaultTitle: "Tagesrezept" });
   loadDailyVideo({ jsonPath: "destories.json", storageKey: "lsf-histoire", container: document.getElementById("histoire-block"), icon: "📖", defaultTitle: "tägliche Geschichte" });
   loadDailyVideo({ jsonPath: "deexercice.json", storageKey: "lsf-exercice", container: document.getElementById("exercice-block"), icon: "💪", defaultTitle: "tägliche Praxis" });
 })();
