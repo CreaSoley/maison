@@ -2,7 +2,7 @@ async function chargerExercice() {
     const container = document.getElementById("exercice-container");
 
     try {
-        const response = await fetch("lsfexercices.json");
+        const response = await fetch("esexercices.json");
         const data = await response.json();
 
         // clé du jour
