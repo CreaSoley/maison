@@ -1,6 +1,6 @@
-/* ------------------------------------------
-   SCRIPT 2 — ENCHAINEMENTS AU HASARD
-------------------------------------------- */
+/* -------------------------------
+   SCRIPT 2 — ENCHAINEMENT
+-------------------------------- */
 
 const enchainements = [
   "Gedan Barai → Gyaku Tsuki → Mae Geri",
@@ -35,19 +35,18 @@ const enchainements = [
 ];
 
 function nouveauEnchainement() {
-  const random = enchainements[Math.floor(Math.random() * enchainements.length)];
-  document.getElementById("comboResult").textContent = random;
+  const result = document.getElementById("comboResult");
+  const e = enchainements[Math.floor(Math.random() * enchainements.length)];
+  result.textContent = e;
+  result.style.animation = "fadeIn .4s";
 }
 
 document.getElementById("btnCombo").addEventListener("click", nouveauEnchainement);
+nouveauEnchainement();
 
-nouveauEnchainement(); // affichage initial
-
-
-
-/* ------------------------------------------
-   SCRIPT 3 — CIBLE (tirage de 3 techniques)
-------------------------------------------- */
+/* -------------------------------
+   SCRIPT 3 — 3 TECHNIQUES CIBLES
+-------------------------------- */
 
 const techniquesCible = [
   "Mae Geri (jambe arrière, chudan)",
@@ -60,22 +59,22 @@ const techniquesCible = [
 ];
 
 function nouveauTirageCible() {
-  const tirage = [];
-
+  let tirage = [];
   while (tirage.length < 3) {
-    const tech = techniquesCible[Math.floor(Math.random() * techniquesCible.length)];
-    if (!tirage.includes(tech)) tirage.push(tech);
+    const t = techniquesCible[Math.floor(Math.random() * techniquesCible.length)];
+    if (!tirage.includes(t)) tirage.push(t);
   }
 
   const list = document.getElementById("cibleList");
   list.innerHTML = "";
+
   tirage.forEach(t => {
     const li = document.createElement("li");
     li.textContent = t;
+    li.className = "list-item";
     list.appendChild(li);
   });
 }
 
 document.getElementById("btnCible").addEventListener("click", nouveauTirageCible);
-
-nouveauTirageCible(); // affichage initial
+nouveauTirageCible();
