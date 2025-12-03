@@ -8,13 +8,15 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* Bannière noire */
 .appbar {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px 10px;
-  background: #ffe0f4;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: #000;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   border-bottom: 4px solid #ffb4e6;
 }
 
@@ -27,11 +29,13 @@ body {
 .header-text .title {
   font-size: 2em;
   line-height: 1;
+  color: white;
 }
 
 .header-text .subtitle {
   font-size: 1.4em;
   opacity: 0.8;
+  color: #ff9be8;
 }
 
 /* Animation kawaii logo flottant */
@@ -77,7 +81,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px; /* écart demandé entre bouton & résultat */
 }
 
 .section-title {
@@ -91,7 +95,7 @@ body {
 .controls-column {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 input, select {
@@ -142,37 +146,42 @@ input, select {
   background: #ffe0f7;
 }
 
-/* Kihon détaillé */
+/* ------------------------------
+   Kihon détaillé
+------------------------------ */
 
 .kihon-layout {
   display: flex;
-  margin-top: 20px;
+  margin-top: 25px;
   gap: 20px;
+  flex-direction: column;
 }
 
+/* texte au-dessus */
 .kihon-text {
   flex: 1;
 }
 
+/* photo + vidéo côte à côte sur desktop */
 .kihon-media {
-  flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
 .photo {
-  width: 100%;
+  width: 50%;
   border-radius: 12px;
 }
 
 .video {
-  width: 100%;
+  width: 50%;
   height: 260px;
   border-radius: 12px;
 }
 
-/* Sub-cards */
+/* ------------------------------
+   SUBCARDS
+------------------------------ */
 
 .kawaii-card {
   background: #fff6fb;
@@ -191,16 +200,22 @@ input, select {
     flex-direction: column;
   }
 
-  .kihon-layout {
-    flex-direction: column;
-  }
-
   .logo-big {
     height: 70px;
   }
 
-  /* bouton surprise sous les filtres */
+  /* bouton surprise sous la recherche */
   #btnRandomKihon {
+    width: 100%;
+  }
+
+  /* photo + vidéo empilées */
+  .kihon-media {
+    flex-direction: column;
+  }
+
+  .photo,
+  .video {
     width: 100%;
   }
 }
