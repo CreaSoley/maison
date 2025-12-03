@@ -6,9 +6,10 @@
   <title>Préparation 2ème Dan – Tai Jitsu</title>
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <!-- Police Spicy -->
   <style>
     @font-face {
       font-family: "Spicy";
@@ -19,45 +20,66 @@
 </head>
 
 <body>
+
+  <!-- HEADER KAWAII -->
   <header class="appbar">
-    <a class="logo" href="../index.html" title="Accueil">
-      <img src="logo.png" alt="logo" class="logo-img"> 
-      <span class="brand-title spicy">PRÉPA 2ème DAN – TAI JITSU</span>
-    </a>
+    <img src="logo.png" alt="logo" class="logo-big">
+    <div class="header-text">
+      <div class="title spicy">Préparation 2ème Dan</div>
+      <div class="subtitle spicy">Tai-Jitsu</div>
+    </div>
   </header>
 
-  <main class="container three-cols">
+  <!-- CONTENU -->
+  <main class="container layout-desktop">
 
-    <!-- 1 — KIHON SIMPLE -->
-    <section class="card-block" id="kihonSimple">
-      <h2 class="spicy">🥋 Kihon simple</h2>
+    <!-- KIHON SIMPLE (prend 2 colonnes sur desktop) -->
+    <section class="card-block wide" id="kihonSimple">
+      <h2 class="spicy section-title">🥋 Kihon simple</h2>
 
-      <div class="controls">
+      <div class="controls controls-column">
         <input id="searchKihon" type="search" placeholder="Rechercher une technique...">
         <select id="filterCategorie"><option value="">Toutes catégories</option></select>
         <button id="btnRandomKihon" class="btn ghost kawaii">✨ Surprise</button>
       </div>
 
-      <div id="kihonResult" class="result-card"></div>
+      <!-- LISTE DES RÉSULTATS -->
+      <div id="kihonList" class="list-results"></div>
+
+      <!-- AFFICHAGE DÉTAILLÉ -->
+      <div id="kihonResult" class="kihon-layout hidden">
+        <div class="kihon-text">
+          <h3 id="techNom"></h3>
+          <p id="techCat" class="tech-cat"></p>
+          <p id="techDesc"></p>
+        </div>
+
+        <div class="kihon-media">
+          <img id="techPhoto" class="photo" src="">
+          <iframe id="techVideo" class="video" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
     </section>
 
-    <!-- 2 — ENCHAINEMENT -->
-    <section class="card-block" id="kihonCombo">
-      <h2 class="spicy">🔗 Enchaînement de kihon</h2>
-      <button id="btnCombo" class="btn primary kawaii">🔄 Nouvel enchaînement</button>
-      <div id="comboResult" class="result-card"></div>
-    </section>
+    <!-- ENCHAINEMENT + CIBLE (1 colonne) -->
+    <section class="card-block stack" id="kihonComboCible">
+      <h2 class="spicy section-title">💫 Enchaînement & Cible</h2>
 
-    <!-- 3 — CIBLE -->
-    <section class="card-block" id="kihonCible">
-      <h2 class="spicy">🎯 Cible – 3 techniques</h2>
-      <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
-      <ul id="cibleList" class="result-list"></ul>
+      <div class="sub-card kawaii-card">
+        <h3 class="spicy">🔗 Enchaînement de kihon</h3>
+        <button id="btnCombo" class="btn primary kawaii">🔄 Nouvel enchaînement</button>
+        <div id="comboResult" class="result-card"></div>
+      </div>
+
+      <div class="sub-card kawaii-card">
+        <h3 class="spicy">🎯 Cible – 3 techniques</h3>
+        <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
+        <ul id="cibleList" class="result-list"></ul>
+      </div>
     </section>
 
   </main>
 
-  <!-- Scripts -->
   <script src="app.js"></script>
   <script src="script_global.js"></script>
 
