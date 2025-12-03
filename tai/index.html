@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Préparation 2ème Dan – Tai Jitsu</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header class="appbar">
+    <a class="logo" href="../index.html" title="Accueil">
+      <img src="assets/images/logo.png" alt="logo" class="logo-img"> 
+      <span class="brand-title spicy">PREPA 2ème DAN – TAI JITSU</span>
+    </a>
+  </header>
+
+  <main class="container three-cols">
+
+    <!-- 1ER ENCART : KIHON SIMPLE -->
+    <section class="card-block" id="kihonSimple">
+      <h2 class="spicy">🥋 Kihon simple</h2>
+      <div class="controls">
+        <input id="searchKihon" type="search" placeholder="Rechercher une technique...">
+        <select id="filterCategorie"><option value="">Toutes catégories</option></select>
+        <button id="btnRandomKihon" class="btn ghost kawaii">✨ Surprise</button>
+      </div>
+      <div id="kihonResult" class="result-card"></div>
+    </section>
+
+    <!-- 2EME ENCART : ENCHAINEMENT DE KIHON -->
+    <section class="card-block" id="kihonCombo">
+      <h2 class="spicy">🔗 Enchaînement de kihon</h2>
+      <button id="btnCombo" class="btn primary kawaii">🔄 Nouvel enchaînement</button>
+      <div id="comboResult" class="result-card"></div>
+    </section>
+
+    <!-- 3EME ENCART : CIBLE -->
+    <section class="card-block" id="kihonCible">
+      <h2 class="spicy">🎯 Cible – 3 techniques</h2>
+      <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
+      <ul id="cibleList" class="result-list"></ul>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
