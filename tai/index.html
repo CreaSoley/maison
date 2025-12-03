@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -15,13 +16,16 @@
       font-family: "Spicy";
       src: url("Spicy Sale.ttf");
     }
-    .spicy { font-family: "Spicy", cursive; }
+
+    .spicy {
+      font-family: "Spicy", cursive;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER KAWAII -->
+  <!-- HEADER (bannière noire + effet kawaii) -->
   <header class="appbar">
     <img src="logo.png" alt="logo" class="logo-big">
     <div class="header-text">
@@ -30,27 +34,30 @@
     </div>
   </header>
 
-  <!-- CONTENU -->
+  <!-- CONTENU GLOBAL -->
   <main class="container layout-desktop">
 
-    <!-- KIHON SIMPLE (prend 2 colonnes sur desktop) -->
+    <!-- KIHON SIMPLE (colonne principale) -->
     <section class="card-block wide" id="kihonSimple">
       <h2 class="spicy section-title">🥋 Kihon simple</h2>
 
+      <!-- Filtres + recherche -->
       <div class="controls controls-column">
         <input id="searchKihon" type="search" placeholder="Rechercher une technique...">
-        <select id="filterCategorie"><option value="">Toutes catégories</option></select>
+        <select id="filterCategorie">
+          <option value="">Toutes catégories</option>
+        </select>
         <button id="btnRandomKihon" class="btn ghost kawaii">✨ Surprise</button>
       </div>
 
-      <!-- LISTE DES RÉSULTATS -->
+      <!-- Liste filtrée (vide au premier chargement) -->
       <div id="kihonList" class="list-results"></div>
 
-      <!-- AFFICHAGE DÉTAILLÉ -->
+      <!-- Bloc détaillé caché tant qu'on n'a pas cliqué -->
       <div id="kihonResult" class="kihon-layout hidden">
         <div class="kihon-text">
           <h3 id="techNom"></h3>
-          <p id="techCat" class="tech-cat"></p>
+          <p id="techCat"></p>
           <p id="techDesc"></p>
         </div>
 
@@ -61,16 +68,18 @@
       </div>
     </section>
 
-    <!-- ENCHAINEMENT + CIBLE (1 colonne) -->
+    <!-- ENCHAINEMENT + CIBLE (colonne latérale) -->
     <section class="card-block stack" id="kihonComboCible">
       <h2 class="spicy section-title">💫 Enchaînement & Cible</h2>
 
+      <!-- Enchaînement -->
       <div class="sub-card kawaii-card">
         <h3 class="spicy">🔗 Enchaînement de kihon</h3>
         <button id="btnCombo" class="btn primary kawaii">🔄 Nouvel enchaînement</button>
         <div id="comboResult" class="result-card"></div>
       </div>
 
+      <!-- Cibles -->
       <div class="sub-card kawaii-card">
         <h3 class="spicy">🎯 Cible – 3 techniques</h3>
         <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
@@ -80,8 +89,10 @@
 
   </main>
 
+  <!-- Scripts -->
   <script src="app.js"></script>
   <script src="script_global.js"></script>
 
 </body>
+
 </html>
