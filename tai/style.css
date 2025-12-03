@@ -1,26 +1,49 @@
+/* ------------------------------
+   STYLE GLOBAL
+------------------------------ */
+
 body {
-  background: #fafafa;
   margin: 0;
+  background: #fff7fc;
   font-family: Arial, sans-serif;
 }
 
 .appbar {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: #333;
-  padding: 10px;
+  justify-content: center;
+  padding: 20px 10px;
+  background: #ffe0f4;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-bottom: 4px solid #ffb4e6;
 }
 
-.logo-img {
-  height: 50px;
-  margin-right: 10px;
+.logo-big {
+  height: 90px;
+  margin-right: 15px;
+  animation: float 3s ease-in-out infinite;
 }
 
-.brand-title {
-  font-size: 1.6em;
-  color: #fff;
+.header-text .title {
+  font-size: 2em;
+  line-height: 1;
 }
+
+.header-text .subtitle {
+  font-size: 1.4em;
+  opacity: 0.8;
+}
+
+/* Animation kawaii logo flottant */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+/* ------------------------------
+   LAYOUT
+------------------------------ */
 
 .container {
   display: flex;
@@ -28,59 +51,158 @@ body {
   padding: 20px;
 }
 
-.three-cols {
+.layout-desktop {
   display: flex;
 }
 
 .card-block {
-  flex: 1;
   background: white;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(255,120,200,0.3);
+  animation: fadeIn 0.6s ease;
 }
 
-.controls {
+/* fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wide {
+  flex: 2;
+}
+
+.stack {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title {
+  font-size: 1.8em;
+}
+
+/* ------------------------------
+   CONTROLS
+------------------------------ */
+
+.controls-column {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 15px;
 }
 
-.result-card {
-  margin-top: 15px;
-}
-
-.card img.photo {
-  width: 100%;
-  border-radius: 8px;
-  margin: 10px 0;
+input, select {
+  padding: 10px;
+  border-radius: 12px;
+  border: 2px solid #ffc7eb;
+  background: #fff0fa;
 }
 
 .btn {
-  padding: 8px 15px;
-  border-radius: 10px;
+  padding: 10px 15px;
+  border-radius: 14px;
+  border: none;
   cursor: pointer;
+  transition: transform .2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
 }
 
 .btn.primary {
-  background: #5568ff;
+  background: #ff8ad4;
   color: white;
 }
 
 .btn.ghost {
-  background: #eee;
+  background: #ffe6f7;
 }
 
-.result-list li {
-  background: #eee;
-  margin: 5px 0;
-  padding: 8px;
-  border-radius: 6px;
+/* ------- listes techniques -------- */
+
+.list-results {
+  margin-top: 15px;
 }
 
-/* Mobile */
-@media (max-width: 800px) {
-  .three-cols {
+.list-item {
+  background: #fff2fc;
+  border: 2px solid #ffcbef;
+  border-radius: 14px;
+  padding: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.list-item:hover {
+  background: #ffe0f7;
+}
+
+/* Kihon détaillé */
+
+.kihon-layout {
+  display: flex;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.kihon-text {
+  flex: 1;
+}
+
+.kihon-media {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.photo {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.video {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+}
+
+/* Sub-cards */
+
+.kawaii-card {
+  background: #fff6fb;
+  border-radius: 18px;
+  padding: 15px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* ------------------------------
+   MOBILE RESPONSIVE
+------------------------------ */
+
+@media (max-width: 900px) {
+
+  .container {
     flex-direction: column;
   }
+
+  .kihon-layout {
+    flex-direction: column;
+  }
+
+  .logo-big {
+    height: 70px;
+  }
+
+  /* bouton surprise sous les filtres */
+  #btnRandomKihon {
+    width: 100%;
+  }
 }
+
+.hidden { display: none; }
