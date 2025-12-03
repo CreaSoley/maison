@@ -5,7 +5,8 @@ fetch("tjkihon.json")
   .then(data => {
     techniques = data;
     populateCategories();
-    displayList(techniques);
+    // NE PAS afficher les techniques par défaut
+    displayList([]);
   });
 
 function populateCategories() {
@@ -28,6 +29,8 @@ function displayList(list) {
   const box = document.getElementById("kihonList");
   box.innerHTML = "";
 
+  if (list.length === 0) return;
+
   list.forEach(t => {
     const div = document.createElement("div");
     div.className = "list-item";
@@ -47,12 +50,13 @@ document.getElementById("searchKihon").addEventListener("input", (e) => {
 /* Filtre catégorie */
 document.getElementById("filterCategorie").addEventListener("change", e => {
   const cat = e.target.value;
-  const filtered = cat ? techniques.filter(t => t.categorie === cat) : techniques;
+  const filtered = cat ? techniques.filter(t => t.categorie === cat) : [];
   displayList(filtered);
 });
 
 /* Surprise */
 document.getElementById("btnRandomKihon").addEventListener("click", () => {
+  if (techniques.length === 0) return;
   const t = techniques[Math.floor(Math.random() * techniques.length)];
   showTechnique(t);
 });
