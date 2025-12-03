@@ -1,0 +1,86 @@
+body {
+  background: #fafafa;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.appbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #333;
+  padding: 10px;
+}
+
+.logo-img {
+  height: 50px;
+  margin-right: 10px;
+}
+
+.brand-title {
+  font-size: 1.6em;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.three-cols {
+  display: flex;
+}
+
+.card-block {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.result-card {
+  margin-top: 15px;
+}
+
+.card img.photo {
+  width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.btn {
+  padding: 8px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #5568ff;
+  color: white;
+}
+
+.btn.ghost {
+  background: #eee;
+}
+
+.result-list li {
+  background: #eee;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+  .three-cols {
+    flex-direction: column;
+  }
+}
