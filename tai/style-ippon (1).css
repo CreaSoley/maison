@@ -1,0 +1,217 @@
+/* ------------------------- */
+/* POLICES */
+/* ------------------------- */
+@font-face {
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf");
+}
+
+.spicy {
+  font-family: "Spicy", cursive;
+}
+
+/* Police standard */
+body, button, input, select, p, div, li {
+  font-family: Arial, sans-serif;
+}
+
+/* ------------------------- */
+/* STRUCTURE GLOBALE */
+/* ------------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+}
+
+/* ------------------------- */
+/* BANNIÈRE / HEADER */
+/* ------------------------- */
+.appbar {
+  background: black;
+  color: white;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* CENTRE tout */
+  justify-content: center;
+  text-align: center;       /* Titre + sous-titre centrés */
+}
+
+.logo-big {
+  width: 110px;
+  margin-bottom: 15px;
+}
+
+.header-text .title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.header-text .subtitle {
+  font-size: 1.7rem;
+  margin-top: 18px;          /* → ESPACE PLUS GRAND entre titre & sous-titre */
+  letter-spacing: 2px;
+}
+
+/* ------------------------- */
+/* BOUTONS */
+/* ------------------------- */
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn.primary {
+  background: #ff80d4;
+  color: white;
+}
+
+.btn.ghost {
+  background: white;
+  border: 2px solid #ff80d4;
+  color: #ff80d4;
+}
+
+.kawaii {
+  border-radius: 20px;
+}
+
+/* Boutons fiches exercices → police spicy */
+.fiche-btn {
+  font-family: "Spicy", cursive !important;
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  background: #ffd7f6;
+  border-radius: 20px;
+  border: 2px solid #ff9bdd;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.fiche-btn:hover {
+  background: #ffb9ee;
+}
+
+/* ------------------------- */
+/* CARD BLOCKS */
+/* ------------------------- */
+.card-block {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+/* ------------------------- */
+/* LAYOUT */
+/* ------------------------- */
+.layout-desktop {
+  display: flex;
+  gap: 25px;
+  padding: 25px;
+}
+
+.layout-desktop > section {
+  flex: 1;
+}
+
+@media(max-width: 800px){
+  .layout-desktop {
+    flex-direction: column;
+  }
+}
+
+/* ------------------------- */
+/* ACCORDIONS – SCRIPT 1 */
+/* ------------------------- */
+
+.ippon-accordion {
+  background: #ffeef7;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 2px solid #ffb4e6;
+}
+
+.ippon-acc-header {
+  font-family: "Spicy", cursive;   /* Technique en SPICY */
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 8px 6px;
+}
+
+.ippon-acc-content {
+  display: none;
+  padding: 10px 5px;
+  border-top: 1px solid #ffb4e6;
+}
+
+/* Titres colonnes : Arial gras */
+.ippon-acc-content strong {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+/* ------------------------- */
+/* CARDS RESULTATS (SCRIPT 2 + SURPRISE) */
+/* ------------------------- */
+
+#resultCard, .result-card {
+  background: #fff3fb;
+  border-radius: 14px;
+  padding: 15px;
+  border: 2px solid #ffb4e6;
+  margin-top: 18px;
+}
+
+/* Technique + côté en SPICY */
+.tech-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.tech-side {
+  font-family: "Spicy", cursive;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* Le reste en Arial : */
+.result-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.result-text {
+  margin-bottom: 12px;
+}
+
+/* ------------------------- */
+/* VIDEO */
+/* ------------------------- */
+.video-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+/* ------------------------- */
+/* BOUTON SURPRISE – pas modifié */
+/* ------------------------- */
+#btnSurprise {
+  /* NE PAS MODIFIER → demandé par toi */
+}
