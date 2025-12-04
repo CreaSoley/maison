@@ -1,0 +1,62 @@
+.library-shelf {
+  position: relative;
+  padding-top: 20px;
+}
+
+.book-shelf {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-end;
+  perspective: 600px;
+}
+
+.book-3d {
+  width: 80px;
+  height: 140px;
+  background-color: var(--color, #ffd7f6);
+  border-radius: 4px;
+  position: relative;
+  text-align: center;
+  font-family: "Spicy", cursive;
+  color: #333;
+  line-height: 140px;
+  display: block;
+  transform: rotateY(-10deg) skewY(-2deg);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.book-3d:hover {
+  transform: rotateY(0deg) skewY(0deg) translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+.book-3d .tooltip {
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 200px;
+  font-size: 0.9rem;
+  z-index: 2;
+}
+
+.book-3d:hover .tooltip {
+  visibility: visible;
+}
+
+.shelf-bar {
+  height: 10px;
+  background: #8b5c3c;
+  border-radius: 5px;
+  margin-top: 10px;
+}
