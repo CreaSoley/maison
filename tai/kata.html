@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Préparation 2ème Dan – Kata</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Material Icons + Police Spicy -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    /* Polices et styles hérités du modèle */
+    @font-face {
+      font-family: "Spicy";
+      src: url("Spicy Sale.ttf");
+    }
+
+    .spicy {
+      font-family: "Spicy", cursive;
+    }
+
+    /* Layout spécifique kata */
+    .kata-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      padding: 25px;
+    }
+
+    .kata-block {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .wide-block {
+      flex-basis: 100%;
+    }
+
+    .video-frame,
+    .gif-frame {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn.primary {
+      background: #ff80d4;
+      color: white;
+    }
+
+    .btn.ghost {
+      background: white;
+      border: 2px solid #ff80d4;
+      color: #ff80d4;
+    }
+
+    .kawaii {
+      border-radius: 20px;
+    }
+
+    /* Bibliothèque */
+    .library {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    .book {
+      width: 100px;
+      height: 150px;
+      background: #ffd7f6;
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: "Spicy", cursive;
+      transition: transform 0.2s;
+    }
+
+    .book:hover {
+      transform: scale(1.1);
+    }
+
+    .tooltip {
+      visibility: hidden;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 5px;
+      border-radius: 6px;
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: 200px;
+      font-size: 0.9rem;
+      z-index: 1;
+    }
+
+    .book:hover .tooltip {
+      visibility: visible;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="appbar">
+    <a class="logo" href="../index.html" title="Accueil">
+      <img src="logo.png" alt="logo" class="logo-big">
+    </a>
+    <div class="header-text">
+      <div class="title spicy">Préparation 2ème Dan</div>
+      <div class="subtitle spicy">Tai-Jitsu – Kata</div>
+    </div>
+  </header>
+
+  <!-- CONTENU -->
+  <main class="kata-container">
+
+    <!-- ENCART 1 : vidéo -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
+      <iframe class="video-frame" src="ADRESSE_EMBED_VIDEO" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <!-- ENCART 2 : GIF -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎬 Démo animée</h2>
+      <img class="gif-frame" src="ADRESSE_GIF" alt="Démo Kata">
+    </section>
+
+    <!-- ENCART 3 : Tirage + Métronome -->
+    <section class="kata-block wide-block">
+      <h2 class="spicy section-title">🎲 Tirage aléatoire / Métronome</h2>
+
+      <div style="margin-bottom: 15px;">
+        <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
+        <p style="margin-top:10px;font-size:1.2rem;">Kata sélectionné : <span id="kataResult">-</span></p>
+      </div>
+
+      <iframe src="https://www.metronomeonline.com/widget.html" width="100%" height="100" frameborder="0" title="Métronome"></iframe>
+    </section>
+
+    <!-- BIBLIOTHÈQUE -->
+    <section class="kata-block wide-block">
+      <h2 class="spicy section-title">📚 Bibliothèque de ressources</h2>
+      <div class="library">
+        <a href="ressource1.html" target="_blank" class="book">Livre 1
+          <span class="tooltip">Description du Livre 1</span>
+        </a>
+        <a href="ressource2.html" target="_blank" class="book">Livre 2
+          <span class="tooltip">Description du Livre 2</span>
+        </a>
+        <a href="ressource3.html" target="_blank" class="book">Livre 3
+          <span class="tooltip">Description du Livre 3</span>
+        </a>
+        <a href="ressource4.html" target="_blank" class="book">Livre 4
+          <span class="tooltip">Description du Livre 4</span>
+        </a>
+        <a href="ressource5.html" target="_blank" class="book">Livre 5
+          <span class="tooltip">Description du Livre 5</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script>
+    const kataList = [
+      "Kata Escargot",
+      "Kata Métronome",
+      "Kata Speedy",
+      "Kata Jour J",
+      "Focus Transition",
+      "Version Bunkaï"
+    ];
+
+    const btnRandom = document.getElementById("btnKataRandom");
+    const kataResult = document.getElementById("kataResult");
+
+    btnRandom.addEventListener("click", () => {
+      const randomIndex = Math.floor(Math.random() * kataList.length);
+      kataResult.textContent = kataList[randomIndex];
+    });
+  </script>
+
+</body>
+
+</html>
