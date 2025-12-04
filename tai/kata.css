@@ -1,62 +1,110 @@
+/* --- BIBLIOTHÈQUE KAWAII --- */
+
 .library-shelf {
   position: relative;
-  padding-top: 20px;
+  padding-top: 25px;
 }
 
 .book-shelf {
   display: flex;
-  gap: 20px;
-  justify-content: flex-start;
+  gap: 25px;
   align-items: flex-end;
-  perspective: 600px;
+  padding-bottom: 20px;
 }
 
-.book-3d {
-  width: 80px;
-  height: 140px;
-  background-color: var(--color, #ffd7f6);
+/* LIVRE ULTRA KAWAII + RÉALISTE */
+.book-kawaii {
+  --tilt: calc(-6deg + (12deg * random())); /* rotation aléatoire */
+  --height: calc(120px + (40px * random())); /* hauteur aléatoire */
+
+  width: 75px;
+  height: var(--height);
+  background: var(--color);
   border-radius: 4px;
-  position: relative;
+  padding: 10px 5px;
   text-align: center;
   font-family: "Spicy", cursive;
-  color: #333;
-  line-height: 140px;
-  display: block;
-  transform: rotateY(-10deg) skewY(-2deg);
-  transition: transform 0.3s, box-shadow 0.3s;
-  cursor: pointer;
   text-decoration: none;
+  color: #333;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  cursor: pointer;
+  transform: rotate(var(--tilt));
+
+  /* texture subtile + ombre */
+  background-image: linear-gradient(
+      135deg,
+      rgba(255,255,255,0.4) 0%,
+      rgba(255,255,255,0) 40%
+    );
+  box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+
+  transition: transform 0.25s, box-shadow 0.25s;
 }
 
-.book-3d:hover {
-  transform: rotateY(0deg) skewY(0deg) translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-}
-
-.book-3d .tooltip {
-  visibility: hidden;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 5px;
-  border-radius: 6px;
+/* tranche réaliste */
+.book-kawaii::before {
+  content: "";
   position: absolute;
-  bottom: 110%;
+  right: -8px;
+  top: 0;
+  height: 100%;
+  width: 8px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 0 4px 4px 0;
+  box-shadow: inset -2px 0 3px rgba(0,0,0,0.15);
+}
+
+/* HOVER = le livre se redresse et devient plus net */
+.book-kawaii:hover {
+  transform: rotate(0deg) translateY(-8px);
+  box-shadow: 0 12px 18px rgba(0,0,0,0.35);
+}
+
+/* Tooltip kawaii */
+.book-kawaii::after {
+  content: attr(data-info);
+  visibility: hidden;
+  opacity: 0;
+
+  position: absolute;
+  bottom: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
-  width: max-content;
-  max-width: 200px;
-  font-size: 0.9rem;
-  z-index: 2;
+
+  background: #333;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+
+  transition: opacity 0.3s;
+  pointer-events: none;
 }
 
-.book-3d:hover .tooltip {
+/* petite flèche */
+.book-kawaii:hover::after {
   visibility: visible;
+  opacity: 1;
 }
 
+.book-kawaii:hover::after {
+  content: attr(data-info);
+}
+
+.book-kawaii:hover::before {
+  /* rien ici, juste pour éviter conflits */
+}
+
+/* étagère */
 .shelf-bar {
-  height: 10px;
+  height: 12px;
   background: #8b5c3c;
-  border-radius: 5px;
-  margin-top: 10px;
+  border-radius: 6px;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.3) inset;
 }
