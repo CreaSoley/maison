@@ -1,223 +1,217 @@
-/* ------------------------------
-   STYLE GLOBAL
------------------------------- */
+/* ------------------------- */
+/* POLICES */
+/* ------------------------- */
+@font-face {
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf");
+}
 
-body {
-  margin: 0;
-  background: #fff7fc;
+.spicy {
+  font-family: "Spicy", cursive;
+}
+
+/* Police standard */
+body, button, input, select, p, div, li {
   font-family: Arial, sans-serif;
 }
 
-/* Bannière noire */
+/* ------------------------- */
+/* STRUCTURE GLOBALE */
+/* ------------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+}
+
+/* ------------------------- */
+/* BANNIÈRE / HEADER */
+/* ------------------------- */
 .appbar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 10px;
-  background: #000;
+  background: black;
   color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  border-bottom: 4px solid #ffb4e6;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* CENTRE tout */
+  justify-content: center;
+  text-align: center;       /* Titre + sous-titre centrés */
 }
 
 .logo-big {
-  height: 90px;
-  margin-right: 15px;
-  animation: float 3s ease-in-out infinite;
+  width: 110px;
+  margin-bottom: 15px;
 }
 
 .header-text .title {
-  font-size: 2em;
-  line-height: 1;
-  color: white;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
 }
 
 .header-text .subtitle {
-  font-size: 1.4em;
-  opacity: 0.8;
-  color: #ff9be8;
+  font-size: 1.7rem;
+  margin-top: 18px;          /* → ESPACE PLUS GRAND entre titre & sous-titre */
+  letter-spacing: 2px;
 }
 
-/* Animation kawaii logo flottant */
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0px); }
-}
-
-/* ------------------------------
-   LAYOUT
------------------------------- */
-
-.container {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-.layout-desktop {
-  display: flex;
-}
-
-.card-block {
-  background: white;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(255,120,200,0.3);
-  animation: fadeIn 0.6s ease;
-}
-
-/* fade-in */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.wide {
-  flex: 2;
-}
-
-.stack {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 30px; /* écart demandé entre bouton & résultat */
-}
-
-.section-title {
-  font-size: 1.8em;
-}
-
-/* ------------------------------
-   CONTROLS
------------------------------- */
-
-.controls-column {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-input, select {
-  padding: 10px;
-  border-radius: 12px;
-  border: 2px solid #ffc7eb;
-  background: #fff0fa;
-}
-
+/* ------------------------- */
+/* BOUTONS */
+/* ------------------------- */
 .btn {
-  padding: 10px 15px;
-  border-radius: 14px;
-  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform .2s;
-}
-
-.btn:hover {
-  transform: scale(1.05);
+  border: none;
+  font-size: 1rem;
 }
 
 .btn.primary {
-  background: #ff8ad4;
+  background: #ff80d4;
   color: white;
 }
 
 .btn.ghost {
-  background: #ffe6f7;
+  background: white;
+  border: 2px solid #ff80d4;
+  color: #ff80d4;
 }
 
-/* ------- listes techniques -------- */
-
-.list-results {
-  margin-top: 15px;
+.kawaii {
+  border-radius: 20px;
 }
 
-.list-item {
-  background: #fff2fc;
-  border: 2px solid #ffcbef;
-  border-radius: 14px;
-  padding: 10px;
-  margin-bottom: 8px;
+/* Boutons fiches exercices → police spicy */
+.fiche-btn {
+  font-family: "Spicy", cursive !important;
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  background: #ffd7f6;
+  border-radius: 20px;
+  border: 2px solid #ff9bdd;
   cursor: pointer;
-  transition: background .2s;
+  transition: 0.2s;
 }
 
-.list-item:hover {
-  background: #ffe0f7;
+.fiche-btn:hover {
+  background: #ffb9ee;
 }
 
-/* ------------------------------
-   Kihon détaillé
------------------------------- */
+/* ------------------------- */
+/* CARD BLOCKS */
+/* ------------------------- */
+.card-block {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+}
 
-.kihon-layout {
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+/* ------------------------- */
+/* LAYOUT */
+/* ------------------------- */
+.layout-desktop {
   display: flex;
-  margin-top: 25px;
-  gap: 20px;
-  flex-direction: column;
+  gap: 25px;
+  padding: 25px;
 }
 
-/* texte au-dessus */
-.kihon-text {
+.layout-desktop > section {
   flex: 1;
 }
 
-/* photo + vidéo côte à côte sur desktop */
-.kihon-media {
-  display: flex;
-  gap: 20px;
+@media(max-width: 800px){
+  .layout-desktop {
+    flex-direction: column;
+  }
 }
 
-.photo {
-  width: 50%;
+/* ------------------------- */
+/* ACCORDIONS – SCRIPT 1 */
+/* ------------------------- */
+
+.ippon-accordion {
+  background: #ffeef7;
   border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 2px solid #ffb4e6;
 }
 
-.video {
-  width: 50%;
-  height: 260px;
-  border-radius: 12px;
+.ippon-acc-header {
+  font-family: "Spicy", cursive;   /* Technique en SPICY */
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 8px 6px;
 }
 
-/* ------------------------------
-   SUBCARDS
------------------------------- */
+.ippon-acc-content {
+  display: none;
+  padding: 10px 5px;
+  border-top: 1px solid #ffb4e6;
+}
 
-.kawaii-card {
-  background: #fff6fb;
-  border-radius: 18px;
+/* Titres colonnes : Arial gras */
+.ippon-acc-content strong {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+/* ------------------------- */
+/* CARDS RESULTATS (SCRIPT 2 + SURPRISE) */
+/* ------------------------- */
+
+#resultCard, .result-card {
+  background: #fff3fb;
+  border-radius: 14px;
   padding: 15px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  border: 2px solid #ffb4e6;
+  margin-top: 18px;
 }
 
-/* ------------------------------
-   MOBILE RESPONSIVE
------------------------------- */
-
-@media (max-width: 900px) {
-
-  .container {
-    flex-direction: column;
-  }
-
-  .logo-big {
-    height: 70px;
-  }
-
-  /* bouton surprise sous la recherche */
-  #btnRandomKihon {
-    width: 100%;
-  }
-
-  /* photo + vidéo empilées */
-  .kihon-media {
-    flex-direction: column;
-  }
-
-  .photo,
-  .video {
-    width: 100%;
-  }
+/* Technique + côté en SPICY */
+.tech-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.hidden { display: none; }
+.tech-side {
+  font-family: "Spicy", cursive;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* Le reste en Arial : */
+.result-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.result-text {
+  margin-bottom: 12px;
+}
+
+/* ------------------------- */
+/* VIDEO */
+/* ------------------------- */
+.video-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+/* ------------------------- */
+/* BOUTON SURPRISE – pas modifié */
+/* ------------------------- */
+#btnSurprise {
+  /* NE PAS MODIFIER → demandé par toi */
+}
