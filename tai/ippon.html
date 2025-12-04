@@ -1,15 +1,16 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ippon Kumite – Tai Jitsu</title>
 
-  <!-- Style externe -->
-  <link rel="stylesheet" href="style-ippon.css">
+  <link rel="stylesheet" href="style.css">
 
   <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <style>
     @font-face {
       font-family: "Spicy";
@@ -21,7 +22,7 @@
 
 <body>
 
-  <!-- HEADER kawaii identique au modèle -->
+  <!-- HEADER (centré + style kawaii) -->
   <header class="appbar">
     <img src="logo.png" alt="logo" class="logo-big">
     <div class="header-text">
@@ -33,67 +34,70 @@
   <!-- CONTENU GLOBAL -->
   <main class="container layout-desktop">
 
-    <!-- BOUTONS PDF + Surprise -->
+    <!-- BOUTONS FICHES EXERCICES -->
     <section class="card-block wide">
-      <h2 class="spicy section-title">📚 Fiches d'exercices</h2>
+      <h2 class="spicy section-title">📄 Fiches exercices</h2>
 
-      <div class="pdf-buttons">
-        <a class="btn primary kawaii" href="ex1.pdf">Exercice 1</a>
-        <a class="btn primary kawaii" href="ex2.pdf">Exercice 2</a>
-        <a class="btn primary kawaii" href="ex3.pdf">Exercice 3</a>
-        <a class="btn primary kawaii" href="ex4.pdf">Exercice 4</a>
-        <a class="btn primary kawaii" href="ex5.pdf">Exercice 5</a>
-        <a class="btn primary kawaii" href="ex6.pdf">Exercice 6</a>
+      <div class="controls" style="display:flex;flex-wrap:wrap;gap:12px;">
+        <button class="fiche-btn">Fiche 1</button>
+        <button class="fiche-btn">Fiche 2</button>
+        <button class="fiche-btn">Fiche 3</button>
+        <button class="fiche-btn">Fiche 4</button>
+        <button class="fiche-btn">Fiche 5</button>
+        <button class="fiche-btn">Fiche 6</button>
+
+        <!-- Bouton surprise (pas modifié) -->
         <button id="btnSurprise" class="btn ghost kawaii">✨ Surprise</button>
       </div>
 
-      <div id="surpriseOutput"></div>
+      <!-- Résultat Surprise -->
+      <div id="surpriseResult"></div>
     </section>
 
-
-    <!-- 2 COLONNES -->
-    <section class="col-2">
-
-      <!-- MODULE 1 : Côté → affiche une card -->
-      <div class="card-block">
-        <h2 class="spicy section-title">🛡️ Défense selon le côté</h2>
-
-        <select id="selectCote1" class="input-full">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-
-        <div id="resultCote1"></div>
-      </div>
-
-
-      <!-- MODULE 2 : Attaque + côté → card + vidéo -->
-      <div class="card-block">
-        <h2 class="spicy section-title">🥋 Technique complète</h2>
-
-        <select id="selectAttaque2" class="input-full">
-          <option value="">Choisir une attaque</option>
-          <option>Oi Tsuki Jodan</option>
-          <option>Oi Tsuki Chudan</option>
-          <option>Mae Geri</option>
-          <option>Mawashi Geri</option>
-          <option>Yoko geri</option>
-        </select>
-
-        <select id="selectCote2" class="input-full">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-
-        <div id="resultModule2"></div>
-      </div>
-
-    </section>
   </main>
 
-  <!-- Scripts -->
+  <!-- 2 COLONNES (Script 1 + Script 2) -->
+  <main class="container layout-desktop">
+
+    <!-- SCRIPT 1 — Accordéons par côté -->
+    <section class="card-block" id="script1">
+      <h2 class="spicy section-title">🥋 Techniques par côté</h2>
+
+      <div class="controls controls-column">
+        <select id="filterSide">
+          <option value="">Choisir un côté</option>
+          <option value="droite">Droite</option>
+          <option value="gauche">Gauche</option>
+        </select>
+      </div>
+
+      <!-- Liste dynamique des accordéons -->
+      <div id="accordionList"></div>
+    </section>
+
+    <!-- SCRIPT 2 — Choix attaque + côté -->
+    <section class="card-block" id="script2">
+      <h2 class="spicy section-title">💫 Fiche technique</h2>
+
+      <div class="controls controls-column">
+        <select id="selectAttack">
+          <option value="">Choisir une attaque</option>
+        </select>
+
+        <select id="selectSide">
+          <option value="">Choisir un côté</option>
+          <option value="droite">Droite</option>
+          <option value="gauche">Gauche</option>
+        </select>
+      </div>
+
+      <div id="resultCard"></div>
+    </section>
+
+  </main>
+
+  <!-- SCRIPT -->
   <script src="ippon.js"></script>
+
 </body>
 </html>
