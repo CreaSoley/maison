@@ -1,4 +1,4 @@
-// ippon.js – version finale
+// ippon.js – version finale alignement
 
 const techniques = [
   { attaque: "Oi Tsuki Jodan", cote: "droite", esquive: "Tai sabaki diagonal extérieur, léger pivot de hanche", blocage: "jodan age-uke en avançant", defense: "contrôle du poignet → empi uchi au plexus", video: "https://www.youtube.com/embed/Rp1drfqOMKY" },
