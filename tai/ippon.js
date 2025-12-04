@@ -1,9 +1,4 @@
-// ippon.js – version corrigée pour correspondre aux IDs du HTML fourni
-// - corrige les IDs (filterSide, accordionList, selectAttack, selectSide, resultCard, surpriseResult)
-// - remplit automatiquement la liste des attaques dans le select
-// - crée les accordéons dans #accordionList
-// - affiche la fiche détaillée dans #resultCard
-// - affiche surprise dans #surpriseResult
+// ippon.js – version finale
 
 const techniques = [
   { attaque: "Oi Tsuki Jodan", cote: "droite", esquive: "Tai sabaki diagonal extérieur, léger pivot de hanche", blocage: "jodan age-uke en avançant", defense: "contrôle du poignet → empi uchi au plexus", video: "https://www.youtube.com/embed/Rp1drfqOMKY" },
@@ -25,7 +20,7 @@ function uniqAttaques() {
   return Array.from(s);
 }
 
-// Module: Remplir selectAttack
+// Remplir selectAttack
 function populateAttackSelect() {
   const sel = document.getElementById('selectAttack');
   if (!sel) return;
@@ -38,7 +33,7 @@ function populateAttackSelect() {
   });
 }
 
-// Module 1: accordéon par côté (filterSide -> accordionList)
+// Module 1: Accordéon par côté
 function initAccordionModule() {
   const sideSel = document.getElementById('filterSide');
   const list = document.getElementById('accordionList');
@@ -55,35 +50,29 @@ function initAccordionModule() {
       return;
     }
 
-    filtered.forEach((t, idx) => {
+    filtered.forEach((t) => {
       const wrapper = document.createElement('div');
       wrapper.className = 'ippon-accordion';
 
-      // header button (technique) – en spicy via CSS
       const header = document.createElement('div');
       header.className = 'ippon-acc-header';
       header.textContent = t.attaque;
-      header.setAttribute('role', 'button');
+      header.setAttribute('role','button');
       header.tabIndex = 0;
 
-      // content
       const content = document.createElement('div');
-      content.className = 'ippon-acc-content arial';
-
-      // structure with bold titles (Arial bold) and normal Arial for values
+      content.className = 'ippon-acc-content';
       content.innerHTML = `
         <p><strong>Tai sabaki :</strong> <span class="result-text">${t.esquive}</span></p>
         <p><strong>Blocage :</strong> <span class="result-text">${t.blocage}</span></p>
         <p><strong>Défense :</strong> <span class="result-text">${t.defense}</span></p>
       `;
 
-      // toggle
       header.addEventListener('click', () => {
-        const isOpen = content.style.display === 'block';
-        content.style.display = isOpen ? 'none' : 'block';
+        content.style.display = content.style.display === 'block' ? 'none' : 'block';
       });
       header.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') header.click();
+        if(e.key === 'Enter' || e.key === ' ') header.click();
       });
 
       wrapper.appendChild(header);
@@ -93,7 +82,7 @@ function initAccordionModule() {
   });
 }
 
-// Module 2: sélectionner attaque + côté -> fiche détaillée
+// Module 2: Fiche Technique
 function initSelectModule() {
   const selAtt = document.getElementById('selectAttack');
   const selSide = document.getElementById('selectSide');
@@ -119,14 +108,9 @@ function initSelectModule() {
         <div class="tech-title">${tech.attaque}</div>
         <div class="tech-side">${tech.cote}</div>
 
-        <p><strong class="result-title">Tai sabaki :</strong></p>
-        <p class="result-text">${tech.esquive}</p>
-
-        <p><strong class="result-title">Blocage :</strong></p>
-        <p class="result-text">${tech.blocage}</p>
-
-        <p><strong class="result-title">Défense :</strong></p>
-        <p class="result-text">${tech.defense}</p>
+        <p><strong class="result-title">Tai sabaki :</strong> <span class="result-text">${tech.esquive}</span></p>
+        <p><strong class="result-title">Blocage :</strong> <span class="result-text">${tech.blocage}</span></p>
+        <p><strong class="result-title">Défense :</strong> <span class="result-text">${tech.defense}</span></p>
 
         <iframe class="video-frame" src="${tech.video}" frameborder="0" allowfullscreen></iframe>
       </div>
@@ -140,25 +124,20 @@ function initSelectModule() {
 // Module 3: Surprise
 function initSurprise() {
   const btn = document.getElementById('btnSurprise');
-  const out = document.getElementById('surpriseResult') || document.getElementById('surpriseOutput') || document.getElementById('surpriseOutput');
+  const out = document.getElementById('surpriseResult');
   if (!btn || !out) return;
 
   btn.addEventListener('click', () => {
     const t = techniques[Math.floor(Math.random() * techniques.length)];
     out.innerHTML = `
       <div class="result-card">
-        <div class="tech-title">${t.attaque}</div>
-        <div class="tech-side">${t.cote}</div>
-
-        <p><strong class="result-title">Tai sabaki :</strong></p>
-        <p class="result-text">${t.esquive}</p>
-
-        <p><strong class="result-title">Blocage :</strong></p>
-        <p class="result-text">${t.blocage}</p>
-
-        <p><strong class="result-title">Défense :</strong></p>
-        <p class="result-text">${t.defense}</p>
-
+        <div>
+          <div class="tech-title">${t.attaque}</div>
+          <div class="tech-side">${t.cote}</div>
+          <p><strong class="result-title">Tai sabaki :</strong> <span class="result-text">${t.esquive}</span></p>
+          <p><strong class="result-title">Blocage :</strong> <span class="result-text">${t.blocage}</span></p>
+          <p><strong class="result-title">Défense :</strong> <span class="result-text">${t.defense}</span></p>
+        </div>
         <iframe class="video-frame" src="${t.video}" frameborder="0" allowfullscreen></iframe>
       </div>
     `;
