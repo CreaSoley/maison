@@ -11,7 +11,7 @@ const techniques = [
   { attaque: "Oi Tsuki Chudan", cote: "droite", esquive: "exterieur gauche", blocage: "ngashi uke → saisie poignet", defense: "uraken tsuki", video: "https://www.youtube.com/embed/ynE0eX2jpXc" },
   { attaque: "Oi Tsuki Chudan", cote: "gauche", esquive: "Pas intérieur rapide vers la droite (tai sabaki intérieur).", blocage: "decrire blocage", defense: "décrire défense", video: "https://www.youtube.com/embed/L18tYBdkTdg" },
   { attaque: "Mae Geri", cote: "droite", esquive: "déplacement extérieur gauche", blocage: "blocage gedan barai déviant", defense: "yoko geri gedan creux genou", video: "https://www.youtube.com/embed/rq67slGGZAw" },
-  { attaque: "Mae Geri", cote: "droite", esquive: "decrire esquive", blocage: "decrire blocage", defense: "décrire défense", video: "https://www.youtube.com/embed/mq8B1Xq9050" },
+  { attaque: "Mae Geri", cote: "gauche", esquive: "decrire esquive", blocage: "decrire blocage", defense: "décrire défense", video: "https://www.youtube.com/embed/mq8B1Xq9050" },
   { attaque: "Mawashi Geri", cote: "droite", esquive: "decrire esquive", blocage: "decrire blocage", defense: "décrire défense", video: "https://www.youtube.com/embed/UK4E4PgYw-g" },
   { attaque: "Mawashi Geri", cote: "gauche", esquive: "decrire esquive", blocage: "decrire blocage", defense: "décrire défense", video: "https://www.youtube.com/embed/d-YZ8euC_YQ?" },
   { attaque: "Yoko geri", cote: "droite", esquive: "decrire esquive", blocage: "decrire blocage", defense: "décrire défense", video: "https://www.youtube.com/embed/d-YZ8euC_YQ?" },
