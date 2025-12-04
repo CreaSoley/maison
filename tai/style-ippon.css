@@ -1,189 +1,217 @@
-// ippon.js – version mise à jour avec accordéons, polices spécifiques et règles demandées
+/* ------------------------- */
+/* POLICES */
+/* ------------------------- */
+@font-face {
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf");
+}
 
-// ==========================
-// Données JSON
-// ==========================
-const techniques = [
-  {
-    attaque: "Oi Tsuki Jodan",
-    cote: "droite",
-    esquive: "Tai sabaki diagonal extérieur, léger pivot de hanche",
-    blocage: "jodan age-uke en avançant",
-    defense: "contrôle du poignet → empi uchi au plexus",
-    video: "https://www.youtube.com/embed/Rp1drfqOMKY"
-  },
-  {
-    attaque: "Oi Tsuki Jodan",
-    cote: "gauche",
-    esquive: "decrire esquive",
-    blocage: "jodan age uke avec rotation du buste.",
-    defense: "tate tsuki chudan puis mae geri chudan (position contrôlée).",
-    video: "https://www.youtube.com/embed//W1C3zZQ4KtQ"
-  },
-  {
-    attaque: "Oi Tsuki Chudan",
-    cote: "droit",
-    esquive: "exterieur gauche",
-    blocage: "ngashi uke → saisie poignet",
-    defense: "uraken tsuki",
-    video: "https://www.youtube.com/embed/ynE0eX2jpXc"
-  },
-  {
-    attaque: "Oi Tsuki Chudan",
-    cote: "gauche",
-    esquive: "Pas intérieur rapide vers la droite (tai sabaki intérieur).",
-    blocage: "decrire blocage",
-    defense: "décrire défense",
-    video: "https://www.youtube.com/embed/L18tYBdkTdg"
-  },
-  {
-    attaque: "Mae Geri",
-    cote: "droit",
-    esquive: "déplacement extérieur gauche",
-    blocage: "blocage gedan barai déviant",
-    defense: "yoko geri gedan creux genou",
-    video: "https://www.youtube.com/embed/rq67slGGZAw"
-  },
-  {
-    attaque: "Mae Geri",
-    cote: "droit",
-    esquive: "decrire esquive",
-    blocage: "decrire blocage",
-    defense: "décrire défense",
-    video: "https://www.youtube.com/embed/mq8B1Xq9050"
-  },
-  {
-    attaque: "Mawashi Geri",
-    cote: "droit",
-    esquive: "decrire esquive",
-    blocage: "decrire blocage",
-    defense: "décrire défense",
-    video: "https://www.youtube.com/embed/UK4E4PgYw-g"
-  },
-  {
-    attaque: "Mawashi Geri",
-    cote: "gauche",
-    esquive: "decrire esquive",
-    blocage: "decrire blocage",
-    defense: "décrire défense",
-    video: "https://www.youtube.com/embed/d-YZ8euC_YQ?"
-  },
-  {
-    attaque: "Yoko geri",
-    cote: "droite",
-    esquive: "decrire esquive",
-    blocage: "decrire blocage",
-    defense: "décrire défense",
-    video: "https://www.youtube.com/embed/d-YZ8euC_YQ?"
-  },
-  {
-    attaque: "Yoko geri",
-    cote: "gauche",
-    esquive: "decrire esquive",
-    blocage: "decrire blocage",
-    defense: "décrire défense",
-    video: "https://www.youtube.com/embed/oSPe3ER_YdQ"
+.spicy {
+  font-family: "Spicy", cursive;
+}
+
+/* Police standard */
+body, button, input, select, p, div, li {
+  font-family: Arial, sans-serif;
+}
+
+/* ------------------------- */
+/* STRUCTURE GLOBALE */
+/* ------------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+}
+
+/* ------------------------- */
+/* BANNIÈRE / HEADER */
+/* ------------------------- */
+.appbar {
+  background: black;
+  color: white;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* CENTRE tout */
+  justify-content: center;
+  text-align: center;       /* Titre + sous-titre centrés */
+}
+
+.logo-big {
+  width: 110px;
+  margin-bottom: 15px;
+}
+
+.header-text .title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.header-text .subtitle {
+  font-size: 1.7rem;
+  margin-top: 18px;          /* → ESPACE PLUS GRAND entre titre & sous-titre */
+  letter-spacing: 2px;
+}
+
+/* ------------------------- */
+/* BOUTONS */
+/* ------------------------- */
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn.primary {
+  background: #ff80d4;
+  color: white;
+}
+
+.btn.ghost {
+  background: white;
+  border: 2px solid #ff80d4;
+  color: #ff80d4;
+}
+
+.kawaii {
+  border-radius: 20px;
+}
+
+/* Boutons fiches exercices → police spicy */
+.fiche-btn {
+  font-family: "Spicy", cursive !important;
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  background: #ffd7f6;
+  border-radius: 20px;
+  border: 2px solid #ff9bdd;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.fiche-btn:hover {
+  background: #ffb9ee;
+}
+
+/* ------------------------- */
+/* CARD BLOCKS */
+/* ------------------------- */
+.card-block {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+/* ------------------------- */
+/* LAYOUT */
+/* ------------------------- */
+.layout-desktop {
+  display: flex;
+  gap: 25px;
+  padding: 25px;
+}
+
+.layout-desktop > section {
+  flex: 1;
+}
+
+@media(max-width: 800px){
+  .layout-desktop {
+    flex-direction: column;
   }
-];
-
-// ==========================
-// MODULE 1 : Côté → Affichage en ACCORDÉON
-// ==========================
-function initModuleCote() {
-  const selectCote = document.getElementById("selectCote1");
-  const result = document.getElementById("resultCote1");
-
-  selectCote.addEventListener("change", () => {
-    const cote = selectCote.value;
-    if (!cote) {
-      result.innerHTML = "";
-      return;
-    }
-
-    const techs = techniques.filter(t => t.cote.toLowerCase() === cote.toLowerCase());
-    result.innerHTML = "";
-
-    techs.forEach(t => {
-      const acc = document.createElement("div");
-      acc.className = "accordion-item";
-
-      acc.innerHTML = `
-        <button class="accordion-title spicy">${t.attaque}</button>
-        <div class="accordion-content">
-          <p><strong>Tai sabaki :</strong> ${t.esquive}</p>
-          <p><strong>Blocage :</strong> ${t.blocage}</p>
-          <p><strong>Défense :</strong> ${t.defense}</p>
-        </div>
-      `;
-
-      // gestion ouverture
-      acc.querySelector(".accordion-title").addEventListener("click", () => {
-        acc.classList.toggle("open");
-      });
-
-      result.appendChild(acc);
-    });
-  });
 }
 
-// ==========================
-// MODULE 2 : Attaque + Côté → Card + vidéo
-// ==========================
-function initModuleAttaqueCote() {
-  const selectAtt = document.getElementById("selectAttaque2");
-  const selectCote = document.getElementById("selectCote2");
-  const result = document.getElementById("resultModule2");
+/* ------------------------- */
+/* ACCORDIONS – SCRIPT 1 */
+/* ------------------------- */
 
-  function update() {
-    const att = selectAtt.value;
-    const cote = selectCote.value;
-    const tech = techniques.find(t => t.attaque === att && t.cote.toLowerCase() === cote.toLowerCase());
-
-    if (!tech) {
-      result.innerHTML = "";
-      return;
-    }
-
-    result.innerHTML = `
-      <div class="kawaii-card card-block">
-        <h3 class="spicy">${tech.attaque} – ${tech.cote}</h3>
-        <p><strong>Tai sabaki :</strong> ${tech.esquive}</p>
-        <p><strong>Blocage :</strong> ${tech.blocage}</p>
-        <p><strong>Défense :</strong> ${tech.defense}</p>
-        <iframe src="${tech.video}" class="video" frameborder="0" allowfullscreen></iframe>
-      </div>`;
-  }
-
-  selectAtt.addEventListener("change", update);
-  selectCote.addEventListener("change", update);
+.ippon-accordion {
+  background: #ffeef7;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 2px solid #ffb4e6;
 }
 
-// ==========================
-// MODULE 3 : Bouton Surprise
-// ==========================
-function initModulePDF() {
-  const surpriseBtn = document.getElementById("btnSurprise");
-  const surpriseOutput = document.getElementById("surpriseOutput");
-
-  surpriseBtn.addEventListener("click", () => {
-    const t = techniques[Math.floor(Math.random() * techniques.length)];
-
-    surpriseOutput.innerHTML = `
-      <div class="kawaii-card card-block">
-        <h3 class="spicy">${t.attaque} – ${t.cote}</h3>
-        <p><strong>Tai sabaki :</strong> ${t.esquive}</p>
-        <p><strong>Blocage :</strong> ${t.blocage}</p>
-        <p><strong>Défense :</strong> ${t.defense}</p>
-        <iframe src="${t.video}" class="video" frameborder="0" allowfullscreen></iframe>
-      </div>`;
-  });
+.ippon-acc-header {
+  font-family: "Spicy", cursive;   /* Technique en SPICY */
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 8px 6px;
 }
 
-// ==========================
-// Initialisation
-// ==========================
-document.addEventListener("DOMContentLoaded", () => {
-  initModuleCote();
-  initModuleAttaqueCote();
-  initModulePDF();
-});
+.ippon-acc-content {
+  display: none;
+  padding: 10px 5px;
+  border-top: 1px solid #ffb4e6;
+}
+
+/* Titres colonnes : Arial gras */
+.ippon-acc-content strong {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+/* ------------------------- */
+/* CARDS RESULTATS (SCRIPT 2 + SURPRISE) */
+/* ------------------------- */
+
+#resultCard, .result-card {
+  background: #fff3fb;
+  border-radius: 14px;
+  padding: 15px;
+  border: 2px solid #ffb4e6;
+  margin-top: 18px;
+}
+
+/* Technique + côté en SPICY */
+.tech-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.tech-side {
+  font-family: "Spicy", cursive;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* Le reste en Arial : */
+.result-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.result-text {
+  margin-bottom: 12px;
+}
+
+/* ------------------------- */
+/* VIDEO */
+/* ------------------------- */
+.video-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+/* ------------------------- */
+/* BOUTON SURPRISE – pas modifié */
+/* ------------------------- */
+#btnSurprise {
+  /* NE PAS MODIFIER → demandé par toi */
+}
