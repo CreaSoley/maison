@@ -97,7 +97,7 @@ body {
   background: #ffb9ee;
 }
 
-/* Tooltip pour boutons PDF */
+/* Tooltip uniquement pour boutons PDF */
 .fiche-btn[title]:hover::after {
   content: attr(title);
   position: absolute;
@@ -265,18 +265,4 @@ body {
 
 /* Responsive : mobile = vidéo en dessous */
 @media(max-width:800px){
-  #surpriseResult .result-card {
-    flex-direction: column;
-  }
-
-  #surpriseResult .result-card > iframe {
-    max-width: 100%;
-    margin-top: 12px;
-  }
-}
-
-/* ------------------------- */
-/* BOUTON SURPRISE – pas modifié */
-#btnSurprise {
-  /* NE PAS MODIFIER */
-}
+  #surpriseResult .res
