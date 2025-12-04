@@ -1,137 +1,189 @@
-/* =============================
-   STYLE IPPON – même base kawaii
-   ============================= */
+// ippon.js – version mise à jour avec accordéons, polices spécifiques et règles demandées
 
-@font-face {
-  font-family: "Spicy";
-  src: url("Spicy Sale.ttf");
-}
-
-body {
-  margin: 0;
-  background: #fdf2ff;
-  font-family: Arial, sans-serif;
-}
-
-/* HEADER kawaii identique */
-.appbar {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background: #000;
-  color: #fff;
-  padding: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.logo-big {
-  height: 80px;
-}
-
-.header-text .title {
-  font-size: 2.2rem;
-}
-
-.header-text .subtitle {
-  margin-top: -10px;
-  font-size: 1.5rem;
-}
-
-/* LAYOUT GLOBAL */
-.container {
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.layout-desktop {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-/* BOUTONS PDF */
-.pdf-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-/* COLONNES */
-.col-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-}
-
-@media(max-width: 768px) {
-  .col-2 {
-    grid-template-columns: 1fr;
+// ==========================
+// Données JSON
+// ==========================
+const techniques = [
+  {
+    attaque: "Oi Tsuki Jodan",
+    cote: "droite",
+    esquive: "Tai sabaki diagonal extérieur, léger pivot de hanche",
+    blocage: "jodan age-uke en avançant",
+    defense: "contrôle du poignet → empi uchi au plexus",
+    video: "https://www.youtube.com/embed/Rp1drfqOMKY"
+  },
+  {
+    attaque: "Oi Tsuki Jodan",
+    cote: "gauche",
+    esquive: "decrire esquive",
+    blocage: "jodan age uke avec rotation du buste.",
+    defense: "tate tsuki chudan puis mae geri chudan (position contrôlée).",
+    video: "https://www.youtube.com/embed//W1C3zZQ4KtQ"
+  },
+  {
+    attaque: "Oi Tsuki Chudan",
+    cote: "droit",
+    esquive: "exterieur gauche",
+    blocage: "ngashi uke → saisie poignet",
+    defense: "uraken tsuki",
+    video: "https://www.youtube.com/embed/ynE0eX2jpXc"
+  },
+  {
+    attaque: "Oi Tsuki Chudan",
+    cote: "gauche",
+    esquive: "Pas intérieur rapide vers la droite (tai sabaki intérieur).",
+    blocage: "decrire blocage",
+    defense: "décrire défense",
+    video: "https://www.youtube.com/embed/L18tYBdkTdg"
+  },
+  {
+    attaque: "Mae Geri",
+    cote: "droit",
+    esquive: "déplacement extérieur gauche",
+    blocage: "blocage gedan barai déviant",
+    defense: "yoko geri gedan creux genou",
+    video: "https://www.youtube.com/embed/rq67slGGZAw"
+  },
+  {
+    attaque: "Mae Geri",
+    cote: "droit",
+    esquive: "decrire esquive",
+    blocage: "decrire blocage",
+    defense: "décrire défense",
+    video: "https://www.youtube.com/embed/mq8B1Xq9050"
+  },
+  {
+    attaque: "Mawashi Geri",
+    cote: "droit",
+    esquive: "decrire esquive",
+    blocage: "decrire blocage",
+    defense: "décrire défense",
+    video: "https://www.youtube.com/embed/UK4E4PgYw-g"
+  },
+  {
+    attaque: "Mawashi Geri",
+    cote: "gauche",
+    esquive: "decrire esquive",
+    blocage: "decrire blocage",
+    defense: "décrire défense",
+    video: "https://www.youtube.com/embed/d-YZ8euC_YQ?"
+  },
+  {
+    attaque: "Yoko geri",
+    cote: "droite",
+    esquive: "decrire esquive",
+    blocage: "decrire blocage",
+    defense: "décrire défense",
+    video: "https://www.youtube.com/embed/d-YZ8euC_YQ?"
+  },
+  {
+    attaque: "Yoko geri",
+    cote: "gauche",
+    esquive: "decrire esquive",
+    blocage: "decrire blocage",
+    defense: "décrire défense",
+    video: "https://www.youtube.com/embed/oSPe3ER_YdQ"
   }
+];
+
+// ==========================
+// MODULE 1 : Côté → Affichage en ACCORDÉON
+// ==========================
+function initModuleCote() {
+  const selectCote = document.getElementById("selectCote1");
+  const result = document.getElementById("resultCote1");
+
+  selectCote.addEventListener("change", () => {
+    const cote = selectCote.value;
+    if (!cote) {
+      result.innerHTML = "";
+      return;
+    }
+
+    const techs = techniques.filter(t => t.cote.toLowerCase() === cote.toLowerCase());
+    result.innerHTML = "";
+
+    techs.forEach(t => {
+      const acc = document.createElement("div");
+      acc.className = "accordion-item";
+
+      acc.innerHTML = `
+        <button class="accordion-title spicy">${t.attaque}</button>
+        <div class="accordion-content">
+          <p><strong>Tai sabaki :</strong> ${t.esquive}</p>
+          <p><strong>Blocage :</strong> ${t.blocage}</p>
+          <p><strong>Défense :</strong> ${t.defense}</p>
+        </div>
+      `;
+
+      // gestion ouverture
+      acc.querySelector(".accordion-title").addEventListener("click", () => {
+        acc.classList.toggle("open");
+      });
+
+      result.appendChild(acc);
+    });
+  });
 }
 
-/* CARDS kawaii */
-.card-block {
-  background: #fff;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+// ==========================
+// MODULE 2 : Attaque + Côté → Card + vidéo
+// ==========================
+function initModuleAttaqueCote() {
+  const selectAtt = document.getElementById("selectAttaque2");
+  const selectCote = document.getElementById("selectCote2");
+  const result = document.getElementById("resultModule2");
+
+  function update() {
+    const att = selectAtt.value;
+    const cote = selectCote.value;
+    const tech = techniques.find(t => t.attaque === att && t.cote.toLowerCase() === cote.toLowerCase());
+
+    if (!tech) {
+      result.innerHTML = "";
+      return;
+    }
+
+    result.innerHTML = `
+      <div class="kawaii-card card-block">
+        <h3 class="spicy">${tech.attaque} – ${tech.cote}</h3>
+        <p><strong>Tai sabaki :</strong> ${tech.esquive}</p>
+        <p><strong>Blocage :</strong> ${tech.blocage}</p>
+        <p><strong>Défense :</strong> ${tech.defense}</p>
+        <iframe src="${tech.video}" class="video" frameborder="0" allowfullscreen></iframe>
+      </div>`;
+  }
+
+  selectAtt.addEventListener("change", update);
+  selectCote.addEventListener("change", update);
 }
 
-.kawaii-card {
-  background: #ffe0fa;
-  border-radius: 18px;
-  padding: 15px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+// ==========================
+// MODULE 3 : Bouton Surprise
+// ==========================
+function initModulePDF() {
+  const surpriseBtn = document.getElementById("btnSurprise");
+  const surpriseOutput = document.getElementById("surpriseOutput");
+
+  surpriseBtn.addEventListener("click", () => {
+    const t = techniques[Math.floor(Math.random() * techniques.length)];
+
+    surpriseOutput.innerHTML = `
+      <div class="kawaii-card card-block">
+        <h3 class="spicy">${t.attaque} – ${t.cote}</h3>
+        <p><strong>Tai sabaki :</strong> ${t.esquive}</p>
+        <p><strong>Blocage :</strong> ${t.blocage}</p>
+        <p><strong>Défense :</strong> ${t.defense}</p>
+        <iframe src="${t.video}" class="video" frameborder="0" allowfullscreen></iframe>
+      </div>`;
+  });
 }
 
-.section-title {
-  margin-top: 0;
-  font-size: 1.8rem;
-}
-
-/* BOUTONS kawaii */
-.btn {
-  padding: 10px 18px;
-  border-radius: 12px;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.primary {
-  background: #ff7ce2;
-  color: #fff;
-}
-
-.ghost {
-  background: #fff;
-  border: 2px solid #ff7ce2;
-  color: #ff38da;
-}
-
-.kawaii {
-  transition: transform 0.2s;
-}
-
-.kawaii:hover {
-  transform: scale(1.05);
-}
-
-/* INPUTS */
-.input-full {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-}
-
-/* VIDEO */
-.video {
-  width: 100%;
-  height: 220px;
-  border-radius: 12px;
-  margin-top: 12px;
-}
+// ==========================
+// Initialisation
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+  initModuleCote();
+  initModuleAttaqueCote();
+  initModulePDF();
+});
