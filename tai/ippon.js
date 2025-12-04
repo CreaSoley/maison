@@ -38,137 +38,157 @@ function populateAttackSelect() {
   });
 }
 
-// Module 1: accordéon par côté (filterSide -> accordionList)
-function initAccordionModule() {
-  const sideSel = document.getElementById('filterSide');
-  const list = document.getElementById('accordionList');
-  if (!sideSel || !list) return;
+// =========================
+// Remplissage des attaques (menu déroulant Script 2)
+// =========================
+function populateAttackSelect() {
+    const select = document.getElementById("selectAttack");
+    if (!select) return;
 
-  sideSel.addEventListener('change', () => {
-    const side = sideSel.value;
-    list.innerHTML = '';
+    const alreadyAdded = new Set();
+
+    techniquesData.forEach(t => {
+        if (!alreadyAdded.has(t.technique)) {
+            const opt = document.createElement("option");
+            opt.value = t.technique;
+            opt.textContent = t.technique;
+            select.appendChild(opt);
+            alreadyAdded.add(t.technique);
+        }
+    });
+}
+
+
+// =========================
+// SCRIPT 1 : Filtrer par côté → affichage accordéon
+// =========================
+document.getElementById("filterSide")?.addEventListener("change", function () {
+    const side = this.value;
+    renderAccordion(side);
+});
+
+function renderAccordion(side) {
+    const container = document.getElementById("accordionList");
+    if (!container) return;
+
+    container.innerHTML = "";
+
     if (!side) return;
 
-    const filtered = techniques.filter(t => t.cote.toLowerCase() === side.toLowerCase());
-    if (filtered.length === 0) {
-      list.innerHTML = '<p>Aucune technique trouvée pour ce côté.</p>';
-      return;
-    }
+    const filtered = techniquesData.filter(t => t.cote === side);
 
-    filtered.forEach((t, idx) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'ippon-accordion';
+    filtered.forEach(tech => {
+        const item = document.createElement("div");
+        item.classList.add("accordion-item");
 
-      // header button (technique) – en spicy via CSS
-      const header = document.createElement('div');
-      header.className = 'ippon-acc-header';
-      header.textContent = t.attaque;
-      header.setAttribute('role', 'button');
-      header.tabIndex = 0;
+        const header = document.createElement("div");
+        header.classList.add("accordion-header");
+        header.tabIndex = 0;
 
-      // content
-      const content = document.createElement('div');
-      content.className = 'ippon-acc-content arial';
+        // Technique = police Spicy
+        header.innerHTML = `<span class="spicy">${tech.technique}</span>`;
 
-      // structure with bold titles (Arial bold) and normal Arial for values
-      content.innerHTML = `
-        <p><strong>Tai sabaki :</strong> <span class="result-text">${t.esquive}</span></p>
-        <p><strong>Blocage :</strong> <span class="result-text">${t.blocage}</span></p>
-        <p><strong>Défense :</strong> <span class="result-text">${t.defense}</span></p>
-      `;
+        const panel = document.createElement("div");
+        panel.classList.add("accordion-panel");
 
-      // toggle
-      header.addEventListener('click', () => {
-        const isOpen = content.style.display === 'block';
-        content.style.display = isOpen ? 'none' : 'block';
-      });
-      header.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') header.click();
-      });
+        panel.innerHTML = `
+            <p><strong>Tai Sabaki :</strong> ${tech.tai_sabaki}</p>
+            <p><strong>Blocage :</strong> ${tech.blocage}</p>
+            <p><strong>Défense :</strong> ${tech.defense}</p>
+            ${tech.video ? `
+            <div class="tech-video">
+                <video controls>
+                    <source src="${tech.video}" type="video/mp4">
+                </video>
+            </div>
+            ` : ""}
+        `;
 
-      wrapper.appendChild(header);
-      wrapper.appendChild(content);
-      list.appendChild(wrapper);
+        header.addEventListener("click", () => {
+            panel.classList.toggle("open");
+        });
+
+        header.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") panel.classList.toggle("open");
+        });
+
+        item.appendChild(header);
+        item.appendChild(panel);
+        container.appendChild(item);
     });
-  });
 }
 
-// Module 2: sélectionner attaque + côté -> fiche détaillée
-function initSelectModule() {
-  const selAtt = document.getElementById('selectAttack');
-  const selSide = document.getElementById('selectSide');
-  const out = document.getElementById('resultCard');
-  if (!selAtt || !selSide || !out) return;
 
-  function render() {
-    const att = selAtt.value;
-    const side = selSide.value;
-    if (!att || !side) {
-      out.innerHTML = '';
-      return;
-    }
+// =========================
+// SCRIPT 2 : Fiche technique complète
+// =========================
+document.getElementById("selectSide")?.addEventListener("change", updateCard);
+document.getElementById("selectAttack")?.addEventListener("change", updateCard);
 
-    const tech = techniques.find(t => t.attaque === att && t.cote.toLowerCase() === side.toLowerCase());
-    if (!tech) {
-      out.innerHTML = '<p>Aucune fiche correspondante.</p>';
-      return;
-    }
+function updateCard() {
+    const attack = document.getElementById("selectAttack")?.value;
+    const side = document.getElementById("selectSide")?.value;
+    const container = document.getElementById("resultCard");
 
-    out.innerHTML = `
-      <div class="result-card">
-        <div class="tech-title">${tech.attaque}</div>
-        <div class="tech-side">${tech.cote}</div>
+    if (!container) return;
 
-        <p><strong class="result-title">Tai sabaki :</strong></p>
-        <p class="result-text">${tech.esquive}</p>
+    container.innerHTML = "";
 
-        <p><strong class="result-title">Blocage :</strong></p>
-        <p class="result-text">${tech.blocage}</p>
+    if (!attack || !side) return;
 
-        <p><strong class="result-title">Défense :</strong></p>
-        <p class="result-text">${tech.defense}</p>
+    const tech = techniquesData.find(t => t.technique === attack && t.cote === side);
 
-        <iframe class="video-frame" src="${tech.video}" frameborder="0" allowfullscreen></iframe>
-      </div>
+    if (!tech) return;
+
+    container.innerHTML = `
+        <div class="tech-card">
+            <h3 class="spicy">${tech.technique} (${tech.cote})</h3>
+
+            <p><strong>Tai Sabaki :</strong> ${tech.tai_sabaki}</p>
+            <p><strong>Blocage :</strong> ${tech.blocage}</p>
+            <p><strong>Défense :</strong> ${tech.defense}</p>
+
+            ${tech.video ? `
+                <div class="tech-video">
+                    <video controls>
+                        <source src="${tech.video}" type="video/mp4">
+                    </video>
+                </div>
+            ` : ""}
+        </div>
     `;
-  }
-
-  selAtt.addEventListener('change', render);
-  selSide.addEventListener('change', render);
 }
 
-// Module 3: Surprise
-function initSurprise() {
-  const btn = document.getElementById('btnSurprise');
-  const out = document.getElementById('surpriseResult') || document.getElementById('surpriseOutput') || document.getElementById('surpriseOutput');
-  if (!btn || !out) return;
 
-  btn.addEventListener('click', () => {
-    const t = techniques[Math.floor(Math.random() * techniques.length)];
-    out.innerHTML = `
-      <div class="result-card">
-        <div class="tech-title">${t.attaque}</div>
-        <div class="tech-side">${t.cote}</div>
+// =========================
+// SCRIPT 3 : BOUTON SURPRISE
+// =========================
+document.getElementById("btnSurprise")?.addEventListener("click", () => {
+    if (techniquesData.length === 0) return;
 
-        <p><strong class="result-title">Tai sabaki :</strong></p>
-        <p class="result-text">${t.esquive}</p>
-
-        <p><strong class="result-title">Blocage :</strong></p>
-        <p class="result-text">${t.blocage}</p>
-
-        <p><strong class="result-title">Défense :</strong></p>
-        <p class="result-text">${t.defense}</p>
-
-        <iframe class="video-frame" src="${t.video}" frameborder="0" allowfullscreen></iframe>
-      </div>
-    `;
-  });
-}
-
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-  populateAttackSelect();
-  initAccordionModule();
-  initSelectModule();
-  initSurprise();
+    const rand = Math.floor(Math.random() * techniquesData.length);
+    renderSurprise(techniquesData[rand]);
 });
+
+function renderSurprise(tech) {
+    const container = document.getElementById("surpriseResult");
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="tech-card">
+            <h3 class="spicy">${tech.technique} (${tech.cote})</h3>
+
+            <p><strong>Tai Sabaki :</strong> ${tech.tai_sabaki}</p>
+            <p><strong>Blocage :</strong> ${tech.blocage}</p>
+            <p><strong>Défense :</strong> ${tech.defense}</p>
+
+            ${tech.video ? `
+                <div class="tech-video">
+                    <video controls>
+                        <source src="${tech.video}" type="video/mp4">
+                    </video>
+                </div>
+            ` : ""}
+        </div>
+    `;
+}
