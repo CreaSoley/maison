@@ -1,6 +1,8 @@
-// ippon.js – gestion des 3 modules : filtres côté, sélection attaque+côté, boutons PDF
+// ippon.js – version mise à jour avec accordéons, polices spécifiques et règles demandées
 
-// ===== Données JSON =====
+// ==========================
+// Données JSON
+// ==========================
 const techniques = [
   {
     attaque: "Oi Tsuki Jodan",
@@ -84,35 +86,49 @@ const techniques = [
   }
 ];
 
-// ===== Module 1 : choix du côté → card affichée =====
+// ==========================
+// MODULE 1 : Côté → Affichage en ACCORDÉON
+// ==========================
 function initModuleCote() {
   const selectCote = document.getElementById("selectCote1");
   const result = document.getElementById("resultCote1");
 
   selectCote.addEventListener("change", () => {
     const cote = selectCote.value;
-    const tech = techniques.filter(t => t.cote.toLowerCase() === cote.toLowerCase());
-
     if (!cote) {
       result.innerHTML = "";
       return;
     }
 
-    // Affiche la première technique trouvée de ce côté
-    if (tech.length > 0) {
-      const t = tech[0];
-      result.innerHTML = `
-        <div class="kawaii-card card-block spicy">
-          <h3>${t.attaque} – ${t.cote}</h3>
+    const techs = techniques.filter(t => t.cote.toLowerCase() === cote.toLowerCase());
+    result.innerHTML = "";
+
+    techs.forEach(t => {
+      const acc = document.createElement("div");
+      acc.className = "accordion-item";
+
+      acc.innerHTML = `
+        <button class="accordion-title spicy">${t.attaque}</button>
+        <div class="accordion-content">
           <p><strong>Tai sabaki :</strong> ${t.esquive}</p>
           <p><strong>Blocage :</strong> ${t.blocage}</p>
           <p><strong>Défense :</strong> ${t.defense}</p>
-        </div>`;
-    }
+        </div>
+      `;
+
+      // gestion ouverture
+      acc.querySelector(".accordion-title").addEventListener("click", () => {
+        acc.classList.toggle("open");
+      });
+
+      result.appendChild(acc);
+    });
   });
 }
 
-// ===== Module 2 : choix attaque + côté → card + vidéo =====
+// ==========================
+// MODULE 2 : Attaque + Côté → Card + vidéo
+// ==========================
 function initModuleAttaqueCote() {
   const selectAtt = document.getElementById("selectAttaque2");
   const selectCote = document.getElementById("selectCote2");
@@ -121,35 +137,40 @@ function initModuleAttaqueCote() {
   function update() {
     const att = selectAtt.value;
     const cote = selectCote.value;
-
     const tech = techniques.find(t => t.attaque === att && t.cote.toLowerCase() === cote.toLowerCase());
 
-    if (tech) {
-      result.innerHTML = `
-        <div class="kawaii-card card-block spicy">
-          <h3>${tech.attaque} – ${tech.cote}</h3>
-          <p><strong>Tai sabaki :</strong> ${tech.esquive}</p>
-          <p><strong>Blocage :</strong> ${tech.blocage}</p>
-          <p><strong>Défense :</strong> ${tech.defense}</p>
-          <iframe src="${tech.video}" class="video" frameborder="0" allowfullscreen></iframe>
-        </div>`;
+    if (!tech) {
+      result.innerHTML = "";
+      return;
     }
+
+    result.innerHTML = `
+      <div class="kawaii-card card-block">
+        <h3 class="spicy">${tech.attaque} – ${tech.cote}</h3>
+        <p><strong>Tai sabaki :</strong> ${tech.esquive}</p>
+        <p><strong>Blocage :</strong> ${tech.blocage}</p>
+        <p><strong>Défense :</strong> ${tech.defense}</p>
+        <iframe src="${tech.video}" class="video" frameborder="0" allowfullscreen></iframe>
+      </div>`;
   }
 
   selectAtt.addEventListener("change", update);
   selectCote.addEventListener("change", update);
 }
 
-// ===== Module 3 : boutons PDF + bouton surprise =====
+// ==========================
+// MODULE 3 : Bouton Surprise
+// ==========================
 function initModulePDF() {
   const surpriseBtn = document.getElementById("btnSurprise");
   const surpriseOutput = document.getElementById("surpriseOutput");
 
   surpriseBtn.addEventListener("click", () => {
     const t = techniques[Math.floor(Math.random() * techniques.length)];
+
     surpriseOutput.innerHTML = `
-      <div class="kawaii-card card-block spicy">
-        <h3>${t.attaque} – ${t.cote}</h3>
+      <div class="kawaii-card card-block">
+        <h3 class="spicy">${t.attaque} – ${t.cote}</h3>
         <p><strong>Tai sabaki :</strong> ${t.esquive}</p>
         <p><strong>Blocage :</strong> ${t.blocage}</p>
         <p><strong>Défense :</strong> ${t.defense}</p>
@@ -158,9 +179,34 @@ function initModulePDF() {
   });
 }
 
-// ===== Initialisation =====
+// ==========================
+// Initialisation
+// ==========================
 document.addEventListener("DOMContentLoaded", () => {
   initModuleCote();
   initModuleAttaqueCote();
   initModulePDF();
 });
+
+/* --- Updated Banner --- */
+.banner { text-align: center; }
+.banner-title { margin-bottom: 20px; }
+.banner-subtitle { margin-top: 10px; }
+
+/* --- Fonts --- */
+.spicy { font-family: 'Spicy', cursive; }
+.arial { font-family: Arial, sans-serif; }
+.bold { font-weight: bold; }
+
+/* --- Surprise Result Styles --- */
+#surprise-technique, #surprise-side { font-family: 'Spicy', cursive; }
+.surprise-info { font-family: Arial, sans-serif; }
+
+/* --- Accordion (Script 1) --- */
+.accordion { border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px; }
+.accordion-header { padding: 10px; background:#f7f7f7; cursor:pointer; font-family:'Spicy',cursive; }
+.accordion-content { display:none; padding:10px; font-family:Arial,sans-serif; }
+
+/* --- Script 3 Buttons --- */
+.exercise-button { font-family:'Spicy',cursive; }
+
