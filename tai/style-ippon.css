@@ -33,14 +33,15 @@ body {
   padding: 25px 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;      /* CENTRE tout */
+  align-items: center;
   justify-content: center;
-  text-align: center;       /* Titre + sous-titre centrés */
+  text-align: center;
 }
 
 .logo-big {
   width: 110px;
   margin-bottom: 15px;
+  cursor: pointer; /* ← logo cliquable */
 }
 
 .header-text .title {
@@ -50,7 +51,7 @@ body {
 
 .header-text .subtitle {
   font-size: 1.7rem;
-  margin-top: 18px;          /* → ESPACE PLUS GRAND entre titre & sous-titre */
+  margin-top: 18px;
   letter-spacing: 2px;
 }
 
@@ -80,7 +81,7 @@ body {
   border-radius: 20px;
 }
 
-/* Boutons fiches exercices → police spicy */
+/* Boutons Fiches en Spicy */
 .fiche-btn {
   font-family: "Spicy", cursive !important;
   font-size: 1.2rem;
@@ -115,16 +116,18 @@ body {
 /* ------------------------- */
 /* LAYOUT */
 /* ------------------------- */
+
+/* Desktop : 2 colonnes */
 .layout-desktop {
   display: flex;
   gap: 25px;
   padding: 25px;
 }
-
 .layout-desktop > section {
   flex: 1;
 }
 
+/* Mobile : empilé */
 @media(max-width: 800px){
   .layout-desktop {
     flex-direction: column;
@@ -144,7 +147,7 @@ body {
 }
 
 .ippon-acc-header {
-  font-family: "Spicy", cursive;   /* Technique en SPICY */
+  font-family: "Spicy", cursive;
   font-size: 1.4rem;
   cursor: pointer;
   padding: 8px 6px;
@@ -156,14 +159,18 @@ body {
   border-top: 1px solid #ffb4e6;
 }
 
-/* Titres colonnes : Arial gras */
 .ippon-acc-content strong {
   font-weight: bold;
   font-family: Arial, sans-serif;
 }
 
+/* Correction alignement : les textes commencent juste après les deux-points */
+.ippon-acc-content p {
+  margin: 4px 0 12px 0;
+}
+
 /* ------------------------- */
-/* CARDS RESULTATS (SCRIPT 2 + SURPRISE) */
+/* RESULT CARDS – Script 2 & Surprise */
 /* ------------------------- */
 
 #resultCard, .result-card {
@@ -174,12 +181,12 @@ body {
   margin-top: 18px;
 }
 
-/* Technique + côté en SPICY */
+/* Titres */
 .tech-title {
   font-family: "Spicy", cursive;
   font-size: 1.6rem;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .tech-side {
@@ -189,69 +196,91 @@ body {
   margin-bottom: 18px;
 }
 
-/* Le reste en Arial : */
+/* Colonne texte */
+.result-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
 .result-title {
   font-weight: bold;
   margin-bottom: 2px;
 }
 
 .result-text {
+  margin-top: 0;
   margin-bottom: 12px;
 }
 
 /* ------------------------- */
-/* VIDEO */
+/* VIDEO – Surprise */
 /* ------------------------- */
-.video-frame {
+
+/* Desktop : vidéo + texte côte à côte */
+.surprise-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start; /* ← aligne la vidéo en haut */
+}
+
+/* Colonne texte */
+.surprise-info {
+  flex: 1;
+}
+
+/* Colonne vidéo */
+.surprise-video {
+  flex: 1;
+}
+
+/* Vidéo ajustée (50% comme demandé) */
+.surprise-video iframe,
+.surprise-video video {
   width: 100%;
-  aspect-ratio: 16/9;
+  max-width: 100%;
   border-radius: 12px;
-  margin-top: 12px;
+}
+
+/* Mobile : vidéo empilée */
+@media(max-width: 800px){
+  .surprise-layout {
+    flex-direction: column;
+  }
 }
 
 /* ------------------------- */
-/* BOUTON SURPRISE – pas modifié */
+/* TOOLTIP PDF */
 /* ------------------------- */
-#btnSurprise {
-  /* NE PAS MODIFIER → demandé par toi */
-}
-/* --- LOGO CLIQUABLE --- */
-.banner .logo {
-    cursor: pointer;
-}
-
-/* --- TOOLTIP (bulle d’info) --- */
 .pdf-btn {
-    position: relative;
+  position: relative;
 }
 
 .pdf-btn::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 120%;
-    background: #222;
-    color: #fff;
-    padding: 6px 10px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    border-radius: 6px;
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.25s ease;
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 120%;
+  background: #222;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.25s ease;
 }
 
 .pdf-btn:hover::after {
-    opacity: 1;
-    bottom: 140%;
+  opacity: 1;
+  bottom: 140%;
 }
 
-/* --- VIDEO Surprise (réduite à 50%) --- */
-#surpriseResult iframe,
-#surpriseResult video {
-    max-width: 50%;
-    display: block;
-    margin: 10px auto;
+/* ------------------------- */
+/* AUTRES (Demandes spéciales) */
+/* ------------------------- */
+#btnSurprise {
+  /* laissé volontairement vide → demandé par toi */
 }
-
