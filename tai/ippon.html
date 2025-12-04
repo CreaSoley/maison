@@ -22,7 +22,7 @@
 
 <body>
 
-  <!-- HEADER (centré + style kawaii) -->
+  <!-- HEADER -->
   <header class="appbar">
     <img src="logo.png" alt="logo" class="logo-big">
     <div class="header-text">
@@ -39,18 +39,19 @@
       <h2 class="spicy section-title">📄 Fiches exercices</h2>
 
       <div class="controls" style="display:flex;flex-wrap:wrap;gap:12px;">
-        <button class="fiche-btn">Fiche 1</button>
-        <button class="fiche-btn">Fiche 2</button>
-        <button class="fiche-btn">Fiche 3</button>
-        <button class="fiche-btn">Fiche 4</button>
-        <button class="fiche-btn">Fiche 5</button>
-        <button class="fiche-btn">Fiche 6</button>
 
-        <!-- Bouton surprise (pas modifié) -->
+        <button class="fiche-btn" title="Télécharger la fiche 1" onclick="window.open('tai/fiche1.pdf','_blank')">Fiche 1</button>
+        <button class="fiche-btn" title="Télécharger la fiche 2" onclick="window.open('tai/fiche2.pdf','_blank')">Fiche 2</button>
+        <button class="fiche-btn" title="Télécharger la fiche 3" onclick="window.open('tai/fiche3.pdf','_blank')">Fiche 3</button>
+        <button class="fiche-btn" title="Télécharger la fiche 4" onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
+        <button class="fiche-btn" title="Télécharger la fiche 5" onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
+        <button class="fiche-btn" title="Télécharger la fiche 6" onclick="window.open('tai/fiche6.pdf','_blank')">Fiche 6</button>
+
+        <!-- Boutique Surprise -->
         <button id="btnSurprise" class="btn ghost kawaii">✨ Surprise</button>
       </div>
 
-      <!-- Résultat Surprise -->
+      <!-- Affichage Surprise -->
       <div id="surpriseResult"></div>
     </section>
 
@@ -59,7 +60,7 @@
   <!-- 2 COLONNES (Script 1 + Script 2) -->
   <main class="container layout-desktop">
 
-    <!-- SCRIPT 1 — Accordéons par côté -->
+    <!-- SCRIPT 1 — Accordéons -->
     <section class="card-block" id="script1">
       <h2 class="spicy section-title">🥋 Techniques par côté</h2>
 
@@ -71,11 +72,10 @@
         </select>
       </div>
 
-      <!-- Liste dynamique des accordéons -->
       <div id="accordionList"></div>
     </section>
 
-    <!-- SCRIPT 2 — Choix attaque + côté -->
+    <!-- SCRIPT 2 — Fiche Technique -->
     <section class="card-block" id="script2">
       <h2 class="spicy section-title">💫 Fiche technique</h2>
 
