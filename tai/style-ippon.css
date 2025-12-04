@@ -215,3 +215,43 @@ body {
 #btnSurprise {
   /* NE PAS MODIFIER → demandé par toi */
 }
+/* --- LOGO CLIQUABLE --- */
+.banner .logo {
+    cursor: pointer;
+}
+
+/* --- TOOLTIP (bulle d’info) --- */
+.pdf-btn {
+    position: relative;
+}
+
+.pdf-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 120%;
+    background: #222;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    border-radius: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s ease;
+}
+
+.pdf-btn:hover::after {
+    opacity: 1;
+    bottom: 140%;
+}
+
+/* --- VIDEO Surprise (réduite à 50%) --- */
+#surpriseResult iframe,
+#surpriseResult video {
+    max-width: 50%;
+    display: block;
+    margin: 10px auto;
+}
+
