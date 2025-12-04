@@ -170,15 +170,25 @@ body {
 
 .ippon-acc-content {
   display: none;
-  padding: 10px 5px;
+  padding: 5px 5px 5px 0;
   border-top: 1px solid #ffb4e6;
+}
+
+/* Titres colonnes + contenu alignés sur la même ligne */
+.ippon-acc-content p {
+  margin: 0;
+  padding: 2px 0;
 }
 
 .ippon-acc-content strong {
   font-weight: bold;
   font-family: Arial, sans-serif;
   display: inline-block;
-  width: 120px; /* largeur fixe pour aligner contenu à droite */
+  width: 120px;
+}
+
+.ippon-acc-content .result-text {
+  display: inline-block;
 }
 
 /* ------------------------- */
@@ -206,6 +216,11 @@ body {
 }
 
 /* Contenu aligné sur une ligne */
+.result-card p {
+  margin: 0;
+  padding: 2px 0;
+}
+
 .result-title {
   font-weight: bold;
   font-family: Arial, sans-serif;
@@ -244,7 +259,7 @@ body {
 #surpriseResult .result-card > iframe {
   flex: 1;
   min-width: 260px;
-  max-width: 50%; /* moitié largeur sur desktop */
+  max-width: 50%;
   margin: 0;
 }
 
@@ -262,7 +277,6 @@ body {
 
 /* ------------------------- */
 /* BOUTON SURPRISE – pas modifié */
-/* ------------------------- */
 #btnSurprise {
   /* NE PAS MODIFIER */
 }
