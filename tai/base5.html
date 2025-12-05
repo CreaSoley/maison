@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Technique de base – Passage de grade</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Spicy";
+      src: url("Spicy Sale.ttf");
+    }
+    .spicy { font-family: "Spicy", cursive; }
+
+    .three-cards {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    @media(max-width: 800px){
+      .three-cards { flex-direction: column; }
+    }
+    .encart {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      flex: 1;
+    }
+    .resource-bookcase {
+      margin-top: 40px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    .book {
+      width: 120px;
+      height: 180px;
+      background: #ffeef7;
+      border: 2px solid #ffb4e6;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      position: relative;
+    }
+    .book:hover .tooltip {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .tooltip {
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s;
+      position: absolute;
+      bottom: -45px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffd7f6;
+      border: 2px solid #ff9bdd;
+      padding: 6px 10px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+<header class="appbar">
+  <a class="logo" href="../index.html" title="Accueil">
+    <img src="logo.png" alt="logo" class="logo-big">
+  </a>
+  <div class="header-text">
+    <div class="title spicy">Techniques de Base</div>
+    <div class="subtitle spicy">Tai-Jitsu – Passage de grade</div>
+  </div>
+</header>
+
+<main class="container" style="padding:25px;">
+  <section class="three-cards">
+
+    <div class="encart">
+      <h2><strong>Par atemi</strong></h2>
+      <p>Sabre de main au cou</p>
+      <img src="gif_atemi.gif" alt="gif atemi" style="width:100%;border-radius:12px;">
+
+      <h3><strong>Application</strong></h3>
+      <p><strong>Attaque de Tori :</strong> ...</p>
+      <p><strong>Défense proposée :</strong> …</p>
+      <p><strong>Vidéo :</strong> lien à venir</p>
+
+      <p>🥋 <a href="pdf/atemi.pdf" target="_blank">Ressource Atemi</a></p>
+    </div>
+
+    <div class="encart">
+      <h2><strong>Par clé</strong></h2>
+      <p>Clé en Z</p>
+      <img src="gif_cle.gif" alt="gif clé" style="width:100%;border-radius:12px;">
+
+      <h3><strong>Application</strong></h3>
+      <p><strong>Attaque de Tori :</strong> ...</p>
+      <p><strong>Défense proposée :</strong> …</p>
+      <p><strong>Vidéo :</strong> lien à venir</p>
+
+      <p>🥋 <a href="pdf/cle.pdf" target="_blank">Ressource Clé</a></p>
+    </div>
+
+    <div class="encart">
+      <h2><strong>Par projection</strong></h2>
+      <p>Sacrifice du corps</p>
+      <img src="gif_projection.gif" alt="gif projection" style="width:100%;border-radius:12px;">
+
+      <h3><strong>Application</strong></h3>
+      <p><strong>Attaque de Tori :</strong> ...</p>
+      <p><strong>Défense proposée :</strong> …</p>
+      <p><strong>Vidéo :</strong> lien à venir</p>
+
+      <p>🥋 <a href="pdf/projection.pdf" target="_blank">Ressource Projection</a></p>
+    </div>
+
+  </section>
+
+  <section class="resource-bookcase">
+    <a href="#" target="_blank" class="book">
+      Livre 1
+      <span class="tooltip">Ressource interne 1</span>
+    </a>
+    <a href="#" target="_blank" class="book">
+      Livre 2
+      <span class="tooltip">Guide technique 2</span>
+    </a>
+    <a href="#" target="_blank" class="book">
+      Livre 3
+      <span class="tooltip">Support avancé 3</span>
+    </a>
+    <a href="#" target="_blank" class="book">
+      Livre 4
+      <span class="tooltip">Document externe 4</span>
+    </a>
+    <a href="#" target="_blank" class="book">
+      Livre 5
+      <span class="tooltip">Fiche pratique 5</span>
+    </a>
+  </section>
+</main>
+
+</body>
+</html>
