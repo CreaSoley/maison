@@ -156,4 +156,36 @@
   .header-text .subtitle {
     font-size: 1.2rem;
   }
-}
+
+/* MOBILE — réduction de la taille des livres kawaii */
+@media (max-width: 600px) {
+
+  .book-kawaii {
+    width: 55px;
+    height: 110px;
+    padding: 8px 4px;
+    font-size: 0.75rem;
+  }
+
+  /* Ajustement des hauteurs variées en version réduite */
+  .book-kawaii:nth-child(1) { height: 100px; }
+  .book-kawaii:nth-child(2) { height: 120px; }
+  .book-kawaii:nth-child(3) { height: 110px; }
+  .book-kawaii:nth-child(4) { height: 125px; }
+  .book-kawaii:nth-child(5) { height: 105px; }
+
+  /* tranche réaliste plus fine */
+  .book-kawaii::before {
+    width: 6px;
+    right: -6px;
+  }
+
+  /* Tooltip : texte légèrement plus petit */
+  .book-kawaii::after {
+    font-size: 0.75rem;
+  }
+
+  /* Espace entre livres réduit */
+  .book-shelf {
+    gap: 15px;
+  }
