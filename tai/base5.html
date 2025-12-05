@@ -31,24 +31,61 @@
     .resource-bookcase {
       margin-top: 40px;
       display: flex;
-      gap: 15px;
+      gap: 25px;
       justify-content: center;
+      padding: 60px 0 80px 0;
+      background: url('etagere.png') center bottom/85% no-repeat;
+      position: relative;
     }
     .book {
       width: 120px;
-      height: 180px;
-      background: #ffeef7;
-      border: 2px solid #ffb4e6;
-      border-radius: 8px;
+      height: 170px;
+      background: linear-gradient(145deg, #fff0fb, #ffd2ef);
+      border: 3px solid #ff8dcf;
+      border-radius: 10px;
+      box-shadow: 3px 8px 0px #ffb4e6, 0 6px 12px rgba(0,0,0,0.18);
+      transform: rotate(-3deg);
+      transition: 0.25s ease;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
       cursor: pointer;
       position: relative;
+      font-weight: bold;
+      background-image: url('texture_papier.png');
+      background-size: cover;
     }
-    .book:hover .tooltip {
+    .book:nth-child(even) {
+      transform: rotate(3deg);
+    }(even) {
+      transform: rotate(2deg);
+    }
+    .book:hover {
+      transform: scale(1.08) rotate(0deg);
+      box-shadow: 5px 12px 0px #ff9bdd, 0 10px 18px rgba(0,0,0,0.25);
+    } {
+      transform: scale(1.07);
+      box-shadow: 0 10px 15px rgba(0,0,0,0.22);
+    }
+    .tooltip {
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s;
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffe7fa;
+      border: 2px solid #ff9bdd;
+      padding: 8px 12px;
+      border-radius: 12px;
+      white-space: nowrap;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      font-family: "Spicy";
+    } {
       opacity: 1;
       pointer-events: auto;
     }
@@ -66,13 +103,81 @@
       border-radius: 10px;
       white-space: nowrap;
     }
-  </style>
+  .mascot {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      animation: floaty 3s ease-in-out infinite;
+    }
+    .mascot img {
+      width: 100%;
+    }
+    @keyframes floaty {
+      0% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-8px); }
+      100% { transform: translateX(-50%) translateY(0); }
+    }
+
+    .book {
+      width: 120px;
+      height: 170px;
+      background: linear-gradient(145deg, rgba(255,240,251,0.9), rgba(255,210,239,0.9));
+      border: 3px solid #ff8dcf;
+      border-radius: 10px;
+      box-shadow: inset 0 0 12px rgba(255,255,255,0.7), 3px 8px 0px #ffb4e6, 0 6px 12px rgba(0,0,0,0.18);
+      transform: rotate(-3deg);
+      transition: 0.35s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 12px;
+      cursor: pointer;
+      position: relative;
+      font-weight: bold;
+      background-image: url('texture_papier.png');
+      background-size: cover;
+      overflow: visible;
+    }
+
+    .book:hover {
+      transform: scale(1.1) rotate(0deg);
+      box-shadow: inset 0 0 18px rgba(255,255,255,0.9), 5px 12px 0px #ff9bdd, 0 12px 20px rgba(0,0,0,0.25);
+    }
+
+    .book::before {
+      content: "";
+      position: absolute;
+      left: -12px;
+      top: 0;
+      width: 12px;
+      height: 100%;
+      background: linear-gradient(to right, #ffb4e6, #ffd7f6);
+      border-right: 2px solid #ff9bdd;
+      border-radius: 4px 0 0 4px;
+      box-shadow: inset 0 0 6px rgba(255,255,255,0.5);
+    }
+
+    .book .stickers {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      font-size: 1.4rem;
+      pointer-events: none;
+    }
+
+    .book .stickers span {
+      display: block;
+    }
+</style>
 </head>
 <body>
 <header class="appbar">
   <a class="logo" href="../index.html" title="Accueil">
     <img src="logo.png" alt="logo" class="logo-big">
-  </a>
+  <span class='sticker'>🌸</span></a>
   <div class="header-text">
     <div class="title spicy">Techniques de Base</div>
     <div class="subtitle spicy">Tai-Jitsu – Passage de grade</div>
@@ -83,7 +188,7 @@
   <section class="three-cards">
 
     <div class="encart">
-      <h2><strong>Par atemi</strong></h2>
+      <h2 class="spicy"><strong>Par atemi</strong></h2>
       <p>Sabre de main au cou</p>
       <img src="atemi5.gif" alt="gif atemi" style="width:100%;border-radius:12px;">
 
@@ -92,11 +197,11 @@
       <p><strong>Défense proposée :</strong> …</p>
       <p><strong>Vidéo :</strong> lien à venir</p>
 
-      <p>🥋 <a href="atemi5.pdf" target="_blank">Ressource Atemi</a></p>
+      <p>🥋 <a href="atemi5.pdf" target="_blank">Comment faire ?<span class='sticker'>🌸</span></a></p>
     </div>
 
     <div class="encart">
-      <h2><strong>Par clé</strong></h2>
+      <h2 class="spicy"><strong>Par clé</strong></h2>
       <p>Clé en Z</p>
       <img src="cle5.gif" alt="gif clé" style="width:100%;border-radius:12px;">
 
@@ -105,11 +210,11 @@
       <p><strong>Défense proposée :</strong> …</p>
       <p><strong>Vidéo :</strong> lien à venir</p>
 
-      <p>🥋 <a href="cle5.pdf" target="_blank">Ressource Clé</a></p>
+      <p>🥋 <a href="cle5.pdf" target="_blank">Comment faire ?<span class='sticker'>🌸</span></a></p>
     </div>
 
     <div class="encart">
-      <h2><strong>Par projection</strong></h2>
+      <h2 class="spicy"><strong>Par projection</strong></h2>
       <p>Sacrifice du corps</p>
       <img src="projection5.gif" alt="gif projection" style="width:100%;border-radius:12px;">
 
@@ -118,32 +223,18 @@
       <p><strong>Défense proposée :</strong> …</p>
       <p><strong>Vidéo :</strong> lien à venir</p>
 
-      <p>🥋 <a href="projection5.pdf" target="_blank">Ressource Projection</a></p>
+      <p>🥋 <a href="projection5.pdf" target="_blank">Comment faire ?<span class='sticker'>🌸</span></a></p>
     </div>
 
   </section>
 
   <section class="resource-bookcase">
-    <a href="#" target="_blank" class="book">
-      Livre 1
-      <span class="tooltip">Ressource interne 1</span>
-    </a>
-    <a href="#" target="_blank" class="book">
-      Livre 2
-      <span class="tooltip">Guide technique 2</span>
-    </a>
-    <a href="#" target="_blank" class="book">
-      Livre 3
-      <span class="tooltip">Support avancé 3</span>
-    </a>
-    <a href="#" target="_blank" class="book">
-      Livre 4
-      <span class="tooltip">Document externe 4</span>
-    </a>
-    <a href="#" target="_blank" class="book">
-      Livre 5
-      <span class="tooltip">Fiche pratique 5</span>
-    </a>
+    <a href="#" target="_blank" class="book">$1<div class='stickers'><span>🐱</span><span>⭐</span><span>🍡</span><span>🥋</span></div></a>
+    <a href="#" target="_blank" class="book">$1<div class='stickers'><span>🐱</span><span>⭐</span><span>🍡</span><span>🥋</span></div></a>
+    <a href="#" target="_blank" class="book">$1<div class='stickers'><span>🐱</span><span>⭐</span><span>🍡</span><span>🥋</span></div></a>
+    <a href="#" target="_blank" class="book">$1<div class='stickers'><span>🐱</span><span>⭐</span><span>🍡</span><span>🥋</span></div></a>
+    <a href="#" target="_blank" class="book">$1<div class='stickers'><span>🐱</span><span>⭐</span><span>🍡</span><span>🥋</span></div></a>
+  <div class="mascot"><img src="kimono.png" alt="mascotte kimono kawaii"></div>
   </section>
 </main>
 
