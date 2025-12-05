@@ -90,3 +90,68 @@
   border-radius: 6px;
   box-shadow: 0 6px 10px rgba(0,0,0,0.3) inset;
 }
+/* -------------------------------------------------------- */
+/* HEADER RESPONSIVE PARFAIT */
+/* -------------------------------------------------------- */
+.appbar {
+  background: black;
+  color: white;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centre horizontalement */
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* LOGO RESPONSIVE — taille maximale contrôlée */
+.logo-big {
+  display: block;
+  max-width: 150px;   /* taille parfaite desktop */
+  width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+/* Texte du header */
+.header-text .title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.header-text .subtitle {
+  font-size: 1.7rem;
+  margin-top: 18px;
+  letter-spacing: 2px;
+}
+
+/* MOBILE : réduction douce */
+@media (max-width: 800px) {
+  .logo-big {
+    max-width: 120px;
+  }
+
+  .header-text .title {
+    font-size: 2.2rem;
+  }
+
+  .header-text .subtitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .logo-big {
+    max-width: 100px;
+  }
+
+  .header-text .title {
+    font-size: 1.8rem;
+  }
+
+  .header-text .subtitle {
+    font-size: 1.2rem;
+  }
+}
