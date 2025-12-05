@@ -55,6 +55,23 @@ body {
 }
 
 /* ------------------------- */
+/* TOP BANNER (fiches 1–6 + surprise) */
+/* ------------------------- */
+.top-banner {
+  width: 100%;
+  background: white;
+  padding: 25px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+}
+
+.top-banner .controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ------------------------- */
 /* BOUTONS */
 /* ------------------------- */
 .btn {
@@ -80,7 +97,7 @@ body {
   border-radius: 20px;
 }
 
-/* Boutons fiches exercices → police spicy */
+/* Boutons fiches exercices */
 .fiche-btn {
   font-family: "Spicy", cursive !important;
   font-size: 1.2rem;
@@ -97,7 +114,6 @@ body {
   background: #ffb9ee;
 }
 
-/* Tooltip uniquement pour boutons PDF */
 .fiche-btn[title]:hover::after {
   content: attr(title);
   position: absolute;
@@ -110,8 +126,6 @@ body {
   font-size: 0.8rem;
   white-space: nowrap;
   border-radius: 6px;
-  opacity: 1;
-  pointer-events: none;
   z-index: 10;
 }
 
@@ -123,7 +137,6 @@ body {
   padding: 20px;
   border-radius: 18px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  margin-bottom: 25px;
 }
 
 .section-title {
@@ -132,26 +145,29 @@ body {
 }
 
 /* ------------------------- */
-/* LAYOUT */
+/* LAYOUT DESKTOP (3 colonnes) */
 /* ------------------------- */
 .layout-desktop {
   display: grid;
-  grid-template-columns: 1fr 1fr 340px; /* 2 colonnes + timer */
+  grid-template-columns: 340px 1fr 340px; /* Gauche / Centre / Droite */
   gap: 25px;
-  padding: 25px;
+  padding: 0 25px 25px 25px;
 }
 
 .layout-desktop > section {
   width: 100%;
 }
+
+/* VERSION MOBILE (inchangée) */
 @media(max-width: 800px){
   .layout-desktop {
-    grid-template-columns: 1fr; /* 1 colonne */
+    display: flex;
+    flex-direction: column;
   }
 }
 
 /* ------------------------- */
-/* ACCORDIONS – SCRIPT 1 */
+/* ACCORDIONS */
 /* ------------------------- */
 .ippon-accordion {
   background: #ffeef7;
@@ -174,7 +190,6 @@ body {
   border-top: 1px solid #ffb4e6;
 }
 
-/* Titres colonnes + contenu alignés sur la même ligne */
 .ippon-acc-content p {
   margin: 0;
   padding: 2px 0;
@@ -182,9 +197,8 @@ body {
 
 .ippon-acc-content strong {
   font-weight: bold;
-  font-family: Arial, sans-serif;
-  display: inline-block;
   width: 120px;
+  display: inline-block;
 }
 
 .ippon-acc-content .result-text {
@@ -192,7 +206,7 @@ body {
 }
 
 /* ------------------------- */
-/* CARDS RESULTATS (SCRIPT 2 + SURPRISE) */
+/* FICHE TECHNIQUE */
 /* ------------------------- */
 .result-card {
   background: #fff3fb;
@@ -202,7 +216,6 @@ body {
   margin-top: 18px;
 }
 
-/* Technique + côté en SPICY */
 .tech-title {
   font-family: "Spicy", cursive;
   font-size: 1.6rem;
@@ -215,7 +228,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* Contenu aligné sur une ligne */
 .result-card p {
   margin: 0;
   padding: 2px 0;
@@ -223,18 +235,14 @@ body {
 
 .result-title {
   font-weight: bold;
-  font-family: Arial, sans-serif;
-  display: inline-block;
   width: 120px;
+  display: inline-block;
 }
 
 .result-text {
   display: inline-block;
 }
 
-/* ------------------------- */
-/* VIDEO */
-/* ------------------------- */
 .video-frame {
   width: 100%;
   aspect-ratio: 16/9;
@@ -243,12 +251,12 @@ body {
 }
 
 /* ------------------------- */
-/* SURPRISE CARD : vidéo + infos côte à côte */
+/* SURPRISE CARD */
+/* ------------------------- */
 #surpriseResult .result-card {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  align-items: flex-start;
 }
 
 #surpriseResult .result-card > div:first-child {
@@ -256,27 +264,18 @@ body {
   min-width: 260px;
 }
 
-#surpriseResult .result-card > iframe {
+#surpriseResult .result-card iframe {
   flex: 1;
   min-width: 260px;
   max-width: 50%;
-  margin: 0;
 }
 
-/* Responsive : mobile = vidéo en dessous */
 @media(max-width:800px){
   #surpriseResult .result-card {
     flex-direction: column;
   }
-
-  #surpriseResult .result-card > iframe {
-    max-width: 100%;
-    margin-top: 12px;
-  }
 }
 
 /* ------------------------- */
-/* BOUTON SURPRISE – pas modifié */
-#btnSurprise {
-  /* NE PAS MODIFIER */
-}
+/* BOUTON SURPRISE – ne pas modifier */
+#btnSurprise {}
