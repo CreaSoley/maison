@@ -57,46 +57,57 @@
       <div id="surpriseResult"></div>
     </section>
 
-  </main>
-
-  <!-- 2 COLONNES (Script 1 + Script 2) -->
   <main class="container layout-desktop">
 
-    <!-- SCRIPT 1 — Accordéons -->
-    <section class="card-block" id="script1">
-      <h2 class="spicy section-title">🥋 Techniques par cote</h2>
+  <!-- SCRIPT 1 — Accordéons -->
+  <section class="card-block" id="script1">
+    <h2 class="spicy section-title">🥋 Techniques par cote</h2>
 
-      <div class="controls controls-column">
-        <select id="filterSide">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-      </div>
+    <div class="controls controls-column">
+      <select id="filterSide">
+        <option value="">Choisir un côté</option>
+        <option value="droite">Droite</option>
+        <option value="gauche">Gauche</option>
+      </select>
+    </div>
 
-      <div id="accordionList"></div>
-    </section>
+    <div id="accordionList"></div>
+  </section>
 
-    <!-- SCRIPT 2 — Fiche Technique -->
-    <section class="card-block" id="script2">
-      <h2 class="spicy section-title">💫 Fiche technique</h2>
+  <!-- SCRIPT 2 — Fiche Technique -->
+  <section class="card-block" id="script2">
+    <h2 class="spicy section-title">💫 Fiche technique</h2>
 
-      <div class="controls controls-column">
-        <select id="selectAttack">
-          <option value="">Choisir une attaque</option>
-        </select>
+    <div class="controls controls-column">
+      <select id="selectAttack">
+        <option value="">Choisir une attaque</option>
+      </select>
 
-        <select id="selectSide">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-      </div>
+      <select id="selectSide">
+        <option value="">Choisir un côté</option>
+        <option value="droite">Droite</option>
+        <option value="gauche">Gauche</option>
+      </select>
+    </div>
 
-      <div id="resultCard"></div>
-    </section>
+    <div id="resultCard"></div>
+  </section>
 
-  </main>
+  <!-- 🎯 TIMER IFRAME A DROITE -->
+  <section class="card-block" id="timerBlock">
+    <h2 class="spicy section-title">⏱️ Timer</h2>
+
+    <iframe 
+      src="https://martinkoban.com/interval-timer/?m1=00&amp;s1=20&amp;m2=00&amp;s2=10&d=5&amp;dt=rounds&amp;wu=5&amp;wut=seconds&amp;nm=0&amp;iframe=1&amp;p1n=Phase%201&amp;p2n=Phase%202&amp;volume=1" 
+      style="border:none;" 
+      title="Interval Timer by MartinKoban.com" 
+      width="340" height="650" 
+      scrolling="no">
+    </iframe>
+  </section>
+
+</main>
+
 
   <!-- SCRIPT -->
   <script src="ippon.js"></script>
