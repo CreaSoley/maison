@@ -1,5 +1,3 @@
-/* ippon.js */
-
 let techniquesData = [];
 const DEFAULT_EMBED = "https://www.youtube.com/embed/Yfe5aQdez9Q";
 
@@ -32,7 +30,7 @@ function populateTypeFilter() {
 
 function populateTechSelector(filterType = "", query = "") {
   const sel = document.getElementById("selectTech");
-  sel.innerHTML = '<option value="">Choisir une technique</option>';
+  sel.innerHTML = '<option value="">Choisir une attaque</option>';
   techniquesData.forEach(t => {
     if (filterType && t.type_attaque !== filterType) return;
     if (query) {
@@ -63,20 +61,16 @@ function toEmbedUrl(url) {
 
 function renderTechniqueCard(t) {
   const container = document.getElementById("techCard");
-  if (!t) {
-    container.innerHTML = "";
-    return;
-  }
+  if (!t) { container.innerHTML = ""; return; }
 
   const derouleHtml = (Array.isArray(t.deroule) && t.deroule.length)
     ? `<ul class="deroule-list">${t.deroule.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
     : `<em>Aucun déroulé détaillé</em>`;
 
-  // Afficher la vidéo dans toutes les cards, desktop + mobile
   const videoHtml = `<iframe class="video-frame" src="${toEmbedUrl(t.video_embed || '')}" title="Vidéo démonstration" allowfullscreen></iframe>`;
 
   container.innerHTML = `
-    <div class="result-card floating-card" role="region" aria-label="Fiche technique">
+    <div class="result-card">
       <div class="tech-title">${escapeHtml(t.attaque)}</div>
       <div class="tech-side">${escapeHtml(t.type_attaque||'')}</div>
       <p><strong>Atemi préparatoire :</strong> ${escapeHtml(t.atemi_preparatoire||'')}</p>
@@ -103,7 +97,7 @@ function randomTechnique() {
 function showRandomPreview(t) {
   const el = document.getElementById("randomResult");
   if (!t) { el.innerHTML = ""; return; }
-  el.textContent = t.attaque; // seulement le nom
+  el.textContent = t.attaque;
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -141,7 +135,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // initial random technique
   const initial = randomTechnique();
   if (initial) showRandomPreview(initial);
 });
