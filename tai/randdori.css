@@ -1,0 +1,257 @@
+/* ------------------------- */
+/* POLICES */
+/* ------------------------- */
+@font-face {
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf");
+}
+
+.spicy {
+  font-family: "Spicy", cursive;
+}
+
+/* Police standard */
+body, button, input, select, p, div, li {
+  font-family: Arial, sans-serif;
+}
+
+/* ------------------------- */
+/* STRUCTURE GLOBALE */
+/* ------------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+}
+
+/* ------------------------- */
+/* BANNIÈRE / HEADER */
+/* ------------------------- */
+.appbar {
+  background: black;
+  color: white;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.logo-big {
+  width: 110px;
+  margin-bottom: 15px;
+}
+
+.header-text .title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.header-text .subtitle {
+  font-size: 1.7rem;
+  margin-top: 18px;
+  letter-spacing: 2px;
+}
+
+/* ------------------------- */
+/* TOP BANNER (fiches 1–6 + surprise) */
+/* ------------------------- */
+.top-banner {
+  width: 100%;
+  background: white;
+  padding: 18px 25px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+}
+
+.top-banner .controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ------------------------- */
+/* BOUTONS */
+/* ------------------------- */
+.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn.primary {
+  background: #ff80d4;
+  color: white;
+}
+
+.btn.ghost {
+  background: white;
+  border: 2px solid #ff80d4;
+  color: #ff80d4;
+}
+
+.kawaii {
+  border-radius: 20px;
+}
+
+/* Boutons fiches exercices */
+.fiche-btn {
+  font-family: "Spicy", cursive !important;
+  font-size: 1.1rem;
+  padding: 10px 16px;
+  background: #ffd7f6;
+  border-radius: 16px;
+  border: 2px solid #ff9bdd;
+  cursor: pointer;
+  transition: 0.18s;
+  position: relative;
+}
+
+.fiche-btn:hover { background: #ffb9ee; }
+
+.fiche-btn[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  border-radius: 6px;
+  z-index: 10;
+}
+
+/* ------------------------- */
+/* CARD BLOCKS */
+/* ------------------------- */
+.card-block {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  margin: 0 25px 25px 25px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+/* ------------------------- */
+/* LAYOUT DESKTOP (centré) */
+/* ------------------------- */
+.layout-desktop {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+
+/* VERSION MOBILE (inchangée) */
+@media(min-width: 900px){
+  .layout-desktop {
+    grid-template-columns: 340px 1fr 340px;
+    padding: 0 25px 25px 25px;
+  }
+
+  .card-block[style*="grid-column: 1 / -1"] {
+    grid-column: 2 / 3;
+    margin-top: 0;
+  }
+}
+
+/* ------------------------- */
+/* ACCORDIONS (non utilisés ici, laissés pour compatibilité) */
+/* ------------------------- */
+.ippon-accordion {
+  background: #ffeef7;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 2px solid #ffb4e6;
+}
+
+/* ------------------------- */
+/* FICHE TECHNIQUE */
+/* ------------------------- */
+.result-card {
+  background: #fff3fb;
+  border-radius: 14px;
+  padding: 16px;
+  border: 2px solid #ffb4e6;
+  margin-top: 18px;
+}
+
+.tech-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.tech-side {
+  font-family: "Spicy", cursive;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.result-card p {
+  margin: 6px 0;
+  padding: 0;
+}
+
+.result-title {
+  font-weight: bold;
+  width: 140px;
+  display: inline-block;
+}
+
+.result-text {
+  display: inline-block;
+}
+
+/* video */
+.video-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  margin-top: 12px;
+  border: none;
+}
+
+/* ------------------------- */
+/* SURPRISE CARD (si besoin) */
+/* ------------------------- */
+#surpriseResult .result-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+#surpriseResult .result-card > div:first-child {
+  flex: 1;
+  min-width: 260px;
+}
+
+#surpriseResult .result-card iframe {
+  flex: 1;
+  min-width: 260px;
+  max-width: 50%;
+}
+
+@media(max-width:800px){
+  #surpriseResult .result-card {
+    flex-direction: column;
+  }
+}
+
+/* small helpers */
+.icon-inline { margin-right:8px; vertical-align:middle; color:#cc4aa8; }
