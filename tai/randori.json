@@ -1,0 +1,272 @@
+[
+  {
+    "attaque": "Saisie de poignet direct",
+    "atemi_preparatoire": "Tsuki court plexus. Effet : relâchement micro-tension.",
+    "objectif": "Sortir de la saisie en utilisant rotation du poignet et du buste.",
+    "deroule": [
+      "Tourner le poignet vers le pouce adverse.",
+      "Engager légèrement le buste pour amplifier.",
+      "Décoller le coude et faire sortir la main en diagonale.",
+      "Contre-saisie pour contrôler le bras.",
+      "Écarter et maintenir distance."
+    ],
+    "points_cles": "Rotation = clé du dégagement. Trajectoire diagonale. Buste donne puissance.",
+    "erreurs": "Tirer droit vers soi. Coude trop haut. Geste brusqué non maîtrisé.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie de poignet opposé",
+    "atemi_preparatoire": "Shuto court sur deltoïde. Effet : épaule crispée → prise moins ferme.",
+    "objectif": "Casser la prise avec levier buste + avant-bras.",
+    "deroule": [
+      "Orienter le buste côté main saisie.",
+      "Passer l’avant-bras par-dessus le sien.",
+      "Tourner le buste → levier efficace.",
+      "Mini-clé externe.",
+      "Maintenir contrôle stable."
+    ],
+    "points_cles": "Utiliser buste et avant-bras. Mouvement court et compact. Contrôle propre.",
+    "erreurs": "Pencher le buste en avant. Arracher la main. Aller trop vite.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie de poignet haut",
+    "atemi_preparatoire": "Paume sur biceps. Effet : bras tendu → baisse de pression.",
+    "objectif": "Ramener la saisie à hauteur utile pour en sortir.",
+    "deroule": [
+      "Descendre coude vers le flanc.",
+      "Pivoter poignet vers le pouce adverse.",
+      "Tirage diagonal vers le bas.",
+      "Contre-saisie.",
+      "Écarter le bras."
+    ],
+    "points_cles": "Descente du coude essentielle. Exit diagonal. Rotation poignet marquée.",
+    "erreurs": "Tirer droit. Monter le bras. Perdre alignement poignet.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie des deux poignets bas",
+    "atemi_preparatoire": "Atemi visuel visage. Effet : ouverture centrale.",
+    "objectif": "Créer espace pour sortir les poignets simultanément.",
+    "deroule": [
+      "Léger relèvement des coudes.",
+      "Rotation des poignets vers l’extérieur.",
+      "Cercle descendant pour casser la prise.",
+      "Option : contrôle du bras.",
+      "Retour au centre."
+    ],
+    "points_cles": "Mouvement symétrique. Cercle fluide. Buste accompagne.",
+    "erreurs": "Tirer droit vers soi. Lever les bras haut. Mouvements trop rapides.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie des deux poignets haut",
+    "atemi_preparatoire": "Paume sternum. Effet : relâche traction vers le haut.",
+    "objectif": "Ramener les bras dans zone contrôlable.",
+    "deroule": [
+      "Abaisser coudes.",
+      "Rotation interne des poignets.",
+      "Cercle avant pour sortir.",
+      "Contrôle simple.",
+      "Maintenir distance."
+    ],
+    "points_cles": "Redescendre d’abord. Cercle fluide. Structure compacte.",
+    "erreurs": "Monter les bras. Tirer vers soi. Rotation insuffisante.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Étranglement de face (1 main)",
+    "atemi_preparatoire": "Tsuki stoppé sternum. Effet : réduit poussée.",
+    "objectif": "Libérer la gorge et contrôler le bras.",
+    "deroule": [
+      "Menton bas pour protéger la gorge.",
+      "Bris de prise avec avant-bras côté attaque.",
+      "Saisie du poignet adverse.",
+      "Clé basse courte.",
+      "Contrôle final."
+    ],
+    "points_cles": "Clé courte efficace. Déroulé fluide. Protection continue.",
+    "erreurs": "Pencher en arrière. Chercher la force. Attendre.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Étranglement de face (2 mains)",
+    "atemi_preparatoire": "Coup d’œil + atemi visuel. Effet : micro-relâchement.",
+    "objectif": "Dégager gorge et contrôler un bras.",
+    "deroule": [
+      "Menton bas.",
+      "Bris de prise avec deux avant-bras vers l’extérieur.",
+      "Capture d’un poignet.",
+      "Clé basse.",
+      "Écartement."
+    ],
+    "points_cles": "Bris rapide. Mouvement court. Stabilité.",
+    "erreurs": "Lever épaules. Séparer par force. Se courber.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie de revers + mawashi tsuki",
+    "atemi_preparatoire": "Tapotement biceps. Effet : ralentit frappe.",
+    "objectif": "Protéger, bloquer, neutraliser.",
+    "deroule": [
+      "Protection latérale bras.",
+      "Blocage du mawashi avec avant-bras.",
+      "Saisie du poignet frappant.",
+      "Clé circulaire courte.",
+      "Contrôle."
+    ],
+    "points_cles": "Timing sur frappe. Blocage absorbant. Clé simple.",
+    "erreurs": "Trop anticiper. Rigidité du bras. Se pencher en arrière.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie de cheveux",
+    "atemi_preparatoire": "Piqué main ouverte (sans contact). Effet : recul réflexe → traction diminue.",
+    "objectif": "Stabiliser tête, casser prise, contrôler.",
+    "deroule": [
+      "Fixer main adverse sur la tête.",
+      "Autre bras diagonal jusqu’au coude.",
+      "Amener bras vers le bas.",
+      "Écarter bras.",
+      "Maintenir distance."
+    ],
+    "points_cles": "Stabiliser. Mouvement diagonal. Levier descendant.",
+    "erreurs": "Se laisser tirer. Monter bras. Attendre.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Couteau frontal",
+    "atemi_preparatoire": "Atemi visuel visage. Effet : détourne intention.",
+    "objectif": "Dégager ligne, dévier, contrôler main armée.",
+    "deroule": [
+      "Déviation extérieure bras armé.",
+      "Saisie poignet armé.",
+      "Rotation externe.",
+      "Amener lame hors axe.",
+      "Contrôle."
+    ],
+    "points_cles": "Priorité : sécurité. Déviation avant tout. Contrôle continu.",
+    "erreurs": "Toucher la lame. Rester en ligne. Forcer clé.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Couteau revers",
+    "atemi_preparatoire": "Paume stoppée épaule. Effet : perturbe cercle.",
+    "objectif": "Intercepter cercle et contrôler poignet armé.",
+    "deroule": [
+      "Protection haute.",
+      "Déviation circulaire vers l’extérieur.",
+      "Saisie du poignet.",
+      "Rotation interne.",
+      "Contrôle."
+    ],
+    "points_cles": "Sortir du cercle. Mouvement souple. Contrôle précis.",
+    "erreurs": "Bloquer droit. Rester dans l’axe. Arracher.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Matraque frontal",
+    "atemi_preparatoire": "Shuto visuel visage. Effet : réduit force frappe.",
+    "objectif": "Bloquer arme et contrôler main armée.",
+    "deroule": [
+      "Blocage double avant-bras vers l’extérieur.",
+      "Saisie poignet/manche.",
+      "Rotation du buste.",
+      "Amener arme sur côté.",
+      "Contrôle."
+    ],
+    "points_cles": "Blocage absorbant. Trajectoire fluide. Contrôle ferme.",
+    "erreurs": "Rigidité. Taper sur arme. Arracher.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Matraque revers",
+    "atemi_preparatoire": "Tapotement biceps. Effet : casse élan circulaire.",
+    "objectif": "Intercepter cercle et sécuriser.",
+    "deroule": [
+      "Blocage semi-circulaire.",
+      "Saisie du poignet.",
+      "Rotation interne/externe.",
+      "Neutralisation.",
+      "Contrôle."
+    ],
+    "points_cles": "Intercepter tôt. Mouvement circulaire. Buste + bras.",
+    "erreurs": "Attendre dernier moment. Taper sur arme. Laisser filer main.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie de cou latéral",
+    "atemi_preparatoire": "Paume plexus. Effet : relâche traction latérale.",
+    "objectif": "Réduire pression sur cou et dégager.",
+    "deroule": [
+      "Protéger tête côté saisie.",
+      "Décrocher avant-bras adverse.",
+      "Saisir poignet.",
+      "Levier descendant.",
+      "Contrôle."
+    ],
+    "points_cles": "Décrocher pas tirer. Mouvement descendant. Stabilité.",
+    "erreurs": "Tirer en arrière. Se courber. Négliger nuque.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie de manche latéral",
+    "atemi_preparatoire": "Shuto triceps. Effet : bras se tend → dégagement facile.",
+    "objectif": "Sortir de l’emprise et contrôler bras.",
+    "deroule": [
+      "Rotation externe poignet.",
+      "Buste accompagne.",
+      "Sortie circulaire.",
+      "Saisie poignet adverse.",
+      "Contrôle."
+    ],
+    "points_cles": "Rotation + buste. Mouvement court. Contrôle propre.",
+    "erreurs": "Tirer direct. Rotation insuffisante. Perdre bras de vue.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie de col arrière",
+    "atemi_preparatoire": "Paume côtes arrière. Effet : micro-déséquilibre attaquant.",
+    "objectif": "Protéger nuque et ramener attaque devant toi.",
+    "deroule": [
+      "Main protection derrière tête.",
+      "Capture poignet.",
+      "Tirage diagonal avant-bas.",
+      "Amener bras devant toi.",
+      "Contrôle."
+    ],
+    "points_cles": "Protection nuque. Mouvement diagonal. Garder contact.",
+    "erreurs": "Tourner dos. Saisir trop haut. Perdre contrôle.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Saisie des deux poignets arrière",
+    "atemi_preparatoire": "Atemi visuel arrière. Effet : buste de l’attaquant remonte.",
+    "objectif": "Ramener mains devant et créer ouverture.",
+    "deroule": [
+      "Descendre coudes.",
+      "Rotation interne poignets.",
+      "Cercle avant pour sortir.",
+      "Option : contrôle bras.",
+      "Zanshin."
+    ],
+    "points_cles": "Descendre d’abord. Cercle avant. Centre stable.",
+    "erreurs": "Tirer en arrière. Lever bras. Rotation faible.",
+    "video_embed": "https://youtu.be/12345"
+  },
+  {
+    "attaque": "Coup de poing direct",
+    "atemi_preparatoire": "Tapotement bras/biceps. Effet : modifie trajectoire.",
+    "objectif": "Sortir de l’axe, dévier, contrôler.",
+    "deroule": [
+      "Déviation extérieure bras.",
+      "Capture poignet/avant-bras.",
+      "Rotation buste.",
+      "Mini-clé ou contrôle.",
+      "Gestion distance."
+    ],
+    "points_cles": "Déviation d’abord. Gestion axe. Contrôle discret.",
+    "erreurs": "Bloquer en force. Rester sur la ligne. Clé trop complexe.",
+    "video_embed": "https://youtu.be/12345"
+  }
+]
