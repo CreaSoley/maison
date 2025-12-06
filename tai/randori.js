@@ -102,10 +102,6 @@ function renderTechniqueCard(t) {
 
           <p><span class="material-icons icon-inline" title=\"Erreurs\">report_problem</span><strong>Erreurs fréquentes :</strong> <span>${escapeHtml(t.erreurs||'')}</span></p>
         </div>
-
-        <div style="flex:1; min-width:260px;">
-          <iframe class="video-frame" src="${videoUrl}" title="Vidéo démonstration" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
       </div>
     </div>
   `;
