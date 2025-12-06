@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Randori et Techniques Imposées – Tai Jitsu</title>
+  <title>Ippon Kumite – Tai Jitsu</title>
 
-  <link rel="stylesheet" href="randdori.css">
+  <link rel="stylesheet" href="style-ippon.css">
 
   <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -28,67 +28,57 @@
       <img src="logo.png" alt="logo" class="logo-big">
     </a>
     <div class="header-text">
-      <div class="title spicy">Randori</div>
-      <div class="subtitle spicy">Techniques imposées</div>
+      <div class="title spicy">Ippon Kumite</div>
+      <div class="subtitle spicy">Randori & Techniques</div>
     </div>
   </header>
 
-  <!-- BANDEAU FICHES + TECHNIQUE ALÉATOIRE -->
+  <!-- BANDEAU FICHES EXERCICES -->
   <section class="top-banner">
     <div class="controls">
-      <button id="btnRandom" class="btn ghost kawaii" title="Technique aléatoire">🎲 Technique aléatoire</button>
+      <button class="fiche-btn" title="Fondamentaux et visualisation" onclick="window.open('F1 Fondamentaux & Visualisation.pdf','_blank')">Fiche 1</button>
+      <button class="fiche-btn" title="Maîtrise du placement" onclick="window.open('tai/fiche2.pdf','_blank')">Fiche 2</button>
+      <button class="fiche-btn" title="Fluidité & rythme" onclick="window.open('tai/fiche3.pdf','_blank')">Fiche 3</button>
+      <button class="fiche-btn" title="Gestion de l'épreuve" onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
+      <button class="fiche-btn" title="Réactivité" onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
+      <button class="fiche-btn" title="Rien pour le moment" onclick="window.open('tai/fiche6.pdf','_blank')">Fiche 6</button>
+
+      <!-- Bouton technique aléatoire -->
+      <button id="btnRandom" class="fiche-btn">Technique aléatoire</button>
     </div>
-    <div id="randomResult" style="margin-top:12px; font-weight:bold;"></div>
+
+    <div id="randomResult" class="spicy" style="margin-top:12px; font-weight:bold; color:#ff80d4;"></div>
   </section>
 
-  <!-- 3 COLONNES : GAUCHE / CENTRE / DROITE -->
+  <!-- 2 COLONNES : SELECTEUR / FICHE TECHNIQUE -->
   <main class="layout-desktop">
 
-    <!-- COLONNE GAUCHE — ACCORDION -->
-    <section class="card-block" id="script1">
-      <h2 class="spicy section-title">🥋 Techniques par côté</h2>
-
-      <div class="controls controls-column">
-        <select id="filterSide">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-      </div>
-
-      <div id="accordionList"></div>
-    </section>
-
-    <!-- COLONNE CENTRALE — FICHE TECHNIQUE -->
-    <section class="card-block" id="script2">
-      <h2 class="spicy section-title">💫 Fiche technique</h2>
-
+    <!-- COLONNE GAUCHE — SELECTEUR -->
+    <section class="card-block">
+      <h2 class="spicy section-title">🥋 Sélectionner une technique</h2>
       <div class="controls controls-column">
         <select id="selectTech">
-          <option value="">Choisir une technique</option>
+          <option value="">Choisir une attaque</option>
         </select>
 
         <select id="filterType">
           <option value="">Filtrer par type</option>
         </select>
 
-        <input type="text" id="searchBox" placeholder="Recherche rapide..." style="margin-top:10px; padding:6px; border-radius:10px; border:1px solid #ffb4e6;">
+        <input id="searchBox" type="text" placeholder="Recherche..." style="margin-top:8px; padding:6px; border-radius:8px; border:1px solid #ffb4e6;">
       </div>
-
-      <div id="techCard"></div>
     </section>
 
-    <!-- COLONNE DROITE — TIMER -->
-    <section class="card-block" id="timerBlock">
-      <h2 class="spicy section-title">⏱️ Timer</h2>
-
-      <iframe src="https://martinkoban.com/interval-timer/?m1=00&amp;s1=10&amp;m2=00&amp;s2=05&d=5&amp;dt=rounds&amp;wu=5&amp;wut=seconds&amp;nm=0&amp;iframe=1&amp;p1n=Phase%201&amp;p2n=Phase%202&amp;volume=1" style="border:none;" title="Interval Timer by MartinKoban.com" width="340" height="650" scrolling="no"></iframe>
+    <!-- COLONNE DROITE — FICHE TECHNIQUE -->
+    <section class="card-block">
+      <h2 class="spicy section-title">💫 Fiche technique</h2>
+      <div id="techCard"></div>
     </section>
 
   </main>
 
   <!-- SCRIPT -->
-  <script src="randori.js"></script>
+  <script src="ippon.js"></script>
 
 </body>
 </html>
