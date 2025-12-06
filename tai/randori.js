@@ -1,4 +1,4 @@
-/* ippon.js — version modifiée selon demandes */
+/* ippon.js */
 
 let techniquesData = [];
 const DEFAULT_EMBED = "https://www.youtube.com/embed/Yfe5aQdez9Q";
@@ -61,7 +61,6 @@ function toEmbedUrl(url) {
   return DEFAULT_EMBED;
 }
 
-/* ====== RENDER TECHNIC CARD (DESKTOP OK, MOBILE AVEC VIDEO) ====== */
 function renderTechniqueCard(t) {
   const container = document.getElementById("techCard");
   if (!t) {
@@ -73,37 +72,28 @@ function renderTechniqueCard(t) {
     ? `<ul class="deroule-list">${t.deroule.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
     : `<em>Aucun déroulé détaillé</em>`;
 
-  const videoUrl = toEmbedUrl(t.video_embed || t.video || "");
+  // Afficher la vidéo dans toutes les cards, desktop + mobile
+  const videoHtml = `<iframe class="video-frame" src="${toEmbedUrl(t.video_embed || '')}" title="Vidéo démonstration" allowfullscreen></iframe>`;
 
   container.innerHTML = `
     <div class="result-card floating-card" role="region" aria-label="Fiche technique">
-      <div class="tech-title">
-        <span class="material-icons">emoji_objects</span>
-        <span>${escapeHtml(t.attaque)}</span>
-      </div>
-
-      <p><span class="material-icons icon-inline">category</span><strong>Type :</strong> ${escapeHtml(t.type_attaque||'')}</p>
-
-      <p><span class="material-icons icon-inline">local_fire_department</span><strong>Atemi préparatoire :</strong> ${escapeHtml(t.atemi_preparatoire||'')}</p>
-
-      <p><span class="material-icons icon-inline">flag</span><strong>Objectif :</strong> ${escapeHtml(t.objectif||'')}</p>
-
-      <p><span class="material-icons icon-inline">format_list_numbered</span><strong>Déroulé :</strong> ${derouleHtml}</p>
-
-      <p><span class="material-icons icon-inline">tips_and_updates</span><strong>Points clés :</strong> <span>${escapeHtml(t.points_cles||'')}</span></p>
-
-      <p><span class="material-icons icon-inline">report_problem</span><strong>Erreurs fréquentes :</strong> <span>${escapeHtml(t.erreurs||'')}</span></p>
-
-      <!-- VIDEO MOBILE UNIQUEMENT -->
-      <div class="mobile-only-video mobile-video">
-        <iframe class="video-frame" src="${videoUrl}" allowfullscreen></iframe>
-      </div>
-
+      <div class="tech-title">${escapeHtml(t.attaque)}</div>
+      <div class="tech-side">${escapeHtml(t.type_attaque||'')}</div>
+      <p><strong>Atemi préparatoire :</strong> ${escapeHtml(t.atemi_preparatoire||'')}</p>
+      <p><strong>Objectif :</strong> ${escapeHtml(t.objectif||'')}</p>
+      <p><strong>Déroulé :</strong> ${derouleHtml}</p>
+      <p><strong>Points clés :</strong> ${escapeHtml(t.points_cles||'')}</p>
+      <p><strong>Erreurs fréquentes :</strong> ${escapeHtml(t.erreurs||'')}</p>
+      ${videoHtml}
     </div>
   `;
 }
 
-/* ====== RANDOM TECH (NOM SEULEMENT) ====== */
+function escapeHtml(s) {
+  if (!s) return "";
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
 function randomTechnique() {
   if (!techniquesData.length) return null;
   const idx = Math.floor(Math.random() * techniquesData.length);
@@ -112,14 +102,10 @@ function randomTechnique() {
 
 function showRandomPreview(t) {
   const el = document.getElementById("randomResult");
-  if (!t) {
-    el.innerHTML = "";
-    return;
-  }
-  el.innerHTML = `<div>${escapeHtml(t.attaque)}</div>`;  // NOM SEULEMENT
+  if (!t) { el.innerHTML = ""; return; }
+  el.textContent = t.attaque; // seulement le nom
 }
 
-/* ====== EVENTS ====== */
 document.addEventListener("DOMContentLoaded", async () => {
   await fetchData();
 
@@ -130,10 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   selTech.addEventListener("change", (e) => {
     const name = e.target.value;
-    if (!name) {
-      renderTechniqueCard(null);
-      return;
-    }
+    if (!name) { renderTechniqueCard(null); return; }
     const t = findTechniqueByName(name);
     renderTechniqueCard(t);
   });
@@ -153,18 +136,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const t = randomTechnique();
     if (t) {
       showRandomPreview(t);
-      const sel = document.getElementById("selectTech");
-      sel.value = t.attaque;
+      selTech.value = t.attaque;
       renderTechniqueCard(t);
     }
   });
 
-  // Initial random preview
+  // initial random technique
   const initial = randomTechnique();
   if (initial) showRandomPreview(initial);
 });
-
-function escapeHtml(s) {
-  if (!s) return "";
-  return s.replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
-}
