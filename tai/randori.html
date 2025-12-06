@@ -4,11 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Ippon Kumite – Tai Jitsu</title>
+  <title>Préparation Techniques – Tai-Jitsu</title>
 
-  <link rel="stylesheet" href="randdori.css">
-
-  <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <style>
@@ -16,69 +13,156 @@
       font-family: "Spicy";
       src: url("Spicy Sale.ttf");
     }
-    .spicy { font-family: "Spicy", cursive; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #222;
+    }
+
+    .spicy {
+      font-family: "Spicy", cursive;
+    }
+
+    /* HEADER */
+    .appbar {
+      background: black;
+      color: white;
+      padding: 25px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo-big {
+      max-width: 150px;
+      margin-bottom: 15px;
+    }
+
+    .header-text .title {
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+    }
+
+    .header-text .subtitle {
+      font-size: 1.7rem;
+      margin-top: 10px;
+      letter-spacing: 1.5px;
+    }
+
+    /* CONTAINER */
+    .kata-container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      padding: 25px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .kata-block {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .wide-block {
+      flex-basis: 100%;
+    }
+
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+
+    .btn.primary {
+      background: #ff80d4;
+      color: white;
+    }
+
+    .btn.ghost {
+      background: white;
+      border: 2px solid #ff80d4;
+      color: #ff80d4;
+    }
+
+    /* CARD TECHNIQUE */
+    .result-card {
+      background: #fff0f8;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      margin-top: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .result-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .tech-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .tech-side {
+      font-style: italic;
+      color: #ff5fc1;
+      margin-bottom: 10px;
+    }
+
+    .deroule-list {
+      padding-left: 20px;
+    }
+
+    /* FORM CONTROLS */
+    select,
+    input[type="text"] {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      width: 100%;
+      max-width: 300px;
+      font-size: 1rem;
+    }
+
+    /* MOBILE */
+    @media (max-width: 800px) {
+      .logo-big {
+        max-width: 120px;
+      }
+
+      .header-text .title {
+        font-size: 2.2rem;
+      }
+
+      .header-text .subtitle {
+        font-size: 1.4rem;
+      }
+    }
   </style>
 </head>
 
 <body>
-
-  <!-- HEADER -->
   <header class="appbar">
-    <a href="index.html">
+    <a class="logo" href="../index.html" title="Accueil">
       <img src="logo.png" alt="logo" class="logo-big">
     </a>
-    <div class="header-text">
-      <div class="title spicy">Ippon Kumite</div>
-      <div class="subtitle spicy">Randori & Techniques</div>
-    </div>
-  </header>
-
-  <!-- BANDEAU FICHES EXERCICES -->
-  <section class="top-banner">
-    <div class="controls">
-      <button class="fiche-btn" title="Fondamentaux et visualisation" onclick="window.open('F1 Fondamentaux & Visualisation.pdf','_blank')">Fiche 1</button>
-      <button class="fiche-btn" title="Maîtrise du placement" onclick="window.open('tai/fiche2.pdf','_blank')">Fiche 2</button>
-      <button class="fiche-btn" title="Fluidité & rythme" onclick="window.open('tai/fiche3.pdf','_blank')">Fiche 3</button>
-      <button class="fiche-btn" title="Gestion de l'épreuve" onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
-      <button class="fiche-btn" title="Réactivité" onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
-      <button class="fiche-btn" title="Rien pour le moment" onclick="window.open('tai/fiche6.pdf','_blank')">Fiche 6</button>
-
-      <!-- Bouton technique aléatoire -->
-      <button id="btnRandom" class="fiche-btn">Technique aléatoire</button>
-    </div>
-
-    <div id="randomResult" class="spicy" style="margin-top:12px; font-weight:bold; color:#ff80d4;"></div>
-  </section>
-
-  <!-- 2 COLONNES : SELECTEUR / FICHE TECHNIQUE -->
-  <main class="layout-desktop">
-
-    <!-- COLONNE GAUCHE — SELECTEUR -->
-    <section class="card-block">
-      <h2 class="spicy section-title">🥋 Sélectionner une technique</h2>
-      <div class="controls controls-column">
-        <select id="selectTech">
-          <option value="">Choisir une attaque</option>
-        </select>
-
-        <select id="filterType">
-          <option value="">Filtrer par type</option>
-        </select>
-
-        <input id="searchBox" type="text" placeholder="Recherche..." style="margin-top:8px; padding:6px; border-radius:8px; border:1px solid #ffb4e6;">
-      </div>
-    </section>
-
-    <!-- COLONNE DROITE — FICHE TECHNIQUE -->
-    <section class="card-block">
-      <h2 class="spicy section-title">💫 Fiche technique</h2>
-      <div id="techCard"></div>
-    </section>
-
-  </main>
-
-  <!-- SCRIPT -->
-  <script src="randori.js"></script>
-
-</body>
-</html>
+    <div class="header-
