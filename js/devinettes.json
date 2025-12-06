@@ -146,5 +146,205 @@
  {
    "enigme": "Parfois mauvaise et redoutée,\nElle peut faire des blessés.\nQu'elle soit d'eau ou de reins.\nElle est aussi mot de la fin.\nQui est-elle ?",
    "reponse": "La chute"
+ },
+ {
+   "enigme": "Quel est le seul nombre qui est également égal au carré de la somme de ses chiffres ?",
+   "reponse": "81"
+ },
+ {
+   "enigme": "Le double de mon âge dans 3 ans sera 50. Quel est mon âge ?",
+   "reponse": "22"
+ },
+ {
+   "enigme": "Qu'est-ce qui est plein de trous mais peut toujours contenir de l'eau ?",
+   "reponse": "Une éponge "
+ },
+ {
+   "enigme": "Si vous avez seulement une allumette, et que vous entrez dans une pièce sombre où il y a une lampe à huile, une bougie et une cheminée, que devez-vous allumer en premier ?",
+   "reponse": "L'allumette"
+ },
+ {
+   "enigme": "Plus je sèche, plus je deviens mouillé. Que suis-je ?",
+   "reponse": "Une serviette "
+ },
+ {
+   "enigme": "Faits de lignes courbes et de contours,\nDu fleuve, ils sont tous les détours.\nSinuosités de la pensée,\nIls rendent l'homme plus compliqué.\nQui sont-ils ?",
+   "reponse": "Les méandres"
+ },
+ {
+   "enigme": "C'est un prénom peu usité,\nElle est aussi une herbacée.\nIl suffit de l'effeuiller,\nPour qu'un cœur tendre soit chaviré.\nQui est-elle ?",
+   "reponse": "La marguerite"
+ },
+ {
+   "enigme": "Lorsqu'il est donné sur la peau,\nIl laisse parfois des bleus.\nOn l'aime chaud, glacé,\nEn crème, il est délicieux.\nQui est-il ?",
+   "reponse": "Le marron"
+ },
+ {
+   "enigme": "Sous les pieds, ou dans la main,\nElle est double pour l'académicien.\nEn abondance dans les prés,\nDe loin, vous l'entendez.\nQui est-elle ?",
+   "reponse": "La corne"
+ },
+ {
+   "enigme": "A l'issue de noirs combats,\nOn l'a celée maintes foi.\nElle vous remplit d'émoi,\nLorsqu'elle est passée au doigt.\nQui est-elle ?",
+   "reponse": "L'alliance"
+ },
+ {
+   "enigme": "Il peut servir aux classements,\nOu glisse sur l'eau lentement.\nIl est parfois fait de ciment,\nIl s'obtient toujours en étudiant.\nQui est-il ?",
+   "reponse": "Le bac"
+ },
+ {
+   "enigme": "Son vin est né de ferments,\nEt c’est aussi un ornement.\nEn or c’est un grand honneur,\nPar deux, elle sert au nageur.\nQui est-elle ?",
+   "reponse": "La palme"
+ },
+ {
+   "enigme": "Autrefois elle acheminait bien du courrier.\nElle est souvent synonyme de voyages.\nParfois au fond d’un grenier,\nS’y entasse des souvenirs sans âge.\nQui est-elle ?",
+   "reponse": "La malle"
+ },
+ {
+   "enigme": "Sa courtoisie est appréciée.\nA vos hôtes vous la rendez.\nElle a des cartes par milliers,\nPourtant elle est souvent guidée.\nQui est-elle ?",
+   "reponse": "La visite"
+ },
+ {
+   "enigme": "Comme le coton, il est léger,\nEt de glace il est constitué.\nCette céréale déshydratée,\nEst idéale au petit-déjeuner.\nQui est-il ?",
+   "reponse": "le flocon"
+ },
+ {
+   "enigme": "Au balcon, vous l'apercevez,\nL'étoile vient s'y reposer.\nLe gardien peut y résider,\nBaignoire, elle n'est jamais mouillée.\nQui est-elle ?",
+   "reponse": "La loge"
+ },
+ {
+   "enigme": "Elle n'est pas à l'abri d'un coup,\nCependant, elle évite de frapper.\nDu serpent elle est tout au bout,\nA la porte, vous la mettez.\nQui est-elle ?",
+   "reponse": "La sonnette"
+ },
+ {
+   "enigme": "Souvent causé par la distraction,\nCette maladresse peut avoir des répercussions.\nCette perche sert à manœuvrer un bateau,\nOu à sortir un poisson de l'eau.\nQui est-elle ?",
+   "reponse": "La gaffe"
+ },
+ {
+   "enigme": "On s'appuie très souvent dessus,\nIl a régulièrement des frais.\nDe votre chaise il est connu,\nIl peut aussi être secret.\nQui est-il ?",
+   "reponse": "Le dossier"
+ },
+ {
+   "enigme": "Née sous les insurgés,\nCette arme de rebelle,\nA beaucoup tournoyer,\nAu temps du roi Soleil.\nQui est-elle ?",
+   "reponse": "La fronde"
+ },
+ {
+   "enigme": "Du fond de la Provence,\nSous le mistral elle danse.\nDe son cœur naît l'essence,\nA une couleur, elle a donné naissance.\nQui est-elle ?",
+   "reponse": "La lavande"
+ },
+ {
+   "enigme": "Souvent associé au printemps,\nOn peut aussi plonger dedans.\nTrès utile en pâtisserie,\nPour peindre on s'en sert aussi.\nQui est-il ?",
+   "reponse": "Le rouleau"
+ },
+ {
+   "enigme": "Ce signe bien connu,\nSymbole d'équilibre et de justice,\nAide le pêcheur assidu,\nDans sa pêche aux écrevisses.\nQui est-elle ?",
+   "reponse": "La balance"
+ },
+ {
+   "enigme": "Il peut s'agir d'un soupçon,\nCar c'est une petite quantité.\nOn aime cette peau si parfumée,\nProvenant de l'orange ou du citron.\nQui est-il ?",
+   "reponse": "Le zeste"
+ },
+ {
+   "enigme": "On compte sur elle pour le transport,\nC'est une bête qu'il faut ménager.\nElle peut être en or,\nSans elle, des verres on ne pourrait porter.\nQui est-elle ?",
+   "reponse": "La monture"
+ },
+ {
+   "enigme": "Il est parfois mauvais,\nEt peut-être incliné.\nPour ne point s'égarer,\nMieux vaut le déplier.\nQui est-il ?",
+   "reponse": "Le plan"
+ },
+ {
+   "enigme": "Pinceaux des peintres et doreurs,\nCe sobriquet est peu flatteur.\nIl hiberne au fond d'un terrier,\nEt le savon, il fait mousser.\nQui est-il ?",
+   "reponse": "Le blaireau"
+ },
+ {
+   "enigme": "Quand on a soif, elle est bien utile,\nLes couturières, y enroulent un fil.\nCet oiseau n'est pas bien gros,\nMais peut finir dans nos fourneaux.\nQui est-elle ?",
+   "reponse": "La canette"
+ },
+ {
+   "enigme": "Il sert à battre le blé,\nEt maintient les plateaux d'une balance équilibrée.\nCalamité, peste ou choléra,\nLe plus connu fut Attila.\nQui est-il ?",
+   "reponse": "Le fléau"
+ },
+ {
+   "enigme": "Son trait est dépourvu d'esprit,\nMais elle ne manque pas de force.\nC'est un mariage, une fusion,\nQue l'on célèbre avec des noces.\nQui est-elle ?",
+   "reponse": "L'union"
+ },
+ {
+   "enigme": "Bien utile pour les fusées,\nIl possède une rampe sans être un escalier.\nSon action s'applique à la publicité,\nOu encore à un produit de beauté.\nQui est-il ?",
+   "reponse": "Le lancement"
+ },
+ {
+   "enigme": "Il a fait dormir 100 ans,\nLa princesse d'un conte d'enfants.\nVêtement de sport d'hiver,\nIl est souvent lié à l'horaire.\nQui est-il ?",
+   "reponse": "Le fuseau"
+ },
+ {
+   "enigme": "Sa forme longue et plate,\nFait de bien joli yeux.\nC'est une bonne pâte,\nEt son lait est soyeux.\nQui est-elle ?",
+   "reponse": "L'amande"
+ },
+ {
+   "enigme": "Sa forme longue et plate,\nFait de bien joli yeux.\nC'est une bonne pâte,\nEt son lait est soyeux.\nQui est-elle ?",
+   "reponse": "Le trousseau"
+ },
+ {
+   "enigme": "Utile pour le dessin,\nOn l'imite quand on l'aime bien.\nIl adore défiler.\nEt peut-être déposer.\nQui est-il ?",
+   "reponse": "Le modèle"
+ },
+ {
+   "enigme": "J’ai treize carreaux mais aucune fenêtre, Qui suis-je ?",
+   "reponse": "Un jeu de cartes"
+ },
+ {
+   "enigme": "Je suis entre 2789 et 2791,Je ne suis pas 2790, Qui suis-je ?",
+   "reponse": "Et"
+ },
+ {
+   "enigme": "Quand je mange, je grandis,Quand je bois, je meurs, Qui suis-je ?",
+   "reponse": "Le feu"
+ },
+ {
+   "enigme": "Je suis à toi, mais ce sont surtout les autres qui m’utilisent, Qui suis-je ?",
+   "reponse": "Ton prénom"
+ },
+ {
+   "enigme": "Je suis né dans l’eau mais quand l’eau me touche je meurs, Qui suis-je",
+   "reponse": "Un glaçon"
+ },
+ {
+   "enigme": "Pour connaître son âge exact, on doit le tuer. Qui est-ce ?",
+   "reponse": "Un arbre"
+ },
+ {
+   "enigme": "Je tourne et pourtant je ne bouge pas.Qui suis-je ?",
+   "reponse": "Le lait"
+ },
+ {
+   "enigme": "Il peut être chaud ou glacé,Il est léger ou puissant,Il peut être de toutes les directions,Qui est-ce ?",
+   "reponse": "Le vent"
+ },
+ {
+   "enigme": "Je suis partout,Sans moi arrive la fin,Pourtant, personne ne me voit,Qui suis-je ?",
+   "reponse": "L'air"
+ },
+ {
+   "enigme": "On me double pour me dire à l’oreille,Je suis à point,Je suis un petit fruit,Je suis une séparation, Qui suis-je ?",
+   "reponse": "mur"
+ },
+ {
+   "enigme": "Dans un étang, un nénuphar double de taille chaque jour. Il lui faudra 30 jours pour recouvrir tout l’étang. Combien de temps lui faudra-t-il pour couvrir la moitié de l’étang ?",
+   "reponse": "29 jours"
+ },
+ {
+   "enigme": "3 araignées attrapent 3 mouches en 3 minutes. Combien faut-il d’araignées pour attraper 60 mouches en 60 minutes.",
+   "reponse": "3"
+ },
+ {
+   "enigme": "Pierre a 35 ans et son frère a 10 ans de moins que lui. Quand Pierre sera deux fois plus âgé, quel âge aura son frère ?",
+   "reponse": "60 ans"
+ },
+ {
+   "enigme": "Des frères et sœurs font la ronde. Il y a trois frères. Trois sœurs se donnent la main mais aucun garçon ne donne la main à son frère. Combien y a t il de sœurs au minimum dans la ronde ?",
+   "reponse": "5"
+ },
+ {
+   "enigme": "Arsène Lupin cambriole la maison du célèbre milliardaire, Laurent Barre. Près du coffre, il découvre ce message. 4 chiffres à entrer : le 2eme est le double du 4eme, le 3 ème est le triple du premier. La somme des 4 fait 14.Quelle est la combinaison ?",
+   "reponse": "2462"
  }
 ]
