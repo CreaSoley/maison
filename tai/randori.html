@@ -1,42 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Randori - Techniques</title>
-  <link rel="stylesheet" href="randdori.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Randori et Techniques Imposées – Tai Jitsu</title>
+
+  <link rel="stylesheet" href="style-ippon.css">
+
+  <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: "Spicy";
+      src: url("Spicy Sale.ttf");
+    }
+    .spicy { font-family: "Spicy", cursive; }
+  </style>
 </head>
+
 <body>
-  <div class="container">
 
-    <!-- ====== BANDEAU SUPERIEUR SANS VIDEO ====== -->
-    <section id="bandeau">
-      <button id="btnRandom" style="margin-bottom:12px; width:100%;">Technique aléatoire</button>
-      <div id="randomResult" class="random-title-only"></div>
+  <!-- HEADER -->
+  <header class="appbar">
+    <a href="index.html">
+      <img src="logo.png" alt="logo" class="logo-big">
+    </a>
+    <div class="header-text">
+      <div class="title spicy">Randori</div>
+      <div class="subtitle spicy">Techniques imposées</div>
+    </div>
+  </header>
+
+  <!-- BANDEAU FICHES + TECHNIQUE ALÉATOIRE -->
+  <section class="top-banner">
+    <div class="controls">
+      <button id="btnRandom" class="btn ghost kawaii" title="Technique aléatoire">🎲 Technique aléatoire</button>
+    </div>
+    <div id="randomResult" style="margin-top:12px; font-weight:bold;"></div>
+  </section>
+
+  <!-- 3 COLONNES : GAUCHE / CENTRE / DROITE -->
+  <main class="layout-desktop">
+
+    <!-- COLONNE GAUCHE — ACCORDION -->
+    <section class="card-block" id="script1">
+      <h2 class="spicy section-title">🥋 Techniques par côté</h2>
+
+      <div class="controls controls-column">
+        <select id="filterSide">
+          <option value="">Choisir un côté</option>
+          <option value="droite">Droite</option>
+          <option value="gauche">Gauche</option>
+        </select>
+      </div>
+
+      <div id="accordionList"></div>
     </section>
 
-    <!-- ====== FILTRES ====== -->
-    <section id="filtres" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
-      <select id="filterType">
-        <option value="">Tous les types</option>
-      </select>
+    <!-- COLONNE CENTRALE — FICHE TECHNIQUE -->
+    <section class="card-block" id="script2">
+      <h2 class="spicy section-title">💫 Fiche technique</h2>
 
-      <input type="text" id="searchBox" placeholder="Rechercher..." />
+      <div class="controls controls-column">
+        <select id="selectTech">
+          <option value="">Choisir une technique</option>
+        </select>
+
+        <select id="filterType">
+          <option value="">Filtrer par type</option>
+        </select>
+
+        <input type="text" id="searchBox" placeholder="Recherche rapide..." style="margin-top:10px; padding:6px; border-radius:10px; border:1px solid #ffb4e6;">
+      </div>
+
+      <div id="techCard"></div>
     </section>
 
-    <!-- ====== SELECTEUR PRINCIPAL (DESK OK) ====== -->
-    <section style="margin-bottom:20px;">
-      <select id="selectTech" style="width:100%;">
-        <option value="">Choisir une technique</option>
-      </select>
+    <!-- COLONNE DROITE — TIMER -->
+    <section class="card-block" id="timerBlock">
+      <h2 class="spicy section-title">⏱️ Timer</h2>
+
+      <iframe src="https://martinkoban.com/interval-timer/?m1=00&amp;s1=10&amp;m2=00&amp;s2=05&d=5&amp;dt=rounds&amp;wu=5&amp;wut=seconds&amp;nm=0&amp;iframe=1&amp;p1n=Phase%201&amp;p2n=Phase%202&amp;volume=1" style="border:none;" title="Interval Timer by MartinKoban.com" width="340" height="650" scrolling="no"></iframe>
     </section>
 
-    <!-- ====== RESULTAT TECHNIQUE ====== -->
-    <section id="techCard"></section>
+  </main>
 
-  </div>
+  <!-- SCRIPT -->
+  <script src="ippon.js"></script>
 
-  <script src="randori.js"></script>
 </body>
 </html>
