@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Randori – Techniques imposées (Tai-Jitsu)</title>
+
+  <link rel="stylesheet" href="style-ippon.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    /* petites adaptations locales */
+    .floating-card { transition: transform .18s ease, box-shadow .18s ease; }
+    .floating-card:hover { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    .controls-column { display:flex; flex-direction:column; gap:10px; }
+    #searchBox { padding:8px 10px; border-radius:8px; border:1px solid #e0c5db; }
+    #filterType, #selectTech { padding:8px 10px; border-radius:8px; border:1px solid #e0c5db; background:white; }
+    .material-icons { vertical-align:middle; margin-right:8px; font-size:18px; color:#cc4aa8; }
+    .deroule-list { margin:8px 0 0 0; padding-left:18px; }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="appbar">
+    <a href="index.html">
+      <img src="logo.png" alt="logo" class="logo-big">
+    </a>
+    <div class="header-text">
+      <div class="title spicy">Randori</div>
+      <div class="subtitle spicy">Techniques imposées</div>
+    </div>
+  </header>
+
+  <!-- BANDEAU RANDOM -->
+  <section class="top-banner">
+    <div class="controls">
+      <button id="btnRandom" class="fiche-btn" title="Générer une technique aléatoire">Technique aléatoire</button>
+      <button id="btnRandomSmall" class="btn ghost kawaii" title="Autre" style="margin-left:8px">🔁</button>
+    </div>
+    <div id="randomResult"></div>
+  </section>
+
+  <!-- LAYOUT  -->
+  <main class="layout-desktop">
+
+    <!-- COLONNE CENTRALE — CONTENU PRINCIPAL -->
+    <section class="card-block" style="grid-column: 1 / -1;">
+      <h2 class="spicy section-title">🎯 Sélection des techniques</h2>
+
+      <div class="controls controls-column" style="max-width:900px;">
+        <input id="searchBox" type="text" placeholder="Recherche rapide (ex : poignet, étranglement...)">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <select id="filterType">
+            <option value="">Filtrer par type d'attaque</option>
+          </select>
+
+          <select id="selectTech" style="flex:1;">
+            <option value="">Choisir une technique</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="techCard"></div>
+    </section>
+
+  </main>
+
+  <script src="ippon.js"></script>
+</body>
+</html>
