@@ -1,141 +1,141 @@
-/* ====== RESET ====== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ------------------------- */
+/* POLICES */
+@font-face {
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf");
+}
+
+.spicy {
+  font-family: "Spicy", cursive;
+}
+
+/* Standard */
+body, button, input, select, p, div, li {
+  font-family: Arial, sans-serif;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background:#f3f3f3;
-  color:#222;
-  line-height:1.5;
-  padding:0;
-  margin:0;
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
 }
 
-/* ====== LAYOUT ====== */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 16px;
+/* ------------------------- */
+/* HEADER */
+.appbar {
+  background: black;
+  color: white;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-/* ====== HEADER / BANDEAU SUPERIEUR ====== */
-#bandeau {
-  margin-bottom:20px;
+.logo-big {
+  width: 110px;
+  margin-bottom: 15px;
 }
 
-#randomResult {
-  background:white;
-  padding:14px;
-  border-radius:10px;
-  box-shadow:0 3px 8px rgba(0,0,0,0.12);
+.header-text .title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
 }
 
-/* Version reduite (nom uniquement) */
-.random-title-only {
-  font-size:1.3rem;
-  font-weight:700;
-  text-align:center;
+.header-text .subtitle {
+  font-size: 1.7rem;
+  margin-top: 18px;
+  letter-spacing: 2px;
 }
 
-/* ====== BOUTONS ====== */
-button {
-  padding:10px 18px;
-  border:none;
-  border-radius:8px;
-  background:#005bbb;
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.2s;
-}
-button:hover {
-  background:#004799;
+/* ------------------------- */
+/* BOUTONS */
+.btn, .fiche-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
 }
 
-/* ====== SELECTEURS ====== */
-select, input[type="text"] {
-  padding:8px 10px;
-  border-radius:6px;
-  border:1px solid #aaa;
-  font-size:1rem;
+.fiche-btn {
+  font-family: "Spicy", cursive;
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  background: #ffd7f6;
+  border-radius: 20px;
+  border: 2px solid #ff9bdd;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* ====== RESULT / CARD ====== */
+.fiche-btn:hover {
+  background: #ffb9ee;
+}
+
+/* ------------------------- */
+/* CARDS */
+.card-block {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+/* ------------------------- */
+/* LAYOUT */
+.layout-desktop {
+  display: flex;
+  gap: 25px;
+  padding: 25px;
+}
+
+.layout-desktop > section {
+  flex: 1;
+}
+
+@media(max-width:800px){
+  .layout-desktop { flex-direction: column; }
+}
+
+/* ------------------------- */
+/* CARDS RESULTATS */
 .result-card {
-  background:white;
-  border-radius:12px;
-  padding:18px;
-  box-shadow:0 3px 9px rgba(0,0,0,0.12);
-}
-
-.floating-card {
-  animation: fadeIn 0.25s ease-out;
+  background: #fff3fb;
+  border-radius: 14px;
+  padding: 15px;
+  border: 2px solid #ffb4e6;
+  margin-top: 18px;
 }
 
 .tech-title {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:1.3rem;
-  font-weight:bold;
-  margin-bottom:16px;
+  font-family: "Spicy", cursive;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.icon-inline {
-  vertical-align:middle;
-  margin-right:6px;
+.tech-side {
+  font-family: "Spicy", cursive;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 18px;
 }
 
-/* ====== VIDEO ====== */
+.result-card p {
+  margin-bottom: 10px;
+}
+
+/* Video dans cards */
 .video-frame {
-  width:100%;
-  height:240px;
-  border-radius:10px;
-  border:none;
-}
-
-/* Mobile card video (ajouté selon demande) */
-.mobile-video {
-  margin-top:12px;
-}
-
-/* ====== LISTES ====== */
-.deroule-list {
-  margin-left:18px;
-  margin-top:6px;
-}
-.deroule-list li {
-  margin-bottom:4px;
-}
-
-/* ====== MOBILE ====== */
-@media (max-width: 768px) {
-  #randomResult {
-    padding:10px;
-  }
-
-  .random-title-only {
-    font-size:1.1rem;
-  }
-
-  /* card vidéo visible uniquement sur mobile */
-  .mobile-only-video {
-    display:block !important;
-  }
-}
-
-/* Desktop cache la vidéo mobile */
-@media (min-width: 769px) {
-  .mobile-only-video {
-    display:none !important;
-  }
-}
-
-/* ====== ANIM ====== */
-@keyframes fadeIn {
-  from { opacity:0; transform:translateY(4px); }
-  to { opacity:1; transform:translateY(0); }
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  margin-top: 12px;
 }
