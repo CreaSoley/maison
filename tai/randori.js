@@ -5,7 +5,7 @@ const DEFAULT_EMBED = "https://www.youtube.com/embed/Yfe5aQdez9Q"; // si aucune 
 
 async function fetchData() {
   try {
-    const resp = await fetch("techniques.json");
+    const resp = await fetch("randori.json");
     const json = await resp.json();
     techniquesData = json.techniques || [];
     populateTypeFilter();
