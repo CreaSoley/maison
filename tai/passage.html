@@ -193,13 +193,11 @@ async function chargerRandori(){
   const data = await r.json();
   const saisies = data.techniques.filter(t=>t.type_attaque==='saisie');
   const frappes = data.techniques.filter(t=>t.type_attaque==='frappe');
-  const etranglement = data.techniques.filter(t=>t.type_attaque==='étranglement');
-  const armesC = data.techniques.filter(t=>t.type_attaque==='arme – couteau');
-  const armesM = data.techniques.filter(t=>t.type_attaque==='arme – matraque');
+  const armesC = data.techniques.filter(t=>t.type_attaque==='arme-couteau');
+  const armesM = data.techniques.filter(t=>t.type_attaque==='arme-matraque');
 
   const tir_s = saisies.sort(()=>0.5-Math.random()).slice(0,3);
   const tir_f = frappes.sort(()=>0.5-Math.random()).slice(0,2);
-  const tir_t = etranglement.sort(()=>0.5-Math.random()).slice(0,1);
   const tir_c = armesC.sort(()=>0.5-Math.random()).slice(0,1);
   const tir_m = armesM.sort(()=>0.5-Math.random()).slice(0,1);
 
@@ -207,7 +205,6 @@ async function chargerRandori(){
   bloc.innerHTML = '<h3 class="spicy">Sélection du jour</h3>' +
     '<h4 class="spicy">Saisies</h4>' + tir_s.map(t=>`<div>• ${t.attaque}</div>`).join('') +
     '<h4 class="spicy">Couteau</h4>' + tir_c.map(t=>`<div>• ${t.attaque}</div>`).join('') +
-    '<h4 class="spicy">Etranglement</h4>' + tir_t.map(t=>`<div>• ${t.attaque}</div>`).join('') +
     '<h4 class="spicy">Matraque</h4>' + tir_m.map(t=>`<div>• ${t.attaque}</div>`).join('') +
     '<h4 class="spicy">Frappes</h4>' + tir_f.map(t=>`<div>• ${t.attaque}</div>`).join('');
 }
@@ -217,6 +214,123 @@ chargerKihon();
 kihonCombat();
 chargerRandori();
 </script>
+
+  <!-- HIIT TIMER SECTION -->
+  <section id="hiit-section" style="padding:20px; margin-top:40px; background:#111; border-radius:12px;">
+    <h2 style="text-align:center; margin-bottom:20px;">Entraînement HIIT</h2>
+
+    <div class="hiit-config" style="display:flex; gap:20px; justify-content:center; margin-bottom:20px; flex-wrap:wrap;">
+      <label>Travail (sec)<br><input type="number" id="hiitWork" value="20" class="training-input"></label>
+      <label>Repos (sec)<br><input type="number" id="hiitRest" value="10" class="training-input"></label>
+      <label>Rounds<br><input type="number" id="hiitRounds" value="8" class="training-input"></label>
+    </div>
+
+    <div style="text-align:center;">
+      <button id="hiitStart" class="training-button">Démarrer HIIT</button>
+    </div>
+
+    <div id="hiitDisplay" style="text-align:center; margin-top:20px; font-size:1.2em;">
+      Round <span id="hiitRound">0</span>/<span id="hiitRoundTotal">0</span> —
+      Phase : <span id="hiitPhase">-</span> —
+      Temps : <span id="hiitTime">0</span>s
+    </div>
+  </section>
+
+  <script>
+    // HIIT TIMER MODULE
+    class HIITTimer {
+      constructor({work, rest, rounds, onTick, onRoundChange, onFinish}) {
+        this.work = work;
+        this.rest = rest;
+        this.rounds = rounds;
+        this.currentRound = 1;
+        this.phase = "work";
+        this.timeLeft = work;
+        this.interval = null;
+        this.onTick = onTick;
+        this.onRoundChange = onRoundChange;
+        this.onFinish = onFinish;
+      }
+
+      start() {
+        if (this.interval) return;
+        this.interval = setInterval(() => {
+          this.timeLeft--;
+          if (this.onTick) this.onTick(this);
+
+          if (this.timeLeft <= 0) {
+            if (this.phase === "work") {
+              this.phase = "rest";
+              this.timeLeft = this.rest;
+            } else {
+              this.phase = "work";
+              this.currentRound++;
+              this.timeLeft = this.work;
+              if (this.onRoundChange) this.onRoundChange(this);
+            }
+
+            if (this.currentRound > this.rounds) {
+              this.stop();
+              if (this.onFinish) this.onFinish();
+            }
+          }
+        }, 1000);
+      }
+
+      stop() {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+
+      reset() {
+        this.stop();
+        this.currentRound = 1;
+        this.phase = "work";
+        this.timeLeft = this.work;
+      }
+    }
+
+    // HIIT TIMER UI HOOK
+    document.getElementById("hiitStart").addEventListener("click", () => {
+      const work = parseInt(document.getElementById("hiitWork").value);
+      const rest = parseInt(document.getElementById("hiitRest").value);
+      const rounds = parseInt(document.getElementById("hiitRounds").value);
+
+      const displayRound = document.getElementById("hiitRound");
+      const displayTotal = document.getElementById("hiitRoundTotal");
+      const displayPhase = document.getElementById("hiitPhase");
+      const displayTime = document.getElementById("hiitTime");
+
+      displayTotal.textContent = rounds;
+
+      const hiit = new HIITTimer({
+        work,
+        rest,
+        rounds,
+
+        onTick: (timer) => {
+          displayRound.textContent = timer.currentRound;
+          displayPhase.textContent = timer.phase === "work" ? "Travail" : "Repos";
+          displayTime.textContent = timer.timeLeft;
+
+          // Soft beep near transition
+          if ([3,2,1].includes(timer.timeLeft)) {
+            new Audio("beep.mp3").play();
+          }
+        },
+
+        onRoundChange: () => {
+          new Audio("ding.mp3").play();
+        },
+
+        onFinish: () => {
+          alert("HIIT terminé !");
+        }
+      });
+
+      hiit.start();
+    });
+  </script>
 
 </body>
 </html>
