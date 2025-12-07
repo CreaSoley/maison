@@ -193,17 +193,20 @@ async function chargerRandori(){
   const data = await r.json();
   const saisies = data.techniques.filter(t=>t.type_attaque==='saisie');
   const frappes = data.techniques.filter(t=>t.type_attaque==='frappe');
-  const armesC = data.techniques.filter(t=>t.type_attaque==='arme-couteau');
-  const armesM = data.techniques.filter(t=>t.type_attaque==='arme-matraque');
+  const etranglement = data.techniques.filter(t=>t.type_attaque==='étranglement');
+  const armesC = data.techniques.filter(t=>t.type_attaque==='arme – couteau');
+  const armesM = data.techniques.filter(t=>t.type_attaque==='arme – matraque');
 
   const tir_s = saisies.sort(()=>0.5-Math.random()).slice(0,3);
   const tir_f = frappes.sort(()=>0.5-Math.random()).slice(0,2);
+  const tir_t = etranglement.sort(()=>0.5-Math.random()).slice(0,1);
   const tir_c = armesC.sort(()=>0.5-Math.random()).slice(0,1);
   const tir_m = armesM.sort(()=>0.5-Math.random()).slice(0,1);
 
   const bloc = document.getElementById('randori');
   bloc.innerHTML = '<h3 class="spicy">Sélection du jour</h3>' +
     '<h4 class="spicy">Saisies</h4>' + tir_s.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+    '<h4 class="spicy">Etranglement</h4>' + tir_t.map(t=>`<div>• ${t.attaque}</div>`).join('') +
     '<h4 class="spicy">Couteau</h4>' + tir_c.map(t=>`<div>• ${t.attaque}</div>`).join('') +
     '<h4 class="spicy">Matraque</h4>' + tir_m.map(t=>`<div>• ${t.attaque}</div>`).join('') +
     '<h4 class="spicy">Frappes</h4>' + tir_f.map(t=>`<div>• ${t.attaque}</div>`).join('');
