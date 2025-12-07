@@ -114,7 +114,7 @@
     },
     {
       "attaque": "Saisie de revers + mawashi tsuki",
-      "type_attaque": "saisie + frappe",
+      "type_attaque": "saisie",
       "atemi_preparatoire": "Tapotement biceps. Effet : ralentit frappe.",
       "objectif": "Protéger, bloquer, neutraliser.",
       "deroule": [
