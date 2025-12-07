@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tai-Jitsu – Entraînement</title>
+
+  <!-- Police Spicy -->
+  <style>
+    @font-face {
+      font-family: "Spicy";
+      src: url("Spicy Sale.ttf");
+    }
+    .spicy { font-family: "Spicy", cursive; }
+
+    body { margin:0; background:#fafafa; font-family:Arial, sans-serif; }
+
+    /* HEADER */
+    header {
+      background:black;
+      color:white;
+      padding:20px;
+      display:flex;
+      align-items:center;
+      gap:20px;
+    }
+    header img { height:80px; }
+    header h1 { font-size:2.5rem; margin:0; }
+
+    /* ENCARTS */
+    .grid-container{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      padding:20px;
+      gap:20px;
+    }
+    .card{
+      background:white;
+      border-radius:18px;
+      box-shadow:0 3px 8px rgba(0,0,0,0.1);
+      padding:20px;
+    }
+    .card-title{
+      display:flex;
+      align-items:center;
+      font-size:1.8rem;
+      margin-bottom:12px;
+    }
+    .card-title img{
+      width:40px;
+      margin-right:10px;
+    }
+
+    /* BIBLIOTHÈQUE */
+    .library{
+      display:flex;
+      gap:20px;
+      justify-content:center;
+      padding-top:10px;
+    }
+    .book{
+      width:120px;
+      height:160px;
+      background:#c58a4b;
+      border-radius:6px;
+      cursor:pointer;
+      box-shadow:0 4px 6px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="logo" />
+  <h1 class="spicy">Tai-Jitsu</h1>
+</header>
+
+<div class="grid-container">
+
+  <!-- UV1 Kihon -->
+  <div class="card" id="uv1">
+    <div class="card-title spicy"><img src="ceinture.png"/>UV1 – Kihon</div>
+    <div id="kihon-techniques"></div>
+    <hr>
+    <button onclick="nouveauxEnchainements()">Nouveaux enchaînements</button>
+    <div id="enchainements"></div>
+    <hr>
+    <div id="kihon-combat"></div>
+  </div>
+
+  <!-- UV2 -->
+  <div class="card" id="uv2">
+    <div class="card-title spicy"><img src="ceinture.png"/>UV2 – Ippon Kumite</div>
+    <iframe src="https://tecladocode.github.io/hiit-timer" width="100%" height="400" style="border:none;"></iframe>
+  </div>
+
+  <!-- UV3 -->
+  <div class="card">
+    <div class="card-title spicy"><img src="ceinture.png"/>UV3 – Kata</div>
+    <ul>
+      <li>kata choisi</li>
+      <li>bunkaï 1 : oi tsuki – gyaku tsuki</li>
+      <li>bunkaï 2 : saisie des deux poignets</li>
+    </ul>
+  </div>
+
+  <!-- UV4 -->
+  <div class="card">
+    <div class="card-title spicy"><img src="ceinture.png"/>UV4 – Technique de base</div>
+    <ul>
+      <li>Application par atemi</li>
+      <li>Application par clé</li>
+      <li>Application par projection</li>
+    </ul>
+  </div>
+
+  <!-- UV5–6 -->
+  <div class="card" id="uv5">
+    <div class="card-title spicy"><img src="ceinture.png"/>UV5–6 – Randori</div>
+    <div id="randori"></div>
+  </div>
+
+  <!-- Ressources -->
+  <div class="card">
+    <div class="card-title spicy"><img src="ceinture.png"/>Ressources</div>
+    <div class="library">
+      <div class="book" onclick="window.open('livre1.pdf')"></div>
+      <div class="book" onclick="window.open('livre2.pdf')"></div>
+      <div class="book" onclick="window.open('livre3.pdf')"></div>
+      <div class="book" onclick="window.open('livre4.pdf')"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Chargement JSON + tirages aléatoires (à compléter)
+</script>
+
+</body>
+</html>
