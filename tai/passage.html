@@ -134,7 +134,85 @@
 </div>
 
 <script>
-// Chargement JSON + tirages aléatoires (à compléter)
+// --- JS UV1 Kihon ---
+async function chargerKihon(){
+  const r = await fetch('tjkihon.json');
+  const data = await r.json();
+  const tirage = data.sort(()=>0.5-Math.random()).slice(0,3);
+  document.getElementById('kihon-techniques').innerHTML = '<h3 class="spicy">Techniques du jour</h3>' +
+    tirage.map(t=>`<div>• ${t.nom}</div>`).join('');
+}
+
+const ENCHAINEMENTS = [
+  "Oi-zuki jodan → Gyaku-zuki chudan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Mae-geri chudan → Gyaku-zuki chudan<br>• Zenkutsu-dachi → Mae-geri → Gyaku-zuki",
+  "Uchi-uke → Gyaku-zuki chudan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Soto-uke → Mae-geri → Gyaku-zuki<br>• Zenkutsu-dachi → Mae-geri → Gyaku-zuki",
+  "Age-uke → Gyaku-zuki jodan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Oi-zuki chudan → Ushiro-geri<br>• Avancée Zenkutsu → Kokutsu/Heiko → Ushiro-geri",
+  "Gedan-barai → Oi-zuki chudan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Teisho-uchi jodan → Mae-geri chudan<br>• Zenkutsu → Mae-geri → Zenkutsu",
+  "Shuto-uke → Shuto-uchi<br>• Kokutsu → Zenkutsu/Shiko",
+  "Haito-uke → Gyaku-zuki chudan<br>• Zenkutsu → Zenkutsu",
+  "Fumikomi → Gyaku-zuki<br>• Zenkutsu → Fumikomi → Gyaku-zuki",
+  "Soto-uke → Mawashi-geri chudan<br>• Zenkutsu → Mawashi → Zenkutsu",
+  "Uraken → Gyaku-zuki<br>• Zenkutsu → Zenkutsu",
+  "Oi-zuki → Kote-uchi<br>• Zenkutsu → Heiko/Sanchin",
+  "Shuto-uke → Hiza-geri<br>• Kokutsu → Heiko → Hiza-geri",
+  "Mae-geri → Empi<br>• Zenkutsu → Mae-geri → Sanchin/Heiko → Empi",
+  "Soto-uke → Teisho<br>• Zenkutsu → Zenkutsu",
+  "Gedan-barai → Mawashi jambe avant<br>• Zenkutsu → Mawashi → Zenkutsu",
+  "Uraken → Mae-geri → Gyaku-zuki<br>• Zenkutsu → Mae-geri → Gyaku-zuki",
+  "Shuto-uke → Shuto-uchi → Teisho<br>• Kokutsu → Zenkutsu/Shiko → Teisho"
+];
+
+function nouveauxEnchainements(){
+  const e = [...ENCHAINEMENTS].sort(()=>0.5-Math.random()).slice(0,2);
+  document.getElementById('enchainements').innerHTML = '<h3 class="spicy">Enchaînements</h3>' +
+    e.map(x=>`<p>${x}</p>`).join('');
+}
+
+function kihonCombat(){
+  const LISTE = [
+    "Mae Geri arrière chudan",
+    "Mawashi arrière jodan/chudan",
+    "Mae Geri avant sursaut chudan",
+    "Mawashi avant sursaut jodan/chudan",
+    "Gyaku Zuki chudan",
+    "Kizami Zuki + Gyaku Zuki",
+    "Oï Zuki jodan retour arrière"
+  ];
+  const t = [...LISTE].sort(()=>0.5-Math.random()).slice(0,3);
+  document.getElementById('kihon-combat').innerHTML = '<h3 class="spicy">Techniques combat</h3>' +
+    t.map(x=>`<div>• ${x}</div>`).join('');
+}
+
+// --- JS UV5–6 randori ---
+async function chargerRandori(){
+  const r = await fetch('randori.json');
+  const data = await r.json();
+  const saisies = data.techniques.filter(t=>t.type_attaque==='saisie');
+  const frappes = data.techniques.filter(t=>t.type_attaque==='frappe');
+  const armesC = data.techniques.filter(t=>t.type_attaque==='arme-couteau');
+  const armesM = data.techniques.filter(t=>t.type_attaque==='arme-matraque');
+
+  const tir_s = saisies.sort(()=>0.5-Math.random()).slice(0,3);
+  const tir_f = frappes.sort(()=>0.5-Math.random()).slice(0,2);
+  const tir_c = armesC.sort(()=>0.5-Math.random()).slice(0,1);
+  const tir_m = armesM.sort(()=>0.5-Math.random()).slice(0,1);
+
+  const bloc = document.getElementById('randori');
+  bloc.innerHTML = '<h3 class="spicy">Sélection du jour</h3>' +
+    '<h4 class="spicy">Saisies</h4>' + tir_s.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+    '<h4 class="spicy">Couteau</h4>' + tir_c.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+    '<h4 class="spicy">Matraque</h4>' + tir_m.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+    '<h4 class="spicy">Frappes</h4>' + tir_f.map(t=>`<div>• ${t.attaque}</div>`).join('');
+}
+
+// Lancement
+chargerKihon();
+kihonCombat();
+chargerRandori();
 </script>
 
 </body>
