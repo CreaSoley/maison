@@ -1,27 +1,20 @@
-/* ------------------------- */
-/* POLICES */
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf");
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #222;
 }
 
 .spicy {
   font-family: "Spicy", cursive;
 }
 
-/* Standard */
-body, button, input, select, p, div, li {
-  font-family: Arial, sans-serif;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background: #fafafa;
-}
-
-/* ------------------------- */
-/* HEADER */
+/* --- HEADER --- */
 .appbar {
   background: black;
   color: white;
@@ -33,7 +26,7 @@ body {
 }
 
 .logo-big {
-  width: 110px;
+  max-width: 150px;
   margin-bottom: 15px;
 }
 
@@ -44,117 +37,76 @@ body {
 
 .header-text .subtitle {
   font-size: 1.7rem;
-  margin-top: 18px;
-  letter-spacing: 2px;
+  margin-top: 10px;
+  letter-spacing: 1.5px;
 }
 
-/* ------------------------- */
-/* BOUTONS */
-.btn, .fiche-btn {
+/* --- MAIN LAYOUT --- */
+.kata-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 25px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.kata-block {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.wide-block {
+  flex-basis: 100%;
+}
+
+/* --- BUTTONS --- */
+.btn {
   padding: 10px 18px;
   border-radius: 10px;
   cursor: pointer;
   border: none;
   font-size: 1rem;
+  margin-right: 10px;
 }
 
-.fiche-btn {
-  font-family: "Spicy", cursive;
-  font-size: 1.2rem;
-  padding: 12px 20px;
-  background: #ffd7f6;
-  border-radius: 20px;
-  border: 2px solid #ff9bdd;
-  cursor: pointer;
-  transition: 0.2s;
+.btn.primary {
+  background: #ff80d4;
+  color: white;
 }
 
-.fiche-btn:hover {
-  background: #ffb9ee;
-}
-
-/* ------------------------- */
-/* CARDS */
-.card-block {
+.btn.ghost {
   background: white;
-  padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  margin-bottom: 25px;
+  border: 2px solid #ff80d4;
+  color: #ff80d4;
 }
 
-.section-title {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-}
-
-/* ------------------------- */
-/* LAYOUT */
-.layout-desktop {
-  display: flex;
-  gap: 25px;
-  padding: 25px;
-}
-
-.layout-desktop > section {
-  flex: 1;
-}
-
-@media(max-width:800px){
-  .layout-desktop { flex-direction: column; }
-}
-
-/* ------------------------- */
-/* CARDS RESULTATS */
+/* --- RESULT CARD --- */
 .result-card {
-  background: #fff3fb;
-  border-radius: 14px;
-  padding: 15px;
-  border: 2px solid #ffb4e6;
-  margin-top: 18px;
+  background: #fff0f8;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  margin-top: 15px;
 }
 
 .tech-title {
-  font-family: "Spicy", cursive;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
   text-align: center;
-  margin-bottom: 10px;
 }
 
 .tech-side {
-  font-family: "Spicy", cursive;
-  font-size: 1.3rem;
-  text-align: center;
-  margin-bottom: 18px;
-}
-
-.result-card p {
+  font-style: italic;
+  color: #ff5fc1;
   margin-bottom: 10px;
+  text-align: center;
 }
 
-/* Video dans cards */
-.video-frame {
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 12px;
-  margin-top: 12px;
-}
-/* ----------- FICHE à IMPRIMER ----------- */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  body {
-    background: white;
-  }
-  .print-block {
-    page-break-after: always;
-  }
-  .qr-code {
-    width: 120px;
-    margin-top: 15px;
-  }
-  /* --- Mise en page Randori desktop --- */
+/* --- RANDORI DESKTOP SPLIT LAYOUT --- */
 @media (min-width: 900px) {
   .randori-card {
     display: flex;
@@ -178,5 +130,9 @@ body {
   }
 }
 
+/* --- PRINT --- */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }
-
