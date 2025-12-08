@@ -1,77 +1,72 @@
-/* ------------------------- */
-/* POLICES */
-@font-face {
-  font-family: "Spicy";
-  src: url("Spicy Sale.ttf");
-}
-
-.spicy {
-  font-family: "Spicy", cursive;
-}
-
-body, button, input, select, p, div, li {
-  font-family: Arial, sans-serif;
-}
+/* ------------------------------ */
+/* GLOBAL */
+/* ------------------------------ */
 
 body {
   margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
   background: #fafafa;
   color: #222;
 }
 
-/* ------------------------- */
-/* HEADER */
+.spicy {
+  font-weight: 700;
+}
+
 .appbar {
-  background: black;
-  color: white;
-  padding: 25px 10px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
+  gap: 10px;
+  background: #111;
+  color: #fff;
+  padding: 10px 20px;
 }
 
 .logo-big {
-  width: 110px;
-  margin-bottom: 15px;
+  height: 60px;
 }
 
 .header-text .title {
-  font-size: 2.5rem;
-  letter-spacing: 2px;
+  font-size: 1.4rem;
 }
 
 .header-text .subtitle {
-  font-size: 1.7rem;
-  margin-top: 18px;
-  letter-spacing: 2px;
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
-/* ------------------------- */
-/* CONTAINER */
-.kata-container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 25px;
-}
+/* ------------------------------ */
+/* LAYOUT GLOBAL DES 2 ENCARTS */
+/* ------------------------------ */
 
-.kata-block {
-  background: white;
+.double-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  margin-bottom: 25px;
 }
 
-/* TITRES */
-.section-title {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+.block {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
 }
 
-/* ------------------------- */
+/* Desktop → 2 colonnes */
+@media (min-width: 900px) {
+  .double-container {
+    flex-direction: row;
+  }
+  .block {
+    flex: 1;
+  }
+}
+
+/* ------------------------------ */
 /* SELECTEURS */
+/* ------------------------------ */
+
 .selector-bar {
   display: flex;
   flex-wrap: wrap;
@@ -79,170 +74,69 @@ body {
   margin-bottom: 15px;
 }
 
-input[type="text"],
-select {
-  padding: 8px 12px;
-  border-radius: 8px;
+.selector-bar select,
+.selector-bar input {
+  padding: 10px;
+  flex: 1;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 1rem;
-  background: white;
 }
 
-/* ------------------------- */
+/* ------------------------------ */
+/* CARDS */
+/* ------------------------------ */
+
+.card-preview {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 15px;
+  min-height: 120px;
+  border: 1px solid #ddd;
+}
+
+/* ------------------------------ */
 /* BOUTONS */
-.btn, .fiche-btn {
-  padding: 10px 18px;
-  border-radius: 10px;
-  cursor: pointer;
+/* ------------------------------ */
+
+.btn {
+  padding: 10px 14px;
   border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
   font-size: 1rem;
 }
 
 .btn.primary {
-  background: #ff80d4;
-  color: white;
+  background: #0077ff;
+  color: #fff;
 }
 
-.fiche-btn {
-  font-family: "Spicy", cursive;
-  font-size: 1.2rem;
-  padding: 12px 20px;
-  background: #ffd7f6;
-  border-radius: 20px;
-  border: 2px solid #ff9bdd;
-  cursor: pointer;
-  transition: 0.2s;
-  margin-top: 20px;
-}
+/* ------------------------------ */
+/* IMPRESSION : uniquement ENCARt 1 */
+/* ------------------------------ */
 
-.fiche-btn:hover {
-  background: #ffb9ee;
-}
-
-/* ------------------------- */
-/* FICHE TECHNIQUE : LAYOUT DESKTOP */
-.tech-wrapper {
-  display: flex;
-  flex-direction: row;
-  gap: 25px;
-  margin-top: 20px;
-}
-
-/* PHOTO À GAUCHE */
-.tech-photo-box {
-  flex: 0 0 35%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.tech-photo {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  object-fit: contain;
-  max-height: 500px;
-}
-
-/* INFO À DROITE */
-.tech-info-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.tech-title {
-  font-family: "Spicy", cursive;
-  font-size: 1.8rem;
-  margin-bottom: 5px;
-  text-align: center;
-}
-
-.tech-side {
-  font-family: "Spicy", cursive;
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.tech-info-box p {
-  margin-bottom: 10px;
-}
-
-.deroule-list {
-  padding-left: 20px;
-}
-
-/* VIDEO RESPONSIVE */
-.video-frame {
-  width: 100%;
-  aspect-ratio: 16/9;
-  margin-top: 15px;
-  border-radius: 12px;
-}
-
-/* ------------------------- */
-/* LAYOUT MOBILE (inchangé) */
-@media(max-width: 800px) {
-  .tech-wrapper {
-    flex-direction: column;
-  }
-
-  .tech-photo-box {
-    width: 100%;
-  }
-
-  .tech-photo {
-    width: 100%;
-    max-height: none; /* Laisse la photo normale sur mobile */
-  }
-
-  .header-text .title {
-    font-size: 2.2rem;
-  }
-
-  .header-text .subtitle {
-    font-size: 1.4rem;
-  }
-
-  .logo-big {
-    width: 120px;
-  }
-}
-
-/* ------------------------- */
-/* IMPRESSION */
 @media print {
-  body {
-    background: white;
+
+  /* Masquer tout sauf la fiche des clés */
+  body * {
+    visibility: hidden;
   }
 
-  .appbar,
-  .selector-bar,
-  #randomResult,
-  select,
-  input,
-  .btn,
-  .primary {
-    display: none !important;
+  #clesResult, #clesResult * {
+    visibility: visible;
   }
 
-  .kata-block {
-    box-shadow: none !important;
-    border: none !important;
+  #clesResult {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 
-  .tech-photo {
-    max-width: 7cm !important;
-    max-height: 7cm !important;
-    object-fit: contain !important;
-  }
-
-  iframe.video-frame {
-    display: none !important;
-  }
-
-  .fiche-btn {
-    display: none !important;
+  /* Ajuster image */
+  #clesResult img {
+    max-height: 7cm;
+    width: auto;
   }
 }
