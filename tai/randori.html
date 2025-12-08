@@ -1,170 +1,15 @@
 <!doctype html>
 <html lang="fr">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Préparation Techniques – Tai-Jitsu</title>
-
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  <style>
-    @font-face {
-      font-family: "Spicy";
-      src: url("Spicy Sale.ttf");
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #222;
-    }
-
-    .spicy {
-      font-family: "Spicy", cursive;
-    }
-
-    /* HEADER */
-    .appbar {
-      background: black;
-      color: white;
-      padding: 25px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .logo-big {
-      max-width: 150px;
-      margin-bottom: 15px;
-    }
-
-    .header-text .title {
-      font-size: 2.5rem;
-      letter-spacing: 2px;
-    }
-
-    .header-text .subtitle {
-      font-size: 1.7rem;
-      margin-top: 10px;
-      letter-spacing: 1.5px;
-    }
-
-    /* CONTAINER */
-    .kata-container {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      padding: 25px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .kata-block {
-      background: white;
-      padding: 20px;
-      border-radius: 18px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .wide-block {
-      flex-basis: 100%;
-    }
-
-    .video-frame {
-      width: 100%;
-      aspect-ratio: 16/9;
-      border-radius: 12px;
-      margin-top: 12px;
-    }
-
-    .btn {
-      padding: 10px 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      border: none;
-      font-size: 1rem;
-      margin-right: 10px;
-    }
-
-    .btn.primary {
-      background: #ff80d4;
-      color: white;
-    }
-
-    .btn.ghost {
-      background: white;
-      border: 2px solid #ff80d4;
-      color: #ff80d4;
-    }
-
-    /* CARD TECHNIQUE */
-    .result-card {
-      background: #fff0f8;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-      margin-top: 15px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .result-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
-    }
-
-    .tech-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .tech-side {
-      font-style: italic;
-      color: #ff5fc1;
-      margin-bottom: 10px;
-    }
-
-    .deroule-list {
-      padding-left: 20px;
-    }
-
-    /* FORM CONTROLS */
-    select,
-    input[type="text"] {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 12px;
-      width: 100%;
-      max-width: 300px;
-      font-size: 1rem;
-    }
-
-    /* MOBILE */
-    @media (max-width: 800px) {
-      .logo-big {
-        max-width: 120px;
-      }
-
-      .header-text .title {
-        font-size: 2.2rem;
-      }
-
-      .header-text .subtitle {
-        font-size: 1.4rem;
-      }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <header class="appbar">
-    <a class="logo" href="../index.html" title="Accueil">
-      <img src="logo.png" alt="logo" class="logo-big">
-    </a>
+    <img src="logo.png" alt="logo" class="logo-big" />
     <div class="header-text">
       <div class="title spicy">Préparation Techniques</div>
       <div class="subtitle spicy">Tai-Jitsu – Randori</div>
@@ -173,179 +18,25 @@
 
   <main class="kata-container">
     <section class="kata-block wide-block">
-  <h2 class="spicy section-title">💠 Entraînement Randori – Clés articulaires</h2>
+      <h2 class="spicy section-title">💠 Entraînement Randori – Clés articulaires</h2>
 
-  <select id="selectCle">
-    <option value="">Choisir une clé</option>
-  </select>
+      <select id="selectCle">
+        <option value="">Choisir une clé</option>
+      </select>
 
-  <div id="exerciceCard"></div>
-</section>
-
-    <!-- SELECTEUR TECHNIQUE -->
-    <section class="kata-block wide-block">
-      <h2 class="spicy section-title">🎯 Sélectionner une technique</h2>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;">
-        <select id="filterType">
-          <option value="">Filtrer par type</option>
-        </select>
-        <input type="text" id="searchBox" placeholder="Recherche rapide...">
-        <select id="selectTech">
-          <option value="">Choisir une technique</option>
-        </select>
-        <button id="btnRandom" class="btn primary kawaii">🎲 Aléatoire</button>
-      </div>
-      <div id="randomResult" style="margin-top:10px;font-size:1.2rem;">Technique sélectionnée : -</div>
-      <div id="techCard"></div>
+      <div id="exerciceCard"></div>
     </section>
-
   </main>
 
-  <script>
-    // --- CONTENU DE IPPON.JS ---
-    let techniquesData = [];
-    const DEFAULT_EMBED = "https://www.youtube.com/embed/Yfe5aQdez9Q";
-
-    async function fetchData() {
-      try {
-        const resp = await fetch("randori.json");
-        const json = await resp.json();
-        techniquesData = json.techniques || [];
-        populateTypeFilter();
-        populateTechSelector();
-      } catch (e) {
-        console.error("Erreur chargement JSON", e);
-        document.getElementById("techCard").innerHTML = "<p>Impossible de charger les techniques.</p>";
-      }
-    }
-
-    function populateTypeFilter() {
-      const set = new Set();
-      techniquesData.forEach(t => { if (t.type_attaque) set.add(t.type_attaque); });
-      const sel = document.getElementById("filterType");
-      set.forEach(v => {
-        const o = document.createElement("option");
-        o.value = v;
-        o.textContent = v;
-        sel.appendChild(o);
-      });
-    }
-
-    function populateTechSelector(filterType = "", query = "") {
-      const sel = document.getElementById("selectTech");
-      sel.innerHTML = '<option value="">Choisir une technique</option>';
-      techniquesData.forEach(t => {
-        if (filterType && t.type_attaque !== filterType) return;
-        if (query) {
-          const q = query.toLowerCase();
-          const haystack = (t.attaque + " " + (t.objectif||"") + " " + (t.points_cles||"") + " " + (t.erreurs||"")).toLowerCase();
-          if (!haystack.includes(q)) return;
-        }
-        const o = document.createElement("option");
-        o.value = t.attaque;
-        o.textContent = t.attaque;
-        sel.appendChild(o);
-      });
-    }
-
-    function findTechniqueByName(name) { return techniquesData.find(t => t.attaque === name); }
-    function toEmbedUrl(url) {
-      if (!url) return DEFAULT_EMBED;
-      if (url.includes("youtube.com/embed")) return url;
-      const by = url.match(/youtu\.be\/([A-Za-z0-9_-]{5,})/);
-      if (by) return `https://www.youtube.com/embed/${by[1]}`;
-      const q = url.match(/[?&]v=([A-Za-z0-9_-]{5,})/);
-      if (q) return `https://www.youtube.com/embed/${q[1]}`;
-      return DEFAULT_EMBED;
-    }
-
-    function escapeHtml(s) {
-      if (!s) return "";
-      return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    }
-
-    function renderTechniqueCard(t) {
-      const container = document.getElementById("techCard");
-      if (!t) { container.innerHTML = ""; return; }
-      const derouleHtml = (Array.isArray(t.deroule) && t.deroule.length)
-        ? `<ul class="deroule-list">${t.deroule.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-        : `<em>Aucun déroulé détaillé</em>`;
-      const videoHtml = `<iframe class="video-frame" src="${toEmbedUrl(t.video_embed || '')}" title="Vidéo démonstration" allowfullscreen></iframe>`;
-      container.innerHTML = `
-        <div class="result-card floating-card" role="region" aria-label="Fiche technique">
-          <div class="tech-title">${escapeHtml(t.attaque)}</div>
-          <div class="tech-side">${escapeHtml(t.type_attaque||'')}</div>
-          <p><strong>Atemi préparatoire :</strong> ${escapeHtml(t.atemi_preparatoire||'')}</p>
-          <p><strong>Objectif :</strong> ${escapeHtml(t.objectif||'')}</p>
-          <p><strong>Déroulé :</strong> ${derouleHtml}</p>
-          <p><strong>Points clés :</strong> ${escapeHtml(t.points_cles||'')}</p>
-          <p><strong>Erreurs fréquentes :</strong> ${escapeHtml(t.erreurs||'')}</p>
-          ${videoHtml}
-        </div>
-      `;
-    }
-
-    function randomTechnique() {
-      if (!techniquesData.length) return null;
-      const idx = Math.floor(Math.random() * techniquesData.length);
-      return techniquesData[idx];
-    }
-
-    function showRandomPreview(t) {
-      const el = document.getElementById("randomResult");
-      if (!t) { el.innerHTML = "Technique sélectionnée : -"; return; }
-      el.textContent = `Technique sélectionnée : ${t.attaque}`;
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      await fetchData();
-
-      const selTech = document.getElementById("selectTech");
-      const filterType = document.getElementById("filterType");
-      const searchBox = document.getElementById("searchBox");
-      const btnRandom = document.getElementById("btnRandom");
-
-      selTech.addEventListener("change", (e) => {
-        const t = findTechniqueByName(e.target.value);
-        renderTechniqueCard(t);
-      });
-
-      filterType.addEventListener("change", (e) => {
-        populateTechSelector(e.target.value, searchBox.value.trim());
-        renderTechniqueCard(null);
-      });
-
-      searchBox.addEventListener("input", (e) => {
-        populateTechSelector(filterType.value, e.target.value.trim());
-        renderTechniqueCard(null);
-      });
-
-      btnRandom.addEventListener("click", () => {
-        const t = randomTechnique();
-        if (t) {
-          showRandomPreview(t);
-          selTech.value = t.attaque;
-          renderTechniqueCard(t);
-        }
-      });
-
-      const initial = randomTechnique();
-      if (initial) showRandomPreview(initial);
-    });
-    /* --------------------------- */
-/*  RANDORI – Clés articulaires */
-/* --------------------------- */
-
+<script>
 let exercicesData = [];
 
-// Téléchargement du JSON
 async function loadRandori() {
-  const resp = await fetch("randori_exercices.json"); // nom à adapter
+  const resp = await fetch("randori_exercices.json");
   exercicesData = await resp.json();
   populateCleSelector();
 }
 
-// Remplit le select des clés
 function populateCleSelector() {
   const sel = document.getElementById("selectCle");
   const set = new Set(exercicesData.map(e => e.video));
@@ -357,65 +48,66 @@ function populateCleSelector() {
   });
 }
 
-// Trouve tous les exercices d’une clé donnée
 function getExercicesByCle(cle) {
   return exercicesData.filter(e => e.video === cle);
 }
 
-// GÉNÈRE UNE CARD HTML
 function renderExerciceCard(ex) {
   const container = document.getElementById("exerciceCard");
   if (!ex) return container.innerHTML = "";
 
   container.innerHTML = `
-    <div class="result-card" style="margin-top:20px;">
-      <div class="tech-title">Exercice ${ex.exercice}</div>
-      <div class="tech-side">${ex.video}</div>
+    <div class="result-card randori-card">
+      <div class="randori-photo">
+        <img src="${ex.photo}" alt="Photo exercice">
+      </div>
 
-      <img src="${ex.photo}" style="width:100%;border-radius:12px;margin-bottom:12px;">
+      <div class="randori-info">
+        <div class="tech-title">Exercice ${ex.exercice}</div>
+        <div class="tech-side">${ex.video}</div>
 
-      <p><strong>Titre :</strong> ${ex.titre}</p>
-      <p><strong>Objectif :</strong> ${ex.objectif}</p>
-      <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
-
-      <button class="btn primary no-print" onclick="window.open('${ex.video_exercice}', '_blank')">
-        🎥 Vidéo
-      </button>
-
-      <button class="btn ghost no-print" onclick='printFiche(${JSON.stringify(ex)})'>
-        🖨️ Imprimer
-      </button>
-    </div>
-  `;
-}
-
-// Génère le QR code + imprime une fiche dédiée
-function printFiche(ex) {
-  const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(ex.video_exercice);
-
-  const w = window.open("", "_blank");
-  w.document.write(`
-    <html>
-      <head>
-        <title>Fiche Exercice ${ex.exercice}</title>
-        <style>
-          body { font-family: Arial; padding: 20px; }
-          h1 { font-size: 28px; }
-          img.main { width: 100%; border-radius: 12px; margin-bottom: 20px; }
-          .qr { width: 150px; }
-        </style>
-      </head>
-      <body class="print-block">
-        <h1>Exercice ${ex.exercice} – ${ex.video}</h1>
-        <img class="main" src="${ex.photo}">
         <p><strong>Titre :</strong> ${ex.titre}</p>
         <p><strong>Objectif :</strong> ${ex.objectif}</p>
         <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
-        <h3>📱 Vidéo associée</h3>
-        <img class="qr" src="${qrUrl}">
-      </body>
+
+        <button class="btn primary no-print" onclick="window.open('${ex.video_exercice}', '_blank')">🎥 Vidéo</button>
+        <button class="btn ghost no-print" id="printBtn">🖨️ Imprimer</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("printBtn").addEventListener("click", () => printFiche(ex));
+}
+
+function printFiche(ex) {
+  const qrUrl =
+    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+    encodeURIComponent(ex.video_exercice);
+
+  const w = window.open("", "_blank");
+
+  w.document.write(`
+    <html>
+    <head>
+      <title>Exercice ${ex.exercice}</title>
+      <style>
+        body { font-family: Arial; padding: 20px; }
+        img.main { width: 100%; border-radius: 12px; margin-bottom: 20px; }
+        img.qr { width: 150px; margin-top: 20px; }
+      </style>
+    </head>
+    <body>
+      <h1>Exercice ${ex.exercice} – ${ex.video}</h1>
+      <img class="main" src="${ex.photo}">
+      <p><strong>Titre :</strong> ${ex.titre}</p>
+      <p><strong>Objectif :</strong> ${ex.objectif}</p>
+      <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
+      <h3>Vidéo associée</h3>
+      <img class="qr" src="${qrUrl}">
+    </body>
     </html>
   `);
+
   w.document.close();
   w.print();
 }
@@ -425,11 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("selectCle").addEventListener("change", (e) => {
     const exs = getExercicesByCle(e.target.value);
-    renderExerciceCard(exs[0]); // On affiche le premier exercice de cette clé
+    renderExerciceCard(exs[0]);
   });
 });
-
-  </script>
-
+</script>
 </body>
 </html>
