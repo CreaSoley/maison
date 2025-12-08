@@ -154,5 +154,29 @@ body {
     width: 120px;
     margin-top: 15px;
   }
+  /* --- Mise en page Randori desktop --- */
+@media (min-width: 900px) {
+  .randori-card {
+    display: flex;
+    gap: 20px;
+  }
+
+  .randori-photo {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .randori-info {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .randori-photo img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+  }
+}
+
 }
 
