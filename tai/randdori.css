@@ -139,3 +139,20 @@ body {
   border-radius: 12px;
   margin-top: 12px;
 }
+/* ----------- FICHE à IMPRIMER ----------- */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+  .print-block {
+    page-break-after: always;
+  }
+  .qr-code {
+    width: 120px;
+    margin-top: 15px;
+  }
+}
+
