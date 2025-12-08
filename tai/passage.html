@@ -92,6 +92,28 @@
   <div class="card" id="uv2">
     <div class="card-title spicy"><img src="ceinture.png"/>UV2 – Ippon Kumite</div>
 
+    <!-- HIIT TIMER SECTION -->
+    <section id="hiit-section" style="padding:20px; margin-top:20px; background:#111; border-radius:12px; color:white;">
+      <h2 style="text-align:center; margin-bottom:20px;">Entraînement HIIT</h2>
+
+      <div class="hiit-config" style="display:flex; gap:20px; justify-content:center; margin-bottom:20px; flex-wrap:wrap;">
+        <label>Travail (sec)<br><input type="number" id="hiitWork" value="20"></label>
+        <label>Repos (sec)<br><input type="number" id="hiitRest" value="10"></label>
+        <label>Rounds<br><input type="number" id="hiitRounds" value="8"></label>
+      </div>
+
+      <div style="text-align:center;">
+        <button id="hiitStart">Démarrer HIIT</button>
+      </div>
+
+      <div id="hiitDisplay" style="text-align:center; margin-top:20px; font-size:1.2em;">
+        Round <span id="hiitRound">0</span>/<span id="hiitRoundTotal">0</span> —
+        Phase : <span id="hiitPhase">-</span> —
+        Temps : <span id="hiitTime">0</span>s
+      </div>
+    </section>
+
+
     
     
   </div>
