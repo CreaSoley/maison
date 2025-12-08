@@ -332,6 +332,103 @@
       const initial = randomTechnique();
       if (initial) showRandomPreview(initial);
     });
+    /* --------------------------- */
+/*  RANDORI – Clés articulaires */
+/* --------------------------- */
+
+let exercicesData = [];
+
+// Téléchargement du JSON
+async function loadRandori() {
+  const resp = await fetch("randori_exercices.json"); // nom à adapter
+  exercicesData = await resp.json();
+  populateCleSelector();
+}
+
+// Remplit le select des clés
+function populateCleSelector() {
+  const sel = document.getElementById("selectCle");
+  const set = new Set(exercicesData.map(e => e.video));
+  set.forEach(cle => {
+    const o = document.createElement("option");
+    o.value = cle;
+    o.textContent = cle;
+    sel.appendChild(o);
+  });
+}
+
+// Trouve tous les exercices d’une clé donnée
+function getExercicesByCle(cle) {
+  return exercicesData.filter(e => e.video === cle);
+}
+
+// GÉNÈRE UNE CARD HTML
+function renderExerciceCard(ex) {
+  const container = document.getElementById("exerciceCard");
+  if (!ex) return container.innerHTML = "";
+
+  container.innerHTML = `
+    <div class="result-card" style="margin-top:20px;">
+      <div class="tech-title">Exercice ${ex.exercice}</div>
+      <div class="tech-side">${ex.video}</div>
+
+      <img src="${ex.photo}" style="width:100%;border-radius:12px;margin-bottom:12px;">
+
+      <p><strong>Titre :</strong> ${ex.titre}</p>
+      <p><strong>Objectif :</strong> ${ex.objectif}</p>
+      <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
+
+      <button class="btn primary no-print" onclick="window.open('${ex.video_exercice}', '_blank')">
+        🎥 Vidéo
+      </button>
+
+      <button class="btn ghost no-print" onclick='printFiche(${JSON.stringify(ex)})'>
+        🖨️ Imprimer
+      </button>
+    </div>
+  `;
+}
+
+// Génère le QR code + imprime une fiche dédiée
+function printFiche(ex) {
+  const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(ex.video_exercice);
+
+  const w = window.open("", "_blank");
+  w.document.write(`
+    <html>
+      <head>
+        <title>Fiche Exercice ${ex.exercice}</title>
+        <style>
+          body { font-family: Arial; padding: 20px; }
+          h1 { font-size: 28px; }
+          img.main { width: 100%; border-radius: 12px; margin-bottom: 20px; }
+          .qr { width: 150px; }
+        </style>
+      </head>
+      <body class="print-block">
+        <h1>Exercice ${ex.exercice} – ${ex.video}</h1>
+        <img class="main" src="${ex.photo}">
+        <p><strong>Titre :</strong> ${ex.titre}</p>
+        <p><strong>Objectif :</strong> ${ex.objectif}</p>
+        <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
+        <h3>📱 Vidéo associée</h3>
+        <img class="qr" src="${qrUrl}">
+      </body>
+    </html>
+  `);
+  w.document.close();
+  w.print();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadRandori();
+
+  document.getElementById("selectCle").addEventListener("change", (e) => {
+    const exs = getExercicesByCle(e.target.value);
+    renderExerciceCard(exs[0]); // On affiche le premier exercice de cette clé
+  });
+});
+
   </script>
 
 </body>
