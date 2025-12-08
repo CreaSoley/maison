@@ -1,42 +1,47 @@
+// -------------------------------------------------------------
+// Chargement des données depuis randori.json
+// -------------------------------------------------------------
 let techniquesData = [];
 const DEFAULT_EMBED = "https://www.youtube.com/embed/Yfe5aQdez9Q";
 
-async function fetchData() {
-  try {
-    const resp = await fetch("randori.json");
-    const json = await resp.json();
-    techniquesData = json.techniques || [];
+fetch("randori.json")
+  .then(res => res.json())
+  .then(data => {
+    techniquesData = data.techniques || [];
     populateTypeFilter();
     populateTechSelector();
-  } catch (e) {
-    console.error("Erreur chargement JSON", e);
-    document.getElementById("techCard").innerHTML = "<p>Impossible de charger les techniques.</p>";
-  }
-}
+  })
+  .catch(err => console.error("Erreur chargement JSON techniques :", err));
 
+
+// -------------------------------------------------------------
+// Populate filtre type
+// -------------------------------------------------------------
 function populateTypeFilter() {
   const set = new Set();
-  techniquesData.forEach(t => {
-    if (t.type_attaque) set.add(t.type_attaque);
-  });
-  const sel = document.getElementById("filterType");
+  techniquesData.forEach(t => { if(t.type_attaque) set.add(t.type_attaque); });
+  const sel = document.getElementById("techFilterType");
   set.forEach(v => {
     const o = document.createElement("option");
     o.value = v;
     o.textContent = v;
     sel.appendChild(o);
   });
+  sel.addEventListener("change", () => populateTechSelector(sel.value, document.getElementById("techSearch").value.trim()));
 }
 
+
+// -------------------------------------------------------------
+// Populate select des techniques
+// -------------------------------------------------------------
 function populateTechSelector(filterType = "", query = "") {
-  const sel = document.getElementById("selectTech");
-  sel.innerHTML = '<option value="">Choisir une attaque</option>';
+  const sel = document.getElementById("techSelect");
+  sel.innerHTML = "<option value=''>Choisir une technique</option>";
   techniquesData.forEach(t => {
-    if (filterType && t.type_attaque !== filterType) return;
-    if (query) {
-      const q = query.toLowerCase();
+    if(filterType && t.type_attaque !== filterType) return;
+    if(query) {
       const haystack = (t.attaque + " " + (t.objectif||"") + " " + (t.points_cles||"") + " " + (t.erreurs||"")).toLowerCase();
-      if (!haystack.includes(q)) return;
+      if(!haystack.includes(query.toLowerCase())) return;
     }
     const o = document.createElement("option");
     o.value = t.attaque;
@@ -45,192 +50,93 @@ function populateTechSelector(filterType = "", query = "") {
   });
 }
 
+
+// -------------------------------------------------------------
+// Trouver une technique par nom
+// -------------------------------------------------------------
 function findTechniqueByName(name) {
   return techniquesData.find(t => t.attaque === name);
 }
 
+
+// -------------------------------------------------------------
+// Convertir lien YouTube pour iframe embed
+// -------------------------------------------------------------
 function toEmbedUrl(url) {
-  if (!url) return DEFAULT_EMBED;
-  if (url.includes("youtube.com/embed")) return url;
+  if(!url) return DEFAULT_EMBED;
+  if(url.includes("youtube.com/embed")) return url;
   const by = url.match(/youtu\.be\/([A-Za-z0-9_-]{5,})/);
-  if (by) return `https://www.youtube.com/embed/${by[1]}`;
+  if(by) return `https://www.youtube.com/embed/${by[1]}`;
   const q = url.match(/[?&]v=([A-Za-z0-9_-]{5,})/);
-  if (q) return `https://www.youtube.com/embed/${q[1]}`;
+  if(q) return `https://www.youtube.com/embed/${q[1]}`;
   return DEFAULT_EMBED;
 }
 
+
+// -------------------------------------------------------------
+// Affichage de la carte technique
+// -------------------------------------------------------------
 function renderTechniqueCard(t) {
-  const container = document.getElementById("techCard");
-  if (!t) { container.innerHTML = ""; return; }
+  const container = document.getElementById("techResult");
+  if(!t) { container.innerHTML = ""; return; }
 
   const derouleHtml = (Array.isArray(t.deroule) && t.deroule.length)
-    ? `<ul class="deroule-list">${t.deroule.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : `<em>Aucun déroulé détaillé</em>`;
+    ? `<ul>${t.deroule.map(s => `<li>${s}</li>`).join("")}</ul>`
+    : "<em>Aucun déroulé détaillé</em>";
 
   const videoHtml = `<iframe class="video-frame" src="${toEmbedUrl(t.video_embed || '')}" title="Vidéo démonstration" allowfullscreen></iframe>`;
 
   container.innerHTML = `
-    <div class="result-card">
-      <div class="tech-title">${escapeHtml(t.attaque)}</div>
-      <div class="tech-side">${escapeHtml(t.type_attaque||'')}</div>
-      <p><strong>Atemi préparatoire :</strong> ${escapeHtml(t.atemi_preparatoire||'')}</p>
-      <p><strong>Objectif :</strong> ${escapeHtml(t.objectif||'')}</p>
+    <div class="result-card" role="region" aria-label="Fiche technique">
+      <h3 class="tech-title">${t.attaque}</h3>
+      <p class="tech-side"><em>${t.type_attaque || ""}</em></p>
+      <p><strong>Atémi préparatoire :</strong> ${t.atemi_preparatoire || ""}</p>
+      <p><strong>Objectif :</strong> ${t.objectif || ""}</p>
       <p><strong>Déroulé :</strong> ${derouleHtml}</p>
-      <p><strong>Points clés :</strong> ${escapeHtml(t.points_cles||'')}</p>
-      <p><strong>Erreurs fréquentes :</strong> ${escapeHtml(t.erreurs||'')}</p>
+      <p><strong>Points clés :</strong> ${t.points_cles || ""}</p>
+      <p><strong>Erreurs fréquentes :</strong> ${t.erreurs || ""}</p>
       ${videoHtml}
     </div>
   `;
 }
 
-function escapeHtml(s) {
-  if (!s) return "";
-  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
 
+// -------------------------------------------------------------
+// Sélection aléatoire
+// -------------------------------------------------------------
 function randomTechnique() {
-  if (!techniquesData.length) return null;
+  if(!techniquesData.length) return null;
   const idx = Math.floor(Math.random() * techniquesData.length);
   return techniquesData[idx];
 }
 
 function showRandomPreview(t) {
-  const el = document.getElementById("randomResult");
-  if (!t) { el.innerHTML = ""; return; }
-  el.textContent = t.attaque;
+  const el = document.getElementById("techSelect");
+  if(t) {
+    el.value = t.attaque;
+    renderTechniqueCard(t);
+  }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await fetchData();
 
-  const selTech = document.getElementById("selectTech");
-  const filterType = document.getElementById("filterType");
-  const searchBox = document.getElementById("searchBox");
-  const btnRandom = document.getElementById("btnRandom");
+// -------------------------------------------------------------
+// Événements DOM
+// -------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const selTech = document.getElementById("techSelect");
+  const filterType = document.getElementById("techFilterType");
+  const searchBox = document.getElementById("techSearch");
+  const btnRandom = document.getElementById("btnRandomTech");
 
-  selTech.addEventListener("change", (e) => {
-    const name = e.target.value;
-    if (!name) { renderTechniqueCard(null); return; }
-    const t = findTechniqueByName(name);
+  selTech.addEventListener("change", e => {
+    const t = findTechniqueByName(e.target.value);
     renderTechniqueCard(t);
   });
 
-  filterType.addEventListener("change", (e) => {
-    populateTechSelector(e.target.value, searchBox.value.trim());
-    renderTechniqueCard(null);
-  });
-
-  searchBox.addEventListener("input", (e) => {
-    const q = e.target.value.trim();
-    populateTechSelector(filterType.value, q);
-    renderTechniqueCard(null);
-  });
+  searchBox.addEventListener("input", e => populateTechSelector(filterType.value, e.target.value.trim()));
 
   btnRandom.addEventListener("click", () => {
     const t = randomTechnique();
-    if (t) {
-      showRandomPreview(t);
-      selTech.value = t.attaque;
-      renderTechniqueCard(t);
-    }
-  });
-
-  const initial = randomTechnique();
-  if (initial) showRandomPreview(initial);
-});
-/* --------------------------- */
-/*  RANDORI – Clés articulaires */
-/* --------------------------- */
-
-let exercicesData = [];
-
-// Téléchargement du JSON
-async function loadRandori() {
-  const resp = await fetch("randori_exercices.json"); // nom à adapter
-  exercicesData = await resp.json();
-  populateCleSelector();
-}
-
-// Remplit le select des clés
-function populateCleSelector() {
-  const sel = document.getElementById("selectCle");
-  const set = new Set(exercicesData.map(e => e.video));
-  set.forEach(cle => {
-    const o = document.createElement("option");
-    o.value = cle;
-    o.textContent = cle;
-    sel.appendChild(o);
-  });
-}
-
-// Trouve tous les exercices d’une clé donnée
-function getExercicesByCle(cle) {
-  return exercicesData.filter(e => e.video === cle);
-}
-
-// GÉNÈRE UNE CARD HTML
-function renderExerciceCard(ex) {
-  const container = document.getElementById("exerciceCard");
-  if (!ex) return container.innerHTML = "";
-
-  container.innerHTML = `
-    <div class="result-card" style="margin-top:20px;">
-      <div class="tech-title">Exercice ${ex.exercice}</div>
-      <div class="tech-side">${ex.video}</div>
-
-      <img src="${ex.photo}" style="width:100%;border-radius:12px;margin-bottom:12px;">
-
-      <p><strong>Titre :</strong> ${ex.titre}</p>
-      <p><strong>Objectif :</strong> ${ex.objectif}</p>
-      <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
-
-      <button class="btn primary no-print" onclick="window.open('${ex.video_exercice}', '_blank')">
-        🎥 Vidéo
-      </button>
-
-      <button class="btn ghost no-print" onclick='printFiche(${JSON.stringify(ex)})'>
-        🖨️ Imprimer
-      </button>
-    </div>
-  `;
-}
-
-// Génère le QR code + imprime une fiche dédiée
-function printFiche(ex) {
-  const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(ex.video_exercice);
-
-  const w = window.open("", "_blank");
-  w.document.write(`
-    <html>
-      <head>
-        <title>Fiche Exercice ${ex.exercice}</title>
-        <style>
-          body { font-family: Arial; padding: 20px; }
-          h1 { font-size: 28px; }
-          img.main { width: 100%; border-radius: 12px; margin-bottom: 20px; }
-          .qr { width: 150px; }
-        </style>
-      </head>
-      <body class="print-block">
-        <h1>Exercice ${ex.exercice} – ${ex.video}</h1>
-        <img class="main" src="${ex.photo}">
-        <p><strong>Titre :</strong> ${ex.titre}</p>
-        <p><strong>Objectif :</strong> ${ex.objectif}</p>
-        <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
-        <h3>📱 Vidéo associée</h3>
-        <img class="qr" src="${qrUrl}">
-      </body>
-    </html>
-  `);
-  w.document.close();
-  w.print();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadRandori();
-
-  document.getElementById("selectCle").addEventListener("change", (e) => {
-    const exs = getExercicesByCle(e.target.value);
-    renderExerciceCard(exs[0]); // On affiche le premier exercice de cette clé
+    if(t) showRandomPreview(t);
   });
 });
