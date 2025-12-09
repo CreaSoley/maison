@@ -218,8 +218,8 @@ async function chargerRandori(){
   const saisies = data.techniques.filter(t=>t.type_attaque==='saisie');
   const frappes = data.techniques.filter(t=>t.type_attaque==='frappe');
   const etranglement = data.techniques.filter(t=>t.type_attaque==='étranglement');
-  const armesC = data.techniques.filter(t=>t.type_attaque==='arme-couteau');
-  const armesM = data.techniques.filter(t=>t.type_attaque==='arme-matraque');
+  const armesC = data.techniques.filter(t=>t.type_attaque==='arme – couteau');
+  const armesM = data.techniques.filter(t=>t.type_attaque==='arme – matraque');
 
   const tir_s = saisies.sort(()=>0.5-Math.random()).slice(0,3);
   const tir_f = frappes.sort(()=>0.5-Math.random()).slice(0,2);
