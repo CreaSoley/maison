@@ -1,205 +1,153 @@
-/* POLICE SPICY */
+/* ------------------------- */
+/* POLICES */
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf");
 }
+.spicy { font-family: "Spicy", cursive; }
 
-.spicy {
-  font-family: "Spicy", cursive;
-}
-
-/* GENERAL */
+/* Reset & base */
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  background: #fafafa;
+  background: #faf7fb;
   font-family: Arial, sans-serif;
-  color: #333;
-}
-
-img, iframe {
-  max-width: 100%;
-  display: block;
+  color: #222;
 }
 
 /* HEADER */
 .appbar {
-  background: black;
-  color: white;
-  padding: 25px 10px;
+  background: #000;
+  color: #fff;
+  padding: 22px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
+.logo-big { width: 140px; margin-bottom: 12px; }
+.header-text .title { font-size: 2.2rem; }
+.header-text .subtitle { font-size: 1.1rem; color: #ffd0ea; margin-top: 6px; }
 
-.logo-big {
-  width: 130px;
-  margin-bottom: 15px;
-}
-
-.header-text .title {
-  font-size: 2.5rem;
-}
-
-.header-text .subtitle {
-  font-size: 1.6rem;
-  margin-top: 5px;
-}
-
-/* PAGE GRID → 2 colonnes desktop / 1 mobile */
-.page-grid {
+/* GRID LAYOUT */
+.encarts-grid {
+  max-width: 1300px;
+  margin: 24px auto;
+  padding: 0 18px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  padding: 25px;
+  gap: 24px;
 }
 
-@media(max-width: 900px) {
-  .page-grid {
-    grid-template-columns: 1fr;
-  }
+/* single-column on small screens */
+@media (max-width: 940px) {
+  .encarts-grid { grid-template-columns: 1fr; padding: 16px; }
 }
 
-/* CARD BLOCK */
-.card-block {
-  background: white;
-  padding: 20px;
+/* CARD STYLE (kawaii) */
+.card.kawaii-card {
+  background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
   border-radius: 18px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  padding: 18px;
+  border: 1px solid #ffd9ef;
+  box-shadow: 0 8px 20px rgba(255, 128, 200, 0.12);
 }
 
-/* TITRES */
+/* TITLES */
 .section-title {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
+  font-size: 1.6rem;
+  margin: 6px 0 14px;
+  color: #ff5fc1;
+  text-align: center;
 }
 
-/* SELECTEURS */
+/* SELECTORS */
 .selectors-row {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
-
 select, input[type="text"] {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 10px;
-  border: 2px solid #ffc5ec;
+  border: 2px solid #ffd6ef;
   font-size: 1rem;
+  background: #fff;
 }
 
-/* FICHE LAYOUT DESKTOP → 50/50 */
-.fiche-container {
-  margin-top: 20px;
-}
+/* BUTTONS */
+.btn { padding: 10px 14px; border-radius: 12px; cursor: pointer; border: none; font-weight: 700; }
+.btn.primary { background: #ff80d4; color: #fff; }
+.btn.ghost { background: #fff; border: 2px solid #ff80d4; color: #ff80d4; }
 
-.fiche-row {
+/* RANDOM PREVIEW */
+.random-result { margin-top: 8px; text-align: center; color: #ff4fb8; font-weight: 700; }
+
+/* FICHE CONTAINERS: internal 50/50 */
+.fiche-container { margin-top: 18px; }
+
+/* Generic row used inside fiches: 50% / 50% */
+.fiche-row, .tech-row {
   display: flex;
   gap: 20px;
+  align-items: flex-start;
 }
 
-.fiche-left,
-.fiche-right {
-  flex: 1;
+/* Each side occupies 50% */
+.fiche-left, .fiche-right, .tech-left, .tech-right {
+  width: 50%;
+  min-width: 0; /* allow flex children to shrink */
 }
 
-/* MOBILE → pile */
-@media(max-width:900px) {
-  .fiche-row {
-    flex-direction: column;
-  }
+/* Media: stack on mobile */
+@media (max-width: 900px) {
+  .fiche-row, .tech-row { flex-direction: column; }
+  .fiche-left, .fiche-right, .tech-left, .tech-right { width: 100%; }
 }
 
-/* IMAGES + VIDEOS */
-.fiche-photo {
+/* IMAGE and VIDEO sizing - contained, no overflow */
+.fiche-photo img, .tech-left iframe, .tech-left .video-frame, .fiche-photo, .tech-video {
   width: 100%;
-  max-height: 350px;
+  max-height: 420px;
   object-fit: contain;
   border-radius: 12px;
+  display: block;
 }
 
-.fiche-video {
-  width: 100%;
-  max-height: 350px;
+/* CARD CONTENT */
+.fiche-card, .result-card {
+  background: #fffaf8;
+  padding: 14px;
   border-radius: 12px;
+  border: 1px solid #ffd7f0;
+  box-shadow: 0 10px 20px rgba(255, 120, 190, 0.06);
 }
+.fiche-card p { margin: 10px 0; color: #333; line-height: 1.35; }
 
-/* CARDS */
-.fiche-card {
-  background: #fff0f8;
-  border-radius: 14px;
-  border: 2px solid #ffb4e6;
-  padding: 15px;
-}
-
-.fiche-card p {
-  margin-bottom: 10px;
-}
-
-.tech-title {
+/* Titles inside cards */
+.tech-title, .cle-title {
   font-family: "Spicy", cursive;
-  font-size: 1.7rem;
-  text-align: center;
+  font-size: 1.4rem;
+  color: #ff4fb8;
+  margin-bottom: 6px;
+  text-align: left;
 }
 
-.tech-side {
-  font-family: "Spicy", cursive;
-  text-align: center;
-  margin-bottom: 10px;
-  color: #ff44bb;
-}
+/* Buttons row */
+.btn-row { display: flex; gap: 10px; margin-top: 10px; }
 
-/* QR CODE */
-.qr-zone {
-  margin-top: 10px;
-  text-align: center;
-}
+/* QR area (in main UI, small canvas) */
+.qr-zone { margin-top: 12px; text-align: left; }
 
-.qr-zone canvas {
-  max-width: 150px;
-}
-
-/* BOUTONS */
-.btn {
-  padding: 10px 15px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: none;
-  font-size: 1rem;
-}
-
-.btn.primary {
-  background: #ff80d4;
-  color: white;
-}
-
-.btn.ghost {
-  background: white;
-  border: 2px solid #ff80d4;
-  color: #ff80d4;
-  margin-right: 10px;
-}
-
-/* IMPRESSION */
+/* PRINT adjustments */
 @media print {
-
-  body {
-    background: white;
-  }
-
-  .appbar,
-  .section-title,
-  .selectors-row,
-  .btn {
-    display: none !important;
-  }
-
-  .fiche-row {
-    flex-direction: row !important;
-  }
-
-  .fiche-photo,
-  .fiche-video {
-    max-height: 7cm !important;
-    width: auto;
-  }
+  body { background: #fff; color: #000; }
+  .encarts-grid, .selectors-row, .btn { display: block !important; }
+  /* hide controls */
+  .selectors-row, .btn { display: none !important; }
+  .card.kawaii-card { box-shadow: none; border: none; }
+  /* limit images to 7cm on print (for cle card) */
+  .fiche-photo img { max-width: 7cm !important; max-height: 7cm !important; }
+  .tech-left iframe { display: none; } /* don't print embedded videos */
 }
