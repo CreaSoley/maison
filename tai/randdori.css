@@ -1,24 +1,26 @@
-/* ------------------------- */
-/* POLICES */
+/* POLICE SPICY */
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf");
-}
-
-body, button, input, select, p, div, li {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background: #fafafa;
-  color: #222;
 }
 
 .spicy {
   font-family: "Spicy", cursive;
 }
 
-/* ------------------------- */
+/* GENERAL */
+body {
+  margin: 0;
+  background: #fafafa;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+img, iframe {
+  max-width: 100%;
+  display: block;
+}
+
 /* HEADER */
 .appbar {
   background: black;
@@ -27,144 +29,177 @@ body, button, input, select, p, div, li {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
 }
 
 .logo-big {
-  width: 110px;
+  width: 130px;
   margin-bottom: 15px;
 }
 
 .header-text .title {
   font-size: 2.5rem;
-  letter-spacing: 2px;
 }
 
 .header-text .subtitle {
-  font-size: 1.7rem;
-  margin-top: 18px;
-  letter-spacing: 2px;
+  font-size: 1.6rem;
+  margin-top: 5px;
 }
 
-/* ------------------------- */
-/* BOUTONS */
-.btn, .fiche-btn {
-  padding: 10px 18px;
+/* PAGE GRID → 2 colonnes desktop / 1 mobile */
+.page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  padding: 25px;
+}
+
+@media(max-width: 900px) {
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CARD BLOCK */
+.card-block {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* TITRES */
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+/* SELECTEURS */
+.selectors-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+select, input[type="text"] {
+  padding: 8px 12px;
   border-radius: 10px;
+  border: 2px solid #ffc5ec;
+  font-size: 1rem;
+}
+
+/* FICHE LAYOUT DESKTOP → 50/50 */
+.fiche-container {
+  margin-top: 20px;
+}
+
+.fiche-row {
+  display: flex;
+  gap: 20px;
+}
+
+.fiche-left,
+.fiche-right {
+  flex: 1;
+}
+
+/* MOBILE → pile */
+@media(max-width:900px) {
+  .fiche-row {
+    flex-direction: column;
+  }
+}
+
+/* IMAGES + VIDEOS */
+.fiche-photo {
+  width: 100%;
+  max-height: 350px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.fiche-video {
+  width: 100%;
+  max-height: 350px;
+  border-radius: 12px;
+}
+
+/* CARDS */
+.fiche-card {
+  background: #fff0f8;
+  border-radius: 14px;
+  border: 2px solid #ffb4e6;
+  padding: 15px;
+}
+
+.fiche-card p {
+  margin-bottom: 10px;
+}
+
+.tech-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+.tech-side {
+  font-family: "Spicy", cursive;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #ff44bb;
+}
+
+/* QR CODE */
+.qr-zone {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.qr-zone canvas {
+  max-width: 150px;
+}
+
+/* BOUTONS */
+.btn {
+  padding: 10px 15px;
+  border-radius: 12px;
   cursor: pointer;
   border: none;
   font-size: 1rem;
 }
 
-.fiche-btn {
-  font-family: "Spicy", cursive;
-  font-size: 1.2rem;
-  padding: 12px 20px;
-  background: #ffd7f6;
-  border-radius: 20px;
-  border: 2px solid #ff9bdd;
-  cursor: pointer;
-  transition: 0.2s;
+.btn.primary {
+  background: #ff80d4;
+  color: white;
 }
 
-.fiche-btn:hover {
-  background: #ffb9ee;
-}
-
-/* ------------------------- */
-/* CONTAINER ENCARDS */
-.encarts-container {
-  display: flex;
-  gap: 25px;
-  padding: 25px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.encart1, .encart2 {
+.btn.ghost {
   background: white;
-  border-radius: 18px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  padding: 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
+  border: 2px solid #ff80d4;
+  color: #ff80d4;
+  margin-right: 10px;
 }
 
-/* Contenu des encarts */
-.encart1 .photo, .encart2 .video-frame {
-  flex: 1;
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-  object-fit: contain;
-}
+/* IMPRESSION */
+@media print {
 
-.encart1 .info, .encart2 .info {
-  flex: 1;
-  overflow: auto;
-}
-
-/* ------------------------- */
-/* CARDS RESULTATS */
-.result-card {
-  background: #fff3fb;
-  border-radius: 14px;
-  padding: 15px;
-  border: 2px solid #ffb4e6;
-  margin-top: 18px;
-}
-
-.tech-title {
-  font-family: "Spicy", cursive;
-  font-size: 1.6rem;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.tech-side {
-  font-family: "Spicy", cursive;
-  font-size: 1.3rem;
-  text-align: center;
-  margin-bottom: 18px;
-}
-
-.result-card p {
-  margin-bottom: 10px;
-}
-
-/* Video dans cards */
-.video-frame {
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 12px;
-  margin-top: 12px;
-}
-
-/* ------------------------- */
-/* FORM CONTROLS */
-select, input[type="text"] {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-bottom: 12px;
-  width: 100%;
-  max-width: 300px;
-  font-size: 1rem;
-}
-
-/* ------------------------- */
-/* MOBILE */
-@media(max-width:800px){
-  .encarts-container {
-    flex-direction: column;
+  body {
+    background: white;
   }
-  .encart1, .encart2 {
-    flex-direction: column;
+
+  .appbar,
+  .section-title,
+  .selectors-row,
+  .btn {
+    display: none !important;
   }
-  .encart1 .photo, .encart2 .video-frame {
-    width: 100%;
-    max-height: 300px;
+
+  .fiche-row {
+    flex-direction: row !important;
+  }
+
+  .fiche-photo,
+  .fiche-video {
+    max-height: 7cm !important;
+    width: auto;
   }
 }
