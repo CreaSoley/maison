@@ -1,64 +1,81 @@
 <!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Préparation Techniques – Tai-Jitsu</title>
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="randdori.css">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Préparation Techniques – Tai-Jitsu</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header class="appbar">
-  <a class="logo" href="../index.html" title="Accueil">
-    <img src="logo.png" alt="logo" class="logo-big">
-  </a>
-  <div class="header-text">
-    <div class="title spicy">Préparation Techniques</div>
-    <div class="subtitle spicy">Tai-Jitsu – Randori</div>
-  </div>
+    <a class="logo" href="../index.html" title="Accueil">
+        <img src="logo.png" alt="logo" class="logo-big">
+    </a>
+    <div class="header-text">
+        <div class="title spicy">Préparation Techniques</div>
+        <div class="subtitle spicy">Tai-Jitsu – Randori & Clés</div>
+    </div>
 </header>
 
-<main class="double-container">
+<main class="layout-desktop">
 
-  <!-- ──────────────────────────── -->
-  <!-- ENCARt 1 : CLES ARTICULAIRES -->
-  <!-- ──────────────────────────── -->
-  <section class="block cles-block">
-    <h2 class="section-title spicy">🔑 Sélectionner une clé articulaire</h2>
+    <!-- ======================================================
+         ENCARt 1 — EXERCICES CLÉS ARTICULAIRES
+    ======================================================= -->
+    <section class="card-block">
 
-    <div class="selector-bar">
-      <select id="clesFilterType"><option value="">Filtrer par type</option></select>
-      <select id="clesSelect"><option value="">Choisir une clé</option></select>
-    </div>
+        <h2 class="spicy section-title">🔐 Exercices — Clés articulaires</h2>
 
-    <div id="clesResult" class="card-preview"></div>
+        <label>Choisir une clé :</label>
+        <select id="selectCleTechnique">
+            <option value="">Choisir…</option>
+        </select>
 
-    <button id="btnPrintCles" class="btn primary">🖨️ Imprimer cette fiche</button>
-  </section>
+        <label>Choisir un exercice :</label>
+        <select id="selectCleExercice">
+            <option value="">Choisir…</option>
+        </select>
 
+        <div id="cleCard"></div>
 
-  <!-- ──────────────────────────── -->
-  <!-- ENCARt 2 : TECHNIQUES RANDORI -->
-  <!-- ──────────────────────────── -->
-  <section class="block techniques-block">
-    <h2 class="section-title spicy">🎯 Sélectionner une technique</h2>
+    </section>
 
-    <div class="selector-bar">
-      <select id="techFilterType"><option value="">Filtrer par type</option></select>
-      <input type="text" id="techSearch" placeholder="Recherche rapide…">
-      <select id="techSelect"><option value="">Choisir une technique</option></select>
-      <button id="btnRandomTech" class="btn primary">🎲 Aléatoire</button>
-    </div>
+    <!-- ======================================================
+         ENCARt 2 — TECHNIQUES RANDORI
+    ======================================================= -->
+    <section class="card-block">
 
-    <div id="techResult" class="card-preview"></div>
-  </section>
+        <h2 class="spicy section-title">🎯 Techniques Randori</h2>
+
+        <div class="filters">
+            <select id="filterType">
+                <option value="">Filtrer par type</option>
+            </select>
+
+            <input type="text" id="searchBox" placeholder="Recherche rapide…">
+
+            <select id="selectTech">
+                <option value="">Choisir une technique</option>
+            </select>
+
+            <button id="btnRandom" class="btn primary kawaii">🎲 Aléatoire</button>
+        </div>
+
+        <div id="randomResult" class="random-preview">Technique sélectionnée : -</div>
+
+        <div id="techCard"></div>
+
+    </section>
 
 </main>
 
-<!-- Scripts séparés -->
+<!-- Scripts -->
 <script src="cles.js"></script>
 <script src="randori.js"></script>
 
