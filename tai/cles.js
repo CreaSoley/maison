@@ -3,7 +3,7 @@
 // -------------------------------------------------------------
 let clesData = [];
 
-fetch("randori-exercices.json")
+fetch("randori_exercices.json")
   .then(res => res.json())
   .then(data => {
     clesData = data;
