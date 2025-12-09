@@ -2,82 +2,80 @@
 <html lang="fr">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Préparation Techniques – Tai-Jitsu</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Préparation Techniques – Tai-Jitsu</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="appbar">
-    <a class="logo" href="../index.html" title="Accueil">
-        <img src="logo.png" alt="logo" class="logo-big">
+  <!-- HEADER -->
+  <header class="appbar">
+    <a class="logo" href="../index.html">
+      <img src="logo.png" alt="logo" class="logo-big">
     </a>
     <div class="header-text">
-        <div class="title spicy">Préparation Techniques</div>
-        <div class="subtitle spicy">Tai-Jitsu – Randori & Clés</div>
+      <div class="title spicy">Préparation Techniques</div>
+      <div class="subtitle spicy">Tai-Jitsu – Randori</div>
     </div>
-</header>
+  </header>
 
-<main class="layout-desktop">
+  <!-- PAGE WRAPPER -->
+  <main class="page-grid">
 
-    <!-- ======================================================
-         ENCARt 1 — EXERCICES CLÉS ARTICULAIRES
-    ======================================================= -->
+    <!-- ENCARt 1 — CLÉS ARTICULAIRES -->
     <section class="card-block">
 
-        <h2 class="spicy section-title">🔐 Exercices — Clés articulaires</h2>
+      <h2 class="spicy section-title">🤲 Exercices — Clés Articulaires</h2>
 
-        <label>Choisir une clé :</label>
-        <select id="selectCleTechnique">
-            <option value="">Choisir…</option>
+      <div class="selectors-row">
+        <select id="selectCle">
+          <option value="">Choisir une clé</option>
         </select>
 
-        <label>Choisir un exercice :</label>
-        <select id="selectCleExercice">
-            <option value="">Choisir…</option>
+        <select id="selectExercice">
+          <option value="">Choisir un exercice</option>
         </select>
+      </div>
 
-        <div id="cleCard"></div>
+      <!-- Conteneur fiche -->
+      <div id="cleCard" class="fiche-container"></div>
 
     </section>
 
-    <!-- ======================================================
-         ENCARt 2 — TECHNIQUES RANDORI
-    ======================================================= -->
+    <!-- ENCARt 2 — TECHNIQUES RANDORI -->
     <section class="card-block">
 
-        <h2 class="spicy section-title">🎯 Techniques Randori</h2>
+      <h2 class="spicy section-title">🥋 Techniques Randori</h2>
 
-        <div class="filters">
-            <select id="filterType">
-                <option value="">Filtrer par type</option>
-            </select>
+      <div class="selectors-row">
+        <select id="filterType">
+          <option value="">Filtrer par type</option>
+        </select>
 
-            <input type="text" id="searchBox" placeholder="Recherche rapide…">
+        <input type="text" id="searchBox" placeholder="Recherche rapide...">
 
-            <select id="selectTech">
-                <option value="">Choisir une technique</option>
-            </select>
+        <select id="selectTech">
+          <option value="">Choisir une technique</option>
+        </select>
 
-            <button id="btnRandom" class="btn primary kawaii">🎲 Aléatoire</button>
-        </div>
+        <button id="btnRandom" class="btn primary">🎲 Aléatoire</button>
+      </div>
 
-        <div id="randomResult" class="random-preview">Technique sélectionnée : -</div>
+      <div id="randomResult" class="random-result">Technique sélectionnée : -</div>
 
-        <div id="techCard"></div>
+      <div id="techCard" class="fiche-container"></div>
 
     </section>
 
-</main>
+  </main>
 
-<!-- Scripts -->
-<script src="cles.js"></script>
-<script src="randori.js"></script>
+  <!-- JS -->
+  <script src="cles.js"></script>
+  <script src="randori.js"></script>
 
 </body>
 </html>
