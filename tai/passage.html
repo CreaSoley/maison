@@ -5,23 +5,24 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tai-Jitsu – Entraînement</title>
 
-  <!-- ==================== CSS KAWAII ==================== -->
   <style>
-  @font-face {
-    font-family:"Spicy";
-    src:url("Spicy Sale.ttf");
-  }
+  /* -------------------- POLICE -------------------- */
+  @font-face { font-family:"Spicy"; src: url("Spicy Sale.ttf"); }
+  .spicy { font-family:"Spicy", cursive; }
 
+  /* -------------------- BASE -------------------- */
+  *{box-sizing:border-box}
   body{
     margin:0;
-    background:#ffeef6; /* rose kawaii */
+    background:#ffeef6;
     font-family:Arial, sans-serif;
+    color:#222;
   }
 
-  /* BANNIÈRE */
+  /* -------------------- HEADER -------------------- */
   header{
-    background:black;
-    color:white;
+    background:#000;
+    color:#fff;
     padding:25px 10px;
     display:flex;
     justify-content:center;
@@ -29,110 +30,81 @@
     gap:20px;
     box-shadow:0 4px 12px rgba(0,0,0,0.25);
   }
-  header img{
-    height:90px;
-    filter:drop-shadow(0 0 4px rgba(255,255,255,0.5));
-  }
-  header h1{
-    font-family:"Spicy";
-    font-size:3rem;
-    margin:0;
-    letter-spacing:2px;
-  }
+  header img{ height:90px; filter:drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
+  header h1{ font-family:"Spicy"; font-size:3rem; margin:0; letter-spacing:2px; color:#ffd1ec; }
 
-  /* GRID PRINCIPAL */
+  /* -------------------- GRID PRINCIPAL -------------------- */
   .grid-container{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-    gap:30px;
-    padding:25px;
+    gap:28px;
+    padding:28px;
+    max-width:1300px;
+    margin:0 auto;
   }
 
-  /* CARDS FLOTTA NTES */
+  /* -------------------- CARDS KAWAII -------------------- */
   .card{
-    background:white;
+    background:linear-gradient(180deg,#fff9fb 0%,#fff4fb 100%);
     border-radius:22px;
-    padding:25px;
-    box-shadow:0 8px 18px rgba(255,170,200,0.35);
-    border:3px solid #ffd4e7;
-    transition:transform .2s, box-shadow .2s;
-  }
-  .card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 10px 20px rgba(255,150,200,0.45);
-  }
-
-  .card-title{
+    padding:24px;
+    border:1px solid #ffd4e7;
+    box-shadow:0 8px 18px rgba(255,150,200,0.12);
+    transition:transform .18s, box-shadow .18s;
     display:flex;
-    align-items:center;
-    font-family:"Spicy";
-    font-size:2rem;
-    margin-bottom:20px;
-    color:#ff69b4;
+    flex-direction:column;
   }
-  .card-title img{
-    width:45px;
-    margin-right:10px;
+  .card:hover{ transform:translateY(-6px); box-shadow:0 14px 30px rgba(255,120,190,0.14); }
+
+  .card-title{ display:flex; align-items:center; gap:12px; font-family:"Spicy"; font-size:1.9rem; color:#ff4fb8; margin-bottom:12px; }
+  .card-title img{ width:44px; }
+
+  /* -------------------- TEXT SIZE ON DESKTOP (larger) -------------------- */
+  @media(min-width:900px){
+    .card { min-height:480px; font-size:1.12rem; }
+    .card p, .card li { font-size:1.04rem; }
   }
 
-  /* LIVRES → petits kimonos */
-  .library{
-    display:flex;
-    justify-content:center;
-    gap:18px;
-    flex-wrap:wrap;
-  }
-  .kimono-btn{
-    width:60px;
-    height:60px;
-    background:url("kimono.png") center/contain no-repeat;
-    cursor:pointer;
-    transition:transform .2s;
-  }
-  .kimono-btn:hover{
-    transform:scale(1.10) rotate(-3deg);
-  }
-
-  /* HIIT SECTION STYLE */
+  /* -------------------- HIIT -------------------- */
   #hiit-section{
     background:#111;
-    color:white;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 0 15px rgba(255,105,180,0.5);
+    color:#fff;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 8px 18px rgba(255,105,180,0.18);
+    margin-top:12px;
   }
-  #hiit-section h2{
-    font-family:"Spicy";
-    font-size:2.1rem;
+  #hiit-section h2{ font-family:"Spicy"; font-size:1.9rem; margin:0 0 14px; color:#ffd1ec; text-align:center; }
+  .training-input{ width:72px; padding:6px; border-radius:8px; border:none; text-align:center; }
+  .training-button{ padding:12px 22px; background:#ff7bbd; border:none; color:#fff; border-radius:12px; cursor:pointer; font-weight:700; box-shadow:0 6px 14px rgba(255,120,180,0.14); }
+  .training-button:hover{ background:#ff5fae; }
+
+  /* HIIT display */
+  #hiitDisplay{ margin-top:14px; text-align:center; font-size:1.1rem; color:#fff; }
+
+  /* -------------------- LIBRARY / KIMONO BTN -------------------- */
+  .library{ display:flex; gap:18px; justify-content:center; align-items:center; padding-top:8px; overflow:hidden; }
+  .kimono-btn{ width:60px; height:60px; background:url("kimono.png") center/contain no-repeat; cursor:pointer; border-radius:10px; transition:transform .18s; }
+  .kimono-btn:hover{ transform:scale(1.08) rotate(-4deg); }
+
+  /* Desktop: force single line for resources */
+  @media(min-width:900px){
+    .library { flex-wrap:nowrap; justify-content:flex-start; }
+    .library > * { flex: 0 0 auto; }
   }
-  .training-input{
-    width:70px;
-    padding:6px;
-    border-radius:8px;
-    border:none;
-    text-align:center;
-  }
-  .training-button{
-    padding:12px 25px;
-    background:#ff7bbd;
-    border:none;
-    border-radius:12px;
-    color:white;
-    cursor:pointer;
-    font-size:1.1rem;
-    box-shadow:0 4px 8px rgba(255,150,200,0.4);
-  }
-  .training-button:hover{
-    background:#ff5fae;
+  @media(max-width:899px){
+    .library { flex-wrap:wrap; justify-content:center; }
   }
 
-  /* AGRANDIR ENCARDS SUR DESKTOP */
-  @media(min-width:900px){
-    .card{
-      min-height:480px;
-      font-size:1.15rem;
-    }
-  }
+  /* -------------------- FONTS / LISTS -------------------- */
+  .spicy{ font-family:"Spicy", cursive; }
+  hr{ border:none; border-top:1px dashed rgba(255,120,180,0.15); margin:16px 0; }
+
+  /* -------------------- KIHON / RANDORI BLOCKS (small helpers) -------------------- */
+  #kihon-techniques h3, #randori h3 { margin:6px 0 10px; font-family:"Spicy"; color:#ff4fb8; }
+  ul{ padding-left:18px; }
+  .btn{ cursor:pointer; padding:8px 12px; border-radius:8px; border:none; background:#ffd1ea; color:#000; }
+  .btn:hover{ filter:brightness(0.98); }
 
   </style>
 </head>
@@ -145,56 +117,59 @@
 
 <div class="grid-container">
 
-  <!-- ==================== UV1 ==================== -->
+  <!-- UV1 Kihon (restauré intégralement) -->
   <div class="card" id="uv1">
-    <div class="card-title"><img src="ceinture.png">UV1 – Kihon</div>
+    <div class="card-title"><img src="ceinture.png" alt="">UV1 – Kihon</div>
+
     <div id="kihon-techniques"></div>
+
     <hr>
-    <button onclick="nouveauxEnchainements()" class="training-button">Nouveaux enchaînements</button>
-    <div id="enchainements"></div>
+
+    <button class="training-button" onclick="nouveauxEnchainements()">Nouveaux enchaînements</button>
+    <div id="enchainements" style="margin-top:12px"></div>
+
     <hr>
+
     <div id="kihon-combat"></div>
   </div>
 
-  <!-- ==================== UV2 + HIIT ==================== -->
+  <!-- UV2 Ippon Kumite + HIIT -->
   <div class="card" id="uv2">
-    <div class="card-title"><img src="ceinture.png">UV2 – Ippon Kumite</div>
+    <div class="card-title"><img src="ceinture.png" alt="">UV2 – Ippon Kumite</div>
 
-    <!-- HIIT -->
     <section id="hiit-section">
       <h2>Entraînement HIIT</h2>
 
-      <div class="hiit-config" style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
-        <label>Travail<br><input type="number" id="hiitWork" value="20" class="training-input"></label>
-        <label>Repos<br><input type="number" id="hiitRest" value="10" class="training-input"></label>
-        <label>Rounds<br><input type="number" id="hiitRounds" value="8" class="training-input"></label>
+      <div class="hiit-config" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:12px;">
+        <label style="color:#fff;">Travail<br><input type="number" id="hiitWork" value="20" class="training-input"></label>
+        <label style="color:#fff;">Repos<br><input type="number" id="hiitRest" value="10" class="training-input"></label>
+        <label style="color:#fff;">Rounds<br><input type="number" id="hiitRounds" value="8" class="training-input"></label>
       </div>
 
-      <div style="text-align:center;">
+      <div style="text-align:center; margin-bottom:8px;">
         <button id="hiitStart" class="training-button">Démarrer HIIT</button>
       </div>
 
-      <div id="hiitDisplay" style="text-align:center; margin-top:20px; font-size:1.3em;">
-        Round <span id="hiitRound">0</span>/<span id="hiitRoundTotal">0</span> —
-        Phase : <span id="hiitPhase">-</span> —
-        Temps : <span id="hiitTime">0</span>s
+      <div id="hiitDisplay">
+        Round <span id="hiitRound">0</span>/<span id="hiitRoundTotal">0</span> — Phase : <span id="hiitPhase">-</span> — Temps : <span id="hiitTime">0</span>s
       </div>
     </section>
+
   </div>
 
-  <!-- ==================== UV3 ==================== -->
+  <!-- UV3 Kata -->
   <div class="card">
-    <div class="card-title"><img src="ceinture.png">UV3 – Kata</div>
+    <div class="card-title"><img src="ceinture.png" alt="">UV3 – Kata</div>
     <ul>
-      <li>Kata choisi</li>
-      <li>Bunkaï 1 : oi tsuki – gyaku tsuki</li>
-      <li>Bunkaï 2 : saisie des deux poignets</li>
+      <li>kata choisi</li>
+      <li>bunkaï 1 : oi tsuki – gyaku tsuki</li>
+      <li>bunkaï 2 : saisie des deux poignets</li>
     </ul>
   </div>
 
-  <!-- ==================== UV4 ==================== -->
+  <!-- UV4 Technique de base -->
   <div class="card">
-    <div class="card-title"><img src="ceinture.png">UV4 – Techniques de base</div>
+    <div class="card-title"><img src="ceinture.png" alt="">UV4 – Technique de base</div>
     <ul>
       <li>Application par atemi</li>
       <li>Application par clé</li>
@@ -202,57 +177,182 @@
     </ul>
   </div>
 
-  <!-- ==================== UV5–6 Randori ==================== -->
+  <!-- UV5–6 Randori (restauré intégralement) -->
   <div class="card">
-    <div class="card-title"><img src="ceinture.png">UV5–6 – Randori</div>
+    <div class="card-title"><img src="ceinture.png" alt="">UV5–6 – Randori</div>
     <div id="randori"></div>
   </div>
 
-  <!-- ==================== Ressources ==================== -->
+  <!-- Ressources (une ligne sur desktop) -->
   <div class="card">
-    <div class="card-title"><img src="ceinture.png">Ressources</div>
+    <div class="card-title"><img src="ceinture.png" alt="">Ressources</div>
     <div class="library">
-      <div class="kimono-btn" onclick="window.open('livre1.pdf')"></div>
-      <div class="kimono-btn" onclick="window.open('livre2.pdf')"></div>
-      <div class="kimono-btn" onclick="window.open('livre3.pdf')"></div>
-      <div class="kimono-btn" onclick="window.open('livre4.pdf')"></div>
+      <div class="kimono-btn" title="Livre 1" onclick="window.open('livre1.pdf')"></div>
+      <div class="kimono-btn" title="Livre 2" onclick="window.open('livre2.pdf')"></div>
+      <div class="kimono-btn" title="Livre 3" onclick="window.open('livre3.pdf')"></div>
+      <div class="kimono-btn" title="Livre 4" onclick="window.open('livre4.pdf')"></div>
     </div>
   </div>
 
 </div>
 
-<!-- ==================== SCRIPTS ORIGINAUX – NON MODIFIÉS ==================== -->
+<!-- ------------------- SCRIPTS (entièrement restaurés) ------------------- -->
 <script>
-/* ==== KIHON ==== */
+/* =================== UV1 – KIHON =================== */
 async function chargerKihon(){
-  const r = await fetch('tjkihon.json');
-  const data = await r.json();
-  const tirage = data.sort(()=>0.5-Math.random()).slice(0,3);
-  document.getElementById('kihon-techniques').innerHTML =
-    '<h3 class="spicy">Techniques du jour</h3>' +
-    tirage.map(t=>`<div>• ${t.nom}</div>`).join('');
+  try {
+    const r = await fetch('tjkihon.json');
+    const data = await r.json();
+    const tirage = data.sort(()=>0.5-Math.random()).slice(0,3);
+    document.getElementById('kihon-techniques').innerHTML =
+      '<h3 class="spicy">Techniques du jour</h3>' +
+      tirage.map(t=>`<div>• ${t.nom}</div>`).join('');
+  } catch(e) {
+    console.error("Erreur chargerKihon:", e);
+    document.getElementById('kihon-techniques').innerHTML = '<p>Impossible de charger les techniques.</p>';
+  }
 }
 
-const ENCHAINEMENTS = [...];
+const ENCHAINEMENTS = [
+  "Oi-zuki jodan → Gyaku-zuki chudan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Mae-geri chudan → Gyaku-zuki chudan<br>• Zenkutsu-dachi → Mae-geri → Gyaku-zuki",
+  "Uchi-uke → Gyaku-zuki chudan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Soto-uke → Mae-geri → Gyaku-zuki<br>• Zenkutsu-dachi → Mae-geri → Gyaku-zuki",
+  "Age-uke → Gyaku-zuki jodan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Oi-zuki chudan → Ushiro-geri<br>• Avancée Zenkutsu → Kokutsu/Heiko → Ushiro-geri",
+  "Gedan-barai → Oi-zuki chudan<br>• Zenkutsu-dachi → Zenkutsu-dachi",
+  "Teisho-uchi jodan → Mae-geri chudan<br>• Zenkutsu → Mae-geri → Zenkutsu",
+  "Shuto-uke → Shuto-uchi<br>• Kokutsu → Zenkutsu/Shiko",
+  "Haito-uke → Gyaku-zuki chudan<br>• Zenkutsu → Zenkutsu",
+  "Fumikomi → Gyaku-zuki<br>• Zenkutsu → Fumikomi → Gyaku-zuki",
+  "Soto-uke → Mawashi-geri chudan<br>• Zenkutsu → Mawashi → Zenkutsu",
+  "Uraken → Gyaku-zuki<br>• Zenkutsu → Zenkutsu",
+  "Oi-zuki → Kote-uchi<br>• Zenkutsu → Heiko/Sanchin",
+  "Shuto-uke → Hiza-geri<br>• Kokutsu → Heiko → Hiza-geri",
+  "Mae-geri → Empi<br>• Zenkutsu → Mae-geri → Sanchin/Heiko → Empi",
+  "Soto-uke → Teisho<br>• Zenkutsu → Zenkutsu",
+  "Gedan-barai → Mawashi jambe avant<br>• Zenkutsu → Mawashi → Zenkutsu",
+  "Uraken → Mae-geri → Gyaku-zuki<br>• Zenkutsu → Mae-geri → Gyaku-zuki",
+  "Shuto-uke → Shuto-uchi → Teisho<br>• Kokutsu → Zenkutsu/Shiko → Teisho"
+];
 
-function nouveauxEnchainements(){ ... }
+function nouveauxEnchainements(){
+  const e = [...ENCHAINEMENTS].sort(()=>0.5-Math.random()).slice(0,2);
+  document.getElementById('enchainements').innerHTML = '<h3 class="spicy">Enchaînements</h3>' +
+    e.map(x=>`<p>${x}</p>`).join('');
+}
 
-function kihonCombat(){ ... }
+function kihonCombat(){
+  const LISTE = [
+    "Mae Geri arrière chudan",
+    "Mawashi arrière jodan/chudan",
+    "Mae Geri avant sursaut chudan",
+    "Mawashi avant sursaut jodan/chudan",
+    "Gyaku Zuki chudan",
+    "Kizami Zuki + Gyaku Zuki",
+    "Oï Zuki jodan retour arrière"
+  ];
+  const t = [...LISTE].sort(()=>0.5-Math.random()).slice(0,3);
+  document.getElementById('kihon-combat').innerHTML = '<h3 class="spicy">Techniques combat</h3>' +
+    t.map(x=>`<div>• ${x}</div>`).join('');
+}
 
-/* ==== RANDORI ==== */
-async function chargerRandori(){ ... }
+/* =================== UV5–6 – RANDORI =================== */
+async function chargerRandori(){
+  try {
+    const r = await fetch('randori.json');
+    const data = await r.json();
+    const saisies = data.techniques.filter(t=>t.type_attaque==='saisie' || t.type_attaque==='Saisie');
+    const frappes = data.techniques.filter(t=>t.type_attaque==='frappe' || t.type_attaque==='Frappe');
+    const etranglement = data.techniques.filter(t=>t.type_attaque==='étranglement' || t.type_attaque==='Etranglement' || t.type_attaque==='étranglement');
+    const armesC = data.techniques.filter(t=>t.type_attaque && t.type_attaque.toLowerCase().includes('arme') && t.type_attaque.toLowerCase().includes('couteau'));
+    const armesM = data.techniques.filter(t=>t.type_attaque && t.type_attaque.toLowerCase().includes('arme') && t.type_attaque.toLowerCase().includes('matraque'));
 
+    const tir_s = saisies.sort(()=>0.5-Math.random()).slice(0,3);
+    const tir_f = frappes.sort(()=>0.5-Math.random()).slice(0,2);
+    const tir_t = etranglement.sort(()=>0.5-Math.random()).slice(0,1);
+    const tir_c = armesC.sort(()=>0.5-Math.random()).slice(0,1);
+    const tir_m = armesM.sort(()=>0.5-Math.random()).slice(0,1);
+
+    const bloc = document.getElementById('randori');
+    bloc.innerHTML = '<h3 class="spicy">Sélection du jour</h3>' +
+      '<h4 class="spicy">Saisies</h4>' + tir_s.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+      '<h4 class="spicy">Couteau</h4>' + tir_c.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+      '<h4 class="spicy">Etranglement</h4>' + tir_t.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+      '<h4 class="spicy">Matraque</h4>' + tir_m.map(t=>`<div>• ${t.attaque}</div>`).join('') +
+      '<h4 class="spicy">Frappes</h4>' + tir_f.map(t=>`<div>• ${t.attaque}</div>`).join('');
+  } catch(e) {
+    console.error("Erreur chargerRandori:", e);
+    document.getElementById('randori').innerHTML = '<p>Impossible de charger le randori.</p>';
+  }
+}
+
+/* =================== LANCEMENT DES CHARGERS =================== */
 chargerKihon();
 kihonCombat();
 chargerRandori();
 
-/* ==== HIIT ==== */
-class HIITTimer{ ... }
+/* =================== HIIT TIMER MODULE (restauré et fiable audio) =================== */
+class HIITTimer {
+  constructor({work, rest, rounds, onTick, onRoundChange, onFinish}) {
+    this.work = work;
+    this.rest = rest;
+    this.rounds = rounds;
+    this.currentRound = 1;
+    this.phase = "work";
+    this.timeLeft = work;
+    this.interval = null;
+    this.onTick = onTick;
+    this.onRoundChange = onRoundChange;
+    this.onFinish = onFinish;
+  }
 
+  start() {
+    if (this.interval) return;
+    this.interval = setInterval(() => {
+      this.timeLeft--;
+      if (this.onTick) this.onTick(this);
+
+      if (this.timeLeft <= 0) {
+        if (this.phase === "work") {
+          this.phase = "rest";
+          this.timeLeft = this.rest;
+        } else {
+          this.phase = "work";
+          this.currentRound++;
+          this.timeLeft = this.work;
+          if (this.onRoundChange) this.onRoundChange(this);
+        }
+
+        if (this.currentRound > this.rounds) {
+          this.stop();
+          if (this.onFinish) this.onFinish();
+        }
+      }
+    }, 1000);
+  }
+
+  stop() {
+    clearInterval(this.interval);
+    this.interval = null;
+  }
+
+  reset() {
+    this.stop();
+    this.currentRound = 1;
+    this.phase = "work";
+    this.timeLeft = this.work;
+  }
+}
+
+/* HIIT UI Hook — on démarre le silence en tout début pour débloquer l'audio */
 document.getElementById("hiitStart").addEventListener("click", () => {
-  const work = +document.getElementById("hiitWork").value;
-  const rest = +document.getElementById("hiitRest").value;
-  const rounds = +document.getElementById("hiitRounds").value;
+  // Play a tiny silent file to unlock audio autoplay permissions in many browsers
+  try { new Audio("silence.mp3").play().catch(()=>{}); } catch(e){}
+
+  const work = parseInt(document.getElementById("hiitWork").value) || 20;
+  const rest = parseInt(document.getElementById("hiitRest").value) || 10;
+  const rounds = parseInt(document.getElementById("hiitRounds").value) || 8;
 
   const displayRound = document.getElementById("hiitRound");
   const displayTotal = document.getElementById("hiitRoundTotal");
@@ -262,19 +362,28 @@ document.getElementById("hiitStart").addEventListener("click", () => {
   displayTotal.textContent = rounds;
 
   const hiit = new HIITTimer({
-    work, rest, rounds,
+    work,
+    rest,
+    rounds,
 
-    onTick: t=>{
-      displayRound.textContent=t.currentRound;
-      displayPhase.textContent=t.phase==="work"?"Travail":"Repos";
-      displayTime.textContent=t.timeLeft;
+    onTick: (timer) => {
+      displayRound.textContent = timer.currentRound;
+      displayPhase.textContent = timer.phase === "work" ? "Travail" : "Repos";
+      displayTime.textContent = timer.timeLeft;
 
-      if([3,2,1].includes(t.timeLeft)) new Audio("beep.mp3").play();
-      if(t.timeLeft===0) new Audio("silence.mp3").play();
+      // beep countdown
+      if ([3,2,1].includes(timer.timeLeft)) {
+        try { new Audio("beep.mp3").play().catch(()=>{}); } catch(e){}
+      }
     },
 
-    onRoundChange: ()=> new Audio("ding.mp3").play(),
-    onFinish: ()=> alert("HIIT terminé !")
+    onRoundChange: () => {
+      try { new Audio("ding.mp3").play().catch(()=>{}); } catch(e){}
+    },
+
+    onFinish: () => {
+      alert("HIIT terminé !");
+    }
   });
 
   hiit.start();
