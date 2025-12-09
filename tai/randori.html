@@ -1,35 +1,36 @@
 <!doctype html>
 <html lang="fr">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Préparation Techniques – Tai-Jitsu</title>
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="randdori.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- QR library (needed by cles.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 </head>
 
 <body>
 
   <!-- HEADER -->
   <header class="appbar">
-    <a class="logo" href="../index.html">
+    <a class="logo" href="../index.html" title="Accueil">
       <img src="logo.png" alt="logo" class="logo-big">
     </a>
     <div class="header-text">
       <div class="title spicy">Préparation Techniques</div>
-      <div class="subtitle spicy">Tai-Jitsu – Randori</div>
+      <div class="subtitle spicy">Tai-Jitsu – Randori & Clés</div>
     </div>
   </header>
 
-  <!-- PAGE WRAPPER -->
-  <main class="page-grid">
+  <!-- MAIN GRID: two columns on desktop, one column on mobile -->
+  <main class="encarts-grid">
 
     <!-- ENCARt 1 — CLÉS ARTICULAIRES -->
-    <section class="card-block">
-
-      <h2 class="spicy section-title">🤲 Exercices — Clés Articulaires</h2>
+    <section class="card kawaii-card" id="encart-cles">
+      <h2 class="section-title spicy">🤲 Exercices — Clés Articulaires</h2>
 
       <div class="selectors-row">
         <select id="selectCle">
@@ -41,22 +42,19 @@
         </select>
       </div>
 
-      <!-- Conteneur fiche -->
       <div id="cleCard" class="fiche-container"></div>
-
     </section>
 
     <!-- ENCARt 2 — TECHNIQUES RANDORI -->
-    <section class="card-block">
-
-      <h2 class="spicy section-title">🥋 Techniques Randori</h2>
+    <section class="card kawaii-card" id="encart-randori">
+      <h2 class="section-title spicy">🥋 Techniques Randori</h2>
 
       <div class="selectors-row">
         <select id="filterType">
           <option value="">Filtrer par type</option>
         </select>
 
-        <input type="text" id="searchBox" placeholder="Recherche rapide...">
+        <input type="text" id="searchBox" placeholder="Recherche rapide..." />
 
         <select id="selectTech">
           <option value="">Choisir une technique</option>
@@ -68,15 +66,12 @@
       <div id="randomResult" class="random-result">Technique sélectionnée : -</div>
 
       <div id="techCard" class="fiche-container"></div>
-
     </section>
 
   </main>
 
-  <!-- JS -->
-  <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+  <!-- SCRIPTS (separate files) -->
   <script src="cles.js"></script>
   <script src="randori.js"></script>
-
 </body>
 </html>
