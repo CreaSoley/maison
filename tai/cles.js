@@ -1,117 +1,183 @@
-// -------------------------------------------------------------
-// Chargement des données depuis randori-exercices.json
-// -------------------------------------------------------------
-let clesData = [];
+/* ----------------------------------------------------------
+   CHARGEMENT DES EXERCICES
+---------------------------------------------------------- */
 
-fetch("randori_exercices.json")
-  .then(res => res.json())
-  .then(data => {
-    clesData = data;
-    remplirFiltresCles();
-    remplirSelectCles();
-  })
-  .catch(err => console.error("Erreur chargement JSON clés :", err));
+let exercicesData = [];
+let exercicesParTechnique = {};
 
+async function chargerExercices() {
+    try {
+        const resp = await fetch("randori_exercices.json");
+        exercicesData = await resp.json();
 
-// -------------------------------------------------------------
-// Remplit le filtre de type
-// -------------------------------------------------------------
-function remplirFiltresCles() {
-  const select = document.getElementById("clesFilterType");
-  const types = [...new Set(clesData.map(item => item.type))];
+        // Regrouper par technique (champ "video")
+        exercicesParTechnique = {};
+        exercicesData.forEach(ex => {
+            const tech = ex.video || "Autre";
+            if (!exercicesParTechnique[tech]) exercicesParTechnique[tech] = [];
+            exercicesParTechnique[tech].push(ex);
+        });
 
-  types.forEach(type => {
-    const opt = document.createElement("option");
-    opt.value = type;
-    opt.textContent = type;
-    select.appendChild(opt);
-  });
-
-  select.addEventListener("change", filtrerCles);
+        remplirSelectTechniques();
+    } catch (e) {
+        console.error("Erreur lors du chargement des exercices :", e);
+    }
 }
 
+/* ----------------------------------------------------------
+   REMPLIR MENU 1 : LISTE DES TECHNIQUES
+---------------------------------------------------------- */
+function remplirSelectTechniques() {
+    const selTech = document.getElementById("selectCleTechnique");
+    selTech.innerHTML = '<option value="">Choisir une clé...</option>';
 
-// -------------------------------------------------------------
-// Remplit la liste déroulante des clés
-// -------------------------------------------------------------
-function remplirSelectCles(filteredList = null) {
-  const select = document.getElementById("clesSelect");
-  select.innerHTML = "<option value=''>Choisir une clé</option>";
-
-  const list = filteredList || clesData;
-
-  list.forEach(cle => {
-    const opt = document.createElement("option");
-    opt.value = cle.id;
-    opt.textContent = cle.nom;
-    select.appendChild(opt);
-  });
-
-  select.addEventListener("change", afficherCle);
+    Object.keys(exercicesParTechnique).forEach(tech => {
+        const opt = document.createElement("option");
+        opt.value = tech;
+        opt.textContent = tech;
+        selTech.appendChild(opt);
+    });
 }
 
+/* ----------------------------------------------------------
+   REMPLIR MENU 2 : LISTE DES EXERCICES POUR UNE TECHNIQUE
+---------------------------------------------------------- */
+function remplirSelectExercices(tech) {
+    const selEx = document.getElementById("selectCleExercice");
+    selEx.innerHTML = '<option value="">Choisir un exercice...</option>';
 
-// -------------------------------------------------------------
-// Filtrage des clés par type
-// -------------------------------------------------------------
-function filtrerCles() {
-  const type = document.getElementById("clesFilterType").value;
+    if (!tech || !exercicesParTechnique[tech]) return;
 
-  if (!type) {
-    remplirSelectCles(clesData);
-    document.getElementById("clesResult").innerHTML = "";
-    return;
-  }
-
-  const filtrées = clesData.filter(c => c.type === type);
-  remplirSelectCles(filtrées);
-  document.getElementById("clesResult").innerHTML = "";
+    exercicesParTechnique[tech].forEach(ex => {
+        const opt = document.createElement("option");
+        opt.value = ex.exercice;
+        opt.textContent = `${ex.exercice}. ${ex.titre.trim()}`;
+        selEx.appendChild(opt);
+    });
 }
 
+/* ----------------------------------------------------------
+   AFFICHAGE DE LA FICHE EXERCICE
+---------------------------------------------------------- */
+function afficherExercice(tech, num) {
+    const cont = document.getElementById("cleCard");
+    cont.innerHTML = "";
 
-// -------------------------------------------------------------
-// Affichage de la clé sélectionnée
-// -------------------------------------------------------------
-function afficherCle() {
-  const id = document.getElementById("clesSelect").value;
-  if (!id) {
-    document.getElementById("clesResult").innerHTML = "";
-    return;
-  }
+    if (!tech || !num) return;
 
-  const cle = clesData.find(c => c.id == id);
-  if (!cle) return;
+    const ex = exercicesParTechnique[tech].find(e => e.exercice == num);
+    if (!ex) return;
 
-  document.getElementById("clesResult").innerHTML = `
-    <div class="fiche-cle">
-      <h3 class="spicy">${cle.nom}</h3>
+    const photo = ex.photo ? ex.photo : "no-image.png";
 
-      <div class="fiche-layout">
-        <div class="fiche-photo">
-          <img src="${cle.image}" alt="${cle.nom}">
+    cont.innerHTML = `
+        <div class="cle-card">
+
+            <div class="cle-row">
+
+                <!-- PHOTO -->
+                <div class="cle-photo">
+                    <img src="${photo}" alt="photo exercice">
+                </div>
+
+                <!-- INFOS -->
+                <div class="cle-infos">
+
+                    <h3 class="spicy cle-title">${tech} – Exercice ${ex.exercice}</h3>
+
+                    <p><strong>Titre :</strong> ${ex.titre}</p>
+                    <p><strong>Objectif :</strong> ${ex.objectif}</p>
+                    <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
+
+                    <div class="cle-btns">
+                        <button class="btn primary" onclick="imprimerExercice(${ex.exercice}, '${tech}')">🖨 Imprimer</button>
+                        ${ex.video_exercice ? `<a class="btn ghost" href="${ex.video_exercice}" target="_blank">🎥 Vidéo</a>` : ""}
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
-
-        <div class="fiche-info">
-          <p><b>Type :</b> ${cle.type}</p>
-          <p><b>Description :</b></p>
-          <p>${cle.description || "Aucune description disponible."}</p>
-        </div>
-      </div>
-    </div>
-  `;
+    `;
 }
 
+/* ----------------------------------------------------------
+   IMPRESSION — FICHE DÉDIÉE
+---------------------------------------------------------- */
+function imprimerExercice(num, tech) {
+    const ex = exercicesParTechnique[tech].find(e => e.exercice == num);
+    if (!ex) return;
 
-// -------------------------------------------------------------
-// Impression de la fiche SEULEMENT pour les clés
-// -------------------------------------------------------------
-document.getElementById("btnPrintCles").addEventListener("click", () => {
-  const card = document.getElementById("clesResult");
+    const photo = ex.photo ? ex.photo : "no-image.png";
 
-  if (!card || card.innerHTML.trim() === "") {
-    alert("Veuillez d'abord sélectionner une clé à imprimer.");
-    return;
-  }
+    // Génération d'un QR Code
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(ex.video_exercice)}`;
 
-  window.print();
+    // Création d’une fenêtre d’impression
+    const win = window.open("", "_blank");
+
+    win.document.write(`
+        <html>
+        <head>
+            <title>Fiche Exercice</title>
+            <style>
+                body { font-family: Arial; padding: 20px; }
+                h2 { font-family: 'Spicy', cursive; }
+
+                .photo-print img {
+                    max-width: 7cm;
+                    max-height: 7cm;
+                    object-fit: cover;
+                    border-radius: 10px;
+                    border: 2px solid #ff9bdd;
+                }
+                .qr img { width: 4cm; margin-top: 15px; }
+
+            </style>
+        </head>
+        <body>
+
+            <h2>${tech} – Exercice ${ex.exercice}</h2>
+
+            <div class="photo-print">
+                <img src="${photo}">
+            </div>
+
+            <p><strong>Titre :</strong> ${ex.titre}</p>
+            <p><strong>Objectif :</strong> ${ex.objectif}</p>
+            <p><strong>Consigne :</strong><br>${ex.consigne.replace(/\n/g, "<br>")}</p>
+
+            ${ex.video_exercice ? `
+                <div class="qr">
+                    <p><strong>Vidéo :</strong></p>
+                    <img src="${qrUrl}">
+                </div>
+            ` : ""}
+
+            <script>window.print();</script>
+        </body>
+        </html>
+    `);
+
+    win.document.close();
+}
+
+/* ----------------------------------------------------------
+   INIT
+---------------------------------------------------------- */
+document.addEventListener("DOMContentLoaded", () => {
+    chargerExercices();
+
+    document.getElementById("selectCleTechnique").addEventListener("change", e => {
+        const tech = e.target.value;
+        remplirSelectExercices(tech);
+        document.getElementById("cleCard").innerHTML = "";
+    });
+
+    document.getElementById("selectCleExercice").addEventListener("change", e => {
+        const tech = document.getElementById("selectCleTechnique").value;
+        const num = e.target.value;
+        afficherExercice(tech, num);
+    });
 });
