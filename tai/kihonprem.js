@@ -8,7 +8,7 @@ const delayBetweenSets = 60000; // délai entre enchaînements (1 minute pour to
 const dingSound = new Audio("ding.mp3");  // fichier présent dans le repo
 
 async function loadJSON() {
-    const response = await fetch("enchaînements.json");
+    const response = await fetch("kihonprem.json");
     const json = await response.json();
     data = json.enchaînements;
 }
