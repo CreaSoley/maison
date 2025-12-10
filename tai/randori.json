@@ -17,22 +17,24 @@
       "erreurs": "Ne pas garder tes coudes proches du corps pour éviter de perdre ton propre équilibre",
       "video_embed": "https://www.youtube.com/embed/ZcmeBA2WbLs"
     },
+    
     {
-      "attaque": "Saisie de poignet opposé",
-      "type_attaque": "saisie",
-      "atemi_preparatoire": "Shuto court sur deltoïde. Effet : épaule crispée → prise moins ferme.",
-      "objectif": "Casser la prise avec levier buste + avant-bras.",
+      "attaque": "Couteau revers",
+      "type_attaque": "arme – couteau",
+      "atemi_preparatoire": "heiko uke court sur deltoïde. Effet : épaule crispée → prise moins ferme.",
+      "objectif": "Casser l'attaque avec les deux avant-bras, dont l'un au dessus du coude et enchaînement avec un atemi visage.",
       "deroule": [
-        "Orienter le buste côté main saisie.",
-        "Passer l’avant-bras par-dessus le sien.",
-        "Tourner le buste → levier efficace.",
-        "Mini-clé externe.",
-        "Maintenir contrôle stable."
+        "Rentrer dans l'attaque et se protéger heiko puis atemi visage, voir empi visage ",
+        "Saisie poignet",
+        "Passer le bras par dessous main ouverte et saisir le poignet",
+        "Désarmer en poussant sur le couteau",
+        "Maintenir contrôle stable de la clé et pousser sur le coude."
       ],
       "points_cles": "Utiliser buste et avant-bras. Mouvement court et compact. Contrôle propre.",
       "erreurs": "Pencher le buste en avant. Arracher la main. Aller trop vite.",
-      "video_embed": "https://www.youtube.com/embed/"
+      "video_embed": "https://www.youtube.com/embed/zWACi5VstDw"
     },
+    
     {
       "attaque": "Saisie de poignet haut",
       "type_attaque": "saisie",
@@ -49,22 +51,24 @@
       "erreurs": "Tirer droit. Monter le bras. Perdre alignement poignet.",
       "video_embed": "https://youtu.be/12345"
     },
+    
     {
-      "attaque": "Saisie des deux poignets bas",
+      "attaque": "Saisie d'un poignet à deux mains",
       "type_attaque": "saisie",
-      "atemi_preparatoire": "Atemi visuel visage. Effet : ouverture centrale.",
-      "objectif": "Créer espace pour sortir les poignets simultanément.",
+      "atemi_preparatoire": "non pertinent",
+      "objectif": "Créer espace pour sortir de la saisie",
       "deroule": [
-        "Léger relèvement des coudes.",
-        "Rotation des poignets vers l’extérieur.",
+        "Saisir sa propre main, paume contre paume",
+        "Rotation des poignets vers l’extérieur en pliant les coudes",
         "Cercle descendant pour casser la prise.",
-        "Option : contrôle du bras.",
-        "Retour au centre."
+        "Atemi finale si possible.".
+      
       ],
       "points_cles": "Mouvement symétrique. Cercle fluide. Buste accompagne.",
       "erreurs": "Tirer droit vers soi. Lever les bras haut. Mouvements trop rapides.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/Vga_X9pHY04"
     },
+    
     {
       "attaque": "Saisie des deux poignets haut",
       "type_attaque": "saisie",
