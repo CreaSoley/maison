@@ -61,7 +61,7 @@
         "Saisir sa propre main, paume contre paume",
         "Rotation des poignets vers l’extérieur en pliant les coudes",
         "Cercle descendant pour casser la prise.",
-        "Atemi finale si possible.".
+        "Atemi final si possible.".
       
       ],
       "points_cles": "Mouvement symétrique. Cercle fluide. Buste accompagne.",
@@ -286,7 +286,7 @@
          ],
       "points_cles": "",
       "erreurs": "",
-      "video_embed": ""
+      "video_embed": "https://www.youtube.com/embed/L2pX_1TQMpw"
     }
   ]
 }
