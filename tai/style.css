@@ -245,8 +245,17 @@ body {
         justify-content: center;
     }
 
-    .kihon-media img,
-    .kihon-media iframe {
-        width: 45%;
-        height: auto;
+   /* --- Améliore la hauteur de la vidéo sur desktop --- */
+@media (min-width: 768px) {
+    .kihon-media iframe.video {
+        height: 400px !important;  /* augmente si tu veux encore plus */
+        max-height: 70vh;          /* ne dépasse jamais l'écran */
+        width: 100%;
     }
+
+    .kihon-media img.photo {
+        width: 10cm;
+        height: 10cm;
+        object-fit: cover;
+    }
+}
