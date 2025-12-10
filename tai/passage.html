@@ -185,6 +185,27 @@
       margin:12px 0 6px;
       font-size:1.4rem;
     }
+    /* --- Photo + vidéo côte à côte en desktop --- */
+.kihon-media {
+    display: flex;
+    flex-direction: column; /* mobile */
+    gap: 15px;
+}
+
+@media (min-width: 768px) {
+    .kihon-media {
+        flex-direction: row;  /* côte à côte */
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .kihon-media img,
+    .kihon-media iframe {
+        width: 45%;
+        height: auto;
+    }
+}
+
 
   </style>
 </head>
