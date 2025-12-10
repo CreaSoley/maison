@@ -1,0 +1,48 @@
+{
+  "kihon": [
+    { "romaji": "Gedan Barai", "jp": "下段払い" },
+    { "romaji": "Jodan Age Uke", "jp": "上段上げ受け" },
+    { "romaji": "Soto Ude Uke", "jp": "外腕受け" },
+    { "romaji": "Uchi Ude Uke", "jp": "内腕受け" },
+    { "romaji": "Shuto Uke", "jp": "手刀受け" },
+    { "romaji": "Osae Uke", "jp": "押さえ受け" },
+    { "romaji": "Teisho Uke", "jp": "底掌受け" },
+    { "romaji": "Juji Uke", "jp": "十字受け" },
+    { "romaji": "Kakiwake Uke", "jp": "掻き分け受け" },
+    { "romaji": "Morote Uke", "jp": "諸手受け" },
+    { "romaji": "Heiko Uke", "jp": "平行受け" },
+    { "romaji": "Empi Uke", "jp": "猿臂受け" },
+    { "romaji": "Sukui Uke", "jp": "掬い受け" },
+    { "romaji": "Nagashi Uke", "jp": "流し受け" },
+    { "romaji": "Otoshi Uke", "jp": "落とし受け" },
+    { "romaji": "Koken Uke", "jp": "虎拳受け" },
+
+    { "romaji": "Uraken Uchi", "jp": "裏拳打ち" },
+    { "romaji": "Shuto Uchi", "jp": "手刀打ち" },
+    { "romaji": "Tetsui Uchi", "jp": "鉄槌打ち" },
+    { "romaji": "Empi Uchi", "jp": "猿臂打ち" },
+    { "romaji": "Haito Uchi", "jp": "背刀打ち" },
+    { "romaji": "Teisho Uchi", "jp": "底掌打ち" },
+    { "romaji": "Koken Uchi", "jp": "虎拳打ち" },
+    { "romaji": "Hiraken Uchi", "jp": "平拳打ち" },
+
+    { "romaji": "Gyaku Tsuki", "jp": "逆突き" },
+    { "romaji": "Oi Tsuki", "jp": "追い突き" },
+    { "romaji": "Maete Tsuki", "jp": "前手突き" },
+    { "romaji": "Kizami Tsuki", "jp": "刻み突き" },
+    { "romaji": "Tate Tsuki", "jp": "縦突き" },
+    { "romaji": "Kagi Tsuki", "jp": "鍵突き" },
+    { "romaji": "Mawashi Tsuki", "jp": "回し突き" },
+    { "romaji": "Yama Tsuki", "jp": "山突き" },
+    { "romaji": "Morote Tsuki", "jp": "諸手突き" },
+    { "romaji": "Nukite", "jp": "貫手" },
+    { "romaji": "Otoshi Tsuki", "jp": "落とし突き" },
+    { "romaji": "Age Tsuki", "jp": "上げ突き" },
+
+    { "romaji": "Mae Geri", "jp": "前蹴り" },
+    { "romaji": "Mawashi Geri", "jp": "回し蹴り" },
+    { "romaji": "Yoko Geri Kekomi", "jp": "横蹴り蹴込み" },
+    { "romaji": "Yoko Geri Keage", "jp": "横蹴り蹴上げ" },
+    { "romaji": "Hiza Geri", "jp": "膝蹴り" }
+  ]
+}
