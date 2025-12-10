@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tai-Jitsu – Accueil</title>
+
+<style>
+@font-face { font-family: "Spicy"; src: url("Spicy Sale.ttf"); }
+
+:root {
+  --pink-1:#fff0f6;
+  --pink-2:#ffd6ec;
+  --accent:#ff5fc1;
+  --card-shadow: 0 10px 24px rgba(255,120,180,0.12);
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
+  font-family: Arial,sans-serif;
+  color:#222;
+}
+
+/* HEADER */
+header {
+  background:#000;
+  color:#fff;
+  padding:24px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+header img { height:86px; cursor:pointer; }
+header h1 {
+  font-family:"Spicy";
+  font-size:2.9rem;
+  margin:0;
+  color:var(--pink-2);
+  letter-spacing:2px;
+}
+
+/* MAIN WRAPPER */
+.main-wrapper {
+  max-width:1600px;
+  margin:20px auto;
+  padding:0 18px 40px;
+}
+
+/* BOUTONS UV */
+.uv-grid {
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap:22px;
+  margin-bottom:30px;
+}
+
+.uv-card {
+  background: linear-gradient(180deg,#fff9fb 0%, #fff4fb 100%);
+  border-radius:20px;
+  width:5cm;
+  height:5cm;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform .16s, box-shadow .16s;
+  flex-direction:column;
+}
+.uv-card:hover {
+  transform: translateY(-6px);
+  box-shadow:0 18px 36px rgba(255,110,180,0.14);
+}
+.uv-card img {
+  max-width:60%;
+  max-height:60%;
+  margin-bottom:6px;
+}
+.uv-card span {
+  font-family:"Spicy";
+  color:var(--accent);
+  font-size:1.4rem;
+  text-align:center;
+}
+
+/* RESPONSIVE MOBILE : BOUTONS EN BARRES */
+@media(max-width:900px){
+  .uv-grid {
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  .uv-card {
+    flex-direction:row;
+    width:100%;
+    height:60px;
+    padding:0 14px;
+  }
+  .uv-card img { max-width:40px; max-height:40px; margin-bottom:0; margin-right:12px; }
+  .uv-card span { font-size:1.3rem; text-align:left; }
+}
+
+/* ACCORDÉONS */
+.accordion-container {
+  display:grid;
+  grid-template-columns: repeat(5,1fr);
+  gap:14px;
+}
+.accordion {
+  background:linear-gradient(180deg,#fff6f9 0%,#fff1f9 100%);
+  border:1px solid var(--pink-2);
+  border-radius:14px;
+  box-shadow: var(--card-shadow);
+  overflow:hidden;
+}
+.accordion-header {
+  cursor:pointer;
+  padding:10px 14px;
+  font-family:"Spicy";
+  font-size:1.4rem;
+  color:var(--accent);
+}
+.accordion-body {
+  display:none;
+  padding:10px 14px;
+  font-size:0.95rem;
+}
+.accordion-body iframe {
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:10px;
+  margin-bottom:8px;
+}
+
+/* ACCORDÉONS MOBILE */
+@media(max-width:900px){
+  .accordion-container {
+    grid-template-columns:1fr;
+  }
+  .accordion-body { display:block; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html"><img src="logo.png" alt="Logo"></a>
+  <h1>Tai-Jitsu</h1>
+</header>
+
+<div class="main-wrapper">
+
+  <!-- BOUTONS UV -->
+  <div class="uv-grid">
+    <div class="uv-card" onclick="location.href='kihon.html'">
+      <img src="lkihon.png" alt="Kihon">
+      <span>Kihon</span>
+    </div>
+    <div class="uv-card" onclick="location.href='ippon.html'">
+      <img src="lippon.png" alt="Ippon Kumite">
+      <span>Ippon Kumite</span>
+    </div>
+    <div class="uv-card" onclick="location.href='kata.html'">
+      <img src="lkata.png" alt="Kata">
+      <span>Kata</span>
+    </div>
+    <div class="uv-card" onclick="location.href='base5.html'">
+      <img src="lbase5.png" alt="Technique de base">
+      <span>Technique de base</span>
+    </div>
+    <div class="uv-card" onclick="location.href='randori.html'">
+      <img src="lrandori.png" alt="Randori">
+      <span>Randori</span>
+    </div>
+    <div class="uv-card" onclick="location.href='passage.html'">
+      <img src="lpassage.png" alt="Examen">
+      <span>Examen</span>
+    </div>
+  </div>
+
+  <!-- ACCORDÉONS -->
+  <div class="accordion-container">
+    <div class="accordion">
+      <div class="accordion-header">Maai</div>
+      <div class="accordion-body">
+        <iframe src="https://www.youtube.com/embed/M1PWGQZqm0w" allowfullscreen></iframe>
+        <p>Le maai (間合い), qu'on peut simplement traduire par « intervalle », est un terme d'arts martiaux japonais se référant à l'espace entre deux adversaires au combat ; plus formellement, la « distance d'engagement ».</p>
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header">Zanchin</div>
+      <div class="accordion-body">
+        <iframe src="https://www.youtube.com/embed/2Qw4D5l5b1g" allowfullscreen></iframe>
+        <p>Zanchin désigne la vigilance et la concentration continue après une attaque.</p>
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header">Kime</div>
+      <div class="accordion-body">
+        <iframe src="https://www.youtube.com/embed/3y3F2kS9u5Y" allowfullscreen></iframe>
+        <p>Kime fait référence à la puissance et à la décision dans l'exécution d'une technique.</p>
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header">Technique juste</div>
+      <div class="accordion-body">
+        <iframe src="https://www.youtube.com/embed/4x2F6sY7H1U" allowfullscreen></iframe>
+        <p>La technique juste consiste à appliquer correctement les principes fondamentaux sans erreur de position ou de timing.</p>
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header">Hara</div>
+      <div class="accordion-body">
+        <iframe src="https://www.youtube.com/embed/5t8V1yW8k2M" allowfullscreen></iframe>
+        <p>Le hara représente le centre de gravité et de puissance corporelle dans les arts martiaux.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ACCORDÉON JS
+document.querySelectorAll('.accordion-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const body = header.nextElementSibling;
+    if(body.style.display === 'block'){
+      body.style.display = 'none';
+    } else {
+      body.style.display = 'block';
+    }
+  });
+});
+</script>
+
+</body>
+</html>
