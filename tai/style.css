@@ -215,3 +215,19 @@ body {
 #btnSurprise {
   /* NE PAS MODIFIER → demandé par toi */
 }
+/* ---- Photo carrée responsive ---- */
+.photo {
+    width: 5cm;
+    height: 5cm;
+    object-fit: cover;   /* coupe proprement */
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+}
+
+@media (min-width: 768px) {
+    .photo {
+        width: 10cm;
+        height: 10cm;
+    }
+}
