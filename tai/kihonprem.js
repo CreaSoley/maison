@@ -4,7 +4,7 @@ const delayBeforeReading = 3000; // 3 secondes avant la lecture
 const delayBetween = 60000; // 1 minute entre chaque enchaînement
 
 async function loadJSON() {
-    const response = await fetch("enchaînements.json");
+    const response = await fetch("kihonprem.json");
     const json = await response.json();
     data = json.enchaînements;
 }
