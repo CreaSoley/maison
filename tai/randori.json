@@ -3,18 +3,19 @@
     {
       "attaque": "Saisie de poignet direct",
       "type_attaque": "saisie",
-      "atemi_preparatoire": "Tsuki court plexus. Effet : relâchement micro-tension.",
+      "atemi_preparatoire": "Teisho jodan. Effet : relâchement micro-tension.",
       "objectif": "Sortir de la saisie en utilisant rotation du poignet et du buste.",
       "deroule": [
-        "Tourner le poignet vers le pouce adverse.",
-        "Engager légèrement le buste pour amplifier.",
-        "Décoller le coude et faire sortir la main en diagonale.",
-        "Contre-saisie pour contrôler le bras.",
-        "Écarter et maintenir distance."
+        "Rotation du bras saisi main ouverte vers l'extérieur",
+        "Main saisie dans la pliure du poignet de l'adversaire.",
+        "Ta main libre vient envelopper l’arrière de sa main, juste au-dessus des articulations métacarpiennes.Le pouce peut se placer sur le dos de sa main pour guider.",
+        "Ton autre main (celle qui était saisie) passe pour prendre appui sur son avant-bras, près du poignet.Tu dois avoir un point haut (avant-bras) et un point bas (sa main).",
+        "Tu fléchis son poignet vers l’avant (ou l’arrière selon l’école).Simultanément, tu tournes légèrement son bras pour aligner les os radius/ulna dans une position de contrainte..",
+        "Stabiliser et guider, tu baisses légèrement ton centre de gravité,tu accompagnes l’attaquant vers le sol ou vers une position de contrôle."
       ],
-      "points_cles": "Rotation = clé du dégagement. Trajectoire diagonale. Buste donne puissance.",
-      "erreurs": "Tirer droit vers soi. Coude trop haut. Geste brusqué non maîtrisé.",
-      "video_embed": "https://youtu.be/12345"
+      "points_cles": "deux points de contrôle : un sur sa main (ou ses doigts), un sur son avant-bras",
+      "erreurs": "Ne pas garder tes coudes proches du corps pour éviter de perdre ton propre équilibre",
+      "video_embed": "https://www.youtube.com/embed/ZcmeBA2WbLs"
     },
     {
       "attaque": "Saisie de poignet opposé",
@@ -30,7 +31,7 @@
       ],
       "points_cles": "Utiliser buste et avant-bras. Mouvement court et compact. Contrôle propre.",
       "erreurs": "Pencher le buste en avant. Arracher la main. Aller trop vite.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/"
     },
     {
       "attaque": "Saisie de poignet haut",
@@ -87,30 +88,31 @@
       "objectif": "Libérer la gorge et contrôler le bras.",
       "deroule": [
         "Menton bas pour protéger la gorge.",
-        "Bris de prise avec avant-bras côté attaque.",
-        "Saisie du poignet adverse.",
-        "Clé basse courte.",
+        "Maintien de la main qui étrangle",
+        "Bris de prise avec atémi visage",
+        "Rotation pour passer le coude sur le bras de l'adversaire et retour face",
+        "Glisser la main à plat du torse vers la gorge en maintenant la saisie au cou",
         "Contrôle final."
       ],
       "points_cles": "Clé courte efficace. Déroulé fluide. Protection continue.",
       "erreurs": "Pencher en arrière. Chercher la force. Attendre.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/MLbTuWRgwaE"
     },
     {
       "attaque": "Étranglement de face (2 mains)",
       "type_attaque": "étranglement",
-      "atemi_preparatoire": "Coup d’œil + atemi visuel. Effet : micro-relâchement.",
+      "atemi_preparatoire": "atemi chudan. Effet : micro-relâchement.",
       "objectif": "Dégager gorge et contrôler un bras.",
       "deroule": [
         "Menton bas.",
-        "Bris de prise avec deux avant-bras vers l’extérieur.",
-        "Capture d’un poignet.",
-        "Clé basse.",
-        "Écartement."
+        "Bris de prise technique d'arc, saisie poignet et rotation vers le poignet saisie.",
+        "Cgarder le poignet et rotation vers l'intérieur pour ramener le coude en clé en le poussant par dessous.",
+        "Maintenir la clé",
+        "atemi final ou saisie cheveux
       ],
       "points_cles": "Bris rapide. Mouvement court. Stabilité.",
       "erreurs": "Lever épaules. Séparer par force. Se courber.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/bo4Xnc2n7R0
     },
     {
       "attaque": "Saisie de revers + mawashi tsuki",
@@ -126,39 +128,37 @@
       ],
       "points_cles": "Timing sur frappe. Blocage absorbant. Clé simple.",
       "erreurs": "Trop anticiper. Rigidité du bras. Se pencher en arrière.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/3ro-L_wkWVA"
     },
     {
       "attaque": "Saisie de cheveux",
       "type_attaque": "saisie",
-      "atemi_preparatoire": "Piqué main ouverte (sans contact). Effet : recul réflexe → traction diminue.",
+      "atemi_preparatoire": " atemi au niveau des parties génitales et des yeux.. Effet : recul réflexe → traction diminue.",
       "objectif": "Stabiliser tête, casser prise, contrôler.",
       "deroule": [
-        "Fixer main adverse sur la tête.",
-        "Autre bras diagonal jusqu’au coude.",
-        "Amener bras vers le bas.",
-        "Écarter bras.",
-        "Maintenir distance."
+        "maintenir sa main plaquée contre votre crâne puis en percutant cette dernière avec votre paume, dans un mouvement du haut vers le bas pour exercer des dommages au niveau de l’articulation des phalanges (la douleur devant alors faire lâcher prise à l’individu).",
+        "La percussion doit s’effectuer sur le dos de la main de l’agresseur, au niveaux de la jonction entre les métacarpes et les phalanges. L’onde de choc se propagera ainsi de façon ciblée afin d’occasionner un maximum de dégâts aux doigts.",
+        "Réaliser si nécessaire une clé de doigts (yubi Kudaki)."
       ],
-      "points_cles": "Stabiliser. Mouvement diagonal. Levier descendant.",
-      "erreurs": "Se laisser tirer. Monter bras. Attendre.",
-      "video_embed": "https://youtu.be/12345"
+      "points_cles": "créez pas une gêne inutile et privilégiez le côté ouvert (avec une riposte au visage de la main droite, du coup, dont le mouvement ne sera pas entravée par le bras tendu de l’agresseur).",
+      "erreurs": "Ne pas maintenir la main de l’agresseur plaquée contre vous ",
+      "video_embed": "https://www.youtube.com/embed/hfKZWJceU0U"
     },
     {
-      "attaque": "Couteau frontal",
+      "attaque": "Couteau basse ou piqué",
       "type_attaque": "arme – couteau",
-      "atemi_preparatoire": "Atemi visuel visage. Effet : détourne intention.",
+      "atemi_preparatoire": "atémi visage",
       "objectif": "Dégager ligne, dévier, contrôler main armée.",
       "deroule": [
-        "Déviation extérieure bras armé.",
-        "Saisie poignet armé.",
-        "Rotation externe.",
+        "Sortie de la ligne d’attaque.Au moment où uke déclenche l’attaque basse, tori effectue un déplacement latéral ou diagonal pour ne pas rester dans le trajet de la lame.Tori garde une main en protection, l’autre libre pour guider.Objectif évalué : gestion de distance + sécurité + compréhension de la ligne de coupe.",
+        "Saisie poignet armé et atemi visage",
+        "changement de main de saisie ou pas et kote gaeshi",
         "Amener lame hors axe.",
         "Contrôle."
       ],
-      "points_cles": "Priorité : sécurité. Déviation avant tout. Contrôle continu.",
+      "points_cles": "Priorité : sécurité. Déviation avant tout. Bien garder le bras conrte soi.",
       "erreurs": "Toucher la lame. Rester en ligne. Forcer clé.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/dE7tGdh7SJ8"
     },
     {
       "attaque": "Couteau revers",
@@ -273,7 +273,7 @@
       "video_embed": "https://youtu.be/12345"
     },
     {
-      "attaque": "Coup de poing direct",
+      "attaque": "Oî tsuki jodan",
       "type_attaque": "frappe",
       "atemi_preparatoire": "Tapotement bras/biceps. Effet : modifie trajectoire.",
       "objectif": "Sortir de l’axe, dévier, contrôler.",
@@ -286,7 +286,7 @@
       ],
       "points_cles": "Déviation d’abord. Gestion axe. Contrôle discret.",
       "erreurs": "Bloquer en force. Rester sur la ligne. Clé trop complexe.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/VikdV4S2b70"
     },
 
     {
