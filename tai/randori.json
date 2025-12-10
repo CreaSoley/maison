@@ -19,7 +19,7 @@
     },
     
     {
-      "attaque": "Couteau revers",
+      "attaque": "Couteau circulaire",
       "type_attaque": "arme – couteau",
       "atemi_preparatoire": "heiko uke court sur deltoïde. Effet : épaule crispée → prise moins ferme.",
       "objectif": "Casser l'attaque avec les deux avant-bras, dont l'un au dessus du coude et enchaînement avec un atemi visage.",
@@ -75,15 +75,15 @@
       "atemi_preparatoire": "Paume sternum. Effet : relâche traction vers le haut.",
       "objectif": "Ramener les bras dans zone contrôlable.",
       "deroule": [
-        "Abaisser coudes.",
-        "Rotation interne des poignets.",
-        "Cercle avant pour sortir.",
-        "Contrôle simple.",
-        "Maintenir distance."
+        "Mains ouvertes, rotation de la hanche pour amorcer le dégagement de la 1ère saisie",
+        "Remonter le coude vers le haut",
+        "Revenir vers le bas pour dégager la saisie",
+        "Empi niveau visage ou teisho",
+        "clé articulaire si possible ou dégagement.Maintenir distance."
       ],
       "points_cles": "Redescendre d’abord. Cercle fluide. Structure compacte.",
       "erreurs": "Monter les bras. Tirer vers soi. Rotation insuffisante.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://youtu.be/t6E5aVh6FqY"
     },
     {
       "attaque": "Étranglement de face (1 main)",
@@ -165,7 +165,7 @@
       "video_embed": "https://www.youtube.com/embed/dE7tGdh7SJ8"
     },
     {
-      "attaque": "Couteau revers",
+      "attaque": "Couteau revers ???",
       "type_attaque": "arme – couteau",
       "atemi_preparatoire": "Paume stoppée épaule. Effet : perturbe cercle.",
       "objectif": "Intercepter cercle et contrôler poignet armé.",
@@ -181,7 +181,7 @@
       "video_embed": "https://youtu.be/12345"
     },
     {
-      "attaque": "Matraque frontal",
+      "attaque": "Matraque revers",
       "type_attaque": "arme – matraque",
       "atemi_preparatoire": "Shuto visuel visage. Effet : réduit force frappe.",
       "objectif": "Bloquer arme et contrôler main armée.",
@@ -194,26 +194,27 @@
       ],
       "points_cles": "Blocage absorbant. Trajectoire fluide. Contrôle ferme.",
       "erreurs": "Rigidité. Taper sur arme. Arracher.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed"
     },
     {
-      "attaque": "Matraque revers",
+      "attaque": "Matraque haute",
       "type_attaque": "arme – matraque",
-      "atemi_preparatoire": "Tapotement biceps. Effet : casse élan circulaire.",
+      "atemi_preparatoire": "atemi niveau chudan",
       "objectif": "Intercepter cercle et sécuriser.",
       "deroule": [
-        "Blocage semi-circulaire.",
+        "Esquive intérieur jodan age uke au niveau de son avant-bras",
         "Saisie du poignet.",
-        "Rotation interne/externe.",
-        "Neutralisation.",
-        "Contrôle."
+        "Arc de cercle vers l'intérieur et le bas, je récupère avec l'autre main",
+        "Toujours en maintenant l'arme, dégagement dans le dos en le mettant en déséquilibre",
+        "Crocheter niveau menton et tirer le menton vers le haut",
+        "Tai sabaki pour lui laisser la place de chuter"
       ],
       "points_cles": "Intercepter tôt. Mouvement circulaire. Buste + bras.",
       "erreurs": "Attendre dernier moment. Taper sur arme. Laisser filer main.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": "https://www.youtube.com/embed/dBoJxGa44ts"
     },
     {
-      "attaque": "Saisie de cou latéral",
+      "attaque": "Saisie de cou latéral ???",
       "type_attaque": "saisie",
       "atemi_preparatoire": "Paume plexus. Effet : relâche traction latérale.",
       "objectif": "Réduire pression sur cou et dégager.",
@@ -229,53 +230,22 @@
       "video_embed": "https://youtu.be/12345"
     },
     {
-      "attaque": "Saisie de manche latéral",
+      "attaque": "Saisie de manche latérale",
       "type_attaque": "saisie",
       "atemi_preparatoire": "Shuto triceps. Effet : bras se tend → dégagement facile.",
       "objectif": "Sortir de l’emprise et contrôler bras.",
       "deroule": [
-        "Rotation externe poignet.",
-        "Buste accompagne.",
-        "Sortie circulaire.",
-        "Saisie poignet adverse.",
+        "Monter vers l'intérieur le bras le plus proche de l'adversaire, parer à un éventuel atemi, en levant le 2ème bras également",
+        "Enrouler de haut en bas par l'extieur, frapper le visage, ramener vers l'intérieur",
+        "Planter le bras vers le bas,profiter de la pliure du coude pour initier la torsion, niveau du bras",
+        "Atemi niveau visage",
         "Contrôle."
       ],
       "points_cles": "Rotation + buste. Mouvement court. Contrôle propre.",
       "erreurs": "Tirer direct. Rotation insuffisante. Perdre bras de vue.",
-      "video_embed": "https://youtu.be/12345"
+      "video_embed": ""https://www.youtube.com/embed/MLbTuWRgwaE"
     },
-    {
-      "attaque": "Saisie de col arrière",
-      "type_attaque": "saisie",
-      "atemi_preparatoire": "Paume côtes arrière. Effet : micro-déséquilibre attaquant.",
-      "objectif": "Protéger nuque et ramener attaque devant toi.",
-      "deroule": [
-        "Main protection derrière tête.",
-        "Capture poignet.",
-        "Tirage diagonal avant-bas.",
-        "Amener bras devant toi.",
-        "Contrôle."
-      ],
-      "points_cles": "Protection nuque. Mouvement diagonal. Garder contact.",
-      "erreurs": "Tourner dos. Saisir trop haut. Perdre contrôle.",
-      "video_embed": "https://youtu.be/12345"
-    },
-    {
-      "attaque": "Saisie des deux poignets arrière",
-      "type_attaque": "saisie",
-      "atemi_preparatoire": "Atemi visuel arrière. Effet : buste de l’attaquant remonte.",
-      "objectif": "Ramener mains devant et créer ouverture.",
-      "deroule": [
-        "Descendre coudes.",
-        "Rotation interne poignets.",
-        "Cercle avant pour sortir.",
-        "Option : contrôle bras.",
-        "Zanshin."
-      ],
-      "points_cles": "Descendre d’abord. Cercle avant. Centre stable.",
-      "erreurs": "Tirer en arrière. Lever bras. Rotation faible.",
-      "video_embed": "https://youtu.be/12345"
-    },
+    
     {
       "attaque": "Oî tsuki jodan",
       "type_attaque": "frappe",
@@ -294,21 +264,26 @@
     },
 
     {
-      "attaque": "Crochet gauche",
+      "attaque": "Mawashi tsuki gauche",
       "type_attaque": "frappe",
       "atemi_preparatoire": "",
-      "objectif": "",
-      "deroule": [],
-      "points_cles": "",
-      "erreurs": "",
-      "video_embed": ""
+      "objectif": "dévier l'attaque",
+      "deroule": jodan age uke du même côté que l'attaque,puis empi niveau chudan
+      "points_cles": "fluidité et précision",
+      "erreurs": "essayer de bloquer l'attaque",
+      "video_embed": "https://www.youtube.com/embed/iNOF7FSktYg"
     },
     {
-      "attaque": "Crochet droit",
+      "attaque": "Mawashi tsuki droit",
       "type_attaque": "frappe",
-      "atemi_preparatoire": "",
-      "objectif": "",
-      "deroule": [],
+      "atemi_preparatoire": "teisho niveau visage dès que l'attaque commence",
+      "objectif": "stopper l'attaque",
+      "deroule": [
+        "Bloquer l'attaque en soto uke avec le bras du même côté et simultannément teisho niveau visage",
+        "Avec le bras opposé, passer sous le bras d'attaque et saisir le poignet",
+         "Atemi niveau chudan".
+
+         ],
       "points_cles": "",
       "erreurs": "",
       "video_embed": ""
