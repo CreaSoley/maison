@@ -1,46 +1,244 @@
-<!-- Mise à jour : début de l'encart 1 (UV1 – Kihon) avec les 3 scripts modernisés -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tai-Jitsu – Entraînement</title>
 
-<div class="card" id="uv1">
-  <div class="card-title">
-    <img src="ceinture.png" alt=""> UV1 – Kihon
+<style>
+  @font-face { font-family: "Spicy"; src: url("Spicy Sale.ttf"); }
+
+  :root{
+    --pink-1:#fff0f6;
+    --pink-2:#ffd6ec;
+    --accent:#ff5fc1;
+    --card-shadow: 0 10px 24px rgba(255,120,180,0.12);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
+    font-family: Arial, sans-serif;
+    color:#222;
+  }
+
+  /* HEADER */
+  header {
+    background:#000;
+    color:#fff;
+    padding:24px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  }
+  header img { height:86px; }
+  header h1 {
+    font-family:"Spicy";
+    font-size:2.9rem;
+    margin:0;
+    color:var(--pink-2);
+    letter-spacing:2px;
+  }
+
+  /* MAIN WRAPPER */
+  .main-wrapper{
+    max-width:1600px;
+    margin:20px auto;
+    padding:0 18px 40px;
+  }
+
+  /* CARDS GRID */
+  .cards-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:22px;
+    width:100%;
+  }
+
+  @media(max-width:1200px){
+    .cards-grid{
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+
+  /* CARD STYLE */
+  .card{
+    background: linear-gradient(180deg,#fff9fb 0%, #fff4fb 100%);
+    border-radius:20px;
+    padding:20px;
+    border:1px solid var(--pink-2);
+    box-shadow: var(--card-shadow);
+    transition: transform .16s, box-shadow .16s;
+    display:flex;
+    flex-direction:column;
+  }
+  .card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 18px 36px rgba(255,110,180,0.14);
+  }
+
+  .card-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:"Spicy";
+    color:var(--accent);
+    font-size:1.7rem;
+    margin-bottom:6px;
+  }
+  .card-title img{ width:42px; }
+
+  .card .content{
+    overflow-y:auto;
+    max-height:350px;
+    padding-right:4px;
+  }
+
+  hr{
+    border:0;
+    border-top:1px dashed rgba(255,100,170,0.18);
+    margin:14px 0;
+  }
+
+  h3.spicy{
+    font-family:"Spicy";
+    color:var(--accent);
+    margin:12px 0 6px;
+    font-size:1.4rem;
+  }
+
+  /* Ressources */
+  .resources-banner{
+    margin-top:30px;
+    padding:14px 16px;
+    background: linear-gradient(180deg,#fff6fb,#fff1f9);
+    border:1px solid #ffd9ef;
+    border-radius:14px;
+    box-shadow:0 8px 20px rgba(255,120,180,0.06);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .library{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    overflow-x:auto;
+    padding:6px 4px;
+  }
+  .kimono-btn{
+    flex:0 0 auto;
+    width:64px;
+    height:64px;
+    background:url("kimono.png") center/contain no-repeat;
+    border-radius:12px;
+    cursor:pointer;
+    transition:transform .12s;
+  }
+  .kimono-btn:hover{
+    transform:scale(1.08) rotate(-6deg);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="../index.html">
+    <img src="logo.png" alt="logo">
+  </a>
+  <h1>Tai-Jitsu</h1>
+</header>
+
+<div class="main-wrapper">
+  <div class="cards-grid">
+
+    <!-- ========== UV1 – Kihon ========== -->
+    <div class="card" id="uv1">
+      <div class="card-title">
+        <img src="ceinture.png" alt=""> UV1 – Kihon
+      </div>
+      <div class="content" id="result"></div>
+      <div style="margin-top:10px;">
+        <label>Nombre d'enchaînements : <input type="number" id="count" value="3" style="width:50px;"></label>
+      </div>
+      <button id="btn-generate" class="training-button">Nouveaux enchaînements</button>
+      <button id="btn-read-jp" class="training-button">Lecture japonaise</button>
+    </div>
+
+    <!-- ========== UV2 – Ippon Kumite ========== -->
+    <div class="card" id="uv2">
+      <div class="card-title">
+        <img src="ceinture.png" alt=""> UV2 – Ippon Kumite
+      </div>
+      <div class="content"></div>
+      <button id="btn-ippon-kumite" class="training-button" style="margin-top:10px;">Lire Ippon Kumite</button>
+    </div>
+
+    <!-- ========== UV3 – Kata & Bunkai ========== -->
+    <div class="card" id="uv3">
+      <div class="card-title">
+        <img src="ceinture.png" alt=""> UV3 – Kata
+      </div>
+      <h4 class="spicy">Kata</h4>
+      <img src="kata.gif" alt="Kata GIF" style="width:100%; border-radius:12px; margin-bottom:10px;">
+      <h4 class="spicy">Bunkai</h4>
+      <ul>
+        <li><b>Bunkai 1 :</b> Uke attaque…<br><small>Courte description de la technique 1.</small></li>
+        <li><b>Bunkai 2 :</b> Uke attaque…<br><small>Courte description de la technique 2.</small></li>
+      </ul>
+    </div>
+
+    <!-- ========== UV4 – Techniques de base ========== -->
+    <div class="card" id="uv4">
+      <div class="card-title">
+        <img src="ceinture.png" alt=""> UV4 – Technique de base
+      </div>
+      <h4 class="spicy">Application par atemi</h4>
+      <p>Saisie poignet croisé – description courte.</p>
+      <h4 class="spicy">Application par clé</h4>
+      <p>Saisie revers – description courte.</p>
+      <h4 class="spicy">Application par projection</h4>
+      <p>Saisie cheveux – description courte.</p>
+    </div>
+
+    <!-- ========== UV5 – Randori partie 1 ========== -->
+    <div class="card" id="uv5">
+      <div class="card-title">
+        <img src="ceinture.png" alt=""> UV5 – Randori
+      </div>
+      <div id="randori" class="content"></div>
+    </div>
+
+    <!-- ========== UV6 – Randori partie 2 ========== -->
+    <div class="card" id="uv6">
+      <div class="card-title">
+        <img src="ceinture.png" alt=""> UV6 – Randori suite
+      </div>
+      <div id="randori2" class="content"></div>
+    </div>
+
+  </div> <!-- fin cards-grid -->
+
+  <!-- ===== BANDEAU RESSOURCES ===== -->
+  <div class="resources-banner">
+    <div class="library">
+      <div class="kimono-btn" title="Livre 1" onclick="window.open('livre1.pdf')"></div>
+      <div class="kimono-btn" title="Livre 2" onclick="window.open('livre2.pdf')"></div>
+      <div class="kimono-btn" title="Livre 3" onclick="window.open('livre3.pdf')"></div>
+      <div class="kimono-btn" title="Livre 4" onclick="window.open('livre4.pdf')"></div>
+    </div>
   </div>
 
-  <!-- SCRIPT 1 : Kihon simples -->
-  <section id="kihon-simples">
-    <h3 class="spicy">Kihon simples</h3>
+</div> <!-- fin main-wrapper -->
 
-    <label>Nombre : <input type="number" id="ks-count" value="3" min="1" max="20"></label>
-    <button class="training-button" id="ks-generate">Tirer</button>
-    <button class="training-button" id="ks-read">Lire en japonais</button>
-
-    <div id="ks-result" class="content"></div>
-  </section>
-
-  <hr>
-
-  <!-- SCRIPT 2 : Enchaînements du kihon → JSON fourni -->
-  <section id="kihon-chaines">
-    <h3 class="spicy">Enchaînements kihon</h3>
-
-    <label>Nombre : <input type="number" id="kc-count" value="2" min="1" max="10"></label>
-    <button class="training-button" id="kc-generate">Changer d’enchaînements</button>
-    <button class="training-button" id="kc-read">Lire en japonais</button>
-
-    <div id="kc-result" class="content"></div>
-  </section>
-
-  <hr>
-
-  <!-- SCRIPT 3 : Techniques combat (liste fixe, tirage random, lecture FR) -->
-  <section id="kihon-combat">
-    <h3 class="spicy">Techniques combat</h3>
-
-    <button class="training-button" id="kcb-generate">Nouvelles techniques</button>
-    <button class="training-button" id="kcb-read">Lecture FR</button>
-
-    <div id="kcb-result" class="content"></div>
-  </section>
-</div>
-
-<!-- Scripts externalisés -->
+<!-- SCRIPTS -->
 <script src="encart1.js"></script>
+<script src="encart2.js"></script>
+<script src="randori.js"></script>
+
+</body>
+</html>
