@@ -1,0 +1,46 @@
+<!-- Mise à jour : début de l'encart 1 (UV1 – Kihon) avec les 3 scripts modernisés -->
+
+<div class="card" id="uv1">
+  <div class="card-title">
+    <img src="ceinture.png" alt=""> UV1 – Kihon
+  </div>
+
+  <!-- SCRIPT 1 : Kihon simples -->
+  <section id="kihon-simples">
+    <h3 class="spicy">Kihon simples</h3>
+
+    <label>Nombre : <input type="number" id="ks-count" value="3" min="1" max="20"></label>
+    <button class="training-button" id="ks-generate">Tirer</button>
+    <button class="training-button" id="ks-read">Lire en japonais</button>
+
+    <div id="ks-result" class="content"></div>
+  </section>
+
+  <hr>
+
+  <!-- SCRIPT 2 : Enchaînements du kihon → JSON fourni -->
+  <section id="kihon-chaines">
+    <h3 class="spicy">Enchaînements kihon</h3>
+
+    <label>Nombre : <input type="number" id="kc-count" value="2" min="1" max="10"></label>
+    <button class="training-button" id="kc-generate">Changer d’enchaînements</button>
+    <button class="training-button" id="kc-read">Lire en japonais</button>
+
+    <div id="kc-result" class="content"></div>
+  </section>
+
+  <hr>
+
+  <!-- SCRIPT 3 : Techniques combat (liste fixe, tirage random, lecture FR) -->
+  <section id="kihon-combat">
+    <h3 class="spicy">Techniques combat</h3>
+
+    <button class="training-button" id="kcb-generate">Nouvelles techniques</button>
+    <button class="training-button" id="kcb-read">Lecture FR</button>
+
+    <div id="kcb-result" class="content"></div>
+  </section>
+</div>
+
+<!-- Scripts externalisés -->
+<script src="encart1.js"></script>
