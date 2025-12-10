@@ -52,12 +52,21 @@
       padding:0 18px 40px;
     }
 
-    .cards-grid{
-      display:grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap:22px;
-      align-items:start;
-    }
+    ./* ======= VERSION DESKTOP : les 5 encarts prennent toute la largeur ======= */
+.cards-grid{
+  display:grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap:22px;
+  align-items:start;
+  width:100%;
+}
+
+/* ======= VERSION MOBILE : on garde les encarts empilés ======= */
+@media(max-width:1060px){
+  .cards-grid{
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
 
     /* resources banner will be below; set later */
     @media(max-width:1060px){
