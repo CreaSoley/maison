@@ -44,17 +44,18 @@ header h1 {
   letter-spacing:2px;
 }
 
-/* MAIN WRAPPER */
+/* MAIN */
 .main-wrapper {
   max-width:1600px;
   margin:20px auto;
   padding:0 18px 40px;
 }
 
-/* BOUTONS UV */
+/* ==== BOUTONS UV ==== */
 .uv-grid {
   display:grid;
   grid-template-columns: repeat(5, 1fr);
+  justify-items:center;
   gap:22px;
   margin-bottom:30px;
 }
@@ -86,27 +87,16 @@ header h1 {
   font-size:1.4rem;
   text-align:center;
 }
-  /* Grille desktop : on force le centage du bouton Examen */
-@media(min-width:901px){
-  .uv-grid {
-    grid-template-columns: repeat(5, 1fr);
-    justify-items:center; 
-  }
 
-  /* Le bouton Examen occupe plus de place */
-  .uv-card.examen {
-    width:6.5cm !important;
-    height:6.5cm !important;
-  }
-}
+/* ==== BOUTON EXAMEN SPÉCIAL ==== */
 .uv-card.examen {
   position:relative;
+  width:6.5cm !important;
+  height:6.5cm !important;
   box-shadow:0 0 18px rgba(255,120,180,0.45),
              0 0 32px rgba(255,80,150,0.25),
              0 0 48px rgba(255,60,130,0.20);
-  transition: transform .16s, box-shadow .16s;
 }
-
 .uv-card.examen:hover {
   box-shadow:0 0 28px rgba(255,120,180,0.65),
              0 0 60px rgba(255,80,150,0.45),
@@ -114,34 +104,44 @@ header h1 {
   transform:translateY(-6px) scale(1.05);
 }
 
-
-/* RESPONSIVE MOBILE : BOUTONS EN BARRES */
+/* ==== MOBILE : BARRES ==== */
 @media(max-width:900px){
+  .uv-grid {
+    grid-template-columns:1fr;
+  }
+
   .uv-card {
     flex-direction:row;
-    width:100%;
-    height:70px;
+    width:100% !important;
+    height:70px !important;
     padding:0 16px;
-    justify-content:flex-start;   /* aligner logo + texte à gauche */
+    justify-content:flex-start;
   }
+
   .uv-card img {
     margin-right:14px;
     margin-left:0;
     max-width:42px;
     max-height:42px;
   }
+
   .uv-card span {
     text-align:left;
-    margin-left:0;
   }
 
+  .uv-card.examen {
+    width:100% !important;
+    height:80px !important;
+  }
+}
 
-/* ACCORDÉONS */
+/* ==== ACCORDÉONS ==== */
 .accordion-container {
   display:grid;
   grid-template-columns: repeat(5,1fr);
   gap:14px;
 }
+
 .accordion {
   background:linear-gradient(180deg,#fff6f9 0%,#fff1f9 100%);
   border:1px solid var(--pink-2);
@@ -149,6 +149,7 @@ header h1 {
   box-shadow: var(--card-shadow);
   overflow:hidden;
 }
+
 .accordion-header {
   cursor:pointer;
   padding:10px 14px;
@@ -156,11 +157,13 @@ header h1 {
   font-size:1.4rem;
   color:var(--accent);
 }
+
 .accordion-body {
   display:none;
   padding:10px 14px;
   font-size:0.95rem;
 }
+
 .accordion-body iframe {
   width:100%;
   aspect-ratio:16/9;
@@ -168,16 +171,18 @@ header h1 {
   margin-bottom:8px;
 }
 
-/* ACCORDÉONS MOBILE */
+/* Mobile = une seule colonne + accordéons ouverts */
 @media(max-width:900px){
   .accordion-container {
     grid-template-columns:1fr;
   }
-  .accordion-body { display:block; }
+  .accordion-body {
+    display:block;
+  }
 }
-
 </style>
 </head>
+
 <body>
 
 <header>
@@ -187,86 +192,89 @@ header h1 {
 
 <div class="main-wrapper">
 
-  <!-- BOUTONS UV -->
+  <!-- ==== BOUTONS UV ==== -->
   <div class="uv-grid">
+
     <div class="uv-card" onclick="location.href='kihon.html'">
-      <img src="lkihon.png" alt="Kihon">
-      <span>Kihon</span>
+      <img src="lkihon.png" alt="Kihon"><span>Kihon</span>
     </div>
+
     <div class="uv-card" onclick="location.href='ippon.html'">
-      <img src="lippon.png" alt="Ippon Kumite">
-      <span>Ippon Kumite</span>
+      <img src="lippon.png" alt="Ippon"><span>Ippon Kumite</span>
     </div>
+
     <div class="uv-card" onclick="location.href='kata.html'">
-      <img src="lkata.png" alt="Kata">
-      <span>Kata</span>
+      <img src="lkata.png" alt="Kata"><span>Kata</span>
     </div>
+
     <div class="uv-card" onclick="location.href='base5.html'">
-      <img src="lbase5.png" alt="Technique de base">
-      <span>Technique de base</span>
+      <img src="lbase5.png" alt="Base 5"><span>Technique de base</span>
     </div>
+
     <div class="uv-card" onclick="location.href='randori.html'">
-      <img src="lrandori.png" alt="Randori">
-      <span>Randori</span>
+      <img src="lrandori.png" alt="Randori"><span>Randori</span>
     </div>
-    <<div class="uv-card examen" onclick="location.href='passage.html'">
-  <img src="lpassage.png" alt="Examen">
-  <span>Examen</span>
-</div>
+
+    <!-- BOUTON EXAMEN CENTRÉ -->
+    <div class="uv-card examen" onclick="location.href='passage.html'">
+      <img src="lpassage.png" alt="Examen"><span>Examen</span>
+    </div>
 
   </div>
 
-  <!-- ACCORDÉONS -->
+  <!-- ==== ACCORDÉONS ==== -->
   <div class="accordion-container">
+
     <div class="accordion">
       <div class="accordion-header">Maai</div>
       <div class="accordion-body">
-        <iframe src="https://www.youtube.com/embed/M1PWGQZqm0w" allowfullscreen></iframe>
-        <p>Le maai (間合い), qu'on peut simplement traduire par « intervalle », est un terme d'arts martiaux japonais se référant à l'espace entre deux adversaires au combat ; plus formellement, la « distance d'engagement ».</p>
+        <iframe src="https://www.youtube.com/embed/M1PWGQZqm0w"></iframe>
+        <p>Le maai est l’intervalle, la distance d’engagement entre deux adversaires.</p>
       </div>
     </div>
+
     <div class="accordion">
       <div class="accordion-header">Zanchin</div>
       <div class="accordion-body">
-        <iframe src="https://www.youtube.com/embed/2Qw4D5l5b1g" allowfullscreen></iframe>
-        <p>Zanchin désigne la vigilance et la concentration continue après une attaque.</p>
+        <iframe src="https://www.youtube.com/embed/2Qw4D5l5b1g"></iframe>
+        <p>Zanchin : vigilance et attention continue après l’action.</p>
       </div>
     </div>
+
     <div class="accordion">
       <div class="accordion-header">Kime</div>
       <div class="accordion-body">
-        <iframe src="https://www.youtube.com/embed/3y3F2kS9u5Y" allowfullscreen></iframe>
-        <p>Kime fait référence à la puissance et à la décision dans l'exécution d'une technique.</p>
+        <iframe src="https://www.youtube.com/embed/3y3F2kS9u5Y"></iframe>
+        <p>Kime : puissance focalisée au moment précis de l’impact.</p>
       </div>
     </div>
+
     <div class="accordion">
       <div class="accordion-header">Technique juste</div>
       <div class="accordion-body">
-        <iframe src="https://www.youtube.com/embed/4x2F6sY7H1U" allowfullscreen></iframe>
-        <p>La technique juste consiste à appliquer correctement les principes fondamentaux sans erreur de position ou de timing.</p>
+        <iframe src="https://www.youtube.com/embed/4x2F6sY7H1U"></iframe>
+        <p>La technique juste applique correctement principes, timing et posture.</p>
       </div>
     </div>
+
     <div class="accordion">
       <div class="accordion-header">Hara</div>
       <div class="accordion-body">
-        <iframe src="https://www.youtube.com/embed/5t8V1yW8k2M" allowfullscreen></iframe>
-        <p>Le hara représente le centre de gravité et de puissance corporelle dans les arts martiaux.</p>
+        <iframe src="https://www.youtube.com/embed/5t8V1yW8k2M"></iframe>
+        <p>Le hara est le centre de gravité et de puissance de l’être.</p>
       </div>
     </div>
+
   </div>
 
 </div>
 
 <script>
-// ACCORDÉON JS
+// ACCORDÉON JS – ouverture/fermeture desktop
 document.querySelectorAll('.accordion-header').forEach(header => {
   header.addEventListener('click', () => {
     const body = header.nextElementSibling;
-    if(body.style.display === 'block'){
-      body.style.display = 'none';
-    } else {
-      body.style.display = 'block';
-    }
+    body.style.display = (body.style.display === 'block') ? 'none' : 'block';
   });
 });
 </script>
