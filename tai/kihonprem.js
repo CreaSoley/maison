@@ -1,10 +1,14 @@
 let data = [];
 let selected = [];
-const delayBeforeReading = 3000; // 3 secondes avant la lecture
-const delayBetween = 60000; // 1 minute entre chaque enchaînement
+
+const delayFirstDing = 5000;   // 5 sec avant le premier ding
+const delayAfterDing = 3000;   // 3 sec après chaque ding avant la lecture japonaise
+const delayBetweenSets = 60000; // délai entre enchaînements (1 minute pour toi)
+
+const dingSound = new Audio("ding.mp3");  // fichier présent dans le repo
 
 async function loadJSON() {
-    const response = await fetch("kihonprem.json");
+    const response = await fetch("enchaînements.json");
     const json = await response.json();
     data = json.enchaînements;
 }
@@ -31,23 +35,53 @@ function display() {
     });
 }
 
+/* ------------- LECTURE JAPONAIS AMÉLIORÉE ------------- */
 function readJapanese() {
     if (selected.length === 0) return;
 
     let index = 0;
 
+    // On attend 5 sec puis ding
     setTimeout(() => {
-        const interval = setInterval(() => {
-            const text = selected[index].jp;
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = "ja-JP";
-            speechSynthesis.speak(utter);
+
+        playDing(() => {
+            // après ding + 3 sec → lecture du premier enchaînement
+            readOne(index);
 
             index++;
-            if (index >= selected.length) clearInterval(interval);
 
-        }, delayBetween);
-    }, delayBeforeReading);
+            const interval = setInterval(() => {
+                if (index >= selected.length) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                playDing(() => {
+                    readOne(index);
+                    index++;
+                });
+
+            }, delayBetweenSets);
+
+        });
+
+    }, delayFirstDing);
+}
+
+/* Lecture japonaise d'un seul bloc */
+function readOne(i) {
+    const text = selected[i].jp;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "ja-JP";
+    speechSynthesis.speak(utter);
+}
+
+/* Lecture du ding puis délai 3 sec */
+function playDing(after) {
+    dingSound.currentTime = 0;
+    dingSound.play().then(() => {
+        setTimeout(after, delayAfterDing);
+    });
 }
 
 loadJSON();
