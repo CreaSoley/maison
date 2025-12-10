@@ -96,13 +96,58 @@
         <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
         <ul id="cibleList" class="result-list"></ul>
       </div>
+      
     </section>
+<section class="card-block stack" id="kihonComboCible">
+    <h2 class="spicy section-title">💫 Enchainement & Cible</h2>
+
+    <!-- Enchainement -->
+    <div class="sub-card kawaii-card">
+        <h3 class="spicy">🔗 Enchainement de kihon</h3>
+        <button id="btnCombo" class="btn primary kawaii">🔄 Nouvel enchaînement</button>
+        <div id="comboResult" class="result-card"></div>
+    </div>
+
+    <div class="pdf-buttons">
+        <a href="pdf/ippon_kumite.pdf" class="pdf-btn" data-tooltip="Télécharger le PDF complet">
+            📄 Ippon Kumite
+        </a>
+        <a href="pdf/tai_sabaki.pdf" class="pdf-btn" data-tooltip="Télécharger le guide des déplacements">
+            📄 Tai Sabaki
+        </a>
+    </div>
+
+    <!-- Cibles -->
+    <div class="sub-card kawaii-card">
+        <h3 class="spicy">🎯 Cible – 3 techniques</h3>
+        <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
+        <ul id="cibleList" class="result-list"></ul>
+    </div>
+
+    <!-- 🔥 NOUVEAU BLOC : Générateur d’enchaînements aléatoires (script fourni) -->
+    <div class="sub-card kawaii-card">
+        <h3 class="spicy">🎲 Générateur d’enchaînements aléatoires</h3>
+
+        <label>Nombre d’enchaînements :</label>
+        <input type="number" id="count" value="1" min="1" max="20">
+
+        <br><br>
+
+        <button onclick="generate()" class="btn primary kawaii">Générer</button>
+        <button onclick="readJapanese()" class="btn ghost kawaii">Lire en japonais</button>
+
+        <div id="result"></div>
+    </div>
+
+</section>
 
   </main>
 
   <!-- Scripts -->
   <script src="app.js"></script>
   <script src="script_global.js"></script>
+  <script src="kihonprem.js"></script>
+
 
 </body>
 
