@@ -3,7 +3,11 @@ const techniques = [
     { "romaji": "Oi Tsuki Jodan", "jp": "追い突き 上段" },
     { "romaji": "Oi Tsuki Chudan", "jp": "追い突き 中段" },
     { "romaji": "Mae Geri Chudan", "jp": "前蹴り 中段" },
-    { "romaji": "Mawashi Geri Jodan", "jp": "回し蹴り 上段" },
+    { "romaji": "Mawashi Geri Chudan", "jp": "回し蹴り 中段" },
+    { "romaji": "Yoko Geri Chudan", "jp": "横蹴り 中段" },
+     { "romaji": "Oi Tsuki Jodan", "jp": "追い突き 上段" },
+    { "romaji": "Oi Tsuki Chudan", "jp": "追い突き 中段" },
+    { "romaji": "Mae Geri Chudan", "jp": "前蹴り 中段" },
     { "romaji": "Mawashi Geri Chudan", "jp": "回し蹴り 中段" },
     { "romaji": "Yoko Geri Chudan", "jp": "横蹴り 中段" }
 ];
