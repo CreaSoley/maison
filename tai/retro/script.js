@@ -11,10 +11,11 @@ async function loadActivities() {
     ACTIVITIES = await res.json();
   } catch(e){
     ACTIVITIES = []; 
+    console.error("Erreur chargement JSON:", e);
   }
 }
 
-/* ---------- tracker localStorage ---------- */
+/* ---------- tracker ---------- */
 function resetTracker(){
   localStorage.setItem('openedDays', JSON.stringify([]));
 }
@@ -30,6 +31,19 @@ function markDayOpened(day){
 function isDayOpened(day){
   const opened = JSON.parse(localStorage.getItem('openedDays')||"[]");
   return opened.includes(day);
+}
+
+function updateTracker(){
+  const tracker = document.getElementById('tracker');
+  tracker.innerHTML = "";
+  ACTIVITIES.forEach((_,i)=>{
+    const div = document.createElement('div');
+    div.className = "day" + (isDayOpened(i+1)?" opened":"");
+    div.addEventListener('click', ()=>{
+      if(isDayOpened(i+1)) showDoor(i);
+    });
+    tracker.appendChild(div);
+  });
 }
 
 /* ---------- compte à rebours ---------- */
@@ -68,7 +82,7 @@ function findTodayIndex(){
   });
 }
 
-/* ---------- afficher une case ---------- */
+/* ---------- afficher la carte ---------- */
 function showDoor(index){
   if(index<0 || index>=ACTIVITIES.length) return;
   currentIndex = index;
@@ -96,8 +110,6 @@ function showDoor(index){
   `;
 
   const overlay = container.querySelector('.door-overlay');
-
-  // si la date est passée, permettre de dévoiler
   if(actDate<=today){
     overlay.addEventListener('click', function reveal(){
       overlay.classList.add('hidden');
@@ -112,25 +124,12 @@ function showDoor(index){
   }
 }
 
-/* ---------- tracker ---------- */
-function updateTracker(){
-  const tracker = document.getElementById('tracker');
-  tracker.innerHTML = "";
-  ACTIVITIES.forEach((_,i)=>{
-    const div = document.createElement('div');
-    div.className = "day" + (isDayOpened(i+1)?" opened":"");
-    div.addEventListener('click', ()=>{
-      if(isDayOpened(i+1)) showDoor(i);
-    });
-    tracker.appendChild(div);
-  });
-}
-
 /* ---------- init ---------- */
 (async function(){
   await loadActivities();
-  resetTracker(); // remet le tracker à zéro
+  resetTracker();
   initCountdown();
+  updateTracker();
   const todayIndex = findTodayIndex();
   showDoor(todayIndex>=0?todayIndex:0);
 })();
