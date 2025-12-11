@@ -193,7 +193,7 @@ header h1 {
 <div class="main-wrapper">
 
   <!-- ==== BOUTONS UV ==== -->
-  <div class="uv-grid">
+  <div class="uv-grid" style="justify-content:center;">
 
     <div class="uv-card" onclick="location.href='kihon.html'">
       <img src="lkihon.png" alt="Kihon"><span>Kihon</span>
@@ -215,9 +215,15 @@ header h1 {
       <img src="lrandori.png" alt="Randori"><span>Randori</span>
     </div>
 
-    <!-- BOUTON EXAMEN CENTRÉ -->
-    <div class="uv-card examen" onclick="location.href='passage.html'">
-      <img src="lpassage.png" alt="Examen"><span>Examen</span>
+    <!-- BOUTONS CENTRÉS EXAMEN + PLANNING -->
+    <div style="display:flex; gap:20px; justify-content:center; width:100%; margin-top:20px;">
+      <div class="uv-card examen" onclick="location.href='passage.html'">
+        <img src="lpassage.png" alt="Examen"><span>Examen</span>
+      </div>
+
+      <div class="uv-card" onclick="location.href='/tai/retro/index.html'">
+        <img src="date.png" alt="Planning"><span>Planning</span>
+      </div>
     </div>
 
   </div>
