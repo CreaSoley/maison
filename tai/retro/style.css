@@ -95,7 +95,7 @@ h1 {
 }
 
 .door-container .texte {
-  font-size:18px;
+  font-size:72px;
   line-height:1.5;
   white-space: pre-line; /* respecte les retours à la ligne */
   opacity:0;
