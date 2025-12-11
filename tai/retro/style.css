@@ -1,27 +1,25 @@
 :root{
-  --primary:#2b2b2b;
   --accent:#c49b66;
-  --background:#fdfcf6;
-  --text:#2b2b2b;
   --tracker:#c49b66;
 }
 
 body {
   margin:0;
   min-height:100vh;
-  font-family: 'Noto Serif JP', serif;
-  background-color: var(--background);
-  color: var(--text);
+  font-family: Arial, sans-serif;
+  background: url('fond.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #2b2b2b;
   display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  padding:20px;
   text-align:justify;
+  padding:10px;
+  overflow-x:hidden;
 }
 
 h1 {
-  font-family: 'Roboto Slab', serif;
   font-size:36px;
   margin-bottom:10px;
   color: var(--accent);
@@ -35,15 +33,26 @@ h1 {
 }
 
 .door-container {
+  position: relative;
   width:100%;
   max-width:700px;
   border:2px solid var(--accent);
   border-radius:12px;
   padding:25px;
-  background:white;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
   margin-bottom:25px;
   min-height:300px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.door-container.reveal {
+  transform: scale(1.03);
+  opacity:1;
 }
 
 .door-container .jour {
@@ -56,6 +65,27 @@ h1 {
 .door-container .texte {
   font-size:18px;
   line-height:1.5;
+}
+
+.door-overlay {
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:20px;
+  font-weight:bold;
+  color:#2b2b2b;
+  background: rgba(255,255,255,0.9);
+  border-radius:12px;
+  cursor:pointer;
+  text-align:center;
+  transition: opacity 0.5s ease;
+}
+
+.door-overlay.hidden {
+  opacity:0;
+  pointer-events:none;
 }
 
 .tracker {
@@ -71,8 +101,18 @@ h1 {
   border:1px solid var(--tracker);
   border-radius:4px;
   background:white;
+  cursor:pointer;
+  transition: background 0.3s;
 }
 
 .tracker .day.opened {
   background: var(--tracker);
+}
+
+/* Responsive mobile */
+@media(max-width:600px){
+  .door-container { padding:15px; font-size:16px; }
+  .door-container .texte { font-size:16px; }
+  h1 { font-size:28px; }
+  .countdown { font-size:16px; }
 }
