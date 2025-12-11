@@ -3,29 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Calendrier de l'Avent Féérique</title>
+  <title>Retroplanning Zen</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&family=Roboto+Slab&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1 id="pageTitle">Planning de préparation</h1>
+  <div class="container">
+    <h1 id="pageTitle">Passage de grade</h1>
+    <div id="countdown" class="countdown"></div>
+    
+    <div id="doorContainer" class="door-container">
+      <!-- La case du jour s'affiche ici -->
+    </div>
 
-  <canvas id="snowCanvas"></canvas>
-  <div id="calendar" class="calendar"></div>
-
-  <!-- MODAL -->
-  <div id="modal" class="modal" aria-hidden="true">
-    <div id="modalContent" class="modal-content">
-      <h2 id="modalTitle"></h2>
-      <div class="texte" id="modalText"></div>
-      <div id="pdfZone"></div>
-      <button id="closeBtn" class="btn-close">Fermer</button>
+    <div id="tracker" class="tracker">
+      <!-- Tracker des jours ouverts -->
     </div>
   </div>
 
-  <div class="credits">
-    <a href="admin.html" title="Gérer localement les activités">⚙️ Gérer (local)</a>
-  </div>
+  <audio id="openSound" src="open.mp3"></audio>
 
   <script src="script.js"></script>
 </body>
