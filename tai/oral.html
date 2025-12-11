@@ -80,6 +80,23 @@
       .card .content{ max-height:260px; }
       .accordion iframe { height:200px; }
     }
+    .button-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.button-row .training-button {
+  flex: 1;
+}
+
+.training-button.stop {
+  background:#ff2e85;
+}
+.training-button.stop:hover {
+  background:#ff0d70;
+}
+
   </style>
 </head>
 <body>
@@ -252,63 +269,63 @@
       </div>
     </div>
 
-    <!-- ========== UV5 – RANDORI 1 (with stop) ========== -->
-    <div class="card" id="uv5">
-      <div class="card-title">
-        <div class="icon" aria-hidden>
-          <svg width="26" height="26" viewBox="0 0 24 24"><path d="M2 12h20" stroke="#ffd6ec" stroke-width="3"/></svg>
-        </div>
-        <div class="spicy">UV5 – Randori (armes)</div>
-      </div>
+    <!-- ========== UV5 ========== -->
+<div class="card" id="uv5">
+  <div class="card-title"><img src="icone-arme.png" alt=""> UV5 – Randori / Techniques armes</div>
 
-      <div class="content" id="uv5-content"></div>
+  <div class="content" id="uv5-content"></div>
 
-      <hr>
+  <h3 class="spicy" style="margin-top:15px;">Techniques sélectionnées :</h3>
+  <div id="uv5-result" style="margin-bottom:15px;"></div>
 
-      <label>Nombre de termes : <input id="uv5-count" type="number" class="input-small" value="3" min="1"></label>
+  <hr>
 
-      <div class="range-row" style="margin-top:8px;">
-        <label>Intervalle (s) : <input id="uv5-interval" type="range" min="5" max="60" value="15" step="1"></label>
-        <div><span id="uv5-interval-display">15</span>s</div>
-        <button id="uv5-stop" class="btn stop" style="width:auto;">STOP</button>
-      </div>
+  <label>Nombre de termes :
+    <input type="number" id="uv5-count" value="3" class="training-input">
+  </label>
 
-      <div class="buttons" style="margin-top:8px;">
-        <button id="uv5-generate" class="btn">Changer la sélection</button>
-        <button id="uv5-read" class="btn secondary">Lire en français</button>
-      </div>
+  <br>
 
-      <div id="uv5-result" class="result-box" style="margin-top:10px;"></div>
-    </div>
+  <label>Intervalle lecture (s) :
+    <input type="range" id="uv5-interval" min="5" max="60" value="15" step="1">
+    <span id="uv5-interval-display">15</span>s
+  </label>
 
-    <!-- ========== UV6 – RANDORI 2 (sans armes) ========== -->
-    <div class="card" id="uv6">
-      <div class="card-title">
-        <div class="icon" aria-hidden>
-          <svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="#fff0f6"/></svg>
-        </div>
-        <div class="spicy">UV6 – Randori (sans armes)</div>
-      </div>
+  <div class="button-row">
+    <button class="training-button" onclick="generateRandori56('uv5')">Changer la sélection</button>
+    <button class="training-button" onclick="readRandori56('uv5')">Lecture</button>
+    <button class="training-button stop" onclick="stopRandori56('uv5')">Stop</button>
+  </div>
+</div>
 
-      <div class="content" id="uv6-content"></div>
+   <!-- ========== UV6 ========== -->
+<div class="card" id="uv6">
+  <div class="card-title"><img src="icone-poing.png" alt=""> UV6 – Randori / Techniques sans armes</div>
 
-      <hr>
+  <div class="content" id="uv6-content"></div>
 
-      <label>Nombre de termes : <input id="uv6-count" type="number" class="input-small" value="3" min="1"></label>
+  <h3 class="spicy" style="margin-top:15px;">Techniques sélectionnées :</h3>
+  <div id="uv6-result" style="margin-bottom:15px;"></div>
 
-      <div class="range-row" style="margin-top:8px;">
-        <label>Intervalle (s) : <input id="uv6-interval" type="range" min="5" max="60" value="15" step="1"></label>
-        <div><span id="uv6-interval-display">15</span>s</div>
-        <button id="uv6-stop" class="btn stop" style="width:auto;">STOP</button>
-      </div>
+  <hr>
 
-      <div class="buttons" style="margin-top:8px;">
-        <button id="uv6-generate" class="btn">Changer la sélection</button>
-        <button id="uv6-read" class="btn secondary">Lire en français</button>
-      </div>
+  <label>Nombre de termes :
+    <input type="number" id="uv6-count" value="3" class="training-input">
+  </label>
 
-      <div id="uv6-result" class="result-box" style="margin-top:10px;"></div>
-    </div>
+  <br>
+
+  <label>Intervalle lecture (s) :
+    <input type="range" id="uv6-interval" min="5" max="60" value="15" step="1">
+    <span id="uv6-interval-display">15</span>s
+  </label>
+
+  <div class="button-row">
+    <button class="training-button" onclick="generateRandori56('uv6')">Changer la sélection</button>
+    <button class="training-button" onclick="readRandori56('uv6')">Lecture</button>
+    <button class="training-button stop" onclick="stopRandori56('uv6')">Stop</button>
+  </div>
+</div>
 
   </div> <!-- fin cards-grid -->
 
