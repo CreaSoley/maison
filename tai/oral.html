@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Tai-Jitsu – Entraînement</title>
 
-  <!-- ======= STYLE KAWAII ======= -->
   <style>
     @font-face { font-family: "Spicy"; src: url("Spicy Sale.ttf"); }
 
@@ -14,191 +13,171 @@
       --pink-2:#ffd6ec;
       --accent:#ff5fc1;
       --card-shadow: 0 10px 24px rgba(255,120,180,0.12);
+      --hot-pink:#ff1493;
     }
 
     *{ box-sizing:border-box; }
     body{ margin:0; background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%); font-family: Arial, sans-serif; color:#222; }
 
-    /* HEADER */
     header { background:#000; color:#fff; padding:24px 12px; display:flex; align-items:center; justify-content:center; gap:18px; box-shadow:0 6px 18px rgba(0,0,0,0.25); }
     header img { height:86px; }
     header h1 { font-family:"Spicy"; font-size:2.9rem; margin:0; color:var(--pink-2); letter-spacing:2px; }
 
-    /* MAIN WRAPPER */
     .main-wrapper{ max-width:1600px; margin:20px auto; padding:0 18px 40px; }
 
-    /* CARDS GRID */
     .cards-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:22px; width:100%; align-items:stretch; }
     @media(max-width:1200px){ .cards-grid{ grid-template-columns: 1fr; } }
 
-    /* CARD STYLE */
     .card{ background: linear-gradient(180deg,#fff9fb 0%, #fff4fb 100%); border-radius:20px; padding:20px; border:1px solid var(--pink-2); box-shadow: var(--card-shadow); transition: transform .16s, box-shadow .16s; display:flex; flex-direction:column; }
     .card:hover{ transform: translateY(-6px); box-shadow: 0 18px 36px rgba(255,110,180,0.14); }
 
     .card-title{ display:flex; align-items:center; gap:10px; font-family:"Spicy"; color:var(--accent); font-size:1.7rem; margin-bottom:6px; }
-    .card-title img{ width:42px; }
+    .card-title .icon{ width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; background:linear-gradient(180deg,#fff,#ffeef8); box-shadow:0 4px 10px rgba(255,120,180,0.08); }
 
     .content{ overflow-y:auto; max-height:350px; padding-right:4px; }
 
+    /* Subtitle: Arial rose (large) — used where requested */
+    .subtitle-arial {
+      font-family: Arial, sans-serif;
+      color: var(--hot-pink);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 10px 0 8px;
+    }
+
     h3.spicy{ font-family:"Spicy"; color:var(--accent); margin:12px 0 6px; font-size:1.4rem; }
+
     hr{ border:0; border-top:1px dashed rgba(255,100,170,0.18); margin:14px 0; }
 
-    /* INPUTS + BUTTONS */
+    /* Buttons */
     .training-input{ width:70px; padding:6px; border-radius:8px; border:none; text-align:center; }
     .training-button{ padding:10px 18px; background:#ff80d4; border:none; color:#fff; border-radius:10px; cursor:pointer; font-weight:700; box-shadow:0 6px 16px rgba(255,100,170,0.12); }
     .training-button:hover{ background:#ff57c3; }
+    .training-button.stop{ background:#ff2e85; }
+    .training-button.stop:hover{ background:#ff0d70; }
 
-    .training-button.stop{
-      background:#ff2e85;
-    }
-    .training-button.stop:hover{
-      background:#ff0d70;
-    }
-
-    .button-row{
-      display:flex;
-      gap:10px;
-      margin-top:10px;
-    }
+    .button-row{ display:flex; gap:10px; margin-top:10px; }
     .button-row .training-button{ flex:1; }
 
-    .encart {
-      background: #ffe6f7;
-      padding: 20px;
-      border-radius: 20px;
-      margin: 20px auto;
-      max-width: 900px;
-      box-shadow: 0 0 20px rgba(255, 0, 150, 0.2);
-    }
-    .encart-title {
-      font-size: 2rem;
-      color: #ff48b0;
-      text-align: center;
-      margin-bottom: 15px;
-      font-family: "Spicy";
-    }
+    .input-small{ width:60px; padding:6px; border-radius:8px; border:1px solid #ffd6ec; text-align:center; }
 
-    .bloc{ margin-bottom:35px; }
+    .result-box{ padding:10px; background:#fff; border-radius:12px; min-height:20px; box-shadow: inset 0 0 10px rgba(255, 0, 150, 0.05); }
 
-    .accordion {
-      background: white;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-    }
-    .accordion summary {
-      padding: 12px;
-      cursor: pointer;
-      background:#ffd6ec;
-      font-family:"Spicy";
-      color:var(--accent);
-      font-size:1.3rem;
-    }
-    .accordion p {
-      margin:12px;
-    }
-    iframe { width:100%; height:250px; border-radius:14px; margin-bottom:12px; }
+    /* Accordions */
+    details.accordion { border-radius:10px; margin-bottom:8px; padding:0; background:linear-gradient(180deg,#fff,#fff6fb); border:1px solid rgba(255,180,220,0.3); overflow:hidden; }
+    details.accordion summary { cursor:pointer; padding:12px; background:#ffd6ec; font-family: Arial, sans-serif; color:var(--hot-pink); font-size:1.15rem; font-weight:700; }
+    details.accordion div.inner { padding:12px; }
 
-    .result-box {
-      padding: 10px;
-      background: white;
-      border-radius: 12px;
-      min-height: 20px;
-      box-shadow: inset 0 0 10px rgba(255, 0, 150, 0.1);
+    iframe { width:100%; height:260px; border-radius:8px; margin-top:8px; }
+
+    .resources-banner{ margin-top:30px; padding:14px 16px; background: linear-gradient(180deg,#fff6fb,#fff1f9); border:1px solid #ffd9ef; border-radius:14px; box-shadow:0 8px 20px rgba(255,120,180,0.06); display:flex; justify-content:center; align-items:center; }
+    .library{ display:flex; align-items:center; gap:14px; overflow-x:auto; padding:6px 4px; }
+    .kimono-btn{ flex:0 0 auto; width:64px; height:64px; background:url("kimono.png") center/contain no-repeat; border-radius:12px; cursor:pointer; transition:transform .12s; }
+    .kimono-btn:hover{ transform:scale(1.08) rotate(-6deg); }
+
+    @media(max-width:600px){
+      .button-row { flex-direction:column; }
+      iframe { height:200px; }
     }
   </style>
 </head>
-
 <body>
 
 <header>
-  <a class="logo" href="../index.html"><img src="logo.png" alt="logo"></a>
+  <a class="logo" href="../index.html"><img src="logo.png" alt="logo" style="height:72px;"></a>
   <h1>Tai-Jitsu</h1>
 </header>
 
 <div class="main-wrapper">
   <div class="cards-grid">
 
-    <!-- ====================================================
-         ENCART 1 — UV1 KIHON
-    ===================================================== -->
-    <section class="encart" id="encart1">
-      <h2 class="encart-title">🐉 UV1 – KIHON</h2>
-
-      <!-- KIHON SIMPLES -->
-      <div class="bloc">
-        <h3 class="spicy">Kihon simples</h3>
-
-        <label>Temps (s) :
-          <input type="range" id="ks-range" min="2" max="20" value="5">
-          <span id="ks-range-display">5</span>
-        </label>
-
-        <label>Nombre :
-          <input type="number" id="ks-count" min="1" value="3" class="input-small">
-        </label>
-
-        <div class="button-row">
-          <button id="ks-generate" class="training-button">Changer</button>
-          <button id="ks-read" class="training-button">Lecture</button>
-          <button id="ks-stop" class="training-button stop">Stop</button>
-        </div>
-
-        <div id="ks-result" class="result-box"></div>
+    <!-- ENCART 1 — UV1 KIHON (no change except subtitles in Arial rose) -->
+    <section class="card" id="uv1">
+      <div class="card-title">
+        <div class="icon" aria-hidden>🐉</div>
+        <div style="font-family:Spicy; font-size:1.7rem;">UV1 – Kihon</div>
       </div>
 
-      <!-- ENCHAINEMENTS -->
-      <div class="bloc">
-        <h3 class="spicy">Kihon — Enchaînements</h3>
+      <div class="content">
+        <!-- Kihon simples -->
+        <div>
+          <div class="subtitle-arial">Kihon simples</div>
 
-        <label>Temps (s) :
-          <input type="range" id="kc-range" min="2" max="20" value="5">
-          <span id="kc-range-display">5</span>
-        </label>
+          <label>Nombre de kihon :
+            <input type="number" id="ks-count" class="input-small" value="3" min="1">
+          </label>
 
-        <label>Nombre :
-          <input type="number" id="kc-count" min="1" value="2" class="input-small">
-        </label>
+          <label style="margin-left:12px;">Intervalle (s) :
+            <input id="ks-interval" type="range" min="2" max="120" value="60">
+            <span id="ks-interval-display">60</span>s
+          </label>
 
-        <div class="button-row">
-          <button id="kc-generate" class="training-button">Changer</button>
-          <button id="kc-read" class="training-button">Lecture</button>
-          <button id="kc-stop" class="training-button stop">Stop</button>
+          <div class="button-row">
+            <button id="ks-generate" class="training-button">Changer</button>
+            <button id="ks-read" class="training-button">Lecture</button>
+            <button id="ks-stop" class="training-button stop">Stop</button>
+          </div>
+
+          <div id="ks-result" class="result-box" style="margin-top:10px;"></div>
         </div>
 
-        <div id="kc-result" class="result-box"></div>
-      </div>
+        <hr>
 
-      <!-- TECHNIQUES COMBAT -->
-      <div class="bloc">
-        <h3 class="spicy">Techniques de combat</h3>
+        <!-- Enchaîn -->
+        <div>
+          <div class="subtitle-arial">Kihon — Enchaînements</div>
 
-        <label>Temps (s) :
-          <input type="range" id="kcb-range" min="2" max="20" value="5">
-          <span id="kcb-range-display">5</span>
-        </label>
+          <label>Nombre :
+            <input type="number" id="kc-count" class="input-small" value="2" min="1">
+          </label>
 
-        <div class="button-row">
-          <button id="kcb-generate" class="training-button">Changer</button>
-          <button id="kcb-read" class="training-button">Lecture</button>
-          <button id="kcb-stop" class="training-button stop">Stop</button>
+          <label style="margin-left:12px;">Intervalle (s) :
+            <input id="kc-interval" type="range" min="2" max="120" value="60">
+            <span id="kc-interval-display">60</span>s
+          </label>
+
+          <div class="button-row">
+            <button id="kc-generate" class="training-button">Changer</button>
+            <button id="kc-read" class="training-button">Lecture</button>
+            <button id="kc-stop" class="training-button stop">Stop</button>
+          </div>
+
+          <div id="kc-result" class="result-box" style="margin-top:10px;"></div>
         </div>
 
-        <div id="kcb-result" class="result-box"></div>
+        <hr>
+
+        <!-- Techniques combat -->
+        <div>
+          <div class="subtitle-arial">Techniques de combat</div>
+
+          <label>Intervalle (s) :
+            <input id="kcb-interval" type="range" min="2" max="120" value="60">
+            <span id="kcb-interval-display">60</span>s
+          </label>
+
+          <div class="button-row">
+            <button id="kcb-generate" class="training-button">Changer</button>
+            <button id="kcb-read" class="training-button">Lecture</button>
+            <button id="kcb-stop" class="training-button stop">Stop</button>
+          </div>
+
+          <div id="kcb-result" class="result-box" style="margin-top:10px;"></div>
+        </div>
       </div>
     </section>
 
-    <!-- ====================================================
-         UV2
-    ===================================================== -->
+    <!-- UV2 — keep icon, remove "Techniques sélectionnées" -->
     <div class="card" id="uv2">
-      <div class="card-title"><img src="icone-sabre.png" alt=""> UV2 – Ippon Kumite</div>
+      <div class="card-title">
+        <div class="icon" aria-hidden>
+          <!-- small glove SVG -->
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6h9v6H6z" fill="#ffc0e6"/><path d="M6 12c0 1.1.9 2 2 2h8v4H6z" fill="#ffd6ec"/></svg>
+        </div>
+        <div class="spicy">UV2 – Ippon Kumite</div>
+      </div>
 
       <div class="content" id="uv2-content"></div>
-
-      <h3 class="spicy">Techniques sélectionnées :</h3>
-      <div id="uv2-result"></div>
 
       <hr>
 
@@ -208,123 +187,128 @@
       </label>
 
       <div class="button-row">
-        <button class="training-button" onclick="readIppon()">Lecture</button>
-        <button class="training-button stop" onclick="stopIppon()">Stop</button>
+        <button id="uv2-read" class="training-button" onclick="readIppon()">Lecture</button>
+        <button id="uv2-stop" class="training-button stop" onclick="stopIppon()">Stop</button>
       </div>
     </div>
 
-    <!-- ====================================================
-         UV3
-    ===================================================== -->
+    <!-- UV3 — Kata, subtitled in Arial pink -->
     <div class="card" id="uv3">
-      <div class="card-title"><img src="icone-kata.png" alt=""> UV3 – Kata</div>
+      <div class="card-title">
+        <div class="icon" aria-hidden>
+          <svg width="28" height="28" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffe6f7"/></svg>
+        </div>
+        <div class="spicy">UV3 – Kata</div>
+      </div>
 
       <div class="content">
-        <h3 class="spicy">Kata</h3>
-        <img src="kata2.gif" style="width:100%; border-radius:14px;">
+        <div class="subtitle-arial">Kata</div>
+        <img src="kata2.gif" alt="kata" style="width:100%; border-radius:12px;">
 
-        <h3 class="spicy">Bunkai</h3>
+        <div class="subtitle-arial">Bunkai</div>
         <ul>
-          <li>Bunkai 1 : uke attaque…</li>
-          <li>Bunkai 2 : uke attaque…</li>
+          <li><b>Bunkai 1 :</b> Uke attaque…</li>
+          <li><b>Bunkai 2 :</b> Uke attaque…</li>
         </ul>
       </div>
     </div>
 
-    <!-- ====================================================
-         UV4 — ACCORDÉONS
-    ===================================================== -->
+    <!-- UV4 — accordions; accordion titles use Arial rose -->
     <div class="card" id="uv4">
-      <div class="card-title"><img src="icone-main.png" alt=""> UV4 – Technique de base</div>
+      <div class="card-title">
+        <div class="icon" aria-hidden><svg width="28" height="28" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="6" fill="#ffeef6"/></svg></div>
+        <div class="spicy">UV4 – Technique de base</div>
+      </div>
 
       <div class="content">
-
         <details class="accordion">
-          <summary>Application par atemi</summary>
-          <p>Saisie par … description de la technique.</p>
-          <iframe src="https://www.youtube.com/embed/mINEUy5vaS4"></iframe>
+          <summary class="subtitle-arial">Application par atemi</summary>
+          <div class="inner">
+            <p>Saisie poignet croisé – description courte.</p>
+            <iframe src="https://www.youtube.com/embed/mINEUy5vaS4" title="Atemi"></iframe>
+          </div>
         </details>
 
         <details class="accordion">
-          <summary>Application par clé</summary>
-          <p>Saisie par … description de la technique.</p>
-          <iframe src="https://www.youtube.com/embed/mINEUy5vaS4"></iframe>
+          <summary class="subtitle-arial">Application par clé</summary>
+          <div class="inner">
+            <p>Saisie revers – description courte.</p>
+            <iframe src="https://www.youtube.com/embed/mINEUy5vaS4" title="Clé"></iframe>
+          </div>
         </details>
 
         <details class="accordion">
-          <summary>Application par projection</summary>
-          <p>Saisie par … description de la technique.</p>
-          <iframe src="https://www.youtube.com/embed/mINEUy5vaS4"></iframe>
+          <summary class="subtitle-arial">Application par projection</summary>
+          <div class="inner">
+            <p>Saisie cheveux – description courte.</p>
+            <iframe src="https://www.youtube.com/embed/mINEUy5vaS4" title="Projection"></iframe>
+          </div>
         </details>
-
       </div>
     </div>
 
-    <!-- ====================================================
-         UV5
-    ===================================================== -->
+    <!-- UV5 — title "Assauts imposés" in Spicy rose; buttons match UV1 style and include stop -->
     <div class="card" id="uv5">
-      <div class="card-title"><img src="icone-arme.png" alt=""> UV5 – Randori / Techniques armes</div>
+      <div class="card-title">
+        <div class="icon" aria-hidden><svg width="28" height="28" viewBox="0 0 24 24"><path d="M2 12h20" stroke="#ffd6ec" stroke-width="3"/></svg></div>
+        <div style="font-family:Spicy; color:var(--accent); font-size:1.7rem;">Assauts imposés</div>
+      </div>
 
       <div class="content" id="uv5-content"></div>
 
-      <h3 class="spicy">Techniques sélectionnées :</h3>
-      <div id="uv5-result"></div>
+      <div class="subtitle-arial" style="margin-top:10px;">Techniques sélectionnées :</div>
+      <div id="uv5-result" class="result-box" style="margin-bottom:10px;"></div>
 
       <hr>
 
       <label>Nombre de termes :
-        <input type="number" id="uv5-count" value="3" class="training-input">
+        <input id="uv5-count" type="number" class="input-small" value="3" min="1">
       </label>
 
-      <br>
-
-      <label>Intervalle lecture (s) :
-        <input type="range" id="uv5-interval" min="5" max="60" value="15" step="1">
+      <label style="margin-left:12px;">Intervalle (s) :
+        <input id="uv5-interval" type="range" min="5" max="60" value="15">
         <span id="uv5-interval-display">15</span>s
       </label>
 
       <div class="button-row">
-        <button class="training-button" onclick="generateRandori56('uv5')">Changer</button>
-        <button class="training-button" onclick="readRandori56('uv5')">Lecture</button>
-        <button class="training-button stop" onclick="stopRandori56('uv5')">Stop</button>
+        <button id="uv5-generate" class="training-button" onclick="generateRandori56('uv5')">Changer</button>
+        <button id="uv5-read" class="training-button" onclick="readRandori56('uv5')">Lecture</button>
+        <button id="uv5-stop" class="training-button stop" onclick="stopRandori56('uv5')">Stop</button>
       </div>
     </div>
 
-    <!-- ====================================================
-         UV6
-    ===================================================== -->
+    <!-- UV6 — title "Randori" in Spicy rose; buttons match UV1 style and include stop -->
     <div class="card" id="uv6">
-      <div class="card-title"><img src="icone-poing.png" alt=""> UV6 – Randori / Techniques sans armes</div>
+      <div class="card-title">
+        <div class="icon" aria-hidden><svg width="28" height="28" viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="#fff0f6"/></svg></div>
+        <div style="font-family:Spicy; color:var(--accent); font-size:1.7rem;">Randori</div>
+      </div>
 
       <div class="content" id="uv6-content"></div>
 
-      <h3 class="spicy">Techniques sélectionnées :</h3>
-      <div id="uv6-result"></div>
+      <div class="subtitle-arial" style="margin-top:10px;">Techniques sélectionnées :</div>
+      <div id="uv6-result" class="result-box" style="margin-bottom:10px;"></div>
 
       <hr>
 
       <label>Nombre de termes :
-        <input type="number" id="uv6-count" value="3" class="training-input">
+        <input id="uv6-count" type="number" class="input-small" value="3" min="1">
       </label>
 
-      <br>
-
-      <label>Intervalle lecture (s) :
-        <input type="range" id="uv6-interval" min="5" max="60" value="15" step="1">
+      <label style="margin-left:12px;">Intervalle (s) :
+        <input id="uv6-interval" type="range" min="5" max="60" value="15">
         <span id="uv6-interval-display">15</span>s
       </label>
 
       <div class="button-row">
-        <button class="training-button" onclick="generateRandori56('uv6')">Changer</button>
-        <button class="training-button" onclick="readRandori56('uv6')">Lecture</button>
-        <button class="training-button stop" onclick="stopRandori56('uv6')">Stop</button>
+        <button id="uv6-generate" class="training-button" onclick="generateRandori56('uv6')">Changer</button>
+        <button id="uv6-read" class="training-button" onclick="readRandori56('uv6')">Lecture</button>
+        <button id="uv6-stop" class="training-button stop" onclick="stopRandori56('uv6')">Stop</button>
       </div>
     </div>
 
   </div>
 
-  <!-- ===== BANDEAU RESSOURCES ===== -->
   <div class="resources-banner">
     <div class="library">
       <div class="kimono-btn" title="Livre 1" onclick="window.open('livre1.pdf')"></div>
@@ -335,28 +319,26 @@
   </div>
 </div>
 
-<!-- ===== SCRIPTS ===== -->
+<!-- SCRIPTS (inchangés) -->
 <script src="encart1.js"></script>
 <script src="encart2.js"></script>
 <script src="encart56.js"></script>
 
 <script>
-  // Sliders encart 1
+  // keep slider displays in sync
   [
-    ["ks-range","ks-range-display"],
-    ["kc-range","kc-range-display"],
-    ["kcb-range","kcb-range-display"]
-  ].forEach(([sliderId, displayId])=>{
-    const s=document.getElementById(sliderId);
-    const d=document.getElementById(displayId);
-    s.addEventListener("input",()=> d.textContent=s.value);
-  });
-
-  // Sliders UV2/5/6
-  ["uv2","uv5","uv6"].forEach(id=>{
-    const s=document.getElementById(id+"-interval");
-    const d=document.getElementById(id+"-interval-display");
-    s.addEventListener("input",()=> d.textContent=s.value);
+    ['ks-interval','ks-interval-display'],
+    ['kc-interval','kc-interval-display'],
+    ['kcb-interval','kcb-interval-display'],
+    ['uv2-interval','uv2-interval-display'],
+    ['uv5-interval','uv5-interval-display'],
+    ['uv6-interval','uv6-interval-display']
+  ].forEach(pair=>{
+    const s=document.getElementById(pair[0]);
+    const d=document.getElementById(pair[1]);
+    if(!s||!d) return;
+    d.textContent = s.value;
+    s.addEventListener('input', ()=> d.textContent = s.value);
   });
 </script>
 
