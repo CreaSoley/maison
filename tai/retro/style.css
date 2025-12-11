@@ -3,6 +3,11 @@
   --tracker:#c49b66;
 }
 
+@font-face {
+  font-family: 'Foremost Italic';
+  src: url('Foremost Italic.ttf') format('truetype');
+}
+
 body {
   margin:0;
   font-family: Arial, sans-serif;
@@ -76,9 +81,10 @@ h1 {
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-.door-container.reveal {
-  transform: scale(1.03);
-  opacity:1;
+.door-container.reveal .texte {
+  opacity: 1;
+  transition: opacity 1s ease, text-shadow 1s ease;
+  text-shadow: 0 0 15px rgba(196,155,102,0.5);
 }
 
 .door-container .jour {
@@ -91,6 +97,8 @@ h1 {
 .door-container .texte {
   font-size:18px;
   line-height:1.5;
+  white-space: pre-line; /* respecte les retours à la ligne */
+  opacity:0;
 }
 
 .door-overlay {
@@ -102,11 +110,12 @@ h1 {
   font-size:20px;
   font-weight:bold;
   color:#2b2b2b;
-  background: rgba(255,255,255,1); /* opaque avant ouverture */
+  background: rgba(255,255,255,1);
   border-radius:12px;
   cursor:pointer;
   text-align:center;
   transition: opacity 0.5s ease;
+  font-family: 'Foremost Italic';
 }
 
 .door-overlay.hidden {
