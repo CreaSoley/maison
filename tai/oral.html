@@ -278,37 +278,74 @@
       </div>
     </div>
 
-    <!-- ========== UV6 – Randori ========== -->
-    <div class="card" id="uv6">
-      <div class="card-title">
-        <div class="icon" aria-hidden>
-          <svg width="28" height="28" viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="#fff0f6"/></svg>
-        </div>
-        <div style="font-family:Spicy; color:var(--accent); font-size:1.7rem;">Randori</div>
-      </div>
+<!-- UV6 — Randori -->
+<div class="card" id="uv6">
+  <div class="card-title">
+    <div class="icon" aria-hidden><svg width="28" height="28" viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="#fff0f6"/></svg></div>
+    <div style="font-family:Spicy; color:var(--accent); font-size:1.7rem;">Randori</div>
+  </div>
 
-      <div class="content" id="uv6-content"></div>
+  <div class="content">
 
-      <div class="subtitle-arial" style="margin-top:10px;">Techniques sélectionnées :</div>
-      <div id="uv6-result" class="result-box" style="margin-bottom:10px;"></div>
+    <div class="subtitle-arial" style="margin-top:10px;">Techniques sélectionnées :</div>
+    <div id="uv6-result" class="result-box" style="margin-bottom:10px;"></div>
 
-      <hr>
-
-      <label>Nombre de termes :
-        <input id="uv6-count" type="number" class="input-small" value="3" min="1">
-      </label>
-
-      <label style="margin-left:12px;">Intervalle (s) :
-        <input id="uv6-interval" type="range" min="5" max="60" value="15">
-        <span id="uv6-interval-display">15</span>s
-      </label>
-
-      <div class="button-row">
-        <button id="uv6-generate" class="training-button" onclick="generateRandori56('uv6')">Changer</button>
-        <button id="uv6-read" class="training-button" onclick="readRandori56('uv6')">Lecture</button>
-        <button id="uv6-stop" class="training-button stop" onclick="stopRandori56('uv6')">Stop</button>
-      </div>
+    <!-- A — FILTRE -->
+    <div style="margin-top:10px;">
+      <label><b>Filtre :</b></label><br>
+      <select id="uv6-filter" class="input-small" style="width:100%; padding:8px;">
+        <option value="all">Toutes les attaques</option>
+        <option value="poignet">Saisies de poignet</option>
+        <option value="revers">Saisie de revers</option>
+        <option value="poing">Attaques poing</option>
+        <option value="arme">Armes (couteau/matraque)</option>
+      </select>
     </div>
+
+    <hr>
+
+    <label>Nombre de termes :
+      <input id="uv6-count" type="number" class="input-small" value="3" min="1">
+    </label>
+
+    <label style="margin-left:12px;">Intervalle lecture (s) :
+      <input id="uv6-interval" type="range" min="5" max="60" value="15">
+      <span id="uv6-interval-display">15</span>s
+    </label>
+
+    <!-- B — DOUBLONS -->
+    <div style="margin-top:10px;">
+      <label>
+        <input type="checkbox" id="uv6-duplicates">
+        Accepter les doublons
+      </label>
+    </div>
+
+    <div class="button-row">
+      <button id="uv6-generate" class="training-button">Changer</button>
+      <button id="uv6-read" class="training-button">Lecture</button>
+      <button id="uv6-stop" class="training-button stop">Stop</button>
+    </div>
+
+    <hr>
+
+    <!-- C — TIMER BIP -->
+    <div class="subtitle-arial">Timer de Bip</div>
+
+    <label>Bip toutes les :
+      <input id="uv6-beep-interval" type="range" min="2" max="30" value="10">
+      <span id="uv6-beep-display">10</span>s
+    </label>
+
+    <div class="button-row">
+      <button id="uv6-beep-start" class="training-button">Démarrer Bip</button>
+      <button id="uv6-beep-stop" class="training-button stop">Stop Bip</button>
+    </div>
+
+  </div>
+</div>
+
+
 
   </div> <!-- end grid -->
 
