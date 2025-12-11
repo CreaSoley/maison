@@ -1,14 +1,8 @@
 /**************************************************
- *  RANDORI – UV5 & UV6
- *  Lecture en français
- *  - Sélection aléatoire
- *  - Intervalle réglable
- *  - Délai initial 5 sec
+ *  UV5 – UV6 Randori
+ *  Version propre (n'écrase plus le HTML)
  **************************************************/
 
-// ---------------------------------------------
-// Listes des techniques
-// ---------------------------------------------
 const techniquesUV5 = [
     "Saisie de poignet direct",
     "Saisie de poignet opposé",
@@ -32,106 +26,115 @@ const techniquesUV5 = [
     "Saisie manche basse"
 ];
 
-const techniquesUV6 = techniquesUV5.filter(t => !t.toLowerCase().includes("couteau") && !t.toLowerCase().includes("matraque"));
+const techniquesUV6 = techniquesUV5.filter(t => !t.toLowerCase().includes("matraque") && !t.toLowerCase().includes("couteau"));
 
-// ---------------------------------------------
-// Fonctions utilitaires
-// ---------------------------------------------
-function getRandomSelection(list, count) {
-    const copy = [...list];
-    const selected = [];
-    for (let i = 0; i < count && copy.length > 0; i++) {
-        const idx = Math.floor(Math.random() * copy.length);
-        selected.push(copy.splice(idx, 1)[0]);
-    }
-    return selected;
-}
-
+/**************************************************
+ * OUTILS
+ **************************************************/
 function speak(text) {
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'fr-FR';
-    utter.rate = 0.9;
-    speechSynthesis.speak(utter);
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "fr-FR";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
 }
 
-// ---------------------------------------------
-// Création des UI pour chaque encart
-// ---------------------------------------------
-function createRandoriUI(cardId, techniquesList) {
-    const card = document.getElementById(cardId);
-    card.innerHTML = `
-        <div class="content" id="${cardId}-result"></div>
-        <div style="margin-top:10px;">
-            <label>Nombre de termes : <input type="number" id="${cardId}-count" value="5" style="width:50px;"></label>
-        </div>
-        <div style="margin-top:10px;">
-            <label>Intervalle (sec) : <input type="range" id="${cardId}-interval" min="5" max="60" value="15">
-            <span id="${cardId}-interval-display">15</span>s</label>
-        </div>
-        <button id="${cardId}-generate" class="training-button">Changer la sélection</button>
-        <button id="${cardId}-read" class="training-button">Lecture</button>
-    `;
+function getRandom(list, count, allowDuplicates) {
+    if (allowDuplicates) {
+        return Array.from({length: count}, () => list[Math.floor(Math.random() * list.length)]);
+    }
+    let arr = [...list];
+    let out = [];
+    for (let i = 0; i < count && arr.length > 0; i++) {
+        let idx = Math.floor(Math.random() * arr.length);
+        out.push(arr.splice(idx, 1)[0]);
+    }
+    return out;
+}
 
-    const resultDiv = document.getElementById(`${cardId}-result`);
-    const countInput = document.getElementById(`${cardId}-count`);
-    const intervalInput = document.getElementById(`${cardId}-interval`);
-    const intervalDisplay = document.getElementById(`${cardId}-interval-display`);
-    const btnGenerate = document.getElementById(`${cardId}-generate`);
-    const btnRead = document.getElementById(`${cardId}-read`);
+function filterTech(list, mode) {
+    switch (mode) {
+        case "poignet": return list.filter(t => t.includes("poignet"));
+        case "revers": return list.filter(t => t.includes("revers"));
+        case "poing": return list.filter(t => t.includes("poing") || t.includes("tsuki"));
+        case "arme": return list.filter(t => t.includes("couteau") || t.includes("matraque"));
+        default: return list;
+    }
+}
 
-    let selected = getRandomSelection(techniquesList, parseInt(countInput.value));
+/**************************************************
+ * UV6 – RANDORI + TIMER BIP
+ **************************************************/
+let uv6Reading = false;
+let uv6BeepTimer = null;
 
-    function displaySelection() {
-        resultDiv.innerHTML = `<h3>Techniques sélectionnées :</h3>` + selected.map((t, i) => `<p><b>${i+1}.</b> ${t}</p>`).join('');
+function updateUV6Selection() {
+    const filterMode = document.getElementById("uv6-filter").value;
+    const count = parseInt(document.getElementById("uv6-count").value);
+    const allowDup = document.getElementById("uv6-duplicates").checked;
+
+    const base = filterTech(techniquesUV6, filterMode);
+    const selection = getRandom(base, count, allowDup);
+
+    document.getElementById("uv6-result").innerHTML =
+        selection.map((t, i) => `<p><b>${i+1}.</b> ${t}</p>`).join("");
+
+    return selection;
+}
+
+let uv6Current = updateUV6Selection();
+
+document.getElementById("uv6-generate").addEventListener("click", () => {
+    uv6Current = updateUV6Selection();
+});
+
+/*********** LECTURE ***********/
+document.getElementById("uv6-read").addEventListener("click", () => {
+    if (uv6Reading) return;
+    uv6Reading = true;
+
+    const interval = parseInt(document.getElementById("uv6-interval").value) * 1000;
+    const ding = new Audio("ding.mp3");
+
+    let i = 0;
+    function step() {
+        if (!uv6Reading) return;
+        if (i >= uv6Current.length) {
+            uv6Reading = false;
+            return;
+        }
+
+        ding.play();
+        ding.onended = () => {
+            speak(uv6Current[i]);
+            i++;
+            setTimeout(step, interval);
+        };
     }
 
-    displaySelection();
+    setTimeout(step, 1000);
+});
 
-    // Slider affichage
-    intervalInput.addEventListener('input', () => {
-        intervalDisplay.textContent = intervalInput.value;
-    });
+document.getElementById("uv6-stop").addEventListener("click", () => {
+    uv6Reading = false;
+    speechSynthesis.cancel();
+});
 
-    // Bouton changer sélection
-    btnGenerate.addEventListener('click', () => {
-        const count = parseInt(countInput.value);
-        selected = getRandomSelection(techniquesList, count);
-        displaySelection();
-    });
+/*********** TIMER DE BIP ***********/
+document.getElementById("uv6-beep-interval").addEventListener("input", e => {
+    document.getElementById("uv6-beep-display").textContent = e.target.value;
+});
 
-    // Bouton lecture
-    btnRead.addEventListener('click', () => {
-        if(selected.length === 0) return;
+document.getElementById("uv6-beep-start").addEventListener("click", () => {
+    if (uv6BeepTimer) return;
 
-        setTimeout(() => {
-            // Lecture avec ding avant chaque terme
-            let index = 0;
-            const ding = new Audio("ding.mp3");
-            const beep = new Audio("beep.mp3");
+    const ding = new Audio("ding.mp3");
 
-            const intervalMs = parseInt(intervalInput.value) * 1000;
+    uv6BeepTimer = setInterval(() => {
+        ding.play();
+    }, parseInt(document.getElementById("uv6-beep-interval").value) * 1000);
+});
 
-            const playNext = () => {
-                if(index >= selected.length){
-                    beep.play();
-                    return;
-                }
-                ding.play();
-                ding.onended = () => {
-                    speak(selected[index]);
-                    index++;
-                    setTimeout(playNext, intervalMs);
-                }
-            }
-
-            playNext();
-
-        }, 5000); // délai initial 5 sec
-    });
-}
-
-// ---------------------------------------------
-// Initialisation
-// ---------------------------------------------
-createRandoriUI("uv5", techniquesUV5);
-createRandoriUI("uv6", techniquesUV6);
+document.getElementById("uv6-beep-stop").addEventListener("click", () => {
+    clearInterval(uv6BeepTimer);
+    uv6BeepTimer = null;
+});
