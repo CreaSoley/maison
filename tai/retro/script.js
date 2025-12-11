@@ -65,16 +65,13 @@ function initCountdown(){
 /* ---------- trouver index du jour ---------- */
 function findTodayIndex(){
   const today = new Date();
-  const dayNum = today.getDate();
-  const monthNum = today.getMonth();
-
   return ACTIVITIES.findIndex(act=>{
     const match = act.jour.match(/(\d{1,2})\s+[^\d]+$/);
     if(!match) return false;
     const actDay = parseInt(match[1],10);
     const actMonth = act.jour.toLowerCase().includes("décembre") ? 11 :
-                     act.jour.toLowerCase().includes("février") ? 1 : monthNum;
-    return actDay === dayNum && actMonth === monthNum;
+                     act.jour.toLowerCase().includes("février") ? 1 : today.getMonth();
+    return actDay === today.getDate() && actMonth === today.getMonth();
   });
 }
 
