@@ -10,7 +10,7 @@ async function loadActivities() {
     if(!res.ok) throw new Error();
     ACTIVITIES = await res.json();
   } catch(e){
-    ACTIVITIES = []; 
+    ACTIVITIES = [];
     console.error("Erreur chargement JSON:", e);
   }
 }
@@ -115,13 +115,27 @@ function showDoor(index){
       overlay.classList.add('hidden');
       container.classList.add('reveal');
       markDayOpened(index+1);
-      openSound.play();
       updateTracker();
+      openSound.play();
       overlay.removeEventListener('click', reveal);
     });
   } else {
     overlay.innerText = `Cette case ne peut être ouverte que le ${act.jour}.`;
   }
+}
+
+/* ---------- navigation entre jours ouverts ---------- */
+function initNavigation(){
+  document.getElementById('prevBtn').addEventListener('click', ()=>{
+    let i = currentIndex-1;
+    while(i>=0 && !isDayOpened(i+1)) i--;
+    if(i>=0) showDoor(i);
+  });
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    let i = currentIndex+1;
+    while(i<ACTIVITIES.length && !isDayOpened(i+1)) i++;
+    if(i<ACTIVITIES.length) showDoor(i);
+  });
 }
 
 /* ---------- init ---------- */
@@ -130,6 +144,7 @@ function showDoor(index){
   resetTracker();
   initCountdown();
   updateTracker();
+  initNavigation();
   const todayIndex = findTodayIndex();
   showDoor(todayIndex>=0?todayIndex:0);
 })();
