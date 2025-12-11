@@ -88,14 +88,14 @@ h1 {
 }
 
 .door-container .jour {
-  font-size:72px;
+  font-size:28px;
   color:#c49b66;
   margin-bottom:15px;
   text-align:center;
 }
 
 .door-container .texte {
-  font-size:px;
+  font-size:18px;
   line-height:1.5;
   white-space: pre-line; /* respecte les retours à la ligne */
   opacity:0;
@@ -107,7 +107,7 @@ h1 {
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:20px;
+  font-size:72px;
   font-weight:bold;
   color:#2b2b2b;
   background: rgba(255,255,255,1);
