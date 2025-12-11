@@ -1,12 +1,16 @@
 let ACTIVITIES = [];
 let currentIndex = 0;
-const TARGET_DATE = new Date(new Date().getFullYear(), 1, 8); // 8 février
+
+// 🔧 CORRECTION : Date fixe pour février 2026 à 00:00:00 (heure locale)
+const TARGET_DATE = new Date(2026, 1, 8, 0, 0, 0);
+
 const openSound = document.getElementById('openSound');
 
 /* ---------- chargement JSON ---------- */
 async function loadActivities() {
   try {
-    const res = await fetch('calendrier.json', {cache:"no-store"});
+    // 🔧 Ajout d'un timestamp pour éviter le cache GitHub Pages
+    const res = await fetch(`calendrier.json?t=${Date.now()}`, {cache:"no-store"});
     if(!res.ok) throw new Error();
     ACTIVITIES = await res.json();
   } catch(e){
@@ -42,24 +46,36 @@ function updateTracker(){
   });
 }
 
-/* ---------- compte à rebours ---------- */
+/* ---------- compte à rebours CORRIGÉ ---------- */
 function initCountdown(){
   const countdownEl = document.getElementById('countdown');
+  
   function update(){
     const now = new Date();
     const diff = TARGET_DATE - now;
-    if(diff<=0){
+    
+    // 🔧 CORRECTION : Gestion des 3 cas
+    if(diff > 0){
+      // Avant l'événement
+      const d = Math.floor(diff/(1000*60*60*24));
+      const h = Math.floor((diff/(1000*60*60))%24);
+      const m = Math.floor((diff/(1000*60))%60);
+      const s = Math.floor((diff/1000)%60);
+      countdownEl.innerText = `Jours restants : ${d} | ${h}h ${m}m ${s}s`;
+      countdownEl.style.color = "white"; // Couleur normale
+    } else if(diff > -86400000){
+      // Le jour J (moins de 24h après minuit)
       countdownEl.innerText = "C'est aujourd'hui le passage de grade !";
-      return;
+      countdownEl.style.color = "#c49b66"; // Accent pour le jour J
+    } else {
+      // Après l'événement
+      countdownEl.innerText = "L'événement est terminé !";
+      countdownEl.style.color = "#ff6b6b"; // Couleur différente
     }
-    const d = Math.floor(diff/(1000*60*60*24));
-    const h = Math.floor((diff/(1000*60*60))%24);
-    const m = Math.floor((diff/(1000*60))%60);
-    const s = Math.floor((diff/1000)%60);
-    countdownEl.innerText = `Jours restants : ${d} | ${h}h ${m}m ${s}s`;
   }
+  
   update();
-  setInterval(update,1000);
+  setInterval(update, 1000);
 }
 
 /* ---------- trouver index du jour ---------- */
