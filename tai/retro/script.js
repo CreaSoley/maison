@@ -1,6 +1,6 @@
 let ACTIVITIES = [];
+let currentIndex = 0;
 const TARGET_DATE = new Date(new Date().getFullYear(), 1, 8); // 8 février
-const today = new Date();
 const openSound = document.getElementById('openSound');
 
 /* ---------- chargement JSON ---------- */
@@ -48,48 +48,91 @@ function initCountdown(){
   setInterval(update,1000);
 }
 
-/* ---------- afficher la case du jour ---------- */
-function showTodayDoor(){
-  const container = document.getElementById('doorContainer');
-  container.innerHTML = "";
-  
-  const dayIndex = ACTIVITIES.findIndex(act=>{
-    const actDate = new Date(act.jour);
-    return actDate.toDateString() === today.toDateString();
+/* ---------- trouver index du jour courant ---------- */
+function findTodayIndex(){
+  const today = new Date();
+  const dayNum = today.getDate();
+  const monthNum = today.getMonth(); // 0=janvier
+
+  return ACTIVITIES.findIndex(act=>{
+    const match = act.jour.match(/(\d{1,2})\s+[^\d]+$/); // extrait le jour
+    if(!match) return false;
+    const actDay = parseInt(match[1],10);
+    const actMonth = act.jour.toLowerCase().includes("décembre") ? 11 :
+                     act.jour.toLowerCase().includes("février") ? 1 : monthNum;
+    return actDay === dayNum && actMonth === monthNum;
   });
-  
-  const act = ACTIVITIES[dayIndex] || {jour:`Jour inconnu`, contenu_1:"", contenu_2:"", themes:"", type:"", duree_minutes:""};
-  
-  markDayOpened(dayIndex+1);
-  openSound.play();
-  
-  container.innerHTML = `
-    <div class="jour">${act.jour}</div>
-    <div class="texte">
-      <strong>Thèmes :</strong> ${act.themes}<br>
-      <strong>Type :</strong> ${act.type}<br>
-      <strong>Durée :</strong> ${act.duree_minutes} min<br><br>
-      ${act.contenu_1}<br><br>
-      ${act.contenu_2}
-    </div>
-  `;
 }
 
-/* ---------- tracker bas de page ---------- */
-function initTracker(){
+/* ---------- afficher une case ---------- */
+function showDoor(index){
+  if(index<0 || index>=ACTIVITIES.length) return;
+  currentIndex = index;
+
+  const act = ACTIVITIES[index] || {jour:`Jour inconnu`, contenu_1:"", contenu_2:"", themes:"", type:"", duree_minutes:""};
+
+  // Vérifie si on peut ouvrir le jour (avant ou aujourd'hui)
+  const today = new Date();
+  const match = act.jour.match(/(\d{1,2})\s+[^\d]+$/);
+  const actDay = match ? parseInt(match[1],10) : 1;
+  const actMonth = act.jour.toLowerCase().includes("décembre") ? 11 :
+                   act.jour.toLowerCase().includes("février") ? 1 : today.getMonth();
+
+  const actDate = new Date(today.getFullYear(), actMonth, actDay);
+
+  if(actDate>today){
+    document.getElementById('doorContainer').innerHTML = `<div class="texte">Cette case ne peut être ouverte que le ${act.jour}.</div>`;
+  } else {
+    markDayOpened(index+1);
+    openSound.play();
+    document.getElementById('doorContainer').innerHTML = `
+      <div class="jour">${act.jour}</div>
+      <div class="texte">
+        <strong>Thèmes :</strong> ${act.themes}<br>
+        <strong>Type :</strong> ${act.type}<br>
+        <strong>Durée :</strong> ${act.duree_minutes} min<br><br>
+        ${act.contenu_1}<br><br>
+        ${act.contenu_2}
+      </div>
+    `;
+  }
+
+  updateTracker();
+}
+
+/* ---------- tracker ---------- */
+function updateTracker(){
   const tracker = document.getElementById('tracker');
   tracker.innerHTML = "";
   ACTIVITIES.forEach((_,i)=>{
     const div = document.createElement('div');
     div.className = "day" + (isDayOpened(i+1)?" opened":"");
+    div.addEventListener('click', ()=>{
+      if(isDayOpened(i+1)) showDoor(i); // permet naviguer aux jours déjà ouverts
+    });
     tracker.appendChild(div);
   });
 }
 
-/* ---------- init global ---------- */
+/* ---------- navigation ---------- */
+function initNavigation(){
+  document.getElementById('prevBtn').addEventListener('click', ()=>{
+    let i = currentIndex-1;
+    while(i>=0 && !isDayOpened(i+1)) i--; // naviguer seulement vers les jours déjà ouverts
+    if(i>=0) showDoor(i);
+  });
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    let i = currentIndex+1;
+    while(i<ACTIVITIES.length && !isDayOpened(i+1)) i++;
+    if(i<ACTIVITIES.length) showDoor(i);
+  });
+}
+
+/* ---------- init ---------- */
 (async function(){
   await loadActivities();
   initCountdown();
-  showTodayDoor();
-  initTracker();
+  initNavigation();
+  const todayIndex = findTodayIndex();
+  showDoor(todayIndex>=0?todayIndex:0);
 })();
