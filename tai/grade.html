@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tai-Jitsu – Entraînement</title>
+
+  <style>
+    @font-face { font-family: "Spicy"; src: url("Spicy Sale.ttf"); }
+
+    :root{
+      --pink-1:#fff0f6;
+      --pink-2:#ffd6ec;
+      --accent:#ff5fc1;
+      --card-shadow: 0 10px 24px rgba(255,120,180,0.12);
+      --hot-pink:#ff1493;
+      --text:#222;
+    }
+
+    *{ box-sizing:border-box; }
+    body{ margin:0; background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%); font-family: Arial, sans-serif; color:var(--text); }
+
+    header { background:#000; color:#fff; padding:20px 12px; display:flex; align-items:center; justify-content:center; gap:18px; box-shadow:0 6px 18px rgba(0,0,0,0.25); }
+    header img { height:64px; }
+    header h1 { font-family:"Spicy"; font-size:2.2rem; margin:0; color:var(--pink-2); letter-spacing:1px; }
+
+    .main-wrapper{ max-width:1400px; margin:20px auto; padding:0 18px 40px; }
+
+    .cards-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; width:100%; align-items:stretch; }
+    @media(max-width:1100px){ .cards-grid{ grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width:700px){ .cards-grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      background: linear-gradient(180deg,#fff9fb 0%, #fff4fb 100%);
+      border-radius:18px;
+      padding:16px;
+      border:1px solid var(--pink-2);
+      box-shadow: var(--card-shadow);
+      display:flex; flex-direction:column;
+    }
+
+    .card-title{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+    .card-title .emoji{ font-size:1.6rem; }
+    .card-title h2 { font-family:Spicy; color:var(--accent); font-size:1.6rem; margin:0; }
+
+    .content{ overflow:auto; padding-right:6px; }
+
+    /* Subtitles in Arial rose */
+    .subtitle-arial { font-family: Arial, sans-serif; color: var(--hot-pink); font-size:1.1rem; font-weight:700; margin:10px 0 8px; }
+
+    .result-box { background:#fff; border-radius:10px; padding:12px; box-shadow: inset 0 0 8px rgba(255,0,150,0.04); min-height:60px; }
+
+    .input-small{ width:60px; padding:6px; border-radius:8px; border:1px solid #ffd6ec; text-align:center; }
+
+    .range-inline{ display:flex; align-items:center; gap:8px; margin-top:8px; }
+
+    .button-row{ display:flex; gap:10px; margin-top:12px; }
+    .button-row .btn{ flex:1; padding:10px 12px; border-radius:12px; border:none; font-weight:700; cursor:pointer; background:#ff80d4; color:#fff; box-shadow:0 6px 14px rgba(255,100,170,0.12); }
+    .button-row .btn.stop{ background:#ff2e85; }
+
+    /* force horizontal even on small displays (requested) */
+    @media(max-width:480px){
+      .button-row { flex-direction:row !important; }
+    }
+
+    label { font-size:0.95rem; color:#333; }
+
+    hr{ border:0; border-top:1px dashed rgba(255,100,170,0.12); margin:12px 0; }
+
+    /* accordions */
+    details { background:transparent; border-radius:8px; margin-bottom:10px; overflow:hidden; }
+    summary { background:#ffe6f7; padding:10px 12px; border-radius:8px; cursor:pointer; font-weight:700; color:var(--hot-pink); }
+    details .inner { padding:12px; background:#fff; border-radius:8px; margin-top:8px; }
+
+    /* small helper for slider display */
+    .slider-display { min-width:36px; text-align:right; display:inline-block; }
+
+    /* footer resources */
+    .resources-banner{ margin-top:20px; padding:12px 14px; background: linear-gradient(180deg,#fff6fb,#fff1f9); border:1px solid #ffd9ef; border-radius:12px; box-shadow:0 8px 20px rgba(255,120,180,0.06); display:flex; justify-content:center; }
+  </style>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="logo">
+  <h1>Tai-Jitsu</h1>
+</header>
+
+<div class="main-wrapper">
+  <div class="cards-grid">
+
+    <!-- UV1 -->
+    <section class="card" id="uv1">
+      <div class="card-title">
+        <div class="emoji">🐉</div>
+        <h2>UV1 – Kihon</h2>
+      </div>
+
+      <div class="content">
+        <div class="subtitle-arial">Kihon simples</div>
+        <div>
+          <label>Nombre de kihon:
+            <input id="ks-count" class="input-small" type="number" value="3" min="1">
+          </label>
+          <div class="range-inline">
+            <label>Intervalle (s):</label>
+            <input id="ks-interval" type="range" min="2" max="30" value="5">
+            <div class="slider-display"><span id="ks-interval-display">5</span>s</div>
+            <button id="ks-stop" class="btn stop" style="min-width:60px;">Stop</button>
+          </div>
+
+          <div class="button-row" style="margin-top:10px;">
+            <button id="ks-generate" class="btn">Changer</button>
+            <button id="ks-read" class="btn">Lecture</button>
+          </div>
+
+          <div id="ks-result" class="result-box" style="margin-top:10px;"></div>
+        </div>
+
+        <hr>
+
+        <div class="subtitle-arial">Kihon — Enchaînements</div>
+        <div>
+          <label>Nombre:
+            <input id="kc-count" class="input-small" type="number" value="2" min="1">
+          </label>
+          <div class="range-inline">
+            <label>Intervalle (s):</label>
+            <input id="kc-interval" type="range" min="2" max="60" value="60">
+            <div class="slider-display"><span id="kc-interval-display">60</span>s</div>
+            <button id="kc-stop" class="btn stop" style="min-width:60px;">Stop</button>
+          </div>
+
+          <div class="button-row" style="margin-top:10px;">
+            <button id="kc-generate" class="btn">Changer</button>
+            <button id="kc-read" class="btn">Lecture</button>
+          </div>
+
+          <div id="kc-result" class="result-box" style="margin-top:10px;"></div>
+        </div>
+
+        <hr>
+
+        <div class="subtitle-arial">Techniques de combat</div>
+        <div>
+          <div class="range-inline">
+            <label>Intervalle (s):</label>
+            <input id="kcb-interval" type="range" min="2" max="60" value="60">
+            <div class="slider-display"><span id="kcb-interval-display">60</span>s</div>
+            <button id="kcb-stop" class="btn stop" style="min-width:60px;">Stop</button>
+          </div>
+
+          <div class="button-row" style="margin-top:10px;">
+            <button id="kcb-generate" class="btn">Changer</button>
+            <button id="kcb-read" class="btn">Lecture</button>
+          </div>
+
+          <div id="kcb-result" class="result-box" style="margin-top:10px;"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- UV2 -->
+    <section class="card" id="uv2">
+      <div class="card-title">
+        <div class="emoji">🐯</div>
+        <h2>UV2 – Ippon Kumite</h2>
+      </div>
+
+      <div class="content">
+        <div id="uv2-list" class="result-box" style="min-height:160px;"></div>
+
+        <hr>
+
+        <div class="range-inline">
+          <label>Intervalle lecture (s):</label>
+          <input id="uv2-interval" type="range" min="5" max="60" value="15">
+          <div class="slider-display"><span id="uv2-interval-display">15</span>s</div>
+        </div>
+
+        <div class="button-row">
+          <button id="uv2-read" class="btn">Lecture</button>
+          <button id="uv2-stop" class="btn stop">Stop</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- UV3 -->
+    <section class="card" id="uv3">
+      <div class="card-title">
+        <div class="emoji">🐼</div>
+        <h2>UV3 – Kata</h2>
+      </div>
+
+      <div class="content">
+        <div class="subtitle-arial">Kata</div>
+        <img src="kata2.gif" alt="kata" style="width:100%; border-radius:8px;">
+        <div class="subtitle-arial" style="margin-top:12px;">Bunkai</div>
+        <ul>
+          <li><b>Bunkai 1 :</b> Uke attaque… <br><small>Courte description</small></li>
+          <li><b>Bunkai 2 :</b> Uke attaque… <br><small>Courte description</small></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- UV4 -->
+    <section class="card" id="uv4">
+      <div class="card-title">
+        <div class="emoji">🦊</div>
+        <h2>UV4 – Technique de base</h2>
+      </div>
+      <div class="content">
+        <details>
+          <summary class="subtitle-arial">Application par atemi</summary>
+          <div class="inner">
+            <p>Saisie poignet croisé – description courte.</p>
+            <iframe src="https://www.youtube.com/embed/mINEUy5vaS4" title="Atemi"></iframe>
+          </div>
+        </details>
+
+        <details>
+          <summary class="subtitle-arial">Application par clé</summary>
+          <div class="inner">
+            <p>Saisie revers – description courte.</p>
+            <iframe src="https://www.youtube.com/embed/mINEUy5vaS4" title="Clé"></iframe>
+          </div>
+        </details>
+
+        <details>
+          <summary class="subtitle-arial">Application par projection</summary>
+          <div class="inner">
+            <p>Saisie cheveux – description courte.</p>
+            <iframe src="https://www.youtube.com/embed/mINEUy5vaS4" title="Projection"></iframe>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- UV5 -->
+    <section class="card" id="uv5">
+      <div class="card-title">
+        <div class="emoji">🐵</div>
+        <h2>UV5 – Assauts imposés</h2>
+      </div>
+
+      <div class="content">
+        <div class="subtitle-arial">UV5</div>
+        <div id="uv5-result" class="result-box"></div>
+
+        <label>Catégorie :
+          <select id="uv5-filter">
+            <option value="all">Toutes</option>
+            <option value="A">Étranglements & Saisies</option>
+            <option value="B">Armes & Atemi</option>
+          </select>
+        </label>
+
+        <div style="margin-top:8px;">
+          <label><input id="uv5-duplicates" type="checkbox"> Accepter les doublons</label>
+        </div>
+
+        <div style="margin-top:8px;">
+          <label>Nombre de techniques :
+            <input id="uv5-count" class="input-small" type="number" value="5" min="1">
+          </label>
+        </div>
+
+        <!-- Range time between reading techniques (user requested) -->
+        <div class="range-inline">
+          <label>Intervalle lecture (s):</label>
+          <input id="uv5-read-interval" type="range" min="3" max="60" value="15">
+          <div class="slider-display"><span id="uv5-read-interval-display">15</span>s</div>
+        </div>
+
+        <hr>
+
+        <!-- Beeper independent -->
+        <div class="subtitle-arial">Beeper (indépendant)</div>
+        <div class="range-inline">
+          <label>Bip toutes les :</label>
+          <input id="uv5-beep-interval" type="range" min="2" max="30" value="10">
+          <div class="slider-display"><span id="uv5-beep-display">10</span>s</div>
+          <div style="margin-left:8px; font-size:1.2rem;" id="uv5-beep-icon">🔇</div>
+        </div>
+        <div class="button-row" style="margin-top:8px;">
+          <button id="uv5-beep-start" class="btn">Démarrer Bip</button>
+          <button id="uv5-beep-stop" class="btn stop">Stop Bip</button>
+        </div>
+
+        <hr>
+
+        <div class="button-row">
+          <button id="uv5-generate" class="btn">Changer</button>
+          <button id="uv5-read" class="btn">Lecture</button>
+          <button id="uv5-stop" class="btn stop">Stop</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- UV6 -->
+    <section class="card" id="uv6">
+      <div class="card-title">
+        <div class="emoji">🐮</div>
+        <h2>UV6 – Randori</h2>
+      </div>
+
+      <div class="content">
+        <div class="subtitle-arial">UV6</div>
+        <div id="uv6-result" class="result-box"></div>
+
+        <label>Catégorie :
+          <select id="uv6-filter">
+            <option value="all">Toutes</option>
+            <option value="A">Étranglements & Saisies</option>
+            <option value="B">Armes & Atemi</option>
+          </select>
+        </label>
+
+        <div style="margin-top:8px;">
+          <label><input id="uv6-duplicates" type="checkbox"> Accepter les doublons</label>
+        </div>
+
+        <div style="margin-top:8px;">
+          <label>Nombre de techniques :
+            <input id="uv6-count" class="input-small" type="number" value="5" min="1">
+          </label>
+        </div>
+
+        <div class="range-inline">
+          <label>Intervalle lecture (s):</label>
+          <input id="uv6-read-interval" type="range" min="3" max="60" value="15">
+          <div class="slider-display"><span id="uv6-read-interval-display">15</span>s</div>
+        </div>
+
+        <hr>
+
+        <div class="subtitle-arial">Beeper (indépendant)</div>
+        <div class="range-inline">
+          <label>Bip toutes les :</label>
+          <input id="uv6-beep-interval" type="range" min="2" max="30" value="10">
+          <div class="slider-display"><span id="uv6-beep-display">10</span>s</div>
+          <div style="margin-left:8px; font-size:1.2rem;" id="uv6-beep-icon">🔇</div>
+        </div>
+        <div class="button-row" style="margin-top:8px;">
+          <button id="uv6-beep-start" class="btn">Démarrer Bip</button>
+          <button id="uv6-beep-stop" class="btn stop">Stop Bip</button>
+        </div>
+
+        <hr>
+
+        <div class="button-row">
+          <button id="uv6-generate" class="btn">Changer</button>
+          <button id="uv6-read" class="btn">Lecture</button>
+          <button id="uv6-stop" class="btn stop">Stop</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="resources-banner">
+    <div>Ressources — <button onclick="window.open('livre1.pdf')">Livre 1</button> <button onclick="window.open('livre2.pdf')">Livre 2</button></div>
+  </div>
+</div>
+
+<!-- =========================
+     SCRIPTS intégrés
+     ========================= -->
+<script>
+/* =====================================================
+   Helper utilities
+   ===================================================== */
+function $(id){ return document.getElementById(id); }
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+function speakFR(text){
+  try{
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="fr-FR";
+    u.rate=0.95;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* =====================================================
+   KIHON : encart 1
+   - Loads JSON if present: kihon_simples.json, kihon_enchainements.json
+   - Allows generate/read/stop and interval slider usage
+   ===================================================== */
+(function KIHON_MODULE(){
+  let KS_DATA = [], KC_DATA = [];
+  let KS_SELECTED = [], KC_SELECTED = [], KCB_SELECTED = [];
+
+  async function loadKihonSimples(){
+    try{
+      const r = await fetch('kihon_simples.json');
+      if(!r.ok) throw new Error('no file');
+      const j = await r.json();
+      KS_DATA = j.kihon || [];
+    }catch(e){
+      // fallback: small hardcoded subset if file absent
+      KS_DATA = [
+        {"romaji":"Gedan Barai","jp":"下段払い"},
+        {"romaji":"Jodan Age Uke","jp":"上段上げ受け"},
+        {"romaji":"Soto Ude Uke","jp":"外腕受け"}
+      ];
+      console.warn("kihon_simples.json not loaded, using fallback.");
+    }
+  }
+
+  async function loadKihonEnchainements(){
+    try{
+      const r = await fetch('kihon_enchainements.json');
+      if(!r.ok) throw new Error('no file');
+      const j = await r.json();
+      KC_DATA = j.enchaînements || [];
+    }catch(e){
+      KC_DATA = [
+        {"fr":"Gedan Barai, Gyaku Tsuki, Mae Geri","jp":"下段払い、逆突き、前蹴り"},
+        {"fr":"Jodan Age Uke, Oi Tsuki, Mae Geri","jp":"上段上げ受け、追い突き、前蹴り"}
+      ];
+      console.warn("kihon_enchainements.json not loaded, using fallback.");
+    }
+  }
+
+  function ksGenerate(){
+    const n = clamp(parseInt($('ks-count').value)||3,1,12);
+    KS_SELECTED = [];
+    for(let i=0;i<n;i++){
+      KS_SELECTED.push(KS_DATA[Math.floor(Math.random()*KS_DATA.length)]);
+    }
+    $('ks-result').innerHTML = KS_SELECTED.map((e,i)=>`<p><b>${i+1}.</b> ${e.romaji} <br><i>${e.jp}</i></p>`).join('');
+  }
+
+  function kcGenerate(){
+    const n = clamp(parseInt($('kc-count').value)||2,1,8);
+    KC_SELECTED = [];
+    for(let i=0;i<n;i++){
+      KC_SELECTED.push(KC_DATA[Math.floor(Math.random()*KC_DATA.length)]);
+    }
+    $('kc-result').innerHTML = KC_SELECTED.map((e,i)=>`<p><b>${i+1}.</b> ${e.fr} <br><i>${e.jp}</i></p>`).join('');
+  }
+
+  const KCB_LIST = [
+    "Mae Geri, de la jambe arrière posée derrière, niveau chudan",
+    "Mawashi Geri, de la jambe arrière posée derrière, niveau jodan ou chudan",
+    "Mae Geri de la jambe avant avec sursaut, niveau chudan",
+    "Mawashi Geri, de la jambe avant avec sursaut, niveau jodan ou chudan",
+    "Gyaku Zuki chudan (coup de poing direct du bras arrière)",
+    "Kizami Zuki/Maete Zuki suivi de Gyaku Zuki",
+    "Oï Zuki (coup de poing en avançant), niveau jodan, retour à l’arrière"
+  ];
+  function kcbGenerate(){
+    KCB_SELECTED = [...KCB_LIST].sort(()=>0.5-Math.random()).slice(0,3);
+    $('kcb-result').innerHTML = KCB_SELECTED.map((t,i)=>`<p><b>${i+1}.</b> ${t}</p>`).join('');
+  }
+
+  // reading with ding/beep & interval slider; supports stop
+  let ksReading=false, kcReading=false, kcbReading=false;
+  let ksTimer=null, kcTimer=null, kcbTimer=null;
+
+  function stopAllKS(){ ksReading=false; if(ksTimer){ clearTimeout(ksTimer); ksTimer=null;} try{speechSynthesis.cancel();}catch(e){} }
+  function stopAllKC(){ kcReading=false; if(kcTimer){ clearTimeout(kcTimer); kcTimer=null;} try{speechSynthesis.cancel();}catch(e){} }
+  function stopAllKCB(){ kcbReading=false; if(kcbTimer){ clearTimeout(kcbTimer); kcbTimer=null;} try{speechSynthesis.cancel();}catch(e){} }
+
+  function ksRead(){
+    if(KS_SELECTED.length===0) return;
+    if(ksReading) return;
+    ksReading=true;
+    const ding = new Audio('ding.mp3');
+    const beep = new Audio('beep.mp3');
+    const interval = (parseInt($('ks-interval').value)||5)*1000;
+    let i=0;
+    function next(){
+      if(!ksReading) return;
+      if(i>=KS_SELECTED.length){ try{beep.play();}catch(e){} ksReading=false; return; }
+      try{ ding.currentTime=0; ding.play().catch(()=>{}); }catch(e){}
+      setTimeout(()=>{ speakFR(KS_SELECTED[i].jp); i++; ksTimer=setTimeout(next, interval); }, 400);
+    }
+    // initial 5s delay
+    ksTimer = setTimeout(next, 5000);
+  }
+
+  function kcRead(){
+    if(KC_SELECTED.length===0) return;
+    if(kcReading) return;
+    kcReading=true;
+    const ding = new Audio('ding.mp3');
+    const beep = new Audio('beep.mp3');
+    const interval = (parseInt($('kc-interval').value)||60)*1000;
+    let i=0;
+    function next(){
+      if(!kcReading) return;
+      if(i>=KC_SELECTED.length){ try{beep.play();}catch(e){} kcReading=false; return; }
+      try{ ding.currentTime=0; ding.play().catch(()=>{}); }catch(e){}
+      setTimeout(()=>{ speakFR(KC_SELECTED[i].jp); i++; kcTimer=setTimeout(next, interval); }, 400);
+    }
+    kcTimer = setTimeout(next, 5000);
+  }
+
+  function kcbRead(){
+    if(KCB_SELECTED.length===0) return;
+    if(kcbReading) return;
+    kcbReading=true;
+    const ding = new Audio('ding.mp3');
+    const beep = new Audio('beep.mp3');
+    const interval = (parseInt($('kcb-interval').value)||60)*1000;
+    let i=0;
+    function next(){
+      if(!kcbReading) return;
+      if(i>=KCB_SELECTED.length){ try{beep.play();}catch(e){} kcbReading=false; return; }
+      try{ ding.currentTime=0; ding.play().catch(()=>{}); }catch(e){}
+      setTimeout(()=>{ speakFR(KCB_SELECTED[i]); i++; kcbTimer=setTimeout(next, interval); }, 400);
+    }
+    kcbTimer = setTimeout(next, 5000);
+  }
+
+  // wire UI after DOM ready
+  document.addEventListener('DOMContentLoaded', async ()=>{
+    await loadKihonSimples();
+    await loadKihonEnchainements();
+    // initial fills
+    ksGenerate();
+    kcGenerate();
+    kcbGenerate();
+
+    $('ks-generate').addEventListener('click', ksGenerate);
+    $('ks-read').addEventListener('click', ksRead);
+    $('ks-stop').addEventListener('click', stopAllKS);
+    $('ks-interval').addEventListener('input', ()=> $('ks-interval-display').textContent = $('ks-interval').value);
+
+    $('kc-generate').addEventListener('click', kcGenerate);
+    $('kc-read').addEventListener('click', kcRead);
+    $('kc-stop').addEventListener('click', stopAllKC);
+    $('kc-interval').addEventListener('input', ()=> $('kc-interval-display').textContent = $('kc-interval').value);
+
+    $('kcb-generate').addEventListener('click', kcbGenerate);
+    $('kcb-read').addEventListener('click', kcbRead);
+    $('kcb-stop').addEventListener('click', stopAllKCB);
+    $('kcb-interval').addEventListener('input', ()=> $('kcb-interval-display').textContent = $('kcb-interval').value);
+  });
+})();
+
+/* =====================================================
+   UV2 — IPPON KUMITE
+   - fetch techniques JSON if present (fallback array)
+   - read all terms in order with ding before each and beep at end
+   - interval slider sets the interval between reads
+   ===================================================== */
+(function IPPON_MODULE(){
+  let techniques = [];
+  let reading=false, readTimer=null;
+
+  async function loadTechniques(){
+    try{
+      const r = await fetch('ippon_kumite.json'); // or whatever name
+      if(!r.ok) throw new Error('no file');
+      const j = await r.json();
+      techniques = j.techniques.map(t=>t.jp || t.romaji) || [];
+    }catch(e){
+      // fallback
+      techniques = [
+        "追い突き 上段", "追い突き 中段", "前蹴り 中段", "回し蹴り 上段", "回し蹴り 中段", "横蹴り 中段"
+      ];
+      console.warn("ippon_kumite.json not loaded, using fallback list.");
+    }
+    $('uv2-list').innerHTML = techniques.map(t=>`<div>${t}</div>`).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    loadTechniques();
+
+    $('uv2-interval').addEventListener('input', ()=> $('uv2-interval-display').textContent = $('uv2-interval').value);
+
+    $('uv2-read').addEventListener('click', ()=>{
+      if(reading) return;
+      reading=true;
+      const ding = new Audio('ding.mp3');
+      const beep = new Audio('beep.mp3');
+      const intervalMs = (parseInt($('uv2-interval').value)||15)*1000;
+      let i=0;
+      function next(){
+        if(!reading) return;
+        if(i>=techniques.length){ try{beep.play()}catch(e){} reading=false; return; }
+        ding.play().catch(()=>{});
+        setTimeout(()=>{
+          speakFR(techniques[i]);
+          i++;
+          readTimer = setTimeout(next, intervalMs);
+        },400);
+      }
+      setTimeout(next,5000); // initial 5s
+    });
+
+    $('uv2-stop').addEventListener('click', ()=>{
+      reading=false;
+      if(readTimer){ clearTimeout(readTimer); readTimer=null;}
+      try{ speechSynthesis.cancel(); }catch(e){}
+    });
+  });
+})();
+
+/* =====================================================
+   UV5 & UV6 — RANDORI with filters, duplicates, beep timer
+   - both encarts use same data lists
+   - beeper independent from reading
+   ===================================================== */
+(function RANDORI_MODULE(){
+  const LIST_ALL = [
+    "Saisie de poignet direct","Saisie de poignet opposé","Saisie de poignet haut",
+    "Saisie des deux poignets bas","Saisie des deux poignets haut","Saisie d'un poignet à deux mains",
+    "Étranglement de face à une main","Étranglement de face à deux mains","Saisie de revers + mawashi tsuki",
+    "Saisie de cheveux","Attaque couteau basse ou pique","Attaque couteau circulaire",
+    "Attaque couteau revers","Attaque couteau haute","Matraque haute","Matraque revers",
+    "Coup de poing direct","Mawashi tsuki gauche","Mawashi tsuki droit","Saisie manche haute","Saisie manche basse"
+  ];
+
+  const CAT_A = [
+    "Saisie de poignet direct","Saisie de poignet opposé","Saisie de poignet haut",
+    "Saisie des deux poignets bas","Saisie des deux poignets haut","Saisie d'un poignet à deux mains",
+    "Étranglement de face à une main","Étranglement de face à deux mains","Saisie de revers + mawashi tsuki",
+    "Saisie de cheveux","Saisie manche haute","Saisie manche basse"
+  ];
+
+  const CAT_B = [
+    "Attaque couteau basse ou pique","Attaque couteau circulaire","Attaque couteau revers",
+    "Attaque couteau haute","Matraque haute","Matraque revers","Coup de poing direct",
+    "Mawashi tsuki gauche","Mawashi tsuki droit"
+  ];
+
+  function getBaseFromCat(cat){
+    switch(cat){
+      case 'A': return CAT_A.slice();
+      case 'B': return CAT_B.slice();
+      default: return LIST_ALL.slice();
+    }
+  }
+
+  // common helpers
+  function pick(list, count, allowDup){
+    if(allowDup){
+      const out=[];
+      for(let i=0;i<count;i++) out.push(list[Math.floor(Math.random()*list.length)]);
+      return out;
+    } else {
+      const copy = list.slice();
+      const out = [];
+      while(out.length < count && copy.length>0){
+        const idx = Math.floor(Math.random()*copy.length);
+        out.push(copy.splice(idx,1)[0]);
+      }
+      return out;
+    }
+  }
+
+  // setup each UV (5 and 6) with same behavior
+  function setupUV(uid){
+    const result = $(uid + '-result');
+    const filter = $(uid + '-filter');
+    const dup = $(uid + '-duplicates');
+    const count = $(uid + '-count');
+    const readInterval = $(uid + '-read-interval');
+    const readIntervalDisplay = $(uid + '-read-interval-display');
+
+    // beep controls
+    const beepSlider = $(uid + '-beep-interval');
+    const beepDisplay = $(uid + '-beep-display');
+    const beepIcon = $(uid + '-beep-icon');
+    const beepStart = $(uid + '-beep-start');
+    const beepStop = $(uid + '-beep-stop');
+
+    const btnGenerate = $(uid + '-generate');
+    const btnRead = $(uid + '-read');
+    const btnStop = $(uid + '-stop');
+
+    if(readInterval && readIntervalDisplay) readIntervalDisplay.textContent = readInterval.value;
+    if(beepSlider && beepDisplay) beepDisplay.textContent = beepSlider.value;
+
+    // selection
+    let currentSelection = [];
+
+    function refresh(){
+      const cat = filter ? filter.value : 'all';
+      const allow = dup ? dup.checked : false;
+      const n = count ? Math.max(1, parseInt(count.value)||1) : 3;
+      const base = getBaseFromCat(cat==='all' ? 'all' : cat);
+      currentSelection = pick(base, n, allow);
+      if(result) result.innerHTML = currentSelection.map((t,i)=>`<p><b>${i+1}.</b> ${t}</p>`).join('');
+      return currentSelection;
+    }
+
+    // initial
+    refresh();
+
+    // UI events
+    if(readInterval){
+      readInterval.addEventListener('input', ()=> readIntervalDisplay.textContent = readInterval.value);
+    }
+    if(beepSlider){
+      beepSlider.addEventListener('input', ()=> beepDisplay.textContent = beepSlider.value);
+    }
+
+    if(btnGenerate) btnGenerate.addEventListener('click', refresh);
+
+    // reading logic (with ding before each term)
+    let reading=false, readTimer=null;
+    const ding = new Audio('ding.mp3');
+    const beepSound = new Audio('beep.mp3');
+
+    if(btnRead){
+      btnRead.addEventListener('click', ()=>{
+        if(reading) return;
+        if(!currentSelection || currentSelection.length===0) return;
+        reading=true;
+        let idx=0;
+        const intervalMs = (readInterval ? parseInt(readInterval.value) : 15)*1000;
+
+        function next(){
+          if(!reading) return;
+          if(idx >= currentSelection.length){
+            try{ beepSound.play(); } catch(e){}
+            reading=false;
+            return;
+          }
+          try{ ding.currentTime=0; ding.play().catch(()=>{}); }catch(e){}
+          setTimeout(()=>{
+            if(!reading) return;
+            speakFR(currentSelection[idx]);
+            idx++;
+            readTimer = setTimeout(next, intervalMs);
+          }, 400);
+        }
+
+        // start after 5s (spec)
+        readTimer = setTimeout(next, 5000);
+      });
+    }
+
+    if(btnStop){
+      btnStop.addEventListener('click', ()=>{
+        reading=false;
+        if(readTimer){ clearTimeout(readTimer); readTimer=null; }
+        try{ speechSynthesis.cancel(); }catch(e){}
+      });
+    }
+
+    // beep timer independent
+    let beepTimer = null;
+    if(beepStart){
+      beepStart.addEventListener('click', ()=>{
+        if(beepTimer) return;
+        beepIcon && (beepIcon.textContent='🔊');
+        const ms = (beepSlider ? parseInt(beepSlider.value) : 10) * 1000;
+        beepTimer = setInterval(()=>{ try{ ding.currentTime=0; ding.play().catch(()=>{}); }catch(e){} }, ms);
+      });
+    }
+    if(beepStop){
+      beepStop.addEventListener('click', ()=>{
+        if(beepTimer){ clearInterval(beepTimer); beepTimer=null; }
+        beepIcon && (beepIcon.textContent='🔇');
+      });
+    }
+
+  } // setupUV
+
+  // attach for uv5 & uv6 after DOM ready
+  document.addEventListener('DOMContentLoaded', ()=>{
+    setupUV('uv5');
+    setupUV('uv6');
+  });
+
+})(); // RANDORI_MODULE
+</script>
+</body>
+</html>
