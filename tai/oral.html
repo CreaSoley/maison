@@ -52,6 +52,74 @@
     .library{ display:flex; align-items:center; gap:14px; overflow-x:auto; padding:6px 4px; }
     .kimono-btn{ flex:0 0 auto; width:64px; height:64px; background:url("kimono.png") center/contain no-repeat; border-radius:12px; cursor:pointer; transition:transform .12s; }
     .kimono-btn:hover{ transform:scale(1.08) rotate(-6deg); }
+    .encart {
+    background: #ffe6f7;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 20px auto;
+    max-width: 900px;
+    box-shadow: 0 0 20px rgba(255, 0, 150, 0.2);
+}
+
+.encart-title {
+    font-size: 2rem;
+    color: #ff48b0;
+    text-align: center;
+    margin-bottom: 15px;
+    font-family: 'Comic Sans MS', sans-serif;
+}
+
+.bloc {
+    margin-bottom: 35px;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #ff1493;
+    margin-bottom: 10px;
+}
+
+.input-small {
+    width: 60px;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.buttons {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    background: #ff6ec7;
+    color: white;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #ff8bd6;
+}
+
+.btn-secondary {
+    background: #ff48b0;
+}
+
+.result-box {
+    padding: 10px;
+    background: white;
+    border-radius: 12px;
+    min-height: 20px;
+    box-shadow: inset 0 0 10px rgba(255, 0, 150, 0.1);
+}
+
   </style>
 </head>
 <body>
@@ -64,22 +132,61 @@
 <div class="main-wrapper">
   <div class="cards-grid">
 
-    <!-- ========== UV1 ========== -->
-    <div class="card" id="uv1">
-      <div class="card-title"><img src="ceinture.png" alt=""> UV1 – Kihon</div>
-      <div class="content" id="uv1-content"></div>
-      <hr>
-      <label>Nombre d'enchaînements : <input type="number" id="uv1-count" value="3" class="training-input"></label>
-      <br>
-      <label>Intervalle lecture (s) : 
-        <input type="range" id="uv1-interval" min="5" max="60" value="15" step="1">
-        <span id="uv1-interval-display">15</span>s
-      </label>
-      <br>
-      <button class="training-button" onclick="generateKihon()">Changer d’enchaînements</button>
-      <button class="training-button" onclick="readKihon()">Lire en japonais</button>
-      <div id="uv1-result" style="margin-top:10px;"></div>
+    <!-- =======================================
+     ENCART 1 — UV1 KIHON
+=========================================== -->
+<section class="encart" id="encart1">
+    <h2 class="encart-title">🐉 UV1 – KIHON</h2>
+
+    <!-- ============================
+         SCRIPT 1 — KIHON SIMPLES
+    ============================== -->
+    <div class="bloc">
+        <h3>Kihon simples</h3>
+
+        <label for="ks-count">Nombre de kihon :</label>
+        <input type="number" id="ks-count" min="1" value="3" class="input-small">
+
+        <div class="buttons">
+            <button id="ks-generate" class="btn">Changer de kihon</button>
+            <button id="ks-read" class="btn btn-secondary">Lire en japonais</button>
+        </div>
+
+        <div id="ks-result" class="result-box"></div>
     </div>
+
+    <!-- ============================
+         SCRIPT 2 — ENCHAINEMENTS
+    ============================== -->
+    <div class="bloc">
+        <h3>Kihon — Enchaînements</h3>
+
+        <label for="kc-count">Nombre d'enchaînements :</label>
+        <input type="number" id="kc-count" min="1" value="2" class="input-small">
+
+        <div class="buttons">
+            <button id="kc-generate" class="btn">Changer d'enchaînements</button>
+            <button id="kc-read" class="btn btn-secondary">Lire en japonais</button>
+        </div>
+
+        <div id="kc-result" class="result-box"></div>
+    </div>
+
+    <!-- ============================
+         SCRIPT 3 — TECHNIQUES COMBAT
+    ============================== -->
+    <div class="bloc">
+        <h3>Techniques de combat</h3>
+
+        <div class="buttons">
+            <button id="kcb-generate" class="btn">Changer techniques combat</button>
+            <button id="kcb-read" class="btn btn-secondary">Lire en français</button>
+        </div>
+
+        <div id="kcb-result" class="result-box"></div>
+    </div>
+</section>
+
 
     <!-- ========== UV2 ========== -->
     <div class="card" id="uv2">
