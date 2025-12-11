@@ -1,217 +1,78 @@
 :root{
-  --or:#f7d794;
-  --cuivre:#e0a86d;
-  --noir:rgba(0,0,0,0.85);
-  --fond:#060403;
-  --goldHalo: rgba(245,205,92,0.95);
-  --gap:15px;
-  --fontMain: "Gochi Hand", Arial, sans-serif;
+  --primary:#2b2b2b;
+  --accent:#c49b66;
+  --background:#fdfcf6;
+  --text:#2b2b2b;
+  --tracker:#c49b66;
 }
 
-*{box-sizing:border-box}
-body{
+body {
   margin:0;
   min-height:100vh;
-  background: radial-gradient(ellipse at center, #0b0b0b 0%, #060403 60%);
-  color: white;
-  font-family: var(--fontMain);
-  overflow-x:hidden;
-}
-
-#pageTitle{
-  text-align:center;
-  font-size:40px;
-  color:var(--or);
-  margin:18px 8px;
-  text-shadow:0 0 8px rgba(247,215,148,0.15);
-}
-
-/* calendar grid */
-.calendar{
-  width:92%;
-  max-width:1100px;
-  margin:20px auto 60px;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:var(--gap);
-  align-items:stretch;
-}
-
-/* responsive */
-@media(max-width:900px){ .calendar{ grid-template-columns:repeat(4,1fr); } }
-@media(max-width:600px){ .calendar{ grid-template-columns:repeat(3,1fr); } }
-@media(max-width:450px){ .calendar{ grid-template-columns:repeat(2,1fr); } }
-
-.door{
-  width:100%;
-  padding-top:100%; /* square */
-  position:relative;
-  background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(10,10,10,0.85));
-  border-radius:12px;
-  border:2px solid rgba(245,205,92,0.25);
-  cursor:pointer;
-  transition: transform .18s ease, box-shadow .18s ease;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 40px rgba(245,205,92,0.06) inset;
-  overflow:hidden;
-}
-
-.door:hover{ transform:translateY(-6px) scale(1.02); }
-
-.door .label{
-  position:absolute;
-  inset:0;
+  font-family: 'Noto Serif JP', serif;
+  background-color: var(--background);
+  color: var(--text);
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   flex-direction:column;
-  font-size:18px;
-  color:var(--or);
-  padding:10px;
-  text-align:center;
-  line-height:1.05;
-  white-space:pre-line;
-}
-
-/* halo glow for opened/available doors */
-.halo{
-  box-shadow: 0 0 22px rgba(247,215,148,0.28), 0 0 44px rgba(247,215,148,0.12);
-  transform:scale(1.01);
-}
-
-/* modal */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.78);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:100;
   padding:20px;
+  text-align:justify;
 }
 
-.modal-content{
-  background:#121212;
-  border:2px solid var(--or);
-  border-radius:12px;
-  padding:22px;
-  max-width:640px;
-  width:100%;
+h1 {
+  font-family: 'Roboto Slab', serif;
+  font-size:36px;
+  margin-bottom:10px;
+  color: var(--accent);
   text-align:center;
-  box-shadow:0 0 26px rgba(247,215,148,0.12);
 }
 
-.modal h2{
-  margin:6px 0 12px;
-  font-size:32px;
-  color:var(--or);
-}
-
-.texte{
+.countdown {
   font-size:20px;
-  color:#fff;
-  margin:8px 0 12px;
-  white-space:pre-line;
+  margin-bottom:20px;
+  text-align:center;
 }
 
-/* pdf btn */
-.pdfBtn{
-  display:inline-block;
-  margin-top:12px;
-  padding:10px 16px;
-  background:var(--or);
-  color:black;
-  font-weight:700;
-  text-decoration:none;
-  border-radius:8px;
+.door-container {
+  width:100%;
+  max-width:700px;
+  border:2px solid var(--accent);
+  border-radius:12px;
+  padding:25px;
+  background:white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-bottom:25px;
+  min-height:300px;
+}
+
+.door-container .jour {
+  font-size:28px;
+  color: var(--accent);
+  margin-bottom:15px;
+  text-align:center;
+}
+
+.door-container .texte {
   font-size:18px;
-  transition:transform .12s;
-}
-.pdfBtn:hover{ transform:translateY(-3px); }
-
-/* close */
-.btn-close{
-  margin-top:18px;
-  font-size:18px;
-  background:var(--cuivre);
-  color:black;
-  border:0;
-  padding:8px 14px;
-  border-radius:8px;
-  cursor:pointer;
+  line-height:1.5;
 }
 
-/* snow canvas */
-#snowCanvas{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:10;
+.tracker {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
-/* small credits link */
-.credits{
-  position:fixed;
-  right:12px;
-  bottom:14px;
-  z-index:120;
-  font-family:Arial, sans-serif;
-  font-size:14px;
-}
-.credits a{ color:#f5e7b3; text-decoration:none; }
-.credits a:hover{ text-decoration:underline; }
-/* ---------- portes déjà ouvertes ---------- */
-.door.opened {
-  border-color: #f5d400;
-  box-shadow: 0 0 28px rgba(245,212,0,0.5), 0 0 40px rgba(245,212,0,0.15) inset;
-  background: linear-gradient(180deg, #1a1a1a, #333300);
-  cursor: default;
+.tracker .day {
+  width:24px;
+  height:24px;
+  border:1px solid var(--tracker);
+  border-radius:4px;
+  background:white;
 }
 
-/* effet flip sur ouverture */
-.door .label {
-  transition: transform 0.6s ease, color 0.4s ease;
-  transform-style: preserve-3d;
+.tracker .day.opened {
+  background: var(--tracker);
 }
-
-.door.opened .label {
-  transform: rotateY(180deg);
-  color: #fffa87; /* couleur dorée */
-}
-
-/* animation pulse légère pour attirer l’œil */
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 28px rgba(245,212,0,0.4), 0 0 40px rgba(245,212,0,0.15) inset; }
-  50% { box-shadow: 0 0 36px rgba(245,212,0,0.6), 0 0 50px rgba(245,212,0,0.2) inset; }
-  100% { box-shadow: 0 0 28px rgba(245,212,0,0.4), 0 0 40px rgba(245,212,0,0.15) inset; }
-}
-
-.door.opened {
-  animation: pulseGlow 2.2s infinite;
-}
-
-/* modal plus lisible pour contenu important */
-#modal .texte {
-  font-size: 18px;
-  line-height: 1.4;
-  color: #fff;
-}
-
-.pdfBtn {
-  background: #f5d400;
-  color: black;
-  font-weight: 700;
-  box-shadow: 0 4px 14px rgba(245,212,0,0.4);
-  transition: transform 0.15s, box-shadow 0.2s;
-}
-.pdfBtn:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(245,212,0,0.6);
-}
-
-/* halo disponible déjà existant */
-.halo {
-  box-shadow: 0 0 22px rgba(247,215,148,0.28), 0 0 44px rgba(247,215,148,0.12);
-  transform: scale(1.01);
-}
-
