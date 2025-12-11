@@ -1,0 +1,482 @@
+[
+ {
+   "jour": "jeudi 11 décembre ",
+   "themes": "kihon, randori",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kihon complexes (15–20 min)**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel",
+   "contenu_2": "2. **Shadow randori technique (15–20 min)**\n\n   * Travail fluide sans interruption\n   * Phases : 1 min atemi 1 minute saisie"
+ },
+ {
+   "jour": "vendredi 12 décembre ",
+   "themes": "kata, réactivité",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kata (20 min)**\n\n   * Reprise du kata principal de la semaine\n   * Correction d’erreurs + travail final d’examen",
+   "contenu_2": "2. **Réactivité / cardio technique (15–20 min)**\n\n   * Intervalles techniques (30/30 ou 40/20)\n   * Ateliers :\n     ** Garde → esquive → contre\n     ** Déplacement → saisie imaginaire → projection"
+ },
+ {
+   "jour": "samedi 13 décembre ",
+   "themes": "ippon kumite, technique de base",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Ippon kumite (30 min)**\n\n   * Déroulé complet\n   * Travail rythme lent / normal / examen",
+   "contenu_2": "2. **Techniques de base à deux (30–45 min)**\n\n   * Contrôles, déséquilibres, projections clés du programme\n   * Travail de précision + timing\n"
+ },
+ {
+   "jour": "dimanche 14 décembre ",
+   "themes": "assauts imposés, randori",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Assauts imposés (30 min)**\n\n   * Déroulé complet\n   * Ajustement des distances et placements",
+   "contenu_2": "2. **Randori (30–45 min)**\n\n2 phases :\n     **Atemis\n     ** Saisies\n30 sec intenses / 30 sec repos, ou rounds 1 min"
+ },
+ {
+   "jour": "lundi 15 décembre ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "55",
+   "contenu_1": "1. **Katas (20 min)**\n\n   * Révision complète du tai jitsu kata nidan\n   * Travail selon différents types d'exercices\"",
+   "contenu_2": "2. **Kihon techniques (15–20 min)**\n\n   * Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)"
+ },
+ {
+   "jour": "mardi 16 décembre ",
+   "themes": "assauts imposés, randori",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Réactivité (15–20 min)**\n\n   * Déclenchements sur annonce\n   * Changement de garde, esquives, pivots\n",
+   "contenu_2": "2. **Automatismes randori (15–20 min)**\n\n   * Shadow randori : déplacements, feintes, combinaisons\n   * Enchaînements libres debout → sol\n   * Travail « 3 secondes : attaque ou défense »"
+ },
+ {
+   "jour": "mercredi 17 décembre ",
+   "themes": "ippon kumite, mémoire",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Ippon kumite partiel (15–20 min)**\n\n   * Déclenchement des attaques\n   * Déplacements, timing, posture\n   * Blocages + contre en shadow",
+   "contenu_2": "2. **Mémoire (15–20 min)**\n\n   * Séquences techniques du programme\n   * Visualisation mentale pat stimuli sonore (3–5 min)"
+ },
+ {
+   "jour": "jeudi 18 décembre ",
+   "themes": "kihon, randori",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kihon complexes (15–20 min)**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel",
+   "contenu_2": "2. **Shadow randori technique (15–20 min)**\n\n   * Travail fluide sans interruption\n   * Phases : 1 min atemi 1 minute saisie"
+ },
+ {
+   "jour": "vendredi 19 décembre ",
+   "themes": "kata, réactivité",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kata (20 min)**\n\n   * Reprise du kata principal de la semaine\n   * Correction d’erreurs + travail final d’examen",
+   "contenu_2": "2. **Réactivité / cardio technique (15–20 min)**\n\n   * Intervalles techniques (30/30 ou 40/20)\n   * Ateliers :\n     ** Garde → esquive → contre\n     ** Déplacement → saisie imaginaire → projection"
+ },
+ {
+   "jour": "samedi 20 décembre ",
+   "themes": "ippon kumite, technique de base",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Ippon kumite (30 min)**\n\n   * Déroulé complet\n   * Travail rythme lent / normal / examen",
+   "contenu_2": "2. **Techniques de base à deux (30–45 min)**\n\n   * Contrôles, déséquilibres, projections clés du programme\n   * Travail de précision + timing\n"
+ },
+ {
+   "jour": "dimanche 21 décembre ",
+   "themes": "assauts imposés, randori",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Assauts imposés (30 min)**\n\n   * Déroulé complet\n   * Ajustement des distances et placements",
+   "contenu_2": "2. **Randori (30–45 min)**\n\n2 phases :\n     **Atemis\n     ** Saisies\n30 sec intenses / 30 sec repos, ou rounds 1 min"
+ },
+ {
+   "jour": "lundi 22 décembre ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "75",
+   "contenu_1": "1. **Kata – 45 min**\n\n   * Travail lent → normal → rapide\n   * Séquences difficiles isolées\n   * Filmer + autocorrection",
+   "contenu_2": "2. **Kihon avancé – 30 min**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel\n   * Variations de rythme et de distance"
+ },
+ {
+   "jour": "mardi 23 décembre ",
+   "themes": "ippon kumite",
+   "type": "duo",
+   "duree_minutes": "60",
+   "contenu_1": " 1. Ippon kumite ( timing, précision, distance)**\n\n **Révisions globales – 10 min\n **Travail technique lent – 15 min",
+   "contenu_2": " 2. Ippon kumite (Ajustements placement, angles, finitions)**\n\n**Travail vitesse contrôlée – 15 min\n**Travail “examen” – 15 min\n**Corrections ciblées – 5 min"
+ },
+ {
+   "jour": "mercredi 24 décembre ",
+   "themes": "mémoire, assauts imposés",
+   "type": "solo, duo",
+   "duree_minutes": "70",
+   "contenu_1": "1. **Mémoire – 15 min**\n \n   * Visualisation des attaques au stimuli sonore",
+   "contenu_2": "2. **Assauts imposés lenteur – 15min**\n3. **Assauts imposés vitesse contrôlée – 15 min**\n4. **Assauts imposés en format examen – 15 min**\n5. **Micro-détails & placements – 10 min**"
+ },
+ {
+   "jour": "jeudi 25 décembre ",
+   "themes": "technique de base, bunkai",
+   "type": "duo",
+   "duree_minutes": "50",
+   "contenu_1": "1. **Travail des techniques de base – 25 min**\n\n   * Saisies, clés, atémis\n   * Éducatifs pour les déséquilibres",
+   "contenu_2": "1. **Travail des bunkai – 25 min**\n\n   * Saisies, clés, atémis\n   * Éducatifs pour les déséquilibres"
+ },
+ {
+   "jour": "vendredi 26 décembre ",
+   "themes": "réactivité, randori",
+   "type": "solo, duo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Préparation réactive – 20 min**\n\n   * Enchaînements spontanés (blocage ou blocage/atemi au choix)\n   * Déclenchements visuels / auditifs",
+   "contenu_2": "2. **Randori thématique – 10 min**\n\n   * Atemi\n   * Saisies\n\n3. **Randori libre – 5 min**\n4. **Analyse + corrections – 5 min**\n"
+ },
+ {
+   "jour": "samedi 27 décembre ",
+   "themes": "kata, technique de base",
+   "type": "solo, duo",
+   "duree_minutes": "50",
+   "contenu_1": "1. **Kata – 10 min**\n2. **Ippon kumite – 10 min**\n3. **Assauts imposés – 10 min**",
+   "contenu_2": "4. **Techniques de base – 10 min**\n5. **Randori – 10 min**\n\nC’est une mini-synthèse générale."
+ },
+ {
+   "jour": "dimanche 28 décembre ",
+   "themes": "",
+   "type": "",
+   "duree_minutes": "0",
+   "contenu_1": "Pause cognitive",
+   "contenu_2": "Journée désaturation"
+ },
+ {
+   "jour": "lundi 29 décembre ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "75",
+   "contenu_1": "1. **Kata – 45 min**\n\n   * Travail lent → normal → rapide\n   * Séquences difficiles isolées\n   * Filmer + autocorrection",
+   "contenu_2": "2. **Kihon avancé – 30 min**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel\n   * Variations de rythme et de distance"
+ },
+ {
+   "jour": "mardi 30 décembre ",
+   "themes": "ippon kumite",
+   "type": "duo",
+   "duree_minutes": "60",
+   "contenu_1": " 1. Ippon kumite ( timing, précision, distance)**\n\n **Révisions globales – 10 min\n **Travail technique lent – 15 min",
+   "contenu_2": " 2. Ippon kumite (Ajustements placement, angles, finitions)**\n\n**Travail vitesse contrôlée – 15 min\n**Travail “examen” – 15 min\n**Corrections ciblées – 5 min"
+ },
+ {
+   "jour": "mercredi 31 décembre ",
+   "themes": "mémoire, assauts imposés",
+   "type": "solo, duo",
+   "duree_minutes": "70",
+   "contenu_1": "1. **Mémoire – 15 min**\n \n   * Visualisation des attaques au stimuli sonore",
+   "contenu_2": "2. **Assauts imposés lenteur – 15min**\n3. **Assauts imposés vitesse contrôlée – 15 min**\n4. **Assauts imposés en format examen – 15 min**\n5. **Micro-détails & placements – 10 min**"
+ },
+ {
+   "jour": "jeudi 1 janvier ",
+   "themes": "technique de base, bunkai",
+   "type": "duo",
+   "duree_minutes": "50",
+   "contenu_1": "1. **Travail des techniques de base – 25 min**\n\n   * Saisies, clés, atémis\n   * Éducatifs pour les déséquilibres",
+   "contenu_2": "1. **Travail des bunkai – 25 min**\n\n   * Saisies, clés, atémis\n   * Éducatifs pour les déséquilibres"
+ },
+ {
+   "jour": "vendredi 2 janvier ",
+   "themes": "réactivité, randori",
+   "type": "solo, duo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Préparation réactive – 20 min**\n\n   * Enchaînements spontanés (blocage ou blocage/atemi au choix)\n   * Déclenchements visuels / auditifs",
+   "contenu_2": "2. **Randori thématique – 10 min**\n\n   * Atemi\n   * Saisies\n\n3. **Randori libre – 5 min**\n4. **Analyse + corrections – 5 min**\n"
+ },
+ {
+   "jour": "samedi 3 janvier ",
+   "themes": "kata, randori",
+   "type": "solo, duo",
+   "duree_minutes": "50",
+   "contenu_1": "1. **Kata – 10 min**\n2. **Ippon kumite – 10 min**\n3. **Assauts imposés – 10 min**",
+   "contenu_2": "4. **Techniques de base – 10 min**\n5. **Randori – 10 min**\n\nC’est une mini-synthèse générale."
+ },
+ {
+   "jour": "dimanche 4 janvier ",
+   "themes": "",
+   "type": "",
+   "duree_minutes": "0",
+   "contenu_1": "Pause cognitive",
+   "contenu_2": "Journée désaturation"
+ },
+ {
+   "jour": "lundi 5 janvier ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "55",
+   "contenu_1": "1. **Katas (20 min)**\n\n   * Révision complète du tai jitsu kata nidan\n   * Travail selon différents types d'exercices\"",
+   "contenu_2": "2. **Kihon techniques (15–20 min)**\n\n   * Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)"
+ },
+ {
+   "jour": "mardi 6 janvier ",
+   "themes": "assauts imposés, randori",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Réactivité (15–20 min)**\n\n   * Déclenchements sur annonce\n   * Changement de garde, esquives, pivots\n",
+   "contenu_2": "2. **Automatismes randori (15–20 min)**\n\n   * Shadow randori : déplacements, feintes, combinaisons\n   * Enchaînements libres debout → sol\n   * Travail « 3 secondes : attaque ou défense »"
+ },
+ {
+   "jour": "mercredi 7 janvier ",
+   "themes": "mémoire, assauts imposés",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Ippon kumite partiel (15–20 min)**\n\n   * Déclenchement des attaques\n   * Déplacements, timing, posture\n   * Blocages + contre en shadow",
+   "contenu_2": "2. **Mémoire (15–20 min)**\n\n   * Séquences techniques du programme\n   * Visualisation mentale pat stimuli sonore (3–5 min)"
+ },
+ {
+   "jour": "jeudi 8 janvier ",
+   "themes": "technique de base, bunkai",
+   "type": "duo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kihon complexes (15–20 min)**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel",
+   "contenu_2": "2. **Shadow randori technique (15–20 min)**\n\n   * Travail fluide sans interruption\n   * Phases : 1 min atemi 1 minute saisie"
+ },
+ {
+   "jour": "vendredi 9 janvier ",
+   "themes": "réactivité, randori",
+   "type": "solo, duo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kata (20 min)**\n\n   * Reprise du kata principal de la semaine\n   * Correction d’erreurs + travail final d’examen",
+   "contenu_2": "2. **Réactivité / cardio technique (15–20 min)**\n\n   * Intervalles techniques (30/30 ou 40/20)\n   * Ateliers :\n     ** Garde → esquive → contre\n     ** Déplacement → saisie imaginaire → projection"
+ },
+ {
+   "jour": "samedi 10 janvier ",
+   "themes": "kata, technique de base",
+   "type": "solo, duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Ippon kumite (30 min)**\n\n   * Déroulé complet\n   * Travail rythme lent / normal / examen",
+   "contenu_2": "2. **Techniques de base à deux (30–45 min)**\n\n   * Contrôles, déséquilibres, projections clés du programme\n   * Travail de précision + timing\n"
+ },
+ {
+   "jour": "dimanche 11 janvier ",
+   "themes": "assauts imposés, randori",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Assauts imposés (30 min)**\n\n   * Déroulé complet\n   * Ajustement des distances et placements",
+   "contenu_2": "2. **Randori (30–45 min)**\n\n2 phases :\n     **Atemis\n     ** Saisies\n30 sec intenses / 30 sec repos, ou rounds 1 min"
+ },
+ {
+   "jour": "lundi 12 janvier ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "55",
+   "contenu_1": "1. **Katas (20 min)**\n\n   * Révision complète du tai jitsu kata nidan\n   * Travail selon différents types d'exercices\"",
+   "contenu_2": "2. **Kihon techniques (15–20 min)**\n\n   * Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)"
+ },
+ {
+   "jour": "mardi 13 janvier ",
+   "themes": "réactivité, randori",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Réactivité (15–20 min)**\n\n   * Déclenchements sur annonce\n   * Changement de garde, esquives, pivots\n",
+   "contenu_2": "2. **Automatismes randori (15–20 min)**\n\n   * Shadow randori : déplacements, feintes, combinaisons\n   * Enchaînements libres debout → sol\n   * Travail « 3 secondes : attaque ou défense »"
+ },
+ {
+   "jour": "mercredi 14 janvier ",
+   "themes": "mémoire, assauts imposés",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Ippon kumite partiel (15–20 min)**\n\n   * Déclenchement des attaques\n   * Déplacements, timing, posture\n   * Blocages + contre en shadow",
+   "contenu_2": "2. **Mémoire (15–20 min)**\n\n   * Séquences techniques du programme\n   * Visualisation mentale pat stimuli sonore (3–5 min)"
+ },
+ {
+   "jour": "jeudi 15 janvier ",
+   "themes": "kihon, randori",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kihon complexes (15–20 min)**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel",
+   "contenu_2": "2. **Shadow randori technique (15–20 min)**\n\n   * Travail fluide sans interruption\n   * Phases : 1 min atemi 1 minute saisie"
+ },
+ {
+   "jour": "vendredi 16 janvier ",
+   "themes": "kata, réactivité",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kata (20 min)**\n\n   * Reprise du kata principal de la semaine\n   * Correction d’erreurs + travail final d’examen",
+   "contenu_2": "2. **Réactivité / cardio technique (15–20 min)**\n\n   * Intervalles techniques (30/30 ou 40/20)\n   * Ateliers :\n     ** Garde → esquive → contre\n     ** Déplacement → saisie imaginaire → projection"
+ },
+ {
+   "jour": "samedi 17 janvier ",
+   "themes": "ippon kumite, technique de base",
+   "type": "solo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Ippon kumite (30 min)**\n\n   * Déroulé complet\n   * Travail rythme lent / normal / examen",
+   "contenu_2": "2. **Techniques de base à deux (30–45 min)**\n\n   * Contrôles, déséquilibres, projections clés du programme\n   * Travail de précision + timing\n"
+ },
+ {
+   "jour": "dimanche 18 janvier ",
+   "themes": "assauts imposés, randori",
+   "type": "solo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Assauts imposés (30 min)**\n\n   * Déroulé complet\n   * Ajustement des distances et placements",
+   "contenu_2": "2. **Randori (30–45 min)**\n\n2 phases :\n     **Atemis\n     ** Saisies\n30 sec intenses / 30 sec repos, ou rounds 1 min"
+ },
+ {
+   "jour": "lundi 19 janvier ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "55",
+   "contenu_1": "1. **Katas (20 min)**\n\n   * Révision complète du tai jitsu kata nidan\n   * Travail selon différents types d'exercices\"",
+   "contenu_2": "2. **Kihon techniques (15–20 min)**\n\n   * Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)"
+ },
+ {
+   "jour": "mardi 20 janvier ",
+   "themes": "randori, réactivité",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Réactivité (15–20 min)**\n\n   * Déclenchements sur annonce\n   * Changement de garde, esquives, pivots\n",
+   "contenu_2": "2. **Automatismes randori (15–20 min)**\n\n   * Shadow randori : déplacements, feintes, combinaisons\n   * Enchaînements libres debout → sol\n   * Travail « 3 secondes : attaque ou défense »"
+ },
+ {
+   "jour": "mercredi 21 janvier ",
+   "themes": "ippon kumite, mémoire",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Ippon kumite partiel (15–20 min)**\n\n   * Déclenchement des attaques\n   * Déplacements, timing, posture\n   * Blocages + contre en shadow",
+   "contenu_2": "2. **Mémoire (15–20 min)**\n\n   * Séquences techniques du programme\n   * Visualisation mentale pat stimuli sonore (3–5 min)"
+ },
+ {
+   "jour": "jeudi 22 janvier ",
+   "themes": "kihon, randori",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kihon complexes (15–20 min)**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel",
+   "contenu_2": "2. **Shadow randori technique (15–20 min)**\n\n   * Travail fluide sans interruption\n   * Phases : 1 min atemi 1 minute saisie"
+ },
+ {
+   "jour": "vendredi 23 janvier ",
+   "themes": "kata, réactivité",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kata (20 min)**\n\n   * Reprise du kata principal de la semaine\n   * Correction d’erreurs + travail final d’examen",
+   "contenu_2": "2. **Réactivité / cardio technique (15–20 min)**\n\n   * Intervalles techniques (30/30 ou 40/20)\n   * Ateliers :\n     ** Garde → esquive → contre\n     ** Déplacement → saisie imaginaire → projection"
+ },
+ {
+   "jour": "samedi 24 janvier ",
+   "themes": "ippon kumite, technique de base",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Ippon kumite (30 min)**\n\n   * Déroulé complet\n   * Travail rythme lent / normal / examen",
+   "contenu_2": "2. **Techniques de base à deux (30–45 min)**\n\n   * Contrôles, déséquilibres, projections clés du programme\n   * Travail de précision + timing\n"
+ },
+ {
+   "jour": "dimanche 25 janvier ",
+   "themes": "assauts imposés, randori",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Assauts imposés (30 min)**\n\n   * Déroulé complet\n   * Ajustement des distances et placements",
+   "contenu_2": "2. **Randori (30–45 min)**\n\n2 phases :\n     **Atemis\n     ** Saisies\n30 sec intenses / 30 sec repos, ou rounds 1 min"
+ },
+ {
+   "jour": "lundi 26 janvier ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "55",
+   "contenu_1": "1. **Katas (20 min)**\n\n   * Révision complète du tai jitsu kata nidan\n   * Travail selon différents types d'exercices\"",
+   "contenu_2": "2. **Kihon techniques (15–20 min)**\n\n   * Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)"
+ },
+ {
+   "jour": "mardi 27 janvier ",
+   "themes": "randori, réactivité",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Réactivité (15–20 min)**\n\n   * Déclenchements sur annonce\n   * Changement de garde, esquives, pivots\n",
+   "contenu_2": "2. **Automatismes randori (15–20 min)**\n\n   * Shadow randori : déplacements, feintes, combinaisons\n   * Enchaînements libres debout → sol\n   * Travail « 3 secondes : attaque ou défense »"
+ },
+ {
+   "jour": "mercredi 28 janvier ",
+   "themes": "ippon kumite, mémoire",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Ippon kumite partiel (15–20 min)**\n\n   * Déclenchement des attaques\n   * Déplacements, timing, posture\n   * Blocages + contre en shadow",
+   "contenu_2": "2. **Mémoire (15–20 min)**\n\n   * Séquences techniques du programme\n   * Visualisation mentale pat stimuli sonore (3–5 min)"
+ },
+ {
+   "jour": "jeudi 29 janvier ",
+   "themes": "kihon, randori",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kihon complexes (15–20 min)**\n\n  *Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)\n   * Travail multi-directionnel",
+   "contenu_2": "2. **Shadow randori technique (15–20 min)**\n\n   * Travail fluide sans interruption\n   * Phases : 1 min atemi 1 minute saisie"
+ },
+ {
+   "jour": "vendredi 30 janvier ",
+   "themes": "kata, réactivité",
+   "type": "solo",
+   "duree_minutes": "40,00",
+   "contenu_1": "1. **Kata (20 min)**\n\n   * Reprise du kata principal de la semaine\n   * Correction d’erreurs + travail final d’examen",
+   "contenu_2": "2. **Réactivité / cardio technique (15–20 min)**\n\n   * Intervalles techniques (30/30 ou 40/20)\n   * Ateliers :\n     ** Garde → esquive → contre\n     ** Déplacement → saisie imaginaire → projection"
+ },
+ {
+   "jour": "samedi 31 janvier ",
+   "themes": "ippon kumite, technique de base",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Ippon kumite (30 min)**\n\n   * Déroulé complet\n   * Travail rythme lent / normal / examen",
+   "contenu_2": "2. **Techniques de base à deux (30–45 min)**\n\n   * Contrôles, déséquilibres, projections clés du programme\n   * Travail de précision + timing\n"
+ },
+ {
+   "jour": "dimanche 1 février ",
+   "themes": "assauts imposés, randori",
+   "type": "duo",
+   "duree_minutes": "60,00",
+   "contenu_1": "1. **Assauts imposés (30 min)**\n\n   * Déroulé complet\n   * Ajustement des distances et placements",
+   "contenu_2": "2. **Randori (30–45 min)**\n\n2 phases :\n     **Atemis\n     ** Saisies\n30 sec intenses / 30 sec repos, ou rounds 1 min"
+ },
+ {
+   "jour": "lundi 2 février ",
+   "themes": "kihon, kata",
+   "type": "solo",
+   "duree_minutes": "55",
+   "contenu_1": "1. **Katas (20 min)\n\n   * Révision complète du tai jitsu kata nidan\n   * Travail selon différents types d'exercices\"",
+   "contenu_2": "2. **Kihon techniques (15–20 min)\n\n   * Kihon simples : travail de 5 kihons aléatoires\n   *Enchaînements kihons :  travail de 5 enchaînements aléatoires\n   * Travail au métronome ou intervales (ex : 30 sec / 10 sec repos)"
+ },
+ {
+   "jour": "mardi 3 février ",
+   "themes": "assauts imposés, randori",
+   "type": "solo",
+   "duree_minutes": "40",
+   "contenu_1": "1. **Réactivité (15–20 min)\n\n   * Déclenchements sur annonce\n   * Changement de garde, esquives, pivots\n",
+   "contenu_2": "2. **Automatismes randori (15–20 min)\n\n   * Shadow randori : déplacements, feintes, combinaisons\n   * Enchaînements libres debout → sol\n   * Travail « 3 secondes : attaque ou défense »"
+ },
+ {
+   "jour": "mercredi 4 février ",
+   "themes": "au choix",
+   "type": "solo",
+   "duree_minutes": "10",
+   "contenu_1": "A déterminer",
+   "contenu_2": "A déterminer"
+ },
+ {
+   "jour": "jeudi 5 février ",
+   "themes": "au choix",
+   "type": "solo",
+   "duree_minutes": "10",
+   "contenu_1": "A déterminer",
+   "contenu_2": "A déterminer"
+ },
+ {
+   "jour": "vendredi 6 février ",
+   "themes": "au choix",
+   "type": "solo",
+   "duree_minutes": "10",
+   "contenu_1": "A déterminer",
+   "contenu_2": "A déterminer"
+ },
+ {
+   "jour": "samedi 7 février ",
+   "themes": "au choix",
+   "type": "solo",
+   "duree_minutes": "10",
+   "contenu_1": "A déterminer",
+   "contenu_2": "A déterminer"
+ },
+ {
+   "jour": "dimanche 8 février ",
+   "themes": "",
+   "type": "",
+   "duree_minutes": "",
+   "contenu_1": "",
+   "contenu_2": ""
+ }
+]
