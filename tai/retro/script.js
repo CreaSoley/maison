@@ -16,10 +16,6 @@ async function loadActivities() {
 }
 
 /* ---------- tracker ---------- */
-function resetTracker(){
-  localStorage.setItem('openedDays', JSON.stringify([]));
-}
-
 function markDayOpened(day){
   const opened = JSON.parse(localStorage.getItem('openedDays')||"[]");
   if(!opened.includes(day)){
@@ -101,10 +97,10 @@ function showDoor(index){
     <div class="door-overlay">Cliquez pour découvrir la séance du jour</div>
     <div class="jour">${act.jour}</div>
     <div class="texte">
-      <strong>Thèmes :</strong> ${act.themes}<br>
-      <strong>Type :</strong> ${act.type}<br>
-      <strong>Durée :</strong> ${act.duree_minutes} min<br><br>
-      ${act.contenu_1}<br><br>
+      <strong>Thèmes :</strong> ${act.themes}\n
+      <strong>Type :</strong> ${act.type}\n
+      <strong>Durée :</strong> ${act.duree_minutes} min\n\n
+      ${act.contenu_1}\n\n
       ${act.contenu_2}
     </div>
   `;
@@ -141,7 +137,6 @@ function initNavigation(){
 /* ---------- init ---------- */
 (async function(){
   await loadActivities();
-  resetTracker();
   initCountdown();
   updateTracker();
   initNavigation();
