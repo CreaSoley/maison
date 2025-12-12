@@ -1,17 +1,13 @@
 /* =============================================================
-   ENCART 1 – UV1 KIHON
-   Code propre, structuré et entièrement autonome
-   Gère :
-   - Kihon simples (JSON)
-   - Enchaînements kihon (JSON)
-   - Techniques combat (liste fixe)
-   - Lecture japonaise / française avec ding, délais, vitesse
-   ============================================================= */
+   ENCART 1 — UV1 KIHON (Fichier séparé encart1.js)
+   - Lecture japonaise + ding
+   - Timers contrôlés par sliders (intervalle dynamique)
+   - Structure identique à UV5/UV6
+============================================================= */
 
 /* -------------------------------------------------------------
-   GLOBAL : Déblocage vocal + ding
+   Déblocage du moteur vocal
 ------------------------------------------------------------- */
-
 function unlockSpeech() {
   return new Promise(resolve => {
     const u = new SpeechSynthesisUtterance("あ");
@@ -23,69 +19,92 @@ function unlockSpeech() {
   });
 }
 
+/* Ding commun */
 const ding = new Audio("ding.mp3");
 
-function playDing(callback) {
+function playDing(callback, delay = 3000) {
   ding.currentTime = 0;
-  ding.play().then(() => {
-    setTimeout(callback, 3000); // 3 secondes après ding
-  }).catch(() => setTimeout(callback, 3000));
+  ding.play()
+      .then(() => setTimeout(callback, delay))
+      .catch(() => setTimeout(callback, delay));
 }
 
 /* =============================================================
-   SCRIPT 1 — KIHON SIMPLES
+   MODULE GÉNÉRIQUE DE LECTURE
+   Simplifie la gestion Lecture / Stop
+============================================================= */
+function createReader() {
+  return {
+    reading: false,
+    timer: null,
+
+    start(callback, intervalMs) {
+      if (this.reading) return;
+      this.reading = true;
+
+      let index = 0;
+
+      // délai avant premier ding (5s)
+      setTimeout(() => {
+        const step = () => {
+          if (!this.reading) return;
+
+          // ding → voix
+          playDing(() => {
+            callback(index);
+
+            index++;
+            if (!this.reading || callback.done(index)) {
+              this.reading = false;
+              return;
+            }
+
+            // prochain cycle
+            this.timer = setTimeout(step, intervalMs);
+          });
+
+        };
+
+        step();
+      }, 5000);
+    },
+
+    stop() {
+      this.reading = false;
+      if (this.timer) clearTimeout(this.timer);
+      try { speechSynthesis.cancel(); } catch (e) {}
+    }
+  };
+}
+
+/* =============================================================
+   KIHON SIMPLES
 ============================================================= */
 
 let KS_DATA = [];
 let KS_SELECTED = [];
+const KS_READER = createReader();
 
 async function ksLoad() {
   try {
     const res = await fetch("kihon_simples.json");
-    const json = await res.json();
-    KS_DATA = json.kihon;
-  } catch (e) {
-    console.error("Erreur JSON Kihon Simples :", e);
-  }
+    KS_DATA = (await res.json()).kihon;
+  } catch (e) { console.error("Erreur JSON Kihon simples", e); }
 }
 
 function ksGenerate() {
-  const n = parseInt(document.getElementById("ks-count").value) || 3;
+  const n = parseInt(ksCount.value) || 3;
   KS_SELECTED = [];
 
   for (let i = 0; i < n; i++) {
-    KS_SELECTED.push(KS_DATA[Math.floor(Math.random() * KS_DATA.length)]);
+    KS_SELECTED.push(
+      KS_DATA[Math.floor(Math.random() * KS_DATA.length)]
+    );
   }
 
-  ksDisplay();
-}
-
-function ksDisplay() {
-  const zone = document.getElementById("ks-result");
-  zone.innerHTML = KS_SELECTED.map((x, i) => `
+  ksResult.innerHTML = KS_SELECTED.map((x, i) => `
     <p><b>${i + 1}.</b> ${x.romaji}<br><i>${x.jp}</i></p>
   `).join("");
-}
-
-async function ksRead() {
-  if (KS_SELECTED.length === 0) return;
-  await unlockSpeech();
-
-  let index = 0;
-  setTimeout(() => {
-    playDing(() => {
-      ksSpeak(index++);
-
-      const loop = setInterval(() => {
-        if (index >= KS_SELECTED.length) {
-          clearInterval(loop);
-          return;
-        }
-        playDing(() => ksSpeak(index++));
-      }, 60000); // 1 min entre techniques
-
-    });
-  }, 5000); // 5 sec avant premier ding
 }
 
 function ksSpeak(i) {
@@ -95,59 +114,48 @@ function ksSpeak(i) {
   speechSynthesis.speak(u);
 }
 
+function ksRead() {
+  if (!KS_SELECTED.length) return;
+  unlockSpeech().then(() => {
+    const intervalMs = parseInt(ksInterval.value) * 1000;
+    KS_READER.start((index) => {
+      ksSpeak(index);
+    }, intervalMs);
+
+    KS_READER.start.done = (index) => (index >= KS_SELECTED.length);
+  });
+}
+
+function ksStop() { KS_READER.stop(); }
+
 /* =============================================================
-   SCRIPT 2 — ENCHAÎNEMENTS KIHON
+   ENCHAÎNEMENTS KIHON
 ============================================================= */
 
 let KC_DATA = [];
 let KC_SELECTED = [];
+const KC_READER = createReader();
 
 async function kcLoad() {
   try {
     const res = await fetch("kihon_enchainements.json");
-    const json = await res.json();
-    KC_DATA = json.enchaînements;
-  } catch (e) {
-    console.error("Erreur JSON Enchaînements :", e);
-  }
+    KC_DATA = (await res.json()).enchaînements;
+  } catch (e) { console.error("Erreur JSON Enchaînements", e); }
 }
 
 function kcGenerate() {
-  const n = parseInt(document.getElementById("kc-count").value) || 2;
+  const n = parseInt(kcCount.value) || 2;
   KC_SELECTED = [];
 
   for (let i = 0; i < n; i++) {
-    KC_SELECTED.push(KC_DATA[Math.floor(Math.random() * KC_DATA.length)]);
+    KC_SELECTED.push(
+      KC_DATA[Math.floor(Math.random() * KC_DATA.length)]
+    );
   }
 
-  kcDisplay();
-}
-
-function kcDisplay() {
-  const zone = document.getElementById("kc-result");
-  zone.innerHTML = KC_SELECTED.map((e, i) => `
-    <p><b>${i + 1}.</b> ${e.fr}<br><i>${e.jp}</i></p>
+  kcResult.innerHTML = KC_SELECTED.map((x, i) => `
+    <p><b>${i + 1}.</b> ${x.fr}<br><i>${x.jp}</i></p>
   `).join("");
-}
-
-async function kcRead() {
-  if (KC_SELECTED.length === 0) return;
-  await unlockSpeech();
-
-  let index = 0;
-  setTimeout(() => {
-    playDing(() => {
-      kcSpeak(index++);
-
-      const loop = setInterval(() => {
-        if (index >= KC_SELECTED.length) {
-          clearInterval(loop);
-          return;
-        }
-        playDing(() => kcSpeak(index++));
-      }, 60000);
-    });
-  }, 5000);
 }
 
 function kcSpeak(i) {
@@ -157,8 +165,22 @@ function kcSpeak(i) {
   speechSynthesis.speak(u);
 }
 
+function kcRead() {
+  if (!KC_SELECTED.length) return;
+  unlockSpeech().then(() => {
+    const intervalMs = parseInt(kcInterval.value) * 1000;
+    KC_READER.start((index) => {
+      kcSpeak(index);
+    }, intervalMs);
+
+    KC_READER.start.done = (index) => (index >= KC_SELECTED.length);
+  });
+}
+
+function kcStop() { KC_READER.stop(); }
+
 /* =============================================================
-   SCRIPT 3 — TECHNIQUES COMBAT (FR)
+   TECHNIQUES DE COMBAT (FR)
 ============================================================= */
 
 const KCB_LIST = [
@@ -172,30 +194,11 @@ const KCB_LIST = [
 ];
 
 let KCB_SELECTED = [];
+const KCB_READER = createReader();
 
 function kcbGenerate() {
   KCB_SELECTED = [...KCB_LIST].sort(() => 0.5 - Math.random()).slice(0, 3);
-  document.getElementById("kcb-result").innerHTML =
-    KCB_SELECTED.map(x => `<p>• ${x}</p>`).join("");
-}
-
-function kcbRead() {
-  if (KCB_SELECTED.length === 0) return;
-
-  let index = 0;
-  setTimeout(() => {
-    playDing(() => {
-      kcbSpeak(index++);
-
-      const loop = setInterval(() => {
-        if (index >= KCB_SELECTED.length) {
-          clearInterval(loop);
-          return;
-        }
-        playDing(() => kcbSpeak(index++));
-      }, 60000);
-    });
-  }, 5000);
+  kcbResult.innerHTML = KCB_SELECTED.map(x => `<p>• ${x}</p>`).join("");
 }
 
 function kcbSpeak(i) {
@@ -205,23 +208,51 @@ function kcbSpeak(i) {
   speechSynthesis.speak(u);
 }
 
+function kcbRead() {
+  if (!KCB_SELECTED.length) return;
+
+  const intervalMs = parseInt(kcbInterval.value) * 1000;
+  KCB_READER.start((index) => {
+    kcbSpeak(index);
+  }, intervalMs);
+
+  KCB_READER.start.done = (index) => (index >= KCB_SELECTED.length);
+}
+
+function kcbStop() { KCB_READER.stop(); }
+
 /* =============================================================
    INITIALISATION
 ============================================================= */
 
-window.addEventListener("DOMContentLoaded", () => {
-  // Kihon simples
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Mise à jour dynamique des sliders
+  ksInterval.addEventListener("input", () =>
+    ksIntervalDisplay.textContent = ksInterval.value + "s"
+  );
+  kcInterval.addEventListener("input", () =>
+    kcIntervalDisplay.textContent = kcInterval.value + "s"
+  );
+  kcbInterval.addEventListener("input", () =>
+    kcbIntervalDisplay.textContent = kcbInterval.value + "s"
+  );
+
+  // Chargement JSON
   ksLoad();
-  document.getElementById("ks-generate").onclick = ksGenerate;
-  document.getElementById("ks-read").onclick = ksRead;
-
-  // Enchaînements
   kcLoad();
-  document.getElementById("kc-generate").onclick = kcGenerate;
-  document.getElementById("kc-read").onclick = kcRead;
 
-  // Combat
-  kcbGenerate();
-  document.getElementById("kcb-generate").onclick = kcbGenerate;
-  document.getElementById("kcb-read").onclick = kcbRead;
+  // Boutons UV1
+  ksGenerateBtn.onclick = ksGenerate;
+  ksReadBtn.onclick = ksRead;
+  ksStopBtn.onclick = ksStop;
+
+  kcGenerateBtn.onclick = kcGenerate;
+  kcReadBtn.onclick = kcRead;
+  kcStopBtn.onclick = kcStop;
+
+  kcbGenerateBtn.onclick = kcbGenerate;
+  kcbReadBtn.onclick = kcbRead;
+  kcbStopBtn.onclick = kcbStop;
+
 });
