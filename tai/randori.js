@@ -5,7 +5,7 @@ let techniquesData = [];
 const DEFAULT_EMBED = "https://www.youtube.com/embed/Yfe5aQdez9Q";
 
 async function loadRandori() {
-  const candidates = ["randori.json", "randori_exercices.json"];
+  const candidates = ["randori.json", "randori.json"];
   for (const url of candidates) {
     try {
       const resp = await fetch(url);
