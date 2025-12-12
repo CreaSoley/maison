@@ -120,7 +120,6 @@ header h1 {
 
 /* Conteneur des deux cartes spéciales */
 .uv-grid > div[style] {
-  /* c’est le div inline avec display:flex; je renforce juste un peu */
   display:flex;
   gap:20px;
   justify-content:center;
@@ -214,170 +213,6 @@ header h1 {
   }
 }
 </style>
-  {
-  margin:0;
-  background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
-  font-family: Arial,sans-serif;
-  color:#222;
-}
-
-/* HEADER */
-header {
-  background:#000;
-  color:#fff;
-  padding:24px 12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.25);
-}
-header img { height:86px; cursor:pointer; }
-header h1 {
-  font-family:"Spicy";
-  font-size:2.9rem;
-  margin:0;
-  color:var(--pink-2);
-  letter-spacing:2px;
-}
-
-/* MAIN */
-.main-wrapper {
-  max-width:1600px;
-  margin:20px auto;
-  padding:0 18px 40px;
-}
-
-/* ==== BOUTONS UV ==== */
-.uv-grid {
-  display:grid;
-  grid-template-columns: repeat(5, 1fr);
-  justify-items:center;
-  gap:22px;
-  margin-bottom:30px;
-}
-
-.uv-card {
-  background: linear-gradient(180deg,#fff9fb 0%, #fff4fb 100%);
-  border-radius:20px;
-  width:5cm;
-  height:5cm;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition: transform .16s, box-shadow .16s;
-  flex-direction:column;
-}
-.uv-card:hover {
-  transform: translateY(-6px);
-  box-shadow:0 18px 36px rgba(255,110,180,0.14);
-}
-.uv-card img {
-  max-width:60%;
-  max-height:60%;
-  margin-bottom:6px;
-}
-.uv-card span {
-  font-family:"Spicy";
-  color:var(--accent);
-  font-size:1.4rem;
-  text-align:center;
-}
-
-/* ==== BOUTON EXAMEN SPÉCIAL ==== */
-.uv-card.examen {
-  position:relative;
-  width:6.5cm !important;
-  height:6.5cm !important;
-  box-shadow:0 0 18px rgba(255,120,180,0.45),
-             0 0 32px rgba(255,80,150,0.25),
-             0 0 48px rgba(255,60,130,0.20);
-}
-.uv-card.examen:hover {
-  box-shadow:0 0 28px rgba(255,120,180,0.65),
-             0 0 60px rgba(255,80,150,0.45),
-             0 0 90px rgba(255,60,130,0.40);
-  transform:translateY(-6px) scale(1.05);
-}
-
-/* ==== MOBILE : BARRES ==== */
-@media(max-width:900px){
-  .uv-grid {
-    grid-template-columns:1fr;
-  }
-
-  .uv-card {
-    flex-direction:row;
-    width:100% !important;
-    height:70px !important;
-    padding:0 16px;
-    justify-content:flex-start;
-  }
-
-  .uv-card img {
-    margin-right:14px;
-    margin-left:0;
-    max-width:42px;
-    max-height:42px;
-  }
-
-  .uv-card span {
-    text-align:left;
-  }
-
-  .uv-card.examen {
-    width:100% !important;
-    height:80px !important;
-  }
-}
-
-/* ==== ACCORDÉONS ==== */
-.accordion-container {
-  display:grid;
-  grid-template-columns: repeat(5,1fr);
-  gap:14px;
-}
-
-.accordion {
-  background:linear-gradient(180deg,#fff6f9 0%,#fff1f9 100%);
-  border:1px solid var(--pink-2);
-  border-radius:14px;
-  box-shadow: var(--card-shadow);
-  overflow:hidden;
-}
-
-.accordion-header {
-  cursor:pointer;
-  padding:10px 14px;
-  font-family:"Spicy";
-  font-size:1.4rem;
-  color:var(--accent);
-}
-
-.accordion-body {
-  display:none;
-  padding:10px 14px;
-  font-size:0.95rem;
-}
-
-.accordion-body iframe {
-  width:100%;
-  aspect-ratio:16/9;
-  border-radius:10px;
-  margin-bottom:8px;
-}
-
-/* Mobile = une seule colonne + accordéons ouverts */
-@media(max-width:900px){
-  .accordion-container {
-    grid-template-columns:1fr;
-  }
-  .accordion-body {
-    display:block;
-  }
-}
-</style>
 </head>
 
 <body>
@@ -455,7 +290,7 @@ header h1 {
     <div class="accordion">
       <div class="accordion-header">Technique juste</div>
       <div class="accordion-body">
-        <iframe src="https://www.youtube.com/embed/4x2F6sY7H1U"></iframe>
+        <iframe src="https://www.youtube.com/embed/4x2F6SY7H1U"></iframe>
         <p>La technique juste applique correctement principes, timing et posture.</p>
       </div>
     </div>
