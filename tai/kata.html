@@ -121,23 +121,50 @@
     .book:hover .tooltip {
       visibility: visible;
     }
+
+    /* Conteneur flexible pour Métronome + Bibliothèque */
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap; /* mobile : empile les blocs */
+      gap: 25px;
+    }
+
+    .flex-item {
+      flex: 1;
+      min-width: 300px; /* garde un bloc lisible sur mobile */
+    }
+
+    /* Bibliothèque à côté du métronome sur desktop */
+    .library-block {
+      background: #fff;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Metronome responsive */
     .metronome-container {
-  position: relative;
-  width: 100%;
-  padding-top: 145%; /* ratio hauteur / largeur (520/360 ≈ 1.44) */
-  border-radius: 8px;
-  overflow: hidden;
-}
+      position: relative;
+      width: 100%;
+      padding-top: 145%; /* ratio hauteur / largeur 520/360 */
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-.metronome-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+    .metronome-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
+    /* Kata result en Arial */
+    #kataResult {
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -169,40 +196,41 @@
       <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
     </section>
 
-    <!-- ENCART 3 : Tirage + Métronome -->
+    <!-- ENCART 3 : Tirage + Métronome + Bibliothèque -->
     <section class="kata-block wide-block">
       <h2 class="spicy section-title">🎲 Tirage aléatoire / Métronome</h2>
 
-      <div style="margin-bottom: 15px;">
-        <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
-        <p style="margin-top:10px;font-size:1.2rem;">Kata sélectionné : <span id="kataResult">-</span></p>
+      <div class="flex-container">
+        <!-- Partie Tirage + Métronome -->
+        <div class="flex-item">
+          <div style="margin-bottom: 15px;">
+            <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
+            <p style="margin-top:10px;font-size:1.2rem;">Kata sélectionné : <span id="kataResult">-</span></p>
+          </div>
+
+          <div class="metronome-container">
+            <iframe src="https://guitarapp.com/metronome.html?embed=true&tempo=120&timeSignature=2&pattern=1" 
+                    title="Online Metronome"></iframe>
+          </div>
+        </div>
+
+        <!-- Bibliothèque -->
+        <div class="flex-item library-block">
+          <h2 class="spicy section-title">📚 Bibliothèque de ressources</h2>
+          <div class="library-shelf">
+            <div class="book-shelf">
+              <a href="https://youtu.be/j1_ygZJOSbs?si=t_8X7xywAGFJ-zc6" target="_blank" class="book-kawaii" data-info="Vidéo" style="--color:#ffd7f6;">Tai-jitsu kata nidan</a>
+              <a href="ressource2.html" target="_blank" class="book-kawaii" data-info="Description du Livre 2" style="--color:#ffb9ee;">Livre 2</a>
+              <a href="ressource3.html" target="_blank" class="book-kawaii" data-info="Description du Livre 3" style="--color:#ffa1d1;">Livre 3</a>
+              <a href="ressource4.html" target="_blank" class="book-kawaii" data-info="Description du Livre 4" style="--color:#ff80d4;">Livre 4</a>
+              <a href="ressource5.html" target="_blank" class="book-kawaii" data-info="Description du Livre 5" style="--color:#ff5fc1;">Livre 5</a>
+            </div>
+            <div class="shelf-bar"></div>
+          </div>
+        </div>
       </div>
-
-    <div class="metronome-container">
-  <iframe src="https://guitarapp.com/metronome.html?embed=true&tempo=120&timeSignature=2&pattern=1" 
-          title="Online Metronome"></iframe>
-</div>
-
     </section>
 
-    <!-- BIBLIOTHÈQUE -->
-   <section class="kata-block wide-block">
-  <h2 class="spicy section-title">📚 Bibliothèque de ressources</h2>
-
-  <div class="library-shelf">
-    <div class="book-shelf">
-
-      <a href="https://youtu.be/j1_ygZJOSbs?si=t_8X7xywAGFJ-zc6" target="_blank" class="book-kawaii" data-info="Vidéo" style="--color:#ffd7f6;">Tai-jitsu kata nidan</a>
-      <a href="ressource2.html" target="_blank" class="book-kawaii" data-info="Description du Livre 2" style="--color:#ffb9ee;">Livre 2</a>
-      <a href="ressource3.html" target="_blank" class="book-kawaii" data-info="Description du Livre 3" style="--color:#ffa1d1;">Livre 3</a>
-      <a href="ressource4.html" target="_blank" class="book-kawaii" data-info="Description du Livre 4" style="--color:#ff80d4;">Livre 4</a>
-      <a href="ressource5.html" target="_blank" class="book-kawaii" data-info="Description du Livre 5" style="--color:#ff5fc1;">Livre 5</a>
-
-    </div>
-
-    <div class="shelf-bar"></div>
-  </div>
-</section>
   </main>
 
   <!-- SCRIPT -->
