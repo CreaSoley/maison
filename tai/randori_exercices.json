@@ -32,7 +32,7 @@
  {
    "exercice": 1,
    "video": "Ude gatame",
-   "titre": "Placement rapide\n",
+   "titre": "Placement rapide",
    "photo": "https://i.pinimg.com/736x/87/06/cd/8706cdf382d83eec426ea7035696d071.jpg",
    "objectif": "S'entraîner à voir le bon côté de la base et le bon côté du levier",
    "consigne": "Le partenaire effectue des tsuki (avec contact) alternativement à droite et à gauche.\nBras droit présenté : bras droit base, bras gauche levier\nBras gauche présenté : bras gauche base, bras droit levier.\nTravailler en alternance, sans regarder\nLevier = bras opposé, celui qui pousse le coude\nBase = pousse et/ou bloque le poignet ou l'avant-bras",
@@ -42,10 +42,10 @@
  {
    "exercice": 2,
    "video": "Ude gatame",
-   "titre": "Saisie croisée",
+   "titre": "Saisie poignet opposé",
    "photo": "https://i.pinimg.com/736x/87/06/cd/8706cdf382d83eec426ea7035696d071.jpg",
    "objectif": "Améliorer la dextérité et le placement corporel",
-   "consigne": "Le partenaire fait une saisie croisée. On enroule, la paume remonte au niveau de l'épaule, paume face à moi pour exposer le coude du partenaire. L'autre main accompagne sans brusuer le mouvement pour travailler sur l'extension.\nLa main saisie attrappe le poignet pour faire une base solide.",
+   "consigne": "Le partenaire fait une saisie de poignet opposée. On enroule, la paume remonte au niveau de l'épaule, paume face à moi pour exposer le coude du partenaire. L'autre main accompagne sans brusuer le mouvement pour travailler sur l'extension.\nLa main saisie attrappe le poignet pour faire une base solide.",
    "video_exercice": "https://youtu.be/F5mpPngePVg?si=N9V3q-3UgXOzQWbk&t=192",
    "qr": ""
  },
@@ -130,5 +130,6 @@
    "qr": ""
  }
 ]
+
 
 
