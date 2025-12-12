@@ -126,91 +126,76 @@
   <main class="main-wrapper">
     <div class="grid">
 
-      <!-- UV1 -->
-      <section class="card" id="uv1">
-        <div class="card-title">
-          <div class="emoji">🐉</div>
-          <h2>UV1 – Kihon</h2>
-        </div>
-        <div class="content">
-          <div class="subtitle-arial">Kihon simples</div>
-          <div class="range-row">
-            <label>Nombre:
-              <input id="ks-count" class="input-small" type="number" value="3" min="1">
-            </label>
-            <label>Intervalle (s):
-              <input id="ks-interval" type="range" min="2" max="30" value="5">
-            </label>
-            <div class="slider-display" id="ks-interval-display">5s</div>
-          </div>
+     <!-- ============================= -->
+<!--        UV1 – KIHON 🐉         -->
+<!-- ============================= -->
+<section id="uv1">
 
-          <div class="button-row">
-            <button id="ks-generate" class="btn">Changer</button>
-            <button id="ks-read" class="btn">Lecture JP</button>
-            <button id="ks-stop" class="btn stop">Stop</button>
-          </div>
-          <div id="ks-result" class="result-box" style="margin-top:10px"></div>
+    <h2>UV1 – Kihon 🐉</h2>
 
-          <hr>
+    <!-- KIHÔN SIMPLES -->
+    <div class="encart">
+        <h3>Kihon simples</h3>
 
-          <div class="subtitle-arial">Kihon — Enchaînements</div>
-          <div class="range-row">
-            <label>Nombre:
-              <input id="kc-count" class="input-small" type="number" value="2" min="1">
-            </label>
-            <label>Intervalle (s):
-              <input id="kc-interval" type="range" min="2" max="120" value="60">
-            </label>
-            <div class="slider-display" id="kc-interval-display">60s</div>
-          </div>
-          <div class="button-row">
-            <button id="kc-generate" class="btn">Changer</button>
-            <button id="kc-read" class="btn">Lecture JP</button>
-            <button id="kc-stop" class="btn stop">Stop</button>
-          </div>
-          <div id="kc-result" class="result-box" style="margin-top:10px"></div>
+        Nombre :
+        <input id="ks-number" type="number" value="3" min="1">
 
-          <hr>
+        Intervalle (s) :
+        <input id="ks-interval" type="range" min="1" max="20" value="5">
 
-          <div class="subtitle-arial">Techniques de combat</div>
-          <div class="range-row">
-            <label>Intervalle (s):
-              <input id="kcb-interval" type="range" min="2" max="120" value="60">
-            </label>
-            <div class="slider-display" id="kcb-interval-display">60s</div>
-          </div>
-          <div class="button-row">
-            <button id="kcb-generate" class="btn">Changer</button>
-            <button id="kcb-read" class="btn">Lecture FR</button>
-            <button id="kcb-stop" class="btn stop">Stop</button>
-          </div>
-          <div id="kcb-result" class="result-box" style="margin-top:10px"></div>
-        </div>
-      </section>
+        <div id="ks-output" class="affichage"></div>
 
-      <!-- UV2 -->
-      <section class="card" id="uv2">
-        <div class="card-title">
-          <div class="emoji">🐯</div>
-          <h2>UV2 – Ippon Kumite</h2>
-        </div>
-        <div class="content">
-          <div id="uv2-list" class="result-box"></div>
+        <button id="ks-play">Lecture JP</button>
+        <button id="ks-stop">Stop</button>
+    </div>
 
-          <div class="range-row" style="margin-top:12px;">
-            <label>Intervalle lecture (s):
-              <input id="uv2-interval" type="range" min="5" max="60" value="15">
-            </label>
-            <div class="slider-display" id="uv2-interval-display">15s</div>
-          </div>
+    <!-- KIHÔN ENCHAINEMENTS -->
+    <div class="encart">
+        <h3>Kihon — Enchaînements</h3>
 
-          <div class="button-row">
-            <button id="uv2-read" class="btn">Lecture JP</button>
-            <button id="uv2-stop" class="btn stop">Stop</button>
-          </div>
-        </div>
-      </section>
+        Nombre :
+        <input id="ke-number" type="number" value="2" min="1">
 
+        Intervalle (s) :
+        <input id="ke-interval" type="range" min="1" max="20" value="6">
+
+        <div id="ke-output" class="affichage"></div>
+
+        <button id="ke-play">Lecture JP</button>
+        <button id="ke-stop">Stop</button>
+    </div>
+
+    <!-- TECHNIQUES DE COMBAT -->
+    <div class="encart">
+        <h3>Techniques de combat</h3>
+
+        Intervalle (s) :
+        <input id="tc-interval" type="range" min="1" max="20" value="6">
+
+        <div id="tc-output" class="affichage"></div>
+
+        <button id="tc-play">Lecture FR</button>
+        <button id="tc-stop">Stop</button>
+    </div>
+
+</section>
+
+
+<!-- ============================= -->
+<!--      UV2 – IPPON 🐯           -->
+<!-- ============================= -->
+<section id="uv2">
+
+    <h2>UV2 – Ippon Kumite 🐯</h2>
+
+    Intervalle (secondes) :
+    <input type="range" id="uv2-interval" min="3" max="30" value="15">
+
+    <button onclick="readIppon()">Lecture JP</button>
+
+    <div id="uv2-content" class="techniques-list"></div>
+
+</section>
       <!-- UV3 -->
       <section class="card" id="uv3">
         <div class="card-title">
