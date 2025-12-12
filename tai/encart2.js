@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', () => {
+
 // ===== TECHNIQUES IPPON KUMITE =====
 const techniques = [
     { "romaji": "Oi Tsuki Jodan", "jp": "追い突き 上段" },
@@ -37,3 +39,4 @@ function readIppon(){
         setTimeout(next, interval);
     }, 5000);
 }
+    });
