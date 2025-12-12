@@ -1,14 +1,19 @@
-document.addEventListener('DOMContentLoaded', () => {
+// ========================
+//   ENCAT 2 : IPPON KUMITE
+// ========================
 
-    // ===== LISTE DES TECHNIQUES UV2 =====
+// rendu GLOBAL pour être appelé depuis l’HTML
+window.readIppon = readIppon;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // LISTE DES TECHNIQUES
     const techniques = [
         { "romaji": "Oi Tsuki Jodan", "jp": "追い突き 上段" },
         { "romaji": "Oi Tsuki Chudan", "jp": "追い突き 中段" },
         { "romaji": "Mae Geri Chudan", "jp": "前蹴り 中段" },
         { "romaji": "Mawashi Geri Chudan", "jp": "回し蹴り 中段" },
         { "romaji": "Yoko Geri Chudan", "jp": "横蹴り 中段" },
-
-        // doublons comme ton fichier original
         { "romaji": "Oi Tsuki Jodan", "jp": "追い突き 上段" },
         { "romaji": "Oi Tsuki Chudan", "jp": "追い突き 中段" },
         { "romaji": "Mae Geri Chudan", "jp": "前蹴り 中段" },
@@ -16,48 +21,57 @@ document.addEventListener('DOMContentLoaded', () => {
         { "romaji": "Yoko Geri Chudan", "jp": "横蹴り 中段" }
     ];
 
-    // ===== CHECK SI L’UI EXISTE =====
+    // insertion UI
     const uv2Content = document.getElementById("uv2-content");
-    if (!uv2Content) {
-        console.error("❌ ERREUR : élément #uv2-content introuvable dans le HTML");
-        return;
+    if (uv2Content) {
+        uv2Content.innerHTML = techniques
+            .map(t => `<p>${t.jp}</p>`)
+            .join('');
     }
 
-    // ===== AFFICHE LES TECHNIQUES =====
-    uv2Content.innerHTML = techniques.map(t => `<p>${t.jp}</p>`).join('');
+});
 
-    // ===== LECTURE AUDIO =====
-    window.readIppon = function () {
-        const intervalInput = document.getElementById("uv2-interval");
-        if (!intervalInput) {
-            console.error("❌ ERREUR : #uv2-interval manquant dans le HTML");
+
+// ========================
+//  LECTURE (GLOBAL)
+// ========================
+let ipponTimer = null;
+let ipponRunning = false;
+
+function readIppon() {
+
+    if (ipponRunning) return;
+    ipponRunning = true;
+
+    const intervalInput = document.getElementById("uv2-interval");
+    const interval = parseInt(intervalInput?.value || 15) * 1000;
+
+    // ding & beep
+    const ding = new Audio("ding.mp3");
+    const beep = new Audio("beep.mp3");
+
+    // techniques (du DOM)
+    const list = [...document.querySelectorAll("#uv2-content p")].map(e => e.textContent);
+
+    let i = 0;
+
+    function next() {
+
+        if (i >= list.length) {
+            beep.play();
+            ipponRunning = false;
             return;
         }
 
-        const interval = parseInt(intervalInput.value) * 1000 || 15000;
+        ding.play();
 
-        const synth = window.speechSynthesis;
-        const ding = new Audio("ding.mp3");
-        const beep = new Audio("beep.mp3");
+        const utter = new SpeechSynthesisUtterance(list[i]);
+        utter.lang = "ja-JP";
+        speechSynthesis.speak(utter);
 
-        let i = 0;
+        i++;
+        ipponTimer = setTimeout(next, interval);
+    }
 
-        setTimeout(function next() {
-            if (i >= techniques.length) {
-                beep.play();
-                return;
-            }
-
-            ding.play();
-
-            const utter = new SpeechSynthesisUtterance(techniques[i].jp);
-            utter.lang = "ja-JP";
-            synth.speak(utter);
-
-            i++;
-            setTimeout(next, interval);
-
-        }, 5000);
-    };
-
-});
+    setTimeout(next, 3000);
+}
