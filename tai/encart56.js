@@ -150,7 +150,7 @@ function RandoriModule(cfg){
             if(!beeping) return;
 
             try{
-                const snd = new Audio("beep.mp3");
+                const snd = new Audio("bip.mp3");
                 snd.play();
             }catch(e){}
 
