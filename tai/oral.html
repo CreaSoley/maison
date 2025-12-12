@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Tai-Jitsu – Entraînement</title>
+  <!-- Intégration de FontAwesome pour les icônes de bip -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
     /* ---------- Fonts & palette ---------- */
@@ -115,6 +117,106 @@
 
     /* utilities */
     .muted { color:#666; font-size:0.95rem; }
+      /* --- Styles Spécifiques Kawaii pour les Encarts --- */
+  .card-kawaii {
+    background: white;
+    border: 3px solid var(--pink-2);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 15px rgba(255, 182, 193, 0.4);
+  }
+
+  .module-title {
+    font-family: "Spicy", sans-serif;
+    color: var(--hot-pink);
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px var(--pink-2);
+  }
+
+  .sub-section {
+    background: var(--pink-1);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px dashed var(--accent);
+  }
+
+  .sub-section h3 {
+    font-family: "Spicy", sans-serif;
+    color: var(--accent);
+    margin-top: 0;
+    font-size: 1.2rem;
+  }
+
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .result-display {
+    background: #fff;
+    border: 2px solid var(--pink-2);
+    border-radius: 12px;
+    padding: 15px;
+    min-height: 60px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #444;
+    margin: 10px 0;
+  }
+
+  /* Style des boutons spécifique aux encarts */
+  .btn-kawaii {
+    font-family: "Spicy", sans-serif;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 0px #d6459b;
+    font-size: 0.9rem;
+  }
+
+  .btn-kawaii:hover {
+    transform: scale(1.05);
+    background: var(--hot-pink);
+  }
+
+  .btn-kawaii:active {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
+
+  .btn-stop {
+    background: #ff4d6d;
+    box-shadow: 0 4px 0px #c9184a;
+  }
+
+  /* Icône Beep */
+  .beep-icon {
+    font-size: 1.3rem;
+    color: var(--accent);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .beep-icon.off {
+    opacity: 0.3;
+    filter: grayscale(1);
+  }
+
+  input[type=range] {
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
   </style>
 </head>
 <body>
@@ -124,78 +226,99 @@
   </header>
 
   <main class="main-wrapper">
-    <div class="grid">
+  <div class="grid">
 
-     <!-- ============================= -->
-<!--        UV1 – KIHON 🐉         -->
-<!-- ============================= -->
-<section id="uv1">
+  <!-- ============================= -->
+  <!--        ENCART 1 : UV1         -->
+  <!-- ============================= -->
+  <section id="uv1" class="card-kawaii">
+    <h2 class="module-title">🌸 UV1 – Kihon 🌸</h2>
 
-    <h2>UV1 – Kihon 🐉</h2>
-
-    <!-- KIHÔN SIMPLES -->
-    <div class="encart">
-        <h3>Kihon simples</h3>
-
-        Nombre :
-        <input id="ks-number" type="number" value="3" min="1">
-
-        Intervalle (s) :
-        <input id="ks-interval" type="range" min="1" max="20" value="5">
-
-        <div id="ks-output" class="affichage"></div>
-
-        <button id="ks-play">Lecture JP</button>
-        <button id="ks-stop">Stop</button>
+    <!-- Kihon Simples -->
+    <div class="sub-section">
+      <h3>Kihon Simples</h3>
+      <div class="controls-row">
+        <label>Qté:</label>
+        <input type="number" id="ks-count" class="input-small" value="3" min="1">
+        <label>Délai:</label>
+        <input type="range" id="ks-interval" min="2" max="15" value="5">
+        <span class="muted">5s</span>
+        <i class="fas fa-bell beep-icon" id="ks-beep"></i>
+      </div>
+      <div id="ks-result" class="result-display">Attente...</div>
+      <div class="button-row">
+        <button id="ks-generate" class="btn-kawaii">🎲 Changer</button>
+        <button id="ks-read" class="btn-kawaii">🔊 Lire</button>
+        <button id="ks-stop" class="btn-kawaii btn-stop">🛑 Stop</button>
+      </div>
     </div>
 
-    <!-- KIHÔN ENCHAINEMENTS -->
-    <div class="encart">
-        <h3>Kihon — Enchaînements</h3>
-
-        Nombre :
-        <input id="ke-number" type="number" value="2" min="1">
-
-        Intervalle (s) :
-        <input id="ke-interval" type="range" min="1" max="20" value="6">
-
-        <div id="ke-output" class="affichage"></div>
-
-        <button id="ke-play">Lecture JP</button>
-        <button id="ke-stop">Stop</button>
+    <!-- Kihon Enchaînements -->
+    <div class="sub-section">
+      <h3>Kihon Enchaînements</h3>
+      <div class="controls-row">
+        <label>Qté:</label>
+        <input type="number" id="kc-count" class="input-small" value="3" min="1">
+        <label>Délai:</label>
+        <input type="range" id="kc-interval" min="2" max="15" value="7">
+        <span class="muted">7s</span>
+        <i class="fas fa-bell beep-icon" id="kc-beep"></i>
+      </div>
+      <div id="kc-result" class="result-display">Attente...</div>
+      <div class="button-row">
+        <button id="kc-generate" class="btn-kawaii">🎲 Changer</button>
+        <button id="kc-read" class="btn-kawaii">🔊 Lire</button>
+        <button id="kc-stop" class="btn-kawaii btn-stop">🛑 Stop</button>
+      </div>
     </div>
 
-    <!-- TECHNIQUES DE COMBAT -->
-    <div class="encart">
-        <h3>Techniques de combat</h3>
-
-        Intervalle (s) :
-        <input id="tc-interval" type="range" min="1" max="20" value="6">
-
-        <div id="tc-output" class="affichage"></div>
-
-        <button id="tc-play">Lecture FR</button>
-        <button id="tc-stop">Stop</button>
+    <!-- Kihon Combat -->
+    <div class="sub-section">
+      <h3>Kihon Combat</h3>
+      <div class="controls-row">
+        <label>Délai:</label>
+        <input type="range" id="kcb-interval" min="2" max="15" value="5">
+        <span class="muted">5s</span>
+        <i class="fas fa-bell beep-icon" id="kcb-beep"></i>
+      </div>
+      <div id="kcb-result" class="result-display">Prêt ?</div>
+      <div class="button-row">
+        <button id="kcb-generate" class="btn-kawaii">🎲 Changer</button>
+        <button id="kcb-read" class="btn-kawaii">🔊 Lire</button>
+        <button id="kcb-stop" class="btn-kawaii btn-stop">🛑 Stop</button>
+      </div>
     </div>
+  </section>
 
-</section>
+  <!-- ============================= -->
+  <!--        ENCART 2 : UV2         -->
+  <!-- ============================= -->
+  <section id="uv2" class="card-kawaii">
+    <h2 class="module-title">🐯 UV2 – Ippon Kumite 🐯</h2>
 
+    <div class="sub-section">
+      <div class="controls-row">
+        <label>Intervalle:</label>
+        <input type="range" id="uv2-interval" min="3" max="30" value="10">
+        <span id="uv2-interval-display" class="muted">10s</span>
+        <i class="fas fa-bell beep-icon" id="uv2-beep"></i>
+      </div>
 
-<!-- ============================= -->
-<!--      UV2 – IPPON 🐯           -->
-<!-- ============================= -->
-<section id="uv2">
+      <div id="uv2-content" class="result-display">
+        <!-- Rempli par le script -->
+      </div>
 
-    <h2>UV2 – Ippon Kumite 🐯</h2>
+      <div class="button-row">
+        <button id="uv2-generate" class="btn-kawaii">🔀 Mélanger</button>
+        <button id="uv2-read" class="btn-kawaii">▶️ Lancer l'Examen</button>
+        <button id="uv2-stop" class="btn-kawaii btn-stop">🛑 Stop</button>
+      </div>
+    </div>
+    
+    <p class="muted" style="text-align: center;">L'ordre des techniques est aléatoire.</p>
+  </section>
 
-    Intervalle (secondes) :
-    <input type="range" id="uv2-interval" min="3" max="30" value="15">
-
-    <button onclick="readIppon()">Lecture JP</button>
-
-    <div id="uv2-content" class="techniques-list"></div>
-
-</section>
+</div>
       <!-- UV3 -->
       <section class="card" id="uv3">
         <div class="card-title">
