@@ -247,108 +247,92 @@
     </div>
 
     <!-- ========== UV5 – Assauts imposés ========== -->
-    <div class="card" id="uv5">
-      <div class="card-title">
-        <div class="icon" aria-hidden>
-          <svg width="28" height="28" viewBox="0 0 24 24"><path d="M2 12h20" stroke="#ffd6ec" stroke-width="3"/></svg>
-        </div>
-     <div class="training-card">
-    <div class="training-title spicy">UV5 – Randori Atemi / Défense</div>
-    <div id="uv5"></div>
-</div>
-      </div>
+ <div class="card" id="uv5-card">
+    <h2 class="uv-title spicy">🐵 UV5 – Assauts imposés</h2>
 
-      <div class="content" id="uv5-content"></div>
+    <div id="uv5-result" class="result-box"></div>
 
-      <div class="subtitle-arial" style="margin-top:10px;">Techniques sélectionnées :</div>
-      <div id="uv5-result" class="result-box" style="margin-bottom:10px;"></div>
-
-      <hr>
-
-      <label>Nombre de termes :
-        <input id="uv5-count" type="number" class="input-small" value="3" min="1">
-      </label>
-
-      <label style="margin-left:12px;">Intervalle (s) :
-        <input id="uv5-interval" type="range" min="5" max="60" value="15">
-        <span id="uv5-interval-display">15</span>s
-      </label>
-
-      <div class="button-row">
-        <button id="uv5-generate" class="training-button" onclick="generateRandori56('uv5')">Changer</button>
-        <button id="uv5-read" class="training-button" onclick="readRandori56('uv5')">Lecture</button>
-        <button id="uv5-stop" class="training-button stop" onclick="stopRandori56('uv5')">Stop</button>
-      </div>
-    </div>
-
-<!-- UV6 — Randori -->
-<div class="card" id="uv6">
-  <div class="card-title">
-    <div class="icon" aria-hidden><svg width="28" height="28" viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="#fff0f6"/></svg></div>
-   <div class="training-card">
-    <div class="training-title spicy">UV5 – Randori Atemi / Défense</div>
-    <div id="uv5"></div>
-</div>
-  </div>
-
-  <div class="content">
-
-    <div class="subtitle-arial" style="margin-top:10px;">Techniques sélectionnées :</div>
-    <div id="uv6-result" class="result-box" style="margin-bottom:10px;"></div>
-
-    <!-- A — FILTRE -->
-    <div style="margin-top:10px;">
-      <label><b>Filtre :</b></label><br>
-      <select id="uv6-filter" class="input-small" style="width:100%; padding:8px;">
-        <option value="all">Toutes les attaques</option>
-        <option value="poignet">Saisies de poignet</option>
-        <option value="revers">Saisie de revers</option>
-        <option value="poing">Attaques poing</option>
-        <option value="arme">Armes (couteau/matraque)</option>
-      </select>
-    </div>
-
-    <hr>
-
-    <label>Nombre de termes :
-      <input id="uv6-count" type="number" class="input-small" value="3" min="1">
+    <label>Catégorie :
+        <select id="uv5-filter">
+            <option value="all">Toutes</option>
+            <option value="A">Étranglements / Saisies</option>
+            <option value="B">Armes & Atemi</option>
+        </select>
     </label>
 
-    <label style="margin-left:12px;">Intervalle lecture (s) :
-      <input id="uv6-interval" type="range" min="5" max="60" value="15">
-      <span id="uv6-interval-display">15</span>s
+    <label><input type="checkbox" id="uv5-duplicates"> Accepter les doublons</label>
+
+    <label>Nombre de techniques :
+        <input type="number" id="uv5-count" value="5" min="1">
     </label>
 
-    <!-- B — DOUBLONS -->
-    <div style="margin-top:10px;">
-      <label>
-        <input type="checkbox" id="uv6-duplicates">
-        Accepter les doublons
-      </label>
-    </div>
-
-    <div class="button-row">
-      <button id="uv6-generate" class="training-button">Changer</button>
-      <button id="uv6-read" class="training-button">Lecture</button>
-      <button id="uv6-stop" class="training-button stop">Stop</button>
-    </div>
-
-    <hr>
-
-    <!-- C — TIMER BIP -->
-    <div class="subtitle-arial">Timer de Bip</div>
+    <label>Intervalle lecture :
+        <input type="range" id="uv5-read-interval" min="5" max="60" value="15">
+        <span id="uv5-read-interval-display">15</span>s
+    </label>
 
     <label>Bip toutes les :
-      <input id="uv6-beep-interval" type="range" min="2" max="30" value="10">
-      <span id="uv6-beep-display">10</span>s
+        <input type="range" id="uv5-beep-interval" min="5" max="60" value="10">
+        <span id="uv5-beep-display">10</span>s
+        <span id="uv5-beep-icon">🔇</span>
     </label>
 
-    <div class="button-row">
-      <button id="uv6-beep-start" class="training-button">Démarrer Bip</button>
-      <button id="uv6-beep-stop" class="training-button stop">Stop Bip</button>
+    <div class="btn-row">
+        <button id="uv5-generate" class="training-button">Changer</button>
+        <button id="uv5-read" class="training-button">Lecture</button>
+        <button id="uv5-stop" class="training-button stop">Stop</button>
     </div>
 
-  </div>
+    <div class="btn-row">
+        <button id="uv5-beep-start" class="training-button">Beep ON</button>
+        <button id="uv5-beep-stop" class="training-button stop">Beep OFF</button>
+    </div>
+</div>
+
+
+<!-- UV6 — Randori -->
+<div class="card" id="uv6-card">
+    <h2 class="uv-title spicy">🐮 UV6 – Randori</h2>
+
+    <div id="uv6-result" class="result-box"></div>
+
+    <label>Catégorie :
+        <select id="uv6-filter">
+            <option value="all">Toutes</option>
+            <option value="A">Étranglements / Saisies</option>
+            <option value="B">Armes & Atemi</option>
+        </select>
+    </label>
+
+    <label><input type="checkbox" id="uv6-duplicates"> Accepter les doublons</label>
+
+    <label>Nombre de techniques :
+        <input type="number" id="uv6-count" value="5" min="1">
+    </label>
+
+    <label>Intervalle lecture :
+        <input type="range" id="uv6-read-interval" min="5" max="60" value="15">
+        <span id="uv6-read-interval-display">15</span>s
+    </label>
+
+    <label>Bip toutes les :
+        <input type="range" id="uv6-beep-interval" min="5" max="60" value="10">
+        <span id="uv6-beep-display">10</span>s
+        <span id="uv6-beep-icon">🔇</span>
+    </label>
+
+    <div class="btn-row">
+        <button id="uv6-generate" class="training-button">Changer</button>
+        <button id="uv6-read" class="training-button">Lecture</button>
+        <button id="uv6-stop" class="training-button stop">Stop</button>
+    </div>
+
+    <div class="btn-row">
+        <button id="uv6-beep-start" class="training-button">Beep ON</button>
+        <button id="uv6-beep-stop" class="training-button stop">Beep OFF</button>
+    </div>
+</div>
+
 </div>
 
 
