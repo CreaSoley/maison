@@ -63,10 +63,8 @@ header h1 {
 /* ==== BOUTONS UV ==== */
 .uv-grid {
   display:grid;
-  /* colonnes automatiques, largeur min 5cm, sinon elles rapetissent proprement */
   grid-template-columns: repeat(auto-fit, minmax(5cm, 1fr));
   gap:22px;
-  margin-bottom:30px;
   justify-items:center;   /* centre chaque carte dans sa cellule */
 }
 
@@ -212,7 +210,12 @@ header h1 {
   .accordion-body {
     display:block;
   }
+/* Conteneur spécifique pour les boutons UV */
+.uv-wrapper {
+  max-width: 1100px;      /* largeur max de la rangée de boutons */
+  margin: 0 auto 30px;    /* centré horizontalement */
 }
+  
 </style>
 </head>
 
@@ -226,7 +229,8 @@ header h1 {
 <div class="main-wrapper">
 
   <!-- ==== BOUTONS UV ==== -->
-  <div class="uv-grid" style="justify-content:center;">
+ <div class="uv-wrapper">
+  <div class="uv-grid">
 
     <div class="uv-card" onclick="location.href='kihon.html'">
       <img src="lkihon.png" alt="Kihon"><span>Kihon</span>
@@ -247,6 +251,20 @@ header h1 {
     <div class="uv-card" onclick="location.href='randori.html'">
       <img src="lrandori.png" alt="Randori"><span>Randori</span>
     </div>
+
+    <!-- BOUTONS CENTRÉS EXAMEN + PLANNING -->
+    <div class="uv-row-exam">
+      <div class="uv-card examen" onclick="location.href='passage.html'">
+        <img src="lpassage.png" alt="Examen"><span>Examen</span>
+      </div>
+
+      <div class="uv-card examen" onclick="location.href='retro/index.html'">
+        <img src="date.png" alt="Planning"><span>Planning</span>
+      </div>
+    </div>
+
+  </div>
+</div>
 
     <!-- BOUTONS CENTRÉS EXAMEN + PLANNING -->
   
