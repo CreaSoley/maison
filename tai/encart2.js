@@ -4,7 +4,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /********************************************************************
-     * DONNÉES — laissées en dur comme demandé
+     * DONNÉES
      ********************************************************************/
     const IPPON = [
         { romaji: "Oi Tsuki Jodan", jp: "追い突き 上段" },
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * OUTILS
      ********************************************************************/
     function playBeep() {
-        new Audio("beep.mp3").play();
+        new Audio("beep.mp3").play().catch(e => console.log("Beep failed, maybe no file?"));
     }
 
     function speakJP(text) {
@@ -55,7 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
      * AFFICHAGE INITIAL
      ********************************************************************/
     function display() {
-        outBox.innerHTML = sequence.map(t => `<p>${t.jp}</p>`).join("");
+        // Utilisation de <div> pour une meilleure mise en forme dans le result-box
+        outBox.innerHTML = sequence.map(t => `<div>${t.jp}</div>`).join("");
     }
     display();
 
@@ -65,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     beepIcon.addEventListener("click", () => {
         beepEnabled = !beepEnabled;
         beepIcon.classList.toggle("off", !beepEnabled);
+        if (!beepEnabled) speechSynthesis.cancel();
     });
 
     /********************************************************************
