@@ -7,11 +7,15 @@ document.addEventListener("DOMContentLoaded", async () => {
      * OUTILS GÉNÉRAUX
      ********************************************************************/
     function playBeep() {
-        // Vérifie si le fichier existe ou simule un son si possible
-        new Audio("beep.mp3").play().catch(e => console.log("Beep failed, maybe no file?"));
+        try {
+            new Audio("beep.mp3").play();
+        } catch (e) {
+            console.log("Fichier beep.mp3 non trouvé ou lecture impossible.");
+        }
     }
 
     function speakJP(text) {
+        if (!text) return; // Sécurité si le texte est vide
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = "ja-JP";
         speechSynthesis.speak(utter);
@@ -31,19 +35,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const res = await fetch(file);
             if (!res.ok) {
-                console.error(`❌ Erreur ${res.status} : Impossible de charger ${file}.`);
-                return [];
+                console.error(`❌ Erreur ${res.status}: Impossible de charger ${file}.`);
+                return null; // Retourne null pour indiquer un échec clair
             }
             return res.json();
         } catch (error) {
-            console.error(`❌ Réseau/JSON impossible à charger pour ${file}.`, error);
-            return []; // Retourne un tableau vide en cas d'échec
+            console.error(`❌ Erreur réseau/JSON pour ${file}.`, error);
+            return null;
         }
     }
 
     /********************************************************************
      * DONNÉES EN DUR POUR KIHON COMBAT (KCB)
-     * Utilisées si le chargement de 'kihon_combat.json' échoue.
      ********************************************************************/
     const KCB_FALLBACK = [
         { jp: "Oï Zuki, jodan, retour à l’arrière" },
@@ -56,21 +59,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     ];
 
     /********************************************************************
-     * CHARGEMENT DES JSON (Si ces fichiers n'existent pas, les modules KS et KC ne fonctionneront pas)
+     * CHARGEMENT DES JSON (CORRIGÉ AVEC LES BONNES CLÉS)
      ********************************************************************/
-    const KS_DATA = await loadJSON("kihon_simples.json");
-    const KC_DATA = await loadJSON("kihon_enchainements.json");
-    let KCB_DATA = await loadJSON("kihon_combat.json");
+    // 1. Pour kihon_simples.json, on accède à la clé "kihon"
+    const ksJson = await loadJSON("kihon_simples.json");
+    const KS_DATA = ksJson ? ksJson.kihon : [];
+
+    // 2. Pour kihon_enchainements.json, on accède à la clé "enchaînements"
+    const kcJson = await loadJSON("kihon_enchainements.json");
+    // La notation ['key'] est nécessaire à cause de l'accent circonflexe.
+    const KC_DATA = kcJson ? kcJson['enchaînements'] : []; 
+
+    // 3. Pour kihon_combat.json, on essaie de charger et on utilise le fallback si ça échoue.
+    let kcbJson = await loadJSON("kihon_combat.json");
+    let KCB_DATA = kcbJson ? (kcbJson.kihon || kcbJson.combat || []) : [];
     
-    // Si le chargement de KCB échoue, utilise les données en dur.
     if (KCB_DATA.length === 0) {
-        console.warn("⚠️ Utilisation des données KCB en dur.");
+        console.warn("⚠️ Fichier kihon_combat.json non trouvé ou vide. Utilisation des données en dur.");
         KCB_DATA = KCB_FALLBACK;
     }
 
-    console.log("KS chargés :", KS_DATA);
-    console.log("KC chargés :", KC_DATA);
-    console.log("KCB chargés :", KCB_DATA);
+    console.log(`KS chargés: ${KS_DATA.length} techniques.`);
+    console.log(`KC chargés: ${KC_DATA.length} techniques.`);
+    console.log(`KCB chargés: ${KCB_DATA.length} techniques.`);
 
     /********************************************************************
      * MODULE GÉNÉRIQUE
@@ -79,39 +90,35 @@ document.addEventListener("DOMContentLoaded", async () => {
         const {
             countInput, intervalInput,
             btnRandom, btnRead, btnStop,
-            outBox, beepIcon,
-            data
+            outBox, beepIcon, data,
+            intervalDisplayId
         } = config;
+        
+        const intervalDisplay = document.getElementById(intervalDisplayId);
+
+        if (!data || data.length === 0) {
+             outBox.innerHTML = "<div>❌ Données manquantes.</div>";
+             btnRandom.disabled = true;
+             btnRead.disabled = true;
+             return;
+        }
 
         let timer = null;
         let sequence = [];
         let beepEnabled = true;
 
-        if (data.length === 0) {
-             outBox.innerHTML = "<div>❌ Données manquantes.</div>";
-             return; // Stop l'initialisation si pas de données
-        }
-        
-        // Initialiser l'affichage de l'intervalle
-        const intervalDisplay = intervalInput.nextElementSibling;
         intervalDisplay.textContent = intervalInput.value + "s";
 
-
-        // bip ON/OFF
         beepIcon.addEventListener("click", () => {
             beepEnabled = !beepEnabled;
             beepIcon.classList.toggle("off", !beepEnabled);
-            if (!beepEnabled) speechSynthesis.cancel();
         });
 
-        // slider affichage
         intervalInput.addEventListener("input", () => {
             intervalDisplay.textContent = intervalInput.value + "s";
         });
 
-        // bouton Changer
         btnRandom.addEventListener("click", () => {
-            // Utilise countInput si disponible, sinon prend 1
             const count = countInput ? parseInt(countInput.value) : 1; 
             sequence = pickRandom(data, count);
             outBox.innerHTML = sequence.map(t => `<div>${t.jp}</div>`).join("");
@@ -119,10 +126,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (beepEnabled) playBeep();
         });
 
-        // bouton Lecture
         btnRead.addEventListener("click", () => {
             if (sequence.length === 0) {
-                // Tente de générer une séquence si la lecture est lancée sans génération préalable
                 btnRandom.click();
                 if (sequence.length === 0) return; 
             }
@@ -145,14 +150,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             }, interval);
         });
 
-        // bouton Stop
         btnStop.addEventListener("click", () => {
             if (timer) clearInterval(timer);
             timer = null;
             speechSynthesis.cancel();
         });
 
-        // Génération initiale (pour ne pas avoir le texte 'Attente...' trop longtemps)
         btnRandom.click(); 
     }
 
@@ -162,6 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initModule({
         countInput: document.getElementById("ks-count"),
         intervalInput: document.getElementById("ks-interval"),
+        intervalDisplayId: "ks-interval-display",
         btnRandom: document.getElementById("ks-generate"),
         btnRead: document.getElementById("ks-read"),
         btnStop: document.getElementById("ks-stop"),
@@ -173,6 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initModule({
         countInput: document.getElementById("kc-count"),
         intervalInput: document.getElementById("kc-interval"),
+        intervalDisplayId: "kc-interval-display",
         btnRandom: document.getElementById("kc-generate"),
         btnRead: document.getElementById("kc-read"),
         btnStop: document.getElementById("kc-stop"),
@@ -182,8 +187,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     initModule({
-        countInput: document.getElementById("kcb-count"), // <-- NOUVEAU : on utilise l'input quantité
+        countInput: document.getElementById("kcb-count"),
         intervalInput: document.getElementById("kcb-interval"),
+        intervalDisplayId: "kcb-interval-display",
         btnRandom: document.getElementById("kcb-generate"),
         btnRead: document.getElementById("kcb-read"),
         btnStop: document.getElementById("kcb-stop"),
@@ -191,5 +197,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         beepIcon: document.getElementById("kcb-beep"),
         data: KCB_DATA
     });
-
 });
