@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
      * OUTILS GÉNÉRAUX
      ********************************************************************/
     function playBeep() {
-        new Audio("beep.mp3").play();
+        // Vérifie si le fichier existe ou simule un son si possible
+        new Audio("beep.mp3").play().catch(e => console.log("Beep failed, maybe no file?"));
     }
 
     function speakJP(text) {
@@ -27,20 +28,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function loadJSON(file) {
-        const res = await fetch(file);
-        if (!res.ok) {
-            console.error("❌ Impossible de charger : " + file);
-            return [];
+        try {
+            const res = await fetch(file);
+            if (!res.ok) {
+                console.error(`❌ Erreur ${res.status} : Impossible de charger ${file}.`);
+                return [];
+            }
+            return res.json();
+        } catch (error) {
+            console.error(`❌ Réseau/JSON impossible à charger pour ${file}.`, error);
+            return []; // Retourne un tableau vide en cas d'échec
         }
-        return res.json();
     }
 
     /********************************************************************
-     * CHARGEMENT DES JSON
+     * DONNÉES EN DUR POUR KIHON COMBAT (KCB)
+     * Utilisées si le chargement de 'kihon_combat.json' échoue.
      ********************************************************************/
-    const KS_DATA = await loadJSON("kihon_simples.json");          // ✔
-    const KC_DATA = await loadJSON("kihon_enchainements.json");    // ✔
-    const KCB_DATA = await loadJSON("kihon_combat.json");          // ✔ (si tu as un fichier)
+    const KCB_FALLBACK = [
+        { jp: "Oï Zuki, jodan, retour à l’arrière" },
+        { jp: "Gyaku Zuki chudan" },
+        { jp: "Kizami Zuki / Maete Zuki jodan, suivi de Gyaku Zuki chudan" },
+        { jp: "Mae Geri, jambe arrière posée derrière, chudan" },
+        { jp: "Mawashi Geri, jambe arrière posée derrière, jodan ou chudan" },
+        { jp: "Mae Geri, jambe avant avec sursaut, chudan" },
+        { jp: "Mawashi Geri, jambe avant avec sursaut, jodan ou chudan" }
+    ];
+
+    /********************************************************************
+     * CHARGEMENT DES JSON (Si ces fichiers n'existent pas, les modules KS et KC ne fonctionneront pas)
+     ********************************************************************/
+    const KS_DATA = await loadJSON("kihon_simples.json");
+    const KC_DATA = await loadJSON("kihon_enchainements.json");
+    let KCB_DATA = await loadJSON("kihon_combat.json");
+    
+    // Si le chargement de KCB échoue, utilise les données en dur.
+    if (KCB_DATA.length === 0) {
+        console.warn("⚠️ Utilisation des données KCB en dur.");
+        KCB_DATA = KCB_FALLBACK;
+    }
 
     console.log("KS chargés :", KS_DATA);
     console.log("KC chargés :", KC_DATA);
@@ -61,20 +87,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         let sequence = [];
         let beepEnabled = true;
 
+        if (data.length === 0) {
+             outBox.innerHTML = "<div>❌ Données manquantes.</div>";
+             return; // Stop l'initialisation si pas de données
+        }
+        
+        // Initialiser l'affichage de l'intervalle
+        const intervalDisplay = intervalInput.nextElementSibling;
+        intervalDisplay.textContent = intervalInput.value + "s";
+
+
         // bip ON/OFF
         beepIcon.addEventListener("click", () => {
             beepEnabled = !beepEnabled;
             beepIcon.classList.toggle("off", !beepEnabled);
+            if (!beepEnabled) speechSynthesis.cancel();
         });
 
         // slider affichage
         intervalInput.addEventListener("input", () => {
-            intervalInput.nextElementSibling.textContent = intervalInput.value + "s";
+            intervalDisplay.textContent = intervalInput.value + "s";
         });
 
         // bouton Changer
         btnRandom.addEventListener("click", () => {
-            const count = countInput ? parseInt(countInput.value) : 1;
+            // Utilise countInput si disponible, sinon prend 1
+            const count = countInput ? parseInt(countInput.value) : 1; 
             sequence = pickRandom(data, count);
             outBox.innerHTML = sequence.map(t => `<div>${t.jp}</div>`).join("");
 
@@ -83,7 +121,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // bouton Lecture
         btnRead.addEventListener("click", () => {
-            if (sequence.length === 0) return;
+            if (sequence.length === 0) {
+                // Tente de générer une séquence si la lecture est lancée sans génération préalable
+                btnRandom.click();
+                if (sequence.length === 0) return; 
+            }
+            if (timer) clearInterval(timer);
 
             let i = 0;
             const interval = parseInt(intervalInput.value) * 1000;
@@ -108,6 +151,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             timer = null;
             speechSynthesis.cancel();
         });
+
+        // Génération initiale (pour ne pas avoir le texte 'Attente...' trop longtemps)
+        btnRandom.click(); 
     }
 
     /********************************************************************
@@ -136,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     initModule({
-        countInput: null,
+        countInput: document.getElementById("kcb-count"), // <-- NOUVEAU : on utilise l'input quantité
         intervalInput: document.getElementById("kcb-interval"),
         btnRandom: document.getElementById("kcb-generate"),
         btnRead: document.getElementById("kcb-read"),
