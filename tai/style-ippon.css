@@ -10,9 +10,20 @@
   font-family: "Spicy", cursive;
 }
 
-/* Police standard */
+/* Police standard pour le reste */
 body, button, input, select, p, div, li {
-  font-family: Arial, sans-serif;
+  font-family: 'Fredoka', Arial, sans-serif;
+}
+
+/* PALETTE KAWAII GLOBALE */
+:root {
+  --pink-1:#fff0f6;
+  --pink-2:#ffd6ec;
+  --pink-3:#ffe3f4;
+  --accent:#ff5fc1;
+  --hot-pink:#ff1493;
+  --card-shadow: 0 10px 24px rgba(255,120,180,0.18);
+  --text:#222;
 }
 
 /* ------------------------- */
@@ -21,14 +32,17 @@ body, button, input, select, p, div, li {
 body {
   margin: 0;
   padding: 0;
-  background: #fafafa;
+  background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ------------------------- */
 /* BANNIÈRE / HEADER */
 /* ------------------------- */
 .appbar {
-  background: black;
+  background: black;                /* on garde le fond noir */
   color: white;
   padding: 25px 10px;
   display: flex;
@@ -36,6 +50,7 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
 .logo-big {
@@ -46,12 +61,14 @@ body {
 .header-text .title {
   font-size: 2.5rem;
   letter-spacing: 2px;
+  color: var(--pink-2);
 }
 
 .header-text .subtitle {
   font-size: 1.7rem;
   margin-top: 18px;
   letter-spacing: 2px;
+  color: #ffd0ea;
 }
 
 /* ------------------------- */
@@ -59,55 +76,79 @@ body {
 /* ------------------------- */
 .top-banner {
   width: 100%;
-  background: white;
-  padding: 25px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  background: #fffdfd;
+  padding: 20px 25px 18px;
+  box-shadow: 0 4px 12px rgba(255,120,180,0.18);
   margin-bottom: 25px;
+  border-bottom: 2px solid var(--pink-2);
 }
 
 .top-banner .controls {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  align-items: center;
 }
 
 /* ------------------------- */
-/* BOUTONS */
+/* BOUTONS GÉNÉRAUX */
 /* ------------------------- */
 .btn {
-  padding: 10px 18px;
-  border-radius: 10px;
+  padding: 9px 16px;
+  border-radius: 999px;
   cursor: pointer;
   border: none;
   font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Fredoka', Arial, sans-serif;
+  box-shadow: 0 4px 0 rgba(214, 69, 155, 0.7);
+  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s, color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .btn.primary {
-  background: #ff80d4;
+  background: var(--accent);
   color: white;
 }
 
 .btn.ghost {
   background: white;
-  border: 2px solid #ff80d4;
-  color: #ff80d4;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  box-shadow: 0 4px 0 rgba(255, 128, 200, 0.6);
 }
 
 .kawaii {
-  border-radius: 20px;
+  border-radius: 999px;
+}
+
+/* Effets hover / active */
+.btn:hover,
+.fiche-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 rgba(214, 69, 155, 0.8);
+}
+
+.btn:active,
+.fiche-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(214, 69, 155, 0.8);
 }
 
 /* Boutons fiches exercices */
 .fiche-btn {
   font-family: "Spicy", cursive !important;
   font-size: 1.2rem;
-  padding: 12px 20px;
+  padding: 10px 18px;
   background: #ffd7f6;
-  border-radius: 20px;
+  border-radius: 999px;
   border: 2px solid #ff9bdd;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.15s;
   position: relative;
+  box-shadow: 0 4px 0 rgba(255, 153, 221, 0.8);
 }
 
 .fiche-btn:hover {
@@ -129,19 +170,29 @@ body {
   z-index: 10;
 }
 
+/* Résultat surprise */
+#surpriseResult {
+  margin-top: 12px;
+}
+
 /* ------------------------- */
 /* CARD BLOCKS */
 /* ------------------------- */
 .card-block {
-  background: white;
-  padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg,#fff9fc 0%, #fff4fb 100%);
+  padding: 18px;
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  border: 2px solid var(--pink-2);
 }
 
+/* TITRES DE SECTION */
 .section-title {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   margin-bottom: 10px;
+  color: var(--hot-pink);
+  text-align: center;
+  text-shadow: 2px 2px 0 var(--pink-3);
 }
 
 /* ------------------------- */
@@ -158,12 +209,46 @@ body {
   width: 100%;
 }
 
-/* VERSION MOBILE (inchangée) */
+/* VERSION MOBILE */
 @media(max-width: 800px){
   .layout-desktop {
     display: flex;
     flex-direction: column;
+    padding: 0 14px 20px;
   }
+}
+
+/* ------------------------- */
+/* CONTROLS (selects, etc.) */
+/* ------------------------- */
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.controls-column {
+  flex-direction: column;
+}
+
+select {
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--pink-2);
+  background: #fff;
+  font-size: 1rem;
+  font-family: 'Fredoka', Arial, sans-serif;
+  box-shadow: 0 3px 0 rgba(255, 182, 193, 0.7);
+  transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s, background-color 0.15s;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 4px 0 rgba(255, 128, 200, 0.8);
+  transform: translateY(-1px);
+  background: #fffdfc;
 }
 
 /* ------------------------- */
@@ -171,23 +256,26 @@ body {
 /* ------------------------- */
 .ippon-accordion {
   background: #ffeef7;
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 14px;
+  padding: 10px 12px;
   margin-bottom: 12px;
   border: 2px solid #ffb4e6;
+  box-shadow: 0 6px 14px rgba(255, 153, 221, 0.3);
 }
 
 .ippon-acc-header {
   font-family: "Spicy", cursive;
   font-size: 1.4rem;
   cursor: pointer;
-  padding: 8px 6px;
+  padding: 6px 4px;
+  color: var(--hot-pink);
 }
 
 .ippon-acc-content {
   display: none;
-  padding: 5px 5px 5px 0;
-  border-top: 1px solid #ffb4e6;
+  padding: 6px 4px 4px 0;
+  border-top: 1px dashed #ffb4e6;
+  margin-top: 4px;
 }
 
 .ippon-acc-content p {
@@ -210,22 +298,25 @@ body {
 /* ------------------------- */
 .result-card {
   background: #fff3fb;
-  border-radius: 14px;
-  padding: 15px;
+  border-radius: 16px;
+  padding: 14px;
   border: 2px solid #ffb4e6;
   margin-top: 18px;
+  box-shadow: 0 8px 18px rgba(255, 120, 190, 0.12);
 }
 
 .tech-title {
   font-family: "Spicy", cursive;
   font-size: 1.6rem;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
+  color: var(--hot-pink);
 }
 
 .tech-side {
   font-family: "Spicy", cursive;
   font-size: 1.3rem;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  color: var(--accent);
 }
 
 .result-card p {
@@ -234,20 +325,23 @@ body {
 }
 
 .result-title {
-  font-weight: bold;
+  font-weight: 600;
   width: 120px;
   display: inline-block;
+  color: #444;
 }
 
 .result-text {
   display: inline-block;
 }
 
+/* Vidéo intégrée */
 .video-frame {
   width: 100%;
   aspect-ratio: 16/9;
   border-radius: 12px;
   margin-top: 12px;
+  border: none;
 }
 
 /* ------------------------- */
@@ -268,6 +362,7 @@ body {
   flex: 1;
   min-width: 260px;
   max-width: 50%;
+  border-radius: 14px;
 }
 
 @media(max-width:800px){
@@ -277,5 +372,17 @@ body {
 }
 
 /* ------------------------- */
-/* BOUTON SURPRISE – ne pas modifier */
+/* TIMER COLUMN */
+/* ------------------------- */
+#timerBlock iframe {
+  width: 100%;
+  max-width: 340px;
+  border-radius: 18px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* ------------------------- */
+/* BOUTON SURPRISE – ne pas modifier structure */
+/* ------------------------- */
+/* (le style vient déjà de .btn.ghost.kawaii) */
 #btnSurprise {}
