@@ -6,16 +6,214 @@
 <title>Tai-Jitsu – Accueil</title>
 
 <style>
-@font-face { font-family: "Spicy"; src: url("Spicy Sale.ttf"); }
+@font-face { 
+  font-family: "Spicy"; 
+  src: url("Spicy Sale.ttf"); 
+}
 
+/* Palette & thème global */
 :root {
   --pink-1:#fff0f6;
   --pink-2:#ffd6ec;
+  --pink-3:#ffe3f4;
   --accent:#ff5fc1;
-  --card-shadow: 0 10px 24px rgba(255,120,180,0.12);
+  --hot-pink:#ff1493;
+  --card-shadow: 0 10px 24px rgba(255,120,180,0.18);
 }
 
+/* Reset */
 * { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
+  font-family: 'Fredoka', Arial, sans-serif;
+  color:#222;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* HEADER – on garde le fond noir */
+header {
+  background:#000;
+  color:#fff;
+  padding:24px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+header img { height:86px; cursor:pointer; }
+header h1 {
+  font-family:"Spicy", cursive;
+  font-size:2.9rem;
+  margin:0;
+  color:var(--pink-2);
+  letter-spacing:2px;
+}
+
+/* MAIN */
+.main-wrapper {
+  max-width:1600px;
+  margin:20px auto;
+  padding:0 18px 40px;
+}
+
+/* ==== BOUTONS UV ==== */
+.uv-grid {
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items:center;
+  gap:22px;
+  margin-bottom:30px;
+}
+
+/* Cartes UV façon boutons kawaii */
+.uv-card {
+  background: linear-gradient(180deg,#fff9fb 0%, #fff4fb 100%);
+  border-radius:20px;
+  width:5cm;
+  height:5cm;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform .16s, box-shadow .16s;
+  flex-direction:column;
+  border: 2px solid var(--pink-2);
+  box-shadow: var(--card-shadow);
+}
+.uv-card:hover {
+  transform: translateY(-6px);
+  box-shadow:0 18px 36px rgba(255,110,180,0.25);
+}
+.uv-card img {
+  max-width:60%;
+  max-height:60%;
+  margin-bottom:6px;
+}
+.uv-card span {
+  font-family:"Spicy", cursive;
+  color:var(--accent);
+  font-size:1.4rem;
+  text-align:center;
+}
+
+/* ==== BOUTON EXAMEN / PLANNING SPÉCIAUX ==== */
+.uv-card.examen {
+  position:relative;
+  width:6.5cm !important;
+  height:6.5cm !important;
+  box-shadow:
+    0 0 18px rgba(255,120,180,0.45),
+    0 0 32px rgba(255,80,150,0.25),
+    0 0 48px rgba(255,60,130,0.20);
+}
+.uv-card.examen:hover {
+  box-shadow:
+    0 0 28px rgba(255,120,180,0.65),
+    0 0 60px rgba(255,80,150,0.45),
+    0 0 90px rgba(255,60,130,0.40);
+  transform:translateY(-6px) scale(1.05);
+}
+
+/* Conteneur des deux cartes spéciales */
+.uv-grid > div[style] {
+  /* c’est le div inline avec display:flex; je renforce juste un peu */
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  width:100%;
+  margin-top:20px;
+}
+
+/* ==== MOBILE : BARRES ==== */
+@media(max-width:900px){
+  .uv-grid {
+    grid-template-columns:1fr;
+  }
+
+  .uv-card {
+    flex-direction:row;
+    width:100% !important;
+    height:70px !important;
+    padding:0 16px;
+    justify-content:flex-start;
+  }
+
+  .uv-card img {
+    margin-right:14px;
+    margin-left:0;
+    max-width:42px;
+    max-height:42px;
+  }
+
+  .uv-card span {
+    text-align:left;
+    font-size:1.3rem;
+  }
+
+  .uv-card.examen {
+    width:100% !important;
+    height:80px !important;
+  }
+}
+
+/* ==== ACCORDÉONS ==== */
+.accordion-container {
+  display:grid;
+  grid-template-columns: repeat(5,1fr);
+  gap:14px;
+  margin-top: 10px;
+}
+
+.accordion {
+  background:linear-gradient(180deg,#fff6f9 0%,#fff1f9 100%);
+  border:2px solid var(--pink-2);
+  border-radius:18px;
+  box-shadow: var(--card-shadow);
+  overflow:hidden;
+}
+
+/* Titre d’accordéon */
+.accordion-header {
+  cursor:pointer;
+  padding:10px 14px;
+  font-family:"Spicy", cursive;
+  font-size:1.4rem;
+  color:var(--hot-pink);
+  text-shadow:1px 1px 0 var(--pink-3);
+}
+
+/* Corps */
+.accordion-body {
+  display:none;
+  padding:10px 14px 14px;
+  font-size:0.95rem;
+  background:#fff;
+  border-top:1px dashed var(--pink-2);
+}
+
+.accordion-body iframe {
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:12px;
+  margin-bottom:8px;
+  border:none;
+  box-shadow:0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Mobile = une seule colonne + accordéons ouverts */
+@media(max-width:900px){
+  .accordion-container {
+    grid-template-columns:1fr;
+  }
+  .accordion-body {
+    display:block;
+  }
+}
+</style>
 
 body {
   margin:0;
