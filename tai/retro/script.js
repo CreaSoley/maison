@@ -54,11 +54,15 @@ function getActDate(act) {
   return date;
 }
 
-/* ================= COMPARAISON DE DATES ================= */
-function isDatePassed(date) {
+/* ================= DATE UTILS ================= */
+function getTodayMidnight() {
   const today = new Date();
-  // Réinitialiser à minuit pour comparaison correcte
   today.setHours(0, 0, 0, 0);
+  return today;
+}
+
+function isDatePassed(date) {
+  const today = getTodayMidnight();
   const compareDate = new Date(date);
   compareDate.setHours(0, 0, 0, 0);
   return compareDate <= today;
@@ -68,6 +72,7 @@ function isDatePassed(date) {
 function getStore(key, def) {
   return JSON.parse(localStorage.getItem(key) || JSON.stringify(def));
 }
+
 function setStore(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
@@ -75,18 +80,38 @@ function setStore(key, value) {
 /* ================= TRACKER ================= */
 function updateTracker() {
   const opened = getStore("openedDays", []);
+  const statuses = getStore("status", {});
+  
   tracker.innerHTML = "";
-  ACTIVITIES.forEach((_, i) => {
-    const d = document.createElement("div");
-    d.className = "day" + (opened.includes(i) ? " opened" : "");
+  
+  ACTIVITIES.forEach((act, i) => {
+    const dayEl = document.createElement("div");
+    dayEl.className = "day";
     
-    // Ajouter la couleur du statut au tracker
-    const status = getStore("status", {})[i];
-    if (status) {
-      d.classList.add(status);
+    if (opened.includes(i)) {
+      dayEl.classList.add("opened");
     }
     
-    tracker.appendChild(d);
+    const dayStatus = statuses[i];
+    if (dayStatus && opened.includes(i)) {
+      dayEl.classList.add(dayStatus);
+    }
+    
+    dayEl.dataset.index = i;
+    
+    if (opened.includes(i)) {
+      dayEl.style.cursor = "pointer";
+      dayEl.onclick = () => {
+        const actDate = getActDate(act);
+        if (isDatePassed(actDate)) {
+          showDay(i);
+        }
+      };
+    }
+    
+    dayEl.title = `Jour ${i + 1}${dayStatus ? ` - Statut: ${dayStatus}` : ''}`;
+    
+    tracker.appendChild(dayEl);
   });
 }
 
@@ -103,34 +128,32 @@ function showDay(i) {
   const journals = getStore("journals", {});
   journalInput.value = journals[i] || "";
 
-  // Gérer les couleurs de statut
-  const status = getStore("status", {})[i];
+  const statuses = getStore("status", {});
+  const currentStatus = statuses[i];
+  
   card.classList.remove("green", "orange", "red");
-  if (status) {
-    card.classList.add(status);
+  if (currentStatus) {
+    card.classList.add(currentStatus);
   }
 
   if (isPassed) {
-    // Le jour est passé ou c'est aujourd'hui - DÉVERROUILLÉ
     card.classList.remove("locked");
     card.style.pointerEvents = "auto";
     
     const opened = getStore("openedDays", []);
     if (opened.includes(i)) {
-      // Déjà ouvert
       overlay.style.display = "none";
       card.classList.add("open");
     } else {
-      // Pas encore ouvert
       overlay.style.display = "flex";
       overlay.innerText = "Cliquez pour découvrir la séance du jour";
       card.onclick = () => openDay(i);
     }
   } else {
-    // Le jour n'est pas encore arrivé - VERROUILLÉ
     card.classList.add("locked");
     card.style.pointerEvents = "none";
     card.classList.remove("open");
+    card.classList.remove("green", "orange", "red");
     
     overlay.style.display = "flex";
     overlay.style.opacity = "1";
@@ -150,7 +173,7 @@ function openDay(i) {
   card.classList.add("open");
   updateTracker();
   if (openSound) {
-    openSound.play().catch(() => {}); // Éviter les erreurs si l'audio n'existe pas
+    openSound.play().catch(() => {});
   }
 }
 
@@ -189,8 +212,7 @@ function updateWeeklyAverage() {
     return;
   }
 
-  weeklyAverageEl.innerText =
-    `Moyenne hebdomadaire : ${Math.round((sum / count) * 100)}%`;
+  weeklyAverageEl.innerText = `Moyenne hebdomadaire : ${Math.round((sum / count) * 100)}%`;
 }
 
 /* ================= NAV ================= */
@@ -212,10 +234,8 @@ document.getElementById("nextBtn").onclick = () => {
   const opened = getStore("openedDays", []);
   
   while (i < ACTIVITIES.length && !opened.includes(i)) {
-    // Vérifier que le jour n'est pas dans le futur
     const actDate = getActDate(ACTIVITIES[i]);
     if (!isDatePassed(actDate)) {
-      // Si le jour est dans le futur, arrêter la recherche
       break;
     }
     i++;
