@@ -5,15 +5,14 @@ fetch("tjkihon.json")
   .then(data => {
     techniques = data;
     populateCategories();
-    // On n'affiche rien au début
-    displayList([]);
+    displayList([]); // Vide au départ
   })
   .catch(err => console.error("Erreur chargement JSON:", err));
 
 function populateCategories() {
   const select = document.getElementById("filterCategorie");
+  if (!select) return;
   const cats = [...new Set(techniques.map(t => t.categorie))];
-
   cats.forEach(c => {
     const opt = document.createElement("option");
     opt.value = c;
@@ -22,68 +21,82 @@ function populateCategories() {
   });
 }
 
-/* ---------------------------------
-   AFFICHAGE DE LA LISTE DE RECHERCHE
----------------------------------- */
+/* -----------------------------------------------------------
+   RECHERCHE RAPIDE & AFFICHAGE INSTANTANÉ
+----------------------------------------------------------- */
+
+const searchInput = document.getElementById("searchKihon");
+const kihonList = document.getElementById("kihonList");
+
+searchInput.addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase().trim();
+  
+  // 1. Si l'entrée est vide, on cache tout
+  if (query.length === 0) {
+    displayList([]);
+    document.getElementById("kihonResult").classList.add("hidden");
+    return;
+  }
+
+  // 2. Filtrage des techniques
+  const filtered = techniques.filter(t => 
+    t.nom.toLowerCase().includes(query) || 
+    t.categorie.toLowerCase().includes(query)
+  );
+
+  // 3. Affichage de la liste de suggestions
+  displayList(filtered);
+
+  // 4. COMPORTEMENT "AUTO-SELECT" :
+  // Si un seul résultat correspond parfaitement ou s'il n'en reste qu'un seul
+  if (filtered.length === 1) {
+    showTechnique(filtered[0]);
+  } 
+  // Ou si le premier résultat correspond exactement au nom saisi
+  else if (filtered.length > 1 && filtered[0].nom.toLowerCase() === query) {
+    showTechnique(filtered[0]);
+  }
+});
+
 function displayList(list) {
-  const box = document.getElementById("kihonList");
-  box.innerHTML = "";
+  kihonList.innerHTML = "";
+  
+  // On limite l'affichage à 5 suggestions pour ne pas encombrer l'écran
+  const maxSuggestions = list.slice(0, 5);
 
-  // Si la liste est vide (et que l'input est vide), on cache la boîte
-  if (list.length === 0) return;
+  if (maxSuggestions.length === 0 || (list.length === 1 && document.getElementById("searchKihon").value.toLowerCase() === list[0].nom.toLowerCase())) {
+    return; // Ne rien afficher si vide ou si déjà sélectionné automatiquement
+  }
 
-  // Création d'une petite liste stylée "Kawaii"
-  const ul = document.createElement("ul");
-  ul.style.listStyle = "none";
-  ul.style.padding = "0";
+  const container = document.createElement("div");
+  container.className = "suggestions-container"; 
+  // Style rapide en ligne pour l'intégration immédiate
+  container.style.cssText = "background:white; border-radius:15px; border:2px solid var(--pink-2); margin-top:5px; overflow:hidden; box-shadow:var(--card-shadow);";
 
-  list.forEach(t => {
-    const li = document.createElement("li");
-    li.style.background = "#fff";
-    li.style.padding = "10px";
-    li.style.marginBottom = "5px";
-    li.style.borderRadius = "10px";
-    li.style.borderLeft = "5px solid var(--accent)";
-    li.style.cursor = "pointer";
-    li.style.fontSize = "0.9rem";
-    li.textContent = t.nom;
+  maxSuggestions.forEach(t => {
+    const item = document.createElement("div");
+    item.className = "suggestion-item";
+    item.style.cssText = "padding:10px 15px; cursor:pointer; border-bottom:1px solid var(--pink-1); font-size:0.9rem; transition:0.2s;";
+    item.innerHTML = `<strong>${t.nom}</strong> <small style="color:var(--accent)">(${t.categorie})</small>`;
     
-    li.addEventListener("click", () => {
-        showTechnique(t);
-        box.innerHTML = ""; // Vide la liste après sélection
+    item.addEventListener("mouseover", () => item.style.backgroundColor = "var(--pink-1)");
+    item.addEventListener("mouseout", () => item.style.backgroundColor = "transparent");
+    
+    item.addEventListener("click", () => {
+      showTechnique(t);
+      searchInput.value = t.nom; // Remplit la barre avec le nom complet
+      kihonList.innerHTML = ""; // Vide les suggestions
     });
-    ul.appendChild(li);
+    container.appendChild(item);
   });
-  box.appendChild(ul);
+
+  kihonList.appendChild(container);
 }
 
-/* Recherche */
-document.getElementById("searchKihon").addEventListener("input", (e) => {
-  const q = e.target.value.toLowerCase();
-  if(q.length < 2) { 
-      displayList([]); 
-      return; 
-  }
-  const filtered = techniques.filter(t => t.nom.toLowerCase().includes(q));
-  displayList(filtered);
-});
+/* -----------------------------------------------------------
+   AFFICHAGE DÉTAILLÉ
+----------------------------------------------------------- */
 
-/* Filtre catégorie */
-document.getElementById("filterCategorie").addEventListener("change", e => {
-  const cat = e.target.value;
-  const filtered = cat ? techniques.filter(t => t.categorie === cat) : [];
-  displayList(filtered);
-});
-
-/* Surprise */
-document.getElementById("btnRandomKihon").addEventListener("click", () => {
-  if (techniques.length === 0) return;
-  const t = techniques[Math.floor(Math.random() * techniques.length)];
-  showTechnique(t);
-  document.getElementById("kihonList").innerHTML = ""; // Nettoie la recherche
-});
-
-/* Affichage détaillé */
 function showTechnique(t) {
   const resultDiv = document.getElementById("kihonResult");
   resultDiv.classList.remove("hidden");
@@ -92,7 +105,7 @@ function showTechnique(t) {
   document.getElementById("techCat").textContent = "🥋 " + t.categorie;
   document.getElementById("techDesc").innerHTML = t.description.replace(/\n/g, "<br>");
 
-  // Gestion de la Photo
+  // Photo
   const img = document.getElementById("techPhoto");
   if (t.photo && t.photo !== "") {
     img.src = t.photo;
@@ -101,21 +114,24 @@ function showTechnique(t) {
     img.style.display = "none";
   }
 
-  // Gestion de la Vidéo
+  // Vidéo (avec conversion embed automatique)
   const video = document.getElementById("techVideo");
   if (t.video && t.video !== "") {
-    // Conversion URL YouTube si nécessaire
-    let videoUrl = t.video;
-    if(videoUrl.includes("watch?v=")) {
-        videoUrl = videoUrl.replace("watch?v=", "embed/");
-    }
-    video.src = videoUrl;
+    let url = t.video.replace("watch?v=", "embed/");
+    // Support pour les liens courts youtu.be
+    url = url.replace("youtu.be/", "www.youtube.com/embed/");
+    video.src = url;
     video.style.display = "block";
   } else {
-    video.src = "";
     video.style.display = "none";
+    video.src = "";
   }
-
-  // Scroll automatique vers le résultat sur mobile
-  resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+// Bouton Surprise
+document.getElementById("btnRandomKihon").addEventListener("click", () => {
+  const t = techniques[Math.floor(Math.random() * techniques.length)];
+  showTechnique(t);
+  kihonList.innerHTML = "";
+  searchInput.value = "";
+});
