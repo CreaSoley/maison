@@ -156,25 +156,37 @@
     <div class="grid">
         
         <!-- COLONNE GAUCHE : Kihon Simple -->
-        <div class="card-kawaii">
-            <div class="module-title">🥋 Kihon Simple</div>
-            
-            <div class="sub-section">
-                <input id="searchKihon" type="search" placeholder="Chercher une technique..." style="width:100%">
-                <select id="filterCategorie" style="width:100%">
-                    <option value="">Toutes catégories</option>
-                </select>
-                <button id="btnRandomKihon" class="btn-kawaii btn-ghost">✨ Surprise</button>
-            </div>
-
-            <div id="kihonResult" class="sub-section hidden">
-                <h3 id="techNom">Technique</h3>
-                <div class="result-display" id="techDesc">Description...</div>
-                <div class="video-container">
-                    <iframe id="techVideo" src="" frameborder="0"></iframe>
-                </div>
-            </div>
+<div class="card-kawaii">
+    <div class="module-title">🥋 Kihon Simple</div>
+    
+    <div class="sub-section">
+        <div class="controls-column">
+            <input id="searchKihon" type="search" placeholder="Rechercher une technique..." style="width:100%">
+            <select id="filterCategorie" style="width:100%; margin-top:10px;">
+                <option value="">Toutes catégories</option>
+            </select>
+            <button id="btnRandomKihon" class="btn-kawaii btn-ghost" style="margin-top:10px;">✨ Surprise (Aléatoire)</button>
         </div>
+    </div>
+
+    <!-- Conteneur pour la liste des résultats de recherche -->
+    <div id="kihonList" class="content" style="margin-bottom:15px;"></div>
+
+    <!-- Bloc détaillé (masqué par défaut) -->
+    <div id="kihonResult" class="sub-section hidden">
+        <h3 id="techNom" style="margin-bottom:5px;"></h3>
+        <p id="techCat" class="muted" style="font-weight:bold; color:var(--accent);"></p>
+        
+        <div class="result-display" id="techDesc" style="font-size: 0.9rem; text-align: left; font-weight: normal;">
+            <!-- La description s'affichera ici -->
+        </div>
+
+        <div class="media-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+            <img id="techPhoto" src="" alt="Photo technique" style="width:100%; border-radius:10px; border:2px solid var(--pink-2); display:none;">
+            <iframe id="techVideo" src="" frameborder="0" allowfullscreen style="width:100%; height:200px; border-radius:10px; display:none;"></iframe>
+        </div>
+    </div>
+</div>
 
         <!-- COLONNE DROITE : Enchaînements -->
         <div class="card-kawaii">
