@@ -209,26 +209,9 @@
     </div>
 </div>
 
-<script>
-    // Logique pour l'interface
-    function generate() {
-        const res = document.getElementById('result');
-        res.innerText = "Génération d'un enchaînement...";
-        // Ajoutez ici votre logique de tirage aléatoire
-    }
-
-    function readJapanese() {
-        alert("Lecture vocale (Japonais)...");
-    }
-
-    // Gestion du menu surprise (exemple)
-    document.getElementById('btnRandomKihon').addEventListener('click', () => {
-        const resultDiv = document.getElementById('kihonResult');
-        resultDiv.classList.remove('hidden');
-        document.getElementById('techNom').innerText = "Oi-Zuki";
-        document.getElementById('techDesc').innerText = "Coup de poing en avançant.";
-    });
-</script>
+<script src="app.js"></script>
+  <script src="script_global.js"></script>
+  <script src="kihonprem.js"></script>
 
 </body>
 </html>
