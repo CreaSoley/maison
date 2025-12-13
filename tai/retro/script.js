@@ -50,7 +50,18 @@ async function loadActivities() {
 function getActDate(act) {
   const match = act.jour.match(/(\d{1,2})/);
   const day = match ? parseInt(match[1], 10) : 1;
-  return new Date(new Date().getFullYear(), 1, day);
+  const date = new Date(new Date().getFullYear(), 1, day, 0, 0, 0);
+  return date;
+}
+
+/* ================= COMPARAISON DE DATES ================= */
+function isDatePassed(date) {
+  const today = new Date();
+  // Réinitialiser à minuit pour comparaison correcte
+  today.setHours(0, 0, 0, 0);
+  const compareDate = new Date(date);
+  compareDate.setHours(0, 0, 0, 0);
+  return compareDate <= today;
 }
 
 /* ================= STORAGE ================= */
@@ -68,6 +79,13 @@ function updateTracker() {
   ACTIVITIES.forEach((_, i) => {
     const d = document.createElement("div");
     d.className = "day" + (opened.includes(i) ? " opened" : "");
+    
+    // Ajouter la couleur du statut au tracker
+    const status = getStore("status", {})[i];
+    if (status) {
+      d.classList.add(status);
+    }
+    
     tracker.appendChild(d);
   });
 }
@@ -77,7 +95,7 @@ function showDay(i) {
   currentIndex = i;
   const act = ACTIVITIES[i];
   const actDate = getActDate(act);
-  const today = new Date();
+  const isPassed = isDatePassed(actDate);
 
   cardDate.innerText = act.jour;
   cardContent.innerText = `${act.contenu_1}\n\n${act.contenu_2}`;
@@ -85,18 +103,37 @@ function showDay(i) {
   const journals = getStore("journals", {});
   journalInput.value = journals[i] || "";
 
+  // Gérer les couleurs de statut
   const status = getStore("status", {})[i];
   card.classList.remove("green", "orange", "red");
-  if (status) card.classList.add(status);
+  if (status) {
+    card.classList.add(status);
+  }
 
-  if (actDate <= today) {
+  if (isPassed) {
+    // Le jour est passé ou c'est aujourd'hui - DÉVERROUILLÉ
     card.classList.remove("locked");
-    overlay.style.display = "flex";
-    overlay.innerText = "Cliquez pour découvrir la séance du jour";
-    card.onclick = () => openDay(i);
+    card.style.pointerEvents = "auto";
+    
+    const opened = getStore("openedDays", []);
+    if (opened.includes(i)) {
+      // Déjà ouvert
+      overlay.style.display = "none";
+      card.classList.add("open");
+    } else {
+      // Pas encore ouvert
+      overlay.style.display = "flex";
+      overlay.innerText = "Cliquez pour découvrir la séance du jour";
+      card.onclick = () => openDay(i);
+    }
   } else {
+    // Le jour n'est pas encore arrivé - VERROUILLÉ
     card.classList.add("locked");
+    card.style.pointerEvents = "none";
+    card.classList.remove("open");
+    
     overlay.style.display = "flex";
+    overlay.style.opacity = "1";
     overlay.innerText = `Disponible le ${act.jour}`;
     card.onclick = null;
   }
@@ -112,7 +149,9 @@ function openDay(i) {
   overlay.style.display = "none";
   card.classList.add("open");
   updateTracker();
-  openSound.play();
+  if (openSound) {
+    openSound.play().catch(() => {}); // Éviter les erreurs si l'audio n'existe pas
+  }
 }
 
 /* ================= STATUS ================= */
@@ -122,6 +161,7 @@ document.querySelectorAll(".status button").forEach(btn => {
     s[currentIndex] = btn.dataset.status;
     setStore("status", s);
     showDay(currentIndex);
+    updateTracker();
     updateWeeklyAverage();
   };
 });
@@ -157,15 +197,33 @@ function updateWeeklyAverage() {
 document.getElementById("prevBtn").onclick = () => {
   let i = currentIndex - 1;
   const opened = getStore("openedDays", []);
-  while (i >= 0 && !opened.includes(i)) i--;
-  if (i >= 0) showDay(i);
+  
+  while (i >= 0 && !opened.includes(i)) {
+    i--;
+  }
+  
+  if (i >= 0) {
+    showDay(i);
+  }
 };
 
 document.getElementById("nextBtn").onclick = () => {
   let i = currentIndex + 1;
   const opened = getStore("openedDays", []);
-  while (i < ACTIVITIES.length && !opened.includes(i)) i++;
-  if (i < ACTIVITIES.length) showDay(i);
+  
+  while (i < ACTIVITIES.length && !opened.includes(i)) {
+    // Vérifier que le jour n'est pas dans le futur
+    const actDate = getActDate(ACTIVITIES[i]);
+    if (!isDatePassed(actDate)) {
+      // Si le jour est dans le futur, arrêter la recherche
+      break;
+    }
+    i++;
+  }
+  
+  if (i < ACTIVITIES.length) {
+    showDay(i);
+  }
 };
 
 /* ================= INIT ================= */
