@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Passage de grade</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retroplanning Zen</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,22 +12,26 @@
   <h1>Passage de grade</h1>
   <div id="countdown" class="countdown"></div>
 
-  <div class="nav-buttons">
+  <div class="nav">
     <button id="prevBtn">← Jour précédent</button>
     <button id="nextBtn">Jour suivant →</button>
   </div>
 
-  <div id="doorContainer" class="door-container"></div>
-
-  <div class="status-buttons">
-    <button data-status="success">✔ Réussi</button>
-    <button data-status="partial">◐ Partiel</button>
-    <button data-status="fail">✖ Non fait</button>
+  <div id="card" class="card locked">
+    <div class="overlay">Cliquez pour découvrir la séance du jour</div>
+    <div class="date" id="cardDate"></div>
+    <div class="content" id="cardContent"></div>
   </div>
 
-  <textarea id="journal" placeholder="Journal personnel de la journée..."></textarea>
+  <div class="status">
+    <button data-status="green">✔</button>
+    <button data-status="orange">◐</button>
+    <button data-status="red">✖</button>
+  </div>
 
-  <div id="weeklyAverage" class="weekly-average"></div>
+  <textarea id="journal" placeholder="Journal personnel de la journée…"></textarea>
+
+  <div id="weeklyAverage" class="weekly"></div>
 
   <div id="tracker" class="tracker"></div>
 </div>
