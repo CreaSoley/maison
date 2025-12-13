@@ -11,7 +11,6 @@
 <div class="container">
   <h1>Passage de grade</h1>
   <div id="countdown" class="countdown"></div>
-  <div id="weeklyAverage" class="weekly-average"></div>
 
   <div class="nav-buttons">
     <button id="prevBtn">← Jour précédent</button>
@@ -20,7 +19,17 @@
 
   <div id="doorContainer" class="door-container"></div>
 
-  <div class="tracker" id="tracker"></div>
+  <div class="status-buttons">
+    <button data-status="success">✔ Réussi</button>
+    <button data-status="partial">◐ Partiel</button>
+    <button data-status="fail">✖ Non fait</button>
+  </div>
+
+  <textarea id="journal" placeholder="Journal personnel de la journée..."></textarea>
+
+  <div id="weeklyAverage" class="weekly-average"></div>
+
+  <div id="tracker" class="tracker"></div>
 </div>
 
 <audio id="openSound" src="open.mp3"></audio>
