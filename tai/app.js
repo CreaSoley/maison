@@ -5,9 +5,10 @@ fetch("tjkihon.json")
   .then(data => {
     techniques = data;
     populateCategories();
-    // NE PAS afficher les techniques par défaut
+    // On n'affiche rien au début
     displayList([]);
-  });
+  })
+  .catch(err => console.error("Erreur chargement JSON:", err));
 
 function populateCategories() {
   const select = document.getElementById("filterCategorie");
@@ -22,27 +23,47 @@ function populateCategories() {
 }
 
 /* ---------------------------------
-   AFFICHAGE LISTE
+   AFFICHAGE DE LA LISTE DE RECHERCHE
 ---------------------------------- */
-
 function displayList(list) {
   const box = document.getElementById("kihonList");
   box.innerHTML = "";
 
+  // Si la liste est vide (et que l'input est vide), on cache la boîte
   if (list.length === 0) return;
 
+  // Création d'une petite liste stylée "Kawaii"
+  const ul = document.createElement("ul");
+  ul.style.listStyle = "none";
+  ul.style.padding = "0";
+
   list.forEach(t => {
-    const div = document.createElement("div");
-    div.className = "list-item";
-    div.textContent = t.nom;
-    div.addEventListener("click", () => showTechnique(t));
-    box.appendChild(div);
+    const li = document.createElement("li");
+    li.style.background = "#fff";
+    li.style.padding = "10px";
+    li.style.marginBottom = "5px";
+    li.style.borderRadius = "10px";
+    li.style.borderLeft = "5px solid var(--accent)";
+    li.style.cursor = "pointer";
+    li.style.fontSize = "0.9rem";
+    li.textContent = t.nom;
+    
+    li.addEventListener("click", () => {
+        showTechnique(t);
+        box.innerHTML = ""; // Vide la liste après sélection
+    });
+    ul.appendChild(li);
   });
+  box.appendChild(ul);
 }
 
 /* Recherche */
 document.getElementById("searchKihon").addEventListener("input", (e) => {
   const q = e.target.value.toLowerCase();
+  if(q.length < 2) { 
+      displayList([]); 
+      return; 
+  }
   const filtered = techniques.filter(t => t.nom.toLowerCase().includes(q));
   displayList(filtered);
 });
@@ -59,15 +80,42 @@ document.getElementById("btnRandomKihon").addEventListener("click", () => {
   if (techniques.length === 0) return;
   const t = techniques[Math.floor(Math.random() * techniques.length)];
   showTechnique(t);
+  document.getElementById("kihonList").innerHTML = ""; // Nettoie la recherche
 });
 
 /* Affichage détaillé */
 function showTechnique(t) {
-  document.getElementById("kihonResult").classList.remove("hidden");
+  const resultDiv = document.getElementById("kihonResult");
+  resultDiv.classList.remove("hidden");
 
   document.getElementById("techNom").textContent = t.nom;
-  document.getElementById("techCat").textContent = "Catégorie : " + t.categorie;
+  document.getElementById("techCat").textContent = "🥋 " + t.categorie;
   document.getElementById("techDesc").innerHTML = t.description.replace(/\n/g, "<br>");
-  document.getElementById("techPhoto").src = t.photo;
-  document.getElementById("techVideo").src = t.video;
+
+  // Gestion de la Photo
+  const img = document.getElementById("techPhoto");
+  if (t.photo && t.photo !== "") {
+    img.src = t.photo;
+    img.style.display = "block";
+  } else {
+    img.style.display = "none";
+  }
+
+  // Gestion de la Vidéo
+  const video = document.getElementById("techVideo");
+  if (t.video && t.video !== "") {
+    // Conversion URL YouTube si nécessaire
+    let videoUrl = t.video;
+    if(videoUrl.includes("watch?v=")) {
+        videoUrl = videoUrl.replace("watch?v=", "embed/");
+    }
+    video.src = videoUrl;
+    video.style.display = "block";
+  } else {
+    video.src = "";
+    video.style.display = "none";
+  }
+
+  // Scroll automatique vers le résultat sur mobile
+  resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
