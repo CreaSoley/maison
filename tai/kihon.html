@@ -7,7 +7,6 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Ajout de Fredoka pour un style plus "Spicy/Kawai" sur les éléments non-titres -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -16,29 +15,28 @@
     @font-face { font-family: "Spicy"; src: url("Spicy Sale.ttf"); }
 
     :root{
-      --pink-1:#fff0f6; /* Rose très clair (fond sub-section) */
-      --pink-2:#ffd6ec; /* Rose clair (bordures) */
-      --accent:#ff5fc1; /* Rose flashy/vif */
+      --pink-1:#fff0f6;
+      --pink-2:#ffd6ec;
+      --accent:#ff5fc1;
       --card-shadow: 0 10px 24px rgba(255,120,180,0.12);
-      --hot-pink:#ff1493; /* Rose très foncé */
+      --hot-pink:#ff1493;
       --bg-gradient: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
       --text:#222;
-      --radius:20px; /* Augmenté pour l'effet Kawaii */
+      --radius:20px;
     }
 
     /* ---------- Base ---------- */
     *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: 'Fredoka', Arial, sans-serif; /* Utilisation de Fredoka */
+      font-family: 'Fredoka', Arial, sans-serif;
       color:var(--text);
       background: var(--bg-gradient);
       -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
     }
-    a{ color:inherit; }
+    a{ color:inherit; text-decoration: none; }
 
-    /* ---------- Header (GARDÉ NOIR/BLANC) ---------- */
+    /* ---------- Header NOIR ---------- */
     header{
       background:#000;
       color:#fff;
@@ -46,32 +44,29 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      gap:18px;
       box-shadow:0 6px 18px rgba(0,0,0,0.25);
     }
     header img{ height:64px; }
-    header h1{ font-family:"Spicy"; font-size:2.2rem; margin:0; color:var(--pink-2); }
+    header h1{ font-family:"Spicy", sans-serif; font-size:2.2rem; margin:0; color:var(--pink-2); }
 
     /* ---------- Layout ---------- */
     .main-wrapper{ max-width:1400px; margin:20px auto; padding:0 18px 40px; }
     .grid{
       display:grid;
-      gap:20px;
-      grid-template-columns: repeat(3,1fr); /* 3 colonnes sur desktop */
-      align-items:stretch; /* Pour que toutes les cartes aient la même hauteur */
+      gap:25px;
+      grid-template-columns: 1fr 1fr; /* 2 colonnes pour l'équilibre */
+      align-items: start;
     }
-    @media (max-width:1100px){ .grid{ grid-template-columns: repeat(2,1fr); } } /* 2 colonnes sur tablette */
-    @media (max-width:700px){ .grid{ grid-template-columns: 1fr; } } /* 1 colonne sur mobile */
+    @media (max-width:900px){ .grid{ grid-template-columns: 1fr; } }
 
-    /* ---------- Card Kawaii (Nouveau style pour toutes les UV) ---------- */
+    /* ---------- Card Kawaii ---------- */
     .card-kawaii {
         background: white;
         border: 3px solid var(--pink-2);
         border-radius: var(--radius);
-        padding: 20px;
+        padding: 25px;
         box-shadow: 0 8px 15px rgba(255, 182, 193, 0.4);
-        display: flex;
-        flex-direction: column;
+        margin-bottom: 20px;
     }
 
     .module-title {
@@ -79,9 +74,8 @@
         color: var(--hot-pink);
         font-size: 1.8rem;
         text-align: center;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         text-shadow: 2px 2px 0px var(--pink-2);
-        flex-shrink: 0; /* Empêche le titre de se compresser */
     }
 
     .sub-section {
@@ -90,254 +84,151 @@
         padding: 15px;
         margin-bottom: 15px;
         border: 1px dashed var(--accent);
-        flex-grow: 1; /* Permet à la section de prendre l'espace restant */
     }
 
-    .sub-section h3, .sub-section summary {
-        font-family: 'Fredoka', sans-serif; /* Utilisé pour les sous-titres */
+    .sub-section h3 {
         color: var(--hot-pink);
         margin-top: 0;
         font-size: 1.2rem;
-        font-weight: 600;
-        padding-bottom: 5px;
     }
 
-    /* ---------- Controls et Affichage ---------- */
-    .controls-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 10px;
-        font-size: 0.95rem;
-    }
-    .controls-row label {
-        font-weight: 600;
-    }
-
+    /* ---------- UI Elements ---------- */
     .result-display {
         background: #fff;
         border: 2px solid var(--pink-2);
         border-radius: 12px;
         padding: 15px;
-        min-height: 60px;
+        min-height: 50px;
         text-align: center;
         font-weight: bold;
-        font-size: 1.2rem;
         color: #c9184a;
         margin: 10px 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
     }
 
-    .input-small {
-        width: 70px;
-        padding: 6px;
-        border-radius: 8px;
-        border: 1px solid var(--pink-2);
-        text-align: center;
+    input, select {
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid var(--pink-2);
         font-family: 'Fredoka', sans-serif;
-    }
-
-    /* Style des boutons */
-    .button-row {
-        display: flex;
-        gap: 10px;
-        margin-top: 15px;
+        margin-bottom: 10px;
     }
 
     .btn-kawaii {
-        flex: 1;
+        width: 100%;
         font-family: "Spicy", sans-serif;
         background: var(--accent);
         color: white;
         border: none;
-        padding: 8px 15px;
+        padding: 12px;
         border-radius: 50px;
         cursor: pointer;
         transition: transform 0.2s;
         box-shadow: 0 4px 0px #d6459b;
-        font-size: 0.9rem;
-        font-weight: normal; /* Spicy font est déjà gras */
+        margin-top: 5px;
     }
 
-    .btn-kawaii:hover {
-        transform: scale(1.03);
-        background: var(--hot-pink);
-    }
+    .btn-kawaii:hover { transform: scale(1.02); background: var(--hot-pink); }
+    .btn-kawaii:active { transform: translateY(3px); box-shadow: none; }
 
-    .btn-kawaii:active {
-        transform: translateY(3px);
-        box-shadow: none;
-    }
+    .btn-ghost { background: #fff; color: var(--accent); border: 2px solid var(--accent); box-shadow: none; }
 
-    .btn-stop {
-        background: #ff4d6d;
-        box-shadow: 0 4px 0px #c9184a;
-    }
+    /* Media Styles */
+    .video-container iframe { width: 100%; border-radius: 10px; margin-top: 10px; height: 200px; }
+    .hidden { display: none; }
 
-    .btn-small {
-        padding: 6px 10px;
-        font-size: 0.8rem;
+    .pdf-row { display: flex; gap: 10px; margin-bottom: 15px; }
+    .pdf-btn { 
+        flex: 1; text-align: center; background: #000; color: #fff; 
+        padding: 8px; border-radius: 10px; font-size: 0.8rem; 
     }
-
-    /* Icône Beep */
-    .beep-icon {
-        font-size: 1.3rem;
-        color: var(--accent);
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .beep-icon.off {
-        opacity: 0.3;
-        filter: grayscale(1);
-    }
-
-    input[type=range] {
-        accent-color: var(--accent);
-        cursor: pointer;
-        flex-grow: 1;
-    }
-
-    /* Accordion */
-    details { margin-bottom: 10px; }
-    summary { 
-        background: var(--pink-2); 
-        padding: 10px; 
-        border-radius: 8px; 
-        cursor: pointer; 
-        color: var(--hot-pink); 
-        font-weight: 700;
-    }
-    details .inner { 
-        padding: 12px; 
-        background: #fff; 
-        border-radius: 8px; 
-        margin-top: 8px; 
-        border: 1px solid var(--pink-2);
-    }
-    details iframe {
-        width: 100%;
-        height: 180px;
-        border: none;
-        border-radius: 8px;
-        margin-top: 10px;
-    }
-
-    /* Liste dans le contenu */
-    .content ul {
-        list-style: none;
-        padding-left: 0;
-    }
-    .content ul li {
-        background: #fff;
-        padding: 8px;
-        margin-bottom: 5px;
-        border-radius: 5px;
-        border-left: 5px solid var(--accent);
-    }
-
-    /* Autres utilitaires */
-    .muted { color:#999; font-size:0.9rem; }
   </style>
 </head>
 <body>
 
 <header>
-    <!-- Le lien entoure le logo et le titre pour rendre toute la zone cliquable -->
-    <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 18px;">
+    <a href="index.html">
         <img src="logo.png" alt="Logo">
         <h1>Kihon</h1>
     </a>
 </header>
 
-  <!-- CONTENU GLOBAL -->
-  <main class="container layout-desktop">
+<div class="main-wrapper">
+    <div class="grid">
+        
+        <!-- COLONNE GAUCHE : Kihon Simple -->
+        <div class="card-kawaii">
+            <div class="module-title">🥋 Kihon Simple</div>
+            
+            <div class="sub-section">
+                <input id="searchKihon" type="search" placeholder="Chercher une technique..." style="width:100%">
+                <select id="filterCategorie" style="width:100%">
+                    <option value="">Toutes catégories</option>
+                </select>
+                <button id="btnRandomKihon" class="btn-kawaii btn-ghost">✨ Surprise</button>
+            </div>
 
-    <!-- KIHON SIMPLE (colonne principale) -->
-    <section class="card-block wide" id="kihonSimple">
-      <h2 class="spicy section-title">🥋 Kihon simple</h2>
-
-      <!-- Filtres + recherche -->
-      <div class="controls controls-column">
-        <input id="searchKihon" type="search" placeholder="Rechercher une technique...">
-        <select id="filterCategorie">
-          <option value="">Toutes catégories</option>
-        </select>
-        <button id="btnRandomKihon" class="btn ghost kawaii">✨ Surprise</button>
-      </div>
-
-      <!-- Liste filtrée (vide au premier chargement) -->
-      <div id="kihonList" class="list-results"></div>
-
-      <!-- Bloc détaillé caché tant qu'on n'a pas cliqué -->
-      <div id="kihonResult" class="kihon-layout hidden">
-        <div class="kihon-text">
-          <h3 id="techNom"></h3>
-          <p id="techCat"></p>
-          <p id="techDesc"></p>
+            <div id="kihonResult" class="sub-section hidden">
+                <h3 id="techNom">Technique</h3>
+                <div class="result-display" id="techDesc">Description...</div>
+                <div class="video-container">
+                    <iframe id="techVideo" src="" frameborder="0"></iframe>
+                </div>
+            </div>
         </div>
 
-        <div class="kihon-media">
-          <img id="techPhoto" class="photo" src="">
-          <iframe id="techVideo" class="video" src="" frameborder="0" allowfullscreen></iframe>
+        <!-- COLONNE DROITE : Enchaînements -->
+        <div class="card-kawaii">
+            <div class="module-title">💫 Entraînement</div>
+
+            <!-- PDF -->
+            <div class="pdf-row">
+                <a href="pdf/ippon_kumite.pdf" class="pdf-btn">📄 Ippon Kumite</a>
+                <a href="pdf/tai_sabaki.pdf" class="pdf-btn">📄 Tai Sabaki</a>
+            </div>
+
+            <div class="sub-section">
+                <h3>🔗 Enchaînement Rapide</h3>
+                <div id="comboResult" class="result-display">Cliquer pour générer...</div>
+                <button id="btnCombo" class="btn-kawaii">🔄 Nouvel enchaînement</button>
+            </div>
+
+            <div class="sub-section">
+                <h3>🎲 Générateur Aléatoire</h3>
+                <label>Nombre d'enchaînements :</label>
+                <input type="number" id="count" value="1" min="1" max="10" style="width:60px">
+                
+                <div id="result" class="result-display" style="font-size: 0.9rem; text-align: left;">---</div>
+                
+                <div style="display:flex; gap:10px">
+                    <button onclick="generate()" class="btn-kawaii">Générer</button>
+                    <button onclick="readJapanese()" class="btn-kawaii btn-ghost">🔈 Lire</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ENCHAINEMENT + CIBLE (colonne latérale) -->
-   <section class="card-block stack" id="kihonComboCible">
-    <h2 class="spicy section-title">💫 Enchainement & Cible</h2>
-
-    <!-- Enchainement -->
-    <div class="sub-card kawaii-card">
-        <h3 class="spicy">🔗 Enchainement de kihon</h3>
-        <button id="btnCombo" class="btn primary kawaii">🔄 Nouvel enchaînement</button>
-        <div id="comboResult" class="result-card"></div>
     </div>
+</div>
 
-    <div class="pdf-buttons">
-        <a href="pdf/ippon_kumite.pdf" class="pdf-btn" data-tooltip="Télécharger le PDF complet">
-            📄 Ippon Kumite
-        </a>
-        <a href="pdf/tai_sabaki.pdf" class="pdf-btn" data-tooltip="Télécharger le guide des déplacements">
-            📄 Tai Sabaki
-        </a>
-    </div>
+<script>
+    // Logique pour l'interface
+    function generate() {
+        const res = document.getElementById('result');
+        res.innerText = "Génération d'un enchaînement...";
+        // Ajoutez ici votre logique de tirage aléatoire
+    }
 
-    <!-- Cibles -->
-    <div class="sub-card kawaii-card">
-        <h3 class="spicy">🎯 Cible – 3 techniques</h3>
-        <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
-        <ul id="cibleList" class="result-list"></ul>
-    </div>
+    function readJapanese() {
+        alert("Lecture vocale (Japonais)...");
+    }
 
-    <!-- 🔥 NOUVEAU BLOC : Générateur d’enchaînements aléatoires (script fourni) -->
-    <div class="sub-card kawaii-card">
-        <h3 class="spicy">🎲 Générateur d’enchaînements aléatoires</h3>
-
-        <label>Nombre d’enchaînements :</label>
-        <input type="number" id="count" value="1" min="1" max="20">
-
-        <br><br>
-
-        <button onclick="generate()" class="btn primary kawaii">Générer</button>
-        <button onclick="readJapanese()" class="btn ghost kawaii">Lire en japonais</button>
-
-        <div id="result"></div>
-    </div>
-
-</section>
-
-  </main>
-
-
-  <!-- Scripts -->
- document.querySelectorAll('.beep-icon').forEach(icon => {
-    icon.addEventListener('click', function() {
-        this.classList.toggle('off');
+    // Gestion du menu surprise (exemple)
+    document.getElementById('btnRandomKihon').addEventListener('click', () => {
+        const resultDiv = document.getElementById('kihonResult');
+        resultDiv.classList.remove('hidden');
+        document.getElementById('techNom').innerText = "Oi-Zuki";
+        document.getElementById('techDesc').innerText = "Coup de poing en avançant.";
     });
+</script>
 
 </body>
 </html>
