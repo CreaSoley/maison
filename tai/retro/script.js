@@ -1,101 +1,107 @@
-let ACTIVITIES = [];
-let currentIndex = 0;
-const TARGET_DATE = new Date(new Date().getFullYear(),1,8);
+let ACTIVITIES=[];
+let currentIndex=0;
 
-const STATUS_SCORE = { green:1, orange:0.5, red:0 };
+function getNextFeb8(){
+  const now=new Date();
+  let target=new Date(now.getFullYear(),1,8,0,0,0);
+  if(target<=now) target=new Date(now.getFullYear()+1,1,8,0,0,0);
+  return target;
+}
+const TARGET_DATE=getNextFeb8();
+
+const openSound=document.getElementById("openSound");
 
 async function loadActivities(){
-  const res = await fetch('calendrier.json');
-  ACTIVITIES = await res.json();
+  const res=await fetch("calendrier.json",{cache:"no-store"});
+  ACTIVITIES=await res.json();
 }
 
-function getData(day){
-  return JSON.parse(localStorage.getItem('day_'+day) || '{}');
+function getData(){
+  return JSON.parse(localStorage.getItem("taiData")||"{}");
 }
-
-function saveData(day,data){
-  localStorage.setItem('day_'+day, JSON.stringify(data));
+function saveData(data){
+  localStorage.setItem("taiData",JSON.stringify(data));
 }
 
 function initCountdown(){
-  const el = document.getElementById('countdown');
+  const el=document.getElementById("countdown");
   setInterval(()=>{
-    const diff = TARGET_DATE - new Date();
-    if(diff<=0){ el.textContent="C’est aujourd’hui le passage de grade !"; return;}
-    el.textContent=`J-${Math.floor(diff/86400000)}`;
+    const diff=TARGET_DATE-new Date();
+    if(diff<=0){ el.innerText="C'est aujourd'hui le passage de grade !"; return;}
+    const d=Math.floor(diff/86400000);
+    el.innerText=`Jours restants : ${d}`;
   },1000);
 }
 
 function showDoor(i){
   currentIndex=i;
-  const a = ACTIVITIES[i];
-  const d = getData(i);
-  const c = document.getElementById('doorContainer');
+  const act=ACTIVITIES[i];
+  const data=getData();
+  const state=data[i]?.state||"";
 
-  c.className='door-container '+(d.status||'');
-  c.innerHTML=`
+  const container=document.getElementById("doorContainer");
+  container.className=`door-container ${state}`;
+  container.innerHTML=`
     <div class="door-overlay">Cliquez pour découvrir la séance du jour</div>
-    <div class="jour">${a.jour} ${d.status ? (d.status==='green'?'✔':d.status==='orange'?'◐':'✖'):''}</div>
-    <div class="texte">${a.contenu_1}\n\n${a.contenu_2}</div>
-
-    <div class="status-buttons">
-      <button onclick="setStatus('green')">✔</button>
-      <button onclick="setStatus('orange')">◐</button>
-      <button onclick="setStatus('red')">✖</button>
-    </div>
-
-    <textarea placeholder="Journal personnel...">${d.note||''}</textarea>
+    <div class="jour">${act.jour} ${state==="success"?"✔":state==="partial"?"◐":state==="fail"?"✖":""}</div>
+    <div class="texte">${act.contenu_1}\n\n${act.contenu_2}</div>
   `;
 
-  const overlay=c.querySelector('.door-overlay');
+  const overlay=container.querySelector(".door-overlay");
   overlay.onclick=()=>{
-    overlay.classList.add('hidden');
-    c.classList.add('reveal');
+    overlay.classList.add("hidden");
+    container.classList.add("reveal");
+    openSound.play();
   };
 
-  c.querySelector('textarea').oninput=e=>{
-    d.note=e.target.value;
-    saveData(i,d);
-  };
-
+  document.getElementById("journal").value=data[i]?.journal||"";
   updateTracker();
   updateWeeklyAverage();
 }
 
-function setStatus(s){
-  const d=getData(currentIndex);
-  d.status=s;
-  saveData(currentIndex,d);
-  showDoor(currentIndex);
-}
+document.querySelectorAll(".status-buttons button").forEach(btn=>{
+  btn.onclick=()=>{
+    const data=getData();
+    data[currentIndex]=data[currentIndex]||{};
+    data[currentIndex].state=btn.dataset.status;
+    saveData(data);
+    showDoor(currentIndex);
+  };
+});
+
+document.getElementById("journal").addEventListener("input",e=>{
+  const data=getData();
+  data[currentIndex]=data[currentIndex]||{};
+  data[currentIndex].journal=e.target.value;
+  saveData(data);
+});
 
 function updateTracker(){
-  const t=document.getElementById('tracker');
-  t.innerHTML='';
+  const t=document.getElementById("tracker");
+  t.innerHTML="";
+  const data=getData();
   ACTIVITIES.forEach((_,i)=>{
-    const d=getData(i);
-    const div=document.createElement('div');
-    div.className='day '+(d.status||'');
-    div.onclick=()=>showDoor(i);
-    t.appendChild(div);
+    const d=document.createElement("div");
+    d.className=`day ${data[i]?.state||""}`;
+    d.onclick=()=>showDoor(i);
+    t.appendChild(d);
   });
 }
 
 function updateWeeklyAverage(){
+  const data=getData();
+  const values={success:1,partial:0.5,fail:0};
   let sum=0,count=0;
-  for(let i=Math.max(0,currentIndex-6);i<=currentIndex;i++){
-    const d=getData(i);
-    if(d.status){ sum+=STATUS_SCORE[d.status]; count++; }
-  }
-  if(!count)return;
-  const avg=sum/count;
-  document.getElementById('weeklyAverage').textContent =
-    avg>=0.8?'Semaine : ✔ excellente':
-    avg>=0.4?'Semaine : ◐ correcte':'Semaine : ✖ difficile';
+  Object.values(data).forEach(d=>{
+    if(d.state){ sum+=values[d.state]; count++; }
+  });
+  const avg=count?Math.round((sum/count)*100):0;
+  document.getElementById("weeklyAverage").innerText=
+    `Moyenne de la semaine : ${avg}%`;
 }
 
-document.getElementById('prevBtn').onclick=()=>currentIndex>0&&showDoor(currentIndex-1);
-document.getElementById('nextBtn').onclick=()=>currentIndex<ACTIVITIES.length-1&&showDoor(currentIndex+1);
+document.getElementById("prevBtn").onclick=()=>showDoor(Math.max(0,currentIndex-1));
+document.getElementById("nextBtn").onclick=()=>showDoor(Math.min(ACTIVITIES.length-1,currentIndex+1));
 
 (async()=>{
   await loadActivities();
