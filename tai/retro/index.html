@@ -1,30 +1,29 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Retroplanning Zen</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Passage de grade</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1 id="pageTitle">Passage de grade</h1>
-    <div id="countdown" class="countdown"></div>
 
-    <div class="nav-buttons">
-      <button id="prevBtn">← Jour précédent</button>
-      <button id="nextBtn">Jour suivant →</button>
-    </div>
+<div class="container">
+  <h1>Passage de grade</h1>
+  <div id="countdown" class="countdown"></div>
+  <div id="weeklyAverage" class="weekly-average"></div>
 
-    <div id="doorContainer" class="door-container">
-      <div class="door-overlay">Cliquez pour découvrir la séance du jour</div>
-    </div>
-
-    <div id="tracker" class="tracker"></div>
+  <div class="nav-buttons">
+    <button id="prevBtn">← Jour précédent</button>
+    <button id="nextBtn">Jour suivant →</button>
   </div>
 
-  <audio id="openSound" src="open.mp3"></audio>
+  <div id="doorContainer" class="door-container"></div>
 
-  <script src="script.js"></script>
+  <div class="tracker" id="tracker"></div>
+</div>
+
+<audio id="openSound" src="open.mp3"></audio>
+<script src="script.js"></script>
 </body>
 </html>
