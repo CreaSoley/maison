@@ -125,13 +125,52 @@ textarea {
   background:#ddd;
 }
 
-.tracker .green {background:#7cc576;}
-.tracker .orange {background:#f7c873;}
-.tracker .red {background:#e57373;}
-
 .weekly {
   margin-top:10px;
   color:white;
 }
+/* ---------- états de réalisation ---------- */
+
+.card.green {
+  border-color: #4caf50;
+  box-shadow: 0 0 25px rgba(76,175,80,0.4);
+}
+
+.card.orange {
+  border-color: #ff9800;
+  box-shadow: 0 0 25px rgba(255,152,0,0.4);
+}
+
+.card.red {
+  border-color: #f44336;
+  box-shadow: 0 0 25px rgba(244,67,54,0.4);
+}
+
+/* symbole sur la carte */
+.card-status {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 48px;
+}
+
+/* tracker coloré */
+.tracker .day.green { background:#4caf50; }
+.tracker .day.orange { background:#ff9800; }
+.tracker .day.red { background:#f44336; }
+
+/* boutons état */
+.status button {
+  font-size: 28px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+}
+
+.status button[data-status="green"] { color:#4caf50; }
+.status button[data-status="orange"] { color:#ff9800; }
+.status button[data-status="red"] { color:#f44336; }
 
 
