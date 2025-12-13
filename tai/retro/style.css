@@ -172,5 +172,58 @@ textarea {
 .status button[data-status="green"] { color:#4caf50; }
 .status button[data-status="orange"] { color:#ff9800; }
 .status button[data-status="red"] { color:#f44336; }
+/* Amélioration du tracker */
+.tracker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
 
+.tracker .day {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: #ddd;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+}
+
+.tracker .day.opened {
+  background: #a0d8ff; /* Bleu pour les jours ouverts sans statut */
+}
+
+.tracker .day.opened:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Couleurs des statuts */
+.tracker .day.green {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+}
+
+.tracker .day.orange {
+  background: linear-gradient(135deg, #FF9800, #EF6C00);
+}
+
+.tracker .day.red {
+  background: linear-gradient(135deg, #f44336, #C62828);
+}
+
+/* Jour verrouillé (futur) */
+.tracker .day:not(.opened) {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
 
