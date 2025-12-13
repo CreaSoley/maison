@@ -63,7 +63,7 @@ h1 { color:white; font-size:36px; }
 }
 
 .texte {
-  font-size:72px;
+  font-size:28px;
   white-space:pre-line;
   opacity:0;
   transition:opacity 1s;
