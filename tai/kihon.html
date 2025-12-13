@@ -248,98 +248,96 @@
     <!-- Le lien entoure le logo et le titre pour rendre toute la zone cliquable -->
     <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 18px;">
         <img src="votre-logo.png" alt="Logo">
-        <h1>Mon Dashboard Kawaii</h1>
+        <h1>Kihon</h1>
     </a>
 </header>
 
-<div class="main-wrapper">
-    <div class="grid">
-        
-        <!-- Carte UV 1 -->
-        <div class="card-kawaii">
-            <div class="module-title">Mathématiques</div>
-            
-            <div class="sub-section">
-                <div class="controls-row">
-                    <label>Note actuelle :</label>
-                    <input type="number" class="input-small" value="15" min="0" max="20">
-                    <span class="beep-icon" title="Activer les alertes">🔔</span>
-                </div>
-                
-                <div class="result-display">
-                    Moyenne : 16.5 / 20
-                </div>
+  <!-- CONTENU GLOBAL -->
+  <main class="container layout-desktop">
 
-                <div class="controls-row">
-                    <label>Progression :</label>
-                    <input type="range" min="0" max="100" value="75">
-                </div>
+    <!-- KIHON SIMPLE (colonne principale) -->
+    <section class="card-block wide" id="kihonSimple">
+      <h2 class="spicy section-title">🥋 Kihon simple</h2>
 
-                <details>
-                    <summary>Ressources de cours</summary>
-                    <div class="inner">
-                        <ul class="content">
-                            <li>Chapitre 1 : Algèbre Linéaire</li>
-                            <li>Chapitre 2 : Analyse Complexe</li>
-                        </ul>
-                        <p class="muted">Vidéos de révision disponibles.</p>
-                    </div>
-                </details>
-            </div>
+      <!-- Filtres + recherche -->
+      <div class="controls controls-column">
+        <input id="searchKihon" type="search" placeholder="Rechercher une technique...">
+        <select id="filterCategorie">
+          <option value="">Toutes catégories</option>
+        </select>
+        <button id="btnRandomKihon" class="btn ghost kawaii">✨ Surprise</button>
+      </div>
 
-            <div class="button-row">
-                <button class="btn-kawaii">Sauvegarder</button>
-                <button class="btn-kawaii btn-stop">Réinitialiser</button>
-            </div>
+      <!-- Liste filtrée (vide au premier chargement) -->
+      <div id="kihonList" class="list-results"></div>
+
+      <!-- Bloc détaillé caché tant qu'on n'a pas cliqué -->
+      <div id="kihonResult" class="kihon-layout hidden">
+        <div class="kihon-text">
+          <h3 id="techNom"></h3>
+          <p id="techCat"></p>
+          <p id="techDesc"></p>
         </div>
 
-        <!-- Carte UV 2 -->
-        <div class="card-kawaii">
-            <div class="module-title">Design Graphique</div>
-            <div class="sub-section">
-                <h3>Projet en cours</h3>
-                <div class="result-display">En attente de revue ✨</div>
-                <p class="muted">Date limite : Vendredi 14 Mars</p>
-                
-                <details>
-                    <summary>Consignes du projet</summary>
-                    <div class="inner">
-                        <p>Créer une charte graphique respectant les codes du "Kawaii Design".</p>
-                    </div>
-                </details>
-            </div>
-            <div class="button-row">
-                <button class="btn-kawaii">Soumettre le projet</button>
-            </div>
+        <div class="kihon-media">
+          <img id="techPhoto" class="photo" src="">
+          <iframe id="techVideo" class="video" src="" frameborder="0" allowfullscreen></iframe>
         </div>
+      </div>
+    </section>
 
-        <!-- Carte UV 3 -->
-        <div class="card-kawaii">
-            <div class="module-title">Programmation</div>
-            <div class="sub-section">
-                <div class="result-display">Tout est validé ! ✅</div>
-                <div class="controls-row">
-                    <label>Dernière mise à jour : Aujourd'hui</label>
-                </div>
-                <div class="button-row">
-                    <button class="btn-kawaii btn-small">Voir les logs</button>
-                </div>
-            </div>
-        </div>
+    <!-- ENCHAINEMENT + CIBLE (colonne latérale) -->
+   <section class="card-block stack" id="kihonComboCible">
+    <h2 class="spicy section-title">💫 Enchainement & Cible</h2>
 
+    <!-- Enchainement -->
+    <div class="sub-card kawaii-card">
+        <h3 class="spicy">🔗 Enchainement de kihon</h3>
+        <button id="btnCombo" class="btn primary kawaii">🔄 Nouvel enchaînement</button>
+        <div id="comboResult" class="result-card"></div>
     </div>
-</div>
+
+    <div class="pdf-buttons">
+        <a href="pdf/ippon_kumite.pdf" class="pdf-btn" data-tooltip="Télécharger le PDF complet">
+            📄 Ippon Kumite
+        </a>
+        <a href="pdf/tai_sabaki.pdf" class="pdf-btn" data-tooltip="Télécharger le guide des déplacements">
+            📄 Tai Sabaki
+        </a>
+    </div>
+
+    <!-- Cibles -->
+    <div class="sub-card kawaii-card">
+        <h3 class="spicy">🎯 Cible – 3 techniques</h3>
+        <button id="btnCible" class="btn primary kawaii">🔄 Nouveau tirage</button>
+        <ul id="cibleList" class="result-list"></ul>
+    </div>
+
+    <!-- 🔥 NOUVEAU BLOC : Générateur d’enchaînements aléatoires (script fourni) -->
+    <div class="sub-card kawaii-card">
+        <h3 class="spicy">🎲 Générateur d’enchaînements aléatoires</h3>
+
+        <label>Nombre d’enchaînements :</label>
+        <input type="number" id="count" value="1" min="1" max="20">
+
+        <br><br>
+
+        <button onclick="generate()" class="btn primary kawaii">Générer</button>
+        <button onclick="readJapanese()" class="btn ghost kawaii">Lire en japonais</button>
+
+        <div id="result"></div>
+    </div>
 
 </section>
 
   </main>
+
 
   <!-- Scripts -->
  document.querySelectorAll('.beep-icon').forEach(icon => {
     icon.addEventListener('click', function() {
         this.classList.toggle('off');
     });
-});
-</body>
 
+</body>
 </html>
