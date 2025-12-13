@@ -132,3 +132,28 @@ h1 {
 .tracker .day.opened {
   background:#c49b66;
 }
+.status {
+  display:flex;
+  gap:14px;
+  margin:10px 0 20px;
+}
+
+.status button {
+  font-size:26px;
+  border:none;
+  background:#eee;
+  border-radius:50%;
+  width:48px;
+  height:48px;
+  cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+}
+
+.status button:hover {
+  transform:scale(1.1);
+}
+
+.status.good { background:#b6e3b6; }
+.status.medium { background:#ffd59e; }
+.status.bad { background:#f2b6b6; }
+
