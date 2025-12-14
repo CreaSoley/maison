@@ -22,7 +22,6 @@ const TARGET_DATE = getNextFeb8();
 /* ================= COUNTDOWN ================= */
 function initCountdown() {
   const el = document.getElementById("countdown");
-
   function update() {
     const diff = TARGET_DATE - new Date();
     if (diff <= 0) {
@@ -35,7 +34,6 @@ function initCountdown() {
     const s = Math.floor((diff / 1000) % 60);
     el.innerText = `Jours restants : ${d} | ${h}h ${m}m ${s}s`;
   }
-
   update();
   setInterval(update, 1000);
 }
@@ -50,6 +48,7 @@ async function loadActivities() {
 function getActDate(act) {
   const match = act.jour.match(/(\d{1,2})/);
   const day = match ? parseInt(match[1], 10) : 1;
+  // on utilise le même mois que le jour du jour (février dans le projet d'origine)
   const date = new Date(new Date().getFullYear(), 1, day, 0, 0, 0);
   return date;
 }
@@ -60,7 +59,6 @@ function getTodayMidnight() {
   today.setHours(0, 0, 0, 0);
   return today;
 }
-
 function isDatePassed(date) {
   const today = getTodayMidnight();
   const compareDate = new Date(date);
@@ -72,7 +70,6 @@ function isDatePassed(date) {
 function getStore(key, def) {
   return JSON.parse(localStorage.getItem(key) || JSON.stringify(def));
 }
-
 function setStore(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
@@ -81,38 +78,43 @@ function setStore(key, value) {
 function updateTracker() {
   const opened = getStore("openedDays", []);
   const statuses = getStore("status", {});
-  
+
   tracker.innerHTML = "";
-  
+
   ACTIVITIES.forEach((act, i) => {
     const dayEl = document.createElement("div");
     dayEl.className = "day";
-    
-    if (opened.includes(i)) {
-      dayEl.classList.add("opened");
-    }
-    
+
+    if (opened.includes(i)) dayEl.classList.add("opened");
+
     const dayStatus = statuses[i];
-    if (dayStatus && opened.includes(i)) {
-      dayEl.classList.add(dayStatus);
-    }
-    
+    if (dayStatus && opened.includes(i)) dayEl.classList.add(dayStatus);
+
     dayEl.dataset.index = i;
-    
+
     if (opened.includes(i)) {
       dayEl.style.cursor = "pointer";
       dayEl.onclick = () => {
         const actDate = getActDate(act);
-        if (isDatePassed(actDate)) {
-          showDay(i);
-        }
+        if (isDatePassed(actDate)) showDay(i);
       };
     }
-    
-    dayEl.title = `Jour ${i + 1}${dayStatus ? ` - Statut: ${dayStatus}` : ''}`;
-    
+
+    dayEl.title = `Jour ${i + 1}${dayStatus ? ` - Statut: ${dayStatus}` : ""}`;
     tracker.appendChild(dayEl);
   });
+}
+
+/* ================= FIND TODAY'S ACTIVITY ================= */
+function getTodayIndex() {
+  const todayDay = new Date().getDate();               // jour du mois (1‑31)
+  // on parcourt les activités et on compare le jour extrait du champ "jour"
+  for (let i = 0; i < ACTIVITIES.length; i++) {
+    const match = ACTIVITIES[i].jour.match(/(\d{1,2})/);
+    const actDay = match ? parseInt(match[1], 10) : 1;
+    if (actDay === todayDay) return i;
+  }
+  return 0; // fallback : aucun matching → on montre le premier
 }
 
 /* ================= CARD ================= */
@@ -122,6 +124,7 @@ function showDay(i) {
   const actDate = getActDate(act);
   const isPassed = isDatePassed(actDate);
 
+  // ------- contenu de la carte -------
   cardDate.innerText = act.jour;
   cardContent.innerText = `${act.contenu_1}\n\n${act.contenu_2}`;
 
@@ -130,33 +133,32 @@ function showDay(i) {
 
   const statuses = getStore("status", {});
   const currentStatus = statuses[i];
-  
   card.classList.remove("green", "orange", "red");
-  if (currentStatus) {
-    card.classList.add(currentStatus);
-  }
+  if (currentStatus) card.classList.add(currentStatus);
+
+  // ------- gestion du overlay -------
+  overlay.style.display = "flex";          // on s’assure qu’il est visible
+  overlay.style.opacity = "1";
 
   if (isPassed) {
+    // activité déjà passée → on peut la déverrouiller
     card.classList.remove("locked");
     card.style.pointerEvents = "auto";
-    
+
     const opened = getStore("openedDays", []);
     if (opened.includes(i)) {
+      // déjà ouvert → on retire le overlay et on montre le contenu
       overlay.style.display = "none";
       card.classList.add("open");
     } else {
-      overlay.style.display = "flex";
+      // pas encore ouvert → on laisse le texte d’instructions
       overlay.innerText = "Cliquez pour découvrir la séance du jour";
       card.onclick = () => openDay(i);
     }
   } else {
+    // activité future → on bloque la carte
     card.classList.add("locked");
     card.style.pointerEvents = "none";
-    card.classList.remove("open");
-    card.classList.remove("green", "orange", "red");
-    
-    overlay.style.display = "flex";
-    overlay.style.opacity = "1";
     overlay.innerText = `Disponible le ${act.jour}`;
     card.onclick = null;
   }
@@ -172,9 +174,7 @@ function openDay(i) {
   overlay.style.display = "none";
   card.classList.add("open");
   updateTracker();
-  if (openSound) {
-    openSound.play().catch(() => {});
-  }
+  if (openSound) openSound.play().catch(() => {});
 }
 
 /* ================= STATUS ================= */
@@ -196,22 +196,19 @@ journalInput.addEventListener("input", () => {
   setStore("journals", j);
 });
 
-/* ================= WEEKLY ================= */
+/* ================= WEEKLY AVERAGE ================= */
 function updateWeeklyAverage() {
   const s = getStore("status", {});
   const values = { green: 1, orange: 0.5, red: 0 };
   let sum = 0, count = 0;
-
   Object.values(s).forEach(v => {
     sum += values[v] ?? 0;
     count++;
   });
-
   if (count === 0) {
     weeklyAverageEl.innerText = "";
     return;
   }
-
   weeklyAverageEl.innerText = `Moyenne hebdomadaire : ${Math.round((sum / count) * 100)}%`;
 }
 
@@ -219,31 +216,19 @@ function updateWeeklyAverage() {
 document.getElementById("prevBtn").onclick = () => {
   let i = currentIndex - 1;
   const opened = getStore("openedDays", []);
-  
-  while (i >= 0 && !opened.includes(i)) {
-    i--;
-  }
-  
-  if (i >= 0) {
-    showDay(i);
-  }
+  while (i >= 0 && !opened.includes(i)) i--;
+  if (i >= 0) showDay(i);
 };
 
 document.getElementById("nextBtn").onclick = () => {
   let i = currentIndex + 1;
   const opened = getStore("openedDays", []);
-  
   while (i < ACTIVITIES.length && !opened.includes(i)) {
     const actDate = getActDate(ACTIVITIES[i]);
-    if (!isDatePassed(actDate)) {
-      break;
-    }
+    if (!isDatePassed(actDate)) break;
     i++;
   }
-  
-  if (i < ACTIVITIES.length) {
-    showDay(i);
-  }
+  if (i < ACTIVITIES.length) showDay(i);
 };
 
 /* ================= INIT ================= */
@@ -251,6 +236,12 @@ document.getElementById("nextBtn").onclick = () => {
   await loadActivities();
   initCountdown();
   updateTracker();
-  showDay(0);
+
+  // <-- 1️⃣  On récupère l’indice de l’activité du jour
+  const todayIdx = getTodayIndex();
+
+  // <-- 2️⃣  On montre cette carte, mais elle reste cachée (overlay visible)
+  showDay(todayIdx);
+
   updateWeeklyAverage();
 })();
