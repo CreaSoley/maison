@@ -1,7 +1,12 @@
-// ippon.js – GitHub Pages friendly: JSON + choix série + URL YouTube -> embed
+// ippon.js – GitHub Pages: JSON + séries indépendantes + YouTube URL -> embed
 
 let allTechniques = [];
-let currentSerie = "";
+
+// Série module 1 (accordéon)
+let serieAccordion = "";
+
+// Série modules 2+3 (fiche + surprise)
+let serieMain = "";
 
 // ----------------- YouTube helpers -----------------
 function parseTimeToSeconds(t) {
@@ -18,7 +23,7 @@ function parseTimeToSeconds(t) {
 
 function toYouTubeEmbed(urlStr) {
   if (!urlStr) return "";
-  if (urlStr.includes("youtube.com/embed/")) return urlStr; // déjà embed
+  if (urlStr.includes("youtube.com/embed/")) return urlStr;
 
   try {
     const u = new URL(urlStr);
@@ -69,9 +74,9 @@ function uniqAttaques(techs) {
   return Array.from(new Set(techs.map(t => t.attaque)));
 }
 
-// ----------------- Populate UI -----------------
-function populateSerieSelect() {
-  const sel = document.getElementById("selectSerie");
+// ----------------- Populate série selects -----------------
+function populateSerieSelect(selectId) {
+  const sel = document.getElementById(selectId);
   if (!sel) return;
 
   sel.innerHTML = `<option value="">Choisir une série</option>`;
@@ -79,22 +84,6 @@ function populateSerieSelect() {
     const opt = document.createElement("option");
     opt.value = s;
     opt.textContent = `Série ${s}`;
-    sel.appendChild(opt);
-  });
-}
-
-function populateAttackSelect() {
-  const sel = document.getElementById("selectAttack");
-  if (!sel) return;
-
-  sel.innerHTML = `<option value="">Choisir une attaque</option>`;
-  if (!currentSerie) return;
-
-  const techs = techniquesForSerie(currentSerie);
-  uniqAttaques(techs).forEach(a => {
-    const opt = document.createElement("option");
-    opt.value = a;
-    opt.textContent = a;
     sel.appendChild(opt);
   });
 }
@@ -107,15 +96,15 @@ function renderAccordion() {
 
   list.innerHTML = "";
 
-  if (!currentSerie) {
-    list.innerHTML = "<p>Choisis d’abord une série.</p>";
+  if (!serieAccordion) {
+    list.innerHTML = "<p>Choisis d’abord une série (accordéon).</p>";
     return;
   }
 
   const side = sideSel.value;
   if (!side) return;
 
-  const filtered = techniquesForSerie(currentSerie).filter(
+  const filtered = techniquesForSerie(serieAccordion).filter(
     t => (t.cote || "").toLowerCase() === side.toLowerCase()
   );
 
@@ -157,12 +146,39 @@ function renderAccordion() {
 }
 
 function initAccordionModule() {
+  const selSerieAcc = document.getElementById("selectSerieAccordion");
   const sideSel = document.getElementById("filterSide");
-  if (!sideSel) return;
-  sideSel.addEventListener("change", renderAccordion);
+  if (selSerieAcc) {
+    selSerieAcc.addEventListener("change", () => {
+      serieAccordion = selSerieAcc.value;
+
+      // reset côté + contenu accordéon
+      if (sideSel) sideSel.value = "";
+      const list = document.getElementById("accordionList");
+      if (list) list.innerHTML = "";
+    });
+  }
+
+  if (sideSel) sideSel.addEventListener("change", renderAccordion);
 }
 
 // ----------------- Module 2: Fiche technique -----------------
+function populateAttackSelect() {
+  const sel = document.getElementById("selectAttack");
+  if (!sel) return;
+
+  sel.innerHTML = `<option value="">Choisir une attaque</option>`;
+  if (!serieMain) return;
+
+  const techs = techniquesForSerie(serieMain);
+  uniqAttaques(techs).forEach(a => {
+    const opt = document.createElement("option");
+    opt.value = a;
+    opt.textContent = a;
+    sel.appendChild(opt);
+  });
+}
+
 function renderCard() {
   const selAtt = document.getElementById("selectAttack");
   const selSide = document.getElementById("selectSide");
@@ -171,8 +187,8 @@ function renderCard() {
 
   out.innerHTML = "";
 
-  if (!currentSerie) {
-    out.innerHTML = "<p>Choisis d’abord une série.</p>";
+  if (!serieMain) {
+    out.innerHTML = "<p>Choisis d’abord une série (fiche technique).</p>";
     return;
   }
 
@@ -180,7 +196,7 @@ function renderCard() {
   const side = selSide.value;
   if (!att || !side) return;
 
-  const tech = techniquesForSerie(currentSerie).find(
+  const tech = techniquesForSerie(serieMain).find(
     t => t.attaque === att && (t.cote || "").toLowerCase() === side.toLowerCase()
   );
 
@@ -214,12 +230,29 @@ function renderCard() {
 }
 
 function initSelectModule() {
+  const selSerie = document.getElementById("selectSerie");
   const selAtt = document.getElementById("selectAttack");
   const selSide = document.getElementById("selectSide");
-  if (!selAtt || !selSide) return;
 
-  selAtt.addEventListener("change", renderCard);
-  selSide.addEventListener("change", renderCard);
+  if (selSerie) {
+    selSerie.addEventListener("change", () => {
+      serieMain = selSerie.value;
+
+      // reset fiche + surprise
+      if (selAtt) selAtt.value = "";
+      if (selSide) selSide.value = "";
+
+      populateAttackSelect();
+
+      const out = document.getElementById("resultCard");
+      const sur = document.getElementById("surpriseResult");
+      if (out) out.innerHTML = "";
+      if (sur) sur.innerHTML = "";
+    });
+  }
+
+  if (selAtt) selAtt.addEventListener("change", renderCard);
+  if (selSide) selSide.addEventListener("change", renderCard);
 }
 
 // ----------------- Module 3: Surprise -----------------
@@ -229,12 +262,12 @@ function renderSurprise() {
 
   out.innerHTML = "";
 
-  if (!currentSerie) {
-    out.innerHTML = "<p>Choisis d’abord une série.</p>";
+  if (!serieMain) {
+    out.innerHTML = "<p>Choisis d’abord une série (surprise).</p>";
     return;
   }
 
-  const techs = techniquesForSerie(currentSerie);
+  const techs = techniquesForSerie(serieMain);
   if (!techs.length) {
     out.innerHTML = "<p>Aucune technique dans cette série.</p>";
     return;
@@ -272,40 +305,10 @@ function initSurprise() {
   btn.addEventListener("click", renderSurprise);
 }
 
-// ----------------- Série: change handler -----------------
-function initSerieModule() {
-  const selSerie = document.getElementById("selectSerie");
-  if (!selSerie) return;
-
-  selSerie.addEventListener("change", () => {
-    currentSerie = selSerie.value;
-
-    // reset UI dépendante
-    const filterSide = document.getElementById("filterSide");
-    const selectSide = document.getElementById("selectSide");
-    const selectAttack = document.getElementById("selectAttack");
-
-    if (filterSide) filterSide.value = "";
-    if (selectSide) selectSide.value = "";
-    if (selectAttack) selectAttack.value = "";
-
-    populateAttackSelect();
-
-    // clear outputs
-    const outCard = document.getElementById("resultCard");
-    const outSurprise = document.getElementById("surpriseResult");
-    const accList = document.getElementById("accordionList");
-    if (outCard) outCard.innerHTML = "";
-    if (outSurprise) outSurprise.innerHTML = "";
-    if (accList) accList.innerHTML = "";
-  });
-}
-
 // ----------------- Load JSON + Init -----------------
 async function loadTechniquesFromJson() {
-  // Si ton techniques.json est dans un sous-dossier, adapte le chemin ici.
-  const res = await fetch("ipponkumite.json", { cache: "no-store" });
-  if (!res.ok) throw new Error(`Impossible de charger ipponkumite.json (${res.status})`);
+  const res = await fetch("techniques.json", { cache: "no-store" });
+  if (!res.ok) throw new Error(`Impossible de charger techniques.json (${res.status})`);
   return await res.json();
 }
 
@@ -313,20 +316,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     allTechniques = await loadTechniquesFromJson();
 
-    populateSerieSelect();
-    initSerieModule();
+    // Remplir les 2 selects série (indépendants)
+    populateSerieSelect("selectSerieAccordion");
+    populateSerieSelect("selectSerie");
 
     initAccordionModule();
     initSelectModule();
     initSurprise();
 
-    // auto-sélection de la première série (optionnel)
-    const selSerie = document.getElementById("selectSerie");
+    // Optionnel : présélectionner série 1 pour chacun (si tu veux)
     const series = uniqSeries();
-    if (selSerie && series.length) {
-      selSerie.value = series[0];
-      selSerie.dispatchEvent(new Event("change"));
+    if (series.length) {
+      const selAcc = document.getElementById("selectSerieAccordion");
+      const selMain = document.getElementById("selectSerie");
+      if (selAcc) selAcc.value = series[0];
+      if (selMain) selMain.value = series[0];
+      serieAccordion = series[0];
+      serieMain = series[0];
+      populateAttackSelect();
     }
+
   } catch (err) {
     console.error(err);
     const accList = document.getElementById("accordionList");
