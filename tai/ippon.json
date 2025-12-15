@@ -1,0 +1,182 @@
+[
+ {
+   "serie": 1,
+   "attaque": "Oi Tsuki Jodan",
+   "cote": "droite",
+   "tai sabaki": "Tai sabaki diagonal extérieur, léger pivot de hanche",
+   "blocage": "jodan age-uke en avançant",
+   "defense": "contrôle du poignet → empi uchi au plexus",
+   "video": "https://www.youtube.com/embed/Rp1drfqOMKY"
+ },
+ {
+   "serie": 1,
+   "attaque": "Oi Tsuki Jodan",
+   "cote": "gauche",
+   "tai sabaki": "decrire esquive",
+   "blocage": "jodan age uke avec rotation du buste.",
+   "defense": "tate tsuki chudan puis mae geri chudan (position contrôlée).",
+   "video": "https://www.youtube.com/embed//W1C3zZQ4KtQ"
+ },
+ {
+   "serie": 1,
+   "attaque": "Oi Tsuki Chudan",
+   "cote": "droite",
+   "tai sabaki": "exterieur gauche",
+   "blocage": "ngashi uke → saisie poignet",
+   "defense": "uraken tsuki",
+   "video": "https://www.youtube.com/embed/ynE0eX2jpXc"
+ },
+ {
+   "serie": 1,
+   "attaque": "Oi Tsuki Chudan",
+   "cote": "gauche",
+   "tai sabaki": "Pas intérieur rapide vers la droite (tai sabaki intérieur).",
+   "blocage": "decrire blocage",
+   "defense": "décrire défense",
+   "video": "https://www.youtube.com/embed/L18tYBdkTdg"
+ },
+ {
+   "serie": 1,
+   "attaque": "Mae Geri",
+   "cote": "droite",
+   "tai sabaki": "déplacement extérieur gauche",
+   "blocage": "blocage gedan barai déviant",
+   "defense": "yoko geri gedan creux genou",
+   "video": "https://www.youtube.com/embed/rq67slGGZAw"
+ },
+ {
+   "serie": 1,
+   "attaque": "Mae Geri",
+   "cote": "droite",
+   "tai sabaki": "decrire esquive",
+   "blocage": "decrire blocage",
+   "defense": "décrire défense",
+   "video": "https://www.youtube.com/embed/mq8B1Xq9050"
+ },
+ {
+   "serie": 1,
+   "attaque": "Mawashi Geri",
+   "cote": "droite",
+   "tai sabaki": "decrire esquive",
+   "blocage": "decrire blocage",
+   "defense": "décrire défense",
+   "video": "https://www.youtube.com/embed/UK4E4PgYw-g"
+ },
+ {
+   "serie": 1,
+   "attaque": "Mawashi Geri",
+   "cote": "gauche",
+   "tai sabaki": "decrire esquive",
+   "blocage": "decrire blocage",
+   "defense": "décrire défense",
+   "video": "https://www.youtube.com/embed/d-YZ8euC_YQ?"
+ },
+ {
+   "serie": 1,
+   "attaque": "Yoko geri",
+   "cote": "droite",
+   "tai sabaki": "decrire esquive",
+   "blocage": "decrire blocage",
+   "defense": "décrire défense",
+   "video": "https://www.youtube.com/embed/d-YZ8euC_YQ?"
+ },
+ {
+   "serie": 1,
+   "attaque": "Yoko geri",
+   "cote": "gauche",
+   "tai sabaki": "decrire esquive",
+   "blocage": "decrire blocage",
+   "defense": "décrire défense",
+   "video": "https://www.youtube.com/embed/oSPe3ER_YdQ"
+ },
+ {
+   "serie": 2,
+   "attaque": "Oi Tsuki Jodan",
+   "cote": "droite",
+   "tai sabaki": "Intérieur avant, pas court (yori ashi)",
+   "blocage": "Age uke",
+   "defense": "Gyaku-tsuki chudan → Reprise distance → Zanshin",
+   "video": "https://youtu.be/eyQTvH7XGYs?si=lA2fQgLWdakO8yIA"
+ },
+ {
+   "serie": 2,
+   "attaque": "Oi Tsuki Jodan",
+   "cote": "gauche",
+   "tai sabaki": "Extérieur avant, pas diagonal moyen (ayumi ashi)",
+   "blocage": "Soto uke court",
+   "defense": "Age tsuki→ Reprise distance → Zanshin",
+   "video": "https://youtu.be/d4B2nSKjq6Y"
+ },
+ {
+   "serie": 2,
+   "attaque": "Oi Tsuki Chudan",
+   "cote": "droite",
+   "tai sabaki": "Intérieur avant, pas court (yori ashi)",
+   "blocage": "Soto uke court",
+   "defense": "Kizami tsuku - gyaku tsuki → Reprise distance → Zanshin",
+   "video": "https://youtu.be/FfYd6zV_fqI?si=LucvRnzGRDGtQpgK&t=117"
+ },
+ {
+   "serie": 2,
+   "attaque": "Oi Tsuki Chudan",
+   "cote": "gauche",
+   "tai sabaki": "Intérieur avant, pas court (yori ashi)",
+   "blocage": "Soto uke court",
+   "defense": "Yoko empi chudan → Reprise distance → Zanshin",
+   "video": "https://youtu.be/FfYd6zV_fqI?si=W8rV0756XbE8eZai&t=61"
+ },
+ {
+   "serie": 2,
+   "attaque": "Mae Geri",
+   "cote": "droite",
+   "tai sabaki": "Intérieur diagonal, retrait bassin court (yori ashi) ",
+   "blocage": "Gedan baraï jambe",
+   "defense": "Hiraken plexus → Reprise distance → Zanshin",
+   "video": "https://youtu.be/wzrRD4LRNvc?si=75HxVsy-fM2wdTKC"
+ },
+ {
+   "serie": 2,
+   "attaque": "Mae Geri",
+   "cote": "gauche",
+   "tai sabaki": "Extérieur latéral, pas court (yori ashi latéral) ",
+   "blocage": "Sukui- uke jambe",
+   "defense": "Gyaku-tsuki chudan → Reprise distance → Zanshin",
+   "video": "https://youtu.be/wzrRD4LRNvc?si=EVi_ZgVjBpsOikSF&t=252"
+ },
+ {
+   "serie": 2,
+   "attaque": "Mawashi Geri",
+   "cote": "droite",
+   "tai sabaki": "Intérieur diagonal, retrait bassin court (yori ashi) ",
+   "blocage": "Haiwan uke",
+   "defense": "Teisho uchi jodan → Reprise distance → Zanshin",
+   "video": "https://youtu.be/z6XRYv_m2aE?si=JA61qCDP45r0T1bI"
+ },
+ {
+   "serie": 2,
+   "attaque": "Mawashi Geri",
+   "cote": "gauche",
+   "tai sabaki": "Intérieur avant, pas court (yori ashi)",
+   "blocage": "Tate heiko uke",
+   "defense": "Yoko empi chudan → Reprise distance → Zanshin",
+   "video": "https://youtu.be/z6XRYv_m2aE?si=1Ci5gbDwy9HCsNZF&t=69"
+ },
+ {
+   "serie": 2,
+   "attaque": "Yoko geri",
+   "cote": "droite",
+   "tai sabaki": "Extérieur latéral, pas court (yori ashi latéral) ",
+   "blocage": "Haiwan uke",
+   "defense": "Haïto uchi → Reprise distance → Zanshin",
+   "video": "https://youtu.be/LDhau0I1kGU?si=sK3CRzb6eOE-g2v3&t=65"
+ },
+ {
+   "serie": 2,
+   "attaque": "Yoko geri",
+   "cote": "gauche",
+   "tai sabaki": "Extérieur latéral, pas court (yori ashi latéral) ",
+   "blocage": "Soto uke",
+   "defense": "Gyaku-tsuki chudan → Reprise distance → Zanshin",
+   "video": "https://youtu.be/LDhau0I1kGU?si=qgLr0a80-IihYH9S"
+ }
+]
