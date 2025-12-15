@@ -42,7 +42,7 @@ body {
 /* BANNIÈRE / HEADER */
 /* ------------------------- */
 .appbar {
-  background: black;                /* on garde le fond noir */
+  background: black;
   color: white;
   padding: 25px 10px;
   display: flex;
@@ -180,7 +180,7 @@ body {
 /* ------------------------- */
 .card-block {
   background: linear-gradient(180deg,#fff9fc 0%, #fff4fb 100%);
-  padding: 18px;
+  padding: 20px; /* ⭐ INCRÉMENTÉ : plus d'espace interne */
   border-radius: 20px;
   box-shadow: var(--card-shadow);
   border: 2px solid var(--pink-2);
@@ -189,7 +189,7 @@ body {
 /* TITRES DE SECTION */
 .section-title {
   font-size: 1.7rem;
-  margin-bottom: 10px;
+  margin-bottom: 16px; /* ⭐ INCRÉMENTÉ */
   color: var(--hot-pink);
   text-align: center;
   text-shadow: 2px 2px 0 var(--pink-3);
@@ -200,9 +200,11 @@ body {
 /* ------------------------- */
 .layout-desktop {
   display: grid;
-  grid-template-columns: 340px 1fr 340px; /* Gauche / Centre / Droite */
+  grid-template-columns: 360px 1fr 360px; /* ⭐ LÉGÈREMENT ÉLARGIS */
   gap: 25px;
   padding: 0 25px 25px 25px;
+  max-width: 1400px; /* ⭐ AJOUTÉ : limite la largeur totale */
+  margin: 0 auto; /* ⭐ AJOUTÉ : centrage */
 }
 
 .layout-desktop > section {
@@ -210,44 +212,61 @@ body {
 }
 
 /* VERSION MOBILE */
-@media(max-width: 800px){
+@media(max-width: 900px){ /* ⭐ ÉLARGIE */
   .layout-desktop {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 20px;
     padding: 0 14px 20px;
+  }
+  
+  .card-block {
+    padding: 18px;
   }
 }
 
 /* ------------------------- */
-/* CONTROLS (selects, etc.) */
+/* CONTROLS (selects, etc.) - VERSION AMÉLIORÉE ⭐ */
 /* ------------------------- */
 .controls {
   display: flex;
+  flex-direction: column; /* ⭐ VERTICAL par défaut */
   gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
+  margin-bottom: 20px; /* ⭐ PLUS D'ESPACE EN BAS */
+  padding: 12px; /* ⭐ PETIT PAD interne */
+  background: rgba(255, 242, 251, 0.6); /* ⭐ FOND discret */
+  border-radius: 16px;
+  border: 1px solid rgba(255, 182, 193, 0.4);
 }
 
 .controls-column {
-  flex-direction: column;
+  flex-direction: column; /* Redondant mais OK */
+}
+
+.controls-row { /* ⭐ NOUVEAU : pour lignes horizontales si besoin */
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 select {
-  padding: 9px 12px;
+  padding: 12px 14px; /* ⭐ PLUS GRAND */
   border-radius: 12px;
   border: 2px solid var(--pink-2);
   background: #fff;
   font-size: 1rem;
+  font-weight: 500;
   font-family: 'Fredoka', Arial, sans-serif;
-  box-shadow: 0 3px 0 rgba(255, 182, 193, 0.7);
-  transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s, background-color 0.15s;
+  box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3); /* ⭐ OMBRE PLUS DOUCE */
+  transition: all 0.2s ease;
+  width: 100%; /* ⭐ PLEINE LARGEUR */
+  box-sizing: border-box;
 }
 
 select:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 4px 0 rgba(255, 128, 200, 0.8);
-  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(255, 95, 193, 0.3);
+  transform: translateY(-2px);
   background: #fffdfc;
 }
 
@@ -257,7 +276,7 @@ select:focus {
 .ippon-accordion {
   background: #ffeef7;
   border-radius: 14px;
-  padding: 10px 12px;
+  padding: 12px 14px; /* ⭐ PLUS D'ESPACE */
   margin-bottom: 12px;
   border: 2px solid #ffb4e6;
   box-shadow: 0 6px 14px rgba(255, 153, 221, 0.3);
@@ -267,19 +286,20 @@ select:focus {
   font-family: "Spicy", cursive;
   font-size: 1.4rem;
   cursor: pointer;
-  padding: 6px 4px;
+  padding: 8px 6px; /* ⭐ PLUS D'ESPACE */
   color: var(--hot-pink);
+  user-select: none;
 }
 
 .ippon-acc-content {
   display: none;
-  padding: 6px 4px 4px 0;
+  padding: 10px 6px 6px 0; /* ⭐ PLUS D'ESPACE */
   border-top: 1px dashed #ffb4e6;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .ippon-acc-content p {
-  margin: 0;
+  margin: 4px 0; /* ⭐ PLUS D'ESPACE */
   padding: 2px 0;
 }
 
@@ -299,28 +319,28 @@ select:focus {
 .result-card {
   background: #fff3fb;
   border-radius: 16px;
-  padding: 14px;
+  padding: 18px; /* ⭐ PLUS D'ESPACE */
   border: 2px solid #ffb4e6;
-  margin-top: 18px;
+  margin-top: 12px; /* ⭐ RÉDUIT */
   box-shadow: 0 8px 18px rgba(255, 120, 190, 0.12);
 }
 
 .tech-title {
   font-family: "Spicy", cursive;
   font-size: 1.6rem;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   color: var(--hot-pink);
 }
 
 .tech-side {
   font-family: "Spicy", cursive;
   font-size: 1.3rem;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   color: var(--accent);
 }
 
 .result-card p {
-  margin: 0;
+  margin: 4px 0; /* ⭐ PLUS D'ESPACE */
   padding: 2px 0;
 }
 
@@ -340,7 +360,7 @@ select:focus {
   width: 100%;
   aspect-ratio: 16/9;
   border-radius: 12px;
-  margin-top: 12px;
+  margin-top: 16px;
   border: none;
 }
 
@@ -351,6 +371,7 @@ select:focus {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  margin-top: 16px;
 }
 
 #surpriseResult .result-card > div:first-child {
@@ -365,7 +386,7 @@ select:focus {
   border-radius: 14px;
 }
 
-@media(max-width:800px){
+@media(max-width:900px){
   #surpriseResult .result-card {
     flex-direction: column;
   }
@@ -382,7 +403,6 @@ select:focus {
 }
 
 /* ------------------------- */
-/* BOUTON SURPRISE – ne pas modifier structure */
+/* BOUTON SURPRISE */
 /* ------------------------- */
-/* (le style vient déjà de .btn.ghost.kawaii) */
 #btnSurprise {}
