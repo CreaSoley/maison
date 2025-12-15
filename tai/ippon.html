@@ -54,20 +54,25 @@
   <!-- 3 COLONNES : GAUCHE / CENTRE / DROITE -->
   <main class="layout-desktop">
 
-    <!-- COLONNE GAUCHE — ACCORDEON -->
-    <section class="card-block" id="script1">
-      <h2 class="spicy section-title">🥋 Techniques par côté</h2>
+   <!-- COLONNE GAUCHE — ACCORDEON -->
+<section class="card-block" id="script1">
+  <h2 class="spicy section-title">🥋 Techniques par côté</h2>
 
-      <div class="controls controls-column">
-        <select id="filterSide">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-      </div>
+  <div class="controls controls-column">
+    <!-- NOUVEAU SÉLECTEUR DE SÉRIE -->
+    <select id="filterSerie">
+      <option value="">Choisir une série</option>
+    </select>
+    
+    <select id="filterSide">
+      <option value="">Choisir un côté</option>
+      <option value="droite">Droite</option>
+      <option value="gauche">Gauche</option>
+    </select>
+  </div>
 
-      <div id="accordionList"></div>
-    </section>
+  <div id="accordionList"></div>
+</section>
 
     <!-- COLONNE CENTRALE — FICHE TECHNIQUE -->
     <section class="card-block" id="script2">
