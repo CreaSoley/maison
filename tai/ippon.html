@@ -50,49 +50,49 @@
     <div id="surpriseResult"></div>
   </section>
 
-
   <!-- 3 COLONNES : GAUCHE / CENTRE / DROITE -->
   <main class="layout-desktop">
 
-   <!-- COLONNE GAUCHE — ACCORDEON -->
-<section class="card-block" id="script1">
-  <h2 class="spicy section-title">🥋 Techniques par côté</h2>
+    <!-- COLONNE GAUCHE — ACCORDEON (AJOUT SELECT SÉRIE) -->
+    <section class="card-block" id="script1">
+      <h2 class="spicy section-title">🥋 Techniques par côté</h2>
 
-  <div class="controls controls-column">
-    <!-- NOUVEAU SÉLECTEUR DE SÉRIE -->
-    <select id="filterSerie">
-      <option value="">Choisir une série</option>
-    </select>
-    
-    <select id="filterSide">
-      <option value="">Choisir un côté</option>
-      <option value="droite">Droite</option>
-      <option value="gauche">Gauche</option>
-    </select>
-  </div>
+      <div class="controls controls-column">
+        <!-- ⭐ NOUVEAU : Select série pour l'accordéon -->
+        <select id="selectSerieAccordion">
+          <option value="">Choisir une série</option>
+        </select>
 
-  <div id="accordionList"></div>
-</section>
+        <select id="filterSide">
+          <option value="">Choisir un côté</option>
+          <option value="droite">Droite</option>
+          <option value="gauche">Gauche</option>
+        </select>
+      </div>
 
-    <!-- COLONNE CENTRALE — FICHE TECHNIQUE -->
+      <div id="accordionList"></div>
+    </section>
+
+    <!-- COLONNE CENTRALE — FICHE TECHNIQUE (AJOUT SELECT SÉRIE) -->
     <section class="card-block" id="script2">
       <h2 class="spicy section-title">💫 Fiche technique</h2>
 
       <div class="controls controls-column">
-  <select id="selectSerie">
-    <option value="">Choisir une série</option>
-  </select>
+        <!-- ⭐ NOUVEAU : Select série pour fiche + surprise -->
+        <select id="selectSerie">
+          <option value="">Choisir une série</option>
+        </select>
 
-  <select id="selectAttack">
-    <option value="">Choisir une attaque</option>
-  </select>
+        <select id="selectAttack">
+          <option value="">Choisir une attaque</option>
+        </select>
 
-  <select id="selectSide">
-    <option value="">Choisir un côté</option>
-    <option value="droite">Droite</option>
-    <option value="gauche">Gauche</option>
-  </select>
-</div>
+        <select id="selectSide">
+          <option value="">Choisir un côté</option>
+          <option value="droite">Droite</option>
+          <option value="gauche">Gauche</option>
+        </select>
+      </div>
 
       <div id="resultCard"></div>
     </section>
@@ -107,7 +107,7 @@
   </main>
 
   <!-- SCRIPT -->
-  <script src="ipponkumite.js"></script>
+  <script src="ippon.js"></script>
 
 </body>
 </html>
