@@ -307,8 +307,8 @@ function initSurprise() {
 
 // ----------------- Load JSON + Init -----------------
 async function loadTechniquesFromJson() {
-  const res = await fetch("techniques.json", { cache: "no-store" });
-  if (!res.ok) throw new Error(`Impossible de charger techniques.json (${res.status})`);
+  const res = await fetch("ipponkumite.json", { cache: "no-store" });
+  if (!res.ok) throw new Error(`Impossible de charger ipponkumite.json (${res.status})`);
   return await res.json();
 }
 
