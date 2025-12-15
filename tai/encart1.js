@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   function playSound(file) {
     try {
       const a = new Audio(file);
-      // ne pas await: certains navigateurs bloquent/retardent selon autoplay policies
       a.play().catch(() => {});
       return a;
     } catch {
@@ -25,12 +24,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   function playBeep() { playSound("beep.mp3"); }
   function playDing() { playSound("ding.mp3"); }
 
-  function speakJP(text, speed = 1) {
+  // ✅ Fonction générique pour parler dans une langue donnée
+  function speak(text, lang = "ja-JP", speed = 1) {
     return new Promise((resolve) => {
       if (!text) return resolve();
       const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "ja-JP";
-      utter.rate = speed;     // ralentir/accélérer la voix
+      utter.lang = lang;
+      utter.rate = speed;
       utter.onend = resolve;
       utter.onerror = resolve;
       speechSynthesis.speak(utter);
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
    * DONNÉES EN DUR KIHON COMBAT (fallback)
    ********************************************************************/
   const KCB_FALLBACK = [
-    { jp: "Oï Zuki (coup de poing en avançant), niveau jodan, retour à l’arrière." },
+    { jp: "Oï Zuki (coup de poing en avançant), niveau jodan, retour à l'arrière." },
     { jp: "Gyaku Zuki chudan (coup de poing direct du bras arrière)" },
     { jp: "Kizami Zuki/Maete Zuki (bras avant) jodan, suivi de Gyaku Zuki (bras arrière) chudan" },
     { jp: "Mae Geri, de la jambe arrière posée derrière, niveau chudan" },
@@ -98,23 +98,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       speedInput, speedDisplayId,
       btnRandom, btnRead, btnStop,
       outBox, beepIcon,
-      data
+      data,
+      lang = "ja-JP"  // ✅ Langue par défaut : japonais
     } = config;
 
     const intervalDisplay = document.getElementById(intervalDisplayId);
     const speedDisplay = speedDisplayId ? document.getElementById(speedDisplayId) : null;
 
     let beepEnabled = true;
-
-    // gestion “stop / relance” propre
     let runId = 0;
     let running = false;
 
-    // init affichages
     if (intervalDisplay) intervalDisplay.textContent = `${intervalInput.value}s`;
     if (speedDisplay && speedInput) speedDisplay.textContent = `${speedInput.value}x`;
 
-    // si pas de data
     if (!data || data.length === 0) {
       outBox.innerHTML = "<div>❌ Données manquantes.</div>";
       btnRandom.disabled = true;
@@ -122,15 +119,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // séquence courante
     let sequence = [];
 
-    // ON/OFF sons (bip + ding)
     beepIcon.addEventListener("click", () => {
       beepEnabled = !beepEnabled;
       beepIcon.classList.toggle("off", !beepEnabled);
-
-      // si on coupe le son, on stoppe aussi une lecture en cours pour éviter confusion
       stopAll();
     });
 
@@ -140,7 +133,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       speechSynthesis.cancel();
     }
 
-    // sliders
     intervalInput.addEventListener("input", () => {
       if (intervalDisplay) intervalDisplay.textContent = `${intervalInput.value}s`;
     });
@@ -151,18 +143,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // Changer = uniquement générer + afficher (PAS de lecture / PAS de bip)
     btnRandom.addEventListener("click", () => {
       const count = countInput ? Math.max(1, parseInt(countInput.value || "1", 10)) : 1;
       sequence = pickRandom(data, count);
       outBox.innerHTML = sequence.map(t => `<div>${t.jp}</div>`).join("");
     });
 
-    // Lire
     btnRead.addEventListener("click", async () => {
       if (running) return;
 
-      // si rien n'a été généré : on génère au clic sur Lire
       if (!sequence.length) {
         btnRandom.click();
         if (!sequence.length) return;
@@ -171,10 +160,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       running = true;
       const myRun = ++runId;
 
-      // feedback immédiat (optionnel)
       if (beepEnabled) playBeep();
 
-      // 10s avant la première annonce
       await wait(INITIAL_DELAY_MS);
       if (myRun !== runId) return;
 
@@ -184,41 +171,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       for (let i = 0; i < sequence.length; i++) {
         if (myRun !== runId) return;
 
-        // ding avant chaque terme (pour les 3 scripts)
         if (beepEnabled) playDing();
 
-        // latence 1.5s après ding
         await wait(DING_TO_SPEECH_DELAY_MS);
         if (myRun !== runId) return;
 
-        // lecture
-        await speakJP(sequence[i].jp, speed);
+        // ✅ Utilise la langue configurée (jp ou fr)
+        await speak(sequence[i].jp, lang, speed);
         if (myRun !== runId) return;
 
-        // intervalle entre éléments (après la fin de la voix)
         if (i < sequence.length - 1) {
           await wait(intervalMs);
           if (myRun !== runId) return;
         }
       }
 
-      // fin
+      // ✅ Attendre l'intervalle avant le beep final
+      await wait(intervalMs);
+      if (myRun !== runId) return;
+
       if (beepEnabled) playBeep();
       running = false;
     });
 
-    // Stop
     btnStop.addEventListener("click", () => {
       stopAll();
     });
 
-    // affichage initial (sans lecture)
     btnRandom.click();
   }
 
   /********************************************************************
    * ACTIVATION DES 3 MODULES UV1
    ********************************************************************/
+  
+  // ✅ Module 1 : Kihon simples - JAPONAIS
   initModule({
     countInput: document.getElementById("ks-count"),
     intervalInput: document.getElementById("ks-interval"),
@@ -230,9 +217,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnStop: document.getElementById("ks-stop"),
     outBox: document.getElementById("ks-result"),
     beepIcon: document.getElementById("ks-beep"),
-    data: KS_DATA
+    data: KS_DATA,
+    lang: "ja-JP"  // ✅ Japonais
   });
 
+  // ✅ Module 2 : Kihon enchaînements - JAPONAIS
   initModule({
     countInput: document.getElementById("kc-count"),
     intervalInput: document.getElementById("kc-interval"),
@@ -244,9 +233,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnStop: document.getElementById("kc-stop"),
     outBox: document.getElementById("kc-result"),
     beepIcon: document.getElementById("kc-beep"),
-    data: KC_DATA
+    data: KC_DATA,
+    lang: "ja-JP"  // ✅ Japonais
   });
 
+  // ✅ Module 3 : Kihon combat - FRANÇAIS
   initModule({
     countInput: document.getElementById("kcb-count"),
     intervalInput: document.getElementById("kcb-interval"),
@@ -258,7 +249,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnStop: document.getElementById("kcb-stop"),
     outBox: document.getElementById("kcb-result"),
     beepIcon: document.getElementById("kcb-beep"),
-    data: KCB_DATA
+    data: KCB_DATA,
+    lang: "fr-FR"  // ✅ FRANÇAIS pour le 3ème module
   });
 
 });
