@@ -1,82 +1,204 @@
-[
-  {
-    "fr": "Zenkutsu dachi, Ayumi ashi, Oi Zuki Jodan, Gyaku Zuki Chudan",
-    "jp": "前屈立ち、歩み足、追い突き上段、逆突き中段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Mae Geri Chudan jambe arrière, poser devant, Gyaku Zuki Chudan",
-    "jp": "前屈立ち、前蹴り中段（後ろ足）、踏み込み、逆突き中段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Tsugi ashi, Uchi Uke, Gyaku Zuki Chudan",
-    "jp": "前屈立ち、継ぎ足、内受け、逆突き中段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Soto Uke, Mae Geri, poser devant, Gyaku Zuki",
-    "jp": "前屈立ち、外受け、前蹴り、踏み込み、逆突き"
-  },
-  {
-    "fr": "Zenkutsu dachi, Yori ashi, Age Uke, Gyaku Zuki Jodan",
-    "jp": "前屈立ち、寄り足、上げ受け、逆突き上段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Ayumi ashi, Oi Zuki Chudan, pivot, Ushiro Geri",
-    "jp": "前屈立ち、歩み足、追い突き中段、回転、後ろ蹴り"
-  },
-  {
-    "fr": "Zenkutsu dachi, Ayumi ashi, Gedan Barai, Oi Zuki Chudan",
-    "jp": "前屈立ち、歩み足、下段払い、追い突き中段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Teisho Uchi Jodan, Mae Geri Chudan",
-    "jp": "前屈立ち、掌底打ち上段、前蹴り中段"
-  },
-  {
-    "fr": "Kokutsu dachi, Shuto Uke, avancer en Zenkutsu dachi, Shuto Uchi",
-    "jp": "後屈立ち、手刀受け、前屈立ちへ踏み込み、手刀打ち"
-  },
-  {
-    "fr": "Zenkutsu dachi, Haito Uke, Yori ashi, Gyaku Zuki Chudan",
-    "jp": "前屈立ち、背刀受け、寄り足、逆突き中段"
-  },
-  {
-    "fr": "Kiba dachi, Yoko Fumikomi, revenir en Zenkutsu dachi, Gyaku Zuki",
-    "jp": "騎馬立ち、横踏み込み、前屈立ちに戻して、逆突き"
-  },
-  {
-    "fr": "Zenkutsu dachi, Soto Uke, Mawashi Geri Chudan",
-    "jp": "前屈立ち、外受け、回し蹴り中段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Uraken Uchi Jodan, Tsugi ashi, Gyaku Zuki Chudan",
-    "jp": "前屈立ち、裏拳打ち上段、継ぎ足、逆突き中段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Ayumi ashi, Oi Zuki, Kote Uchi (coudes)",
-    "jp": "前屈立ち、歩み足、追い突き、肘打ち（小手打ち）"
-  },
-  {
-    "fr": "Kokutsu dachi, Shuto Uke, avancer, Hiza Geri",
-    "jp": "後屈立ち、手刀受け、踏み込み、膝蹴り"
-  },
-  {
-    "fr": "Zenkutsu dachi, Mae Geri Chudan, poser devant, Empi Uchi",
-    "jp": "前屈立ち、前蹴り中段、踏み込み、猿臂打ち"
-  },
-  {
-    "fr": "Zenkutsu dachi, Soto Uke, Teisho Chudan",
-    "jp": "前屈立ち、外受け、掌底中段"
-  },
-  {
-    "fr": "Zenkutsu dachi, Gedan Barai, Tsugi ashi, Mawashi Geri jambe avant",
-    "jp": "前屈立ち、下段払い、継ぎ足、前足で回し蹴り"
-  },
-  {
-    "fr": "Zenkutsu dachi, Uraken Uchi, Mae Geri, Gyaku Zuki",
-    "jp": "前屈立ち、裏拳打ち、前蹴り、逆突き"
-  },
-  {
-    "fr": "Kokutsu dachi, Shuto Uke, avancer en Zenkutsu dachi, Shuto Uchi, Teisho",
-    "jp": "後屈立ち、手刀受け、前屈立ちへ踏み込み、手刀打ち、掌底"
-  }
-]
+{
+  "enchaînements": [
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Oï Zuki Jodan, Gyaku Zuki Chudan",
+      "jp": "前屈立ち、歩み足、追い突き上段、逆突き中段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Mae Geri Chudan, Gyaku Zuki Chudan",
+      "jp": "前屈立ち、歩み足、前蹴り中段、逆突き中段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Uchi Uke, Gyaku Zuki Chudan",
+      "jp": "前屈立ち、歩み足、内受け、逆突き中段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Soto Uke, Mae Geri, Gyaku Zuki",
+      "jp": "前屈立ち、歩み足、外受け、前蹴り、逆突き"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Age Uke, Gyaku Zuki Jodan",
+      "jp": "前屈立ち、歩み足、上げ受け、逆突き上段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Oï Zuki Chudan, pivot",
+      "jp": "前屈立ち、歩み足、追い突き中段、回転"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Soto Uke, Mae Geri, Gyaku Teisho Uchi",
+      "jp": "前屈立ち、歩み足、外受け、前蹴り、逆掌底打ち"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Gedan Barai, Oï Zuki Chudan",
+      "jp": "前屈立ち、歩み足、下段払い、追い突き中段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Teisho Uchi Jodan, Mae Geri Chudan",
+      "jp": "前屈立ち、歩み足、掌底打ち上段、前蹴り中段"
+    },
+    {
+      "fr": "Kokutsu dachi, Ayumi ashi, Shuto Uke, Ayumi ashi, Zenkutsu dachi, Shuto Uchi",
+      "jp": "後屈立ち、歩み足、手刀受け、歩み足、前屈立ち、手刀打ち"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Haito Uke, Gyaku Zuki Chudan",
+      "jp": "前屈立ち、歩み足、背刀受け、逆突き中段"
+    },
+    {
+      "fr": "Kiba dachi, Yoko geri keage, Zenkutsu dachi, Gyaku Zuki",
+      "jp": "騎馬立ち、横蹴り蹴上げ、前屈立ち、逆突き"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Soto Uke, Mawashi Geri Chudan",
+      "jp": "前屈立ち、歩み足、外受け、回し蹴り中段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Uraken Uchi Jodan, Gyaku Zuki Chudan",
+      "jp": "前屈立ち、歩み足、裏拳打ち上段、逆突き中段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Oï Zuki, kiba dachi yoko Empi",
+      "jp": "前屈立ち、歩み足、追い突き、騎馬立ち横猿臂"
+    },
+    {
+      "fr": "Kokutsu dachi, Ayumi ashi, Shuto Uke, Zenkutsu dachi, Gyaku Nukite",
+      "jp": "後屈立ち、歩み足、手刀受け、前屈立ち、逆貫手"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Mae Geri Chudan, Empi Uchi",
+      "jp": "前屈立ち、歩み足、前蹴り中段、猿臂打ち"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Soto Uke, Teisho Chudan",
+      "jp": "前屈立ち、歩み足、外受け、掌底中段"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Gedan Barai, Mawashi Geri",
+      "jp": "前屈立ち、歩み足、下段払い、回し蹴り"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Uraken Uchi, Mae Geri, Gyaku Zuki",
+      "jp": "前屈立ち、歩み足、裏拳打ち、前蹴り、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Shuto Uke, Ayumi ashi, Zenkutsu dachi, Shuto Uchi, Teisho",
+      "jp": "後屈立ち、手刀受け、歩み足、前屈立ち、手刀打ち、掌底"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Gedan Barai, Gyaku Tsuki, Mae Geri",
+      "jp": "前屈立ち、歩み足、下段払い、逆突き、前蹴り"
+    },
+    {
+      "fr": "Kokutsu dachi, Jodan Age Uke, Ayumi ashi Zenkutsu dachi, Oï Tsuki, Mae Geri",
+      "jp": "後屈立ち、上段上げ受け、歩み足前屈立ち、追い突き、前蹴り"
+    },
+    {
+      "fr": "Zenkutsu dachi, Soto Ude Uke, Gyaku Tsuki, Mawashi Geri",
+      "jp": "前屈立ち、外腕受け、逆突き、回し蹴り"
+    },
+    {
+      "fr": "Zenkutsu dachi, Tsugi ashi, Uchi Ude Uke, Kizami Tsuki, Gyaku Tsuki",
+      "jp": "前屈立ち、継ぎ足、内腕受け、刻み突き、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Shuto Uke, Ayumi ashi Zenkutsu dachi, Shuto Uchi, Gyaku Tsuki",
+      "jp": "後屈立ち、手刀受け、歩み足前屈立ち、手刀打ち、逆突き"
+    },
+    {
+      "fr": "Kiba dachi, Osae Uke, Tsugi ashi Zenkutsu dachi, Tate Tsuki, Mawashi Geri",
+      "jp": "騎馬立ち、押さえ受け、継ぎ足前屈立ち、縦突き、回し蹴り"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Teisho Uke, Gyaku Tsuki",
+      "jp": "前屈立ち、歩み足、掌底受け、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Juji Uke, Ayumi ashi Zenkutsu dachi, Uraken Uchi, Gyaku Tsuki",
+      "jp": "後屈立ち、十字受け、歩み足前屈立ち、裏拳打ち、逆突き"
+    },
+    {
+      "fr": "Kiba dachi, Kakiwake Uke, Tsugi ashi, Nukite, Zenkutsu dachi, Tate Tsuki",
+      "jp": "騎馬立ち、掻き分け受け、継ぎ足、貫手、前屈立ち、縦突き"
+    },
+    {
+      "fr": "Zenkutsu dachi, Yori ashi, Morote Uke, Tetsui Uchi, Gyaku Tsuki",
+      "jp": "前屈立ち、寄り足、諸手受け、鉄槌打ち、逆突き"
+    },
+    {
+      "fr": "Kiba dachi, Tsugi ashi, Heiko Uke, Zenkutsu dachi, Gyaku Tsuki",
+      "jp": "騎馬立ち、継ぎ足、平行受け、前屈立ち、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Sukui Uke, Ayumi ashi Zenkutsu dachi, Empi Uchi, Gyaku Tsuki",
+      "jp": "後屈立ち、掬い受け、歩み足前屈立ち、猿臂打ち、逆突き"
+    },
+    {
+      "fr": "Zenkutsu dachi, Yori ashi, Nagashi Uke, Kizami Tsuki, Tate Gyaku Tsuki",
+      "jp": "前屈立ち、寄り足、流し受け、刻み突き、縦逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Otoshi Uke, Ayumi ashi Zenkutsu dachi, Oï Tsuki, Yoko Geri Keage",
+      "jp": "後屈立ち、落とし受け、歩み足前屈立ち、追い突き、横蹴り蹴上げ"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Soto Ude Uke, Tate Tsuki, Yoko Geri Kekomi",
+      "jp": "前屈立ち、歩み足、外腕受け、縦突き、横蹴り蹴込み"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Uchi Ude Uke, Mawashi Tsuki, Mae Geri",
+      "jp": "前屈立ち、歩み足、内腕受け、回し突き、前蹴り"
+    },
+    {
+      "fr": "Zenkutsu dachi, Ayumi ashi, Gedan Barai, Kizami Tsuki, Yoko Geri Keage",
+      "jp": "前屈立ち、歩み足、下段払い、刻み突き、横蹴り蹴上げ"
+    },
+    {
+      "fr": "Kiba dachi, Morote Uke, Ayumi ashi Zenkutsu dachi, Maete Tsuki, Mawashi Geri",
+      "jp": "騎馬立ち、諸手受け、歩み足前屈立ち、前手突き、回し蹴り"
+    },
+    {
+      "fr": "Kokutsu dachi, Shuto Uke, Ayumi ashi Zenkutsu dachi, Hiraken Uchi, Gyaku tsuki",
+      "jp": "後屈立ち、手刀受け、歩み足前屈立ち、平拳打ち、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Ayumi ashi, Shuto Uke",
+      "jp": "後屈立ち、歩み足、手刀受け"
+    },
+    {
+      "fr": "Zenkutsu dachi, Tsugi ashi, Teisho Uke, Haito Uchi, Gyaku Tsuki",
+      "jp": "前屈立ち、継ぎ足、掌底受け、背刀打ち、逆突き"
+    },
+    {
+      "fr": "Zenkutsu dachi, Yori ashi, Nagashi Uke, Gyaku Tsuki",
+      "jp": "前屈立ち、寄り足、流し受け、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Juji Uke, Ayumi ashi Zenkutsu dachi, Morote Tsuki",
+      "jp": "後屈立ち、十字受け、歩み足前屈立ち、諸手突き"
+    },
+    {
+      "fr": "Kiba dachi, Yori ashi, Osae Uke, Tsugi ashi Zenkutsu dachi, Gyaku Tsuki",
+      "jp": "騎馬立ち、寄り足、押さえ受け、継ぎ足前屈立ち、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Sukui Uke, Ayumi ashi Zenkutsu dachi, Empi Uchi, Mae Geri jambe arrière",
+      "jp": "後屈立ち、掬い受け、歩み足前屈立ち、猿臂打ち、後ろ足で前蹴り"
+    },
+    {
+      "fr": "Zenkutsu dachi, Yori ashi, Heiko Uke, Nukite, Mawashi Tsuki",
+      "jp": "前屈立ち、寄り足、平行受け、貫手、回し突き"
+    },
+    {
+      "fr": "Kiba dachi, Yori ashi, Otoshi Uke, Zenkutsu dachi, Gyaku Tsuki",
+      "jp": "騎馬立ち、寄り足、落とし受け、前屈立ち、逆突き"
+    },
+    {
+      "fr": "Kokutsu dachi, Jodan Age Uke, Ayumi ashi Zenkutsu dachi, Kizami Tsuki, Gyaku Tsuki",
+      "jp": "後屈立ち、上段上げ受け、歩み足前屈立ち、刻み突き、逆突き"
+    },
+    {
+      "fr": "Kiba dachi, Tsugi ashi, Kakiwake Uke, Zenkutsu dachi, Age Tsuki",
+      "jp": "騎馬立ち、継ぎ足、掻き分け受け、前屈立ち、上げ突き"
+    }
+  ]
+}
