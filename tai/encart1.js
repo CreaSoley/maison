@@ -65,13 +65,13 @@ document.addEventListener("DOMContentLoaded", async () => {
    * DONNÉES EN DUR KIHON COMBAT (fallback)
    ********************************************************************/
   const KCB_FALLBACK = [
-    { jp: "Oï Zuki (coup de poing en avançant), niveau jodan, retour à l'arrière." },
-    { jp: "Gyaku Zuki chudan (coup de poing direct du bras arrière)" },
-    { jp: "Kizami Zuki/Maete Zuki (bras avant) jodan, suivi de Gyaku Zuki (bras arrière) chudan" },
-    { jp: "Mae Geri, de la jambe arrière posée derrière, niveau chudan" },
-    { jp: "Mawashi Geri, de la jambe arrière posée derrière, niveau jodan ou chudan" },
-    { jp: "Mae Geri de la jambe avant avec sursaut, niveau chudan" },
-    { jp: "Mawashi Geri, de la jambe avant avec sursaut, niveau jodan ou chudan" }
+    { jp: "Oï Tsuki jodan" },
+    { jp: "Gyaku Tsuki chudan" },
+    { jp: "Kizami Tsuki jodan, Gyaku Tsuki Chudan" },
+    { jp: "Mae Geri, ambe arrière posée derrière" },
+    { jp: "Mawashi Geri, jambe arrière posée derrière" },
+    { jp: "Mae Geri de la jambe avant avec sursaut" },
+    { jp: "Mawashi geri de la jambe avant avec sursaut" },
   ];
 
   /********************************************************************
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const ksJson = await loadJSON("kihon_simples.json");
   const KS_DATA = ksJson ? ksJson.kihon : [];
 
-  const kcJson = await loadJSON("kihon_enchainements.json");
+  const kcJson = await loadJSON("kihon_enchainements_simples.json");
   const KC_DATA = kcJson ? kcJson["enchaînements"] : [];
 
   const kcbJson = await loadJSON("kihon_combat.json");
