@@ -1,3 +1,4 @@
+
 let techniques = [];
 
 fetch("tjkihon.json")
