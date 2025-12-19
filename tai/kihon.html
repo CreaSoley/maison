@@ -33,6 +33,7 @@
       color:var(--text);
       background: var(--bg-gradient);
       -webkit-font-smoothing:antialiased;
+      padding-bottom: 50px;
     }
     a{ color:inherit; text-decoration: none; }
 
@@ -46,7 +47,7 @@
       justify-content:center;
       box-shadow:0 6px 18px rgba(0,0,0,0.25);
     }
-    header img{ height:64px; }
+    header img{ height:64px; margin-right: 15px; }
     header h1{ font-family:"Spicy", sans-serif; font-size:2.2rem; margin:0; color:var(--pink-2); }
 
     /* ---------- Layout ---------- */
@@ -59,14 +60,15 @@
     }
     @media (max-width:900px){ .grid{ grid-template-columns: 1fr; } }
 
-    /* ---------- Card Kawaii ---------- */
-    .card-kawaii {
+    /* ---------- Card Kawaii & Generic Card ---------- */
+    .card-kawaii, .card {
         background: white;
         border: 3px solid var(--pink-2);
         border-radius: var(--radius);
         padding: 25px;
         box-shadow: 0 8px 15px rgba(255, 182, 193, 0.4);
         margin-bottom: 20px;
+        width: 100%;
     }
 
     .module-title {
@@ -111,6 +113,7 @@
         border: 2px solid var(--pink-2);
         font-family: 'Fredoka', sans-serif;
         margin-bottom: 10px;
+        font-size: 1rem;
     }
 
     .btn-kawaii {
@@ -125,6 +128,7 @@
         transition: transform 0.2s;
         box-shadow: 0 4px 0px #d6459b;
         margin-top: 5px;
+        font-size: 1.1rem;
     }
 
     .btn-kawaii:hover { transform: scale(1.02); background: var(--hot-pink); }
@@ -136,94 +140,102 @@
     .video-container iframe { width: 100%; border-radius: 10px; margin-top: 10px; height: 200px; }
     .hidden { display: none; }
 
-    .pdf-row { display: flex; gap: 10px; margin-bottom: 15px; }
+    .pdf-row { display: flex; gap: 10px; margin-bottom: 20px; }
     .pdf-btn { 
         flex: 1; text-align: center; background: #000; color: #fff; 
-        padding: 8px; border-radius: 10px; font-size: 0.8rem; 
+        padding: 10px; border-radius: 10px; font-size: 0.9rem; font-weight: bold; transition: 0.2s;
+    }
+    .pdf-btn:hover { background: var(--accent); transform: scale(1.05); }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
 <header>
-    <a href="index.html">
+    <a href="index.html" style="display: flex; align-items: center;">
+        <!-- Assurez-vous d'avoir logo.png dans votre dossier -->
         <img src="logo.png" alt="Logo">
-        <h1>Kihon</h1>
+        <h1>Kihon Training</h1>
     </a>
 </header>
 
 <div class="main-wrapper">
     <div class="grid">
         
-        <!-- COLONNE GAUCHE : Kihon Simple -->
-<div class="card-kawaii">
-    <div class="module-title">🥋 Kihon Simple</div>
-    
-    <div class="sub-section">
-        <div class="controls-column">
-            <input id="searchKihon" type="search" placeholder="Rechercher une technique..." style="width:100%">
-            <select id="filterCategorie" style="width:100%; margin-top:10px;">
-                <option value="">Toutes catégories</option>
-            </select>
-            <button id="btnRandomKihon" class="btn-kawaii btn-ghost" style="margin-top:10px;">✨ Surprise (Aléatoire)</button>
-        </div>
-    </div>
-
-    <!-- Conteneur pour la liste des résultats de recherche -->
-    <div id="kihonList" class="content" style="margin-bottom:15px;"></div>
-
-    <!-- Bloc détaillé (masqué par défaut) -->
-    <div id="kihonResult" class="sub-section hidden">
-        <h3 id="techNom" style="margin-bottom:5px;"></h3>
-        <p id="techCat" class="muted" style="font-weight:bold; color:var(--accent);"></p>
-        
-        <div class="result-display" id="techDesc" style="font-size: 0.9rem; text-align: left; font-weight: normal;">
-            <!-- La description s'affichera ici -->
-        </div>
-
-        <div class="media-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-            <img id="techPhoto" src="" alt="Photo technique" style="width:100%; border-radius:10px; border:2px solid var(--pink-2); display:none;">
-            <iframe id="techVideo" src="" frameborder="0" allowfullscreen style="width:100%; height:200px; border-radius:10px; display:none;"></iframe>
-        </div>
-    </div>
-</div>
-
-        <!-- COLONNE DROITE : Enchaînements -->
+        <!-- =========================================
+             COLONNE GAUCHE : Kihon Simple (JS 1)
+             ========================================= -->
         <div class="card-kawaii">
-            <div class="module-title">💫 Entraînement</div>
-
-            <!-- PDF -->
-            <div class="pdf-row">
-                <a href="pdf/ippon_kumite.pdf" class="pdf-btn">📄 Ippon Kumite</a>
-                <a href="pdf/tai_sabaki.pdf" class="pdf-btn">📄 Tai Sabaki</a>
+            <div class="module-title">🥋 Kihon Simple</div>
+            
+            <div class="sub-section">
+                <div class="controls-column">
+                    <input id="searchKihon" type="search" placeholder="🔍 Rechercher une technique..." style="width:100%">
+                    <select id="filterCategorie" style="width:100%; margin-top:10px;">
+                        <option value="">Toutes catégories</option>
+                    </select>
+                    <button id="btnRandomKihon" class="btn-kawaii btn-ghost" style="margin-top:10px;">✨ Surprise (Aléatoire)</button>
+                </div>
             </div>
 
-            <div class="sub-section">
-                <h3>🔗 Enchaînement Rapide</h3>
-                <div id="comboResult" class="result-display">Cliquer pour générer...</div>
-                <button id="btnCombo" class="btn-kawaii">🔄 Nouvel enchaînement</button>
-            </div>
+            <!-- Liste des suggestions -->
+            <div id="kihonList" class="content" style="margin-bottom:15px;"></div>
 
-            <div class="sub-section">
-                <h3>🎲 Générateur Aléatoire</h3>
-                <label>Nombre d'enchaînements :</label>
-                <input type="number" id="count" value="1" min="1" max="10" style="width:60px">
+            <!-- Bloc détaillé technique -->
+            <div id="kihonResult" class="sub-section hidden">
+                <h3 id="techNom" style="margin-bottom:5px;"></h3>
+                <p id="techCat" class="muted" style="font-weight:bold; color:var(--accent);"></p>
                 
-                <div id="result" class="result-display" style="font-size: 0.9rem; text-align: left;">---</div>
-                
-                <div style="display:flex; gap:10px">
-                    <button onclick="generate()" class="btn-kawaii">Générer</button>
-                    <button onclick="readJapanese()" class="btn-kawaii btn-ghost">🔈 Lire</button>
+                <div class="result-display" id="techDesc" style="font-size: 0.9rem; text-align: left; font-weight: normal;">
+                    <!-- Description insérée par JS -->
+                </div>
+
+                <div class="media-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                    <img id="techPhoto" src="" alt="Photo technique" style="width:100%; border-radius:10px; border:2px solid var(--pink-2); display:none;">
+                    <iframe id="techVideo" src="" frameborder="0" allowfullscreen style="width:100%; height:200px; border-radius:10px; display:none;"></iframe>
                 </div>
             </div>
         </div>
 
+        <!-- =========================================
+             COLONNE DROITE : Scripts Avancés (JS 2)
+             ========================================= -->
+        <div> <!-- Wrapper colonne droite -->
+            
+            <!-- Liens PDF -->
+            <div class="pdf-row">
+                <a href="https://youtu.be/ghSQNr7BWAc?si=Nu5VB_CnmJ9Xgs9u" class="pdf-btn" target="_blank">📄 examen kihon</a>
+                <a href="https://youtu.be/cJ7VeFZL8ZQ?si=dNA9E5PlGu4pe1bg" class="pdf-btn" target="_blank">📄 Kihon sur cible</a>
+            </div>
+
+            <!-- Section 1 : Enchainements (Script 2) -->
+            <div id="enchainementSection" class="card-kawaii">
+                <div class="module-title">💫 Enchaînements</div>
+                <!-- Le script JS 2 va injecter les contrôles ici -->
+            </div>
+
+            <!-- Section 2 : 3 Techniques Cibles (Script 3) -->
+            <!-- On prépare le conteneur ici pour qu'il reste dans la colonne droite -->
+            <div id="cibleSection" class="card">
+                <!-- Le script JS 3 (partie 2) va injecter les contrôles ici -->
+            </div>
+
+        </div>
+
     </div>
 </div>
 
-<script src="app.js"></script>
-  <script src="script_global.js"></script>
-  <script src="kihonprem.js"></script>
+<!-- =========================================
+     SCRIPTS JAVASCRIPT
+     ========================================= -->
+<!-- Assurez-vous que vos fichiers JS sont nommés ainsi -->
+<script src="apps.js"></script>         <!-- Votre 1er fichier JS -->
+<script src="script_global.js"></script>   <!-- Votre 2ème fichier JS -->
 
 </body>
 </html>
