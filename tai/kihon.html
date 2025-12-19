@@ -54,7 +54,7 @@
     .grid{
       display:grid;
       gap:25px;
-      grid-template-columns: 1fr 1fr; /* 2 colonnes */
+      grid-template-columns: 1fr 1fr;
       align-items: start;
     }
     @media (max-width:900px){ .grid{ grid-template-columns: 1fr; } }
@@ -67,7 +67,7 @@
         padding: 25px;
         box-shadow: 0 8px 15px rgba(255, 182, 193, 0.4);
         margin-bottom: 20px;
-        overflow: hidden; /* Important pour les suggestions */
+        overflow: visible;
     }
 
     .module-title {
@@ -132,6 +132,7 @@
 
     .btn-kawaii:hover { transform: scale(1.02); background: var(--hot-pink); }
     .btn-kawaii:active { transform: translateY(3px); box-shadow: none; }
+    .btn-kawaii:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .btn-ghost { background: #fff; color: var(--accent); border: 2px solid var(--accent); box-shadow: none; }
 
@@ -139,22 +140,45 @@
     .video-container iframe { width: 100%; border-radius: 10px; margin-top: 10px; height: 200px; }
     .hidden { display: none !important; }
 
-    /* --- Styles Spécifiques Script 2 (Enchaînements) --- */
-    /* Suggestions de recherche */
+    /* Suggestions */
     .suggestions-container {
-        position: absolute;
-        width: calc(100% - 50px); /* Ajustement par rapport au padding */
-        z-index: 100;
+        background: white;
+        border-radius: 15px;
+        border: 2px solid var(--pink-2);
+        margin-top: 5px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
     }
-    .suggestion-item:hover {
-        background-color: var(--pink-1);
+    .suggestion-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--pink-1);
+        font-size: 0.9rem;
+        transition: 0.2s;
+    }
+    .suggestion-item:hover { background-color: var(--pink-1); }
+    .suggestion-item:last-child { border-bottom: none; }
+
+    /* Liste catégorie */
+    .category-list {
+        max-height: 400px;
+        overflow-y: auto;
+        margin-top: 10px;
+    }
+    .category-item {
+        padding: 12px 15px;
+        background: white;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        border: 2px solid var(--pink-2);
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .category-item:hover {
+        background: var(--pink-1);
+        transform: translateX(5px);
     }
 
-    /* Popup Description */
-    #techniquePopup {
-        animation: fadeIn 0.3s;
-    }
-    
     /* Termes cliquables */
     .clickable-term {
         cursor: pointer;
@@ -163,11 +187,10 @@
         text-underline-offset: 3px;
         transition: 0.2s;
     }
-    
+    .clickable-term:hover { color: var(--accent); }
+
     /* Sliders */
-    input[type="range"] {
-        accent-color: var(--accent);
-    }
+    input[type="range"] { accent-color: var(--accent); }
 
     /* PDF Row */
     .pdf-row { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -181,6 +204,17 @@
         from { opacity: 0; transform: translateY(5px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Status indicator */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-left: 10px;
+    }
+    .status-active { background: #4CAF50; color: white; }
+    .status-waiting { background: #FF9800; color: white; }
   </style>
 </head>
 <body>
@@ -201,7 +235,7 @@
         <div class="card-kawaii">
             <div class="module-title">🥋 Kihon Simple</div>
             
-            <div class="sub-section" style="position: relative;">
+            <div class="sub-section">
                 <div class="controls-column">
                     <input id="searchKihon" type="search" placeholder="Rechercher une technique...">
                     <select id="filterCategorie">
@@ -209,8 +243,10 @@
                     </select>
                     <button id="btnRandomKihon" class="btn-kawaii btn-ghost">✨ Surprise (Aléatoire)</button>
                 </div>
-                <!-- Conteneur des suggestions (ajouté pour le Script 1) -->
+                <!-- Conteneur des suggestions de recherche -->
                 <div id="kihonList"></div>
+                <!-- Conteneur de la liste par catégorie -->
+                <div id="categoryList" class="category-list"></div>
             </div>
 
             <!-- Bloc détaillé (masqué par défaut) -->
@@ -219,7 +255,6 @@
                 <p id="techCat" style="font-weight:bold; color:var(--accent); margin-bottom: 10px;"></p>
                 
                 <div class="result-display" id="techDesc" style="font-size: 0.9rem; text-align: left; font-weight: normal; min-height: auto;">
-                    <!-- La description s'affichera ici -->
                 </div>
 
                 <div class="media-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
@@ -232,22 +267,55 @@
         </div>
 
         <!-- ========================================= -->
-        <!-- COLONNE DROITE : SCRIPT 2 (ENTRAÎNEMENT) -->
+        <!-- COLONNE DROITE : SCRIPTS 2 & 3           -->
         <!-- ========================================= -->
-        <div class="card-kawaii">
-            <div class="module-title">💫 Entraînement</div>
+        <div>
+            <!-- SCRIPT 2 : ENCHAÎNEMENT -->
+            <div class="card-kawaii">
+                <div class="module-title">💫 Enchaînement</div>
 
-            <!-- PDF (Conservé) -->
-            <div class="pdf-row">
-                <a href="pdf/ippon_kumite.pdf" class="pdf-btn">📄 Ippon Kumite</a>
-                <a href="pdf/tai_sabaki.pdf" class="pdf-btn">📄 Tai Sabaki</a>
+                <!-- PDF -->
+                <div class="pdf-row">
+                    <a href="pdf/ippon_kumite.pdf" class="pdf-btn">📄 Ippon Kumite</a>
+                    <a href="pdf/tai_sabaki.pdf" class="pdf-btn">📄 Tai Sabaki</a>
+                </div>
+
+                <div id="enchainementSection"></div>
             </div>
 
-            <!-- SECTION ENCHAÎNEMENT (Script 2) -->
-            <div id="enchainementSection">
-                <!-- L'interface sera injectée ici par le JS -->
-            </div>
+            <!-- SCRIPT 3 : 3 TECHNIQUES CIBLES -->
+            <div class="card-kawaii" id="cibleSection">
+                <div class="module-title">🎯 3 Techniques Cibles</div>
+                
+                <div class="sub-section">
+                    <button id="btnNouveauCible" class="btn-kawaii">🎲 Nouveau tirage (3 techniques)</button>
+                    
+                    <!-- Liste des techniques -->
+                    <div class="result-display" style="min-height: 120px; text-align: left;">
+                        <ul id="cibleList" style="list-style: none; padding: 0; margin: 0;">
+                            <li style="color: #999; text-align: center;">Cliquez pour commencer</li>
+                        </ul>
+                    </div>
+                </div>
 
+                <div class="sub-section">
+                    <h3>🔊 Contrôles Audio</h3>
+                    
+                    <button id="btnLectureFR" class="btn-kawaii" style="background: #4CAF50;">🔊 Lire en français</button>
+                    
+                    <div style="margin-top: 10px;">
+                        <label style="font-weight: bold; color: var(--accent);">
+                            Beeper : <span id="cibleBeeperFreqValue">3s</span>
+                        </label>
+                        <input type="range" id="cibleBeeperFreqSlider" min="1" max="10" step="1" value="3">
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 5px;">
+                        <button id="btnStartCibleBeeper" class="btn-kawaii" style="background: #2196F3; flex:1;">🔔 Démarrer</button>
+                        <button id="btnStopCibleBeeper" class="btn-kawaii" style="background: #ff4444; flex:1;">⏹ Stop</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -257,17 +325,16 @@
 <!-- SCRIPTS JAVASCRIPT -->
 <!-- ========================================= -->
 
-<!-- SCRIPT 1 : KIHON SIMPLE -->
+<!-- SCRIPT 1 : KIHON SIMPLE (avec filtrage par catégorie) -->
 <script>
 let techniques = [];
 
-// Chargement JSON (Assurez-vous que le fichier existe)
 fetch("tjkihon.json")
   .then(res => res.json())
   .then(data => {
     techniques = data;
     populateCategories();
-    displayList([]); // Vide au départ
+    displayList([]);
   })
   .catch(err => console.error("Erreur chargement JSON:", err));
 
@@ -289,27 +356,39 @@ function populateCategories() {
 
 const searchInput = document.getElementById("searchKihon");
 const kihonList = document.getElementById("kihonList");
+const categoryListContainer = document.getElementById("categoryList");
+const filterCategorie = document.getElementById("filterCategorie");
 
+// Événement de recherche
 searchInput.addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase().trim();
   
-  // 1. Si l'entrée est vide, on cache tout
+  // Cacher la liste par catégorie quand on recherche
+  categoryListContainer.innerHTML = "";
+  
   if (query.length === 0) {
     displayList([]);
     document.getElementById("kihonResult").classList.add("hidden");
+    // Si une catégorie est sélectionnée, afficher sa liste
+    if (filterCategorie.value) {
+      displayCategoryList(filterCategorie.value);
+    }
     return;
   }
 
-  // 2. Filtrage des techniques
-  const filtered = techniques.filter(t => 
+  // Filtrage des techniques (avec catégorie si sélectionnée)
+  let filtered = techniques.filter(t => 
     t.nom.toLowerCase().includes(query) || 
     t.categorie.toLowerCase().includes(query)
   );
+  
+  // Appliquer le filtre catégorie si actif
+  if (filterCategorie.value) {
+    filtered = filtered.filter(t => t.categorie === filterCategorie.value);
+  }
 
-  // 3. Affichage de la liste de suggestions
   displayList(filtered);
 
-  // 4. COMPORTEMENT "AUTO-SELECT" :
   if (filtered.length === 1) {
     showTechnique(filtered[0]);
   } 
@@ -318,27 +397,62 @@ searchInput.addEventListener("input", (e) => {
   }
 });
 
+// Événement de changement de catégorie
+filterCategorie.addEventListener("change", (e) => {
+  const category = e.target.value;
+  
+  // Vider la recherche
+  searchInput.value = "";
+  displayList([]);
+  document.getElementById("kihonResult").classList.add("hidden");
+  
+  if (category) {
+    displayCategoryList(category);
+  } else {
+    categoryListContainer.innerHTML = "";
+  }
+});
+
+// Afficher la liste des techniques d'une catégorie
+function displayCategoryList(category) {
+  const filtered = techniques.filter(t => t.categorie === category);
+  categoryListContainer.innerHTML = "";
+  
+  if (filtered.length === 0) {
+    categoryListContainer.innerHTML = '<p style="color:#999; text-align:center;">Aucune technique dans cette catégorie</p>';
+    return;
+  }
+  
+  filtered.forEach(t => {
+    const item = document.createElement("div");
+    item.className = "category-item";
+    item.innerHTML = `<strong>${t.nom}</strong>`;
+    item.addEventListener("click", () => {
+      showTechnique(t);
+      // Scroll vers le résultat si nécessaire
+      document.getElementById("kihonResult").scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    categoryListContainer.appendChild(item);
+  });
+}
+
+// Afficher les suggestions de recherche
 function displayList(list) {
   kihonList.innerHTML = "";
   
   const maxSuggestions = list.slice(0, 5);
 
-  if (maxSuggestions.length === 0 || (list.length === 1 && document.getElementById("searchKihon").value.toLowerCase() === list[0].nom.toLowerCase())) {
+  if (maxSuggestions.length === 0 || (list.length === 1 && searchInput.value.toLowerCase() === list[0].nom.toLowerCase())) {
     return; 
   }
 
   const container = document.createElement("div");
   container.className = "suggestions-container"; 
-  container.style.cssText = "background:white; border-radius:15px; border:2px solid var(--pink-2); margin-top:5px; overflow:hidden; box-shadow:var(--card-shadow);";
 
   maxSuggestions.forEach(t => {
     const item = document.createElement("div");
     item.className = "suggestion-item";
-    item.style.cssText = "padding:10px 15px; cursor:pointer; border-bottom:1px solid var(--pink-1); font-size:0.9rem; transition:0.2s;";
     item.innerHTML = `<strong>${t.nom}</strong> <small style="color:var(--accent)">(${t.categorie})</small>`;
-    
-    item.addEventListener("mouseover", () => item.style.backgroundColor = "var(--pink-1)");
-    item.addEventListener("mouseout", () => item.style.backgroundColor = "transparent");
     
     item.addEventListener("click", () => {
       showTechnique(t);
@@ -363,7 +477,6 @@ function showTechnique(t) {
   document.getElementById("techCat").textContent = "🥋 " + t.categorie;
   document.getElementById("techDesc").innerHTML = t.description.replace(/\n/g, "<br>");
 
-  // Photo
   const img = document.getElementById("techPhoto");
   if (t.photo && t.photo !== "") {
     img.src = t.photo;
@@ -372,7 +485,6 @@ function showTechnique(t) {
     img.style.display = "none";
   }
 
-  // Vidéo
   const video = document.getElementById("techVideo");
   if (t.video && t.video !== "") {
     let url = t.video.replace("watch?v=", "embed/");
@@ -387,34 +499,40 @@ function showTechnique(t) {
 
 // Bouton Surprise
 document.getElementById("btnRandomKihon").addEventListener("click", () => {
-  const t = techniques[Math.floor(Math.random() * techniques.length)];
+  let pool = techniques;
+  
+  // Si une catégorie est sélectionnée, tirer dans cette catégorie
+  if (filterCategorie.value) {
+    pool = techniques.filter(t => t.categorie === filterCategorie.value);
+  }
+  
+  if (pool.length === 0) {
+    alert("Aucune technique disponible");
+    return;
+  }
+  
+  const t = pool[Math.floor(Math.random() * pool.length)];
   showTechnique(t);
   kihonList.innerHTML = "";
   searchInput.value = "";
 });
 </script>
 
-<!-- SCRIPT 2 : ENCHAÎNEMENT AVANCÉ -->
+<!-- SCRIPT 2 : ENCHAÎNEMENT AVANCÉ (avec beeper auto après lecture) -->
 <script>
-// Variables globales Script 2
 let enchainementsData = [];
-let techniquesDescriptions = []; // Utilisé pour les popups
+let techniquesDescriptions = [];
 let currentEnchainement = null;
 let enchainementBeeper = null;
 let enchainementTimeouts = [];
 let isReadingEnchainement = false;
 let enchainementSpeechRate = 0.7;
 
-// Chargement des données
 async function loadEnchainementData() {
     try {
-        // Charger les enchainements
         const response1 = await fetch("kihon_maj2025.json");
         enchainementsData = await response1.json();
         
-        // Charger les descriptions (utilise le même JSON que Script 1 si possible)
-        // Si c'est le même fichier, on peut éviter de le recharger ou utiliser la variable globale
-        // Ici on le recharge pour l'exemple, ou on peut copier la variable 'techniques' si elle existe
         if (typeof techniques !== 'undefined' && techniques.length > 0) {
             techniquesDescriptions = techniques;
         } else {
@@ -429,18 +547,15 @@ async function loadEnchainementData() {
     }
 }
 
-// Initialisation de l'interface Enchainement
 function initEnchainementUI() {
     const container = document.getElementById("enchainementSection");
     if (!container) return;
     
-    // Structure HTML injectée
     const controls = document.createElement("div");
     controls.id = "enchainementControls";
     controls.innerHTML = `
         <div class="sub-section">
             <h3>🔗 Générateur d'Enchaînement</h3>
-            <!-- Filtre spécialité -->
             <div>
                 <label style="font-weight: bold; color: var(--accent);">Filtrer par spécialité :</label>
                 <select id="filterSpecialite">
@@ -448,20 +563,16 @@ function initEnchainementUI() {
                 </select>
             </div>
             
-            <!-- Bouton tirage -->
             <button id="btnNouveauEnchainement" class="btn-kawaii">🎲 Nouveau tirage</button>
             
-            <!-- Affichage de l'enchainement -->
             <div id="enchainementResult" class="result-display" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
                 <p style="color: #999;">Cliquez pour commencer</p>
             </div>
         </div>
 
-        <!-- Contrôles Audio -->
         <div class="sub-section">
-            <h3>🔊 Contrôles Audio</h3>
+            <h3>🔊 Contrôles Audio <span id="audioStatus"></span></h3>
             
-            <!-- Vitesse de lecture -->
             <div>
                 <label style="font-weight: bold; color: var(--accent);">
                     Vitesse lecture JP : <span id="enchainementSpeedValue">×0.7</span>
@@ -469,10 +580,9 @@ function initEnchainementUI() {
                 <input type="range" id="enchainementSpeedSlider" min="0.3" max="2" step="0.1" value="0.7">
             </div>
             
-            <!-- Bouton lecture -->
             <button id="btnLectureJP" class="btn-kawaii" style="background: #4CAF50;">▶️ Lire en japonais (2 fois)</button>
+            <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">⚡ Le beeper démarrera automatiquement 5s après la lecture</p>
             
-            <!-- Beeper -->
             <div style="margin-top: 10px;">
                 <label style="font-weight: bold; color: var(--accent);">
                     Beeper : <span id="beeperFreqValue">3s</span>
@@ -488,18 +598,18 @@ function initEnchainementUI() {
     `;
     container.appendChild(controls);
     
-    // Attacher les événements
     attachEnchainementEvents();
 }
 
-// Population du filtre de spécialités
 function populateSpecialites() {
     const select = document.getElementById("filterSpecialite");
     if (!select) return;
     
     const allSpecs = new Set();
     enchainementsData.forEach(e => {
-        e.specialite.forEach(s => allSpecs.add(s));
+        if (e.specialite && Array.isArray(e.specialite)) {
+            e.specialite.forEach(s => allSpecs.add(s));
+        }
     });
     
     allSpecs.forEach(spec => {
@@ -510,7 +620,6 @@ function populateSpecialites() {
     });
 }
 
-// Attacher les événements
 function attachEnchainementEvents() {
     document.getElementById("btnNouveauEnchainement")?.addEventListener("click", nouveauEnchainement);
     
@@ -531,13 +640,12 @@ function attachEnchainementEvents() {
     document.getElementById("btnStopBeeper")?.addEventListener("click", stopEnchainementBeeper);
 }
 
-// Nouveau tirage d'enchainement
 function nouveauEnchainement() {
     const specialite = document.getElementById("filterSpecialite")?.value;
     let filtered = enchainementsData;
     
     if (specialite) {
-        filtered = enchainementsData.filter(e => e.specialite.includes(specialite));
+        filtered = enchainementsData.filter(e => e.specialite && e.specialite.includes(specialite));
     }
     
     if (filtered.length === 0) {
@@ -549,7 +657,6 @@ function nouveauEnchainement() {
     afficherEnchainement();
 }
 
-// Affichage de l'enchainement
 function afficherEnchainement() {
     const resultDiv = document.getElementById("enchainementResult");
     if (!resultDiv || !currentEnchainement) return;
@@ -569,16 +676,14 @@ function afficherEnchainement() {
     `;
 }
 
-// Créer des termes cliquables
 function createClickableTerms(text) {
     const terms = text.split(/[,→]/);
     return terms.map(term => {
         const trimmed = term.trim();
-        return `<span class="clickable-term" onclick="showTechniquePopup('${trimmed}')" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#333'">${trimmed}</span>`;
+        return `<span class="clickable-term" onclick="showTechniquePopup('${trimmed.replace(/'/g, "\\'")}')">${trimmed}</span>`;
     }).join(' → ');
 }
 
-// Afficher popup description
 function showTechniquePopup(termName) {
     const technique = techniquesDescriptions.find(t => 
         t.nom.toLowerCase() === termName.toLowerCase() ||
@@ -595,58 +700,95 @@ function showTechniquePopup(termName) {
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
         background: white; padding: 25px; border-radius: 20px;
         box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 9999;
-        max-width: 500px; max-height: 80vh; overflow-y: auto;
+        max-width: 90%; width: 500px; max-height: 80vh; overflow-y: auto;
+        animation: fadeIn 0.3s;
     `;
     
     if (technique) {
+        let videoEmbed = '';
+        if (technique.video) {
+            let url = technique.video.replace("watch?v=", "embed/").replace("youtu.be/", "www.youtube.com/embed/");
+            videoEmbed = `<iframe src="${url}" style="width: 100%; height: 200px; margin-top: 15px; border-radius: 10px;" frameborder="0" allowfullscreen></iframe>`;
+        }
+        
         popup.innerHTML = `
-            <button onclick="this.parentElement.remove()" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">×</button>
+            <button onclick="this.parentElement.remove()" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 18px;">×</button>
             <h2 style="color: var(--accent); margin-bottom: 10px;">${technique.nom}</h2>
             <p style="font-style: italic; color: #666; margin-bottom: 10px;">Catégorie: ${technique.categorie}</p>
             <p style="line-height: 1.6;">${technique.description.replace(/\n/g, '<br>')}</p>
-            ${technique.video ? `<iframe src="${technique.video}" style="width: 100%; height: 200px; margin-top: 15px; border-radius: 10px;" frameborder="0" allowfullscreen></iframe>` : ''}
+            ${videoEmbed}
         `;
     } else {
         popup.innerHTML = `
             <button onclick="this.parentElement.remove()" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">×</button>
             <h3 style="color: var(--accent);">${termName}</h3>
-            <p style="color: #666;">Description non trouvée.</p>
+            <p style="color: #666;">Description non trouvée dans la base de données.</p>
         `;
     }
     
     document.body.appendChild(popup);
     
-    setTimeout(() => {
-        document.addEventListener('click', function closePopup(e) {
-            if (!popup.contains(e.target) && !e.target.classList.contains('clickable-term')) {
-                popup.remove();
-                document.removeEventListener('click', closePopup);
-            }
-        });
-    }, 100);
+    // Fermer en cliquant à l'extérieur
+    const overlay = document.createElement("div");
+    overlay.id = "popupOverlay";
+    overlay.style.cssText = "position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 9998;";
+    overlay.onclick = () => {
+        popup.remove();
+        overlay.remove();
+    };
+    document.body.appendChild(overlay);
 }
 
-// Lecture en japonais
+// Lecture en japonais avec beeper automatique après
 async function lireEnchainementJaponais() {
     if (!currentEnchainement || isReadingEnchainement) return;
     
     isReadingEnchainement = true;
     const btn = document.getElementById("btnLectureJP");
+    const statusSpan = document.getElementById("audioStatus");
     const originalText = btn.textContent;
-    btn.textContent = "⏳ Préparation (5s)...";
+    
     btn.disabled = true;
+    
+    // Nettoyer les timeouts précédents
+    enchainementTimeouts.forEach(t => clearTimeout(t));
+    enchainementTimeouts = [];
     
     await unlockSpeechSynthesis();
     
+    // Phase 1 : Préparation (5s)
+    btn.textContent = "⏳ Préparation (5s)...";
+    statusSpan.innerHTML = '<span class="status-badge status-waiting">Préparation</span>';
+    
     enchainementTimeouts.push(setTimeout(() => {
+        // Phase 2 : Première lecture
         btn.textContent = "🔊 Lecture 1/2...";
+        statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 1</span>';
+        
         speakJapanese(currentEnchainement.jp, () => {
+            // Phase 3 : Pause entre les lectures (5s)
+            btn.textContent = "⏸ Pause (5s)...";
+            statusSpan.innerHTML = '<span class="status-badge status-waiting">Pause</span>';
+            
             enchainementTimeouts.push(setTimeout(() => {
+                // Phase 4 : Deuxième lecture
                 btn.textContent = "🔊 Lecture 2/2...";
+                statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 2</span>';
+                
                 speakJapanese(currentEnchainement.jp, () => {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    isReadingEnchainement = false;
+                    // Phase 5 : Attente avant beeper (5s)
+                    btn.textContent = "⏳ Beeper dans 5s...";
+                    statusSpan.innerHTML = '<span class="status-badge status-waiting">Bientôt beeper</span>';
+                    
+                    enchainementTimeouts.push(setTimeout(() => {
+                        // Phase 6 : Démarrage automatique du beeper
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                        isReadingEnchainement = false;
+                        statusSpan.innerHTML = '<span class="status-badge status-active">Beeper actif</span>';
+                        
+                        startEnchainementBeeper();
+                    }, 5000));
                 });
             }, 5000));
         });
@@ -658,24 +800,32 @@ function speakJapanese(text, callback) {
     utterance.lang = "ja-JP";
     utterance.rate = enchainementSpeechRate;
     utterance.onend = callback;
+    utterance.onerror = () => {
+        console.error("Erreur synthèse vocale");
+        if (callback) callback();
+    };
     speechSynthesis.speak(utterance);
 }
 
-// Beeper enchainement
 function startEnchainementBeeper() {
     stopEnchainementBeeper();
     const freq = parseInt(document.getElementById("beeperFreqSlider")?.value || 3) * 1000;
     
-    // Note: Assurez-vous que top.mp3 existe
     const topSound = new Audio("top.mp3");
-    topSound.play().catch(e => console.log("Audio play (click required)"));
+    topSound.play().catch(e => console.log("Audio nécessite une interaction utilisateur"));
     
     enchainementBeeper = setInterval(() => {
-        topSound.currentTime = 0;
-        topSound.play().catch(e => {});
+        const sound = new Audio("top.mp3");
+        sound.play().catch(e => {});
     }, freq);
     
     document.getElementById("btnStartBeeper").style.background = "#4CAF50";
+    document.getElementById("btnStartBeeper").textContent = "🔔 Actif";
+    
+    const statusSpan = document.getElementById("audioStatus");
+    if (statusSpan) {
+        statusSpan.innerHTML = '<span class="status-badge status-active">Beeper actif</span>';
+    }
 }
 
 function stopEnchainementBeeper() {
@@ -683,21 +833,162 @@ function stopEnchainementBeeper() {
         clearInterval(enchainementBeeper);
         enchainementBeeper = null;
         document.getElementById("btnStartBeeper").style.background = "#2196F3";
+        document.getElementById("btnStartBeeper").textContent = "🔔 Démarrer";
+        
+        const statusSpan = document.getElementById("audioStatus");
+        if (statusSpan) {
+            statusSpan.innerHTML = '';
+        }
+    }
+    
+    // Nettoyer aussi les timeouts de lecture
+    enchainementTimeouts.forEach(t => clearTimeout(t));
+    enchainementTimeouts = [];
+    
+    // Arrêter la synthèse vocale
+    speechSynthesis.cancel();
+    
+    // Reset du bouton lecture si en cours
+    const btn = document.getElementById("btnLectureJP");
+    if (btn && isReadingEnchainement) {
+        btn.textContent = "▶️ Lire en japonais (2 fois)";
+        btn.disabled = false;
+        isReadingEnchainement = false;
     }
 }
 
 async function unlockSpeechSynthesis() {
     return new Promise(resolve => {
-        const utter = new SpeechSynthesisUtterance("a");
+        const utter = new SpeechSynthesisUtterance(".");
         utter.volume = 0.001;
         utter.onend = resolve;
+        utter.onerror = resolve;
         speechSynthesis.speak(utter);
     });
 }
 
-// Initialisation globale
 document.addEventListener("DOMContentLoaded", () => {
     loadEnchainementData();
+});
+</script>
+
+<!-- SCRIPT 3 : 3 TECHNIQUES CIBLES -->
+<script>
+const techniquesCible = [
+    "Mae Geri (jambe arrière, chudan)",
+    "Mawashi Geri (jambe arrière, jodan/chudan)",
+    "Mae Geri jambe avant avec sursaut (chudan)",
+    "Mawashi Geri jambe avant avec sursaut (jodan/chudan)",
+    "Gyaku Zuki chudan",
+    "Kizami/Maete Zuki jodan → Gyaku Zuki chudan",
+    "Oï Zuki jodan → retour arrière"
+];
+
+let cibleBeeper = null;
+let currentTiragesCible = [];
+
+function attachCibleEvents() {
+    document.getElementById("btnNouveauCible")?.addEventListener("click", nouveauTirageCible);
+    document.getElementById("btnLectureFR")?.addEventListener("click", lireTechniquesFrancais);
+    
+    const cibleBeeperSlider = document.getElementById("cibleBeeperFreqSlider");
+    cibleBeeperSlider?.addEventListener("input", (e) => {
+        document.getElementById("cibleBeeperFreqValue").textContent = `${e.target.value}s`;
+    });
+    
+    document.getElementById("btnStartCibleBeeper")?.addEventListener("click", startCibleBeeper);
+    document.getElementById("btnStopCibleBeeper")?.addEventListener("click", stopCibleBeeper);
+}
+
+function nouveauTirageCible() {
+    currentTiragesCible = [];
+    const disponibles = [...techniquesCible];
+    
+    for (let i = 0; i < 3 && disponibles.length > 0; i++) {
+        const index = Math.floor(Math.random() * disponibles.length);
+        currentTiragesCible.push(disponibles[index]);
+        disponibles.splice(index, 1);
+    }
+    
+    afficherTechniquesCible();
+}
+
+function afficherTechniquesCible() {
+    const list = document.getElementById("cibleList");
+    list.innerHTML = "";
+    
+    currentTiragesCible.forEach((tech, i) => {
+        const li = document.createElement("li");
+        li.style.cssText = `
+            padding: 12px;
+            margin-bottom: 10px;
+            background: var(--pink-1);
+            border-radius: 10px;
+            font-size: 1rem;
+            animation: fadeIn 0.4s;
+            animation-delay: ${i * 0.15}s;
+            animation-fill-mode: both;
+        `;
+        li.innerHTML = `<strong>${i + 1}.</strong> ${tech}`;
+        list.appendChild(li);
+    });
+}
+
+function lireTechniquesFrancais() {
+    if (currentTiragesCible.length === 0) {
+        alert("Veuillez d'abord faire un tirage");
+        return;
+    }
+    
+    speechSynthesis.cancel();
+    
+    let index = 0;
+    function speakNext() {
+        if (index < currentTiragesCible.length) {
+            const utterance = new SpeechSynthesisUtterance(`${index + 1}. ${currentTiragesCible[index]}`);
+            utterance.lang = "fr-FR";
+            utterance.rate = 0.9;
+            utterance.onend = () => {
+                index++;
+                setTimeout(speakNext, 1000);
+            };
+            speechSynthesis.speak(utterance);
+        }
+    }
+    
+    speakNext();
+}
+
+function startCibleBeeper() {
+    stopCibleBeeper();
+    
+    const freq = parseInt(document.getElementById("cibleBeeperFreqSlider")?.value || 3) * 1000;
+    
+    const topSound = new Audio("top.mp3");
+    topSound.play().catch(e => console.log("Audio nécessite une interaction"));
+    
+    cibleBeeper = setInterval(() => {
+        const sound = new Audio("top.mp3");
+        sound.play().catch(e => {});
+    }, freq);
+    
+    document.getElementById("btnStartCibleBeeper").style.background = "#4CAF50";
+    document.getElementById("btnStartCibleBeeper").textContent = "🔔 Actif";
+}
+
+function stopCibleBeeper() {
+    if (cibleBeeper) {
+        clearInterval(cibleBeeper);
+        cibleBeeper = null;
+        document.getElementById("btnStartCibleBeeper").style.background = "#2196F3";
+        document.getElementById("btnStartCibleBeeper").textContent = "🔔 Démarrer";
+    }
+}
+
+// Initialisation
+document.addEventListener("DOMContentLoaded", () => {
+    attachCibleEvents();
+    nouveauTirageCible(); // Tirage initial automatique
 });
 </script>
 
