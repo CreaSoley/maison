@@ -1,3 +1,148 @@
+J'ai compris les deux problèmes. Voici les corrections :
+
+1. **Script 2** : Le problème vient du fait que l'affichage est déclenché 10 secondes après la fin de la lecture 2, mais le compteur de 5s pour le beeper est indépendant. Je vais corriger pour que l'affichage se fasse bien.
+
+2. **Script 1** : Je vais augmenter la hauteur de la vidéo à environ 380px (≈10cm sur un écran standard) pour le desktop uniquement.
+
+Voici les sections modifiées :
+
+```html
+<!-- Dans la section <style>, remplacer la règle .video-container iframe par : -->
+<style>
+    /* ... autres styles ... */
+    
+    /* Vidéo responsive avec hauteur augmentée sur desktop */
+    .video-container iframe { 
+        width: 100%; 
+        border-radius: 10px; 
+        margin-top: 10px; 
+        height: 200px; /* Mobile par défaut */
+    }
+    
+    /* Desktop : hauteur ~10cm (380px) */
+    @media (min-width: 901px) {
+        .video-container iframe {
+            height: 380px;
+        }
+        
+        /* Aussi pour la vidéo dans le résultat kihon */
+        #techVideo {
+            height: 380px !important;
+        }
+    }
+    
+    /* ... autres styles ... */
+</style>
+```
+
+Pour le **Script 2**, voici la fonction `nouveauEnchainement` corrigée :
+
+```javascript
+// Nouveau tirage avec séquence : annonce catégorie → lecture JP → affichage différé
+async function nouveauEnchainement() {
+    const specialite = document.getElementById("filterSpecialite")?.value;
+    let filtered = enchainementsData;
+    
+    if (specialite) {
+        filtered = enchainementsData.filter(e => e.specialite && e.specialite.includes(specialite));
+    }
+    
+    if (filtered.length === 0) {
+        alert("Aucun enchainement trouvé pour cette spécialité");
+        return;
+    }
+    
+    // Nettoyer les timeouts précédents
+    enchainementTimeouts.forEach(t => clearTimeout(t));
+    enchainementTimeouts = [];
+    stopEnchainementBeeper();
+    speechSynthesis.cancel();
+    
+    // Sélection aléatoire
+    currentEnchainement = filtered[Math.floor(Math.random() * filtered.length)];
+    
+    // Sélection d'une catégorie aléatoire si plusieurs
+    if (currentEnchainement.specialite && currentEnchainement.specialite.length > 0) {
+        const randomIndex = Math.floor(Math.random() * currentEnchainement.specialite.length);
+        selectedCategorie = currentEnchainement.specialite[randomIndex];
+    } else {
+        selectedCategorie = "Technique";
+    }
+    
+    // Affichage initial : masquer le contenu, afficher le compte à rebours
+    const resultDiv = document.getElementById("enchainementResult");
+    const categorieDiv = document.getElementById("categorieAnnonce");
+    const btn = document.getElementById("btnNouveauEnchainement");
+    const statusSpan = document.getElementById("audioStatus");
+    
+    btn.disabled = true;
+    isReadingEnchainement = true;
+    
+    resultDiv.innerHTML = `
+        <div style="animation: fadeIn 0.4s;">
+            <p style="font-size: 1.5rem; color: var(--accent);">⏳</p>
+            <p id="countdown" style="font-size: 1.2rem; color: #666;">Préparation...</p>
+        </div>
+    `;
+    categorieDiv.innerHTML = "";
+    
+    // Déblocage synthèse vocale
+    await unlockSpeechSynthesis();
+    
+    // Phase 1 : Attendre 5 secondes puis annoncer la catégorie en français
+    statusSpan.innerHTML = '<span class="status-badge status-waiting">Préparation 5s</span>';
+    document.getElementById("countdown").textContent = "Préparation... 5s";
+    
+    enchainementTimeouts.push(setTimeout(async () => {
+        // Annoncer la catégorie en français
+        categorieDiv.innerHTML = `🏷️ ${selectedCategorie}`;
+        statusSpan.innerHTML = '<span class="status-badge status-active">Annonce catégorie</span>';
+        document.getElementById("countdown").textContent = `Catégorie : ${selectedCategorie}`;
+        
+        await speakFrench(selectedCategorie);
+        
+        // Phase 2 : Première lecture japonaise
+        statusSpan.innerHTML = '<span class="status-badge status-active">Lecture JP 1/2</span>';
+        document.getElementById("countdown").textContent = "Lecture japonaise 1/2...";
+        
+        speakJapanese(currentEnchainement.jp, () => {
+            // Pause de 5 secondes
+            statusSpan.innerHTML = '<span class="status-badge status-waiting">Pause 5s</span>';
+            document.getElementById("countdown").textContent = "Pause... 5s";
+            
+            enchainementTimeouts.push(setTimeout(() => {
+                // Phase 3 : Deuxième lecture japonaise
+                statusSpan.innerHTML = '<span class="status-badge status-active">Lecture JP 2/2</span>';
+                document.getElementById("countdown").textContent = "Lecture japonaise 2/2...";
+                
+                speakJapanese(currentEnchainement.jp, () => {
+                    // Phase 4 : Attente 5s puis beeper + affichage technique
+                    statusSpan.innerHTML = '<span class="status-badge status-waiting">Beeper dans 5s</span>';
+                    document.getElementById("countdown").textContent = "Beeper dans 5s...";
+                    
+                    // Après 5 secondes : démarrer le beeper ET afficher la technique
+                    enchainementTimeouts.push(setTimeout(() => {
+                        // Afficher la technique
+                        afficherEnchainement();
+                        
+                        // Démarrer le beeper
+                        statusSpan.innerHTML = '<span class="status-badge status-active">Beeper actif</span>';
+                        btn.disabled = false;
+                        isReadingEnchainement = false;
+                        startEnchainementBeeper();
+                    }, 5000));
+                });
+            }, 5000));
+        });
+    }, 5000));
+}
+```
+
+---
+
+Voici le **code HTML complet corrigé** :
+
+```html
 <!doctype html>
 <html lang="fr">
 <head>
@@ -11,7 +156,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
-    /* ---------- Fonts & palette ---------- */
     @font-face { font-family: "Spicy"; src: url("Spicy Sale.ttf"); }
 
     :root{
@@ -25,7 +169,6 @@
       --radius:20px;
     }
 
-    /* ---------- Base ---------- */
     *{ box-sizing:border-box; }
     body{
       margin:0;
@@ -36,7 +179,6 @@
     }
     a{ color:inherit; text-decoration: none; }
 
-    /* ---------- Header NOIR ---------- */
     header{
       background:#000;
       color:#fff;
@@ -49,7 +191,6 @@
     header img{ height:64px; }
     header h1{ font-family:"Spicy", sans-serif; font-size:2.2rem; margin:0; color:var(--pink-2); }
 
-    /* ---------- Layout ---------- */
     .main-wrapper{ max-width:1400px; margin:20px auto; padding:0 18px 40px; }
     .grid{
       display:grid;
@@ -59,7 +200,6 @@
     }
     @media (max-width:900px){ .grid{ grid-template-columns: 1fr; } }
 
-    /* ---------- Card Kawaii ---------- */
     .card-kawaii {
         background: white;
         border: 3px solid var(--pink-2);
@@ -94,7 +234,6 @@
         margin-bottom: 10px;
     }
 
-    /* ---------- UI Elements ---------- */
     .result-display {
         background: #fff;
         border: 2px solid var(--pink-2);
@@ -119,58 +258,57 @@
     .btn-kawaii {
         width: 100%;
         font-family: "Spicy", sans-serif;
+        background: var(--accent);
         color: white;
         border: none;
         padding: 12px;
         border-radius: 50px;
         cursor: pointer;
-        transition: transform 0.2s;
-        box-shadow: 0 4px 0px rgba(0,0,0,0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 0px #d6459b;
         margin-top: 5px;
-        background-size: cover;
-        background-repeat: no-repeat;
     }
 
-    .btn-kawaii:hover { transform: scale(1.02); filter: brightness(1.1); }
+    .btn-kawaii:hover { transform: scale(1.02); }
     .btn-kawaii:active { transform: translateY(3px); box-shadow: none; }
-    .btn-kawaii:disabled { opacity: 0.6; cursor: not-allowed; transform: none; filter: none; }
+    .btn-kawaii:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    .btn-ghost { 
-        background: #fff; 
-        color: var(--accent); 
-        border: 2px solid var(--accent); 
-        box-shadow: none; 
-        background-image: none !important;
-    }
+    .btn-ghost { background: #fff; color: var(--accent); border: 2px solid var(--accent); box-shadow: none; }
 
-    /* 🎨 Nouveaux dégradés boutons */
-    .btn-read {
-        background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+    /* Boutons avec dégradés */
+    .btn-stop {
+        background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+        box-shadow: 0 4px 0px #8a1a40;
     }
     .btn-start {
         background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+        color: #333;
+        box-shadow: 0 4px 0px #5cb88a;
     }
-    .btn-stop {
-        background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+    .btn-read {
+        background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+        box-shadow: 0 4px 0px #1a0436;
     }
 
-    /* Media Styles */
-    .video-container iframe { 
+    /* Vidéo - Mobile */
+    .video-container iframe,
+    #techVideo { 
         width: 100%; 
         border-radius: 10px; 
         margin-top: 10px; 
-        height: 200px; /* Hauteur mobile */
+        height: 200px;
     }
-    /* 📱 ORDINATEUR : Vidéo ~10cm de hauteur (380px ≈ 10cm) */
-    @media (min-width: 900px) {
-        .video-container iframe {
-            height: 380px;
+    
+    /* Vidéo - Desktop : hauteur ~10cm (380px) */
+    @media (min-width: 901px) {
+        .video-container iframe,
+        #techVideo {
+            height: 380px !important;
         }
     }
 
     .hidden { display: none !important; }
 
-    /* Suggestions */
     .suggestions-container {
         background: white;
         border-radius: 15px;
@@ -189,7 +327,6 @@
     .suggestion-item:hover { background-color: var(--pink-1); }
     .suggestion-item:last-child { border-bottom: none; }
 
-    /* Liste catégorie */
     .category-list {
         max-height: 400px;
         overflow-y: auto;
@@ -209,7 +346,6 @@
         transform: translateX(5px);
     }
 
-    /* Termes cliquables */
     .clickable-term {
         cursor: pointer;
         text-decoration: underline;
@@ -219,23 +355,19 @@
     }
     .clickable-term:hover { color: var(--accent); }
 
-    /* Sliders */
     input[type="range"] { accent-color: var(--accent); }
 
-    /* PDF Row */
     .pdf-row { display: flex; gap: 10px; margin-bottom: 15px; }
     .pdf-btn { 
         flex: 1; text-align: center; background: #000; color: #fff; 
         padding: 8px; border-radius: 10px; font-size: 0.8rem; 
     }
 
-    /* Animation */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(5px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Status indicator */
     .status-badge {
         display: inline-block;
         padding: 4px 10px;
@@ -245,6 +377,13 @@
     }
     .status-active { background: #4CAF50; color: white; }
     .status-waiting { background: #FF9800; color: white; }
+
+    .technique-unique {
+        font-size: 1.3rem;
+        padding: 20px;
+        text-align: center;
+        animation: fadeIn 0.5s;
+    }
   </style>
 </head>
 <body>
@@ -259,9 +398,7 @@
 <div class="main-wrapper">
     <div class="grid">
         
-        <!-- ========================================= -->
         <!-- COLONNE GAUCHE : SCRIPT 1 (KIHON SIMPLE) -->
-        <!-- ========================================= -->
         <div class="card-kawaii">
             <div class="module-title">🥋 Kihon Simple</div>
             
@@ -273,13 +410,10 @@
                     </select>
                     <button id="btnRandomKihon" class="btn-kawaii btn-ghost">✨ Surprise (Aléatoire)</button>
                 </div>
-                <!-- Conteneur des suggestions de recherche -->
                 <div id="kihonList"></div>
-                <!-- Conteneur de la liste par catégorie -->
                 <div id="categoryList" class="category-list"></div>
             </div>
 
-            <!-- Bloc détaillé (masqué par défaut) -->
             <div id="kihonResult" class="sub-section hidden">
                 <h3 id="techNom" style="margin-bottom:5px;"></h3>
                 <p id="techCat" style="font-weight:bold; color:var(--accent); margin-bottom: 10px;"></p>
@@ -296,15 +430,12 @@
             </div>
         </div>
 
-        <!-- ========================================= -->
-        <!-- COLONNE DROITE : SCRIPTS 2 & 3           -->
-        <!-- ========================================= -->
+        <!-- COLONNE DROITE : SCRIPTS 2 & 3 -->
         <div>
             <!-- SCRIPT 2 : ENCHAÎNEMENT -->
             <div class="card-kawaii">
                 <div class="module-title">💫 Enchaînement</div>
 
-                <!-- PDF -->
                 <div class="pdf-row">
                     <a href="pdf/ippon_kumite.pdf" class="pdf-btn">📄 Ippon Kumite</a>
                     <a href="pdf/tai_sabaki.pdf" class="pdf-btn">📄 Tai Sabaki</a>
@@ -313,18 +444,15 @@
                 <div id="enchainementSection"></div>
             </div>
 
-            <!-- SCRIPT 3 : 1 TECHNIQUE CIBLE -->
+            <!-- SCRIPT 3 : TECHNIQUE CIBLE UNIQUE -->
             <div class="card-kawaii" id="cibleSection">
                 <div class="module-title">🎯 Technique Cible</div>
                 
                 <div class="sub-section">
                     <button id="btnNouveauCible" class="btn-kawaii">🎲 Nouveau tirage</button>
                     
-                    <!-- Liste des techniques -->
-                    <div class="result-display" style="min-height: 120px; text-align: left;">
-                        <ul id="cibleList" style="list-style: none; padding: 0; margin: 0;">
-                            <li style="color: #999; text-align: center;">Cliquez pour commencer</li>
-                        </ul>
+                    <div class="result-display technique-unique" id="cibleResult">
+                        <span style="color: #999;">Cliquez pour commencer</span>
                     </div>
                 </div>
 
@@ -341,8 +469,8 @@
                     </div>
                     
                     <div style="display: flex; gap: 10px; margin-top: 5px;">
-                        <button id="btnStartCibleBeeper" class="btn-kawaii btn-start">🔔 Démarrer</button>
-                        <button id="btnStopCibleBeeper" class="btn-kawaii btn-stop">⏹ Stop</button>
+                        <button id="btnStartCibleBeeper" class="btn-kawaii btn-start" style="flex:1;">🔔 Démarrer</button>
+                        <button id="btnStopCibleBeeper" class="btn-kawaii btn-stop" style="flex:1;">⏹ Stop</button>
                     </div>
                 </div>
             </div>
@@ -350,10 +478,6 @@
 
     </div>
 </div>
-
-<!-- ========================================= -->
-<!-- SCRIPTS JAVASCRIPT -->
-<!-- ========================================= -->
 
 <!-- SCRIPT 1 : KIHON SIMPLE -->
 <script>
@@ -380,39 +504,29 @@ function populateCategories() {
   });
 }
 
-/* -----------------------------------------------------------
-   RECHERCHE RAPIDE & AFFICHAGE INSTANTANÉ
------------------------------------------------------------ */
-
 const searchInput = document.getElementById("searchKihon");
 const kihonList = document.getElementById("kihonList");
 const categoryListContainer = document.getElementById("categoryList");
 const filterCategorie = document.getElementById("filterCategorie");
 
-// Événement de recherche
 searchInput.addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase().trim();
-  
-  // Cacher la liste par catégorie quand on recherche
   categoryListContainer.innerHTML = "";
   
   if (query.length === 0) {
     displayList([]);
     document.getElementById("kihonResult").classList.add("hidden");
-    // Si une catégorie est sélectionnée, afficher sa liste
     if (filterCategorie.value) {
       displayCategoryList(filterCategorie.value);
     }
     return;
   }
 
-  // Filtrage des techniques (avec catégorie si sélectionnée)
   let filtered = techniques.filter(t => 
     t.nom.toLowerCase().includes(query) || 
     t.categorie.toLowerCase().includes(query)
   );
   
-  // Appliquer le filtre catégorie si actif
   if (filterCategorie.value) {
     filtered = filtered.filter(t => t.categorie === filterCategorie.value);
   }
@@ -427,11 +541,8 @@ searchInput.addEventListener("input", (e) => {
   }
 });
 
-// Événement de changement de catégorie
 filterCategorie.addEventListener("change", (e) => {
   const category = e.target.value;
-  
-  // Vider la recherche
   searchInput.value = "";
   displayList([]);
   document.getElementById("kihonResult").classList.add("hidden");
@@ -443,7 +554,6 @@ filterCategorie.addEventListener("change", (e) => {
   }
 });
 
-// Afficher la liste des techniques d'une catégorie
 function displayCategoryList(category) {
   const filtered = techniques.filter(t => t.categorie === category);
   categoryListContainer.innerHTML = "";
@@ -459,17 +569,14 @@ function displayCategoryList(category) {
     item.innerHTML = `<strong>${t.nom}</strong>`;
     item.addEventListener("click", () => {
       showTechnique(t);
-      // Scroll vers le résultat si nécessaire
       document.getElementById("kihonResult").scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
-    category$ListContainer.appendChild(item);
+    categoryListContainer.appendChild(item);
   });
 }
 
-// Afficher les suggestions de recherche
 function displayList(list) {
   kihonList.innerHTML = "";
-  
   const maxSuggestions = list.slice(0, 5);
 
   if (maxSuggestions.length === 0 || (list.length === 1 && searchInput.value.toLowerCase() === list[0].nom.toLowerCase())) {
@@ -482,7 +589,7 @@ function displayList(list) {
   maxSuggestions.forEach(t => {
     const item = document.createElement("div");
     item.className = "suggestion-item";
-    item.innerHTML = `<strong>${t.nom}</strong> <small style="color:var(--accent)">(\({t.categorie})</small>`;
+    item.innerHTML = `<strong>${t.nom}</strong> <small style="color:var(--accent)">(${t.categorie})</small>`;
     
     item.addEventListener("click", () => {
       showTechnique(t);
@@ -494,10 +601,6 @@ function displayList(list) {
 
   kihonList.appendChild(container);
 }
-
-/* -----------------------------------------------------------
-   AFFICHAGE DÉTAILLÉ
------------------------------------------------------------ */
 
 function showTechnique(t) {
   const resultDiv = document.getElementById("kihonResult");
@@ -527,20 +630,15 @@ function showTechnique(t) {
   }
 }
 
-// Bouton Surprise
 document.getElementById("btnRandomKihon").addEventListener("click", () => {
   let pool = techniques;
-  
-  // Si une catégorie est sélectionnée, tirer dans cette catégorie
   if (filterCategorie.value) {
     pool = techniques.filter(t => t.categorie === filterCategorie.value);
   }
-  
   if (pool.length === 0) {
     alert("Aucune technique disponible");
     return;
   }
-  
   const t = pool[Math.floor(Math.random() * pool.length)];
   showTechnique(t);
   kihonList.innerHTML = "";
@@ -553,6 +651,7 @@ document.getElementById("btnRandomKihon").addEventListener("click", () => {
 let enchainementsData = [];
 let techniquesDescriptions = [];
 let currentEnchainement = null;
+let selectedCategorie = null;
 let enchainementBeeper = null;
 let enchainementTimeouts = [];
 let isReadingEnchainement = false;
@@ -595,7 +694,9 @@ function initEnchainementUI() {
             
             <button id="btnNouveauEnchainement" class="btn-kawaii">🎲 Nouveau tirage</button>
             
-            <div id="enchainementResult" class="result-display" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+            <div id="categorieAnnonce" style="text-align: center; font-size: 1.1rem; color: var(--accent); font-weight: bold; margin-top: 10px; min-height: 25px;"></div>
+            
+            <div id="enchainementResult" class="result-display" style="min-height: 100px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
                 <p style="color: #999;">Cliquez pour commencer</p>
             </div>
         </div>
@@ -611,7 +712,7 @@ function initEnchainementUI() {
             </div>
             
             <button id="btnLectureJP" class="btn-kawaii btn-read">▶️ Lire en japonais (2 fois)</button>
-            <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">⚡ Séquence automatique après nouveau tirage</p>
+            <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">⚡ Le beeper démarre auto 5s après la 2ème lecture</p>
             
             <div style="margin-top: 10px;">
                 <label style="font-weight: bold; color: var(--accent);">
@@ -621,8 +722,8 @@ function initEnchainementUI() {
             </div>
             
             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                <button id="btnStartBeeper" class="btn-kawaii btn-start">🔔 Démarrer</button>
-                <button id="btnStopBeeper" class="btn-kawaii btn-stop">⏹ Stop</button>
+                <button id="btnStartBeeper" class="btn-kawaii btn-start" style="flex:1;">🔔 Démarrer</button>
+                <button id="btnStopBeeper" class="btn-kawaii btn-stop" style="flex:1;">⏹ Stop</button>
             </div>
         </div>
     `;
@@ -656,7 +757,7 @@ function attachEnchainementEvents() {
     const speedSlider = document.getElementById("enchainementSpeedSlider");
     speedSlider?.addEventListener("input", (e) => {
         enchainementSpeechRate = parseFloat(e.target.value);
-        document.getElementById("enchainementSpeedValue").textContent = `×\){enchainementSpeechRate.toFixed(1)}`;
+        document.getElementById("enchainementSpeedValue").textContent = `×${enchainementSpeechRate.toFixed(1)}`;
     });
     
     document.getElementById("btnLectureJP")?.addEventListener("click", lireEnchainementJaponais);
@@ -670,7 +771,8 @@ function attachEnchainementEvents() {
     document.getElementById("btnStopBeeper")?.addEventListener("click", stopEnchainementBeeper);
 }
 
-function nouveauEnchaine$ment() {
+// Nouveau tirage avec séquence complète
+async function nouveauEnchainement() {
     const specialite = document.getElementById("filterSpecialite")?.value;
     let filtered = enchainementsData;
     
@@ -683,74 +785,102 @@ function nouveauEnchaine$ment() {
         return;
     }
     
-    // Arrêter toute lecture ou beeper en cours
+    // Nettoyer
+    enchainementTimeouts.forEach(t => clearTimeout(t));
+    enchainementTimeouts = [];
     stopEnchainementBeeper();
     speechSynthesis.cancel();
     
-    // Sélectionner l'enchaînement
+    // Sélection aléatoire
     currentEnchainement = filtered[Math.floor(Math.random() * filtered.length)];
     
-    // Afficher message de chargement au lieu du résultat
+    // Sélection catégorie aléatoire
+    if (currentEnchainement.specialite && currentEnchainement.specialite.length > 0) {
+        const randomIndex = Math.floor(Math.random() * currentEnchainement.specialite.length);
+        selectedCategorie = currentEnchainement.specialite[randomIndex];
+    } else {
+        selectedCategorie = "Technique";
+    }
+    
     const resultDiv = document.getElementById("enchainementResult");
+    const categorieDiv = document.getElementById("categorieAnnonce");
+    const btn = document.getElementById("btnNouveauEnchainement");
+    const statusSpan = document.getElementById("audioStatus");
+    
+    btn.disabled = true;
+    isReadingEnchainement = true;
+    
     resultDiv.innerHTML = `
-        <p style="color: #999;">⏳ Préparation de l'entraînement...</p>
+        <div style="animation: fadeIn 0.4s;">
+            <p style="font-size: 1.5rem; color: var(--accent);">⏳</p>
+            <p id="countdown" style="font-size: 1.2rem; color: #666;">Préparation...</p>
+        </div>
     `;
+    categorieDiv.innerHTML = "";
     
-    // 🕒 PROGRAMMATION AUTOMATIQUE
-    // 1. Afficher le nom de la technique APRÈS 10 SECONDES
-    setTimeout(() => {
-        afficherEnchainement();
-    }, 10000);
+    await unlockSpeechSynthesis();
     
-    // 2. Annoncer la catégorie en français APRÈS 5 SECONDES
-    setTimeout(() => {
-        speakCategoryInFrench();
-    }, 5000);
+    // Phase 1 : Préparation 5s
+    statusSpan.innerHTML = '<span class="status-badge status-waiting">Préparation 5s</span>';
+    updateCountdown("Préparation... 5s");
+    
+    enchainementTimeouts.push(setTimeout(async () => {
+        // Annonce catégorie FR
+        categorieDiv.innerHTML = `🏷️ ${selectedCategorie}`;
+        statusSpan.innerHTML = '<span class="status-badge status-active">Annonce catégorie</span>';
+        updateCountdown(`Catégorie : ${selectedCategorie}`);
+        
+        await speakFrench(selectedCategorie);
+        
+        // Phase 2 : Lecture JP 1
+        statusSpan.innerHTML = '<span class="status-badge status-active">Lecture JP 1/2</span>';
+        updateCountdown("Lecture japonaise 1/2...");
+        
+        speakJapanese(currentEnchainement.jp, () => {
+            // Pause 5s
+            statusSpan.innerHTML = '<span class="status-badge status-waiting">Pause 5s</span>';
+            updateCountdown("Pause... 5s");
+            
+            enchainementTimeouts.push(setTimeout(() => {
+                // Phase 3 : Lecture JP 2
+                statusSpan.innerHTML = '<span class="status-badge status-active">Lecture JP 2/2</span>';
+                updateCountdown("Lecture japonaise 2/2...");
+                
+                speakJapanese(currentEnchainement.jp, () => {
+                    // Phase 4 : Attente 5s puis beeper + affichage
+                    statusSpan.innerHTML = '<span class="status-badge status-waiting">Beeper dans 5s</span>';
+                    updateCountdown("Beeper dans 5s...");
+                    
+                    enchainementTimeouts.push(setTimeout(() => {
+                        // AFFICHER LA TECHNIQUE ICI
+                        afficherEnchainement();
+                        
+                        // Démarrer le beeper
+                        statusSpan.innerHTML = '<span class="status-badge status-active">Beeper actif</span>';
+                        btn.disabled = false;
+                        isReadingEnchainement = false;
+                        startEnchainementBeeper();
+                    }, 5000));
+                });
+            }, 5000));
+        });
+    }, 5000));
 }
 
-// Fonction qui annonce la catégorie en français
-function speakCategoryInFrench() {
-    if (!currentEnchainement) return;
-    
-    // Récupérer toutes les catégories associées à l'enchaînement
-    let categories = [];
-    
-    // Cas 1 : Si l'enchaînement a un champ catégorie défini
-    if (currentEnchainement.categorie) {
-        categories = Array.isArray(currentEnchainement.categorie) ? currentEnchainement.categorie : [currentEnchainement.categorie];
-    } 
-    // Cas 2 : Sinon on extrait les catégories des techniques composant l'enchaînement
-    else {
-        const terms = currentEnchainement.fr.split(/[,→]/).map(t => t.trim());
-        terms.forEach(term => {
-            const technique = techniquesDescriptions.find(t => 
-                t.nom.toLowerCase() === term.toLowerCase()
-            );
-            if (technique && technique.categorie && !categories.includes(technique.categorie)) {
-                categories.push(technique.categorie);
-            }
-        });
-    }
-    
-    // Valeur par défaut si aucune catégorie trouvée
-    if (categories.length === 0) {
-        categories = ["Entraînement Tai Jitsu"];
-    }
-    
-    // Choisir une catégorie aléatoirement si plusieurs disponibles
-    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-    
-    // Lecture vocale française
-    const utterance = new SpeechSynthesisUtterance(`Catégorie : \({randomCategory}`);
-    utterance.lang = "fr-FR";
-    utterance.rate = 0.9;
-    
-    // Dès que la catégorie est annoncée, lancer automatiquement la lecture japonaise
-    utterance.onend = () => {
-        lireEnchainementJaponais();
-    };
-    
-    speechSynthesis.speak(utterance);
+function updateCountdown(text) {
+    const el = document.getElementById("countdown");
+    if (el) el.textContent = text;
+}
+
+function speakFrench(text) {
+    return new Promise((resolve) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "fr-FR";
+        utterance.rate = 0.9;
+        utterance.onend = resolve;
+        utterance.onerror = resolve;
+        speechSynthesis.speak(utterance);
+    });
 }
 
 function afficherEnchainement() {
@@ -760,10 +890,10 @@ function afficherEnchainement() {
     resultDiv.innerHTML = `
         <div style="animation: fadeIn 0.4s;">
             <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; color: #333;">
-                \){createClickableTerms(currentEnchainement.fr)}
+                ${createClickableTerms(currentEnchainement.fr)}
             </div>
             <div style="font-size: 1.1rem; color: #666; font-style: italic;">
-                \({currentEnchainement.jp}
+                ${currentEnchainement.jp}
             </div>
             <div style="margin-top: 8px; font-size: 0.8rem; color: var(--accent);">
                 <em>Cliquez sur une technique pour la description</em>
@@ -776,7 +906,7 @@ function createClickableTerms(text) {
     const terms = text.split(/[,→]/);
     return terms.map(term => {
         const trimmed = term.trim();
-        return `<span class="clickable-term" onclick="showTechniquePopup('\){trimmed.replace(/'/g, "\\'")}')">\({trimmed}</span>`;
+        return `<span class="clickable-term" onclick="showTechniquePopup('${trimmed.replace(/'/g, "\\'")}')">${trimmed}</span>`;
     }).join(' → ');
 }
 
@@ -789,6 +919,8 @@ function showTechniquePopup(termName) {
     
     const existingPopup = document.getElementById("techniquePopup");
     if (existingPopup) existingPopup.remove();
+    const existingOverlay = document.getElementById("popupOverlay");
+    if (existingOverlay) existingOverlay.remove();
     
     const popup = document.createElement("div");
     popup.id = "techniquePopup";
@@ -804,27 +936,26 @@ function showTechniquePopup(termName) {
         let videoEmbed = '';
         if (technique.video) {
             let url = technique.video.replace("watch?v=", "embed/").replace("youtu.be/", "www.youtube.com/embed/");
-            videoEmbed = `<iframe src="\){url}" style="width: 100%; height: 200px; margin-top: 15px; border-radius: 10px;" frameborder="0" allowfullscreen></iframe>`;
+            videoEmbed = `<iframe src="${url}" style="width: 100%; height: 200px; margin-top: 15px; border-radius: 10px;" frameborder="0" allowfullscreen></iframe>`;
         }
         
         popup.innerHTML = `
-            <button onclick="this.parentElement.remove(); document.getElementById('popupOverlay')?.remove()" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 18px;">×</button>
-            <h2 style="color: var(--accent); margin-bottom: 10px;">\({technique.nom}</h2>
-            <p style="font-style: italic; color: #666; margin-bottom: 10px;">Catégorie: \){technique.categorie}</p>
-            <p style="line-height: 1.6;">\({technique.description.replace(/\n/g, '<br>')}</p>
-            \){videoEmbed}
+            <button onclick="this.parentElement.remove(); document.getElementById('popupOverlay')?.remove();" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 18px;">×</button>
+            <h2 style="color: var(--accent); margin-bottom: 10px;">${technique.nom}</h2>
+            <p style="font-style: italic; color: #666; margin-bottom: 10px;">Catégorie: ${technique.categorie}</p>
+            <p style="line-height: 1.6;">${technique.description.replace(/\n/g, '<br>')}</p>
+            ${videoEmbed}
         `;
     } else {
         popup.innerHTML = `
-            <button onclick="this.parentElement.remove(); document.getElementById('popupOverlay')?.remove()" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">×</button>
-            <h3 style="color: var(--accent);">\({termName}</h3>
+            <button onclick="this.parentElement.remove(); document.getElementById('popupOverlay')?.remove();" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">×</button>
+            <h3 style="color: var(--accent);">${termName}</h3>
             <p style="color: #666;">Description non trouvée dans la base de données.</p>
         `;
     }
     
     document.body.appendChild(popup);
     
-    // Fermer en cliquant à l'extérieur
     const overlay = document.createElement("div");
     overlay.id = "popupOverlay";
     overlay.style.cssText = "position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 9998;";
@@ -835,7 +966,6 @@ function showTechniquePopup(termName) {
     document.body.appendChild(overlay);
 }
 
-// Lecture en japonais avec beeper automatique après
 async function lireEnchainementJaponais() {
     if (!currentEnchainement || isReadingEnchainement) return;
     
@@ -846,43 +976,42 @@ async function lireEnchainementJaponais() {
     
     btn.disabled = true;
     
-    // Nettoyer les timeouts précédents
     enchainementTimeouts.forEach(t => clearTimeout(t));
     enchainementTimeouts = [];
     
     await unlockSpeechSynthesis();
     
-    // Phase 1 : Première lecture japonaise
-    btn.textContent = "🔊 Lecture 1/2...";
-    statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 1</span>';
+    btn.textContent = "⏳ Préparation (5s)...";
+    statusSpan.innerHTML = '<span class="status-badge status-waiting">Préparation</span>';
     
-    speakJapanese(currentEnchainement.jp, () => {
-        // Phase 2 : Pause entre les lectures
-        btn.textContent = "⏸ Pause (5s)...";
-        statusSpan.innerHTML = '<span class="status-badge status-waiting">Pause</span>';
+    enchainementTimeouts.push(setTimeout(() => {
+        btn.textContent = "🔊 Lecture 1/2...";
+        statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 1</span>';
         
-        enchainementTimeouts.push(setTimeout(() => {
-            // Phase 3 : Deuxième lecture japonaise
-            btn.textContent = "🔊 Lecture 2/2...";
-            statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 2</span>';
+        speakJapanese(currentEnchainement.jp, () => {
+            btn.textContent = "⏸ Pause (5s)...";
+            statusSpan.innerHTML = '<span class="status-badge status-waiting">Pause</span>';
             
-            speakJapanese(currentEnchainement.jp, () => {
-                // Phase 4 : Attente avant démarrage du beeper
-                btn.textContent = "⏳ Beeper dans 5s...";
-                statusSpan.innerHTML = '<span class="status-badge status-waiting">Bientôt beeper</span>';
+            enchainementTimeouts.push(setTimeout(() => {
+                btn.textContent = "🔊 Lecture 2/2...";
+                statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 2</span>';
                 
-                enchainementTimeouts.push(setTimeout(() => {
-                    // Phase 5 : Démarrage automatique du beeper
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    isReadingEnchainement = false;
-                    statusSpan.innerHTML = '<span class="status-badge status-active">Beeper actif</span>';
+                speakJapanese(currentEnchainement.jp, () => {
+                    btn.textContent = "⏳ Beeper dans 5s...";
+                    statusSpan.innerHTML = '<span class="status-badge status-waiting">Bientôt beeper</span>';
                     
-                    startEnchainementBeeper();
-                }, 5000));
-            });
-        }, 5000));
-    });
+                    enchainementTimeouts.push(setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                        isReadingEnchainement = false;
+                        statusSpan.innerHTML = '<span class="status-badge status-active">Beeper actif</span>';
+                        
+                        startEnchainementBeeper();
+                    }, 5000));
+                });
+            }, 5000));
+        });
+    }, 5000));
 }
 
 function speakJapanese(text, callback) {
@@ -909,7 +1038,7 @@ function startEnchainementBeeper() {
         sound.play().catch(e => {});
     }, freq);
     
-    document.getElementById("btnStartBeeper").style.background = "linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)";
+    document.getElementById("btnStartBeeper").style.backgroundImage = "linear-gradient(120deg, #4CAF50 0%, #45a049 100%)";
     document.getElementById("btnStartBeeper").textContent = "🔔 Actif";
     
     const statusSpan = document.getElementById("audioStatus");
@@ -922,7 +1051,7 @@ function stopEnchainementBeeper() {
     if (enchainementBeeper) {
         clearInterval(enchainementBeeper);
         enchainementBeeper = null;
-        document.getElementById("btnStartBeeper").style.background = "linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)";
+        document.getElementById("btnStartBeeper").style.backgroundImage = "linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)";
         document.getElementById("btnStartBeeper").textContent = "🔔 Démarrer";
         
         const statusSpan = document.getElementById("audioStatus");
@@ -931,20 +1060,21 @@ function stopEnchainementBeeper() {
         }
     }
     
-    // Nettoyer aussi les timeouts de lecture
     enchainementTimeouts.forEach(t => clearTimeout(t));
     enchainementTimeouts = [];
     
-    // Arrêter la synthèse vocale
     speechSynthesis.cancel();
     
-    // Reset du bouton lecture si en cours
     const btn = document.getElementById("btnLectureJP");
+    const btnTirage = document.getElementById("btnNouveauEnchainement");
     if (btn && isReadingEnchainement) {
         btn.textContent = "▶️ Lire en japonais (2 fois)";
         btn.disabled = false;
-        isReadingEnchainement = false;
     }
+    if (btnTirage) {
+        btnTirage.disabled = false;
+    }
+    isReadingEnchainement = false;
 }
 
 async function unlockSpeechSynthesis() {
@@ -962,7 +1092,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- SCRIPT 3 : 1 TECHNIQUE CIBLE -->
+<!-- SCRIPT 3 : TECHNIQUE CIBLE UNIQUE -->
 <script>
 const techniquesCible = [
     "Mae Geri (jambe arrière, chudan)",
@@ -975,65 +1105,45 @@ const techniquesCible = [
 ];
 
 let cibleBeeper = null;
-let currentTiragesCible = [];
+let currentTechniqueCible = null;
 
 function attachCibleEvents() {
     document.getElementById("btnNouveauCible")?.addEventListener("click", nouveauTirageCible);
-    document.getElementById("btnLectureFR")?.addEventListener("click", lireTechniquesFrancais);
+    document.getElementById("btnLectureFR")?.addEventListener("click", lireTechniqueFrancais);
     
     const cibleBeeperSlider = document.getElementById("cibleBeeperFreqSlider");
     cibleBeeperSlider?.addEventListener("input", (e) => {
-        document.getElementById("cibleBeeperFreqValue").textContent = `\){e.target.value}s`;
+        document.getElementById("cibleBeeperFreqValue").textContent = `${e.target.value}s`;
     });
     
     document.getElementById("btnStartCibleBeeper")?.addEventListener("click", startCibleBeeper);
     document.getElementById("btnStopCibleBeeper")?.addEventListener("click", stopCibleBeeper);
 }
 
-// 🎯 MODIFICATION : Tirage d'UNE SEULE technique
 function nouveauTirageCible() {
-    currentTiragesCible = [];
-    const disponibles = [...techniquesCible];
-    
-    if (disponibles.length > 0) {
-        const index = Math.floor(Math.random() * disponibles.length);
-        currentTiragesCible.push(disponibles[index]);
-        disponibles.splice(index, 1);
-    }
-    
-    afficherTechniquesCible();
+    const randomIndex = Math.floor(Math.random() * techniquesCible.length);
+    currentTechniqueCible = techniquesCible[randomIndex];
+    afficherTechniqueCible();
 }
 
-function afficherTechniquesCible() {
-    const list = document.getElementById("cibleList");
-    list.innerHTML = "";
-    
-    currentTiragesCible.forEach((tech, i) => {
-        const li = document.createElement("li");
-        li.style.cssText = `
-            padding: 12px;
-            margin-bottom: 10px;
-            background: var(--pink-1);
-            border-radius: 10px;
-            font-size: 1.1rem;
-            animation: fadeIn 0.4s;
-            animation-delay: \({i * 0.15}s;
-            animation-fill-mode: both;
-        `;
-        li.innerHTML = `<strong>\){i + 1}.</strong> ${tech}`;
-        list.appendChild(li);
-    });
+function afficherTechniqueCible() {
+    const resultDiv = document.getElementById("cibleResult");
+    resultDiv.innerHTML = `
+        <div style="animation: fadeIn 0.5s;">
+            <strong>${currentTechniqueCible}</strong>
+        </div>
+    `;
 }
 
-function lireTechniquesFrancais() {
-    if (currentTiragesCible.length === 0) {
+function lireTechniqueFrancais() {
+    if (!currentTechniqueCible) {
         alert("Veuillez d'abord faire un tirage");
         return;
     }
     
     speechSynthesis.cancel();
     
-    const utt$erance = new SpeechSynthesisUtterance(`${currentTiragesCible[0]}`);
+    const utterance = new SpeechSynthesisUtterance(currentTechniqueCible);
     utterance.lang = "fr-FR";
     utterance.rate = 0.9;
     speechSynthesis.speak(utterance);
@@ -1052,7 +1162,7 @@ function startCibleBeeper() {
         sound.play().catch(e => {});
     }, freq);
     
-    document.getElementById("btnStartCibleBeeper").style.background = "linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)";
+    document.getElementById("btnStartCibleBeeper").style.backgroundImage = "linear-gradient(120deg, #4CAF50 0%, #45a049 100%)";
     document.getElementById("btnStartCibleBeeper").textContent = "🔔 Actif";
 }
 
@@ -1060,17 +1170,28 @@ function stopCibleBeeper() {
     if (cibleBeeper) {
         clearInterval(cibleBeeper);
         cibleBeeper = null;
-        document.getElementById("btnStartCibleBeeper").style.background = "linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)";
+        document.getElementById("btnStartCibleBeeper").style.backgroundImage = "linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)";
         document.getElementById("btnStartCibleBeeper").textContent = "🔔 Démarrer";
     }
 }
 
-// Initialisation
 document.addEventListener("DOMContentLoaded", () => {
     attachCibleEvents();
-    nouveauTirageCible(); // Tirage initial automatique
+    nouveauTirageCible();
 });
 </script>
 
 </body>
 </html>
+```
+
+## Résumé des corrections :
+
+### Script 1 (Vidéo) :
+- ✅ **Hauteur vidéo augmentée** : 380px sur desktop (≈10cm), 200px sur mobile
+- ✅ Media query `@media (min-width: 901px)` pour cibler uniquement le desktop
+
+### Script 2 (Affichage technique) :
+- ✅ **Bug corrigé** : L'affichage de la technique se fait maintenant **dans le même timeout** que le démarrage du beeper (après les 5s finales)
+- ✅ Ajout de la fonction `updateCountdown()` pour simplifier les mises à jour du texte
+- ✅ Séquence complète : Préparation 5s → Catégorie FR → JP 1 → Pause 5s → JP 2 → 5s → **Affichage + Beeper**
