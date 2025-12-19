@@ -119,22 +119,63 @@
     .btn-kawaii {
         width: 100%;
         font-family: "Spicy", sans-serif;
-        background: var(--accent);
         color: white;
         border: none;
         padding: 12px;
         border-radius: 50px;
         cursor: pointer;
         transition: transform 0.2s;
-        box-shadow: 0 4px 0px #d6459b;
+        box-shadow: 0 4px 0px rgba(0,0,0,0.2);
         margin-top: 5px;
     }
 
-    .btn-kawaii:hover { transform: scale(1.02); background: var(--hot-pink); }
-    .btn-kawaii:active { transform: translateY(3px); box-shadow: none; }
-    .btn-kawaii:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-kawaii:hover { 
+        transform: scale(1.02); 
+    }
+    .btn-kawaii:active { 
+        transform: translateY(3px); 
+        box-shadow: none; 
+    }
+    .btn-kawaii:disabled { 
+        opacity: 0.6; 
+        cursor: not-allowed; 
+        transform: none; 
+    }
 
-    .btn-ghost { background: #fff; color: var(--accent); border: 2px solid var(--accent); box-shadow: none; }
+    .btn-ghost { 
+        background: #fff; 
+        color: var(--accent); 
+        border: 2px solid var(--accent); 
+        box-shadow: none; 
+    }
+
+    /* 🆕 Gradients personnalisés pour les boutons */
+    .btn-read {
+        background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+        background-size: 200% auto;
+        transition: all 0.3s ease;
+    }
+    .btn-read:hover {
+        background-position: right center;
+    }
+
+    .btn-start {
+        background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+        background-size: 200% auto;
+        transition: all 0.3s ease;
+    }
+    .btn-start:hover {
+        background-position: right center;
+    }
+
+    .btn-stop {
+        background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+        background-size: 200% auto;
+        transition: all 0.3s ease;
+    }
+    .btn-stop:hover {
+        background-position: right center;
+    }
 
     /* Media Styles */
     .video-container iframe { width: 100%; border-radius: 10px; margin-top: 10px; height: 200px; }
@@ -283,15 +324,15 @@
                 <div id="enchainementSection"></div>
             </div>
 
-            <!-- SCRIPT 3 : 3 TECHNIQUES CIBLES -->
+            <!-- SCRIPT 3 : TECHNIQUE CIBLE -->
             <div class="card-kawaii" id="cibleSection">
-                <div class="module-title">🎯 3 Techniques Cibles</div>
+                <div class="module-title">🎯 Technique Cible</div>
                 
                 <div class="sub-section">
-                    <button id="btnNouveauCible" class="btn-kawaii">🎲 Nouveau tirage (3 techniques)</button>
+                    <button id="btnNouveauCible" class="btn-kawaii">🎲 Nouveau tirage</button>
                     
                     <!-- Liste des techniques -->
-                    <div class="result-display" style="min-height: 120px; text-align: left;">
+                    <div class="result-display" style="min-height: 80px; text-align: left;">
                         <ul id="cibleList" style="list-style: none; padding: 0; margin: 0;">
                             <li style="color: #999; text-align: center;">Cliquez pour commencer</li>
                         </ul>
@@ -301,7 +342,7 @@
                 <div class="sub-section">
                     <h3>🔊 Contrôles Audio</h3>
                     
-                    <button id="btnLectureFR" class="btn-kawaii" style="background: #4CAF50;">🔊 Lire en français</button>
+                    <button id="btnLectureFR" class="btn-kawaii btn-read">🔊 Lire en français</button>
                     
                     <div style="margin-top: 10px;">
                         <label style="font-weight: bold; color: var(--accent);">
@@ -311,8 +352,8 @@
                     </div>
                     
                     <div style="display: flex; gap: 10px; margin-top: 5px;">
-                        <button id="btnStartCibleBeeper" class="btn-kawaii" style="background: #2196F3; flex:1;">🔔 Démarrer</button>
-                        <button id="btnStopCibleBeeper" class="btn-kawaii" style="background: #ff4444; flex:1;">⏹ Stop</button>
+                        <button id="btnStartCibleBeeper" class="btn-kawaii btn-start" style="flex:1;">🔔 Démarrer</button>
+                        <button id="btnStopCibleBeeper" class="btn-kawaii btn-stop" style="flex:1;">⏹ Stop</button>
                     </div>
                 </div>
             </div>
@@ -325,7 +366,7 @@
 <!-- SCRIPTS JAVASCRIPT -->
 <!-- ========================================= -->
 
-<!-- SCRIPT 1 : KIHON SIMPLE (avec filtrage par catégorie) -->
+<!-- SCRIPT 1 : KIHON SIMPLE -->
 <script>
 let techniques = [];
 
@@ -432,7 +473,7 @@ function displayCategoryList(category) {
       // Scroll vers le résultat si nécessaire
       document.getElementById("kihonResult").scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
-    categoryListContainer.appendChild(item);
+    category$ListContainer.appendChild(item);
   });
 }
 
@@ -452,7 +493,7 @@ function displayList(list) {
   maxSuggestions.forEach(t => {
     const item = document.createElement("div");
     item.className = "suggestion-item";
-    item.innerHTML = `<strong>${t.nom}</strong> <small style="color:var(--accent)">(${t.categorie})</small>`;
+    item.innerHTML = `<strong>${t.nom}</strong> <small style="color:var(--accent)">(\({t.categorie})</small>`;
     
     item.addEventListener("click", () => {
       showTechnique(t);
@@ -518,7 +559,7 @@ document.getElementById("btnRandomKihon").addEventListener("click", () => {
 });
 </script>
 
-<!-- SCRIPT 2 : ENCHAÎNEMENT AVANCÉ (avec beeper auto après lecture) -->
+<!-- SCRIPT 2 : ENCHAÎNEMENT AVANCÉ (MODIFIÉ) -->
 <script>
 let enchainementsData = [];
 let techniquesDescriptions = [];
@@ -580,7 +621,7 @@ function initEnchainementUI() {
                 <input type="range" id="enchainementSpeedSlider" min="0.3" max="2" step="0.1" value="0.7">
             </div>
             
-            <button id="btnLectureJP" class="btn-kawaii" style="background: #4CAF50;">▶️ Lire en japonais (2 fois)</button>
+            <button id="btnLectureJP" class="btn-kawaii btn-read">▶️ Lire en japonais (2 fois)</button>
             <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">⚡ Le beeper démarrera automatiquement 5s après la lecture</p>
             
             <div style="margin-top: 10px;">
@@ -591,8 +632,8 @@ function initEnchainementUI() {
             </div>
             
             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                <button id="btnStartBeeper" class="btn-kawaii" style="background: #2196F3; flex:1;">🔔 Démarrer</button>
-                <button id="btnStopBeeper" class="btn-kawaii" style="background: #ff4444; flex:1;">⏹ Stop</button>
+                <button id="btnStartBeeper" class="btn-kawaii btn-start" style="flex:1;">🔔 Démarrer</button>
+                <button id="btnStopBeeper" class="btn-kawaii btn-stop" style="flex:1;">⏹ Stop</button>
             </div>
         </div>
     `;
@@ -626,10 +667,10 @@ function attachEnchainementEvents() {
     const speedSlider = document.getElementById("enchainementSpeedSlider");
     speedSlider?.addEventListener("input", (e) => {
         enchainementSpeechRate = parseFloat(e.target.value);
-        document.getElementById("enchainementSpeedValue").textContent = `×${enchainementSpeechRate.toFixed(1)}`;
+        document.getElementById("enchainementSpeedValue").textContent = `×\){enchainementSpeechRate.toFixed(1)}`;
     });
     
-    document.getElementById("btnLectureJP")?.addEventListener("click", lireEnchainementJaponais);
+    document.getElementById("btnLectureJP")?.addEventListener("click", () => lireEnchainementJaponais());
     
     const beeperSlider = document.getElementById("beeperFreqSlider");
     beeperSlider?.addEventListener("input", (e) => {
@@ -640,7 +681,15 @@ function attachEnchainementEvents() {
     document.getElementById("btnStopBeeper")?.addEventListener("click", stopEnchainementBeeper);
 }
 
+// 🆕 Fonction modifiée a$vec le nouveau flux
 function nouveauEnchainement() {
+    // Annuler toutes les actions en cours
+    stopEnchainementBeeper();
+    speechSynthesis.cancel();
+    enchainementTimeouts.forEach(t => clearTimeout(t));
+    enchainementTimeouts = [];
+    isReadingEnchainement = false;
+
     const specialite = document.getElementById("filterSpecialite")?.value;
     let filtered = enchainementsData;
     
@@ -654,7 +703,51 @@ function nouveauEnchainement() {
     }
     
     currentEnchainement = filtered[Math.floor(Math.random() * filtered.length)];
-    afficherEnchainement();
+    
+    // Afficher message de chargement
+    const resultDiv = document.getElementById("enchainementResult");
+    resultDiv.innerHTML = `
+        <p style="color: #999;">⏳ Préparation de l'enchaînement...</p>
+    `;
+
+    // 🆕 Planifier l'affichage de l'enchaînement après 10 secondes
+    enchainementTimeouts.push(setTimeout(() => {
+        afficherEnchainement();
+    }, 10000));
+
+    // 🆕 Planifier la lecture de la catégorie après 5 secondes
+    enchainementTimeouts.push(setTimeout(() => {
+        lireCategorieFrancais();
+    }, 5000));
+}
+
+// 🆕 Fonction de lecture de la catégorie en français
+function lireCategorieFrancais() {
+    if (!currentEnchainement || !currentEnchainement.specialite || currentEnchainement.specialite.length === 0) {
+        // Si pas de spécialité, passer directement à la lecture japonaise
+        lireEnchainementJaponais(true);
+        return;
+    }
+
+    // Choisir une spécialité aléatoirement si plusieurs disponibles
+    const selectedSpecialite = currentEnchainement.specialite[Math.floor(Math.random() * currentEnchainement.specialite.length)];
+    
+    const utterance = new SpeechSynthesisUtterance(`Catégorie : \({selectedSpecialite}`);
+    utterance.lang = "fr-FR";
+    utterance.rate = 0.9;
+    utterance.volume = 1.0;
+
+    // Après la lecture de la catégorie, lancer la lecture japonaise immédiatement
+    utterance.onend = () => {
+        lireEnchainementJaponais(true);
+    };
+
+    // En cas d'erreur, lancer quand même la lecture japonaise
+    utterance.onerror = () => {
+        lireEnchainementJaponais(true);
+    };
+
+    speechSynthesis.speak(utterance);
 }
 
 function afficherEnchainement() {
@@ -664,10 +757,10 @@ function afficherEnchainement() {
     resultDiv.innerHTML = `
         <div style="animation: fadeIn 0.4s;">
             <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; color: #333;">
-                ${createClickableTerms(currentEnchainement.fr)}
+                \){createClickableTerms(currentEnchainement.fr)}
             </div>
             <div style="font-size: 1.1rem; color: #666; font-style: italic;">
-                ${currentEnchainement.jp}
+                \({currentEnchainement.jp}
             </div>
             <div style="margin-top: 8px; font-size: 0.8rem; color: var(--accent);">
                 <em>Cliquez sur une technique pour la description</em>
@@ -680,7 +773,7 @@ function createClickableTerms(text) {
     const terms = text.split(/[,→]/);
     return terms.map(term => {
         const trimmed = term.trim();
-        return `<span class="clickable-term" onclick="showTechniquePopup('${trimmed.replace(/'/g, "\\'")}')">${trimmed}</span>`;
+        return `<span class="clickable-term" onclick="showTechniquePopup('\){trimmed.replace(/'/g, "\\'")}')">\({trimmed}</span>`;
     }).join(' → ');
 }
 
@@ -708,20 +801,20 @@ function showTechniquePopup(termName) {
         let videoEmbed = '';
         if (technique.video) {
             let url = technique.video.replace("watch?v=", "embed/").replace("youtu.be/", "www.youtube.com/embed/");
-            videoEmbed = `<iframe src="${url}" style="width: 100%; height: 200px; margin-top: 15px; border-radius: 10px;" frameborder="0" allowfullscreen></iframe>`;
+            videoEmbed = `<iframe src="\){url}" style="width: 100%; height: 200px; margin-top: 15px; border-radius: 10px;" frameborder="0" allowfullscreen></iframe>`;
         }
         
         popup.innerHTML = `
             <button onclick="this.parentElement.remove()" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 18px;">×</button>
-            <h2 style="color: var(--accent); margin-bottom: 10px;">${technique.nom}</h2>
-            <p style="font-style: italic; color: #666; margin-bottom: 10px;">Catégorie: ${technique.categorie}</p>
-            <p style="line-height: 1.6;">${technique.description.replace(/\n/g, '<br>')}</p>
-            ${videoEmbed}
+            <h2 style="color: var(--accent); margin-bottom: 10px;">\({technique.nom}</h2>
+            <p style="font-style: italic; color: #666; margin-bottom: 10px;">Catégorie: \){technique.categorie}</p>
+            <p style="line-height: 1.6;">\({technique.description.replace(/\n/g, '<br>')}</p>
+            \){videoEmbed}
         `;
     } else {
         popup.innerHTML = `
             <button onclick="this.parentElement.remove()" style="float: right; background: #ff4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">×</button>
-            <h3 style="color: var(--accent);">${termName}</h3>
+            <h3 style="color: var(--accent);">\({termName}</h3>
             <p style="color: #666;">Description non trouvée dans la base de données.</p>
         `;
     }
@@ -739,8 +832,8 @@ function showTechniquePopup(termName) {
     document.body.appendChild(overlay);
 }
 
-// Lecture en japonais avec beeper automatique après
-async function lireEnchainementJaponais() {
+// 🆕 Fonction modifiée avec option pour sauter la pause initiale
+async function lireEnchainementJaponais(skipInitialDelay = false) {
     if (!currentEnchainement || isReadingEnchainement) return;
     
     isReadingEnchainement = true;
@@ -755,15 +848,24 @@ async function lireEnchainementJaponais() {
     enchainementTimeouts = [];
     
     await unlockSpeechSynthesis();
-    
-    // Phase 1 : Préparation (5s)
-    btn.textContent = "⏳ Préparation (5s)...";
-    statusSpan.innerHTML = '<span class="status-badge status-waiting">Préparation</span>';
-    
-    enchainementTimeouts.push(setTimeout(() => {
-        // Phase 2 : Première lecture
+
+    let initialDelay = 5000;
+    if (skipInitialDelay) {
+        initialDelay = 0;
         btn.textContent = "🔊 Lecture 1/2...";
         statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 1</span>';
+    } else {
+        // Phase 1 : Préparation (5s)
+        btn.textContent = "⏳ Préparation (5s)...";
+        statusSpan.innerHTML = '<span class="status-badge status-waiting">Préparation</span>';
+    }
+    
+    enchainementTimeouts.push(setTimeout(() => {
+        if (!skipInitialDelay) {
+            // Phase 2 : Première lecture
+            btn.textContent = "🔊 Lecture 1/2...";
+            statusSpan.innerHTML = '<span class="status-badge status-active">Lecture 1</span>';
+        }
         
         speakJapanese(currentEnchainement.jp, () => {
             // Phase 3 : Pause entre les lectures (5s)
@@ -792,7 +894,7 @@ async function lireEnchainementJaponais() {
                 });
             }, 5000));
         });
-    }, 5000));
+    }, initialDelay));
 }
 
 function speakJapanese(text, callback) {
@@ -819,7 +921,7 @@ function startEnchainementBeeper() {
         sound.play().catch(e => {});
     }, freq);
     
-    document.getElementById("btnStartBeeper").style.background = "#4CAF50";
+    // Mise à jour visuelle sans modifier le gradient
     document.getElementById("btnStartBeeper").textContent = "🔔 Actif";
     
     const statusSpan = document.getElementById("audioStatus");
@@ -832,7 +934,7 @@ function stopEnchainementBeeper() {
     if (enchainementBeeper) {
         clearInterval(enchainementBeeper);
         enchainementBeeper = null;
-        document.getElementById("btnStartBeeper").style.background = "#2196F3";
+        // Mise à jour visuelle sans modifier le gradient
         document.getElementById("btnStartBeeper").textContent = "🔔 Démarrer";
         
         const statusSpan = document.getElementById("audioStatus");
@@ -872,16 +974,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- SCRIPT 3 : 3 TECHNIQUES CIBLES -->
+<!-- SCRIPT 3 : TECHNIQUE CIBLE (MODIFIÉ) -->
 <script>
 const techniquesCible = [
-    "Mae Geri de la jambe arrière",
-    "Mawashi Geri de la jambe arrière",
-    "Mae Geri jambe avant avec sursaut",
-    "Mawashi Geri jambe avant avec sursaut",
+    "Mae Geri (jambe arrière, chudan)",
+    "Mawashi Geri (jambe arrière, jodan/chudan)",
+    "Mae Geri jambe avant avec sursaut (chudan)",
+    "Mawashi Geri jambe avant avec sursaut (jodan/chudan)",
     "Gyaku Zuki chudan",
-    "Kizami/Maete Zuki jodan Gyaku Zuki chudan",
-    "Oï Zuki jodan retour arrière"
+    "Kizami/Maete Zuki jodan → Gyaku Zuki chudan",
+    "Oï Zuki jodan → retour arrière"
 ];
 
 let cibleBeeper = null;
@@ -893,18 +995,20 @@ function attachCibleEvents() {
     
     const cibleBeeperSlider = document.getElementById("cibleBeeperFreqSlider");
     cibleBeeperSlider?.addEventListener("input", (e) => {
-        document.getElementById("cibleBeeperFreqValue").textContent = `${e.target.value}s`;
+        document.getElementById("cibleBeeperFreqValue").textContent = `\){e.target.value}s`;
     });
     
     document.getElementById("btnStartCibleBeeper")?.addEventListener("click", startCibleBeeper);
     document.getElementById("btnStopCibleBeeper")?.addEventListener("click", stopCibleBeeper);
 }
 
+// 🆕 Modifié pour ne sélectionner qu'UNE SEULE technique
 function nouveauTirageCible() {
     currentTiragesCible = [];
     const disponibles = [...techniquesCible];
     
-    for (let i = 0; i < 3 && disponibles.length > 0; i++) {
+    // Sélectionner UNE seule technique aléatoire
+    if (disponibles.length > 0) {
         const index = Math.floor(Math.random() * disponibles.length);
         currentTiragesCible.push(disponibles[index]);
         disponibles.splice(index, 1);
@@ -924,12 +1028,12 @@ function afficherTechniquesCible() {
             margin-bottom: 10px;
             background: var(--pink-1);
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             animation: fadeIn 0.4s;
-            animation-delay: ${i * 0.15}s;
+            animation-delay: \({i * 0.15}s;
             animation-fill-mode: both;
         `;
-        li.innerHTML = `<strong>${i + 1}.</strong> ${tech}`;
+        li.innerHTML = `<strong>\){i + 1}.</strong> ${tech}`;
         list.appendChild(li);
     });
 }
@@ -942,10 +1046,10 @@ function lireTechniquesFrancais() {
     
     speechSynthesis.cancel();
     
-    let index = 0;
+    let index$ = 0;
     function speakNext() {
         if (index < currentTiragesCible.length) {
-            const utterance = new SpeechSynthesisUtterance(`${index + 1}. ${currentTiragesCible[index]}`);
+            const utterance = new SpeechSynthesisUtterance(`${currentTiragesCible[index]}`);
             utterance.lang = "fr-FR";
             utterance.rate = 0.9;
             utterance.onend = () => {
@@ -972,7 +1076,7 @@ function startCibleBeeper() {
         sound.play().catch(e => {});
     }, freq);
     
-    document.getElementById("btnStartCibleBeeper").style.background = "#4CAF50";
+    // Mise à jour visuelle sans modifier le gradient
     document.getElementById("btnStartCibleBeeper").textContent = "🔔 Actif";
 }
 
@@ -980,7 +1084,7 @@ function stopCibleBeeper() {
     if (cibleBeeper) {
         clearInterval(cibleBeeper);
         cibleBeeper = null;
-        document.getElementById("btnStartCibleBeeper").style.background = "#2196F3";
+        // Mise à jour visuelle sans modifier le gradient
         document.getElementById("btnStartCibleBeeper").textContent = "🔔 Démarrer";
     }
 }
