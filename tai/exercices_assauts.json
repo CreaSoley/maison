@@ -1,0 +1,107 @@
+{
+  "exercices": [
+    {
+      "assaut": "Étranglement de face à une main",
+      "configuration": "fauteuil",
+      "objectif": "Réflexe de protection et sortie d’axe immédiate",
+      "points_cles": [
+        "Protection immédiate de la trachée",
+        "Inclinaison courte du buste pour casser l’axe de pression",
+        "Rotation du buste vers l’extérieur de la main adverse",
+        "Recréation d’espace avant toute action"
+      ],
+      "erreurs_a_eviter": [
+        "Répondre sans protection préalable",
+        "Agir sans sortie d’axe sur une attaque vitale"
+      ],
+      "deroule": [
+        "Visualiser une main arrivant à la gorge",
+        "Rentrer le menton et monter légèrement les épaules",
+        "Saisir le poignet agresseur avec la main la plus proche",
+        "Monter l’avant-bras en barrière verticale",
+        "Tourner le buste vers l’extérieur de trente à quarante-cinq degrés",
+        "Effectuer un teisho imaginaire vers le visage ou le sternum",
+        "Appliquer une clé de coude imaginaire",
+        "Marquer l’arrêt et maintenir le zanshin"
+      ],
+      "image": "/images/logo1.png"
+    },
+    {
+      "assaut": "Étranglement de face à deux mains",
+      "configuration": "fauteuil",
+      "objectif": "Récupération du centre sous pression",
+      "points_cles": [
+        "Protection vitale prioritaire",
+        "Redressement actif du buste pour respirer",
+        "Rotation du buste pour désaxer la poussée",
+        "Stabilité du centre malgré la contrainte"
+      ],
+      "erreurs_a_eviter": [
+        "Tirer vers le bas sans rotation",
+        "Rester dans l’axe de pression"
+      ],
+      "deroule": [
+        "Visualiser les deux mains à la gorge",
+        "Rentrer le menton et gainer immédiatement",
+        "Descendre simultanément les coudes avec atemi niveau chudan",
+        "Tourner le buste avec enroulement des bras",
+        "Former un arc défensif",
+        "Sortir clairement de l’axe",
+        "Appliquer une clé de coude imaginaire",
+        "Maintenir le zanshin"
+      ],
+      "image": "/images/logo1.png"
+    },
+    {
+      "assaut": "Saisie de revers",
+      "configuration": "fauteuil",
+      "objectif": "Lecture de l’axe et du déséquilibre",
+      "points_cles": [
+        "Abaissement du centre pour casser la traction",
+        "Rotation du buste vers le côté libre",
+        "Sortie d’axe sans tirage en force",
+        "Posture conservée et regard actif"
+      ],
+      "erreurs_a_eviter": [
+        "Reculer le buste",
+        "Fuir au lieu de contrôler l’axe"
+      ],
+      "deroule": [
+        "Visualiser une saisie du revers",
+        "Gainer et stabiliser le regard",
+        "Saisir le poignet agresseur",
+        "Tourner le buste du côté de la saisie",
+        "Faire passer l’épaule devant",
+        "Effectuer un atemi court imaginaire",
+        "Marquer l’arrêt et le zanshin"
+      ],
+      "image": "/images/logo1.png"
+    },
+    {
+      "assaut": "Saisie de cheveux",
+      "configuration": "fauteuil",
+      "objectif": "Réalisme et contrôle de la traction",
+      "points_cles": [
+        "Protection immédiate de la tête et des cervicales",
+        "Inclinaison dans le sens de la traction",
+        "Rotation pour réduire la tension",
+        "Réalignement rapide tête et buste"
+      ],
+      "erreurs_a_eviter": [
+        "Résister frontalement à la traction",
+        "Créer une tension cervicale excessive"
+      ],
+      "deroule": [
+        "Visualiser une main saisissant les cheveux",
+        "Rentrer le menton et accompagner légèrement la traction",
+        "Saisir immédiatement le poignet",
+        "Incliner et tourner le buste dans le sens de la traction",
+        "Faire passer l’épaule devant",
+        "Appliquer une clé de doigts imaginaire",
+        "Effectuer un atemi court",
+        "Maintenir le zanshin"
+      ],
+      "image": "/images/logo1.png"
+    }
+  ]
+}
