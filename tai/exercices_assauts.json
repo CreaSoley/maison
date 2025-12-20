@@ -15,14 +15,14 @@
         "Agir sans sortie d’axe sur une attaque vitale"
       ],
       "deroule": [
-        "Visualiser une main arrivant à la gorge",
-        "Rentrer le menton et monter légèrement les épaules",
-        "Saisir le poignet agresseur avec la main la plus proche",
-        "Monter l’avant-bras en barrière verticale",
-        "Tourner le buste vers l’extérieur de trente à quarante-cinq degrés",
-        "Effectuer un teisho imaginaire vers le visage ou le sternum",
-        "Appliquer une clé de coude imaginaire",
-        "Marquer l’arrêt et maintenir le zanshin"
+        { "etape": 1, "texte": "Visualiser une main arrivant à la gorge" },
+        { "etape": 2, "texte": "Rentrer le menton et monter légèrement les épaules" },
+        { "etape": 3, "texte": "Saisir le poignet agresseur avec la main la plus proche" },
+        { "etape": 4, "texte": "Monter l’avant-bras en barrière verticale" },
+        { "etape": 5, "texte": "Tourner le buste vers l’extérieur de trente à quarante-cinq degrés" },
+        { "etape": 6, "texte": "Effectuer un teisho imaginaire vers le visage ou le sternum" },
+        { "etape": 7, "texte": "Appliquer une clé de coude imaginaire" },
+        { "etape": 8, "texte": "Marquer l’arrêt et maintenir le zanshin" }
       ],
       "image": "/images/logo1.png"
     },
@@ -41,14 +41,14 @@
         "Rester dans l’axe de pression"
       ],
       "deroule": [
-        "Visualiser les deux mains à la gorge",
-        "Rentrer le menton et gainer immédiatement",
-        "Descendre simultanément les coudes avec atemi niveau chudan",
-        "Tourner le buste avec enroulement des bras",
-        "Former un arc défensif",
-        "Sortir clairement de l’axe",
-        "Appliquer une clé de coude imaginaire",
-        "Maintenir le zanshin"
+        { "etape": 1, "texte": "Visualiser les deux mains à la gorge" },
+        { "etape": 2, "texte": "Rentrer le menton et gainer immédiatement" },
+        { "etape": 3, "texte": "Descendre simultanément les coudes avec atemi chudan" },
+        { "etape": 4, "texte": "Tourner le buste avec enroulement des bras" },
+        { "etape": 5, "texte": "Former un arc défensif" },
+        { "etape": 6, "texte": "Sortir clairement de l’axe de pression" },
+        { "etape": 7, "texte": "Appliquer une clé de coude imaginaire" },
+        { "etape": 8, "texte": "Maintenir le zanshin" }
       ],
       "image": "/images/logo1.png"
     },
@@ -67,13 +67,13 @@
         "Fuir au lieu de contrôler l’axe"
       ],
       "deroule": [
-        "Visualiser une saisie du revers",
-        "Gainer et stabiliser le regard",
-        "Saisir le poignet agresseur",
-        "Tourner le buste du côté de la saisie",
-        "Faire passer l’épaule devant",
-        "Effectuer un atemi court imaginaire",
-        "Marquer l’arrêt et le zanshin"
+        { "etape": 1, "texte": "Visualiser une saisie du revers" },
+        { "etape": 2, "texte": "Gainer et stabiliser le regard" },
+        { "etape": 3, "texte": "Saisir le poignet agresseur" },
+        { "etape": 4, "texte": "Tourner le buste vers le côté libre" },
+        { "etape": 5, "texte": "Faire passer l’épaule devant" },
+        { "etape": 6, "texte": "Effectuer un atemi court imaginaire" },
+        { "etape": 7, "texte": "Marquer l’arrêt et maintenir le zanshin" }
       ],
       "image": "/images/logo1.png"
     },
@@ -92,16 +92,463 @@
         "Créer une tension cervicale excessive"
       ],
       "deroule": [
-        "Visualiser une main saisissant les cheveux",
-        "Rentrer le menton et accompagner légèrement la traction",
-        "Saisir immédiatement le poignet",
-        "Incliner et tourner le buste dans le sens de la traction",
-        "Faire passer l’épaule devant",
-        "Appliquer une clé de doigts imaginaire",
-        "Effectuer un atemi court",
-        "Maintenir le zanshin"
+        { "etape": 1, "texte": "Visualiser une main saisissant les cheveux" },
+        { "etape": 2, "texte": "Rentrer le menton et accompagner la traction" },
+        { "etape": 3, "texte": "Saisir immédiatement le poignet agresseur" },
+        { "etape": 4, "texte": "Incliner et tourner le buste dans le sens de la traction" },
+        { "etape": 5, "texte": "Faire passer l’épaule devant" },
+        { "etape": 6, "texte": "Appliquer une clé de doigts imaginaire" },
+        { "etape": 7, "texte": "Effectuer un atemi court imaginaire" },
+        { "etape": 8, "texte": "Maintenir le zanshin" }
       ],
       "image": "/images/logo1.png"
-    }
-  ]
+    },
+    {
+      "assaut": "Saisie d’un poignet direct",
+      "configuration": "fauteuil",
+      "objectif": "Sortie d’axe par rotation interne et reprise du centre",
+      "points_cles": [
+        "Coude rapproché du corps pour protéger le centre",
+        "Rotation du buste du côté du poignet saisi",
+        "Sortie d’axe avant la libération",
+        "Continuité du mouvement sans rupture"
+      ],
+      "erreurs_a_eviter": [
+        "Tirer le bras vers l’arrière",
+        "Lutter en force contre la saisie"
+      ],
+      "deroule": [
+        { "etape": 1, "texte": "Visualiser un poignet saisi côté direct" },
+        { "etape": 2, "texte": "Gainer légèrement et rentrer le menton" },
+        { "etape": 3, "texte": "Rapprocher le coude du centre" },
+        { "etape": 4, "texte": "Tourner le buste du côté du poignet saisi" },
+        { "etape": 5, "texte": "Placer la main libre en protection haute" },
+        { "etape": 6, "texte": "Libérer le poignet par un mouvement d’enroulement" },
+        { "etape": 7, "texte": "Effectuer un contre imaginaire court" },
+        { "etape": 8, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+      ],
+      "image": "/images/logo1.png"
+    },
+{
+  "assaut": "Saisie d’un poignet opposé",
+  "configuration": "fauteuil",
+  "objectif": "Désaxer la traction et ouvrir l’angle faible",
+  "points_cles": [
+    "Accompagnement de la traction adverse",
+    "Rotation du buste vers l’extérieur de la saisie",
+    "Axe tête et buste toujours protégé",
+    "Libération réalisée dans le mouvement"
+  ],
+  "erreurs_a_eviter": [
+    "Résister en force face à la traction",
+    "Rester dans l’axe de l’adversaire"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser un poignet opposé saisi" },
+    { "etape": 2, "texte": "Gainer légèrement et détendre les épaules" },
+    { "etape": 3, "texte": "Incliner légèrement le buste dans le sens de la traction" },
+    { "etape": 4, "texte": "Tourner le buste vers l’extérieur de trente à quarante-cinq degrés" },
+    { "etape": 5, "texte": "Fermer le coude vers le centre" },
+    { "etape": 6, "texte": "Libérer le poignet par un mouvement en spirale" },
+    { "etape": 7, "texte": "Effectuer un contre imaginaire court" },
+    { "etape": 8, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Saisie des deux poignets",
+  "configuration": "fauteuil",
+  "objectif": "Sortir de l’axe et reprendre le centre",
+  "points_cles": [
+    "Détente des épaules pour éviter l’enfermement",
+    "Rotation du buste pour créer une faiblesse dans la saisie",
+    "Mains ramenées vers le centre",
+    "Libération initiée par le buste"
+  ],
+  "erreurs_a_eviter": [
+    "Tirer en force sur les poignets",
+    "Agir uniquement avec les bras"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser les deux poignets saisis" },
+    { "etape": 2, "texte": "Gainer légèrement et rentrer le menton" },
+    { "etape": 3, "texte": "Ouvrir légèrement les paumes vers l’extérieur" },
+    { "etape": 4, "texte": "Tourner le buste à gauche d’environ trente degrés" },
+    { "etape": 5, "texte": "Accompagner la rotation par les épaules" },
+    { "etape": 6, "texte": "Tourner le buste à droite d’environ trente degrés" },
+    { "etape": 7, "texte": "Effectuer un tsuki imaginaire court" },
+    { "etape": 8, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Saisie des deux poignets hauts",
+  "configuration": "fauteuil",
+  "objectif": "Casser la structure adverse par le centre",
+  "points_cles": [
+    "Abaissement du centre et des épaules",
+    "Rotation du buste pour casser la ligne de contrôle",
+    "Reprise de posture avant la libération",
+    "Axe tête et bassin réaligné"
+  ],
+  "erreurs_a_eviter": [
+    "Descendre les bras sans engager le centre",
+    "Geste mécanique sans tai sabaki"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser les poignets saisis en position haute" },
+    { "etape": 2, "texte": "Ouvrir les paumes de mains" },
+    { "etape": 3, "texte": "Monter légèrement les bras en gouttière" },
+    { "etape": 4, "texte": "Tourner le buste à gauche d’environ trente degrés" },
+    { "etape": 5, "texte": "Gainer et s’ancrer dans le dossier" },
+    { "etape": 6, "texte": "Appliquer une clé de doigts imaginaire en gouttière" },
+    { "etape": 7, "texte": "Effectuer un atemi imaginaire court" },
+    { "etape": 8, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Saisie d’un poignet à deux mains",
+  "configuration": "fauteuil",
+  "objectif": "Gestion de l’espace et fluidité",
+  "points_cles": [
+    "Absence de lutte contre la force directe",
+    "Rotation du buste vers le pouce",
+    "Coude recentré près du corps",
+    "Distance recréée par le déplacement du buste"
+  ],
+  "erreurs_a_eviter": [
+    "Lutter contre la saisie",
+    "Figement du buste"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser un poignet saisi à deux mains" },
+    { "etape": 2, "texte": "Relâcher l’épaule du bras saisi" },
+    { "etape": 3, "texte": "Incliner légèrement le buste" },
+    { "etape": 4, "texte": "Tourner le buste et le poignet vers le pouce" },
+    { "etape": 5, "texte": "Faire passer l’épaule devant" },
+    { "etape": 6, "texte": "Effectuer un atemi imaginaire court" },
+    { "etape": 7, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Mawashi tsuki",
+  "configuration": "fauteuil",
+  "objectif": "Laisser passer l’attaque et sortir de l’axe",
+  "points_cles": [
+    "Sortie circulaire de l’axe",
+    "Rotation du buste avant l’action des bras",
+    "Centre stable et épaules détendues",
+    "Distance recréée sans recul excessif"
+  ],
+  "erreurs_a_eviter": [
+    "Bloquer en force",
+    "Rester dans l’axe de frappe"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser un mawashi tsuki arrivant" },
+    { "etape": 2, "texte": "Incliner le buste du côté opposé à la frappe" },
+    { "etape": 3, "texte": "Effectuer une rotation circulaire du buste" },
+    { "etape": 4, "texte": "Placer l’avant-bras en barrière souple" },
+    { "etape": 5, "texte": "Sortir complètement de l’axe du coup" },
+    { "etape": 6, "texte": "Effectuer un contre imaginaire court" },
+    { "etape": 7, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+    {
+  "assaut": "Tsuki jodan",
+  "configuration": "fauteuil",
+  "objectif": "Protection immédiate et déviation courte",
+  "points_cles": [
+    "Protection vitale déclenchée avant la déviation",
+    "Inclinaison minimale du buste",
+    "Rotation courte pour casser la ligne d’attaque",
+    "Axe tête et buste constamment protégé"
+  ],
+  "erreurs_a_eviter": [
+    "Chercher le poing adverse",
+    "Retarder la protection de la tête"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser un tsuki dirigé vers le visage" },
+    { "etape": 2, "texte": "Monter immédiatement la protection haute" },
+    { "etape": 3, "texte": "Rentrer le menton et monter légèrement les épaules" },
+    { "etape": 4, "texte": "Incliner très légèrement le buste vers l’arrière" },
+    { "etape": 5, "texte": "Tourner le buste pour casser la ligne d’attaque" },
+    { "etape": 6, "texte": "Dévier le bras adverse par un mouvement court" },
+    { "etape": 7, "texte": "Effectuer un contre imaginaire direct" },
+    { "etape": 8, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque haute matraque descendante",
+  "configuration": "fauteuil",
+  "objectif": "Protection de la tête et sortie d’axe claire",
+  "points_cles": [
+    "Réflexe de survie prioritaire pour la tête",
+    "Sortie d’axe diagonale",
+    "Rotation du buste pour absorber l’impact visuel",
+    "Stabilisation immédiate après l’esquive"
+  ],
+  "erreurs_a_eviter": [
+    "Lever les bras sans protéger la tête",
+    "Rester sous la trajectoire de frappe"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une frappe descendante vers la tête" },
+    { "etape": 2, "texte": "Rentrer le menton et monter les épaules" },
+    { "etape": 3, "texte": "Monter l’avant-bras en barrière verticale" },
+    { "etape": 4, "texte": "Incliner légèrement le buste vers l’arrière" },
+    { "etape": 5, "texte": "Tourner le buste vers l’extérieur de l’attaque" },
+    { "etape": 6, "texte": "Effectuer un teisho ou un coude imaginaire vers le centre" },
+    { "etape": 7, "texte": "Stabiliser la posture" },
+    { "etape": 8, "texte": "Maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque haute couteau descendante ou en pique",
+  "configuration": "fauteuil",
+  "objectif": "Réflexe de survie et contrôle de l’axe vital",
+  "points_cles": [
+    "Protection du centre avant toute tentative de contrôle",
+    "Sortie d’axe combinant inclinaison et rotation",
+    "Buste engagé sans fuite désorganisée",
+    "Zone vitale constamment fermée"
+  ],
+  "erreurs_a_eviter": [
+    "Chercher la main armée",
+    "Ouvrir la ligne centrale"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque haute avec arme courte" },
+    { "etape": 2, "texte": "Rentrer le menton et gainer immédiatement" },
+    { "etape": 3, "texte": "Former une double barrière avec les avant-bras" },
+    { "etape": 4, "texte": "Incliner et tourner le buste pour sortir de l’axe" },
+    { "etape": 5, "texte": "Maintenir la protection du centre" },
+    { "etape": 6, "texte": "Effectuer une saisie symbolique de l’avant-bras armé" },
+    { "etape": 7, "texte": "Placer un contre imaginaire court" },
+    { "etape": 8, "texte": "Maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque basse couteau vers l’abdomen ou la cuisse",
+  "configuration": "fauteuil",
+  "objectif": "Lecture basse et fermeture de l’angle",
+  "points_cles": [
+    "Lecture basse sans rupture de posture",
+    "Fermeture de l’angle par rotation externe du buste",
+    "Centre gainé et tête haute",
+    "Esquive courte et fonctionnelle"
+  ],
+  "erreurs_a_eviter": [
+    "Se pencher vers l’arme",
+    "Ouvrir le centre"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque basse montante ou directe" },
+    { "etape": 2, "texte": "Gainer et reculer très légèrement le buste" },
+    { "etape": 3, "texte": "Descendre les coudes pour protéger le centre" },
+    { "etape": 4, "texte": "Tourner le buste vers l’extérieur de l’attaque" },
+    { "etape": 5, "texte": "Former une barrière basse avec l’avant-bras" },
+    { "etape": 6, "texte": "Effectuer un contre imaginaire direct bas" },
+    { "etape": 7, "texte": "Stabiliser la posture" },
+    { "etape": 8, "texte": "Maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque circulaire matraque",
+  "configuration": "fauteuil",
+  "objectif": "Laisser passer l’attaque et sortir de l’axe",
+  "points_cles": [
+    "Accompagnement du mouvement adverse",
+    "Inclinaison opposée à la frappe",
+    "Sortie d’axe ample et contrôlée",
+    "Continuité fluide sans arrêt brutal"
+  ],
+  "erreurs_a_eviter": [
+    "Chercher un blocage dur",
+    "S’opposer frontalement à l’arme"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque circulaire large" },
+    { "etape": 2, "texte": "Incliner le buste dans le sens opposé à la frappe" },
+    { "etape": 3, "texte": "Accompagner la trajectoire par une rotation fluide du buste" },
+    { "etape": 4, "texte": "Placer l’avant-bras en barrière souple" },
+    { "etape": 5, "texte": "Sortir complètement de l’axe de l’arme" },
+    { "etape": 6, "texte": "Effectuer un contre imaginaire court" },
+    { "etape": 7, "texte": "Stabiliser la posture" },
+    { "etape": 8, "texte": "Maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+    {
+  "assaut": "Enchaînement continu d’attaques armées",
+  "configuration": "fauteuil",
+  "objectif": "Développer les réflexes de protection et la continuité du tai sabaki",
+  "points_cles": [
+    "Protection réflexe avant toute action technique",
+    "Transitions fluides entre les sorties d’axe",
+    "Centre constamment protégé malgré la fatigue",
+    "Zanshin maintenu jusqu’à la fin de l’enchaînement"
+  ],
+  "erreurs_a_eviter": [
+    "Se figer dans une réponse unique",
+    "Répéter mécaniquement les mêmes gestes"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque haute à la matraque" },
+    { "etape": 2, "texte": "Protéger la tête et sortir immédiatement de l’axe" },
+    { "etape": 3, "texte": "Visualiser une attaque haute au couteau" },
+    { "etape": 4, "texte": "Former une double barrière et tourner le buste" },
+    { "etape": 5, "texte": "Visualiser une attaque basse au couteau" },
+    { "etape": 6, "texte": "Fermer le centre par le gainage et la rotation" },
+    { "etape": 7, "texte": "Visualiser une attaque circulaire à la matraque" },
+    { "etape": 8, "texte": "Effectuer une esquive circulaire et stabiliser la posture" },
+    { "etape": 9, "texte": "Marquer un arrêt final et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque haute matraque descendante",
+  "configuration": "debout",
+  "objectif": "Protection de la tête et sortie d’axe franche",
+  "points_cles": [
+    "Protection de la tête avant toute rotation",
+    "Menton rentré et épaules montées",
+    "Sortie d’axe diagonale clairement visible",
+    "Coordination buste et hanches"
+  ],
+  "erreurs_a_eviter": [
+    "Lever les bras sans protéger la tête",
+    "Bloquer uniquement avec les bras"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une frappe descendante vers la tête" },
+    { "etape": 2, "texte": "Rentrer le menton et monter les épaules" },
+    { "etape": 3, "texte": "Monter l’avant-bras en barrière verticale" },
+    { "etape": 4, "texte": "Effectuer un pas diagonal de sortie d’axe" },
+    { "etape": 5, "texte": "Tourner le buste et les hanches" },
+    { "etape": 6, "texte": "Saisir symboliquement le poignet armé" },
+    { "etape": 7, "texte": "Placer un contre imaginaire court" },
+    { "etape": 8, "texte": "Appliquer une clé articulaire imaginaire" },
+    { "etape": 9, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque haute couteau descendante ou en pique",
+  "configuration": "debout",
+  "objectif": "Survie immédiate et protection vitale",
+  "points_cles": [
+    "Double barrière vitale compacte",
+    "Gestes courts sans ouverture",
+    "Sortie claire de l’axe par déplacement",
+    "Protection du centre prioritaire"
+  ],
+  "erreurs_a_eviter": [
+    "Chercher directement la main armée",
+    "Écarter excessivement les bras"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque haute au couteau" },
+    { "etape": 2, "texte": "Rentrer le menton et gainer immédiatement" },
+    { "etape": 3, "texte": "Former une double barrière avec les avant-bras" },
+    { "etape": 4, "texte": "Effectuer un pas latéral de sortie d’axe" },
+    { "etape": 5, "texte": "Tourner le buste pour fermer la ligne centrale" },
+    { "etape": 6, "texte": "Saisir symboliquement le poignet armé" },
+    { "etape": 7, "texte": "Placer un contre imaginaire très court" },
+    { "etape": 8, "texte": "Appliquer une clé articulaire imaginaire" },
+    { "etape": 9, "texte": "Maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque basse couteau vers l’abdomen ou la cuisse",
+  "configuration": "debout",
+  "objectif": "Lecture basse et fermeture immédiate du centre",
+  "points_cles": [
+    "Gainage pour protéger l’abdomen",
+    "Buste stable et tête haute",
+    "Descente des coudes pour fermer le centre",
+    "Sortie d’axe latérale"
+  ],
+  "erreurs_a_eviter": [
+    "Se pencher vers l’arme",
+    "Ouvrir la ligne centrale"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque basse directe ou remontante" },
+    { "etape": 2, "texte": "Reculer légèrement le bassin en gainant" },
+    { "etape": 3, "texte": "Descendre les coudes pour protéger l’abdomen" },
+    { "etape": 4, "texte": "Effectuer un tai sabaki latéral" },
+    { "etape": 5, "texte": "Former une barrière basse avec l’avant-bras" },
+    { "etape": 6, "texte": "Contrôler symboliquement le bras armé" },
+    { "etape": 7, "texte": "Placer un contre imaginaire direct" },
+    { "etape": 8, "texte": "Appliquer une clé articulaire imaginaire" },
+    { "etape": 9, "texte": "Maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+{
+  "assaut": "Attaque circulaire matraque",
+  "configuration": "debout",
+  "objectif": "Laisser passer l’attaque et prendre l’angle",
+  "points_cles": [
+    "Accompagnement du mouvement adverse",
+    "Rotation fluide du buste",
+    "Sortie complète de l’axe",
+    "Absence de blocage dur"
+  ],
+  "erreurs_a_eviter": [
+    "Chercher un blocage frontal",
+    "Arrêter brutalement le mouvement"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque circulaire large à la matraque" },
+    { "etape": 2, "texte": "Effectuer un pas circulaire extérieur" },
+    { "etape": 3, "texte": "Accompagner l’attaque par une rotation fluide du buste" },
+    { "etape": 4, "texte": "Placer une barrière souple avec l’avant-bras" },
+    { "etape": 5, "texte": "Sortir complètement de l’axe de l’arme" },
+    { "etape": 6, "texte": "Placer un contre imaginaire court" },
+    { "etape": 7, "texte": "Stabiliser la posture" },
+    { "etape": 8, "texte": "Maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
+},
+    {
+  "assaut": "Attaque revers arme (couteau ou matraque)",
+  "configuration": "debout",
+  "objectif": "Lecture fine de l’angle et gestion du timing",
+  "points_cles": [
+    "Entrée dans l’angle mort par rotation interne",
+    "Buste qui passe sous la ligne d’attaque",
+    "Protection de la tête avant la rotation",
+    "Timing précis sans mouvement excessif"
+  ],
+  "erreurs_a_eviter": [
+    "Rotation trop large",
+    "Réaction tardive",
+    "Blocage dur face à l’arme"
+  ],
+  "deroule": [
+    { "etape": 1, "texte": "Visualiser une attaque revers horizontale avec arme" },
+    { "etape": 2, "texte": "Rentrer le menton et monter légèrement les épaules" },
+    { "etape": 3, "texte": "Effectuer un pas de tai sabaki vers l’intérieur de l’attaque" },
+    { "etape": 4, "texte": "Tourner le buste et les hanches pour passer sous la frappe" },
+    { "etape": 5, "texte": "Placer une barrière courte sans blocage dur" },
+    { "etape": 6, "texte": "Entrer dans l’angle mort de l’arme" },
+    { "etape": 7, "texte": "Effectuer un contre imaginaire immédiat" },
+    { "etape": 8, "texte": "Marquer l’arrêt et maintenir le zanshin" }
+  ],
+  "image": "/images/logo1.png"
 }
+
+
+
+
