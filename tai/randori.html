@@ -70,11 +70,70 @@
 
       <div id="techCard" class="fiche-container"></div>
     </section>
+<!-- ENCARt 3 — EXERCICES ASSAUTS -->
+<section class="card kawaii-card" id="encart-assauts">
+  <h2 class="section-title spicy">⚔️ Exercices – Assauts</h2>
 
+  <div class="tabs">
+    <button class="btn ghost" id="tab1">🎧 Exercice 1</button>
+    <button class="btn ghost" id="tab2">🛠️ Exercice 2</button>
+  </div>
+
+  <div id="ex1-container">
+    <!-- Interface Exercice 1 -->
+    <div class="selectors-row">
+      <select id="filterConfig">
+        <option value="">Toutes les configurations</option>
+        <option value="fauteuil">Fauteuil</option>
+        <option value="debout">Debout</option>
+        <!-- etc. -->
+      </select>
+
+      <select id="selectAssaut">
+        <option value="">Choisir un assaut</option>
+      </select>
+
+      <button id="btnAssautRandom" class="btn primary">🔀 Aléatoire</button>
+    </div>
+
+    <div id="assautCard" class="fiche-container"></div>
+
+    <div class="btn-row">
+      <button class="btn primary" id="btnPlay1">▶️ Lire</button>
+      <button class="btn ghost" id="btnStop1">⏹️ Stop</button>
+
+      <label for="speedRange">Vitesse :</label>
+      <input type="range" min="0.5" max="2" step="0.1" value="1" id="speedRange">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn ghost" onclick="window.print()">🖨️ Imprimer la fiche</button>
+    </div>
+  </div>
+
+  <div id="ex2-container" style="display:none;">
+    <!-- Interface Exercice 2 -->
+    <div class="selectors-row">
+      <label for="intervalControl">Intervalle entre lectures :</label>
+      <input type="range" min="3" max="60" value="10" id="intervalControl">
+      <span id="intervalValue">10s</span>
+    </div>
+
+    <div id="techniquesList" class="fiche-card">
+      <!-- Cases à cocher auto-générées -->
+    </div>
+
+    <div class="btn-row">
+      <button class="btn primary" id="btnPlay2">▶️ Lancer séquence</button>
+      <button class="btn ghost" id="btnStop2">⏹️ Stop</button>
+    </div>
+  </div>
+</section>
   </main>
 
   <!-- SCRIPTS (separate files) -->
   <script src="cles.js"></script>
   <script src="randori.js"></script>
+  <script src="exercices_assauts.js"></script>
 </body>
 </html>
