@@ -302,3 +302,275 @@ input::placeholder {
     display: none;
   }
 }
+/* ==================== ENCART 3 — ASSAUTS ==================== */
+
+#encart-assauts {
+  background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
+}
+
+.exercice-bloc {
+  margin-bottom: 24px;
+}
+
+.exercice-bloc:last-child {
+  margin-bottom: 0;
+}
+
+.exercice-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.4rem;
+  color: var(--hot-pink);
+  margin: 0 0 14px 0;
+  text-align: center;
+}
+
+.exercice-separator {
+  text-align: center;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 20px 0;
+  position: relative;
+}
+
+.exercice-separator::before,
+.exercice-separator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--pink-2), transparent);
+}
+
+.exercice-separator::before {
+  left: 0;
+}
+
+.exercice-separator::after {
+  right: 0;
+}
+
+/* Contrôles de lecture */
+.controls-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.speed-control label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+#speedRange {
+  width: 120px;
+}
+
+#speedValue {
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 35px;
+}
+
+/* Fiche assaut */
+.assaut-card {
+  background: #fffaf8;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #ffd7f0;
+  box-shadow: 0 8px 18px rgba(255, 120, 190, 0.12);
+}
+
+.assaut-card h4 {
+  font-family: "Spicy", cursive;
+  font-size: 1.3rem;
+  color: #ff4fb8;
+  margin: 0 0 12px 0;
+}
+
+.assaut-section {
+  margin-bottom: 12px;
+}
+
+.assaut-section h5 {
+  font-weight: 600;
+  color: var(--hot-pink);
+  margin: 0 0 6px 0;
+  font-size: 0.95rem;
+}
+
+.assaut-section p,
+.assaut-section ul {
+  margin: 0;
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.assaut-section ul {
+  padding-left: 20px;
+}
+
+.assaut-section li {
+  margin-bottom: 4px;
+}
+
+.assaut-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 14px;
+  display: block;
+  background: #fff;
+  margin-top: 12px;
+}
+
+/* Liste de checkboxes pour exercice 2 */
+.assauts-checkbox-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 2px solid var(--pink-2);
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  margin-bottom: 12px;
+}
+
+.assaut-checkbox-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.assaut-checkbox-item:hover {
+  background: #fff5fa;
+}
+
+.assaut-checkbox-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.assaut-checkbox-item label {
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.assaut-checkbox-item .config-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--pink-2);
+  color: var(--hot-pink);
+  font-weight: 600;
+}
+
+/* Contrôle d'intervalle */
+.interval-control {
+  background: #fffaf8;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #ffd7f0;
+  margin-top: 12px;
+}
+
+.interval-control label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+#intervalRange {
+  width: 100%;
+}
+
+#intervalValue {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Status de séquence */
+.sequence-status {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  display: none;
+}
+
+.sequence-status.active {
+  display: block;
+  background: #fff4fb;
+  border: 2px solid var(--accent);
+  color: var(--hot-pink);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Responsive */
+@media (max-width: 940px) {
+  .speed-control {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  #speedRange {
+    flex: 1;
+  }
+
+  .controls-row {
+    flex-direction: column;
+  }
+
+  .controls-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* PRINT pour fiche assaut */
+@media print {
+  .exercice-separator,
+  .selectors-row,
+  .controls-row,
+  .interval-control,
+  .sequence-status,
+  #btnPrintAssaut {
+    display: none !important;
+  }
+
+  .exercice-bloc {
+    page-break-inside: avoid;
+  }
+
+  .assaut-card {
+    box-shadow: none;
+    border: 2px solid #ffd7f0;
+  }
+
+  .assaut-image {
+    max-height: 200px !important;
+  }
+}
