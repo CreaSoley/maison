@@ -201,27 +201,14 @@ function updateSequencePreview() {
   const output = selectedSequence.map((a, i) => `
     <div class="sequence-item">
       <span>${i + 1}. ${a.assaut}</span>
-      <button onclick="removeFromSequence(${i})">✕</button>
+      <button class="remove-btn" onclick="removeFromSequence(${i})">✕</button>
     </div>
   `).join('');
 
   zone.innerHTML = `
     <div class="sequence-items">${output}</div>
-    <div>Total : ${selectedSequence.length} assaut(s)</div>
+    <div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>
   `;
-  zone.classList.add('active');
-}
-
-
-  const output = selectedSequence.map((a, i) => `
-    <div class="sequence-item">
-      <span>${i + 1}. ${a.assaut}</span>
-      <button class="remove-btn" onclick="removeFromSequence(${i})">✕</button>
-    </div>
-  `).join('');
-
-  zone.innerHTML = `<div class="sequence-items">${output}</div>
-    <div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>`;
   zone.classList.add('active');
 }
 
@@ -229,6 +216,7 @@ function removeFromSequence(index) {
   selectedSequence.splice(index, 1);
   updateSequencePreview();
 }
+
 
 // ==================== UTILITAIRES ====================
 
