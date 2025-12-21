@@ -132,32 +132,90 @@ async function playAssaut() {
   isPlaying = false;
 }
 
-function printAssaut() {
+document.getElementById('btnExportPdfAssaut').addEventListener('click', exportAssautAsPdf);
+
+function exportAssautAsPdf() {
   const a = window.currentAssaut;
-  if (!a) return;
+  if (!a) return alert("Aucun assaut sélectionné.");
   const win = window.open('', '_blank');
   win.document.write(`
-    <html><head><title>${a.assaut}</title>
+    <html><head><title>Fiche - ${a.assaut}</title>
     <style>
       body { font-family: Arial, sans-serif; padding: 20px; color: #222; }
-      h1 { text-align: center; color: #ff1493; }
-      .config { background:#fee; padding:8px; border-radius:12px; text-align: center; }
-      .objectif { font-style: italic; margin:1em 0; padding-left:10px; border-left:3px solid #f09; }
-      h3 { color:#f06; border-bottom:1px solid #fcc; }
+      h1 { text-align: center; color: #ff1493; font-size: 1.8rem; }
+      .config-badge {
+        display: inline-block;
+        margin: 10px auto;
+        background: #ffe0f0;
+        padding: 0.5em 1em;
+        border-radius: 999px;
+        font-weight: bold;
+      }
+      .objectif {
+        font-style: italic;
+        font-size: 1.1rem;
+        padding: 1em;
+        border-left: 4px solid #ff1493;
+        background: #fff6fb;
+        margin: 20px 0;
+      }
+      .columns {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .column {
+        flex: 1;
+        background: #fff6fb;
+        padding: 1rem;
+        border-radius: 12px;
+        border: 1px solid #ffd6ec;
+      }
+      h3 {
+        color: #ff1493;
+        font-size: 1.2rem;
+        margin-bottom: 0.5em;
+        border-bottom: 2px solid #ffd6ec;
+        padding-bottom: 0.3em;
+      }
+      .deroule {
+        margin-top: 30px;
+      }
+      .etape {
+        margin-bottom: 0.6em;
+        padding: 0.5em;
+        background: #fff0f6;
+        border-left: 4px solid #ff5fc1;
+        border-radius: 8px;
+      }
+      .etape strong {
+        color: #ff1493;
+      }
     </style>
     </head><body>
       <h1>${a.assaut}</h1>
-      <div class="config">${a.configuration}</div>
+      <div class="config-badge">${a.configuration}</div>
       <div class="objectif">${a.objectif}</div>
-      <h3>🔑 Points clés</h3>
-      <ul>${a.points_cles.map(p => `<li>${p}</li>`).join('')}</ul>
-      <h3>⚠️ Erreurs à éviter</h3>
-      <ul>${a.erreurs_a_eviter.map(p => `<li>${p}</li>`).join('')}</ul>
-      <h3>📋 Déroulé</h3>
-      ${a.deroule.map(e => `<div><strong>${e.etape}.</strong> ${e.texte}</div>`).join('')}
-    </body></html>`);
+
+      <div class="columns">
+        <div class="column">
+          <h3>🔑 Points clés</h3>
+          <ul>${a.points_cles.map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+        <div class="column">
+          <h3>⚠️ Erreurs à éviter</h3>
+          <ul>${a.erreurs_a_eviter.map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+      </div>
+
+      <div class="deroule">
+        <h3>📋 Déroulé complet</h3>
+        ${a.deroule.map(e => `<div class="etape"><strong>${e.etape}.</strong> ${e.texte}</div>`).join('')}
+      </div>
+    </body></html>
+  `);
   win.document.close();
-  win.focus();
+}
 }
 
 // ---------- SCRIPT 2 : Enchaînement personnalisé ----------
