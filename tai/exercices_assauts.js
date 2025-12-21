@@ -146,59 +146,8 @@ function exportAssautAsPdf() {
 
 // ==================== SCRIPT 2 — Enchaînement perso ====================
 
-function initializeScript2() {
-  const assautsList = document.getElementById('assautsList');
-  const sequenceDisplay = document.getElementById('sequenceDisplay');
-
-  // Génération de la liste déroulante + boutons
-  assautsList.innerHTML = `
-    <div class="selectors-row">
-      <select id="selectAssautSequence" style="flex:1;">
-        <option value="">-- Choisir un assaut --</option>
-        ${assautsData.map((a, i) => `<option value="${i}">${a.assaut} (${a.configuration})</option>`).join('')}
-      </select>
-      <button class="btn ghost" id="btnPreviewAssaut">👀 Aperçu</button>
-      <button class="btn primary" id="btnAddToSequence">➕ Ajouter</button>
-    </div>
-    <div id="previewAssautCard" class="fiche-card" style="margin-top:12px;"></div>
-  `;
-
-  document.getElementById('btnPreviewAssaut').addEventListener('click', () => {
-    const sel = document.getElementById('selectAssautSequence').value;
-    if (sel) previewAssaut(assautsData[sel]);
-  });
-
-  document.getElementById('btnAddToSequence').addEventListener('click', () => {
-    const sel = document.getElementById('selectAssautSequence').value;
-    if (sel) {
-      selectedSequence.push(assautsData[sel]);
-      updateSequencePreview();
-    }
-  });
-
-  // Fonctions locales externes
-  document.getElementById('btnClearSequence').addEventListener('click', () => {
-    selectedSequence = [];
-    updateSequencePreview();
-    showStatus("🧽 Séquence vidée !");
-  });
-
-  document.getElementById('btnSaveSequence').addEventListener('click', () => {
-    localStorage.setItem(LOCAL_SEQUENCE_KEY, JSON.stringify(selectedSequence.map(a => assautsData.indexOf(a))));
-    showStatus("💾 Sauvegardée !");
-  });
-
-  document.getElementById('btnLoadSequence').addEventListener('click', () => {
-    const data = localStorage.getItem(LOCAL_SEQUENCE_KEY);
-    if (!data) return showStatus("⚠️ Rien à charger.");
-    const indices = JSON.parse(data);
-    selectedSequence = indices.map(i => assautsData[i]);
-    updateSequencePreview();
-    showStatus("📂 Séquence chargée !");
-  });
-
-  updateSequencePreview();
-}
+exercices_assauts.js:219 Uncaught SyntaxError: Unexpected token '}'
+randori.js:19 Loaded randori data from randori.json 18 items
 
 function previewAssaut(a) {
   document.getElementById('previewAssautCard').innerHTML = `
