@@ -23,19 +23,22 @@ const btnStopSequence = document.getElementById('btnStopSequence');
 const intervalRange = document.getElementById('intervalRange');
 const intervalValue = document.getElementById('intervalValue');
 const sequenceStatus = document.getElementById('sequenceStatus');
+const sequenceDisplay = document.getElementById('sequenceDisplay');
+const optionLoop = document.getElementById('optionLoop');
+const optionRandom = document.getElementById('optionRandom');
 
 // Variables globales
 let currentAssaut = null;
 let synth = window.speechSynthesis;
-let selectedAssauts = [];
+let selectedSequence = [];
 let sequenceTimeout = null;
 let audioContext = null;
 let bbpSound = null;
 let notifSound = null;
+let isPlaying = false;
 
 // ==================== INITIALISATION ====================
 
-// Charger le JSON
 fetch('exercices_assauts.json')
   .then(response => response.json())
   .then(data => {
@@ -51,7 +54,6 @@ fetch('exercices_assauts.json')
 // ==================== SCRIPT 1 : ASSAUT GUIDÉ ====================
 
 function initializeScript1() {
-  // Remplir le select
   assautsData.forEach((assaut, index) => {
     const option = document.createElement('option');
     option.value = index;
@@ -60,7 +62,6 @@ function initializeScript1() {
     selectAssaut.appendChild(option);
   });
 
-  // Event listeners
   selectAssaut.addEventListener('change', handleAssautSelect);
   filterConfig.addEventListener('change', filterAssauts);
   btnRandomAssaut.addEventListener('click', selectRandomAssaut);
@@ -69,7 +70,6 @@ function initializeScript1() {
   speedRange.addEventListener('input', updateSpeedDisplay);
   btnPrintAssaut.addEventListener('click', printAssaut);
 
-  // Initialiser les sons
   initSounds();
 }
 
@@ -102,7 +102,6 @@ function filterAssauts() {
     }
   }
   
-  // Réinitialiser la sélection si elle est filtrée
   if (config && currentAssaut && currentAssaut.configuration !== config) {
     selectAssaut.value = '';
     currentAssaut = null;
@@ -131,37 +130,53 @@ function selectRandomAssaut() {
 }
 
 function displayAssaut(assaut) {
+  const configLabel = assaut.configuration === 'fauteuil' ? '🪑 Fauteuil' : '🧍 Debout';
+  
+  const pointsClesHTML = assaut.points_cles
+    .map(point => `<li>${point}</li>`)
+    .join('');
+  
+  const erreursHTML = assaut.erreurs_a_eviter
+    .map(erreur => `<li>${erreur}</li>`)
+    .join('');
+  
+  const derouleHTML = assaut.deroule
+    .map(etape => `
+      <div class="deroule-item">
+        <span class="deroule-num">${etape.etape}.</span>
+        <span>${etape.texte}</span>
+      </div>
+    `).join('');
+
   const html = `
-    <div class="assaut-card">
-      <h4>${assaut.assaut}</h4>
-      
-      <div class="assaut-section">
-        <h5>🎯 Objectif</h5>
-        <p>${assaut.objectif}</p>
+    <div class="assaut-display">
+      <div class="assaut-header">
+        <div class="assaut-image-container">
+          <img src="${assaut.image}" alt="${assaut.assaut}" class="assaut-image" />
+        </div>
+        <div class="assaut-info">
+          <h4 class="assaut-title">${assaut.assaut}</h4>
+          <div class="assaut-config">${configLabel}</div>
+          <div class="assaut-objectif">${assaut.objectif}</div>
+        </div>
       </div>
 
-      <div class="assaut-section">
-        <h5>🔑 Points clés</h5>
-        <ul>
-          ${assaut.points_cles.map(point => `<li>${point}</li>`).join('')}
-        </ul>
-      </div>
+      <div class="assaut-columns">
+        <div class="assaut-section">
+          <h5>🔑 Points clés</h5>
+          <ul>${pointsClesHTML}</ul>
+        </div>
 
-      <div class="assaut-section">
-        <h5>⚠️ Erreurs à éviter</h5>
-        <ul>
-          ${assaut.erreurs_a_eviter.map(erreur => `<li>${erreur}</li>`).join('')}
-        </ul>
-      </div>
+        <div class="assaut-section">
+          <h5>⚠️ Erreurs à éviter</h5>
+          <ul>${erreursHTML}</ul>
+        </div>
 
-      <div class="assaut-section">
-        <h5>📋 Déroulé</h5>
-        <ul>
-          ${assaut.deroule.map(etape => `<li>${etape}</li>`).join('')}
-        </ul>
+        <div class="assaut-section deroule-section">
+          <h5>📋 Déroulé</h5>
+          <div class="deroule-grid">${derouleHTML}</div>
+        </div>
       </div>
-
-      ${assaut.image ? `<img src="${assaut.image}" alt="${assaut.assaut}" class="assaut-image" />` : ''}
     </div>
   `;
   
@@ -172,58 +187,72 @@ function updateSpeedDisplay() {
   speedValue.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
 }
 
-function playAssaut() {
-  if (!currentAssaut || synth.speaking) return;
+async function playAssaut() {
+  if (!currentAssaut || isPlaying) return;
 
   stopSpeech();
+  isPlaying = true;
+  btnPlayAssaut.disabled = true;
+  btnStopAssaut.disabled = false;
 
-  const text = buildAssautText(currentAssaut);
-  const utterance = new SpeechSynthesisUtterance(text);
-  
-  utterance.lang = 'fr-FR';
-  utterance.rate = parseFloat(speedRange.value);
-  utterance.pitch = 1;
-  
-  utterance.onstart = () => {
-    btnPlayAssaut.disabled = true;
-    btnStopAssaut.disabled = false;
-  };
-  
-  utterance.onend = () => {
-    btnPlayAssaut.disabled = false;
-    btnStopAssaut.disabled = true;
-  };
+  const speed = parseFloat(speedRange.value);
 
-  synth.speak(utterance);
+  // 1. Nom de l'assaut
+  await speakWithPause(`${currentAssaut.assaut}.`, speed);
+  await sleep(1000);
+
+  // 2. Configuration
+  const configText = currentAssaut.configuration === 'fauteuil' ? 'Fauteuil' : 'Debout';
+  await speakWithPause(`Configuration : ${configText}.`, speed);
+  await sleep(1000);
+
+  // 3. Objectif
+  await speakWithPause(`Objectif : ${currentAssaut.objectif}.`, speed);
+  await sleep(1000);
+
+  // 4. Points clés
+  await speakWithPause(`Points clés :`, speed);
+  for (let i = 0; i < currentAssaut.points_cles.length; i++) {
+    await speakWithPause(currentAssaut.points_cles[i], speed);
+  }
+  await sleep(1000);
+
+  // 5. Erreurs à éviter
+  await speakWithPause(`Erreurs à éviter :`, speed);
+  for (let i = 0; i < currentAssaut.erreurs_a_eviter.length; i++) {
+    await speakWithPause(currentAssaut.erreurs_a_eviter[i], speed);
+  }
+  await sleep(1000);
+
+  // 6. Déroulé
+  await speakWithPause(`Commençons le travail.`, speed);
+  await sleep(500);
+
+  for (let i = 0; i < currentAssaut.deroule.length; i++) {
+    const etape = currentAssaut.deroule[i];
+    await speakWithPause(`Étape ${etape.etape} : ${etape.texte}.`, speed);
+  }
+
+  isPlaying = false;
+  btnPlayAssaut.disabled = false;
+  btnStopAssaut.disabled = true;
 }
 
-function buildAssautText(assaut) {
-  let text = '';
-  
-  text += `Assaut : ${assaut.assaut}. `;
-  text += `Objectif : ${assaut.objectif}. `;
-  
-  text += 'Points clés : ';
-  assaut.points_cles.forEach(point => {
-    text += `${point}. `;
+function speakWithPause(text, speed) {
+  return new Promise((resolve) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'fr-FR';
+    utterance.rate = speed;
+    utterance.pitch = 1;
+    utterance.onend = resolve;
+    synth.speak(utterance);
   });
-  
-  text += 'Erreurs à éviter : ';
-  assaut.erreurs_a_eviter.forEach(erreur => {
-    text += `${erreur}. `;
-  });
-  
-  text += 'Déroulé : ';
-  assaut.deroule.forEach(etape => {
-    text += `${etape}. `;
-  });
-  
-  return text;
 }
 
 function stopSpeech() {
   if (synth.speaking) {
     synth.cancel();
+    isPlaying = false;
     btnPlayAssaut.disabled = false;
     btnStopAssaut.disabled = true;
   }
@@ -232,10 +261,10 @@ function stopSpeech() {
 function printAssaut() {
   if (!currentAssaut) return;
   
-  // Créer une fenêtre d'impression temporaire
   const printWindow = window.open('', '', 'height=600,width=800');
+  const assautDisplay = assautCard.innerHTML;
   
-  const assautCardContent = assautCard.innerHTML;
+  const configLabel = currentAssaut.configuration === 'fauteuil' ? '🪑 Fauteuil' : '🧍 Debout';
   
   printWindow.document.write(`
     <!DOCTYPE html>
@@ -250,36 +279,74 @@ function printAssaut() {
           padding: 20px;
           color: #222;
         }
-        h1 {
-          color: #ff1493;
+        .print-header {
           text-align: center;
-          font-size: 1.8rem;
           margin-bottom: 20px;
         }
-        .assaut-card {
-          background: #fffaf8;
-          padding: 20px;
-          border-radius: 14px;
-          border: 2px solid #ffd6ec;
-        }
-        h4 {
-          color: #ff4fb8;
-          font-size: 1.4rem;
-          margin-bottom: 15px;
-        }
-        h5 {
+        h1 {
           color: #ff1493;
-          margin-top: 15px;
+          font-size: 1.8rem;
+          margin: 0 0 10px 0;
+        }
+        .config-badge {
+          display: inline-block;
+          padding: 4px 12px;
+          background: #fff0f6;
+          border: 2px solid #ffd6ec;
+          border-radius: 20px;
+          font-weight: 600;
+          color: #ff5fc1;
           margin-bottom: 8px;
         }
-        ul {
+        .objectif {
+          font-style: italic;
+          color: #666;
+          padding: 10px;
+          background: #fffaf8;
+          border-left: 3px solid #ff5fc1;
+          margin: 10px 0;
+        }
+        .columns {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          margin: 20px 0;
+        }
+        .section {
+          border: 2px solid #ffd6ec;
+          border-radius: 12px;
+          padding: 15px;
+          background: #fffaf8;
+        }
+        .section h3 {
+          color: #ff1493;
+          font-size: 1.1rem;
+          margin: 0 0 10px 0;
+          text-align: center;
+          padding-bottom: 8px;
+          border-bottom: 2px solid #ffd6ec;
+        }
+        .section ul {
+          margin: 0;
+          padding-left: 20px;
           line-height: 1.6;
         }
-        .assaut-image {
-          width: 100%;
-          max-height: 300px;
-          object-fit: contain;
-          margin-top: 15px;
+        .deroule-section {
+          grid-column: 1 / -1;
+        }
+        .deroule-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin-top: 10px;
+        }
+        .deroule-item {
+          display: flex;
+          gap: 6px;
+        }
+        .deroule-num {
+          font-weight: 700;
+          color: #ff5fc1;
         }
         @media print {
           body { padding: 0; }
@@ -287,8 +354,12 @@ function printAssaut() {
       </style>
     </head>
     <body>
-      <h1>🎯 Fiche d'exercice - Tai-Jitsu</h1>
-      ${assautCardContent}
+      <div class="print-header">
+        <h1>🎯 Fiche d'exercice - Tai-Jitsu</h1>
+        <div class="config-badge">${configLabel}</div>
+        <div class="objectif">${currentAssaut.objectif}</div>
+      </div>
+      ${assautDisplay}
     </body>
     </html>
   `);
@@ -306,13 +377,12 @@ function printAssaut() {
 function initializeScript2() {
   displayAssautsList();
   
-  searchAssaut.addEventListener('input', filterAssautsList);
+  searchAssaut.addEventListener('input', () => displayAssautsList(searchAssaut.value));
   btnValidateSequence.addEventListener('click', validateSequence);
   btnPlaySequence.addEventListener('click', playSequence);
   btnStopSequence.addEventListener('click', stopSequence);
   intervalRange.addEventListener('input', updateIntervalDisplay);
   
-  // Initialiser les sons
   initSounds();
 }
 
@@ -339,7 +409,8 @@ function displayAssautsList(filter = '') {
     
     const badge = document.createElement('span');
     badge.className = 'config-badge';
-    badge.textContent = assaut.configuration;
+    badge.textContent = assaut.configuration === 'fauteuil' ? '🪑' : '🧍';
+    badge.title = assaut.configuration;
     
     item.appendChild(checkbox);
     item.appendChild(label);
@@ -349,11 +420,6 @@ function displayAssautsList(filter = '') {
   });
 }
 
-function filterAssautsList() {
-  const filter = searchAssaut.value;
-  displayAssautsList(filter);
-}
-
 function updateValidateButton() {
   const checkboxes = assautsList.querySelectorAll('input[type="checkbox"]:checked');
   btnValidateSequence.disabled = checkboxes.length === 0;
@@ -361,11 +427,49 @@ function updateValidateButton() {
 
 function validateSequence() {
   const checkboxes = assautsList.querySelectorAll('input[type="checkbox"]:checked');
-  selectedAssauts = Array.from(checkboxes).map(cb => assautsData[cb.value]);
+  selectedSequence = Array.from(checkboxes).map(cb => {
+    const index = parseInt(cb.value);
+    return assautsData[index];
+  });
   
-  if (selectedAssauts.length > 0) {
+  if (selectedSequence.length > 0) {
     btnPlaySequence.disabled = false;
-    showStatus(`✅ ${selectedAssauts.length} assaut(s) sélectionné(s)`);
+    displaySequencePreview();
+    showStatus(`✅ ${selectedSequence.length} assaut(s) sélectionné(s)`);
+  }
+}
+
+function displaySequencePreview() {
+  sequenceDisplay.innerHTML = '';
+  
+  if (selectedSequence.length === 0) {
+    sequenceDisplay.classList.remove('active');
+    return;
+  }
+  
+  sequenceDisplay.classList.add('active');
+  
+  const itemsHTML = selectedSequence.map((assaut, index) => `
+    <div class="sequence-item">
+      <span>${index + 1}. ${assaut.assaut}</span>
+      <button class="remove-btn" onclick="removeFromSequence(${index})" title="Retirer">✕</button>
+    </div>
+  `).join('');
+  
+  const countHTML = `<div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>`;
+  
+  sequenceDisplay.innerHTML = `
+    <div class="sequence-items">${itemsHTML}</div>
+    ${countHTML}
+  `;
+}
+
+function removeFromSequence(index) {
+  selectedSequence.splice(index, 1);
+  displaySequencePreview();
+  
+  if (selectedSequence.length === 0) {
+    btnPlaySequence.disabled = true;
   }
 }
 
@@ -374,47 +478,58 @@ function updateIntervalDisplay() {
 }
 
 async function playSequence() {
-  if (selectedAssauts.length === 0) return;
+  if (selectedSequence.length === 0 || isPlaying) return;
   
   stopSequence();
+  isPlaying = true;
   
   btnPlaySequence.disabled = true;
   btnStopSequence.disabled = false;
   btnValidateSequence.disabled = true;
   
-  showStatus('#marrage dans 5 secondes...');
+  const shouldLoop = optionLoop.checked;
+  const shouldRandomize = optionRandom.checked;
   
-  // Attendre 5 secondes
-  await sleep(5000);
+  let sequence = [...selectedSequence];
   
-  // Son de début
-  playSound('bbp');
-  
-  showStatus('🎵 Lecture en cours...');
-  
-  // Lire chaque assaut
-  for (let i = 0; i < selectedAssauts.length; i++) {
-    const assaut = selectedAssauts[i];
-    
-    // Son avant chaque assaut
-    if (i > 0) {
-      playSound('notif');
-      await sleep(500); // Petite pause après le son
+  do {
+    if (shouldRandomize) {
+      sequence = shuffleArray([...selectedSequence]);
     }
     
-    // Lire l'assaut
-    await speakAssaut(assaut);
+    showStatus('⏱️ Démarrage dans 5 secondes...');
+    await sleep(5000);
     
-    // Pause entre les assauts (sauf pour le dernier)
-    if (i < selectedAssauts.length - 1) {
-      const interval = parseInt(intervalRange.value) * 1000;
-      showStatus(`⏸️ Pause... (${interval/1000}s)`);
-      await sleep(interval);
+    playSound('bbp');
+    showStatus('🎵 Lecture en cours...');
+    
+    for (let i = 0; i < sequence.length; i++) {
+      if (!isPlaying) break;
+      
+      const assaut = sequence[i];
+      
+      if (i > 0) {
+        playSound('notif');
+        await sleep(500);
+      }
+      
+      await speakAssaut(assaut);
+      
+      if (i < sequence.length - 1) {
+        const interval = parseInt(intervalRange.value) * 1000;
+        showStatus(`# Pause... (${interval/1000}s)`);
+        await sleep(interval);
+      }
     }
-  }
-  
-  // Son de fin
-  playSound('bbp');
+    
+    playSound('bbp');
+    
+    if (shouldLoop && isPlaying) {
+      showStatus('🔁 Nouvelle boucle dans 3 secondes...');
+      await sleep(3000);
+    }
+    
+  } while (shouldLoop && isPlaying);
   
   showStatus('✅ Séquence terminée !');
   
@@ -424,24 +539,25 @@ async function playSequence() {
     btnValidateSequence.disabled = false;
     hideStatus();
   }, 3000);
+  
+  isPlaying = false;
 }
 
 function speakAssaut(assaut) {
   return new Promise((resolve) => {
     const text = `${assaut.assaut}. ${assaut.objectif}`;
     const utterance = new SpeechSynthesisUtterance(text);
-    
     utterance.lang = 'fr-FR';
     utterance.rate = 1;
     utterance.pitch = 1;
-    
     utterance.onend = resolve;
-    
     synth.speak(utterance);
   });
 }
 
 function stopSequence() {
+  isPlaying = false;
+  
   if (sequenceTimeout) {
     clearTimeout(sequenceTimeout);
     sequenceTimeout = null;
@@ -454,6 +570,15 @@ function stopSequence() {
   btnValidateSequence.disabled = false;
   
   hideStatus();
+}
+
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
 }
 
 function showStatus(message) {
@@ -469,13 +594,9 @@ function hideStatus() {
 
 function initSounds() {
   try {
-    // Créer l'AudioContext
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
-    // Précharger les sons
     bbpSound = new Audio('bbp.mp3');
     notifSound = new Audio('notif.mp3');
-    
     bbpSound.load();
     notifSound.load();
   } catch (error) {
@@ -484,7 +605,7 @@ function initSounds() {
 }
 
 function playSound(type) {
-  if (!audioContext) return;
+  if (!audioContext || !bbpSound || !notifSound) return;
   
   const sound = type === 'bbp' ? bbpSound : notifSound;
   
@@ -500,8 +621,10 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Nettoyage à la fermeture
 window.addEventListener('beforeunload', () => {
   stopSpeech();
   stopSequence();
 });
+
+// Rendre removeFromSequence globale
+window.removeFromSequence = removeFromSequence;
