@@ -574,3 +574,344 @@ input::placeholder {
     max-height: 200px !important;
   }
 }
+/* ==================== ENCART 3 — ASSAUTS (PLEINE LARGEUR) ==================== */
+
+.full-width-card {
+  grid-column: 1 / -1; /* Prend toute la largeur */
+  background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
+}
+
+.exercices-container {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.exercice-bloc {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.exercice-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.4rem;
+  color: var(--hot-pink);
+  margin: 0 0 14px 0;
+  text-align: center;
+}
+
+.exercice-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.3rem;
+  position: relative;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 0 10px;
+}
+
+.exercice-separator::before,
+.exercice-separator::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to bottom, transparent, var(--pink-2), transparent);
+  margin: 0 10px;
+}
+
+/* ========== EXERCICE 1 - AFFICHAGE AMÉLIORÉ ========== */
+
+.assaut-display {
+  background: #fffaf8;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #ffd7f0;
+  box-shadow: 0 8px 18px rgba(255, 120, 190, 0.12);
+  margin-bottom: 16px;
+}
+
+.assaut-header {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.assaut-image-container {
+  flex-shrink: 0;
+}
+
+.assaut-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+  background: #fff;
+  border: 2px solid var(--pink-2);
+}
+
+.assaut-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.assaut-title {
+  font-family: "Spicy", cursive;
+  font-size: 1.6rem;
+  color: #ff4fb8;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.assaut-config {
+  text-align: center;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  padding: 4px 12px;
+  background: var(--pink-1);
+  border-radius: 20px;
+  display: inline-block;
+  width: 100%;
+}
+
+.assaut-objectif {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  padding: 8px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.assaut-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.assaut-section h5 {
+  font-weight: 700;
+  color: var(--hot-pink);
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  text-align: center;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--pink-2);
+}
+
+.assaut-section ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.assaut-section li {
+  margin-bottom: 6px;
+}
+
+.deroule-section {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+}
+
+.deroule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+  margin-top: 10px;
+}
+
+.deroule-item {
+  display: flex;
+  gap: 8px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.deroule-num {
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ========== EXERCICE 2 - SÉQUENCE DISPLAY ========== */
+
+.sequence-display {
+  background: #fffaf8;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #ffd7f0;
+  margin: 12px 0;
+  min-height: 60px;
+  display: none;
+}
+
+.sequence-display.active {
+  display: block;
+}
+
+.sequence-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sequence-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--pink-1);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #333;
+  border: 1px solid var(--pink-2);
+}
+
+.sequence-item .remove-btn {
+  background: none;
+  border: none;
+  color: var(--hot-pink);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.sequence-item .remove-btn:hover {
+  transform: scale(1.2);
+}
+
+.sequence-count {
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ========== OPTIONS EXERCICE 2 ========== */
+
+.options-control {
+  background: #fffaf8;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ffd7f0;
+  margin-top: 12px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #333;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 1200px) {
+  .exercices-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .exercice-separator {
+    writing-mode: horizontal-tb;
+    padding: 10px 0;
+  }
+
+  .exercice-separator::before,
+  .exercice-separator::after {
+    width: 40%;
+    height: 2px;
+  }
+
+  .assaut-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .deroule-section {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .assaut-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .assaut-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .deroule-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .options-control {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ========== PRINT ========== */
+
+@media print {
+  .exercice-separator,
+  .selectors-row,
+  .controls-row,
+  .interval-control,
+  .options-control,
+  .sequence-status,
+  .btn {
+    display: none !important;
+  }
+
+  .exercice-bloc {
+    page-break-inside: avoid;
+  }
+
+  .assaut-display {
+    box-shadow: none;
+    border: 2px solid #ffd7f0;
+  }
+
+  .assaut-image {
+    max-height: 150px !important;
+  }
+
+  .assaut-columns {
+    page-break-inside: avoid;
+  }
+}
