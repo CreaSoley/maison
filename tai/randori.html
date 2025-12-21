@@ -72,72 +72,90 @@
     </section>
 
     <!-- ENCART 3 — EXERCICES ASSAUTS -->
-    <section class="card kawaii-card" id="encart-assauts">
-      <h2 class="section-title spicy">🎯 Exercices d'Assauts</h2>
+<section class="card kawaii-card full-width-card" id="encart-assauts">
+  <h2 class="section-title spicy">🎯 Exercices d'Assauts</h2>
 
-      <!-- SCRIPT 1 -->
-      <div class="exercice-bloc">
-        <h3 class="exercice-title">📝 Exercice 1 : Assaut guidé</h3>
+  <div class="exercices-container">
+    
+    <!-- ========== EXERCICE 1 ========== -->
+    <div class="exercice-bloc" id="exercice1-bloc">
+      <h3 class="exercice-title">📝 Exercice 1 : Assaut guidé</h3>
+      
+      <div class="selectors-row">
+        <select id="selectAssaut">
+          <option value="">Choisir un assaut</option>
+        </select>
         
-        <div class="selectors-row">
-          <select id="selectAssaut">
-            <option value="">Choisir un assaut</option>
-          </select>
-          
-          <select id="filterConfig">
-            <option value="">Filtrer par configuration</option>
-            <option value="fauteuil">Fauteuil</option>
-            <option value="debout">Debout</option>
-          </select>
+        <select id="filterConfig">
+          <option value="">Toutes configurations</option>
+          <option value="fauteuil">Fauteuil</option>
+          <option value="debout">Debout</option>
+        </select>
 
-          <button id="btnRandomAssaut" class="btn primary">🎲 Aléatoire</button>
-        </div>
-
-        <div class="controls-row">
-          <button id="btnPlayAssaut" class="btn primary" disabled>▶️ Lecture</button>
-          <button id="btnStopAssaut" class="btn ghost" disabled>⏹️ Stop</button>
-          
-          <div class="speed-control">
-            <label for="speedRange">Vitesse :</label>
-            <input type="range" id="speedRange" min="0.5" max="1.5" step="0.1" value="1" />
-            <span id="speedValue">1.0x</span>
-          </div>
-        </div>
-
-        <div id="assautCard" class="fiche-container"></div>
-
-        <button id="btnPrintAssaut" class="btn ghost" style="margin-top: 12px;">🖨️ Imprimer la fiche</button>
+        <button id="btnRandomAssaut" class="btn primary">🎲 Aléatoire</button>
       </div>
 
-      <div class="exercice-separator">ou</div>
+      <div id="assautCard" class="fiche-container"></div>
 
-      <!-- SCRIPT 2 -->
-      <div class="exercice-bloc">
-        <h3 class="exercice-title">🎵 Exercice 2 : Enchaînement personnalisé</h3>
+      <div class="controls-row">
+        <button id="btnPlayAssaut" class="btn primary" disabled>▶️ Lecture</button>
+        <button id="btnStopAssaut" class="btn ghost" disabled>⏹️ Stop</button>
         
-        <div class="selectors-row">
-          <input type="text" id="searchAssaut" placeholder="Rechercher un assaut..." style="flex: 1;" />
+        <div class="speed-control">
+          <label for="speedRange">Vitesse déroulé :</label>
+          <input type="range" id="speedRange" min="0.5" max="1.5" step="0.1" value="1" />
+          <span id="speedValue">1.0x</span>
         </div>
-
-        <div id="assautsList" class="assauts-checkbox-list"></div>
-
-        <div class="controls-row" style="margin-top: 16px;">
-          <button id="btnValidateSequence" class="btn primary" disabled>✅ Valider la sélection</button>
-          <button id="btnPlaySequence" class="btn primary" disabled>▶️ Lancer la séquence</button>
-          <button id="btnStopSequence" class="btn ghost" disabled>⏹️ Stop</button>
-        </div>
-
-        <div class="interval-control">
-          <label for="intervalRange">
-            Intervalle entre les assauts : 
-            <span id="intervalValue">10</span> secondes
-          </label>
-          <input type="range" id="intervalRange" min="3" max="60" step="1" value="10" />
-        </div>
-
-        <div id="sequenceStatus" class="sequence-status"></div>
       </div>
-    </section>
+
+      <button id="btnPrintAssaut" class="btn ghost">🖨️ Imprimer la fiche</button>
+    </div>
+
+    <div class="exercice-separator">ou</div>
+
+    <!-- ========== EXERCICE 2 ========== -->
+    <div class="exercice-bloc" id="exercice2-bloc">
+      <h3 class="exercice-title">🎵 Exercice 2 : Enchaînement personnalisé</h3>
+      
+      <div class="selectors-row">
+        <input type="text" id="searchAssaut" placeholder="Rechercher un assaut..." style="flex: 1;" />
+      </div>
+
+      <div id="assautsList" class="assauts-checkbox-list"></div>
+
+      <div class="sequence-display" id="sequenceDisplay"></div>
+
+      <div class="controls-row" style="margin-top: 16px;">
+        <button id="btnValidateSequence" class="btn primary" disabled>✅ Valider la sélection</button>
+        <button id="btnPlaySequence" class="btn primary" disabled>▶️ Lancer la séquence</button>
+        <button id="btnStopSequence" class="btn ghost" disabled>⏹️ Stop</button>
+      </div>
+
+      <div class="interval-control">
+        <label for="intervalRange">
+          Intervalle entre les assauts : 
+          <span id="intervalValue">10</span> secondes
+        </label>
+        <input type="range" id="intervalRange" min="3" max="60" step="1" value="10" />
+      </div>
+
+      <div class="options-control">
+        <label class="checkbox-label">
+          <input type="checkbox" id="optionLoop" />
+          <span>🔁 Lecture en boucle</span>
+        </label>
+        
+        <label class="checkbox-label">
+          <input type="checkbox" id="optionRandom" />
+          <span>🎲 Ordre aléatoire</span>
+        </label>
+      </div>
+
+      <div id="sequenceStatus" class="sequence-status"></div>
+    </div>
+
+  </div>
+</section>
 
   </main>
 
