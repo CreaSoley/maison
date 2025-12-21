@@ -11,8 +11,8 @@
   <!-- QR library (needed by cles.js) -->
   <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -31,7 +31,7 @@
   <!-- MAIN GRID: two columns on desktop, one column on mobile -->
   <main class="encarts-grid">
 
-    <!-- ENCARt 1 — CLÉS ARTICULAIRES -->
+    <!-- ENCART 1 — CLÉS ARTICULAIRES -->
     <section class="card kawaii-card" id="encart-cles">
       <h2 class="section-title spicy">🤲 Exercices — Clés Articulaires</h2>
 
@@ -48,7 +48,7 @@
       <div id="cleCard" class="fiche-container"></div>
     </section>
 
-    <!-- ENCARt 2 — TECHNIQUES RANDORI -->
+    <!-- ENCART 2 — TECHNIQUES RANDORI -->
     <section class="card kawaii-card" id="encart-randori">
       <h2 class="section-title spicy">🥋 Techniques Randori</h2>
 
@@ -70,70 +70,80 @@
 
       <div id="techCard" class="fiche-container"></div>
     </section>
-<!-- ENCARt 3 — EXERCICES ASSAUTS -->
-<section class="card kawaii-card" id="encart-assauts">
-  <h2 class="section-title spicy">⚔️ Exercices – Assauts</h2>
 
-  <div class="tabs">
-    <button class="btn ghost" id="tab1">🎧 Exercice 1</button>
-    <button class="btn ghost" id="tab2">🛠️ Exercice 2</button>
-  </div>
+    <!-- ENCART 3 — EXERCICES ASSAUTS -->
+    <section class="card kawaii-card" id="encart-assauts">
+      <h2 class="section-title spicy">🎯 Exercices d'Assauts</h2>
 
-  <div id="ex1-container">
-    <!-- Interface Exercice 1 -->
-    <div class="selectors-row">
-      <select id="filterConfig">
-        <option value="">Toutes les configurations</option>
-        <option value="fauteuil">Fauteuil</option>
-        <option value="debout">Debout</option>
-        <!-- etc. -->
-      </select>
+      <!-- SCRIPT 1 -->
+      <div class="exercice-bloc">
+        <h3 class="exercice-title">📝 Exercice 1 : Assaut guidé</h3>
+        
+        <div class="selectors-row">
+          <select id="selectAssaut">
+            <option value="">Choisir un assaut</option>
+          </select>
+          
+          <select id="filterConfig">
+            <option value="">Filtrer par configuration</option>
+            <option value="fauteuil">Fauteuil</option>
+            <option value="debout">Debout</option>
+          </select>
 
-      <select id="selectAssaut">
-        <option value="">Choisir un assaut</option>
-      </select>
+          <button id="btnRandomAssaut" class="btn primary">🎲 Aléatoire</button>
+        </div>
 
-      <button id="btnAssautRandom" class="btn primary">🔀 Aléatoire</button>
-    </div>
+        <div class="controls-row">
+          <button id="btnPlayAssaut" class="btn primary" disabled>▶️ Lecture</button>
+          <button id="btnStopAssaut" class="btn ghost" disabled>⏹️ Stop</button>
+          
+          <div class="speed-control">
+            <label for="speedRange">Vitesse :</label>
+            <input type="range" id="speedRange" min="0.5" max="1.5" step="0.1" value="1" />
+            <span id="speedValue">1.0x</span>
+          </div>
+        </div>
 
-    <div id="assautCard" class="fiche-container"></div>
+        <div id="assautCard" class="fiche-container"></div>
 
-    <div class="btn-row">
-      <button class="btn primary" id="btnPlay1">▶️ Lire</button>
-      <button class="btn ghost" id="btnStop1">⏹️ Stop</button>
+        <button id="btnPrintAssaut" class="btn ghost" style="margin-top: 12px;">🖨️ Imprimer la fiche</button>
+      </div>
 
-      <label for="speedRange">Vitesse :</label>
-      <input type="range" min="0.5" max="2" step="0.1" value="1" id="speedRange">
-    </div>
+      <div class="exercice-separator">ou</div>
 
-    <div class="btn-row">
-      <button class="btn ghost" onclick="window.print()">🖨️ Imprimer la fiche</button>
-    </div>
-  </div>
+      <!-- SCRIPT 2 -->
+      <div class="exercice-bloc">
+        <h3 class="exercice-title">🎵 Exercice 2 : Enchaînement personnalisé</h3>
+        
+        <div class="selectors-row">
+          <input type="text" id="searchAssaut" placeholder="Rechercher un assaut..." style="flex: 1;" />
+        </div>
 
-  <div id="ex2-container" style="display:none;">
-    <!-- Interface Exercice 2 -->
-    <div class="selectors-row">
-      <label for="intervalControl">Intervalle entre lectures :</label>
-      <input type="range" min="3" max="60" value="10" id="intervalControl">
-      <span id="intervalValue">10s</span>
-    </div>
+        <div id="assautsList" class="assauts-checkbox-list"></div>
 
-    <div id="techniquesList" class="fiche-card">
-      <!-- Cases à cocher auto-générées -->
-    </div>
+        <div class="controls-row" style="margin-top: 16px;">
+          <button id="btnValidateSequence" class="btn primary" disabled>✅ Valider la sélection</button>
+          <button id="btnPlaySequence" class="btn primary" disabled>▶️ Lancer la séquence</button>
+          <button id="btnStopSequence" class="btn ghost" disabled>⏹️ Stop</button>
+        </div>
 
-    <div class="btn-row">
-      <button class="btn primary" id="btnPlay2">▶️ Lancer séquence</button>
-      <button class="btn ghost" id="btnStop2">⏹️ Stop</button>
-    </div>
-  </div>
-</section>
+        <div class="interval-control">
+          <label for="intervalRange">
+            Intervalle entre les assauts : 
+            <span id="intervalValue">10</span> secondes
+          </label>
+          <input type="range" id="intervalRange" min="3" max="60" step="1" value="10" />
+        </div>
+
+        <div id="sequenceStatus" class="sequence-status"></div>
+      </div>
+    </section>
+
   </main>
 
   <!-- SCRIPTS (separate files) -->
   <script src="cles.js"></script>
   <script src="randori.js"></script>
-  <script src="exercices_assauts.js"></script>
+  <script src="assauts.js"></script>
 </body>
 </html>
