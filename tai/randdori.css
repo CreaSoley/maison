@@ -915,3 +915,11 @@ input::placeholder {
     page-break-inside: avoid;
   }
 }
+/* TITRES D'EXERCICE FORCÉS EN ARIAL */
+#encart-assauts .exercice-title {
+  font-family: Arial, sans-serif !important;
+  font-size: 1.8rem !important;
+  color: var(--hot-pink);
+  font-weight: bold;
+  margin-bottom: 16px;
+}
