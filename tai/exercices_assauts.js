@@ -2,304 +2,230 @@ let assautsData = [];
 let selectedSequence = [];
 let synth = window.speechSynthesis;
 let isPlaying = false;
-let bbpSound = null;
-let notifSound = null;
 const LOCAL_SEQUENCE_KEY = 'tai_sequence_assauts';
 
-document.addEventListener('DOMContentLoaded', init);
-
-function init() {
+document.addEventListener('DOMContentLoaded', () => {
   fetch('exercices_assauts.json')
     .then(res => res.json())
     .then(data => {
       assautsData = data.exercices;
-      initScript1();
-      initScript2();
+      initializeScript1();
+      initializeScript2();
     });
-}
+});
 
-// ---------- SCRIPT 1 : Assaut guidé ----------
-function initScript1() {
-  const select = document.getElementById('selectAssaut');
-  const filter = document.getElementById('filterConfig');
-  const play = document.getElementById('btnPlayAssaut');
-  const stop = document.getElementById('btnStopAssaut');
-  const print = document.getElementById('btnPrintAssaut');
-  const speedRange = document.getElementById('speedRange');
-  const speedValue = document.getElementById('speedValue');
-  const randomBtn = document.getElementById('btnRandomAssaut');
-  const container = document.getElementById('assautCard');
+// ==================== SCRIPT 1 — Assaut guidé ====================
 
+function initializeScript1() {
+  const select = document.getElementById("selectAssaut");
+  const filter = document.getElementById("filterConfig");
+  const assautCard = document.getElementById("assautCard");
+
+  // Charger assauts dans le select
   assautsData.forEach((a, i) => {
-    const opt = document.createElement('option');
+    const opt = document.createElement("option");
     opt.value = i;
     opt.textContent = a.assaut;
     opt.dataset.config = a.configuration;
     select.appendChild(opt);
   });
 
-  select.addEventListener('change', () => {
-    const a = assautsData[select.value];
-    window.currentAssaut = a;
-    displayAssaut(a, container);
-    play.disabled = false;
-    print.disabled = false;
+  select.addEventListener("change", () => {
+    const selected = assautsData[select.value];
+    displayAssaut(selected, assautCard);
+    window.currentAssaut = selected;
+    document.getElementById('btnPlayAssaut').disabled = false;
+    document.getElementById('btnExportPdfAssaut').disabled = false;
   });
 
-  filter.addEventListener('change', () => {
+  filter.addEventListener("change", () => {
+    const config = filter.value;
     Array.from(select.options).forEach(opt => {
-      opt.style.display = !filter.value || opt.dataset.config === filter.value ? '' : 'none';
+      opt.style.display = !config || opt.dataset.config === config ? '' : 'none';
     });
   });
 
-  randomBtn.addEventListener('click', () => {
-    let arr = filter.value
+  document.getElementById("btnRandomAssaut").addEventListener("click", () => {
+    let filtered = filter.value
       ? assautsData.filter(a => a.configuration === filter.value)
       : assautsData;
-    const rand = arr[Math.floor(Math.random() * arr.length)];
-    select.value = assautsData.indexOf(rand);
-    select.dispatchEvent(new Event('change'));
+    const rand = filtered[Math.floor(Math.random() * filtered.length)];
+    const index = assautsData.indexOf(rand);
+    select.value = index;
+    select.dispatchEvent(new Event("change"));
   });
 
-  speedRange.addEventListener('input', () => {
-    speedValue.textContent = speedRange.value + "x";
+  document.getElementById("btnPlayAssaut").addEventListener("click", playAssaut);
+  document.getElementById("btnStopAssaut").addEventListener("click", () => synth.cancel());
+  document.getElementById("speedRange").addEventListener("input", e => {
+    document.getElementById("speedValue").textContent = parseFloat(e.target.value).toFixed(1) + "x";
   });
 
-  play.addEventListener('click', playAssaut);
-  stop.addEventListener('click', () => {
-    synth.cancel();
-    isPlaying = false;
-  });
-  print.addEventListener('click', printAssaut);
-
-  initSounds();
+  document.getElementById("btnExportPdfAssaut").addEventListener("click", exportAssautAsPdf);
 }
 
-function displayAssaut(assaut, container) {
-  const configLabel = assaut.configuration === 'fauteuil' ? '🪑 Fauteuil' : '🧍 Debout';
-  const derouleHTML = assaut.deroule.map(e => `
-    <div class="deroule-item">
-      <span class="deroule-num">${e.etape}.</span> <span>${e.texte}</span>
-    </div>`).join('');
+function displayAssaut(a, container) {
+  const derouleHTML = a.deroule.map(e =>
+    `<div class="deroule-item"><span class="deroule-num">${e.etape}.</span> ${e.texte}</div>`).join('');
 
   container.innerHTML = `
     <div class="assaut-display">
       <div class="assaut-header">
         <div class="assaut-image-container">
-          <img src="${assaut.image}" class="assaut-image" />
+          <img src="${a.image}" class="assaut-image" alt="${a.assaut}" />
         </div>
         <div class="assaut-info">
-          <h4 class="assaut-title">${assaut.assaut}</h4>
-          <div class="assaut-config">${configLabel}</div>
-          <div class="assaut-objectif">${assaut.objectif}</div>
+          <h4 class="assaut-title">${a.assaut}</h4>
+          <div class="assaut-config">${a.configuration}</div>
+          <div class="assaut-objectif">${a.objectif}</div>
         </div>
       </div>
       <div class="assaut-columns">
         <div class="assaut-section">
           <h5>🔑 Points clés</h5>
-          <ul>${assaut.points_cles.map(p => `<li>${p}</li>`).join('')}</ul>
+          <ul>${a.points_cles.map(item => `<li>${item}</li>`).join('')}</ul>
         </div>
         <div class="assaut-section">
           <h5>⚠️ Erreurs à éviter</h5>
-          <ul>${assaut.erreurs_a_eviter.map(p => `<li>${p}</li>`).join('')}</ul>
+          <ul>${a.erreurs_a_eviter.map(item => `<li>${item}</li>`).join('')}</ul>
         </div>
         <div class="assaut-section deroule-section">
           <h5>📋 Déroulé</h5>
           <div class="deroule-grid">${derouleHTML}</div>
         </div>
       </div>
-    </div>`;
+    </div>
+  `;
 }
 
 async function playAssaut() {
-  if (!window.currentAssaut) return;
   const a = window.currentAssaut;
-  isPlaying = true;
-  const speed = parseFloat(document.getElementById('speedRange').value);
-
-  await speak(a.assaut, 1); await delay(1000);
-  await speak("Configuration : " + a.configuration, 1); await delay(1000);
-  await speak("Objectif : " + a.objectif, 1); await delay(1000);
-  await speak("Voici les points clés :", 1);
-  for (let p of a.points_cles) await speak(p, 1);
-  await speak("Voici les erreurs à éviter :", 1);
-  for (let e of a.erreurs_a_eviter) await speak(e, 1);
-  await speak("Commençons le travail", 1);
-  for (let etape of a.deroule) {
+  if (!a) return;
+  const speed = parseFloat(document.getElementById("speedRange").value);
+  await speak(`${a.assaut}`, 1); await wait(1000);
+  await speak(`Configuration : ${a.configuration}`, 1);
+  await speak(`Objectif : ${a.objectif}`, 1);
+  await speak(`Voici les points clés :`, 1);
+  for (const point of a.points_cles) await speak(point, 1);
+  await speak(`Voici les erreurs à éviter :`, 1);
+  for (const err of a.erreurs_a_eviter) await speak(err, 1);
+  await speak(`Commençons le travail`, 1);
+  for (const etape of a.deroule) {
     await speak(`Étape ${etape.etape} : ${etape.texte}`, speed);
   }
-
-  isPlaying = false;
 }
-
-document.getElementById('btnExportPdfAssaut').addEventListener('click', exportAssautAsPdf);
 
 function exportAssautAsPdf() {
   const a = window.currentAssaut;
   if (!a) return alert("Aucun assaut sélectionné.");
   const win = window.open('', '_blank');
   win.document.write(`
-    <html><head><title>Fiche - ${a.assaut}</title>
-    <style>
-      body { font-family: Arial, sans-serif; padding: 20px; color: #222; }
-      h1 { text-align: center; color: #ff1493; font-size: 1.8rem; }
-      .config-badge {
-        display: inline-block;
-        margin: 10px auto;
-        background: #ffe0f0;
-        padding: 0.5em 1em;
-        border-radius: 999px;
-        font-weight: bold;
-      }
-      .objectif {
-        font-style: italic;
-        font-size: 1.1rem;
-        padding: 1em;
-        border-left: 4px solid #ff1493;
-        background: #fff6fb;
-        margin: 20px 0;
-      }
-      .columns {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-      }
-      .column {
-        flex: 1;
-        background: #fff6fb;
-        padding: 1rem;
-        border-radius: 12px;
-        border: 1px solid #ffd6ec;
-      }
-      h3 {
-        color: #ff1493;
-        font-size: 1.2rem;
-        margin-bottom: 0.5em;
-        border-bottom: 2px solid #ffd6ec;
-        padding-bottom: 0.3em;
-      }
-      .deroule {
-        margin-top: 30px;
-      }
-      .etape {
-        margin-bottom: 0.6em;
-        padding: 0.5em;
-        background: #fff0f6;
-        border-left: 4px solid #ff5fc1;
-        border-radius: 8px;
-      }
-      .etape strong {
-        color: #ff1493;
-      }
-    </style>
+    <html><head><title>${a.assaut}</title>
+     <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      h1 { text-align: center; color: #ff1493; }
+      .config { text-align: center; font-weight: bold; margin: 10px; }
+      .objectif { font-style: italic; margin: 20px 0; border-left: 4px solid #ff1493; padding-left: 10px; }
+      ul { padding-left: 20px; }
+      .columns { display: flex; gap: 20px; }
+      .column { flex: 1; }
+      .etape { margin-bottom: 8px; }
+     </style>
     </head><body>
-      <h1>${a.assaut}</h1>
-      <div class="config-badge">${a.configuration}</div>
-      <div class="objectif">${a.objectif}</div>
-
-      <div class="columns">
-        <div class="column">
-          <h3>🔑 Points clés</h3>
-          <ul>${a.points_cles.map(p => `<li>${p}</li>`).join('')}</ul>
-        </div>
-        <div class="column">
-          <h3>⚠️ Erreurs à éviter</h3>
-          <ul>${a.erreurs_a_eviter.map(p => `<li>${p}</li>`).join('')}</ul>
-        </div>
-      </div>
-
-      <div class="deroule">
-        <h3>📋 Déroulé complet</h3>
-        ${a.deroule.map(e => `<div class="etape"><strong>${e.etape}.</strong> ${e.texte}</div>`).join('')}
-      </div>
-    </body></html>
-  `);
+     <h1>${a.assaut}</h1>
+     <div class="config">${a.configuration}</div>
+     <div class="objectif">${a.objectif}</div>
+     <div class="columns">
+      <div class="column"><h3>🔑 Points clés</h3><ul>${a.points_cles.map(p => `<li>${p}</li>`).join('')}</ul></div>
+      <div class="column"><h3>⚠️ Erreurs à éviter</h3><ul>${a.erreurs_a_eviter.map(p => `<li>${p}</li>`).join('')}</ul></div>
+     </div>
+     <h3>📋 Déroulé</h3>${a.deroule.map(e => `<div class="etape"><strong>${e.etape}.</strong> ${e.texte}</div>`).join('')}
+    </body></html>`);
   win.document.close();
 }
-}
 
-// ---------- SCRIPT 2 : Enchaînement personnalisé ----------
-function initScript2() {
-  const preview = document.getElementById('sequenceDisplay');
-  document.getElementById('btnPlaySequence').addEventListener('click', playSequence);
-  document.getElementById('btnStopSequence').addEventListener('click', () => {
-    isPlaying = false;
-    synth.cancel();
-  });
-  document.getElementById('intervalRange').addEventListener('input', e => {
-    document.getElementById('intervalValue').textContent = e.target.value;
-  });
+// ==================== SCRIPT 2 — Enchaînement perso ====================
 
-  // Gestion formulaire sélection
-  const search = document.getElementById('searchAssaut');
-  const list = document.getElementById('assautsList');
+function initializeScript2() {
+  const assautsList = document.getElementById('assautsList');
+  const sequenceDisplay = document.getElementById('sequenceDisplay');
 
-  // Remplacer anciennes checkbox par select
-  const selectorZone = `
+  // Génération de la liste déroulante + boutons
+  assautsList.innerHTML = `
     <div class="selectors-row">
-      <select id="selectAssautSequence"></select>
-      <button id="btnAddToSequence" class="btn ghost">➕ Ajouter</button>
+      <select id="selectAssautSequence" style="flex:1;">
+        <option value="">-- Choisir un assaut --</option>
+        ${assautsData.map((a, i) => `<option value="${i}">${a.assaut} (${a.configuration})</option>`).join('')}
+      </select>
+      <button class="btn ghost" id="btnPreviewAssaut">👀 Aperçu</button>
+      <button class="btn primary" id="btnAddToSequence">➕ Ajouter</button>
     </div>
+    <div id="previewAssautCard" class="fiche-card" style="margin-top:12px;"></div>
   `;
-  list.innerHTML = selectorZone;
 
-  const select = document.getElementById('selectAssautSequence');
-  assautsData.forEach((a, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.innerText = `${a.assaut} (${a.configuration})`;
-    select.appendChild(opt);
+  document.getElementById('btnPreviewAssaut').addEventListener('click', () => {
+    const sel = document.getElementById('selectAssautSequence').value;
+    if (sel) previewAssaut(assautsData[sel]);
   });
 
   document.getElementById('btnAddToSequence').addEventListener('click', () => {
-    const index = select.value;
-    if (!index) return;
-    selectedSequence.push(assautsData[index]);
-    updateSequencePreview();
+    const sel = document.getElementById('selectAssautSequence').value;
+    if (sel) {
+      selectedSequence.push(assautsData[sel]);
+      updateSequencePreview();
+    }
   });
 
-  // Actions supplémentaires
-  document.getElementById('btnValidateSequence').addEventListener('click', updateSequencePreview);
+  // Fonctions locales externes
   document.getElementById('btnClearSequence').addEventListener('click', () => {
     selectedSequence = [];
     updateSequencePreview();
     showStatus("🧽 Séquence vidée !");
   });
+
   document.getElementById('btnSaveSequence').addEventListener('click', () => {
-    const indices = selectedSequence.map(a => assautsData.indexOf(a));
-    localStorage.setItem(LOCAL_SEQUENCE_KEY, JSON.stringify(indices));
-    showStatus("💾 Sauvegarde effectuée !");
+    localStorage.setItem(LOCAL_SEQUENCE_KEY, JSON.stringify(selectedSequence.map(a => assautsData.indexOf(a))));
+    showStatus("💾 Sauvegardée !");
   });
+
   document.getElementById('btnLoadSequence').addEventListener('click', () => {
-    const raw = localStorage.getItem(LOCAL_SEQUENCE_KEY);
-    if (!raw) return showStatus("⚠️ Aucune sauvegarde trouvée");
-    const indices = JSON.parse(raw);
+    const data = localStorage.getItem(LOCAL_SEQUENCE_KEY);
+    if (!data) return showStatus("⚠️ Rien à charger.");
+    const indices = JSON.parse(data);
     selectedSequence = indices.map(i => assautsData[i]);
     updateSequencePreview();
-    showStatus("📂 Séquence restaurée !");
+    showStatus("📂 Séquence chargée !");
   });
-  document.getElementById('btnExportSequence').addEventListener('click', exportSequenceAsPdf);
+
+  updateSequencePreview();
+}
+
+function previewAssaut(a) {
+  document.getElementById('previewAssautCard').innerHTML = `
+    <div><strong>${a.assaut}</strong></div>
+    <div style="font-style: italic; color: #555;">🎯 ${a.objectif}</div>
+    <div style="margin-top: 5px;"><strong>Étape 1 :</strong> ${a.deroule[0].texte}</div>
+  `;
 }
 
 function updateSequencePreview() {
-  const preview = document.getElementById('sequenceDisplay');
+  const zone = document.getElementById('sequenceDisplay');
   if (selectedSequence.length === 0) {
-    preview.innerHTML = '';
-    preview.classList.remove('active');
+    zone.innerHTML = '';
+    zone.classList.remove('active');
     return;
   }
 
-  let items = selectedSequence.map((a, i) => `
+  const output = selectedSequence.map((a, i) => `
     <div class="sequence-item">
       <span>${i + 1}. ${a.assaut}</span>
       <button class="remove-btn" onclick="removeFromSequence(${i})">✕</button>
-    </div>`).join('');
+    </div>
+  `).join('');
 
-  preview.innerHTML = `
-    <div class="sequence-items">${items}</div>
-    <div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>
-  `;
-  preview.classList.add('active');
+  zone.innerHTML = `<div class="sequence-items">${output}</div>
+    <div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>`;
+  zone.classList.add('active');
 }
 
 function removeFromSequence(index) {
@@ -307,55 +233,28 @@ function removeFromSequence(index) {
   updateSequencePreview();
 }
 
-// ---------- Export PDF - Séquence ----------
-function exportSequenceAsPdf() {
-  if (selectedSequence.length === 0) return alert("Aucune séquence sélectionnée.");
-  const w = window.open('', '_blank');
-  w.document.write(`
-    <html><head><title>Enchaînement</title>
-    <style>
-      body { font-family: Arial, sans-serif; padding:20px; }
-      h1 { text-align:center; color:#f06; }
-      .step { margin-bottom:1rem; padding:10px; border-left:4px solid #f06; background:#fff5fa; }
-      .step-title { font-weight:bold; margin-bottom:4px; color:#c06; }
-      .objectif { font-style: italic; font-size: 0.95em; color:#555; }
-    </style>
-    </head><body>
-    <h1>🎵 Enchaînement — Tai-Jitsu</h1>
-    ${selectedSequence.map((a, i) => `
-      <div class="step">
-        <div class="step-title">${i+1}. ${a.assaut}</div>
-        <div class="objectif">🎯 ${a.objectif}</div>
-      </div>
-    `).join('')}
-    </body></html>`);
-  w.document.close();
-  w.focus();
-}
+// ==================== UTILITAIRES ====================
 
-// ---------- Utils ----------
-function speak(text, rate = 1) {
-  return new Promise(r => {
-    const u = new SpeechSynthesisUtterance(text);
+function speak(txt, rate = 1) {
+  return new Promise(res => {
+    const u = new SpeechSynthesisUtterance(txt);
     u.lang = 'fr-FR';
     u.rate = rate;
+    u.onend = res;
     synth.speak(u);
-    u.onend = r;
   });
 }
 
-function delay(ms) {
-  return new Promise(r => setTimeout(r, ms));
+function wait(ms) {
+  return new Promise(res => setTimeout(res, ms));
 }
 
 function showStatus(txt) {
-  const el = document.getElementById('sequenceStatus');
+  const el = document.getElementById("sequenceStatus");
   el.textContent = txt;
-  el.classList.add('active');
-  setTimeout(() => el.classList.remove('active'), 3000);
+  el.classList.add("active");
+  setTimeout(() => el.classList.remove("active"), 3000);
 }
 
-function initSounds() {
-  bbpSound = new Audio("bbp.mp3");
-  notifSound = new Audio("notif.mp3");
-}
+// Permet de retirer dynamiquement un assaut
+window.removeFromSequence = removeFromSequence;
