@@ -227,365 +227,418 @@ function printAssaut() {
   /* ... votre code d’impression reste inchangé ... */
 }
 
-/* ==============================================================
-   EXERCICE 2 – ENCHAÎNEMENT PERSONNALISÉ
-   (remplacement complet – aucune redéclaration de assautsData)
-   ============================================================== */
+/* ==================== EXERCICE 2 : ENCHAÎNEMENT PERSONNALISÉ ==================== */
 
-;(function () {                     // <-- IIFE qui isole le script 2
+// 📦 DONNÉES EN DUR (21 intitulés d'assauts)
+const SEQUENCE_ASSAUTS = [
+  "Étranglement de face à une main",
+  "Étranglement de face à deux mains",
+  "Soumission par clé de jambe",
+  "Couché‑ferme (guard pass)",
+  "Passage de garde inversé",
+  "Escapatoire en cage",
+  "Projection d'épaule",
+  "Projection de hanche",
+  "Clef de poignet inversée",
+  "Triangulation de jambe",
+  "Kimura de bras",
+  "Arm‑bar à la jambe",
+  "Scapula‑lock",
+  "Sangle de cou",
+  "Couché‑ferme par coulisser",
+  "Double‑leg takedown",
+  "Cut‑back de jambe",
+  "Sote‑gatame (somme)",
+  "Butterfly guard sweep",
+  "Hip‑stir‑sweep",
+  "Reveil de garde à la volée"
+];
 
-  /* -------------------------------------------------
-     1️⃣ Références du DOM (elles existent déjà dans le HTML)
-     ------------------------------------------------- */
-  const searchAssaut         = document.getElementById('searchAssaut');
-  const assautsList          = document.getElementById('assautsList');
-  const btnValidateSequence = document.getElementById('btnValidateSequence');
-  const btnPlaySequence     = document.getElementById('btnPlaySequence');
-  const btnStopSequence     = document.getElementById('btnStopSequence');
-  const intervalRange       = document.getElementById('intervalRange');
-  const intervalValue       = document.getElementById('intervalValue');
-  const sequenceStatus      = document.getElementById('sequenceStatus');
-  const sequenceDisplay     = document.getElementById('sequenceDisplay');
-  const optionLoop          = document.getElementById('optionLoop');
-  const optionRandom        = document.getElementById('optionRandom');
+// 🎯 ÉLÉMENTS DOM
+const searchAssaut = document.getElementById('searchAssaut');
+const assautsList = document.getElementById('assautsList');
+const btnValidateSequence = document.getElementById('btnValidateSequence');
+const btnPlaySequence = document.getElementById('btnPlaySequence');
+const btnStopSequence = document.getElementById('btnStopSequence');
+const intervalRange = document.getElementById('intervalRange');
+const intervalValue = document.getElementById('intervalValue');
+const sequenceStatus = document.getElementById('sequenceStatus');
+const sequenceDisplay = document.getElementById('sequenceDisplay');
+const optionLoop = document.getElementById('optionLoop');
+const optionRandom = document.getElementById('optionRandom');
 
-  /* -------------------------------------------------
-     2️⃣ Données **en dur** – exactement les 20 intitulés que vous avez fournis
-        (pas de fetch, pas de redeclaration de assautsData globale)
-     ------------------------------------------------- */
-  const titlesHardCoded = [
-    "Etranglement de face à une main",
-    "Etranglement de face à deux mains",
-    "Soumission par clé de jambe",
-    "Couché‑ferme (guard pass)",
-    "Passage de garde inversé",
-    "Escapatoire en cage",
-    "Projection d’épaule",
-    "Projection de hanche",
-    "Clef de poignet inversée",
-    "Triangulation de jambe",
-    "Kimura de bras",
-    "Arm‑bar à la jambe",
-    "Scapula‑lock",
-    "Sangle de cou",
-    "Couché‑ferme par coulisser",
-    "Double‑leg takedown",
-    "Cut‑back de jambe",
-    "Sote‑gatame (somme)",
-    "Butterfly guard sweep",
-    "Hip‑stir‑sweep",
-    "Reveil de garde à la volée"
-  ];
+// 📊 VARIABLES GLOBALES (ne PAS redéclarer assautsData !)
+let selectedSequence = [];
+let sequenceTimeout = null;
+let audioContext = null;
+let bbpSound = null;
+let notifSound = null;
+let isPlaying = false;
 
-  // On crée le tableau d’objets attendu par le reste du code, **sans** toucher
-  // à la variable globale `assautsData` du script 1.
-  const exercise2Data = titlesHardCoded.map(t => ({ assaut: t }));
+// 🚀 INITIALISATION (dès que le DOM est prêt)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeScript2);
+} else {
+  initializeScript2();
+}
 
-  /* -------------------------------------------------
-     3️⃣ Variables propres à lExercise 2
-     ------------------------------------------------- */
-  let selectedSequence = [];          // tableau d’assauts (doublons possibles)
-  let isPlaying = false;
-  let sequenceTimeout = null;
-  let audioContext, bbpSound, notifSound;
-  let synth;                          // ré‑utilise le même SpeechSynthesis du script 1
-
-  /* -------------------------------------------------
-     4️⃣ Initialisation (appelée après DOMContentLoaded)
-     ------------------------------------------------- */
-  function initExercise2() {
-    displayAssaultsList();                                   // remplissage initial
-    // Recherche en temps réel
-    searchAssaut.addEventListener('input', () => displayAssaultsList(searchAssaut.value));
-    // Validation / lecture / arrêt
+function initializeScript2() {
+  displayAvailableAssauts();
+  
+  if (searchAssaut) {
+    searchAssaut.addEventListener('input', () => displayAvailableAssauts(searchAssaut.value));
+  }
+  if (btnValidateSequence) {
     btnValidateSequence.addEventListener('click', validateSequence);
+  }
+  if (btnPlaySequence) {
     btnPlaySequence.addEventListener('click', playSequence);
+  }
+  if (btnStopSequence) {
     btnStopSequence.addEventListener('click', stopSequence);
-    // Gestion du délai entre deux assauts
+  }
+  if (intervalRange) {
     intervalRange.addEventListener('input', updateIntervalDisplay);
-    // Sons (si vous avez des fichiers mp3)
-    initSounds();
   }
+  
+  initSounds();
+}
 
-  /* -------------------------------------------------
-     5️⃣ Construction de la liste d’assauts (avec bouton « Ajouter »)
-     ------------------------------------------------- */
-  function displayAssaultsList(filter = '') {
-    assautsList.innerHTML = '';
-    const matches = exercise2Data.filter(a =>
-      a.assaut.toLowerCase().includes(filter.toLowerCase())
-    );
-
-    matches.forEach((assaut, idx) => {
-      const item = document.createElement('div');
-      item.className = 'assault-item';
-      item.dataset.idx = idx;
-
-      const badge = document.createElement('span');
-      badge.className = 'config-badge';
-      badge.textContent = assaut.assaut;               // vous pouvez mettre un icône ici
-      badge.title = '';
-
-      const label = document.createElement('label');
-      label.htmlFor = `assault-${idx}`;
-      label.textContent = `${assaut.assaut}`;
-
-      const btnAdd = document.createElement('button');
-      btnAdd.textContent = '➕ Ajouter';
-      btnAdd.className = 'add-btn';
-      btnAdd.addEventListener('click', (e) => {
-        e.stopPropagation();
-        addAssautToSelection(idx);
-      });
-
-      item.appendChild(badge);
-      item.appendChild(label);
-      item.appendChild(btnAdd);
-      assautsList.appendChild(item);
-    });
+// 📋 AFFICHAGE DES ASSAUTS DISPONIBLES
+function displayAvailableAssauts(filter = '') {
+  if (!assautsList) return;
+  
+  assautsList.innerHTML = '';
+  
+  const filtered = SEQUENCE_ASSAUTS.filter(assaut => 
+    assaut.toLowerCase().includes(filter.toLowerCase())
+  );
+  
+  if (filtered.length === 0) {
+    assautsList.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">Aucun assaut trouvé</p>';
+    return;
   }
+  
+  filtered.forEach((assaut, index) => {
+    const item = document.createElement('div');
+    item.className = 'assaut-checkbox-item';
+    
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `assaut-seq-${index}`;
+    checkbox.value = assaut;
+    
+    const label = document.createElement('label');
+    label.htmlFor = `assaut-seq-${index}`;
+    label.textContent = assaut;
+    
+    item.appendChild(checkbox);
+    item.appendChild(label);
+    
+    assautsList.appendChild(item);
+  });
+}
 
-  /* -------------------------------------------------
-     6️⃣ Ajout d’un assaut à la séquence (les doublons sont autorisés)
-     ------------------------------------------------- */
-  function addAssautToSelection(idx) {
-    selectedSequence.push(exercise2Data[idx]);   // on push l’objet complet
-    displaySequencePreview();
-    btnValidateSequence.disabled = false;        // on active la validation dès qu’on a au moins un élément
+// ✅ VALIDER LA SÉLECTION
+function validateSequence() {
+  const checkboxes = assautsList.querySelectorAll('input[type="checkbox"]:checked');
+  
+  if (checkboxes.length === 0) {
+    alert('⚠️ Veuillez sélectionner au moins un assaut');
+    return;
   }
+  
+  selectedSequence = Array.from(checkboxes).map(cb => cb.value);
+  
+  if (btnPlaySequence) btnPlaySequence.disabled = false;
+  displaySelectedSequence();
+  showStatus(`✅ ${selectedSequence.length} assaut(s) ajouté(s) à la séquence`);
+  
+  // Décocher toutes les cases
+  checkboxes.forEach(cb => cb.checked = false);
+}
 
-  /* -------------------------------------------------
-     7️⃣ Validation (simple affichage de statut)
-     ------------------------------------------------- */
-  function validateSequence() {
-    showStatus(`✅ ${selectedSequence.length} assaut(s) sélectionné(s)`);
+// 📊 AFFICHAGE DE LA SÉQUENCE SÉLECTIONNÉE (avec drag & drop)
+function displaySelectedSequence() {
+  if (!sequenceDisplay) return;
+  
+  sequenceDisplay.innerHTML = '';
+  
+  if (selectedSequence.length === 0) {
+    sequenceDisplay.classList.remove('active');
+    if (btnPlaySequence) btnPlaySequence.disabled = true;
+    return;
   }
+  
+  sequenceDisplay.classList.add('active');
+  
+  const itemsHTML = selectedSequence.map((assaut, index) => `
+    <div class="sequence-item" draggable="true" data-index="${index}">
+      <span class="drag-handle">⋮⋮</span>
+      <span class="sequence-number">${index + 1}</span>
+      <span class="sequence-name">${assaut}</span>
+      <button class="remove-btn" onclick="removeFromSequence(${index})" title="Retirer">✕</button>
+    </div>
+  `).join('');
+  
+  const countHTML = `<div class="sequence-count">📦 Total : ${selectedSequence.length} assaut(s) | 💡 Glissez pour réorganiser</div>`;
+  
+  sequenceDisplay.innerHTML = `<div class="sequence-items">${itemsHTML}</div>${countHTML}`;
+  
+  addDragAndDropHandlers();
+}
 
-  /* -------------------------------------------------
-     8️⃣ Affichage de la séquence (chips avec ↑/↓/✕)
-     ------------------------------------------------- */
-  function displaySequencePreview() {
-    sequenceDisplay.innerHTML = '';
-    if (selectedSequence.length === 0) {
-      sequenceDisplay.classList.remove('active');
-      btnPlaySequence.disabled = true;
-      return;
+// 🖱️ DRAG & DROP
+function addDragAndDropHandlers() {
+  const items = sequenceDisplay.querySelectorAll('.sequence-item');
+  let draggedElement = null;
+  
+  items.forEach(item => {
+    item.addEventListener('dragstart', handleDragStart);
+    item.addEventListener('dragover', handleDragOver);
+    item.addEventListener('drop', handleDrop);
+    item.addEventListener('dragend', handleDragEnd);
+  });
+  
+  function handleDragStart(e) {
+    draggedElement = this;
+    this.style.opacity = '0.5';
+    e.dataTransfer.effectAllowed = 'move';
+  }
+  
+  function handleDragOver(e) {
+    if (e.preventDefault) e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+  }
+  
+  function handleDrop(e) {
+    if (e.stopPropagation) e.stopPropagation();
+    
+    if (draggedElement !== this) {
+      const draggedIndex = parseInt(draggedElement.dataset.index);
+      const targetIndex = parseInt(this.dataset.index);
+      
+      const draggedItem = selectedSequence[draggedIndex];
+      selectedSequence.splice(draggedIndex, 1);
+      selectedSequence.splice(targetIndex, 0, draggedItem);
+      
+      displaySelectedSequence();
     }
-    sequenceDisplay.classList.add('active');
-
-    const chipsHTML = selectedSequence.map((assaut, i) => createSequenceChip(i, assaut))
-                                    .join('');
-    const countHTML = `<div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>`;
-    sequenceDisplay.innerHTML = `
-      <div class="sequence-items">${chipsHTML}</div>
-      ${countHTML}
-    `;
+    
+    return false;
   }
-
-  /** Crée le HTML d’une « chip » (numéro + titre + flèches + croix) */
-  function createSequenceChip(pos, assaut) {
-    const up = document.createElement('button');
-    up.className = 'move-btn up';
-    up.innerHTML = '▲';
-    up.title = 'Monter';
-    up.onclick = () => moveInSequence(pos, -1);
-
-    const dn = document.createElement('button');
-    dn.className = 'move-btn down';
-    dn.innerHTML = '▼';
-    dn.title = 'Descendre';
-    dn.onclick = () => moveInSequence(pos, +1);
-
-    const rm = document.createElement('button');
-    rm.className = 'remove-btn';
-    rm.innerHTML = '✕';
-    rm.title = 'Retirer';
-    rm.onclick = e => {
-      e.stopPropagation();
-      removeFromSequence(pos);
-    };
-
-    const txt = document.createElement('span');
-    txt.textContent = `${pos + 1}. ${assaut.assaut}`;
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'sequence-chip';
-    wrapper.dataset.idx = pos;
-    wrapper.appendChild(txt);
-    wrapper.appendChild(up);
-    wrapper.appendChild(dn);
-    wrapper.appendChild(rm);
-    return wrapper;
+  
+  function handleDragEnd() {
+    this.style.opacity = '1';
   }
+}
 
-  /** Déplace un assaut dans le tableau `selectedSequence` */
-  function moveInSequence(idx, direction) {
-    const newIdx = idx + direction;
-    if (newIdx < 0 || newIdx >= selectedSequence.length) return;
-    const [moved] = selectedSequence.splice(idx, 1);
-    selectedSequence.splice(newIdx, 0, moved);
-    displaySequencePreview();
+// 🗑️ RETIRER DE LA SÉQUENCE
+function removeFromSequence(index) {
+  const assautName = selectedSequence[index];
+  
+  if (confirm(`Retirer "${assautName}" de la séquence ?`)) {
+    selectedSequence.splice(index, 1);
+    displaySelectedSequence();
+    
+    if (selectedSequence.length === 0) {
+      if (btnPlaySequence) btnPlaySequence.disabled = true;
+      hideStatus();
+    } else {
+      showStatus(`🗑️ "${assautName}" retiré (${selectedSequence.length} restant)`);
+    }
   }
+}
 
-  /** Retire un assaut (les doublons sont simplement supprimés) */
-  function removeFromSequence(idx) {
-    selectedSequence.splice(idx, 1);
-    displaySequencePreview();
-    if (selectedSequence.length === 0) btnPlaySequence.disabled = true;
-  }
-
-  /* -------------------------------------------------
-     9️⃣ Gestion du délai (interval) entre deux assauts
-     ------------------------------------------------- */
-  function updateIntervalDisplay() {
+function updateIntervalDisplay() {
+  if (intervalValue && intervalRange) {
     intervalValue.textContent = intervalRange.value;
   }
+}
 
-  /* -------------------------------------------------
-     🔟 Lecture de la séquence (boucle / random / interval)
-         → chaque appel utilise **seulement** le titre.
-     ------------------------------------------------- */
-  async function playSequence() {
-    if (selectedSequence.length === 0 || isPlaying) return;
-
-    stopSequence();                // sécurise le cas où on relance
-    isPlaying = true;
-
-    btnPlaySequence.disabled = true;
-    btnStopSequence.disabled = false;
-    btnValidateSequence.disabled = true;
-
-    const shouldLoop   = optionLoop.checked;
-    const shouldRandom = optionRandom.checked;
-    let working = [...selectedSequence];
-
-    do {
-      // Randomisation éventuelle
-      if (shouldRandom) working = shuffleArray([...selectedSequence]);
-
-      // Petite pause avant le premier assaut
-      showStatus('⏱️ Démarrage dans 5 s…');
-      await sleep(5000);
-
-      // Son d’accompagnement (bbp)
-      playSound('bbp');
-
-      // Lecture de chaque assaut (seulement le titre)
-      for (let i = 0; i < working.length; i++) {
-        if (!isPlaying) break;
-
-        if (i > 0) {
-          // Petit signal entre deux assauts
-          playSound('notif');
-          await sleep(500);
-        }
-
-        await speakAssaut(working[i]);          // ← **titre uniquement**
-        // Pause définie par l’utilisateur
-        if (i < working.length - 1) {
-          const ms = parseInt(intervalRange.value) * 1000;
-          showStatus(`# Pause (${intervalRange.value}s)`);
-          await sleep(ms);
-        }
+// ▶️ JOUER LA SÉQUENCE (UNIQUEMENT L'INTITULÉ)
+async function playSequence() {
+  if (selectedSequence.length === 0 || isPlaying) return;
+  
+  stopSequence();
+  isPlaying = true;
+  
+  if (btnPlaySequence) btnPlaySequence.disabled = true;
+  if (btnStopSequence) btnStopSequence.disabled = false;
+  if (btnValidateSequence) btnValidateSequence.disabled = true;
+  
+  const shouldLoop = optionLoop.checked;
+  const shouldRandomize = optionRandom.checked;
+  
+  let sequence = [...selectedSequence];
+  
+  do {
+    if (shouldRandomize) {
+      sequence = shuffleArray([...selectedSequence]);
+      showStatus('🔀 Mode aléatoire activé');
+    } else {
+      showStatus('🎵 Lecture en cours...');
+    }
+    
+    await sleep(2000);
+    playSound('bbp');
+    await sleep(500);
+    
+    for (let i = 0; i < sequence.length; i++) {
+      if (!isPlaying) break;
+      
+      const assaut = sequence[i];
+      highlightCurrentAssaut(i);
+      
+      if (i > 0) {
+        playSound('notif');
+        await sleep(500);
       }
-
-      // Boucle éventuelle
-      if (shouldLoop && isPlaying) {
-        showStatus('🔁 Nouvelle boucle dans 3 s…');
-        await sleep(3000);
+      
+      // ✅ UNIQUEMENT L'INTITULÉ (vitesse normale)
+      await speakWithPause(assaut, 1);
+      
+      if (i < sequence.length - 1) {
+        const interval = parseInt(intervalRange.value) * 1000;
+        showStatus(`⏸️ Pause... (${interval/1000}s) - ${i+1}/${sequence.length}`);
+        await sleep(interval);
       }
-    } while (shouldLoop && isPlaying);
+    }
+    
+    playSound('bbp');
+    
+    if (shouldLoop && isPlaying) {
+      showStatus('🔁 Nouvelle boucle dans 3 secondes...');
+      await sleep(3000);
+    }
+    
+  } while (shouldLoop && isPlaying);
+  
+  showStatus('✅ Séquence terminée !');
+  
+  setTimeout(() => {
+    if (btnPlaySequence) btnPlaySequence.disabled = false;
+    if (btnStopSequence) btnStopSequence.disabled = true;
+    if (btnValidateSequence) btnValidateSequence.disabled = false;
+    hideStatus();
+  }, 3000);
+  
+  isPlaying = false;
+  document.querySelectorAll('.sequence-item').forEach(item => {
+    item.style.background = '';
+    item.style.borderColor = '';
+  });
+}
 
-    showStatus('✅ Séquence terminée !');
-    resetControlsAfterPlay();
+// 🎨 SURLIGNER L'ASSAUT EN COURS
+function highlightCurrentAssaut(index) {
+  document.querySelectorAll('.sequence-item').forEach((item, i) => {
+    if (i === index) {
+      item.style.background = '#fff0f6';
+      item.style.borderColor = '#ff1493';
+      item.style.transform = 'scale(1.02)';
+    } else {
+      item.style.background = '';
+      item.style.borderColor = '';
+      item.style.transform = '';
+    }
+  });
+}
+
+function stopSequence() {
+  isPlaying = false;
+  
+  if (sequenceTimeout) {
+    clearTimeout(sequenceTimeout);
+    sequenceTimeout = null;
   }
+  
+  stopSpeech();
+  
+  if (btnPlaySequence) btnPlaySequence.disabled = false;
+  if (btnStopSequence) btnStopSequence.disabled = true;
+  if (btnValidateSequence) btnValidateSequence.disabled = false;
+  
+  hideStatus();
+  document.querySelectorAll('.sequence-item').forEach(item => {
+    item.style.background = '';
+    item.style.borderColor = '';
+  });
+}
 
-  /** Lecture d’un assaut – **seulement** le titre + point final */
-  async function speakAssaut(assaut) {
-    const text = `${assaut.assaut}.`;
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'fr-FR';
-    utter.rate = 1;
-    utter.onend = () => {};
-    synth.speak(utter);
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
+  return shuffled;
+}
 
-  /** Fonction utilitaire de pause */
-  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-  /** Lecture des sons (bbp / notif) – fonctionne si les fichiers existent */
-  function playSound(type) {
-    if (!audioContext || !bbpSound || !notifSound) return;
-    const s = type === 'bbp' ? bbpSound : notifSound;
-    s.currentTime = 0;
-    s.play().catch(() => console.warn('Erreur de lecture du son'));
-  }
-
-  /** Affichage du statut (en haut à droite) */
-  function showStatus(msg) {
-    sequenceStatus.textContent = msg;
+function showStatus(message) {
+  if (sequenceStatus) {
+    sequenceStatus.textContent = message;
     sequenceStatus.classList.add('active');
   }
-  function hideStatus() { sequenceStatus.classList.remove('active'); }
+}
 
-  /** Remise à zéro des boutons après la lecture */
-  function resetControlsAfterPlay() {
-    setTimeout(() => {
-      btnPlaySequence.disabled = false;
-      btnStopSequence.disabled = true;
-      btnValidateSequence.disabled = false;
-      hideStatus();
-    }, 3000);
+function hideStatus() {
+  if (sequenceStatus) {
+    sequenceStatus.classList.remove('active');
   }
+}
 
-  /** Arrêt de la séquence en cours */
-  function stopSequence() {
-    isPlaying = false;
-    if (sequenceTimeout) clearTimeout(sequenceTimeout);
-    stopSpeech();                     // fonction du script 1
-    btnPlaySequence.disabled = false;
-    btnStopSequence.disabled = true;
-    btnValidateSequence.disabled = false;
-    hideStatus();
+// 🔊 GESTION DES SONS
+function initSounds() {
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    bbpSound = new Audio('bbp.mp3');
+    notifSound = new Audio('notif.mp3');
+    if (bbpSound) bbpSound.load();
+    if (notifSound) notifSound.load();
+  } catch (error) {
+    console.warn('Audio non supporté:', error);
   }
+}
 
-  /** Mélange d’un tableau (pour le mode random) */
-  function shuffleArray(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+function playSound(type) {
+  if (!audioContext || !bbpSound || !notifSound) return;
+  
+  const sound = type === 'bbp' ? bbpSound : notifSound;
+  
+  if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch(err => console.warn('Erreur lecture son:', err));
   }
+}
 
-  /* -------------------------------------------------
-     1️⃣1️⃣ Initialisation finale de lExercise 2
-     ------------------------------------------------- */
-  function runExercise2() {
-    // (re)création du AudioContext et chargement des fichiers son
-    try {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      bbpSound = new Audio('bbp.mp3');
-      notifSound = new Audio('notif.mp3');
-      bbpSound.load();
-      notifSound.load();
-    } catch (e) {
-      console.warn('Audio non supporté :', e);
-    }
-    initializeScript2();   // attache tous les écouteurs nécessaires
+// 🛠️ UTILITAIRES
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function stopSpeech() {
+  if (synth && synth.speaking) {
+    synth.cancel();
   }
+}
 
-  // Attente du DOM avant d’appeler runExercise2()
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runExercise2);
-  } else {
-    runExercise2();
-  }
+function speakWithPause(text, speed) {
+  return new Promise((resolve) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'fr-FR';
+    utterance.rate = speed;
+    utterance.pitch = 1;
+    utterance.onend = resolve;
+    if (synth) synth.speak(utterance);
+  });
+}
 
-  /* -------------------------------------------------
-     1️⃣2️⃣ Export global (pour les boutons « ✕ »)
-     ------------------------------------------------- */
-  window.removeFromSequence = removeFromSequence;
+// 🌐 GLOBALES
+window.removeFromSequence = removeFromSequence;
 
-})();   // ← fin de lIIFE qui contient lExercise 2
+window.addEventListener('beforeunload', () => {
+  stopSpeech();
+  stopSequence();
+});
