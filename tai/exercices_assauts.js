@@ -228,28 +228,30 @@ function printAssaut() {
 }
 
 /* ==============================================================
-   EXERCICE 2 – ENCHAÎNEMENT PERSONNALISÉ (lecture uniquement du titre)
+   EXERCICE 2 – ENCHAÎNEMENT PERSONNALISÉ
+   (remplacement complet – aucune redéclaration de assautsData)
    ============================================================== */
 
-/* ---------- 2️⃣ IIFE qui regroupe tout l'exercice 2 ---------- */
-;(function () {
-  /* -------------------------------------------------
-     2.1 Références du DOM (celles déjà présentes dans le HTML)
-     ------------------------------------------------- */
-  const searchAssaut      = document.getElementById('searchAssaut');
-  const assautsList       = document.getElementById('assautsList');
-  const btnValidateSequence= document.getElementById('btnValidateSequence');
-  const btnPlaySequence    = document.getElementById('btnPlaySequence');
-  const btnStopSequence    = document.getElementById('btnStopSequence');
-  const intervalRange      = document.getElementById('intervalRange');
-  const intervalValue      = document.getElementById('intervalValue');
-  const sequenceStatus     = document.getElementById('sequenceStatus');
-  const sequenceDisplay    = document.getElementById('sequenceDisplay');
-  const optionLoop         = document.getElementById('optionLoop');
-  const optionRandom       = document.getElementById('optionRandom');
+;(function () {                     // <-- IIFE qui isole le script 2
 
   /* -------------------------------------------------
-     2.2 Données **en dur** – exactement les 20 intitulés que vous avez fournis
+     1️⃣ Références du DOM (elles existent déjà dans le HTML)
+     ------------------------------------------------- */
+  const searchAssaut         = document.getElementById('searchAssaut');
+  const assautsList          = document.getElementById('assautsList');
+  const btnValidateSequence = document.getElementById('btnValidateSequence');
+  const btnPlaySequence     = document.getElementById('btnPlaySequence');
+  const btnStopSequence     = document.getElementById('btnStopSequence');
+  const intervalRange       = document.getElementById('intervalRange');
+  const intervalValue       = document.getElementById('intervalValue');
+  const sequenceStatus      = document.getElementById('sequenceStatus');
+  const sequenceDisplay     = document.getElementById('sequenceDisplay');
+  const optionLoop          = document.getElementById('optionLoop');
+  const optionRandom        = document.getElementById('optionRandom');
+
+  /* -------------------------------------------------
+     2️⃣ Données **en dur** – exactement les 20 intitulés que vous avez fournis
+        (pas de fetch, pas de redeclaration de assautsData globale)
      ------------------------------------------------- */
   const titlesHardCoded = [
     "Etranglement de face à une main",
@@ -275,59 +277,53 @@ function printAssaut() {
     "Reveil de garde à la volée"
   ];
 
-  /* -------------------------------------------------
-     2.3 Tableau d’objets minimal (pour garder la même forme que le JSON)
-     ------------------------------------------------- */
-  const assautsData = titlesHardCoded.map(t => ({ assaut: t }));
+  // On crée le tableau d’objets attendu par le reste du code, **sans** toucher
+  // à la variable globale `assautsData` du script 1.
+  const exercise2Data = titlesHardCoded.map(t => ({ assaut: t }));
 
   /* -------------------------------------------------
-     2.4 Variables propres à lExercise 2
+     3️⃣ Variables propres à lExercise 2
      ------------------------------------------------- */
-  let selectedSequence = [];               // tableau d’assauts (doublons possibles)
+  let selectedSequence = [];          // tableau d’assauts (doublons possibles)
   let isPlaying = false;
   let sequenceTimeout = null;
   let audioContext, bbpSound, notifSound;
-  let synth;                               // ré‑utilise le même lecteur vocal du script 1
+  let synth;                          // ré‑utilise le même SpeechSynthesis du script 1
 
   /* -------------------------------------------------
-     2.5 Initialisation (appelée après le DOMContentLoaded)
+     4️⃣ Initialisation (appelée après DOMContentLoaded)
      ------------------------------------------------- */
   function initExercise2() {
-    displayAssaultsList();                 // remplissage initial de la liste
-
+    displayAssaultsList();                                   // remplissage initial
     // Recherche en temps réel
     searchAssaut.addEventListener('input', () => displayAssaultsList(searchAssaut.value));
-
     // Validation / lecture / arrêt
     btnValidateSequence.addEventListener('click', validateSequence);
     btnPlaySequence.addEventListener('click', playSequence);
     btnStopSequence.addEventListener('click', stopSequence);
-
     // Gestion du délai entre deux assauts
     intervalRange.addEventListener('input', updateIntervalDisplay);
-
-    // Sons (si les fichiers existent)
+    // Sons (si vous avez des fichiers mp3)
     initSounds();
   }
 
   /* -------------------------------------------------
-     2.6 Construction de la liste d’assauts (avec bouton “Ajouter”)
+     5️⃣ Construction de la liste d’assauts (avec bouton « Ajouter »)
      ------------------------------------------------- */
   function displayAssaultsList(filter = '') {
     assautsList.innerHTML = '';
-
-    const matches = assautsData.filter(a =>
+    const matches = exercise2Data.filter(a =>
       a.assaut.toLowerCase().includes(filter.toLowerCase())
     );
 
     matches.forEach((assaut, idx) => {
-      const container = document.createElement('div');
-      container.className = 'assault-item';
-      container.dataset.idx = idx;
+      const item = document.createElement('div');
+      item.className = 'assault-item';
+      item.dataset.idx = idx;
 
       const badge = document.createElement('span');
       badge.className = 'config-badge';
-      badge.textContent = assaut.assaut;      // vous pouvez mettre un icône ou la config ici
+      badge.textContent = assaut.assaut;               // vous pouvez mettre un icône ici
       badge.title = '';
 
       const label = document.createElement('label');
@@ -342,31 +338,31 @@ function printAssaut() {
         addAssautToSelection(idx);
       });
 
-      container.appendChild(badge);
-      container.appendChild(label);
-      container.appendChild(btnAdd);
-      assautsList.appendChild(container);
+      item.appendChild(badge);
+      item.appendChild(label);
+      item.appendChild(btnAdd);
+      assautsList.appendChild(item);
     });
   }
 
   /* -------------------------------------------------
-     2.7 Ajout d’un assaut à la séquence (les doublons sont autorisés)
+     6️⃣ Ajout d’un assaut à la séquence (les doublons sont autorisés)
      ------------------------------------------------- */
   function addAssautToSelection(idx) {
-    selectedSequence.push(assautsData[idx]);   // push de l’objet complet
+    selectedSequence.push(exercise2Data[idx]);   // on push l’objet complet
     displaySequencePreview();
-    btnValidateSequence.disabled = false;      // on active la validation dès qu’on a au moins un élément
+    btnValidateSequence.disabled = false;        // on active la validation dès qu’on a au moins un élément
   }
 
   /* -------------------------------------------------
-     2.8 Validation (simple retour visuel)
+     7️⃣ Validation (simple affichage de statut)
      ------------------------------------------------- */
   function validateSequence() {
     showStatus(`✅ ${selectedSequence.length} assaut(s) sélectionné(s)`);
   }
 
   /* -------------------------------------------------
-     2.9 Affichage de la séquence (chips avec up/down / ✕)
+     8️⃣ Affichage de la séquence (chips avec ↑/↓/✕)
      ------------------------------------------------- */
   function displaySequencePreview() {
     sequenceDisplay.innerHTML = '';
@@ -377,10 +373,8 @@ function printAssaut() {
     }
     sequenceDisplay.classList.add('active');
 
-    const chipsHTML = selectedSequence
-      .map((assaut, i) => createSequenceChip(i, assaut))
-      .join('');
-
+    const chipsHTML = selectedSequence.map((assaut, i) => createSequenceChip(i, assaut))
+                                    .join('');
     const countHTML = `<div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>`;
     sequenceDisplay.innerHTML = `
       <div class="sequence-items">${chipsHTML}</div>
@@ -388,7 +382,7 @@ function printAssaut() {
     `;
   }
 
-  /** Crée le HTML d’une « chip » (numéro + titre + flèches + croix) */
+  /** Crée le HTML d’une « chip » (numéro + titre + flèches + croix) */
   function createSequenceChip(pos, assaut) {
     const up = document.createElement('button');
     up.className = 'move-btn up';
@@ -437,35 +431,32 @@ function printAssaut() {
   function removeFromSequence(idx) {
     selectedSequence.splice(idx, 1);
     displaySequencePreview();
-    if (selectedSequence.length === 0) {
-      btnPlaySequence.disabled = true;
-    }
+    if (selectedSequence.length === 0) btnPlaySequence.disabled = true;
   }
 
   /* -------------------------------------------------
-     2.10 Gestion du délai (interval) entre deux assauts
+     9️⃣ Gestion du délai (interval) entre deux assauts
      ------------------------------------------------- */
   function updateIntervalDisplay() {
     intervalValue.textContent = intervalRange.value;
   }
 
   /* -------------------------------------------------
-     2.11 Lecture de la séquence complète (boucle / random / interval)
-          → chaque appel utilise **seulement** le titre.
+     🔟 Lecture de la séquence (boucle / random / interval)
+         → chaque appel utilise **seulement** le titre.
      ------------------------------------------------- */
   async function playSequence() {
     if (selectedSequence.length === 0 || isPlaying) return;
 
-    stopSequence();               // sécurise le cas où on relance
+    stopSequence();                // sécurise le cas où on relance
     isPlaying = true;
 
     btnPlaySequence.disabled = true;
     btnStopSequence.disabled = false;
     btnValidateSequence.disabled = true;
 
-    const shouldLoop  = optionLoop.checked;
+    const shouldLoop   = optionLoop.checked;
     const shouldRandom = optionRandom.checked;
-
     let working = [...selectedSequence];
 
     do {
@@ -479,7 +470,7 @@ function printAssaut() {
       // Son d’accompagnement (bbp)
       playSound('bbp');
 
-      // Lecture de chaque assaut **uniquement du titre**
+      // Lecture de chaque assaut (seulement le titre)
       for (let i = 0; i < working.length; i++) {
         if (!isPlaying) break;
 
@@ -489,7 +480,7 @@ function printAssaut() {
           await sleep(500);
         }
 
-        await speakAssaut(working[i]);           // ← **titre uniquement**
+        await speakAssaut(working[i]);          // ← **titre uniquement**
         // Pause définie par l’utilisateur
         if (i < working.length - 1) {
           const ms = parseInt(intervalRange.value) * 1000;
@@ -551,7 +542,7 @@ function printAssaut() {
   function stopSequence() {
     isPlaying = false;
     if (sequenceTimeout) clearTimeout(sequenceTimeout);
-    stopSpeech();                         // fonction du script 1
+    stopSpeech();                     // fonction du script 1
     btnPlaySequence.disabled = false;
     btnStopSequence.disabled = true;
     btnValidateSequence.disabled = false;
@@ -569,7 +560,7 @@ function printAssaut() {
   }
 
   /* -------------------------------------------------
-     2.12 Initialisation finale de lExercise 2
+     1️⃣1️⃣ Initialisation finale de lExercise 2
      ------------------------------------------------- */
   function runExercise2() {
     // (re)création du AudioContext et chargement des fichiers son
@@ -582,7 +573,6 @@ function printAssaut() {
     } catch (e) {
       console.warn('Audio non supporté :', e);
     }
-
     initializeScript2();   // attache tous les écouteurs nécessaires
   }
 
@@ -594,8 +584,8 @@ function printAssaut() {
   }
 
   /* -------------------------------------------------
-     2.13 Export global de la fonction de retrait (pour les ✕)
+     1️⃣2️⃣ Export global (pour les boutons « ✕ »)
      ------------------------------------------------- */
   window.removeFromSequence = removeFromSequence;
 
-})();   // ← FIN de lIIFE qui encapsule lExercise 2
+})();   // ← fin de lIIFE qui contient lExercise 2
