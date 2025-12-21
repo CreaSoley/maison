@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
       initializeScript1();
       initializeScript2();
     });
-});
 
 // ==================== SCRIPT 1 — Assaut guidé ====================
 
