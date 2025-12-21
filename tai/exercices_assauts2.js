@@ -1,10 +1,45 @@
+// ==================== CHARGEMENT DES DONNÉES ====================
 
+let exercicesData = []; // Variable globale pour stocker les données
+
+fetch('exercices_assauts.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erreur HTTP: ' + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    exercicesData = data;
+    console.log("✅ Données chargées :", exercicesData.length, "exercices");
+    
+    // Optionnel : Lancer un premier aperçu si la liste n'est pas vide
+    if(exercicesData.length > 0) {
+        // previewAssaut(exercicesData[0]); 
+    }
+  })
+  .catch(error => {
+    console.error("❌ Erreur chargement JSON:", error);
+    document.body.innerHTML += `<div style="color:red; padding:20px;">ERREUR JSON: ${error}<br>Vérifiez que le fichier exercices_assauts.json est valide.</div>`;
+  });
 // ==================== SCRIPT 2 — Enchaînement perso ====================
 
-exercices_assauts.js:219 Uncaught SyntaxError: Unexpected token '}'
-randori.js:19 Loaded randori data from randori.json 18 items
+// 1. Variable globale (sera remplie par le fetch)
+let exercicesData = [];
 
+// 2. Fonction de chargement (À mettre ici ou en haut)
+fetch('exercices_assauts.json')
+  .then(res => res.json())
+  .then(data => {
+    exercicesData = data;
+    console.log("Chargement OK", data);
+  })
+  .catch(err => console.error("Erreur JSON:", err));
+
+
+// 3. Tes fonctions existantes
 function previewAssaut(a) {
+  if (!a) return;
   document.getElementById('previewAssautCard').innerHTML = `
     <div><strong>${a.assaut}</strong></div>
     <div style="font-style: italic;">🎯 ${a.objectif}</div>
@@ -14,6 +49,7 @@ function previewAssaut(a) {
 
 function updateSequencePreview() {
   const zone = document.getElementById('sequenceDisplay');
+  if (!zone) return; // Sécurité si l'élément n'existe pas
 
   if (selectedSequence.length === 0) {
     zone.innerHTML = '';
@@ -40,9 +76,7 @@ function removeFromSequence(index) {
   updateSequencePreview();
 }
 
-
 // ==================== UTILITAIRES ====================
-
 function speak(txt, rate = 1) {
   return new Promise(res => {
     const u = new SpeechSynthesisUtterance(txt);
@@ -59,10 +93,11 @@ function wait(ms) {
 
 function showStatus(txt) {
   const el = document.getElementById("sequenceStatus");
-  el.textContent = txt;
-  el.classList.add("active");
-  setTimeout(() => el.classList.remove("active"), 3000);
+  if(el) {
+      el.textContent = txt;
+      el.classList.add("active");
+      setTimeout(() => el.classList.remove("active"), 3000);
+  }
 }
 
-// Permet de retirer dynamiquement un assaut
 window.removeFromSequence = removeFromSequence;
