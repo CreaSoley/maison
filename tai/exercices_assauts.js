@@ -15,9 +15,7 @@ const assautCard = document.getElementById('assautCard');
 const btnPrintAssaut = document.getElementById('btnPrintAssaut');
 
 // Éléments DOM - Script 2
-const searchAssaut = document.getElementById('searchAssaut');
 const assautsList = document.getElementById('assautsList');
-const btnValidateSequence = document.getElementById('btnValidateSequence');
 const btnPlaySequence = document.getElementById('btnPlaySequence');
 const btnStopSequence = document.getElementById('btnStopSequence');
 const intervalRange = document.getElementById('intervalRange');
@@ -31,122 +29,73 @@ const optionRandom = document.getElementById('optionRandom');
 let currentAssaut = null;
 let synth = window.speechSynthesis;
 let selectedSequence = [];
-let sequenceTimeout = null;
-let audioContext = null;
+let isPlaying = false;
 let bbpSound = null;
 let notifSound = null;
-let isPlaying = false;
 
 // ==================== INITIALISATION ====================
 
 fetch('exercices_assauts.json')
-  .then(response => response.json())
+  .then(res => res.json())
   .then(data => {
     assautsData = data.exercices;
     initializeScript1();
     initializeScript2();
   })
-  .catch(error => {
-    console.error('Erreur chargement JSON:', error);
-    alert('Erreur lors du chargement des exercices d\'assauts');
-  });
+  .catch(() => alert("Erreur lors du chargement des données."));
 
-// ==================== SCRIPT 1 : ASSAUT GUIDÉ ====================
+/* -------- SCRIPT 1 — GUIDÉ -------- */
 
 function initializeScript1() {
   assautsData.forEach((assaut, index) => {
-    const option = document.createElement('option');
-    option.value = index;
-    option.textContent = assaut.assaut;
-    option.dataset.config = assaut.configuration;
-    selectAssaut.appendChild(option);
+    const opt = document.createElement('option');
+    opt.value = index;
+    opt.textContent = assaut.assaut;
+    opt.dataset.config = assaut.configuration;
+    selectAssaut.appendChild(opt);
   });
 
-  selectAssaut.addEventListener('change', handleAssautSelect);
-  filterConfig.addEventListener('change', filterAssauts);
-  btnRandomAssaut.addEventListener('click', selectRandomAssaut);
+  selectAssaut.addEventListener('change', () => {
+    const index = selectAssaut.value;
+    currentAssaut = assautsData[index];
+    displayAssaut(currentAssaut);
+    btnPlayAssaut.disabled = false;
+    btnPrintAssaut.disabled = false;
+  });
+
+  filterConfig.addEventListener('change', () => {
+    const config = filterConfig.value;
+    Array.from(selectAssaut.options).forEach(opt => {
+      opt.style.display = !config || opt.dataset.config === config ? '' : 'none';
+    });
+  });
+
+  btnRandomAssaut.addEventListener('click', () => {
+    const config = filterConfig.value;
+    const valid = config ? assautsData.filter(a => a.configuration === config) : assautsData;
+    const rand = valid[Math.floor(Math.random() * valid.length)];
+    const index = assautsData.indexOf(rand);
+    selectAssaut.value = index;
+    selectAssaut.dispatchEvent(new Event('change'));
+  });
+
   btnPlayAssaut.addEventListener('click', playAssaut);
-  btnStopAssaut.addEventListener('click', stopSpeech);
-  speedRange.addEventListener('input', updateSpeedDisplay);
+  btnStopAssaut.addEventListener('click', () => {
+    synth.cancel();
+    isPlaying = false;
+  });
+
+  speedRange.addEventListener('input', () => {
+    speedValue.textContent = speedRange.value + "x";
+  });
+
   btnPrintAssaut.addEventListener('click', printAssaut);
 
   initSounds();
 }
 
-function handleAssautSelect() {
-  const index = selectAssaut.value;
-  if (index === '') {
-    currentAssaut = null;
-    assautCard.innerHTML = '';
-    btnPlayAssaut.disabled = true;
-    btnPrintAssaut.disabled = true;
-    return;
-  }
-  
-  currentAssaut = assautsData[index];
-  displayAssaut(currentAssaut);
-  btnPlayAssaut.disabled = false;
-  btnPrintAssaut.disabled = false;
-}
-
-function filterAssauts() {
-  const config = filterConfig.value;
-  const options = selectAssaut.options;
-  
-  for (let i = 0; i < options.length; i++) {
-    const option = options[i];
-    if (config === '' || option.dataset.config === config) {
-      option.style.display = '';
-    } else {
-      option.style.display = 'none';
-    }
-  }
-  
-  if (config && currentAssaut && currentAssaut.configuration !== config) {
-    selectAssaut.value = '';
-    currentAssaut = null;
-    assautCard.innerHTML = '';
-    btnPlayAssaut.disabled = true;
-    btnPrintAssaut.disabled = true;
-  }
-}
-
-function selectRandomAssaut() {
-  const config = filterConfig.value;
-  let availableAssauts = assautsData;
-  
-  if (config) {
-    availableAssauts = assautsData.filter(a => a.configuration === config);
-  }
-  
-  if (availableAssauts.length === 0) return;
-  
-  const randomIndex = Math.floor(Math.random() * availableAssauts.length);
-  const randomAssaut = availableAssauts[randomIndex];
-  const originalIndex = assautsData.indexOf(randomAssaut);
-  
-  selectAssaut.value = originalIndex;
-  handleAssautSelect();
-}
-
 function displayAssaut(assaut) {
-  const configLabel = assaut.configuration === 'fauteuil' ? '🪑 Fauteuil' : '🧍 Debout';
-  
-  const pointsClesHTML = assaut.points_cles
-    .map(point => `<li>${point}</li>`)
-    .join('');
-  
-  const erreursHTML = assaut.erreurs_a_eviter
-    .map(erreur => `<li>${erreur}</li>`)
-    .join('');
-  
-  const derouleHTML = assaut.deroule
-    .map(etape => `
-      <div class="deroule-item">
-        <span class="deroule-num">${etape.etape}.</span>
-        <span>${etape.texte}</span>
-      </div>
-    `).join('');
+  const configLabel = assaut.configuration === "fauteuil" ? "🪑 Fauteuil" : "🧍 Debout";
 
   const html = `
     <div class="assaut-display">
@@ -160,471 +109,222 @@ function displayAssaut(assaut) {
           <div class="assaut-objectif">${assaut.objectif}</div>
         </div>
       </div>
-
       <div class="assaut-columns">
         <div class="assaut-section">
           <h5>🔑 Points clés</h5>
-          <ul>${pointsClesHTML}</ul>
+          <ul>${assaut.points_cles.map(x => `<li>${x}</li>`).join('')}</ul>
         </div>
-
         <div class="assaut-section">
           <h5>⚠️ Erreurs à éviter</h5>
-          <ul>${erreursHTML}</ul>
+          <ul>${assaut.erreurs_a_eviter.map(x => `<li>${x}</li>`).join('')}</ul>
         </div>
-
         <div class="assaut-section deroule-section">
           <h5>📋 Déroulé</h5>
-          <div class="deroule-grid">${derouleHTML}</div>
+          <div class="deroule-grid">
+            ${assaut.deroule.map(e => `<div class="deroule-item"><span class="deroule-num">${e.etape}.</span><span>${e.texte}</span></div>`).join('')}
+          </div>
         </div>
       </div>
     </div>
   `;
-  
   assautCard.innerHTML = html;
 }
 
-function updateSpeedDisplay() {
-  speedValue.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
-}
-
 async function playAssaut() {
-  if (!currentAssaut || isPlaying) return;
-
-  stopSpeech();
+  if (!currentAssaut) return;
   isPlaying = true;
-  btnPlayAssaut.disabled = true;
-  btnStopAssaut.disabled = false;
-
   const speed = parseFloat(speedRange.value);
 
-  // 1. Nom de l'assaut
-  await speakWithPause(`${currentAssaut.assaut}.`, speed);
+  await speak(`${currentAssaut.assaut}`, 1);
+  await sleep(1000);
+  await speak(`Configuration : ${currentAssaut.configuration}`, 1);
+  await sleep(1000);
+  await speak(`Objectif : ${currentAssaut.objectif}`, 1);
   await sleep(1000);
 
-  // 2. Configuration
-  const configText = currentAssaut.configuration === 'fauteuil' ? 'Fauteuil' : 'Debout';
-  await speakWithPause(`Configuration : ${configText}.`, speed);
+  await speak(`Voici les points clés :`, 1);
+  for (let p of currentAssaut.points_cles) await speak(p, 1);
   await sleep(1000);
 
-  // 3. Objectif
-  await speakWithPause(`Objectif : ${currentAssaut.objectif}.`, speed);
+  await speak(`Voici les erreurs à éviter :`, 1);
+  for (let e of currentAssaut.erreurs_a_eviter) await speak(e, 1);
   await sleep(1000);
 
-  // 4. Points clés
-  await speakWithPause(`Points clés :`, speed);
-  for (let i = 0; i < currentAssaut.points_cles.length; i++) {
-    await speakWithPause(currentAssaut.points_cles[i], speed);
-  }
+  await speak(`Commençons le travail`, 1);
   await sleep(1000);
 
-  // 5. Erreurs à éviter
-  await speakWithPause(`Erreurs à éviter :`, speed);
-  for (let i = 0; i < currentAssaut.erreurs_a_eviter.length; i++) {
-    await speakWithPause(currentAssaut.erreurs_a_eviter[i], speed);
-  }
-  await sleep(1000);
-
-  // 6. Déroulé
-  await speakWithPause(`Commençons le travail.`, speed);
-  await sleep(500);
-
-  for (let i = 0; i < currentAssaut.deroule.length; i++) {
-    const etape = currentAssaut.deroule[i];
-    await speakWithPause(`Étape ${etape.etape} : ${etape.texte}.`, speed);
+  for (let etape of currentAssaut.deroule) {
+    await speak(`Étape ${etape.etape} : ${etape.texte}`, speed);
   }
 
   isPlaying = false;
-  btnPlayAssaut.disabled = false;
-  btnStopAssaut.disabled = true;
 }
 
-function speakWithPause(text, speed) {
-  return new Promise((resolve) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'fr-FR';
-    utterance.rate = speed;
-    utterance.pitch = 1;
-    utterance.onend = resolve;
-    synth.speak(utterance);
+function speak(text, rate = 1) {
+  return new Promise(resolve => {
+    if (!isPlaying) return resolve();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "fr-FR";
+    utter.rate = rate;
+    utter.onend = resolve;
+    synth.speak(utter);
   });
 }
 
-function stopSpeech() {
-  if (synth.speaking) {
-    synth.cancel();
-    isPlaying = false;
-    btnPlayAssaut.disabled = false;
-    btnStopAssaut.disabled = true;
-  }
+function sleep(ms) {
+  return new Promise(res => setTimeout(res, ms));
 }
 
 function printAssaut() {
   if (!currentAssaut) return;
-  
-  const printWindow = window.open('', '', 'height=600,width=800');
-  const assautDisplay = assautCard.innerHTML;
-  
-  const configLabel = currentAssaut.configuration === 'fauteuil' ? '🪑 Fauteuil' : '🧍 Debout';
-  
-  printWindow.document.write(`
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-      <meta charset="utf-8">
-      <title>Fiche d'exercice - ${currentAssaut.assaut}</title>
-      <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
-      <style>
-        body {
-          font-family: 'Fredoka', Arial, sans-serif;
-          padding: 20px;
-          color: #222;
-        }
-        .print-header {
-          text-align: center;
-          margin-bottom: 20px;
-        }
-        h1 {
-          color: #ff1493;
-          font-size: 1.8rem;
-          margin: 0 0 10px 0;
-        }
-        .config-badge {
-          display: inline-block;
-          padding: 4px 12px;
-          background: #fff0f6;
-          border: 2px solid #ffd6ec;
-          border-radius: 20px;
-          font-weight: 600;
-          color: #ff5fc1;
-          margin-bottom: 8px;
-        }
-        .objectif {
-          font-style: italic;
-          color: #666;
-          padding: 10px;
-          background: #fffaf8;
-          border-left: 3px solid #ff5fc1;
-          margin: 10px 0;
-        }
-        .columns {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-          margin: 20px 0;
-        }
-        .section {
-          border: 2px solid #ffd6ec;
-          border-radius: 12px;
-          padding: 15px;
-          background: #fffaf8;
-        }
-        .section h3 {
-          color: #ff1493;
-          font-size: 1.1rem;
-          margin: 0 0 10px 0;
-          text-align: center;
-          padding-bottom: 8px;
-          border-bottom: 2px solid #ffd6ec;
-        }
-        .section ul {
-          margin: 0;
-          padding-left: 20px;
-          line-height: 1.6;
-        }
-        .deroule-section {
-          grid-column: 1 / -1;
-        }
-        .deroule-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-          margin-top: 10px;
-        }
-        .deroule-item {
-          display: flex;
-          gap: 6px;
-        }
-        .deroule-num {
-          font-weight: 700;
-          color: #ff5fc1;
-        }
-        @media print {
-          body { padding: 0; }
-        }
-      </style>
-    </head>
-    <body>
-      <div class="print-header">
-        <h1>🎯 Fiche d'exercice - Tai-Jitsu</h1>
-        <div class="config-badge">${configLabel}</div>
-        <div class="objectif">${currentAssaut.objectif}</div>
-      </div>
-      ${assautDisplay}
-    </body>
-    </html>
+  const w = window.open('', '_blank');
+  w.document.write(`
+    <html><head><title>${currentAssaut.assaut}</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; color: #222; }
+      h1 { color: #ff1493; text-align: center; }
+      .objectif { font-style: italic; margin: 20px 0; }
+      .config { font-weight: bold; background: #fee; padding: 6px 10px; border-radius: 10px; text-align: center; }
+      .columns { display: flex; gap: 20px; margin-top: 20px; }
+      .column { flex: 1; }
+      .deroule { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+      .step { display: flex; gap: 6px; }
+    </style>
+    </head><body>
+    <h1>${currentAssaut.assaut}</h1>
+    <div class="config">${currentAssaut.configuration}</div>
+    <div class="objectif">${currentAssaut.objectif}</div>
+    <div class="columns">
+      <div class="column"><h3>Points clés</h3><ul>${currentAssaut.points_cles.map(x => `<li>${x}</li>`).join('')}</ul></div>
+      <div class="column"><h3>Erreurs à éviter</h3><ul>${currentAssaut.erreurs_a_eviter.map(x => `<li>${x}</li>`).join('')}</ul></div>
+    </div>
+    <div class="deroule">
+      ${currentAssaut.deroule.map(e => `<div class="step"><strong>${e.etape}.</strong> ${e.texte}</div>`).join('')}
+    </div></body></html>
   `);
-  
-  printWindow.document.close();
-  printWindow.focus();
-  
-  setTimeout(() => {
-    printWindow.print();
-  }, 250);
+  w.document.close();
+  w.focus();
 }
 
-// ==================== SCRIPT 2 : ENCHAÎNEMENT PERSONNALISÉ ====================
+/* -------- SCRIPT 2 — ENCHAÎNEMENT -------- */
 
 function initializeScript2() {
-  displayAssautsList();
-  
-  searchAssaut.addEventListener('input', () => displayAssautsList(searchAssaut.value));
-  btnValidateSequence.addEventListener('click', validateSequence);
+  displayAssautsList2();
+
   btnPlaySequence.addEventListener('click', playSequence);
-  btnStopSequence.addEventListener('click', stopSequence);
-  intervalRange.addEventListener('input', updateIntervalDisplay);
-  
+  btnStopSequence.addEventListener('click', () => {
+    synth.cancel();
+    isPlaying = false;
+    btnPlaySequence.disabled = false;
+    btnStopSequence.disabled = true;
+  });
+
+  intervalRange.addEventListener('input', () => {
+    intervalValue.textContent = intervalRange.value + "s";
+  });
+
   initSounds();
 }
 
-function displayAssautsList(filter = '') {
-  assautsList.innerHTML = '';
-  
-  const filtered = assautsData.filter(assaut => 
-    assaut.assaut.toLowerCase().includes(filter.toLowerCase())
-  );
-  
-  filtered.forEach((assaut, index) => {
-    const item = document.createElement('div');
-    item.className = 'assaut-checkbox-item';
-    
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.id = `assaut-${index}`;
-    checkbox.value = index;
-    checkbox.addEventListener('change', updateValidateButton);
-    
-    const label = document.createElement('label');
-    label.htmlFor = `assaut-${index}`;
-    label.textContent = assaut.assaut;
-    
-    const badge = document.createElement('span');
-    badge.className = 'config-badge';
-    badge.textContent = assaut.configuration === 'fauteuil' ? '🪑' : '🧍';
-    badge.title = assaut.configuration;
-    
-    item.appendChild(checkbox);
-    item.appendChild(label);
-    item.appendChild(badge);
-    
-    assautsList.appendChild(item);
-  });
-}
-
-function updateValidateButton() {
-  const checkboxes = assautsList.querySelectorAll('input[type="checkbox"]:checked');
-  btnValidateSequence.disabled = checkboxes.length === 0;
-}
-
-function validateSequence() {
-  const checkboxes = assautsList.querySelectorAll('input[type="checkbox"]:checked');
-  selectedSequence = Array.from(checkboxes).map(cb => {
-    const index = parseInt(cb.value);
-    return assautsData[index];
-  });
-  
-  if (selectedSequence.length > 0) {
-    btnPlaySequence.disabled = false;
-    displaySequencePreview();
-    showStatus(`✅ ${selectedSequence.length} assaut(s) sélectionné(s)`);
-  }
-}
-
-function displaySequencePreview() {
-  sequenceDisplay.innerHTML = '';
-  
-  if (selectedSequence.length === 0) {
-    sequenceDisplay.classList.remove('active');
-    return;
-  }
-  
-  sequenceDisplay.classList.add('active');
-  
-  const itemsHTML = selectedSequence.map((assaut, index) => `
-    <div class="sequence-item">
-      <span>${index + 1}. ${assaut.assaut}</span>
-      <button class="remove-btn" onclick="removeFromSequence(${index})" title="Retirer">✕</button>
+function displayAssautsList2() {
+  assautsList.innerHTML = `
+    <div class="selectors-row">
+      <input type="text" id="searchField" placeholder="Rechercher...">
+      <select id="selectAssautSequence"></select>
+      <button class="btn ghost" id="addToSequence">➕ Ajouter</button>
     </div>
-  `).join('');
-  
-  const countHTML = `<div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>`;
-  
-  sequenceDisplay.innerHTML = `
-    <div class="sequence-items">${itemsHTML}</div>
-    ${countHTML}
   `;
-}
+  const select = document.getElementById('selectAssautSequence');
+  const search = document.getElementById('searchField');
 
-function removeFromSequence(index) {
-  selectedSequence.splice(index, 1);
-  displaySequencePreview();
-  
-  if (selectedSequence.length === 0) {
-    btnPlaySequence.disabled = true;
+  function updateSelect(filter = '') {
+    select.innerHTML = '';
+    assautsData.forEach((assaut, index) => {
+      if (!filter || assaut.assaut.toLowerCase().includes(filter.toLowerCase())) {
+        const opt = document.createElement('option');
+        opt.value = index;
+        opt.textContent = assaut.assaut + " (" + assaut.configuration + ")";
+        select.appendChild(opt);
+      }
+    });
   }
+
+  search.addEventListener('input', () => updateSelect(search.value));
+  updateSelect();
+
+  document.getElementById('addToSequence').addEventListener('click', () => {
+    const index = select.value;
+    if (index !== "") {
+      selectedSequence.push(assautsData[index]);
+      updateSequencePreview();
+      btnPlaySequence.disabled = false;
+    }
+  });
 }
 
-function updateIntervalDisplay() {
-  intervalValue.textContent = intervalRange.value;
+function updateSequencePreview() {
+  sequenceDisplay.innerHTML = selectedSequence.map((a, i) => `
+    <div>${i+1}. ${a.assaut}</div>
+  `).join('');
 }
+
+/* --- Lecture de la séquence --- */
 
 async function playSequence() {
   if (selectedSequence.length === 0 || isPlaying) return;
-  
-  stopSequence();
+
   isPlaying = true;
-  
   btnPlaySequence.disabled = true;
   btnStopSequence.disabled = false;
-  btnValidateSequence.disabled = true;
-  
-  const shouldLoop = optionLoop.checked;
-  const shouldRandomize = optionRandom.checked;
-  
-  let sequence = [...selectedSequence];
-  
+
+  let seq = [...selectedSequence];
+  const delay = parseInt(intervalRange.value) * 1000;
+  const loop = optionLoop.checked;
+  const rand = optionRandom.checked;
+
   do {
-    if (shouldRandomize) {
-      sequence = shuffleArray([...selectedSequence]);
-    }
-    
-    showStatus('⏱️ Démarrage dans 5 secondes...');
-    await sleep(5000);
-    
-    playSound('bbp');
-    showStatus('🎵 Lecture en cours...');
-    
-    for (let i = 0; i < sequence.length; i++) {
-      if (!isPlaying) break;
-      
-      const assaut = sequence[i];
-      
-      if (i > 0) {
-        playSound('notif');
-        await sleep(500);
-      }
-      
-      await speakAssaut(assaut);
-      
-      if (i < sequence.length - 1) {
-        const interval = parseInt(intervalRange.value) * 1000;
-        showStatus(`# Pause... (${interval/1000}s)`);
-        await sleep(interval);
-      }
-    }
-    
-    playSound('bbp');
-    
-    if (shouldLoop && isPlaying) {
-      showStatus('🔁 Nouvelle boucle dans 3 secondes...');
-      await sleep(3000);
-    }
-    
-  } while (shouldLoop && isPlaying);
-  
-  showStatus('✅ Séquence terminée !');
-  
-  setTimeout(() => {
-    btnPlaySequence.disabled = false;
-    btnStopSequence.disabled = true;
-    btnValidateSequence.disabled = false;
-    hideStatus();
-  }, 3000);
-  
-  isPlaying = false;
-}
+    if (rand) seq = shuffle([...selectedSequence]);
 
-function speakAssaut(assaut) {
-  return new Promise((resolve) => {
-    const text = `${assaut.assaut}. ${assaut.objectif}`;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'fr-FR';
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    utterance.onend = resolve;
-    synth.speak(utterance);
-  });
-}
+    await delayStart();
 
-function stopSequence() {
+    for (let i = 0; i < seq.length; i++) {
+      await playSound('notif');
+      await speak(`${seq[i].assaut}`, 1);
+      if (i < seq.length - 1) await sleep(delay);
+    }
+
+    await playSound('bbp');
+    await sleep(delay);
+
+  } while (loop && isPlaying);
+
   isPlaying = false;
-  
-  if (sequenceTimeout) {
-    clearTimeout(sequenceTimeout);
-    sequenceTimeout = null;
-  }
-  
-  stopSpeech();
-  
   btnPlaySequence.disabled = false;
   btnStopSequence.disabled = true;
-  btnValidateSequence.disabled = false;
-  
-  hideStatus();
 }
 
-function shuffleArray(array) {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+function shuffle(arr) {
+  return arr.map(x => [x, Math.random()]).sort((a,b) => a[1]-b[1]).map(x => x[0]);
 }
 
-function showStatus(message) {
-  sequenceStatus.textContent = message;
-  sequenceStatus.classList.add('active');
-}
-
-function hideStatus() {
-  sequenceStatus.classList.remove('active');
-}
-
-// ==================== GESTION DES SONS ====================
+/* -------- Sons -------- */
 
 function initSounds() {
+  bbpSound = new Audio("bbp.mp3");
+  notifSound = new Audio("notif.mp3");
+}
+
+async function playSound(type) {
+  let sound = type === 'bbp' ? bbpSound : notifSound;
+  sound.currentTime = 0;
   try {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    bbpSound = new Audio('bbp.mp3');
-    notifSound = new Audio('notif.mp3');
-    bbpSound.load();
-    notifSound.load();
-  } catch (error) {
-    console.warn('Audio non supporté:', error);
-  }
+    await sound.play();
+    await sleep(500);
+  } catch (e) {}
 }
 
-function playSound(type) {
-  if (!audioContext || !bbpSound || !notifSound) return;
-  
-  const sound = type === 'bbp' ? bbpSound : notifSound;
-  
-  if (sound) {
-    sound.currentTime = 0;
-    sound.play().catch(err => console.warn('Erreur lecture son:', err));
-  }
+async function delayStart() {
+  sequenceStatus.textContent = "⏳ Démarrage dans 5s...";
+  await sleep(5000);
+  sequenceStatus.textContent = "🎶 Lecture en cours...";
 }
-
-// ==================== UTILITAIRES ====================
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-window.addEventListener('beforeunload', () => {
-  stopSpeech();
-  stopSequence();
-});
-
-// Rendre removeFromSequence globale
-window.removeFromSequence = removeFromSequence;
