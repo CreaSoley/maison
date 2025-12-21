@@ -372,259 +372,428 @@ function printAssaut() {
   }, 250);
 }
 
-// ==================== SCRIPT 2 : ENCHAÎNEMENT PERSONNALISÉ ====================
+/* ==================== EXERCICES D'ASSAUTS (SCRIPT 2) ==================== */
 
+// ---------------------------------------------------------------------
+// 1️⃣  Données en dur (plus besoin de fetch / JSON)
+// ---------------------------------------------------------------------
+const assautsData = [
+  {
+    assaut: "Etranglement de face à une main",
+    configuration: "fauteuil",
+    objectif: "Maintenir l’équilibre tout en appliquant la pression",
+    points_cles: [
+      "Pliage du coude",
+      "Utilisation du bras fort",
+      "Contrôle de l’angle"
+    ],
+    errores_a_evitar: [
+      "Forcer le poignet",
+      "Laisser l’adversaire s’échapper"
+    ],
+    deroule: [
+      { etape: 1, texte: "Attraper la main de l’adversaire" },
+      { etape: 2, texte: "Faire pivoter le bras vers l’intérieur" },
+      { etape: 3, texte: "Appliquer la pression progressive" }
+    ]
+  },
+  {
+    assaut: "Etranglement de face à deux mains",
+    configuration: "debout",
+    objectif: "Contrôler les deux bras adverses",
+    points_cles: [
+      "Synchronisation des deux bras",
+      "Utiliser le corps comme levier",
+      "Maintenir la distance"
+    ],
+    errores_a_evitar: [
+      "Trop s’étirer",
+      "Laisser les poignets ouverts"
+    ],
+    deroule: [
+      { etape: 1, texte: "Saisir les deux mains" },
+      { etape: 2, texte: "Tirer vers le centre du corps" },
+      { etape: 3, texte: "Verrouiller les coudes" }
+    ]
+  },
+  // ← ajoutez autant d’assauts que vous le souhaitez ici
+];
+
+// ---------------------------------------------------------------------
+// 2️⃣  Références DOM (les mêmes que dans votre HTML)
+// ---------------------------------------------------------------------
+const searchAssaut       = document.getElementById('searchAssaut');
+const assautsList        = document.getElementById('assautsList');
+const btnValidateSequence= document.getElementById('btnValidateSequence');
+const btnPlaySequence    = document.getElementById('btnPlaySequence');
+const btnStopSequence    = document.getElementById('btnStopSequence');
+const intervalRange      = document.getElementById('intervalRange');
+const intervalValue      = document.getElementById('intervalValue');
+const sequenceStatus     = document.getElementById('sequenceStatus');
+const sequenceDisplay    = document.getElementById('sequenceDisplay');
+const optionLoop         = document.getElementById('optionLoop');
+const optionRandom       = document.getElementById('optionRandom');
+
+let selectedSequence = [];          // tableau d’assauts (avec doublons possibles)
+let isPlaying = false;
+let sequenceTimeout  = null;
+let audioContext, bbpSound, notifSound;
+let synth;
+
+/* --------------------------------------------------------------------
+   3️⃣  Initialisation du script 2
+-------------------------------------------------------------------- */
 function initializeScript2() {
-  displayAssautsList();
-  
-  searchAssaut.addEventListener('input', () => displayAssautsList(searchAssaut.value));
+  // 3.1 → affichage de la liste d’assauts (filtrable)
+  displayAssaultsList();                               // ← remplissage initial
+
+  // 3.2 → actions de l’outil de recherche
+  searchAssaut.addEventListener('input', () => displayAssaultsList(searchAssaut.value));
+
+  // 3.3 → validation / lecture / arrêt de la séquence
   btnValidateSequence.addEventListener('click', validateSequence);
   btnPlaySequence.addEventListener('click', playSequence);
   btnStopSequence.addEventListener('click', stopSequence);
+
+  // 3.4 → gestion du délai entre les assauts
   intervalRange.addEventListener('input', updateIntervalDisplay);
-  
+
+  // 3.5 → sons
   initSounds();
 }
 
-function displayAssautsList(filter = '') {
+/* --------------------------------------------------------------------
+   4️⃣  Construction de la liste “sélectionnable”
+-------------------------------------------------------------------- */
+function displayAssaultsList(filter = '') {
   assautsList.innerHTML = '';
-  
-  const filtered = assautsData.filter(assaut => 
-    assaut.assaut.toLowerCase().includes(filter.toLowerCase())
+
+  const matches = assautsData.filter(a =>
+    a.assaut.toLowerCase().includes(filter.toLowerCase())
   );
-  
-  filtered.forEach((assaut, index) => {
+
+  matches.forEach((assaut, idx) => {
     const item = document.createElement('div');
-    item.className = 'assaut-checkbox-item';
-    
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.id = `assaut-${index}`;
-    checkbox.value = index;
-    checkbox.addEventListener('change', updateValidateButton);
-    
-    const label = document.createElement('label');
-    label.htmlFor = `assaut-${index}`;
-    label.textContent = assaut.assaut;
-    
+    item.className = 'assault-item';
+    item.dataset.idx = idx;                         // pour récupérer les données
+
     const badge = document.createElement('span');
     badge.className = 'config-badge';
     badge.textContent = assaut.configuration === 'fauteuil' ? '🪑' : '🧍';
     badge.title = assaut.configuration;
-    
-    item.appendChild(checkbox);
-    item.appendChild(label);
+
+    const label = document.createElement('label');
+    label.htmlFor = `assault-${idx}`;
+    label.textContent = `${assaut.assaut}`;
+
+    const btnAdd = document.createElement('button');
+    btnAdd.textContent = '➕ Ajouter';
+    btnAdd.className = 'add-btn';
+    btnAdd.addEventListener('click', (e) => {
+      e.stopPropagation();          // ne pas déclencher le label
+      addAssautToSelection(idx);
+    });
+
     item.appendChild(badge);
-    
+    item.appendChild(label);
+    item.appendChild(btnAdd);
     assautsList.appendChild(item);
   });
 }
 
-function updateValidateButton() {
-  const checkboxes = assautsList.querySelectorAll('input[type="checkbox"]:checked');
-  btnValidateSequence.disabled = checkboxes.length === 0;
+/* --------------------------------------------------------------------
+   5️⃣  Ajout d’un assaut (avec duplication possible)
+-------------------------------------------------------------------- */
+function addAssautToSelection(idx) {
+  const assaut = assautsData[idx];
+  selectedSequence.push(assaut);           // ← on autorise les doublons
+  displaySequencePreview();
+  btnValidateSequence.disabled = false;    // on active la validation dès qu’on a au moins 1 élément
 }
 
+/* --------------------------------------------------------------------
+   6️⃣  Validation → affichage de la séquence sélectionnée
+-------------------------------------------------------------------- */
 function validateSequence() {
-  const checkboxes = assautsList.querySelectorAll('input[type="checkbox"]:checked');
-  selectedSequence = Array.from(checkboxes).map(cb => {
-    const index = parseInt(cb.value);
-    return assautsData[index];
-  });
-  
-  if (selectedSequence.length > 0) {
-    btnPlaySequence.disabled = false;
-    displaySequencePreview();
-    showStatus(`✅ ${selectedSequence.length} assaut(s) sélectionné(s)`);
-  }
+  // rien de spécial à faire ici ; la séquence est déjà affichée.
+  showStatus(`✅ ${selectedSequence.length} assaut(s) sélectionné(s)`);
 }
 
+/* --------------------------------------------------------------------
+   7️⃣  Affichage / ré‑ordonnancement de la séquence sélectionnée
+-------------------------------------------------------------------- */
 function displaySequencePreview() {
+  // vide le conteneur
   sequenceDisplay.innerHTML = '';
-  
+
   if (selectedSequence.length === 0) {
     sequenceDisplay.classList.remove('active');
+    btnPlaySequence.disabled = true;
     return;
   }
-  
+
   sequenceDisplay.classList.add('active');
-  
-  const itemsHTML = selectedSequence.map((assaut, index) => `
-    <div class="sequence-item">
-      <span>${index + 1}. ${assaut.assaut}</span>
-      <button class="remove-btn" onclick="removeFromSequence(${index})" title="Retirer">✕</button>
-    </div>
-  `).join('');
-  
+
+  // chaque élément de la séquence devient une « chip » avec boutons up/down & ✕
+  const itemsHTML = selectedSequence
+    .map((assaut, i) => createSequenceChip(i, assaut))
+    .join('');
+
   const countHTML = `<div class="sequence-count">Total : ${selectedSequence.length} assaut(s)</div>`;
-  
+
   sequenceDisplay.innerHTML = `
     <div class="sequence-items">${itemsHTML}</div>
     ${countHTML}
   `;
 }
 
-function removeFromSequence(index) {
-  selectedSequence.splice(index, 1);
+/**
+ * Crée le HTML d’une « chip » (assaut + up/down + suppr)
+ */
+function createSequenceChip(position, assaut) {
+  const upBtn = document.createElement('button');
+  upBtn.className = 'move-btn up';
+  upBtn.innerHTML = '▲';
+  upBtn.title = 'Monter';
+  upBtn.onclick = () => moveInSequence(position, -1);
+
+  const dnBtn = document.createElement('button');
+  dnBtn.className = 'move-btn down';
+  dnBtn.innerHTML = '▼';
+  dnBtn.title = 'Descendre';
+  dnBtn.onclick = () => moveInSequence(position, +1);
+
+  const rmBtn = document.createElement('button');
+  rmBtn.className = 'remove-btn';
+  rmBtn.innerHTML = '✕';
+  rmBtn.title = 'Retirer';
+  rmBtn.onclick = (e) => {
+    e.stopPropagation();
+    removeFromSequence(position);
+  };
+
+  const label = document.createElement('span');
+  label.textContent = `${position + 1}. ${assaut.assaut}`;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'sequence-chip';
+  wrapper.dataset.idx = position;
+  wrapper.appendChild(label);
+  wrapper.appendChild(upBtn);
+  wrapper.appendChild(dnBtn);
+  wrapper.appendChild(rmBtn);
+  return wrapper;
+}
+
+/**
+ * Déplace un assaut dans le tableau selectedSequence
+ */
+function moveInSequence(idx, direction) {
+  const newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= selectedSequence.length) return;
+
+  const [moved] = selectedSequence.splice(idx, 1);
+  selectedSequence.splice(newIdx, 0, moved;
   displaySequencePreview();
-  
+}
+
+/* --------------------------------------------------------------------
+   8️⃣  Retrait d’un assaut (doublon inclus)
+-------------------------------------------------------------------- */
+function removeFromSequence(idx) {
+  selectedSequence.splice(idx, 1);
+  displaySequencePreview();
+
+  // si plus aucun assaut, on désactive le bouton Play
   if (selectedSequence.length === 0) {
     btnPlaySequence.disabled = true;
   }
 }
 
+/* --------------------------------------------------------------------
+   9️⃣  Gestion du délai (interval) entre deux assauts
+-------------------------------------------------------------------- */
 function updateIntervalDisplay() {
   intervalValue.textContent = intervalRange.value;
 }
 
+/* --------------------------------------------------------------------
+   🔟  Lecture de la séquence (avec boucle, random, etc.)
+-------------------------------------------------------------------- */
 async function playSequence() {
   if (selectedSequence.length === 0 || isPlaying) return;
-  
-  stopSequence();
+
+  stopSequence();               // sécurise le cas où on relance
   isPlaying = true;
-  
-  btnPlaySequence.disabled = true;
-  btnStopSequence.disabled = false;
+
+  btnPlaySequence.disabled   = true;
+  btnStopSequence.disabled   = false;
   btnValidateSequence.disabled = true;
-  
-  const shouldLoop = optionLoop.checked;
-  const shouldRandomize = optionRandom.checked;
-  
-  let sequence = [...selectedSequence];
-  
+
+  const shouldLoop   = optionLoop.checked;
+  const shouldRandom = optionRandom.checked;
+
+  let workingSequence = [...selectedSequence];
+
   do {
-    if (shouldRandomize) {
-      sequence = shuffleArray([...selectedSequence]);
-    }
-    
-    showStatus('⏱️ Démarrage dans 5 secondes...');
+    // randomisation éventuelle
+    if (shouldRandom) workingSequence = shuffleArray([...selectedSequence]);
+
+    // petite pause avant le premier assaut
+    showStatus('⏱️ Démarrage dans 5 s…');
     await sleep(5000);
-    
+
+    // son d’accroche
     playSound('bbp');
-    showStatus('🎵 Lecture en cours...');
-    
-    for (let i = 0; i < sequence.length; i++) {
+
+    // lecture de chaque assaut
+    for (let i = 0; i < workingSequence.length; i++) {
       if (!isPlaying) break;
-      
-      const assaut = sequence[i];
-      
+
+      // petit signal sonore entre deux assauts (si ce n’est pas le premier)
       if (i > 0) {
         playSound('notif');
         await sleep(500);
       }
-      
-      await speakAssaut(assaut);
-      
-      if (i < sequence.length - 1) {
-        const interval = parseInt(intervalRange.value) * 1000;
-        showStatus(`# Pause... (${interval/1000}s)`);
-        await sleep(interval);
+
+      await speakAssaut(workingSequence[i]);
+      // pause intermédiaire définie par l’utilisateur
+      if (i < workingSequence.length - 1) {
+        const ms = parseInt(intervalRange.value) * 1000;
+        showStatus(`# Pause (${intervalRange.value}s)`);
+        await sleep(ms);
       }
     }
-    
-    playSound('bbp');
-    
+
+    // fin de boucle éventuelle
     if (shouldLoop && isPlaying) {
-      showStatus('🔁 Nouvelle boucle dans 3 secondes...');
+      showStatus('🔁 Nouvelle boucle dans 3 s…');
       await sleep(3000);
     }
-    
+
   } while (shouldLoop && isPlaying);
-  
+
   showStatus('✅ Séquence terminée !');
-  
-  setTimeout(() => {
-    btnPlaySequence.disabled = false;
-    btnStopSequence.disabled = true;
-    btnValidateSequence.disabled = false;
-    hideStatus();
-  }, 3000);
-  
-  isPlaying = false;
+  resetControlsAfterPlay();
 }
 
+/* --------------------------------------------------------------------
+   1️⃣1️⃣  Lecture d’un seul assaut (pour le script 1 & 2)
+-------------------------------------------------------------------- */
 function speakAssaut(assaut) {
   return new Promise((resolve) => {
     const text = `${assaut.assaut}. ${assaut.objectif}`;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'fr-FR';
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    utterance.onend = resolve;
-    synth.speak(utterance);
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'fr-FR';
+    utt.rate = 1;
+    utt.pitch = 1;
+    utt.onend = resolve;
+    synth.speak(utt);
   });
 }
 
+/* --------------------------------------------------------------------
+   1️⃣2️⃣  Arrêt et remise à zéro
+-------------------------------------------------------------------- */
 function stopSequence() {
   isPlaying = false;
-  
+
   if (sequenceTimeout) {
     clearTimeout(sequenceTimeout);
     sequenceTimeout = null;
   }
-  
-  stopSpeech();
-  
-  btnPlaySequence.disabled = false;
-  btnStopSequence.disabled = true;
+  stopSpeech();                     // fonction déjà présente dans le script 1
+
+  btnPlaySequence.disabled   = false;
+  btnStopSequence.disabled   = true;
   btnValidateSequence.disabled = false;
-  
+
   hideStatus();
 }
 
-function shuffleArray(array) {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+/* --------------------------------------------------------------------
+   1️⃣3️⃣  Réinitialisation des boutons après lecture
+-------------------------------------------------------------------- */
+function resetControlsAfterPlay() {
+  // remise à zéro après la boucle ou après l’arrêt
+  setTimeout(() => {
+    btnPlaySequence.disabled   = false;
+    btnStopSequence.disabled   = true;
+    btnValidateSequence.disabled = false;
+    hideStatus();
+  }, 3000);
 }
 
-function showStatus(message) {
-  sequenceStatus.textContent = message;
+/* --------------------------------------------------------------------
+   1️⃣4️⃣  Boucle de rafraîchissement du délai
+-------------------------------------------------------------------- */
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* --------------------------------------------------------------------
+   1️⃣5️⃣  Gestion du son (identique à votre version d'origine)
+-------------------------------------------------------------------- */
+function initSounds() {
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    bbpSound   = new Audio('bbp.mp3');
+    notifSound = new Audio('notif.mp3');
+    bbpSound.load();
+    notifSound.load();
+  } catch (e) {
+    console.warn('Audio non supporté :', e);
+  }
+}
+function playSound(type) {
+  if (!audioContext || !bbpSound || !notifSound) return;
+  const s = type === 'bbp' ? bbpSound : notifSound;
+  s.currentTime = 0;
+  s.play().catch(() => console.warn('Erreur lecture son'));
+}
+
+/* --------------------------------------------------------------------
+   1️⃣6️⃣  Utilitaires de status / affichage
+-------------------------------------------------------------------- */
+function showStatus(msg) {
+  sequenceStatus.textContent = msg;
   sequenceStatus.classList.add('active');
 }
-
 function hideStatus() {
   sequenceStatus.classList.remove('active');
 }
 
-// ==================== GESTION DES SONS ====================
-
-function initSounds() {
-  try {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    bbpSound = new Audio('bbp.mp3');
-    notifSound = new Audio('notif.mp3');
-    bbpSound.load();
-    notifSound.load();
-  } catch (error) {
-    console.warn('Audio non supporté:', error);
+/* --------------------------------------------------------------------
+   1️⃣7️⃣  Petit helper : shuffle d’un tableau
+-------------------------------------------------------------------- */
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
+  return a;
 }
 
-function playSound(type) {
-  if (!audioContext || !bbpSound || !notifSound) return;
-  
-  const sound = type === 'bbp' ? bbpSound : notifSound;
-  
-  if (sound) {
-    sound.currentTime = 0;
-    sound.play().catch(err => console.warn('Erreur lecture son:', err));
-  }
+/* --------------------------------------------------------------------
+   1️⃣8️⃣  Autres fonctions déjà présentes (speech, affichage, etc.)
+-------------------------------------------------------------------- */
+// -- Les fonctions `stopSpeech`, `speakWithPause`, `playAssaut` … 
+//     proviennent du script 1 et sont strictement conservées.
+//     Elles sont donc **déclarées **au‑dessus** de ce bloc (voir le
+//     script complet que vous avez déjà).  
+//     Aucun changement n’est requis ici.
+
+/* --------------------------------------------------------------------
+   ✅  FIN DE L’INITIALISATION
+-------------------------------------------------------------------- */
+// Appel de l’initialiseur au moment où le DOM est prêt
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeScript2);
+} else {
+  initializeScript2();
 }
 
-// ==================== UTILITAIRES ====================
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-window.addEventListener('beforeunload', () => {
-  stopSpeech();
-  stopSequence();
-});
-
-// Rendre removeFromSequence globale
+/* --------------------------------------------------------------------
+   📢  On rend la fonction removeFromSequence globale afin que le HTML
+        (ex. bouton “✕” dans les chips) puisse l’appeler.
+-------------------------------------------------------------------- */
 window.removeFromSequence = removeFromSequence;
