@@ -341,3 +341,27 @@ input::placeholder {
   background: var(--accent);
   color: #fff;
 }
+.fiche-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.fiche-objectif {
+  text-align: center;
+  font-weight: 700;
+}
+
+.deroule-grid {
+  columns: 2;
+  column-gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .deroule-grid { columns: 1; }
+}
+
+@media print {
+  .deroule-grid { columns: 2; }
+}
