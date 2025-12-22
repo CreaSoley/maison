@@ -74,6 +74,62 @@
     <!-- ENCART 3 — EXERCICES ASSAUTS -->
 <section class="card kawaii-card full-width-card" id="encart-assauts">
   <h2 class="section-title spicy">🎯 Exercices d'Assauts</h2>
+<div class="assauts-grid">
+
+  <!-- EXERCICE 1 -->
+  <section class="card kawaii-card assaut-card" id="assaut-ex1">
+    <h3 class="section-title spicy">🧠 Exercice 1 – Assaut guidé</h3>
+
+    <div class="selectors-row">
+      <select id="assautSelect">
+        <option value="">Choisir un assaut</option>
+      </select>
+
+      <select id="configFilter">
+        <option value="">Configuration</option>
+        <option value="debout">Debout</option>
+        <option value="fauteuil">Fauteuil</option>
+      </select>
+
+      <button id="assautRandom" class="btn ghost">🎲 Aléatoire</button>
+    </div>
+
+    <div class="selectors-row">
+      <label>Vitesse déroulé</label>
+      <input type="range" id="speechSpeed" min="0.6" max="1.4" step="0.1" value="1">
+    </div>
+
+    <div class="btn-row">
+      <button id="playAssaut" class="btn primary">▶ Lecture</button>
+      <button id="stopAssaut" class="btn ghost">⏹ Stop</button>
+      <button id="printAssaut" class="btn ghost">🖨 PDF</button>
+    </div>
+
+    <div id="assautFiche" class="fiche-container"></div>
+  </section>
+
+  <!-- EXERCICE 2 -->
+  <section class="card kawaii-card assaut-card" id="assaut-ex2">
+    <h3 class="section-title spicy">🧩 Exercice 2 – Composer un enchaînement</h3>
+
+    <div id="assautList" class="chips-list"></div>
+
+    <h4>Sélection</h4>
+    <div id="sequenceZone" class="sequence-zone"></div>
+
+    <div class="selectors-row">
+      <label>Intervalle (sec)</label>
+      <input type="range" id="intervalRange" min="3" max="60" value="10">
+    </div>
+
+    <div class="btn-row">
+      <button id="playSequence" class="btn primary">▶ Lecture</button>
+      <button id="stopSequence" class="btn ghost">⏹ Stop</button>
+      <button id="clearSequence" class="btn ghost">🧹 Clear</button>
+    </div>
+  </section>
+
+</div>
 
 
 </section>
