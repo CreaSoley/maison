@@ -1,24 +1,18 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Préparation Techniques – Tai-Jitsu</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Préparation Techniques – Tai-Jitsu</title>
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  <link rel="stylesheet" href="randdori.css" />
-
-  <!-- QR library (needed by cles.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="randdori.css">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="appbar">
+<header class="appbar">
   <img src="logo.png" class="logo-big" alt="logo">
   <div class="header-text">
     <div class="title spicy">Préparation Techniques</div>
@@ -77,68 +71,116 @@
 
   <div class="assauts-grid">
 
-    <!-- ========= EXERCICE 1 ========= -->
-    <section class="assaut-card">
-      <h3 class="section-title spicy">🧠 Exercice 1 – Assaut guidé</h3>
+ <!-- ================= EXERCICE 1 ================= -->
+<section class="assaut-card">
 
-      <div class="selectors-row">
-        <select id="assautSelect"></select>
-        <select id="configFilter">
-          <option value="">Configuration</option>
-          <option value="debout">Debout</option>
-          <option value="fauteuil">Fauteuil</option>
-        </select>
-        <button id="assautRandom" class="btn ghost">🎲</button>
-      </div>
+<h3 class="section-title spicy">Exercice 1 – Assaut guidé</h3>
 
-      <label>Vitesse : <strong><span id="speedVal">1.0</span></strong></label>
-      <input type="range" id="speechSpeed" min="0.6" max="1.4" step="0.1" value="1">
+<div class="selectors-row">
+<select id="assautSelect"></select>
+<select id="configFilter">
+  <option value="">Configuration</option>
+  <option value="debout">Debout</option>
+  <option value="fauteuil">Fauteuil</option>
+</select>
+<button id="assautRandom" class="btn ghost">
+  <span class="btn-text">Aléatoire</span>
+  <span class="btn-icon">🎲</span>
+</button>
+</div>
 
-      <div class="btn-row">
-        <button id="playAssaut" class="btn primary">▶ Lecture</button>
-        <button id="coachMode" class="btn ghost">🎙 Coach</button>
-        <button id="stopAssaut" class="btn ghost">⏹</button>
-        <button id="printAssaut" class="btn ghost">🖨 PDF</button>
-      </div>
+<label>
+Vitesse :
+<strong><span id="speedVal">1.0</span></strong>
+</label>
+<input type="range" id="speechSpeed" min="0.6" max="1.4" step="0.1" value="1">
 
-      <div id="assautFiche"></div>
-    </section>
+<div class="btn-row">
+<button id="playAssaut" class="btn primary">
+  <span class="btn-text">Lecture</span>
+  <span class="btn-icon">▶️</span>
+</button>
 
-    <!-- ========= EXERCICE 2 ========= -->
-    <section class="assaut-card">
-      <h3 class="section-title spicy">🧩 Exercice 2 – Enchaînement</h3>
+<button id="stopAssaut" class="btn ghost">
+  <span class="btn-text">Stop</span>
+  <span class="btn-icon">⏹</span>
+</button>
 
-      <div id="assautList" class="chips-list"></div>
+<button id="printAssaut" class="btn ghost">
+  <span class="btn-text">PDF</span>
+  <span class="btn-icon">🖨</span>
+</button>
+</div>
 
-      <h4>Séquence</h4>
-      <div id="sequenceZone" class="chips-list"></div>
+<!-- ZONE IMPRIMABLE UNIQUEMENT -->
+<div id="print-zone">
+  <div id="assautFiche"></div>
+</div>
 
-      <label>Intervalle : <strong><span id="intervalVal">10</span>s</strong></label>
-      <input type="range" id="intervalRange" min="3" max="60" value="10">
-
-      <div class="btn-row">
-        <button id="playSequence" class="btn primary">▶</button>
-        <button id="loopSeq" class="btn ghost">🔁</button>
-        <button id="randomSeq" class="btn ghost">🔀</button>
-        <button id="stopSequence" class="btn ghost">⏹</button>
-      </div>
-
-      <input type="text" id="saveName" placeholder="Nom de la séquence">
-      <div class="btn-row">
-        <button id="saveSeq" class="btn ghost">💾</button>
-        <select id="loadSeq"></select>
-      </div>
-
-      <canvas id="qrSeq"></canvas>
-
-      <button id="fullscreen" class="btn primary">📱 Plein écran dojo</button>
-    </section>
-
-  </div>
 </section>
 
+<!-- ================= EXERCICE 2 ================= -->
+<section class="assaut-card">
 
-  </main>
+<h3 class="section-title spicy">Exercice 2 – Enchaînement</h3>
+
+<p class="hint">Touchez une technique pour l’ajouter</p>
+<div id="assautList" class="chips-list"></div>
+
+<h4>Séquence</h4>
+<div id="sequenceZone" class="sequence-zone"></div>
+
+<label>
+Intervalle :
+<strong><span id="intervalVal">10</span>s</strong>
+</label>
+<input type="range" id="intervalRange" min="3" max="60" value="10">
+
+<label>Répétitions</label>
+<select id="repeatCount">
+  <option value="1">x1</option>
+  <option value="10">x10</option>
+  <option value="20">x20</option>
+  <option value="30">x30</option>
+  <option value="0">Libre</option>
+</select>
+
+<div class="btn-row">
+<button id="playSequence" class="btn primary">
+  <span class="btn-text">Lecture</span>
+  <span class="btn-icon">▶️</span>
+</button>
+
+<button id="loopSeq" class="btn ghost">
+  <span class="btn-text">Boucle</span>
+  <span class="btn-icon">🔁</span>
+</button>
+
+<button id="randomSeq" class="btn ghost">
+  <span class="btn-text">Aléatoire</span>
+  <span class="btn-icon">🔀</span>
+</button>
+
+<button id="stopSequence" class="btn ghost">
+  <span class="btn-text">Stop</span>
+  <span class="btn-icon">⏹</span>
+</button>
+</div>
+
+<input type="text" id="saveName" placeholder="Nom de la séquence">
+<div class="btn-row">
+<button id="saveSeq" class="btn ghost">Sauvegarder</button>
+<select id="loadSeq"></select>
+</div>
+
+<canvas id="qrSeq"></canvas>
+
+</section>
+
+</div>
+</section>
+
+</main>
 
   <!-- SCRIPTS (separate files) -->
   <script src="cles.js"></script>
