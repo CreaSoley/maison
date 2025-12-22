@@ -1,39 +1,38 @@
-/* ===============================
-   DONNÉES
-================================ */
+/* =======================
+   VARIABLES
+======================= */
 let assauts = [];
 let currentAssaut = null;
 let sequence = [];
-let utterance = null;
 let playing = false;
 let loop = false;
 
 const notif = new Audio("notif.mp3");
 const bbp = new Audio("bbp.mp3");
 
-/* ===============================
+/* =======================
    LOAD JSON
-================================ */
+======================= */
 fetch("exercices_assauts.json")
-  .then(r => r.json())
-  .then(d => {
-    assauts = d.exercices;
-    init();
-  });
+.then(r => r.json())
+.then(d => {
+  assauts = d.exercices;
+  init();
+});
 
-/* ===============================
+/* =======================
    INIT
-================================ */
+======================= */
 function init() {
-  fillAssauts();
-  renderChips();
+  fillAssautSelect();
+  renderAssautChips();
   bindUI();
   loadSavedList();
 }
 
-/* ===============================
-   UI
-================================ */
+/* =======================
+   UI BINDINGS
+======================= */
 function bindUI() {
   speechSpeed.oninput = () => speedVal.textContent = speechSpeed.value;
   intervalRange.oninput = () => intervalVal.textContent = intervalRange.value;
@@ -50,28 +49,33 @@ function bindUI() {
 
   playAssaut.onclick = () => speak(buildSpeech(currentAssaut), speechSpeed.value);
   stopAssaut.onclick = stopSpeech;
-  coachMode.onclick = () => coach(currentAssaut);
   printAssaut.onclick = () => window.print();
 
   playSequence.onclick = playSequenceHandler;
   stopSequence.onclick = stopAll;
   loopSeq.onclick = () => loop = !loop;
-  randomSeq.onclick = () => shuffle(sequence);
+  randomSeq.onclick = shuffleSequence;
 
   saveSeq.onclick = saveNamedSequence;
   loadSeq.onchange = loadNamedSequence;
-
-  fullscreen.onclick = toggleFullscreen;
 }
 
-/* ===============================
+/* =======================
    EXERCICE 1
-================================ */
+======================= */
+function fillAssautSelect() {
+  assautSelect.innerHTML = `<option value="">Choisir un assaut</option>`;
+  assauts.forEach((a, i) => {
+    assautSelect.innerHTML += `<option value="${i}">${a.assaut}</option>`;
+  });
+}
+
 function renderFiche(a) {
+  if (!a) return;
   assautFiche.innerHTML = `
   <div class="fiche-card">
     <div class="fiche-header">
-      <img src="${a.image}" style="width:5cm;height:5cm;object-fit:contain">
+      <img src="${a.image}" alt="">
       <h3 class="tech-title">${a.assaut}</h3>
     </div>
 
@@ -106,87 +110,110 @@ ${a.deroule.map(d => `Étape ${d.etape}. ${d.texte}.`).join(" ")}
 `;
 }
 
-function speak(t, rate = 1) {
+function speak(text, rate = 1) {
   stopSpeech();
-  utterance = new SpeechSynthesisUtterance(t);
-  utterance.lang = "fr-FR";
-  utterance.rate = rate;
-  speechSynthesis.speak(utterance);
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "fr-FR";
+  u.rate = rate;
+  speechSynthesis.speak(u);
 }
 
 function stopSpeech() {
   speechSynthesis.cancel();
 }
 
-/* ===============================
-   MODE COACH
-================================ */
-async function coach(a) {
-  await wait(5000);
-  for (let d of a.deroule) {
-    speak(`Étape ${d.etape}`);
-    await wait(1500);
-    speak(d.texte, 0.9);
-    await wait(3000);
-  }
-  speak("Fin. Zanshin.");
-}
-
-/* ===============================
-   EXERCICE 2
-================================ */
-function renderChips() {
+/* =======================
+   EXERCICE 2 – SÉQUENCE
+======================= */
+function renderAssautChips() {
   assautList.innerHTML = "";
   assauts.forEach(a => {
-    const c = document.createElement("div");
-    c.className = "chip";
-    c.textContent = a.assaut;
-    c.onclick = () => addToSequence(a);
-    assautList.appendChild(c);
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = a.assaut;
+    b.onclick = () => {
+      sequence.push(a);
+      renderSequence();
+    };
+    assautList.appendChild(b);
   });
-}
-
-function addToSequence(a) {
-  sequence.push(a);
-  renderSequence();
 }
 
 function renderSequence() {
   sequenceZone.innerHTML = "";
   sequence.forEach((a, i) => {
-    const c = document.createElement("div");
-    c.className = "chip selected";
-    c.textContent = a.assaut;
-    c.onclick = () => {
+    const row = document.createElement("div");
+    row.className = "sequence-item";
+
+    row.innerHTML = `
+      <span>${a.assaut}</span>
+      <div>
+        <button>⬆️</button>
+        <button>⬇️</button>
+        <button>❌</button>
+      </div>
+    `;
+
+    const [up, down, del] = row.querySelectorAll("button");
+
+    up.onclick = () => {
+      if (i === 0) return;
+      [sequence[i - 1], sequence[i]] = [sequence[i], sequence[i - 1]];
+      renderSequence();
+    };
+
+    down.onclick = () => {
+      if (i === sequence.length - 1) return;
+      [sequence[i + 1], sequence[i]] = [sequence[i], sequence[i + 1]];
+      renderSequence();
+    };
+
+    del.onclick = () => {
       sequence.splice(i, 1);
       renderSequence();
     };
-    sequenceZone.appendChild(c);
+
+    sequenceZone.appendChild(row);
   });
 }
 
+/* =======================
+   LECTURE AVEC RÉPÉTITIONS
+======================= */
 async function playSequenceHandler() {
   if (!sequence.length) return;
   playing = true;
+
+  const interval = intervalRange.value * 1000;
+  const repeat = parseInt(repeatCount.value);
+
   await wait(5000);
 
-  do {
+  let rounds = repeat === 0 ? Infinity : repeat;
+
+  while (rounds-- > 0 && playing) {
     for (let a of sequence) {
       if (!playing) break;
       notif.play();
       await wait(1000);
       speak(a.assaut);
-      await wait(intervalRange.value * 1000);
+      await wait(interval);
     }
     bbp.play();
-  } while (loop && playing);
+    if (!loop) break;
+  }
 
   generateQR();
 }
 
-/* ===============================
+function stopAll() {
+  playing = false;
+  stopSpeech();
+}
+
+/* =======================
    SAUVEGARDE
-================================ */
+======================= */
 function saveNamedSequence() {
   const name = saveName.value.trim();
   if (!name) return;
@@ -197,13 +224,10 @@ function saveNamedSequence() {
 }
 
 function loadSavedList() {
-  loadSeq.innerHTML = `<option value="">📂 Charger</option>`;
+  loadSeq.innerHTML = `<option value="">Charger une séquence</option>`;
   const all = JSON.parse(localStorage.getItem("assautSeq") || "{}");
   Object.keys(all).forEach(k => {
-    const o = document.createElement("option");
-    o.value = k;
-    o.textContent = k;
-    loadSeq.appendChild(o);
+    loadSeq.innerHTML += `<option value="${k}">${k}</option>`;
   });
 }
 
@@ -213,31 +237,20 @@ function loadNamedSequence() {
   renderSequence();
 }
 
-/* ===============================
-   QR + UTILS
-================================ */
+/* =======================
+   UTILS
+======================= */
+function shuffleSequence() {
+  sequence.sort(() => Math.random() - 0.5);
+  renderSequence();
+}
+
 function generateQR() {
   new QRious({
     element: qrSeq,
     value: sequence.map(a => a.assaut).join(" | "),
     size: 160
   });
-}
-
-function stopAll() {
-  playing = false;
-  stopSpeech();
-}
-
-function shuffle(arr) {
-  arr.sort(() => Math.random() - 0.5);
-  renderSequence();
-}
-
-function toggleFullscreen() {
-  document.fullscreenElement
-    ? document.exitFullscreen()
-    : document.documentElement.requestFullscreen();
 }
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
