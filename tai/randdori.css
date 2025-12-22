@@ -117,15 +117,19 @@ body {
   text-shadow: 2px 2px 0 var(--pink-3);
 }
 
-/* ------------------------- */
-/* ENCADRÉ 3 – EXERCICE 1 & 2 */
+/* ============================= */
+/* ENCA RT 3 – EXERCICES 1 & 2 */
+/* ============================= */
+
+/* Conteneur des exercices */
 .assauts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 24px;
+  align-items: stretch;
 }
 
-/* MOBILE */
+/* Mobile : empilé */
 @media (max-width: 940px) {
   .assauts-grid {
     grid-template-columns: 1fr;
