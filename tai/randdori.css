@@ -1,5 +1,33 @@
 /* =========================
-   BASE / RESET
+   POLICES
+========================= */
+@font-face {
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf") format("truetype");
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+.spicy {
+  font-family: "Spicy", cursive;
+}
+
+/* =========================
+   VARIABLES & THÈME
+========================= */
+:root {
+  --pink-1:#fff0f6;
+  --pink-2:#ffd6ec;
+  --pink-3:#ffe3f4;
+  --accent:#ff5fc1;
+  --hot-pink:#ff1493;
+  --card-shadow: 0 10px 24px rgba(255,120,180,0.14);
+  --text:#222;
+}
+
+/* =========================
+   RESET & BASE
 ========================= */
 *,
 *::before,
@@ -8,75 +36,142 @@
 }
 
 html, body {
+  width: 100%;
+  overflow-x: hidden; /* ⬅️ SUPPRIME LE SCROLL HORIZONTAL */
+}
+
+body {
   margin: 0;
-  padding: 0;
-  max-width: 100%;
-  overflow-x: hidden; /* ⛔ SCROLL HORIZONTAL BLOQUÉ */
+  background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
+  font-family: 'Fredoka', Arial, sans-serif;
+  color: var(--text);
 }
 
 /* =========================
-   VARIABLES
+   BANNIÈRE / HEADER
 ========================= */
-:root {
-  --accent: #ff5fc1;
-  --accent-dark: #e544a6;
-  --pink-light: #fff0f7;
-  --pink-border: #ffd6ec;
-  --shadow-soft: 0 6px 18px rgba(255, 120, 180, 0.25);
+.appbar {
+  background: #000;
+  color: #fff;
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.logo-big {
+  width: 120px;
+  max-width: 60vw;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.header-text .title {
+  font-size: 2.2rem;
+  color: var(--pink-2);
+}
+
+.header-text .subtitle {
+  font-size: 1.1rem;
+  color: #ffd0ea;
+  margin-top: 6px;
 }
 
 /* =========================
-   LAYOUT
+   LAYOUT GRILLE
 ========================= */
 .encarts-grid {
   max-width: 1300px;
-  margin: auto;
-  padding: 16px;
+  margin: 24px auto;
+  padding: 0 18px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 24px;
 }
 
 .full-width-card {
   grid-column: 1 / -1;
 }
 
-.assauts-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-/* MOBILE */
-@media (max-width: 900px) {
-  .encarts-grid,
-  .assauts-grid {
+@media (max-width: 940px) {
+  .encarts-grid {
     grid-template-columns: 1fr;
+    padding: 14px;
   }
 }
 
 /* =========================
-   CARDS
+   CARTES
 ========================= */
-.kawaii-card {
-  background: linear-gradient(180deg, #fff9fc, #fff4fb);
-  border-radius: 18px;
-  border: 2px solid var(--pink-border);
-  padding: 16px;
-  box-shadow: var(--shadow-soft);
+.card.kawaii-card,
+.assaut-card {
+  background: linear-gradient(180deg,#fff9fc,#fff4fb);
+  border-radius: 20px;
+  padding: 18px;
+  border: 2px solid var(--pink-2);
+  box-shadow: var(--card-shadow);
 }
 
 /* =========================
-   BUTTONS
+   TITRES
+========================= */
+.section-title {
+  font-size: 1.7rem;
+  margin: 6px 0 14px;
+  color: var(--hot-pink);
+  text-align: center;
+  text-shadow: 2px 2px 0 var(--pink-3);
+}
+
+/* =========================
+   FORMULAIRES
+========================= */
+.selectors-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+select,
+input[type="text"],
+input[type="range"] {
+  max-width: 100%;
+}
+
+select,
+input[type="text"] {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--pink-2);
+  font-size: 1rem;
+  background: #fff;
+  font-family: 'Fredoka', Arial, sans-serif;
+  box-shadow: 0 3px 0 rgba(255,182,193,0.6);
+}
+
+select:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* =========================
+   BOUTONS
 ========================= */
 .btn {
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: 999px;
+  cursor: pointer;
   border: none;
   font-weight: 600;
-  cursor: pointer;
-  background: #fff;
-  box-shadow: 0 4px 0 var(--accent-dark);
+  font-family: 'Fredoka', Arial, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 0 rgba(214,69,155,0.7);
 }
 
 .btn.primary {
@@ -84,53 +179,67 @@ html, body {
   color: #fff;
 }
 
+.btn.ghost {
+  background: #fff;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+
 .btn.active {
-  background: var(--accent-dark);
+  background: var(--hot-pink);
   color: #fff;
-  box-shadow: 0 0 0 3px rgba(255, 95, 193, 0.4);
+  box-shadow: 0 0 0 3px rgba(255,20,147,0.25);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 /* =========================
-   CHIPS / SEQUENCE
+   ASSAUTS / SÉQUENCES
 ========================= */
-.chips-list {
+.chips-list,
+.sequence-zone {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin: 10px 0;
 }
 
 .chip {
   padding: 6px 12px;
   border-radius: 999px;
-  background: var(--pink-light);
-  border: 2px solid var(--pink-border);
+  background: var(--pink-2);
   cursor: pointer;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .sequence-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
   background: #fff;
   border-radius: 12px;
-  padding: 8px 10px;
-  border: 1px solid var(--pink-border);
+  padding: 8px 12px;
+  width: 100%;
 }
 
 .seq-actions button {
+  background: none;
   border: none;
-  background: transparent;
-  font-size: 1.1rem;
   cursor: pointer;
+  font-size: 1.1rem;
 }
 
 /* =========================
-   FICHE EXERCICE 1
+   FICHES EXERCICE 1
 ========================= */
-#print-zone {
-  max-width: 100%;
+.fiche-container {
+  margin-top: 18px;
 }
 
 .fiche-header {
@@ -140,18 +249,34 @@ html, body {
   gap: 14px;
 }
 
-.fiche-header img {
-  width: 5cm;
-  height: 5cm;
-  object-fit: contain;
-}
-
 .fiche-objectif {
   text-align: center;
   font-weight: 700;
-  margin: 10px 0;
 }
 
+.fiche-row {
+  display: flex;
+  gap: 20px;
+}
+
+.fiche-left,
+.fiche-right {
+  width: 50%;
+}
+
+@media (max-width: 900px) {
+  .fiche-row {
+    flex-direction: column;
+  }
+  .fiche-left,
+  .fiche-right {
+    width: 100%;
+  }
+}
+
+/* =========================
+   DÉROULÉ COLONNES
+========================= */
 .deroule-grid {
   columns: 2;
   column-gap: 30px;
@@ -163,28 +288,41 @@ html, body {
   }
 }
 
+@media print {
+  .deroule-grid {
+    columns: 2;
+  }
+}
+
 /* =========================
-   PRINT – PDF UNIQUEMENT EXERCICE 1
+   PRINT (EXERCICE 1 SEUL)
 ========================= */
 @media print {
 
   body * {
-    visibility: hidden !important;
+    visibility: hidden;
   }
 
   #print-zone,
   #print-zone * {
-    visibility: visible !important;
+    visibility: visible;
   }
 
   #print-zone {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
   }
 
-  .deroule-grid {
-    columns: 2;
+  .btn,
+  .selectors-row {
+    display: none !important;
+  }
+
+  .card.kawaii-card {
+    box-shadow: none;
+    border: none;
+    background: #fff;
   }
 }
