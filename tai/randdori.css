@@ -1,21 +1,20 @@
-/* =========================
-   POLICES
-========================= */
+/* ===================================================== */
+/* POLICES */
+/* ===================================================== */
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf") format("truetype");
-  font-display: swap;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
 
 .spicy {
   font-family: "Spicy", cursive;
 }
 
-/* =========================
-   VARIABLES & THÈME
-========================= */
+/* ===================================================== */
+/* PALETTE */
+/* ===================================================== */
 :root {
   --pink-1:#fff0f6;
   --pink-2:#ffd6ec;
@@ -26,9 +25,9 @@
   --text:#222;
 }
 
-/* =========================
-   RESET & BASE
-========================= */
+/* ===================================================== */
+/* RESET & BASE */
+/* ===================================================== */
 *,
 *::before,
 *::after {
@@ -37,7 +36,7 @@
 
 html, body {
   width: 100%;
-  overflow-x: hidden; /* ⬅️ SUPPRIME LE SCROLL HORIZONTAL */
+  overflow-x: hidden; /* 🔒 STOP scroll horizontal */
 }
 
 body {
@@ -47,25 +46,24 @@ body {
   color: var(--text);
 }
 
-/* =========================
-   BANNIÈRE / HEADER
-========================= */
+/* ===================================================== */
+/* HEADER / BANNIÈRE */
+/* ===================================================== */
 .appbar {
   background: #000;
   color: #fff;
-  padding: 24px 12px;
+  padding: 22px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
 }
 
 .logo-big {
-  width: 120px;
-  max-width: 60vw;
+  width: 120px;        /* 🔧 proportion corrigée */
+  max-width: 40vw;
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .header-text .title {
@@ -79,22 +77,24 @@ body {
   margin-top: 6px;
 }
 
-/* =========================
-   LAYOUT GRILLE
-========================= */
+/* ===================================================== */
+/* GRID PRINCIPAL */
+/* ===================================================== */
 .encarts-grid {
   max-width: 1300px;
   margin: 24px auto;
-  padding: 0 18px;
+  padding: 0 16px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
+/* Pleine largeur */
 .full-width-card {
   grid-column: 1 / -1;
 }
 
+/* Mobile */
 @media (max-width: 940px) {
   .encarts-grid {
     grid-template-columns: 1fr;
@@ -102,21 +102,19 @@ body {
   }
 }
 
-/* =========================
-   CARTES
-========================= */
-.card.kawaii-card,
-.assaut-card {
-  background: linear-gradient(180deg,#fff9fc,#fff4fb);
+/* ===================================================== */
+/* CARTES */
+/* ===================================================== */
+.card.kawaii-card {
+  background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
   border-radius: 20px;
   padding: 18px;
   border: 2px solid var(--pink-2);
   box-shadow: var(--card-shadow);
+  width: 100%;
+  overflow: hidden; /* 🔒 évite débordements */
 }
 
-/* =========================
-   TITRES
-========================= */
 .section-title {
   font-size: 1.7rem;
   margin: 6px 0 14px;
@@ -125,20 +123,42 @@ body {
   text-shadow: 2px 2px 0 var(--pink-3);
 }
 
-/* =========================
-   FORMULAIRES
-========================= */
+/* ===================================================== */
+/* ENCARt 3 – EXERCICES 1 & 2 */
+/* ===================================================== */
+.assauts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 🖥 côte à côte desktop */
+  gap: 20px;
+  width: 100%;
+}
+
+/* Mobile : empilé */
+@media (max-width: 940px) {
+  .assauts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================================================== */
+/* ASSAUT CARDS */
+/* ===================================================== */
+.assaut-card {
+  background: linear-gradient(180deg,#fff9fc,#fff);
+  border-radius: 18px;
+  padding: 14px;
+  border: 1px solid var(--pink-2);
+  width: 100%;
+}
+
+/* ===================================================== */
+/* SELECTEURS */
+/* ===================================================== */
 .selectors-row {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 12px;
-}
-
-select,
-input[type="text"],
-input[type="range"] {
-  max-width: 100%;
 }
 
 select,
@@ -149,7 +169,8 @@ input[type="text"] {
   font-size: 1rem;
   background: #fff;
   font-family: 'Fredoka', Arial, sans-serif;
-  box-shadow: 0 3px 0 rgba(255,182,193,0.6);
+  box-shadow: 0 3px 0 rgba(255, 182, 193, 0.6);
+  max-width: 100%;
 }
 
 select:focus,
@@ -158,9 +179,9 @@ input[type="text"]:focus {
   border-color: var(--accent);
 }
 
-/* =========================
-   BOUTONS
-========================= */
+/* ===================================================== */
+/* BOUTONS */
+/* ===================================================== */
 .btn {
   padding: 10px 16px;
   border-radius: 999px;
@@ -168,10 +189,11 @@ input[type="text"]:focus {
   border: none;
   font-weight: 600;
   font-family: 'Fredoka', Arial, sans-serif;
+  box-shadow: 0 4px 0 rgba(214, 69, 155, 0.7);
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 0 rgba(214,69,155,0.7);
+  white-space: nowrap;
 }
 
 .btn.primary {
@@ -185,28 +207,16 @@ input[type="text"]:focus {
   color: var(--accent);
 }
 
-.btn.active {
-  background: var(--hot-pink);
-  color: #fff;
-  box-shadow: 0 0 0 3px rgba(255,20,147,0.25);
-}
-
-.btn-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-/* =========================
-   ASSAUTS / SÉQUENCES
-========================= */
+/* ===================================================== */
+/* LISTES TECHNIQUES */
+/* ===================================================== */
 .chips-list,
 .sequence-zone {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin: 10px 0;
+  width: 100%;
 }
 
 .chip {
@@ -215,68 +225,70 @@ input[type="text"]:focus {
   background: var(--pink-2);
   cursor: pointer;
   font-weight: 600;
-  white-space: nowrap;
 }
 
 .sequence-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   background: #fff;
-  border-radius: 12px;
   padding: 8px 12px;
+  border-radius: 12px;
   width: 100%;
 }
 
-.seq-actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-/* =========================
-   FICHES EXERCICE 1
-========================= */
+/* ===================================================== */
+/* FICHES */
+/* ===================================================== */
 .fiche-container {
   margin-top: 18px;
+  width: 100%;
 }
 
-.fiche-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-}
-
-.fiche-objectif {
-  text-align: center;
-  font-weight: 700;
-}
-
-.fiche-row {
+.fiche-row,
+.tech-row {
   display: flex;
   gap: 20px;
 }
 
 .fiche-left,
-.fiche-right {
+.fiche-right,
+.tech-left,
+.tech-right {
   width: 50%;
 }
 
+/* Mobile fiche */
 @media (max-width: 900px) {
-  .fiche-row {
+  .fiche-row,
+  .tech-row {
     flex-direction: column;
   }
+
   .fiche-left,
-  .fiche-right {
+  .fiche-right,
+  .tech-left,
+  .tech-right {
     width: 100%;
   }
 }
 
-/* =========================
-   DÉROULÉ COLONNES
-========================= */
+/* ===================================================== */
+/* IMAGES / VIDÉOS */
+/* ===================================================== */
+.fiche-photo img,
+.tech-video,
+.tech-left iframe {
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  border-radius: 14px;
+  display: block;
+}
+
+/* ===================================================== */
+/* DÉROULÉ */
+/* ===================================================== */
 .deroule-grid {
   columns: 2;
   column-gap: 30px;
@@ -288,35 +300,16 @@ input[type="text"]:focus {
   }
 }
 
+/* ===================================================== */
+/* PRINT */
+/* ===================================================== */
 @media print {
-  .deroule-grid {
-    columns: 2;
-  }
-}
-
-/* =========================
-   PRINT (EXERCICE 1 SEUL)
-========================= */
-@media print {
-
-  body * {
-    visibility: hidden;
+  html, body {
+    overflow: visible;
   }
 
-  #print-zone,
-  #print-zone * {
-    visibility: visible;
-  }
-
-  #print-zone {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  .btn,
-  .selectors-row {
+  .selectors-row,
+  .btn {
     display: none !important;
   }
 
@@ -324,5 +317,9 @@ input[type="text"]:focus {
     box-shadow: none;
     border: none;
     background: #fff;
+  }
+
+  .deroule-grid {
+    columns: 2;
   }
 }
