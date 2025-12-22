@@ -280,3 +280,10 @@ select {
     background: #fff;
   }
 }
+.logo-link {
+  display: inline-block;
+}
+
+.logo-link:hover {
+  opacity: 0.9;
+}
