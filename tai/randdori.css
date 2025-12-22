@@ -37,8 +37,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* FIX */
   text-align: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 .logo-big { width: 140px; margin-bottom: 12px; }
 
