@@ -302,3 +302,42 @@ input::placeholder {
     display: none;
   }
 }
+.full-width-card {
+  grid-column: 1 / -1;
+}
+
+.assauts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 940px) {
+  .assauts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.assaut-card {
+  background: linear-gradient(180deg,#fff9fc,#fff);
+}
+
+.chips-list, .sequence-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--pink-2);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.chip.selected {
+  background: var(--accent);
+  color: #fff;
+}
