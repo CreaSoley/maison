@@ -1,307 +1,42 @@
-/* ------------------------- */
-/* POLICES */
-@font-face {
-  font-family: "Spicy";
-  src: url("Spicy Sale.ttf");
-}
-.spicy { font-family: "Spicy", cursive; }
-
-/* Palette & thèmes */
-:root {
-  --pink-1:#fff0f6;
-  --pink-2:#ffd6ec;
-  --pink-3:#ffe3f4;
-  --accent:#ff5fc1;     /* rose vif principale */
-  --hot-pink:#ff1493;   /* rose très soutenu */
-  --card-shadow: 0 10px 24px rgba(255,120,180,0.14);
-  --text:#222;
+/* =========================
+   BASE / RESET
+========================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-/* Reset & base */
-* { box-sizing: border-box; }
-
-body {
+html, body {
   margin: 0;
-  background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
-  font-family: 'Fredoka', Arial, sans-serif;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden; /* ⛔ SCROLL HORIZONTAL BLOQUÉ */
 }
 
-/* HEADER (noir conservé) */
-.appbar {
-  background: #000;
-  color: #fff;
-  padding: 22px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* FIX */
-  text-align: center;
-}
-.logo-big { width: 140px; margin-bottom: 12px; }
-
-.header-text .title {
-  font-size: 2.2rem;
-  color: var(--pink-2);
-}
-.header-text .subtitle {
-  font-size: 1.1rem;
-  color: #ffd0ea;
-  margin-top: 6px;
+/* =========================
+   VARIABLES
+========================= */
+:root {
+  --accent: #ff5fc1;
+  --accent-dark: #e544a6;
+  --pink-light: #fff0f7;
+  --pink-border: #ffd6ec;
+  --shadow-soft: 0 6px 18px rgba(255, 120, 180, 0.25);
 }
 
-/* GRID LAYOUT */
+/* =========================
+   LAYOUT
+========================= */
 .encarts-grid {
   max-width: 1300px;
-  margin: 24px auto;
-  padding: 0 18px;
+  margin: auto;
+  padding: 16px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-/* single-column on small screens */
-@media (max-width: 940px) {
-  .encarts-grid {
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
-}
-
-/* CARD STYLE (kawaii) */
-.card.kawaii-card {
-  background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
-  border-radius: 20px;
-  padding: 18px;
-  border: 2px solid var(--pink-2);
-  box-shadow: var(--card-shadow);
-}
-
-/* TITRES de section */
-.section-title {
-  font-size: 1.7rem;
-  margin: 6px 0 14px;
-  color: var(--hot-pink);
-  text-align: center;
-  text-shadow: 2px 2px 0 var(--pink-3);
-}
-
-/* SELECTORS ROW */
-.selectors-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-/* Champs & selects */
-select,
-input[type="text"] {
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 2px solid var(--pink-2);
-  font-size: 1rem;
-  background: #fff;
-  font-family: 'Fredoka', Arial, sans-serif;
-  color: var(--text);
-  box-shadow: 0 3px 0 rgba(255, 182, 193, 0.6);
-  transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s, background-color 0.15s;
-}
-
-select:focus,
-input[type="text"]:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 4px 0 rgba(255, 128, 200, 0.7);
-  transform: translateY(-1px);
-  background: #fffdfc;
-}
-
-/* Placeholder */
-input::placeholder {
-  color: #b88;
-}
-
-/* BUTTONS */
-.btn {
-  padding: 10px 16px;
-  border-radius: 999px;
-  cursor: pointer;
-  border: none;
-  font-weight: 600;
-  font-family: 'Fredoka', Arial, sans-serif;
-  box-shadow: 0 4px 0 rgba(214, 69, 155, 0.7);
-  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s, color 0.15s;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* Bouton principal rose */
-.btn.primary {
-  background: var(--accent);
-  color: #fff;
-}
-
-/* Bouton “ghost” */
-.btn.ghost {
-  background: #fff;
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  box-shadow: 0 4px 0 rgba(255, 128, 200, 0.5);
-}
-
-/* Effets hover / active */
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 0 rgba(214, 69, 155, 0.8);
-}
-
-.btn:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 rgba(214, 69, 155, 0.8);
-}
-
-/* RANDOM PREVIEW */
-.random-result {
-  margin-top: 8px;
-  text-align: center;
-  color: #ff4fb8;
-  font-weight: 700;
-  font-family: 'Fredoka', Arial, sans-serif;
-}
-
-/* FICHE CONTAINERS */
-.fiche-container {
-  margin-top: 18px;
-}
-
-/* Generic row used inside fiches: 50% / 50% */
-.fiche-row,
-.tech-row {
-  display: flex;
   gap: 20px;
-  align-items: flex-start;
 }
 
-/* Each side occupies 50% */
-.fiche-left,
-.fiche-right,
-.tech-left,
-.tech-right {
-  width: 50%;
-  min-width: 0;
-}
-
-/* Media: stack on mobile */
-@media (max-width: 900px) {
-  .fiche-row,
-  .tech-row {
-    flex-direction: column;
-  }
-  .fiche-left,
-  .fiche-right,
-  .tech-left,
-  .tech-right {
-    width: 100%;
-  }
-}
-
-/* IMAGE / VIDEO sizing */
-.fiche-photo img,
-.tech-left iframe,
-.tech-left .video-frame,
-.fiche-photo,
-.tech-video {
-  width: 100%;
-  max-height: 420px;
-  object-fit: contain;
-  border-radius: 14px;
-  display: block;
-  background: #fff;
-}
-
-/* CARTES internes (fiches) */
-.fiche-card,
-.result-card {
-  background: #fffaf8;
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid #ffd7f0;
-  box-shadow: 0 8px 18px rgba(255, 120, 190, 0.12);
-}
-
-.fiche-card p {
-  margin: 10px 0;
-  color: #333;
-  line-height: 1.4;
-}
-
-/* Titles inside cards */
-.tech-title,
-.cle-title {
-  font-family: "Spicy", cursive;
-  font-size: 1.4rem;
-  color: #ff4fb8;
-  margin-bottom: 6px;
-}
-
-/* Buttons row dans les fiches */
-.btn-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-/* QR area */
-.qr-zone {
-  margin-top: 12px;
-  text-align: left;
-}
-
-/* Icônes Material : on peut les teinter légèrement rose si besoin */
-.material-icons {
-  vertical-align: middle;
-  color: var(--accent);
-}
-
-/* PRINT adjustments */
-@media print {
-  body {
-    background: #fff;
-    color: #000;
-  }
-
-  .encarts-grid,
-  .selectors-row,
-  .btn {
-    display: block !important;
-  }
-
-  /* cacher les contrôles en impression */
-  .selectors-row,
-  .btn {
-    display: none !important;
-  }
-
-  .card.kawaii-card {
-    box-shadow: none;
-    border: none;
-    background: #fff;
-  }
-
-  /* limiter taille image */
-  .fiche-photo img {
-    max-width: 7cm !important;
-    max-height: 7cm !important;
-  }
-
-  .tech-left iframe {
-    display: none;
-  }
-}
 .full-width-card {
   grid-column: 1 / -1;
 }
@@ -312,35 +47,92 @@ input::placeholder {
   gap: 20px;
 }
 
-@media (max-width: 940px) {
+/* MOBILE */
+@media (max-width: 900px) {
+  .encarts-grid,
   .assauts-grid {
     grid-template-columns: 1fr;
   }
 }
 
-.assaut-card {
-  background: linear-gradient(180deg,#fff9fc,#fff);
+/* =========================
+   CARDS
+========================= */
+.kawaii-card {
+  background: linear-gradient(180deg, #fff9fc, #fff4fb);
+  border-radius: 18px;
+  border: 2px solid var(--pink-border);
+  padding: 16px;
+  box-shadow: var(--shadow-soft);
 }
 
-.chips-list, .sequence-zone {
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 0 4px 0 var(--accent-dark);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn.active {
+  background: var(--accent-dark);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 95, 193, 0.4);
+}
+
+/* =========================
+   CHIPS / SEQUENCE
+========================= */
+.chips-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 10px 0;
 }
 
 .chip {
   padding: 6px 12px;
   border-radius: 999px;
-  background: var(--pink-2);
+  background: var(--pink-light);
+  border: 2px solid var(--pink-border);
   cursor: pointer;
   font-weight: 600;
 }
 
-.chip.selected {
-  background: var(--accent);
-  color: #fff;
+.sequence-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--pink-border);
 }
+
+.seq-actions button {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* =========================
+   FICHE EXERCICE 1
+========================= */
+#print-zone {
+  max-width: 100%;
+}
+
 .fiche-header {
   display: flex;
   justify-content: center;
@@ -348,9 +140,16 @@ input::placeholder {
   gap: 14px;
 }
 
+.fiche-header img {
+  width: 5cm;
+  height: 5cm;
+  object-fit: contain;
+}
+
 .fiche-objectif {
   text-align: center;
   font-weight: 700;
+  margin: 10px 0;
 }
 
 .deroule-grid {
@@ -359,9 +158,33 @@ input::placeholder {
 }
 
 @media (max-width: 900px) {
-  .deroule-grid { columns: 1; }
+  .deroule-grid {
+    columns: 1;
+  }
 }
 
+/* =========================
+   PRINT – PDF UNIQUEMENT EXERCICE 1
+========================= */
 @media print {
-  .deroule-grid { columns: 2; }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #print-zone,
+  #print-zone * {
+    visibility: visible !important;
+  }
+
+  #print-zone {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .deroule-grid {
+    columns: 2;
+  }
 }
