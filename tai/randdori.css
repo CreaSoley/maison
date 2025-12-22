@@ -1,4 +1,4 @@
-/* ========================= */
+/* ------------------------- */
 /* POLICES */
 @font-face {
   font-family: "Spicy";
@@ -7,9 +7,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
 
-.spicy { font-family: "Spicy", cursive; }
+.spicy {
+  font-family: "Spicy", cursive;
+}
 
-/* ========================= */
+/* ------------------------- */
 /* PALETTE */
 :root {
   --pink-1:#fff0f6;
@@ -21,28 +23,27 @@
   --text:#222;
 }
 
-/* ========================= */
+/* ------------------------- */
 /* RESET & BASE */
 * {
   box-sizing: border-box;
-  max-width: 100%;
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
   width: 100%;
-  overflow-x: hidden; /* 🔥 SUPPRESSION DU SCROLL HORIZONTAL */
+  min-height: 100dvh;
+  overflow-x: hidden;
 }
 
 body {
+  margin: 0;
   background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
   font-family: 'Fredoka', Arial, sans-serif;
   color: var(--text);
 }
 
-/* ========================= */
-/* HEADER / BANNIÈRE */
+/* ------------------------- */
+/* HEADER */
 .appbar {
   background: #000;
   color: #fff;
@@ -50,28 +51,33 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
+.appbar a {
+  display: inline-block;
+}
+
 .logo-big {
-  width: 120px;        /* ⚖️ corrigé */
+  width: 140px;
   max-width: 60vw;
   height: auto;
   margin-bottom: 12px;
 }
 
 .header-text .title {
-  font-size: 2.1rem;
+  font-size: 2.2rem;
   color: var(--pink-2);
 }
 
 .header-text .subtitle {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: #ffd0ea;
   margin-top: 6px;
 }
 
-/* ========================= */
+/* ------------------------- */
 /* GRID PRINCIPAL */
 .encarts-grid {
   max-width: 1300px;
@@ -82,14 +88,15 @@ body {
   gap: 24px;
 }
 
+/* MOBILE */
 @media (max-width: 940px) {
   .encarts-grid {
     grid-template-columns: 1fr;
-    padding: 12px;
+    padding: 14px;
   }
 }
 
-/* ========================= */
+/* ------------------------- */
 /* CARTES */
 .card.kawaii-card {
   background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
@@ -97,51 +104,97 @@ body {
   padding: 18px;
   border: 2px solid var(--pink-2);
   box-shadow: var(--card-shadow);
+  width: 100%;
 }
 
-/* ========================= */
+/* ------------------------- */
 /* TITRES */
 .section-title {
   font-size: 1.7rem;
-  margin: 8px 0 16px;
+  margin: 6px 0 18px;
   color: var(--hot-pink);
   text-align: center;
   text-shadow: 2px 2px 0 var(--pink-3);
 }
 
-/* ========================= */
-/* FORMULAIRES */
-.selectors-row {
+/* ------------------------- */
+/* ENCADRÉ 3 – EXERCICE 1 & 2 */
+.assauts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* MOBILE */
+@media (max-width: 940px) {
+  .assauts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------- */
+/* EXERCICE 2 – ESPACEMENTS */
+.assaut-card {
+  background: linear-gradient(180deg,#fff9fc,#fff);
+  padding-bottom: 24px;
+}
+
+/* Chips */
+.chips-list {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 14px;
+  gap: 12px;
+  margin: 18px 0 22px;
 }
 
-select,
-input[type="text"] {
-  padding: 10px 14px;
-  border-radius: 14px;
-  border: 2px solid var(--pink-2);
-  font-size: 1rem;
-  background: #fff;
-  box-shadow: 0 3px 0 rgba(255,182,193,.6);
+.chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--pink-2);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: normal;
+  max-width: 100%;
 }
 
-/* ========================= */
+/* Séquence */
+.sequence-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 24px;
+}
+
+/* Inputs & boutons – aération */
+input[type="text"],
+select {
+  margin-bottom: 18px;
+}
+
+/* Boutons ligne */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 18px 0 26px;
+}
+
+/* ------------------------- */
 /* BOUTONS */
 .btn {
-  padding: 10px 18px;
+  padding: 12px 18px;
   border-radius: 999px;
   cursor: pointer;
   border: none;
   font-weight: 600;
+  font-family: 'Fredoka', Arial, sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: 0.15s;
+  transition: all .2s ease;
 }
 
+/* Normal */
 .btn.primary {
   background: var(--accent);
   color: #fff;
@@ -153,94 +206,73 @@ input[type="text"] {
   color: var(--accent);
 }
 
-/* 🔥 ÉTAT ACTIF CLAIR */
+/* ACTIF (lecture / boucle / aléatoire / répétitions) */
 .btn.active {
-  background: var(--hot-pink) !important;
+  background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
   color: #fff !important;
-  box-shadow: 0 0 0 4px rgba(255,20,147,.35);
+  box-shadow:
+    0 0 0 3px rgba(106,17,203,0.35),
+    0 8px 18px rgba(37,117,252,0.45);
   transform: translateY(-1px);
 }
 
-/* ========================= */
-/* EXERCICE 2 – ZONES */
-.chips-list,
-.sequence-zone {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 14px 0;
-}
-
-.chip {
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: var(--pink-2);
-  font-weight: 600;
-  white-space: normal;
-  text-align: center;
-}
-
-/* 🔥 AÉRATION ENTRE INPUT + BOUTONS */
-.sequence-zone + input[type="text"] {
-  margin-top: 16px;
-}
-
-.sequence-zone + input[type="text"] + .btn-row {
-  margin-top: 14px;
-}
-
-/* ========================= */
+/* ------------------------- */
 /* FICHE EXERCICE 1 */
-.fiche-header {
+.fiche-row {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.fiche-objectif {
-  text-align: center;
-  font-weight: 700;
-}
-
-/* ========================= */
-/* DÉROULÉ */
-.deroule-grid {
-  columns: 2;
-  column-gap: 28px;
+.fiche-left,
+.fiche-right {
+  width: 50%;
+  min-width: 0;
 }
 
 @media (max-width: 900px) {
-  .deroule-grid { columns: 1; }
+  .fiche-row {
+    flex-direction: column;
+  }
+  .fiche-left,
+  .fiche-right {
+    width: 100%;
+  }
 }
 
-/* ========================= */
-/* 🔥 PDF : EXERCICE 1 UNIQUEMENT */
-@media print {
+/* Déroulé */
+.deroule-grid {
+  columns: 2;
+  column-gap: 30px;
+}
 
-  body * {
-    visibility: hidden !important;
+@media (max-width: 900px) {
+  .deroule-grid {
+    columns: 1;
+  }
+}
+
+/* ------------------------- */
+/* PRINT – ON NE CHANGE RIEN */
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .encarts-grid,
+  .selectors-row,
+  .btn {
+    display: none !important;
   }
 
   #print-zone,
   #print-zone * {
-    visibility: visible !important;
-  }
-
-  #print-zone {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-  }
-
-  .btn,
-  .selectors-row {
-    display: none !important;
+    display: block !important;
   }
 
   .card.kawaii-card {
     box-shadow: none;
     border: none;
+    background: #fff;
   }
 }
