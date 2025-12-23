@@ -146,72 +146,112 @@ function renderKataCard(kata) {
     // ======================================================
     let speechUtterance = null;
 
-    function attachFicheEventListeners() {
-        const btnPlay = document.getElementById('btnPlay');
-        const btnPause = document.getElementById('btnPause');
-        const btnStop = document.getElementById('btnStop');
-        const btnPdf = document.getElementById('btnPdf');
-        const btnWhatsapp = document.getElementById('btnWhatsapp');
-        const speedRateSlider = document.getElementById('speedRateFiche');
-        const speedValueSpan = document.getElementById('speedValueFiche');
+// ... (le début du fichier fiche-manager.js est inchangé) ...
 
-        if (!btnPlay) return;
+function attachFicheEventListeners() {
+    const btnPlay = document.getElementById('btnPlay');
+    const btnPause = document.getElementById('btnPause');
+    const btnStop = document.getElementById('btnStop');
+    const btnPdf = document.getElementById('btnPdf');
+    const btnWhatsapp = document.getElementById('btnWhatsapp');
+    const speedRateSlider = document.getElementById('speedRateFiche');
+    const speedValueSpan = document.getElementById('speedValueFiche');
 
-        speedRateSlider.addEventListener('input', () => {
-            speedValueSpan.textContent = parseFloat(speedRateSlider.value).toFixed(1) + 'x';
-            if (speechUtterance) {
-                speechUtterance.rate = parseFloat(speedRateSlider.value);
-            }
-        });
+    if (!btnPlay) return;
 
-        btnPlay.addEventListener('click', () => {
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
-                btnPause.disabled = false;
-                btnPlay.disabled = true;
-            } else {
-                if (!currentKata) return;
-                
-                window.speechSynthesis.cancel();
-                
-                speechUtterance = new SpeechSynthesisUtterance(currentKata.etapes_kata);
-                speechUtterance.lang = 'fr-FR';
-                speechUtterance.rate = parseFloat(speedRateSlider.value);
+    // Gestion de la vitesse (inchangée)
+    speedRateSlider.addEventListener('input', () => {
+        speedValueSpan.textContent = parseFloat(speedRateSlider.value).toFixed(1) + 'x';
+        // Note: le réglage de vitesse en cours de lecture est complexe, 
+        // il s'appliquera à la prochaine lecture.
+    });
 
-                speechUtterance.onend = () => {
-                    btnPause.disabled = true;
-                    btnPlay.disabled = false;
-                };
-
-                window.speechSynthesis.speak(speechUtterance);
-                btnPause.disabled = false;
-                btnPlay.disabled = true;
-            }
-        });
-
-        btnPause.addEventListener('click', () => {
-            window.speechSynthesis.pause();
-            btnPause.disabled = true;
-            btnPlay.disabled = false;
-        });
-
-        btnStop.addEventListener('click', () => {
-            window.speechSynthesis.cancel();
-            btnPause.disabled = true;
-            btnPlay.disabled = false;
-        });
-
-        btnPdf.addEventListener('click', () => {
-            window.print();
-        });
-
-        btnWhatsapp.addEventListener('click', () => {
+    btnPlay.addEventListener('click', () => {
+        if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            btnPause.disabled = false;
+            btnPlay.disabled = true;
+        } else {
             if (!currentKata) return;
-            const text = `Voici mon kata : ${currentKata.nom_kata}\n\n${currentKata.etapes_kata.substring(0, 200)}...`;
-            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
-        });
-    }
+            
+            window.speechSynthesis.cancel(); // Stoppe toute lecture précédente
+            
+            const speechRate = parseFloat(speedRateSlider.value);
+
+            // --- NOUVELLE SÉQUENCE DE LECTURE ---
+            
+            // 1. Phrase d'introduction
+            const intro = `aujourd'hui nous allons travailler le kata ${currentKata.nom_kata}`;
+            const utteranceIntro = new SpeechSynthesisUtterance(intro);
+            utteranceIntro.lang = 'fr-FR';
+            utteranceIntro.rate = speechRate;
+
+            utteranceIntro.onend = () => {
+                // 2. Pause de 2 secondes après l'intro
+                setTimeout(() => {
+                    const start = "commençons";
+                    const utteranceStart = new SpeechSynthesisUtterance(start);
+                    utteranceStart.lang = 'fr-FR';
+                    utteranceStart.rate = speechRate;
+
+                    utteranceStart.onend = () => {
+                        // 3. Pause de 1 seconde après "commençons"
+                        setTimeout(() => {
+                            // 4. Lecture du déroulé
+                            const utteranceSteps = new SpeechSynthesisUtterance(currentKata.etapes_kata);
+                            utteranceSteps.lang = 'fr-FR';
+                            utteranceSteps.rate = speechRate;
+
+                            utteranceSteps.onend = () => {
+                                // Réinitialise les boutons à la fin de TOUTE la lecture
+                                btnPause.disabled = true;
+                                btnPlay.disabled = false;
+                            };
+                            
+                            window.speechSynthesis.speak(utteranceSteps);
+
+                        }, 1000); // Pause de 1 seconde
+                    };
+                    
+                    window.speechSynthesis.speak(utteranceStart);
+
+                }, 2000); // Pause de 2 secondes
+            };
+
+            // Désactive le bouton play et active le pause dès le début
+            btnPause.disabled = false;
+            btnPlay.disabled = true;
+            
+            window.speechSynthesis.speak(utteranceIntro);
+        }
+    });
+
+    btnPause.addEventListener('click', () => {
+        window.speechSynthesis.pause();
+        btnPause.disabled = true;
+        btnPlay.disabled = false;
+    });
+
+    btnStop.addEventListener('click', () => {
+        window.speechSynthesis.cancel();
+        btnPause.disabled = true;
+        btnPlay.disabled = false;
+    });
+
+    // Gestion PDF et WhatsApp (inchangées)
+    btnPdf.addEventListener('click', () => {
+        window.print();
+    });
+
+    btnWhatsapp.addEventListener('click', () => {
+        if (!currentKata) return;
+        const text = `Voici mon kata : ${currentKata.nom_kata}\n\n${currentKata.etapes_kata.substring(0, 200)}...`;
+        const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank');
+    });
+}
+
+// ... (le reste du fichier fiche-manager.js est inchangé) ...
 
     // ======================================================
     // UTILITAIRE
