@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Préparation 2ème Dan – Kata</title>
+
+  <!-- Material Icons + Police Spicy -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="kata.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="appbar">
+    <a class="logo" href="../index.html" title="Accueil">
+      <img src="logo.png" alt="logo" class="logo-big">
+    </a>
+    <div class="header-text">
+      <div class="title spicy">Préparation 2eme Dan</div>
+      <div class="subtitle spicy">Tai-Jitsu – Kata</div>
+    </div>
+  </header>
+
+  <!-- CONTENU -->
+  <main class="kata-container">
+
+    <!-- ENCART 1 : vidéo -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
+      <iframe class="video-frame" src="https://www.youtube.com/embed/5MZsQbEMF6c" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <!-- ENCART 2 : GIF -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎬 Démo animée</h2>
+      <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
+    </section>
+
+    <!-- ENCART 3 : MODIFIÉ - Tirage + Lecteur + Métronome + Google Forms -->
+    <section class="kata-block wide-block">
+      <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
+
+      <div class="flex-container">
+        <!-- Partie GAUCHE : Tirage + Lecteur + Métronome -->
+        <div class="flex-item">
+          <div>
+            <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
+            <p style="margin-top:10px;font-size:1.2rem;">
+              Kata sélectionné : <span id="kataResult">-</span>
+            </p>
+            
+            <!-- NOUVEAU : Contrôles de lecture de la carte -->
+            <div class="tts-controls">
+                <button id="btnSpeak" class="btn primary">
+                    <span class="material-icons">play_arrow</span> Lire
+                </button>
+                <button id="btnStopSpeak" class="btn ghost">
+                    <span class="material-icons">stop</span> Stop
+                </button>
+                <div class="slider-container">
+                    <label for="speedRate">Vitesse :</label>
+                    <input type="range" id="speedRate" min="0.5" max="2" value="1" step="0.1">
+                    <span id="speedValue">1.0x</span>
+                </div>
+            </div>
+          </div>
+
+          <!-- NOUVEAU MÉTRONOME -->
+          <div id="metronome">
+            <div class="lcd-display" id="lcdDisplay">120 | 1</div>
+            
+            <div class="tempo-control">
+                <label for="bpmSlider">Tempo (BPM) : <span id="bpmValue">120</span></label>
+                <input type="range" id="bpmSlider" min="40" max="220" value="120">
+            </div>
+
+            <div class="metronome-controls">
+                <button id="playBtn" class="metronome-btn play"><span class="material-icons">play_arrow</span></button>
+                <button id="stopBtn" class="metronome-btn stop"><span class="material-icons">stop</span></button>
+            </div>
+
+            <div class="pattern-grid" id="patternGrid">
+                <!-- Les boutons de motif seront générés par JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Partie DROITE : Google Forms -->
+        <div class="flex-item google-forms-integration">
+          <h3 class="spicy section-title">📝 Remplir ma fiche de suivi</h3>
+          <p>
+            Pour suivre votre progression, utilisez le formulaire ci-dessous. Chaque réponse est automatiquement transformée en une fiche PDF que vous pouvez conserver.
+          </p>
+          <a href="https://docs.google.com/forms/d/e/VOTRE_ID_FORMULAIRE/viewform" target="_blank" class="btn primary kawaii" style="display:inline-block; margin-top: 15px;">
+            <span class="material-icons">description</span> Accéder au formulaire
+          </a>
+          
+          <h4 style="margin-top: 30px;">📄 Comment ça marche ?</h4>
+          <ol>
+            <li>Vous remplissez une fiche via le lien ci-dessus.</li>
+            <li>Les réponses sont enregistrées dans une Google Sheet.</li>
+            <li>Un script automatique (Google Apps Script) se déclenche.</li>
+            <li>Il utilise vos réponses pour remplir un modèle de fiche (Google Doc).</li>
+            <li>Le document final est sauvegardé en PDF dans votre Google Drive.</li>
+          </ol>
+          <p style="font-size: 0.9em; color: #666;">
+            <strong>Note :</strong> La mise en place de l'automatisation PDF nécessite une configuration unique dans Google Drive. Des tutoriels sont disponibles en cherchant "Google Apps Script generate PDF from Form".
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <script src="kata.js"></script>
+
+</body>
+
+</html>
