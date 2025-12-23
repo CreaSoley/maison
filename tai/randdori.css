@@ -91,6 +91,7 @@ body {
   gap: 24px;
 }
 
+/* Mobile : 1 colonne */
 @media (max-width: 940px) {
   .encarts-grid {
     grid-template-columns: 1fr;
@@ -98,7 +99,7 @@ body {
 }
 
 /* ========================= */
-/* CARTES */
+/* CARTES KAWAII */
 /* ========================= */
 .card.kawaii-card {
   background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
@@ -119,11 +120,17 @@ body {
   text-shadow: 2px 2px 0 var(--pink-3);
 }
 
-/* ========================= */
-/* ENCART 3 – ASSAUTS */
-/* ========================= */
+/* ================================================= */
+/* ENCART 3 – ASSAUTS (PLEINE LARGEUR DESKTOP) */
+/* ================================================= */
+.full-width-card {
+  grid-column: 1 / -1;
+  width: 100%;
+}
 
-/* ⬅️ C’EST CETTE PARTIE QUI RÉTABLIT LES 2 COLONNES */
+/* ================================================= */
+/* EXERCICE 1 & 2 – 2 COLONNES DESKTOP */
+/* ================================================= */
 .assauts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -131,17 +138,18 @@ body {
   align-items: stretch;
 }
 
+/* Mobile : empilé */
 @media (max-width: 940px) {
   .assauts-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* Cartes exercices */
+/* Cartes internes */
 .assaut-card {
   background: linear-gradient(180deg,#fff9fc,#fff);
-  padding: 18px;
   border-radius: 16px;
+  padding: 18px;
 }
 
 /* ========================= */
@@ -151,25 +159,27 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin: 18px 0;
+  margin: 18px 0 22px;
 }
 
 .sequence-zone {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin: 20px 0;
+  margin: 20px 0 24px;
 }
 
 .btn-row {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin: 20px 0;
+  margin: 20px 0 26px;
 }
 
 input,
 select {
+  width: 100%;
+  max-width: 100%;
   margin-bottom: 18px;
 }
 
@@ -182,10 +192,11 @@ select {
   cursor: pointer;
   border: none;
   font-weight: 600;
+  font-family: 'Fredoka', Arial, sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
 }
 
 /* Normal */
@@ -253,7 +264,7 @@ select {
   }
 }
 
-/* Déroulé */
+/* Déroulé en colonnes */
 .deroule-grid {
   columns: 2;
   column-gap: 30px;
@@ -276,33 +287,5 @@ select {
   #print-zone,
   #print-zone * {
     display: block !important;
-  }
-}
-/* ========================================= */
-/* ENCAR T 3 — PLEINE LARGEUR DESKTOP */
-/* ========================================= */
-
-/* Force l'encart assauts à prendre toute la largeur */
-.full-width-card {
-  grid-column: 1 / -1;
-  width: 100%;
-}
-
-/* Sécurité : pas de max-width parasite */
-#encart-assauts {
-  max-width: 100%;
-}
-
-/* À l'intérieur : Exercice 1 & 2 côte à côte */
-#encart-assauts .assauts-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-/* Mobile : empilé */
-@media (max-width: 940px) {
-  #encart-assauts .assauts-grid {
-    grid-template-columns: 1fr;
   }
 }
