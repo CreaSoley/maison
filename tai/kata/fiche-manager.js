@@ -82,19 +82,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function renderKataCard(kata) {
-        const imageHtml = kata.shema_kata
-            ? `<img src="${escapeHtml(kata.shema_kata)}" alt="Schéma ${escapeHtml(kata.nom_kata)}" class="kata-fiche-image" onerror="this.style.display='none'">`
-            : '';
+    // ... (le début du fichier fiche-manager.js est inchangé) ...
 
-        kataCardDisplay.innerHTML = `
-            <article class="kata-fiche-card">
-                ${imageHtml}
-                <div class="kata-fiche-content">
-                    <h3 class="kata-fiche-title">${escapeHtml(kata.nom_kata)}</h3>
-                    <pre class="kata-fiche-steps">${escapeHtml(kata.etapes_kata)}</pre>
-                    
-                    <div class="kata-fiche-buttons">
+function renderKataCard(kata) {
+    // L'image est maintenant en haut, avec `object-fit: contain` pour ne pas être coupée
+    const imageHtml = kata.shema_kata
+        ? `<img src="${escapeHtml(kata.shema_kata)}" alt="Schéma ${escapeHtml(kata.nom_kata)}" class="kata-fiche-image" onerror="this.style.display='none'">`
+        : '';
+
+    kataCardDisplay.innerHTML = `
+        <article class="kata-fiche-card">
+            ${imageHtml}
+            <!-- Le titre en "spicy" juste en dessous de l'image -->
+            <h3 class="kata-fiche-title spicy">${escapeHtml(kata.nom_kata)}</h3>
+            
+            <!-- Conteneur en deux colonnes -->
+            <div class="kata-fiche-body">
+                <!-- Colonne de gauche : Contrôles -->
+                <div class="kata-fiche-controls">
+                    <!-- Le régulateur est en premier -->
+                    <div class="slider-container">
+                        <label for="speedRateFiche">Vitesse :</label>
+                        <input type="range" id="speedRateFiche" min="0.5" max="2" value="1" step="0.1">
+                        <span id="speedValueFiche">1.0x</span>
+                    </div>
+                    <!-- Puis les autres boutons -->
+                    <div class="button-group">
                         <button id="btnPlay" class="btn-fiche btn-pdf">
                             <span class="material-icons">play_arrow</span> Lecture
                         </button>
@@ -104,20 +117,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button id="btnStop" class="btn-fiche btn-pdf">
                             <span class="material-icons">stop</span> Stop
                         </button>
-                        <div class="slider-container">
-                            <label for="speedRateFiche">Vitesse :</label>
-                            <input type="range" id="speedRateFiche" min="0.5" max="2" value="1" step="0.1">
-                            <span id="speedValueFiche">1.0x</span>
-                        </div>
                         <button id="btnPdf" class="btn-fiche btn-pdf">
-                            <span class="material-icons">picture_as_pdf</span> Afficher/Exporter PDF
+                            <span class="material-icons">picture_as_pdf</span> PDF
                         </button>
                         <button id="btnWhatsapp" class="btn-fiche btn-whatsapp">
                             <span class="material-icons">share</span> WhatsApp
                         </button>
                     </div>
                 </div>
-            </article>
+                
+                <!-- Colonne de droite : Déroulé -->
+                <div class="kata-fiche-steps-container">
+                    <pre class="kata-fiche-steps">${escapeHtml(kata.etapes_kata)}</pre>
+                </div>
+            </div>
+        </article>
+    `;
+    attachFicheEventListeners();
+}
+
+// ... (le reste du fichier fiche-manager.js est inchangé) ...
         `;
         attachFicheEventListeners();
     }
