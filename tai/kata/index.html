@@ -18,10 +18,9 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER (inchangé) -->
   <header class="appbar">
     <a class="logo" href="../index.html" title="Accueil">
-      <!-- Vérifiez que le fichier logo.png est bien ici -->
       <img src="logo.png" alt="logo" class="logo-big">
     </a>
     <div class="header-text">
@@ -32,50 +31,52 @@
 
   <!-- CONTENU -->
   <main class="kata-container">
-    <div class="main-content-container">
 
-      <!-- ENCART 1 : vidéo -->
-      <section class="kata-block">
-        <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
-        <iframe class="video-frame" src="https://www.youtube.com/embed/5MZsQbEMF6c" frameborder="0" allowfullscreen></iframe>
-      </section>
+    <!-- ENCART 1 : vidéo (inchangé) -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
+      <iframe class="video-frame" src="https://www.youtube.com/embed/5MZsQbEMF6c" frameborder="0" allowfullscreen></iframe>
+    </section>
 
-      <!-- ENCART 2 : GIF -->
-      <section class="kata-block">
-        <h2 class="spicy section-title">🎬 Démo animée</h2>
-        <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
-      </section>
+    <!-- ENCART 2 : GIF (inchangé) -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎬 Démo animée</h2>
+      <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
+    </section>
 
-      <!-- ENCART 3 : Zone d'entraînement -->
-      <section class="kata-block">
-        <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
-        <div class="flex-container">
-          <div class="flex-item">
-            <div>
-              <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
-              <p style="margin-top:10px;font-size:1.2rem;">
-                Kata sélectionné : <span id="kataResult">-</span>
-              </p>
+    <!-- ENCART 3 : Zone d'entraînement (Tirage + Métronome) -->
+       <div class="main-content-container">
+         
+    <section class="kata-block wide-block">
+      <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
+      <div class="flex-container">
+        <div class="flex-item">
+          <div>
+            <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
+            <p style="margin-top:10px;font-size:1.2rem;">
+              Kata sélectionné : <span id="kataResult">-</span>
+            </p>
+          </div>
+          <!-- Métronome (identique à avant) -->
+          <div id="metronome">
+            <div class="lcd-display" id="lcdDisplay">120 | 1</div>
+            <div class="tempo-control">
+                <label for="bpmSlider">Tempo (BPM) : <span id="bpmValue">120</span></label>
+                <input type="range" id="bpmSlider" min="40" max="220" value="120">
             </div>
-            <!-- Métronome -->
-            <div id="metronome">
-              <div class="lcd-display" id="lcdDisplay">120 | 1</div>
-              <div class="tempo-control">
-                  <label for="bpmSlider">Tempo (BPM) : <span id="bpmValue">120</span></label>
-                  <input type="range" id="bpmSlider" min="40" max="220" value="120">
-              </div>
-              <div class="metronome-controls">
-                  <button id="playBtn" class="metronome-btn play"><span class="material-icons">play_arrow</span></button>
-                  <button id="stopBtn" class="metronome-btn stop"><span class="material-icons">stop</span></button>
-              </div>
-              <div class="pattern-grid" id="patternGrid"></div>
+            <div class="metronome-controls">
+                <button id="playBtn" class="metronome-btn play"><span class="material-icons">play_arrow</span></button>
+                <button id="stopBtn" class="metronome-btn stop"><span class="material-icons">stop</span></button>
             </div>
+            <div class="pattern-grid" id="patternGrid"></div>
           </div>
         </div>
-      </section>
+      </div>
+       
+    </section>
 
-      <!-- ENCART 4 : Fiches de suivi -->
-      <section class="kata-block">
+    <!-- NOUVEL ENCART 4 : Fiches de suivi -->
+    <section class="kata-block wide-block">
         <h2 class="spicy section-title">📝 Mes fiches de suivi</h2>
         
         <div class="fiche-header">
@@ -96,18 +97,17 @@
         <div id="kataCardDisplay">
             <!-- La fiche sélectionnée sera affichée ici -->
         </div>
-      </section>
+       </div>
+    </section>
 
-    </div>
   </main>
 
-  <!-- ====================================================== -->
-  <!-- SCRIPTS : PLACÉS À LA FIN DU BODY -->
-  <!-- ====================================================== -->
+  <!-- SCRIPT -->
   <!-- Script pour la zone d'entraînement -->
-  <script src="kata.js"></script>
+  <script src="script.js"></script>
   <!-- NOUVEAU script pour la gestion des fiches -->
   <script src="newkata.js"></script>
 
 </body>
+
 </html>
