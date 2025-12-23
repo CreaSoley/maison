@@ -176,7 +176,8 @@ function attachFicheEventListeners() {
             // --- NOUVELLE SÉQUENCE DE LECTURE ---
             
             // 1. Phrase d'introduction
-            const intro = `"aujourd'hui nous allons travailler le kata ${currentKata.nom_kata}"`;
+           
+            const intro = `aujourdhui nous allons travailler le kata ${currentKata.nom_kata}`;
             const utteranceIntro = new SpeechSynthesisUtterance(intro);
             utteranceIntro.lang = 'fr-FR';
             utteranceIntro.rate = speechRate;
