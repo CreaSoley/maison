@@ -170,7 +170,7 @@ header h1 {
   display:grid;
   grid-template-columns: repeat(5,1fr);
   gap:14px;
-  margin-top: 10px;
+  margin-top:10px;
 }
 
 .accordion {
@@ -181,17 +181,16 @@ header h1 {
   overflow:hidden;
 }
 
-/* Titre d’accordéon */
+/* Titre */
 .accordion-header {
   cursor:pointer;
   padding:10px 14px;
   font-family:"Spicy", cursive;
   font-size:1.4rem;
   color:var(--hot-pink);
-  text-shadow:1px 1px 0 var(--pink-3);
 }
 
-/* Corps */
+/* Corps fermé par défaut */
 .accordion-body {
   display:none;
   padding:10px 14px 14px;
@@ -200,24 +199,18 @@ header h1 {
   border-top:1px dashed var(--pink-2);
 }
 
-.accordion-body iframe {
-  width:100%;
-  aspect-ratio:16/9;
-  border-radius:12px;
-  margin-bottom:8px;
-  border:none;
-  box-shadow:0 4px 10px rgba(0,0,0,0.12);
+/* Accordéon ouvert */
+.accordion.open .accordion-body {
+  display:block;
 }
 
-/* Mobile = une seule colonne + accordéons ouverts */
+/* Mobile */
 @media(max-width:900px){
   .accordion-container {
     grid-template-columns:1fr;
   }
-  .accordion-body {
-    display:block;
-  }
 }
+
 </style>
 </head>
 
@@ -316,14 +309,21 @@ header h1 {
 </div>
 
 <script>
-// ACCORDÉON JS – ouverture/fermeture desktop
 document.querySelectorAll('.accordion-header').forEach(header => {
   header.addEventListener('click', () => {
-    const body = header.nextElementSibling;
-    body.style.display = (body.style.display === 'block') ? 'none' : 'block';
+    const accordion = header.parentElement;
+
+    // Ferme les autres (optionnel)
+    document.querySelectorAll('.accordion').forEach(a => {
+      if (a !== accordion) a.classList.remove('open');
+    });
+
+    // Toggle celui cliqué
+    accordion.classList.toggle('open');
   });
 });
 </script>
+
 
 </body>
 </html>
