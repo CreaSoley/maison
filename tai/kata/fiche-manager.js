@@ -135,11 +135,6 @@ function renderKataCard(kata) {
     `;
     attachFicheEventListeners();
 }
-
-// ... (le reste du fichier fiche-manager.js est inchangé) ...
-        `;
-        attachFicheEventListeners();
-    }
     
     // ======================================================
     // GESTION DE LA SYNTHÈSE VOCALE (TTS)
