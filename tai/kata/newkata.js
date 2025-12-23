@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Préparation 2ème Dan – Kata</title>
+
+  <!-- Material Icons + Police Spicy -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  
+  <!-- IMPORTANT : Ajout de la bibliothèque PapaParse -->
+  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+
+  <link rel="stylesheet" href="kata.css">
+</head>
+
+<body>
+
+  <!-- HEADER (inchangé) -->
+  <header class="appbar">
+    <a class="logo" href="../index.html" title="Accueil">
+      <img src="logo.png" alt="logo" class="logo-big">
+    </a>
+    <div class="header-text">
+      <div class="title spicy">Préparation 2eme Dan</div>
+      <div class="subtitle spicy">Tai-Jitsu – Kata</div>
+    </div>
+  </header>
+
+  <!-- CONTENU -->
+  <main class="kata-container">
+
+    <!-- ENCART 1 : vidéo (inchangé) -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
+      <iframe class="video-frame" src="https://www.youtube.com/embed/5MZsQbEMF6c" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <!-- ENCART 2 : GIF (inchangé) -->
+    <section class="kata-block">
+      <h2 class="spicy section-title">🎬 Démo animée</h2>
+      <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
+    </section>
+
+    <!-- ENCART 3 : Zone d'entraînement (Tirage + Métronome) -->
+    <section class="kata-block wide-block">
+      <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
+      <div class="flex-container">
+        <div class="flex-item">
+          <div>
+            <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
+            <p style="margin-top:10px;font-size:1.2rem;">
+              Kata sélectionné : <span id="kataResult">-</span>
+            </p>
+          </div>
+          <!-- Métronome (identique à avant) -->
+          <div id="metronome">
+            <div class="lcd-display" id="lcdDisplay">120 | 1</div>
+            <div class="tempo-control">
+                <label for="bpmSlider">Tempo (BPM) : <span id="bpmValue">120</span></label>
+                <input type="range" id="bpmSlider" min="40" max="220" value="120">
+            </div>
+            <div class="metronome-controls">
+                <button id="playBtn" class="metronome-btn play"><span class="material-icons">play_arrow</span></button>
+                <button id="stopBtn" class="metronome-btn stop"><span class="material-icons">stop</span></button>
+            </div>
+            <div class="pattern-grid" id="patternGrid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOUVEL ENCART 4 : Fiches de suivi -->
+    <section class="kata-block wide-block">
+        <h2 class="spicy section-title">📝 Mes fiches de suivi</h2>
+        
+        <div class="fiche-header">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSefEKw3CssjHA6MLv4Uq_6hImqztUgLmpnDrHOn0gQBDw8dEw/viewform?usp=header" 
+               target="_blank" 
+               class="btn primary kawaii">
+                <span class="material-icons">add_circle</span> Ajouter un kata
+            </a>
+            
+            <div class="selector-container">
+                <label for="kataSelector">Choisir une fiche à consulter :</label>
+                <select id="kataSelector" class="kata-selector">
+                    <option value="">-- Chargement en cours... --</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="kataCardDisplay">
+            <!-- La fiche sélectionnée sera affichée ici -->
+        </div>
+    </section>
+
+  </main>
+
+  <!-- SCRIPT -->
+  <!-- Script pour la zone d'entraînement -->
+  <script src="kata.js"></script>
+  <!-- NOUVEAU script pour la gestion des fiches -->
+  <script src="newkata.js"></script>
+
+</body>
+
+</html>
