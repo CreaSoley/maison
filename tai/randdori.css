@@ -1,5 +1,6 @@
-/* ------------------------- */
+/* ========================= */
 /* POLICES */
+/* ========================= */
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf");
@@ -11,8 +12,9 @@
   font-family: "Spicy", cursive;
 }
 
-/* ------------------------- */
+/* ========================= */
 /* PALETTE */
+/* ========================= */
 :root {
   --pink-1:#fff0f6;
   --pink-2:#ffd6ec;
@@ -23,8 +25,9 @@
   --text:#222;
 }
 
-/* ------------------------- */
+/* ========================= */
 /* RESET & BASE */
+/* ========================= */
 * {
   box-sizing: border-box;
 }
@@ -42,8 +45,9 @@ body {
   color: var(--text);
 }
 
-/* ------------------------- */
+/* ========================= */
 /* HEADER */
+/* ========================= */
 .appbar {
   background: #000;
   color: #fff;
@@ -51,11 +55,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
 }
 
-.appbar a {
+.logo-link {
   display: inline-block;
 }
 
@@ -74,11 +77,11 @@ body {
 .header-text .subtitle {
   font-size: 1.1rem;
   color: #ffd0ea;
-  margin-top: 6px;
 }
 
-/* ------------------------- */
+/* ========================= */
 /* GRID PRINCIPAL */
+/* ========================= */
 .encarts-grid {
   max-width: 1300px;
   margin: 24px auto;
@@ -88,27 +91,26 @@ body {
   gap: 24px;
 }
 
-/* MOBILE */
 @media (max-width: 940px) {
   .encarts-grid {
     grid-template-columns: 1fr;
-    padding: 14px;
   }
 }
 
-/* ------------------------- */
+/* ========================= */
 /* CARTES */
+/* ========================= */
 .card.kawaii-card {
   background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
   border-radius: 20px;
   padding: 18px;
   border: 2px solid var(--pink-2);
   box-shadow: var(--card-shadow);
-  width: 100%;
 }
 
-/* ------------------------- */
+/* ========================= */
 /* TITRES */
+/* ========================= */
 .section-title {
   font-size: 1.7rem;
   margin: 6px 0 18px;
@@ -117,11 +119,11 @@ body {
   text-shadow: 2px 2px 0 var(--pink-3);
 }
 
-/* ============================= */
-/* ENCA RT 3 – EXERCICES 1 & 2 */
-/* ============================= */
+/* ========================= */
+/* ENCART 3 – ASSAUTS */
+/* ========================= */
 
-/* Conteneur des exercices */
+/* ⬅️ C’EST CETTE PARTIE QUI RÉTABLIT LES 2 COLONNES */
 .assauts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -129,73 +131,61 @@ body {
   align-items: stretch;
 }
 
-/* Mobile : empilé */
 @media (max-width: 940px) {
   .assauts-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* ------------------------- */
-/* EXERCICE 2 – ESPACEMENTS */
+/* Cartes exercices */
 .assaut-card {
   background: linear-gradient(180deg,#fff9fc,#fff);
-  padding-bottom: 24px;
+  padding: 18px;
+  border-radius: 16px;
 }
 
-/* Chips */
+/* ========================= */
+/* EXERCICE 2 – ESPACEMENTS */
+/* ========================= */
 .chips-list {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin: 18px 0 22px;
+  margin: 18px 0;
 }
 
-.chip {
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: var(--pink-2);
-  cursor: pointer;
-  font-weight: 600;
-  white-space: normal;
-  max-width: 100%;
-}
-
-/* Séquence */
 .sequence-zone {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin: 20px 0 24px;
+  gap: 14px;
+  margin: 20px 0;
 }
 
-/* Inputs & boutons – aération */
-input[type="text"],
-select {
-  margin-bottom: 18px;
-}
-
-/* Boutons ligne */
 .btn-row {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin: 18px 0 26px;
+  margin: 20px 0;
 }
 
-/* ------------------------- */
+input,
+select {
+  margin-bottom: 18px;
+}
+
+/* ========================= */
 /* BOUTONS */
+/* ========================= */
 .btn {
   padding: 12px 18px;
   border-radius: 999px;
   cursor: pointer;
   border: none;
   font-weight: 600;
-  font-family: 'Fredoka', Arial, sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all .2s ease;
+  transition: all 0.3s ease;
 }
 
 /* Normal */
@@ -210,18 +200,39 @@ select {
   color: var(--accent);
 }
 
-/* ACTIF (lecture / boucle / aléatoire / répétitions) */
-.btn.active {
+/* ▶️ LECTURE ACTIVE – ROUGE */
+.btn.playing {
+  background-image: linear-gradient(
+    to top,
+    #dbdcd7 0%,
+    #dddcd7 24%,
+    #e2c9cc 30%,
+    #e7627d 46%,
+    #b8235a 59%,
+    #801357 71%,
+    #3d1635 84%,
+    #1c1a27 100%
+  );
+  color: #fff;
+  box-shadow:
+    0 0 0 3px rgba(255, 90, 170, 0.35),
+    0 10px 22px rgba(128, 19, 87, 0.6);
+  transform: translateY(-2px);
+}
+
+/* 🔁 / 🔀 ACTIFS – BLEU / VIOLET */
+.btn.mode-active {
   background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-  color: #fff !important;
+  color: #fff;
   box-shadow:
     0 0 0 3px rgba(106,17,203,0.35),
     0 8px 18px rgba(37,117,252,0.45);
   transform: translateY(-1px);
 }
 
-/* ------------------------- */
+/* ========================= */
 /* FICHE EXERCICE 1 */
+/* ========================= */
 .fiche-row {
   display: flex;
   gap: 20px;
@@ -230,7 +241,6 @@ select {
 .fiche-left,
 .fiche-right {
   width: 50%;
-  min-width: 0;
 }
 
 @media (max-width: 900px) {
@@ -255,17 +265,11 @@ select {
   }
 }
 
-/* ------------------------- */
-/* PRINT – ON NE CHANGE RIEN */
+/* ========================= */
+/* PRINT – EXERCICE 1 SEUL */
+/* ========================= */
 @media print {
-  body {
-    background: #fff;
-    color: #000;
-  }
-
-  .encarts-grid,
-  .selectors-row,
-  .btn {
+  body * {
     display: none !important;
   }
 
@@ -273,60 +277,4 @@ select {
   #print-zone * {
     display: block !important;
   }
-
-  .card.kawaii-card {
-    box-shadow: none;
-    border: none;
-    background: #fff;
-  }
 }
-.logo-link {
-  display: inline-block;
-}
-
-.logo-link:hover {
-  opacity: 0.9;
-}
-.btn.active {
-  background-image: linear-gradient(
-    to top,
-    #dbdcd7 0%,
-    #dddcd7 24%,
-    #e2c9cc 30%,
-    #e7627d 46%,
-    #b8235a 59%,
-    #801357 71%,
-    #3d1635 84%,
-    #1c1a27 100%
-  );
-  color: #fff;
-  box-shadow:
-    0 0 0 3px rgba(255, 90, 170, 0.35),
-    0 8px 18px rgba(128, 19, 87, 0.6);
-  transform: translateY(-1px);
-  transition:
-    background-image 0.4s ease,
-    box-shadow 0.35s ease,
-    transform 0.25s ease;
-}
-/* ============================= */
-/* ASSAUTS – LAYOUT EXERCICE 1 / 2 */
-/* ============================= */
-
-.assauts-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 colonnes desktop */
-  gap: 24px;
-  align-items: stretch;
-}
-
-/* Mobile : empilé */
-@media (max-width: 940px) {
-  .assauts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-@media print {
-  .deroule-grid { columns: 2; }
-}
-
