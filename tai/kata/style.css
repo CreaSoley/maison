@@ -36,6 +36,138 @@ body {
   font-size: 2rem;
   color: #333;
 }
+/* ---------- STYLES POUR L'IMPRESSION (PDF) (inchangés) ---------- */
+@media print {
+  body * { visibility: hidden; }
+  .kata-fiche-card, .kata-fiche-card * { visibility: visible; }
+  .kata-fiche-card { position: absolute; left: 0; top: 0; width: 100%; }
+  .kata-fiche-buttons { display: none !important; }
+  .kata-fiche-title { font-size: 24px; color: #000; }
+  .kata-fiche-steps { font-family: Georgia, serif; font-size: 12pt; color: #000; }
+}
+
+
+/* ---------- NOUVEAUX STYLES : FICHES DE SUIVI (MIS À JOUR) ---------- */
+.fiche-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.selector-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.kata-selector {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    min-width: 250px;
+}
+
+/* La carte affichant la fiche avec la nouvelle structure */
+.kata-fiche-card {
+    display: flex;
+    flex-direction: column; /* Empile les éléments verticalement */
+    gap: 20px;
+    background-color: #fdfdfd;
+    border: 1px solid #eee;
+    border-radius: 12px; /* var(--radius) */
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Image en haut, contenue sans être coupée */
+.kata-fiche-image {
+    width: 100%;
+    max-height: 300px; /* Limite la hauteur pour qu'elle ne prenne pas trop de place */
+    object-fit: contain; /* <-- C'est la clé : contient l'image sans la couper */
+    background-color: #f9f9f9; /* Un fond léger si l'image a des espaces vides */
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+/* Titre en "spicy" */
+.kata-fiche-title {
+    font-size: 2rem; /* Un peu plus grand */
+    color: #ff80d4;
+    margin: 0;
+    text-align: center;
+}
+
+/* Conteneur pour les deux colonnes */
+.kata-fiche-body {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start; /* Aligne les éléments en haut */
+}
+
+/* Colonne de gauche pour les contrôles */
+.kata-fiche-controls {
+    flex: 1; /* Prend 1 partie de l'espace */
+    min-width: 250px; /* Largeur minimale pour la lisibilité */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Groupe pour les boutons pour les espacer joliment */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Colonne de droite pour le déroulé */
+.kata-fiche-steps-container {
+    flex: 2; /* Prend 2 parties de l'espace (plus large) */
+}
+
+.kata-fiche-steps {
+    white-space: pre-wrap;
+    line-height: 1.7;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ff80d4;
+    margin: 0;
+}
+
+/* Styles des boutons d'action (inchangés) */
+.btn-fiche {
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+.btn-pdf { background: linear-gradient(45deg, #84fab0 0%, #8fd3f4 100%); color: white; }
+.btn-whatsapp { background: linear-gradient(45deg, #25D366, #128C7E); color: white; }
+
+/* Responsive : on repasse en une seule colonne sur mobile */
+@media (max-width: 768px) {
+    .kata-fiche-body {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .kata-fiche-controls {
+        min-width: auto;
+    }
+}
 
 .header-text .subtitle {
   font-size: 1.2rem;
