@@ -278,3 +278,31 @@ select {
     display: block !important;
   }
 }
+/* ========================================= */
+/* ENCAR T 3 — PLEINE LARGEUR DESKTOP */
+/* ========================================= */
+
+/* Force l'encart assauts à prendre toute la largeur */
+.full-width-card {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+/* Sécurité : pas de max-width parasite */
+#encart-assauts {
+  max-width: 100%;
+}
+
+/* À l'intérieur : Exercice 1 & 2 côte à côte */
+#encart-assauts .assauts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Mobile : empilé */
+@media (max-width: 940px) {
+  #encart-assauts .assauts-grid {
+    grid-template-columns: 1fr;
+  }
+}
