@@ -1,6 +1,7 @@
-/* -------------------------
+/* ======================================================
    VARIABLES & POLICES
---------------------------*/
+====================================================== */
+
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf");
@@ -11,26 +12,16 @@
 }
 
 body {
+  margin: 0;
   background-color: #f0f0f0;
   font-family: 'Roboto', sans-serif;
+  color: #333;
 }
 
-/* ---------- APPBAR / HEADER ---------- */
-.appbar {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+/* ======================================================
+   HEADER / APPBAR
+====================================================== */
 
-.logo {
-  margin-right: 20px;
-}
-
-/* =========================
-   BANNIÈRE / HEADER
-========================= */
 .appbar {
   background: #000;
   color: #fff;
@@ -38,7 +29,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
 }
 
@@ -51,215 +41,87 @@ body {
 
 .header-text .title {
   font-size: 2.2rem;
-  color: var(--pink-2);
-}
-
-.header-text .subtitle {
-  font-size: 1.1rem;
-  color: #ffd0ea;
-  margin-top: 6px;
-}
-/* ---------- STYLES POUR L'IMPRESSION (PDF) (inchangés) ---------- */
-@media print {
-  body * { visibility: hidden; }
-  .kata-fiche-card, .kata-fiche-card * { visibility: visible; }
-  .kata-fiche-card { position: absolute; left: 0; top: 0; width: 100%; }
-  .kata-fiche-buttons { display: none !important; }
-  .kata-fiche-title { font-size: 24px; color: #000; }
-  .kata-fiche-steps { font-family: Georgia, serif; font-size: 12pt; color: #000; }
-}
-
-
-/* ---------- NOUVEAUX STYLES : FICHES DE SUIVI (MIS À JOUR) ---------- */
-.fiche-header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.selector-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.kata-selector {
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 1rem;
-    min-width: 250px;
-}
-
-/* La carte affichant la fiche avec la nouvelle structure */
-.kata-fiche-card {
-    display: flex;
-    flex-direction: column; /* Empile les éléments verticalement */
-    gap: 20px;
-    background-color: #fdfdfd;
-    border: 1px solid #eee;
-    border-radius: 12px; /* var(--radius) */
-    padding: 20px;
-    margin-top: 20px;
-}
-
-/* Image en haut, contenue sans être coupée */
-.kata-fiche-image {
-    width: 100%;
-    max-height: 300px; /* Limite la hauteur pour qu'elle ne prenne pas trop de place */
-    object-fit: contain; /* <-- C'est la clé : contient l'image sans la couper */
-    background-color: #f9f9f9; /* Un fond léger si l'image a des espaces vides */
-    border-radius: 10px;
-    border: 1px solid #eee;
-}
-
-/* Titre en "spicy" */
-.kata-fiche-title {
-    font-size: 2rem; /* Un peu plus grand */
-    color: #ff80d4;
-    margin: 0;
-    text-align: center;
-}
-
-/* Conteneur pour les deux colonnes */
-.kata-fiche-body {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start; /* Aligne les éléments en haut */
-}
-
-/* Colonne de gauche pour les contrôles */
-.kata-fiche-controls {
-    flex: 1; /* Prend 1 partie de l'espace */
-    min-width: 250px; /* Largeur minimale pour la lisibilité */
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Groupe pour les boutons pour les espacer joliment */
-.button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-/* Colonne de droite pour le déroulé */
-.kata-fiche-steps-container {
-    flex: 2; /* Prend 2 parties de l'espace (plus large) */
-}
-
-.kata-fiche-steps {
-    white-space: pre-wrap;
-    line-height: 1.7;
-    font-family: 'Roboto', sans-serif;
-    color: #333;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid #ff80d4;
-    margin: 0;
-}
-
-/* Styles des boutons d'action (inchangés) */
-.btn-fiche {
-    padding: 8px 15px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.2s;
-}
-.btn-pdf { background: linear-gradient(45deg, #84fab0 0%, #8fd3f4 100%); color: white; }
-.btn-whatsapp { background: linear-gradient(45deg, #25D366, #128C7E); color: white; }
-
-/* Responsive : on repasse en une seule colonne sur mobile */
-@media (max-width: 768px) {
-    .kata-fiche-body {
-        flex-direction: column;
-        gap: 20px;
-    }
-    .kata-fiche-controls {
-        min-width: auto;
-    }
+  color: #ff80d4;
 }
 
 .header-text .subtitle {
   font-size: 1.2rem;
-  color: #555;
+  color: #ffd0ea;
+  margin-top: 6px;
 }
 
-/* ---------- LAYOUT MAIN ---------- */
+/* ======================================================
+   LAYOUT PRINCIPAL
+====================================================== */
+
 .kata-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
   padding: 25px;
 }
+
+.main-content-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+
+@media (min-width: 1024px) {
+  .main-content-container {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ======================================================
+   BLOCS / ENCARTS
+====================================================== */
 
 .kata-block {
   background: white;
   padding: 20px;
   border-radius: 18px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  min-width: 300px;
-}
-
-.wide-block {
-  flex-basis: 100%;
-}
-
-.video-frame,
-.gif-frame {
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 12px;
-  margin-top: 12px;
 }
 
 .section-title {
   font-size: 1.5rem;
-  color: #333;
   border-bottom: 2px solid #ff80d4;
   padding-bottom: 5px;
   margin-bottom: 15px;
 }
 
+/* Vidéo & GIF */
+.video-frame,
+.gif-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+/* ======================================================
+   BOUTONS GÉNÉRIQUES
+====================================================== */
+
 .btn {
   padding: 10px 18px;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   border: none;
   font-size: 1rem;
-  transition: background-color 0.3s, transform 0.2s;
-  text-decoration: none; /* Pour les liens stylés comme des boutons */
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .btn.primary {
   background: #ff80d4;
   color: white;
-}
-
-.btn.ghost {
-  background: white;
-  border: 2px solid #ff80d4;
-  color: #ff80d4;
 }
 
 .btn:disabled {
@@ -271,144 +133,206 @@ body {
   border-radius: 20px;
 }
 
-/* ---------- FLEX CONTAINER ---------- */
-.flex-container {
+/* ======================================================
+   FICHES DE SUIVI – HEADER
+====================================================== */
+
+.fiche-header {
   display: flex;
   flex-wrap: wrap;
-  gap: 25px;
-}
-
-.flex-item {
-  flex: 1;
-  min-width: 300px;
-}
-
-/* ---------- CORRECTION RESPONSIVE MOBILE ---------- */
-/* Pour s'assurer que les éléments s'empilent correctement sur mobile */
-@media (max-width: 768px) {
-  .kata-container {
-    padding: 15px;
-    gap: 15px;
-  }
-  .kata-block {
-    padding: 15px;
-    flex-basis: 100%; /* Force chaque bloc à prendre toute la largeur */
-  }
-  .flex-item {
-    min-width: 100%; /* Évite que les éléments flexibles ne sortent */
-  }
-}
-
-/* ---------- STYLES MÉTRONOME (inchangés) ---------- */
-#metronome { border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-top: 20px; background-color: #fafafa; }
-.lcd-display { background-color: #222; color: #0f0; font-family: 'Courier New', Courier, monospace; font-size: 2.5rem; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 5px; }
-.metronome-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-.metronome-btn { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1rem; }
-.metronome-btn.play { background: #4CAF50; }
-.metronome-btn.stop { background: #f44336; }
-.tempo-control { margin-bottom: 20px; text-align: center; }
-.tempo-control input { width: 80%; }
-.pattern-grid { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
-.beat-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ff80d4; background: white; color: #ff80d4; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-.beat-btn.active { background: #ff80d4; color: white; transform: scale(1.1); }
-.beat-btn.current { box-shadow: 0 0 15px #ff80d4; }
-
-
-/* ---------- NOUVEAUX STYLES : FICHES DE SUIVI ---------- */
-.fiche-header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
 }
 
 .selector-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .kata-selector {
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 1rem;
-    min-width: 250px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  min-width: 240px;
 }
 
-/* La carte affichant la fiche */
+/* ======================================================
+   CARD FICHE KATA (ÉCRAN + PDF)
+====================================================== */
+
 .kata-fiche-card {
-    display: flex;
-    gap: 20px;
-    background-color: #fdfdfd;
-    border: 1px solid #eee;
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-top: 20px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-top: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.kata-fiche-image {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 10px;
-    flex-shrink: 0;
-}
-
-.kata-fiche-content {
-    flex: 1;
-}
-
+/* Titre */
 .kata-fiche-title {
-    font-family: "Spicy", cursive;
-    font-size: 1.8rem;
-    color: var(--primary-dark, #ff80d4);
-    margin: 0 0 10px 0;
+  text-align: center;
+  font-size: 2rem;
+  color: #ff80d4;
+  margin: 1rem 0 1.5rem;
+}
+
+/* Image */
+.kata-fiche-image {
+  display: block;
+  margin: 0 auto 1.5rem;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f9f9f9;
+}
+
+/* Corps */
+.kata-fiche-body {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
+
+.kata-fiche-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .kata-fiche-steps {
-    white-space: pre-wrap; /* Respecte les sauts de ligne du CSV */
-    line-height: 1.6;
-    color: #333;
+  background: #f8f8f8;
+  padding: 1rem;
+  border-radius: 12px;
+  white-space: pre-wrap;
+  line-height: 1.7;
 }
 
-.kata-fiche-buttons {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+/* Boutons fiche */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-/* Styles des boutons d'action de la fiche */
 .btn-fiche {
-    padding: 8px 15px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.2s;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-.btn-pdf { background: linear-gradient(45deg, #84fab0 0%, #8fd3f4 100%); color: white; }
-.btn-whatsapp { background: linear-gradient(45deg, #25D366, #128C7E); color: white; }
 
-/* ---------- STYLES POUR L'IMPRESSION (PDF) ---------- */
+.btn-pdf {
+  background: linear-gradient(45deg, #84fab0, #8fd3f4);
+  color: white;
+}
+
+.btn-whatsapp {
+  background: linear-gradient(45deg, #25D366, #128C7E);
+  color: white;
+}
+
+/* Mobile fiche */
+@media (max-width: 768px) {
+  .kata-fiche-body {
+    grid-template-columns: 1fr;
+  }
+
+  .kata-fiche-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* ======================================================
+   MÉTRONOME (inchangé)
+====================================================== */
+
+#metronome {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #fafafa;
+}
+
+.lcd-display {
+  background-color: #222;
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  font-size: 2.5rem;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 5px;
+}
+
+.metronome-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.metronome-btn {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.metronome-btn.play { background: #4CAF50; }
+.metronome-btn.stop { background: #f44336; }
+
+.tempo-control {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.tempo-control input {
+  width: 80%;
+}
+
+/* ======================================================
+   PRINT / PDF
+====================================================== */
+
 @media print {
-  /* Cacher tout sauf la carte */
-  body * { visibility: hidden; }
-  .kata-fiche-card, .kata-fiche-card * { visibility: visible; }
-  .kata-fiche-card { position: absolute; left: 0; top: 0; width: 100%; }
-  
-  /* Cacher les boutons d'action sur la version imprimée */
-  .kata-fiche-buttons { display: none !important; }
-  
-  /* Ajuster les polices pour l'impression */
-  .kata-fiche-title { font-size: 24px; color: #000; }
-  .kata-fiche-steps { font-family: Georgia, serif; font-size: 12pt; color: #000; }
+  body * {
+    visibility: hidden;
+  }
+
+  .kata-fiche-card,
+  .kata-fiche-card * {
+    visibility: visible;
+  }
+
+  .kata-fiche-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  button,
+  select,
+  .slider-container {
+    display: none !important;
+  }
 }
