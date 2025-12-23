@@ -309,4 +309,24 @@ select {
     box-shadow 0.35s ease,
     transform 0.25s ease;
 }
+/* ============================= */
+/* ASSAUTS – LAYOUT EXERCICE 1 / 2 */
+/* ============================= */
+
+.assauts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 colonnes desktop */
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Mobile : empilé */
+@media (max-width: 940px) {
+  .assauts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media print {
+  .deroule-grid { columns: 2; }
+}
 
