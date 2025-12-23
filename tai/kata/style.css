@@ -51,12 +51,8 @@ body {
 }
 
 /* ======================================================
-   LAYOUT PRINCIPAL
+   LAYOUT PRINCIPAL – COLONNES ÉQUILIBRÉES
 ====================================================== */
-
-.kata-container {
-  padding: 25px;
-}
 
 .main-content-container {
   display: grid;
@@ -64,13 +60,22 @@ body {
   gap: 25px;
 }
 
+/* Desktop : colonnes verrouillées */
 @media (min-width: 1024px) {
   .main-content-container {
     grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "video gif"
+      "training fiches";
     align-items: start;
   }
-}
 
+  /* Attribution explicite */
+  .kata-block:nth-of-type(1) { grid-area: video; }
+  .kata-block:nth-of-type(2) { grid-area: gif; }
+  .kata-block:nth-of-type(3) { grid-area: training; }
+  .kata-block:nth-of-type(4) { grid-area: fiches; }
+}
 /* ======================================================
    BLOCS / ENCARTS
 ====================================================== */
@@ -188,9 +193,10 @@ body {
 /* Image */
 .kata-fiche-image {
   display: block;
-  margin: 0 auto 1.5rem;
+  width: 100%;
   max-width: 100%;
   height: auto;
+  margin: 0 auto 1.5rem;
   object-fit: contain;
   border-radius: 12px;
   background: #f9f9f9;
