@@ -1,5 +1,5 @@
 /* ========================= */
-/* IMPORTS – TOUJOURS EN PREMIER */
+/* IMPORTS (TOUJOURS EN HAUT) */
 /* ========================= */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
 
@@ -11,21 +11,18 @@
 /* ========================= */
 /* BASE */
 /* ========================= */
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
 }
 
 html, body {
   width: 100%;
-  margin: 0;
-  padding: 0;
+  min-height: 100dvh;
   overflow-x: hidden;
 }
 
 body {
-  min-height: 100vh;
+  margin: 0;
   font-family: 'Fredoka', Arial, sans-serif;
   background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
   color: #222;
@@ -93,7 +90,6 @@ body {
   gap: 24px;
 }
 
-/* Mobile */
 @media (max-width: 940px) {
   .encarts-grid {
     grid-template-columns: 1fr;
@@ -101,15 +97,15 @@ body {
 }
 
 /* ========================= */
-/* CARTES */
+/* CARTES KAWAII */
 /* ========================= */
-.card.kawaii-card {
+.card.kawaii-card,
+.assaut-card {
   background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
   border-radius: 20px;
   padding: 18px;
   border: 2px solid var(--pink-2);
   box-shadow: var(--card-shadow);
-  width: 100%;
 }
 
 /* ========================= */
@@ -124,81 +120,35 @@ body {
 }
 
 /* ========================= */
-/* ENCAR T 3 – ASSAUTS */
+/* ENCART 3 PLEINE LARGEUR */
 /* ========================= */
-
-/* Prend toute la largeur du grid */
 .full-width-card {
   grid-column: 1 / -1;
 }
 
-/* Conteneur Exercice 1 & 2 */
+/* Exercice 1 & 2 côte à côte */
 .assauts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
-/* Mobile : empilé */
 @media (max-width: 940px) {
   .assauts-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* Cartes internes */
-.assaut-card {
-  background: linear-gradient(180deg,#fff9fc,#ffffff);
-  border-radius: 18px;
-  padding: 18px;
-  border: 1px solid #ffd7f0;
-  box-shadow: 0 8px 18px rgba(255,120,190,0.12);
-}
-
 /* ========================= */
-/* EXERCICE 1 – FICHE */
+/* IMAGES / VIDÉOS */
 /* ========================= */
-.fiche-row {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-
-.fiche-left,
-.fiche-right {
-  width: 50%;
-  min-width: 0;
-}
-
-@media (max-width: 900px) {
-  .fiche-row {
-    flex-direction: column;
-  }
-  .fiche-left,
-  .fiche-right {
-    width: 100%;
-  }
-}
-
-/* Image – NE SE DÉFORME PLUS */
-.fiche-photo img {
+.fiche-photo img,
+.tech-video iframe {
   width: 100%;
   max-height: 420px;
   object-fit: contain;
   border-radius: 14px;
   background: #fff;
-}
-
-/* Déroulé */
-.deroule-grid {
-  columns: 2;
-  column-gap: 30px;
-}
-
-@media (max-width: 900px) {
-  .deroule-grid {
-    columns: 1;
-  }
 }
 
 /* ========================= */
@@ -211,19 +161,18 @@ body {
   margin: 18px 0;
 }
 
-.chip {
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: var(--pink-2);
-  font-weight: 600;
-  cursor: pointer;
-}
-
 .sequence-zone {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   margin: 20px 0;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 22px 0;
 }
 
 /* ========================= */
@@ -231,12 +180,11 @@ body {
 /* ========================= */
 input,
 select {
-  width: 100%;
   padding: 10px 12px;
   border-radius: 12px;
   border: 2px solid var(--pink-2);
-  margin-bottom: 16px;
-  font-family: 'Fredoka', Arial, sans-serif;
+  margin-bottom: 14px;
+  font-family: inherit;
 }
 
 /* ========================= */
@@ -254,7 +202,6 @@ select {
   transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease;
 }
 
-/* Normal */
 .btn.primary {
   background: var(--accent);
   color: #fff;
@@ -266,7 +213,7 @@ select {
   color: var(--accent);
 }
 
-/* Lecture active */
+/* ▶️ LECTURE ACTIVE */
 .btn.playing {
   background-image: linear-gradient(
     to top,
@@ -280,38 +227,69 @@ select {
     #1c1a27 100%
   );
   color: #fff;
-  box-shadow:
-    0 0 0 3px rgba(255, 90, 170, 0.35),
-    0 10px 22px rgba(128, 19, 87, 0.6);
+  box-shadow: 0 0 0 3px rgba(255,90,170,.35),
+              0 10px 22px rgba(128,19,87,.6);
 }
 
-/* Boucle / Aléatoire actifs */
+/* 🔁 / 🔀 ACTIFS */
 .btn.mode-active {
   background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
   color: #fff;
-  box-shadow:
-    0 0 0 3px rgba(106,17,203,0.35),
-    0 8px 18px rgba(37,117,252,0.45);
-}
-
-/* Ligne boutons */
-.btn-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin: 20px 0;
+  box-shadow: 0 0 0 3px rgba(106,17,203,.35),
+              0 8px 18px rgba(37,117,252,.45);
 }
 
 /* ========================= */
-/* PRINT – EXERCICE 1 SEUL */
+/* FICHE EXERCICE 1 */
+/* ========================= */
+.fiche-row {
+  display: flex;
+  gap: 20px;
+}
+
+.fiche-left,
+.fiche-right {
+  width: 50%;
+}
+
+@media (max-width: 900px) {
+  .fiche-row {
+    flex-direction: column;
+  }
+  .fiche-left,
+  .fiche-right {
+    width: 100%;
+  }
+}
+
+.deroule-grid {
+  columns: 2;
+  column-gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .deroule-grid {
+    columns: 1;
+  }
+}
+
+/* ========================= */
+/* PRINT – EXERCICE 1 UNIQUEMENT */
 /* ========================= */
 @media print {
   body * {
-    display: none !important;
+    visibility: hidden;
   }
 
   #print-zone,
   #print-zone * {
-    display: block !important;
+    visibility: visible;
+  }
+
+  #print-zone {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
   }
 }
