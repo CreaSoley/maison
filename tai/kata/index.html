@@ -48,67 +48,89 @@
 
      <!-- ... (votre header et le début du main sont inchangés) ... -->
 
+<!-- CONTENU -->
 <main class="kata-container">
-    
-    <!-- ====================================================== -->
-    <!-- NOUVEAU CONTENEUR POUR LA MISE EN PAGE EN DEUX COLONNES -->
-    <!-- ====================================================== -->
-    <div class="main-content-container">
+  <div class="main-content-container">
 
-      <!-- ENCART 3 : Zone d'entraînement -->
-      <section class="kata-block block-training">
-        <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
-        
-        <!-- Le contenu de l'encart -->
-        <div>
-            <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
-            <p style="margin-top:10px;font-size:1.2rem;">
-              Kata sélectionné : <span id="kataResult">-</span>
-            </p>
+    <!-- ENCART 1 : vidéo -->
+    <section class="kata-block block-video">
+      <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
+      <iframe class="video-frame"
+        src="https://www.youtube.com/embed/5MZsQbEMF6c"
+        frameborder="0"
+        allowfullscreen></iframe>
+    </section>
+
+    <!-- ENCART 2 : GIF -->
+    <section class="kata-block block-gif">
+      <h2 class="spicy section-title">🎬 Démo animée</h2>
+      <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
+    </section>
+
+    <!-- ENCART 3 : Zone d'entraînement -->
+    <section class="kata-block block-training">
+      <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
+
+      <button id="btnKataRandom" class="btn primary kawaii">
+        🎲 Nouveau tirage
+      </button>
+
+      <p style="margin-top:10px;font-size:1.2rem;">
+        Kata sélectionné : <span id="kataResult">-</span>
+      </p>
+
+      <!-- Métronome -->
+      <div id="metronome">
+        <div class="lcd-display" id="lcdDisplay">120 | 1</div>
+
+        <div class="tempo-control">
+          <label for="bpmSlider">
+            Tempo (BPM) : <span id="bpmValue">120</span>
+          </label>
+          <input type="range" id="bpmSlider" min="40" max="220" value="120">
         </div>
 
-        <!-- Métronome -->
-        <div id="metronome">
-          <div class="lcd-display" id="lcdDisplay">120 | 1</div>
-          <div class="tempo-control">
-              <label for="bpmSlider">Tempo (BPM) : <span id="bpmValue">120</span></label>
-              <input type="range" id="bpmSlider" min="40" max="220" value="120">
-          </div>
-          <div class="metronome-controls">
-              <button id="playBtn" class="metronome-btn play"><span class="material-icons">play_arrow</span></button>
-              <button id="stopBtn" class="metronome-btn stop"><span class="material-icons">stop</span></button>
-          </div>
-          <div class="pattern-grid" id="patternGrid"></div>
-        </div>
-      </section>
-
-      <!-- ENCART 4 : Fiches de suivi -->
-      <section class="kata-block block-fiches">
-        <h2 class="spicy section-title">📝 Mes fiches de suivi</h2>
-        
-        <div class="fiche-header">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSefEKw3CssjHA6MLv4Uq_6hImqztUgLmpnDrHOn0gQBDw8dEw/viewform?usp=header" 
-               target="_blank" 
-               class="btn primary kawaii">
-                <span class="material-icons">add_circle</span> Ajouter un kata
-            </a>
-            
-            <div class="selector-container">
-                <label for="kataSelector">Choisir une fiche à consulter :</label>
-                <select id="kataSelector" class="kata-selector">
-                    <option value="">-- Chargement en cours... --</option>
-                </select>
-            </div>
+        <div class="metronome-controls">
+          <button id="playBtn" class="metronome-btn play">
+            <span class="material-icons">play_arrow</span>
+          </button>
+          <button id="stopBtn" class="metronome-btn stop">
+            <span class="material-icons">stop</span>
+          </button>
         </div>
 
-        <div id="kataCardDisplay">
-            <!-- La fiche sélectionnée sera affichée ici -->
+        <div class="pattern-grid" id="patternGrid"></div>
+      </div>
+    </section>
+
+    <!-- ENCART 4 : Fiches -->
+    <section class="kata-block block-fiches">
+      <h2 class="spicy section-title">📝 Mes fiches de suivi</h2>
+
+      <div class="fiche-header">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSefEKw3CssjHA6MLv4Uq_6hImqztUgLmpnDrHOn0gQBDw8dEw/viewform?usp=header"
+          target="_blank"
+          class="btn primary kawaii">
+          <span class="material-icons">add_circle</span>
+          Ajouter un kata
+        </a>
+
+        <div class="selector-container">
+          <label for="kataSelector">
+            Choisir une fiche à consulter :
+          </label>
+          <select id="kataSelector" class="kata-selector">
+            <option value="">-- Chargement en cours... --</option>
+          </select>
         </div>
-      </section>
+      </div>
 
-    </div> <!-- Fermeture de main-content-container -->
+      <div id="kataCardDisplay"></div>
+    </section>
 
+  </div>
 </main>
+
 
 <!-- ... (la fin de votre fichier avec les scripts est inchangée) ... -->
 
