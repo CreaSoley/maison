@@ -9,12 +9,16 @@
   <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- IMPORTANT : Ajout de la bibliothèque PapaParse -->
+  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+
+  <link rel="stylesheet" href="kata.css">
 </head>
 
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER (inchangé) -->
   <header class="appbar">
     <a class="logo" href="../index.html" title="Accueil">
       <img src="logo.png" alt="logo" class="logo-big">
@@ -28,97 +32,77 @@
   <!-- CONTENU -->
   <main class="kata-container">
 
-    <!-- ENCART 1 : vidéo -->
+    <!-- ENCART 1 : vidéo (inchangé) -->
     <section class="kata-block">
       <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
       <iframe class="video-frame" src="https://www.youtube.com/embed/5MZsQbEMF6c" frameborder="0" allowfullscreen></iframe>
     </section>
 
-    <!-- ENCART 2 : GIF -->
+    <!-- ENCART 2 : GIF (inchangé) -->
     <section class="kata-block">
       <h2 class="spicy section-title">🎬 Démo animée</h2>
       <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
     </section>
 
-    <!-- ENCART 3 : MODIFIÉ - Tirage + Lecteur + Métronome + Google Forms -->
+    <!-- ENCART 3 : Zone d'entraînement (Tirage + Métronome) -->
     <section class="kata-block wide-block">
       <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
-
       <div class="flex-container">
-        <!-- Partie GAUCHE : Tirage + Lecteur + Métronome -->
         <div class="flex-item">
           <div>
             <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
             <p style="margin-top:10px;font-size:1.2rem;">
               Kata sélectionné : <span id="kataResult">-</span>
             </p>
-            
-            <!-- NOUVEAU : Contrôles de lecture de la carte -->
-            <div class="tts-controls">
-                <button id="btnSpeak" class="btn primary">
-                    <span class="material-icons">play_arrow</span> Lire
-                </button>
-                <button id="btnStopSpeak" class="btn ghost">
-                    <span class="material-icons">stop</span> Stop
-                </button>
-                <div class="slider-container">
-                    <label for="speedRate">Vitesse :</label>
-                    <input type="range" id="speedRate" min="0.5" max="2" value="1" step="0.1">
-                    <span id="speedValue">1.0x</span>
-                </div>
-            </div>
           </div>
-
-          <!-- NOUVEAU MÉTRONOME -->
+          <!-- Métronome (identique à avant) -->
           <div id="metronome">
             <div class="lcd-display" id="lcdDisplay">120 | 1</div>
-            
             <div class="tempo-control">
                 <label for="bpmSlider">Tempo (BPM) : <span id="bpmValue">120</span></label>
                 <input type="range" id="bpmSlider" min="40" max="220" value="120">
             </div>
-
             <div class="metronome-controls">
                 <button id="playBtn" class="metronome-btn play"><span class="material-icons">play_arrow</span></button>
                 <button id="stopBtn" class="metronome-btn stop"><span class="material-icons">stop</span></button>
             </div>
-
-            <div class="pattern-grid" id="patternGrid">
-                <!-- Les boutons de motif seront générés par JS -->
-            </div>
+            <div class="pattern-grid" id="patternGrid"></div>
           </div>
-
-        </div>
-
-        <!-- Partie DROITE : Google Forms -->
-        <div class="flex-item google-forms-integration">
-          <h3 class="spicy section-title">📝 Remplir ma fiche de suivi</h3>
-          <p>
-            Pour suivre votre progression, utilisez le formulaire ci-dessous. Chaque réponse est automatiquement transformée en une fiche PDF que vous pouvez conserver.
-          </p>
-          <a href="https://docs.google.com/forms/d/e/VOTRE_ID_FORMULAIRE/viewform" target="_blank" class="btn primary kawaii" style="display:inline-block; margin-top: 15px;">
-            <span class="material-icons">description</span> Accéder au formulaire
-          </a>
-          
-          <h4 style="margin-top: 30px;">📄 Comment ça marche ?</h4>
-          <ol>
-            <li>Vous remplissez une fiche via le lien ci-dessus.</li>
-            <li>Les réponses sont enregistrées dans une Google Sheet.</li>
-            <li>Un script automatique (Google Apps Script) se déclenche.</li>
-            <li>Il utilise vos réponses pour remplir un modèle de fiche (Google Doc).</li>
-            <li>Le document final est sauvegardé en PDF dans votre Google Drive.</li>
-          </ol>
-          <p style="font-size: 0.9em; color: #666;">
-            <strong>Note :</strong> La mise en place de l'automatisation PDF nécessite une configuration unique dans Google Drive. Des tutoriels sont disponibles en cherchant "Google Apps Script generate PDF from Form".
-          </p>
         </div>
       </div>
+    </section>
+
+    <!-- NOUVEL ENCART 4 : Fiches de suivi -->
+    <section class="kata-block wide-block">
+        <h2 class="spicy section-title">📝 Mes fiches de suivi</h2>
+        
+        <div class="fiche-header">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSefEKw3CssjHA6MLv4Uq_6hImqztUgLmpnDrHOn0gQBDw8dEw/viewform?usp=header" 
+               target="_blank" 
+               class="btn primary kawaii">
+                <span class="material-icons">add_circle</span> Ajouter un kata
+            </a>
+            
+            <div class="selector-container">
+                <label for="kataSelector">Choisir une fiche à consulter :</label>
+                <select id="kataSelector" class="kata-selector">
+                    <option value="">-- Chargement en cours... --</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="kataCardDisplay">
+            <!-- La fiche sélectionnée sera affichée ici -->
+        </div>
     </section>
 
   </main>
 
   <!-- SCRIPT -->
-  <script src="script.js"></script>
+  <!-- Script pour la zone d'entraînement -->
+  <script src="kata.js"></script>
+  <!-- NOUVEAU script pour la gestion des fiches -->
+  <script src="newkata.js"></script>
 
 </body>
 
