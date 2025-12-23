@@ -1,109 +1,145 @@
-<!doctype html>
-<html lang="fr">
+document.addEventListener('DOMContentLoaded', () => {
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Préparation 2ème Dan – Kata</title>
+    // ======================================================
+    // SCRIPT DU TIRAGE ALÉATOIRE (CONSERVÉ)
+    // ======================================================
+    const kataList = [
+        "Kata Escargot",
+        "Kata Métronome",
+        "Kata Speedy",
+        "Kata Jour J",
+        "Focus Transition",
+        "Version Bunkaï"
+    ];
 
-  <!-- Material Icons + Police Spicy -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  
-  <!-- IMPORTANT : Ajout de la bibliothèque PapaParse -->
-  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    const btnRandom = document.getElementById("btnKataRandom");
+    const kataResult = document.getElementById("kataResult");
 
-  <link rel="stylesheet" href="kata.css">
-</head>
+    btnRandom.addEventListener("click", () => {
+        const randomIndex = Math.floor(Math.random() * kataList.length);
+        kataResult.textContent = kataList[randomIndex];
+    });
 
-<body>
 
-  <!-- HEADER (inchangé) -->
-  <header class="appbar">
-    <a class="logo" href="../index.html" title="Accueil">
-      <img src="logo.png" alt="logo" class="logo-big">
-    </a>
-    <div class="header-text">
-      <div class="title spicy">Préparation 2eme Dan</div>
-      <div class="subtitle spicy">Tai-Jitsu – Kata</div>
-    </div>
-  </header>
+    // ======================================================
+    // SCRIPT MÉTRONOME AVANCÉ (COMPLET)
+    // ======================================================
+    let isPlaying = false;
+    let intervalId = null;
+    let currentBeat = -1;
+    
+    const bpmSlider = document.getElementById('bpmSlider');
+    const bpmValue = document.getElementById('bpmValue');
+    const playBtn = document.getElementById('playBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const lcdDisplay = document.getElementById('lcdDisplay');
+    const patternGrid = document.getElementById('patternGrid');
+    
+    let rhythmPattern = [true, false, false, false]; // Par défaut : 4/4
 
-  <!-- CONTENU -->
-  <main class="kata-container">
+    function initializePatternGrid() {
+        patternGrid.innerHTML = '';
+        rhythmPattern.forEach((isActive, index) => {
+            const beatBtn = document.createElement('button');
+            beatBtn.className = 'beat-btn';
+            beatBtn.textContent = index + 1;
+            if (isActive) {
+                beatBtn.classList.add('active');
+            }
+            beatBtn.addEventListener('click', () => toggleBeat(index));
+            patternGrid.appendChild(beatBtn);
+        });
+    }
 
-    <!-- ENCART 1 : vidéo (inchangé) -->
-    <section class="kata-block">
-      <h2 class="spicy section-title">🎥 Kata en vidéo</h2>
-      <iframe class="video-frame" src="https://www.youtube.com/embed/5MZsQbEMF6c" frameborder="0" allowfullscreen></iframe>
-    </section>
+    function toggleBeat(index) {
+        rhythmPattern[index] = !rhythmPattern[index];
+        const beatBtns = patternGrid.querySelectorAll('.beat-btn');
+        if (rhythmPattern[index]) {
+            beatBtns[index].classList.add('active');
+        } else {
+            beatBtns[index].classList.remove('active');
+        }
+    }
 
-    <!-- ENCART 2 : GIF (inchangé) -->
-    <section class="kata-block">
-      <h2 class="spicy section-title">🎬 Démo animée</h2>
-      <img class="gif-frame" src="kata2.gif" alt="Démo Kata">
-    </section>
-
-    <!-- ENCART 3 : Zone d'entraînement (Tirage + Métronome) -->
-    <section class="kata-block wide-block">
-      <h2 class="spicy section-title">🎲 Zone d'entraînement</h2>
-      <div class="flex-container">
-        <div class="flex-item">
-          <div>
-            <button id="btnKataRandom" class="btn primary kawaii">🎲 Nouveau tirage</button>
-            <p style="margin-top:10px;font-size:1.2rem;">
-              Kata sélectionné : <span id="kataResult">-</span>
-            </p>
-          </div>
-          <!-- Métronome (identique à avant) -->
-          <div id="metronome">
-            <div class="lcd-display" id="lcdDisplay">120 | 1</div>
-            <div class="tempo-control">
-                <label for="bpmSlider">Tempo (BPM) : <span id="bpmValue">120</span></label>
-                <input type="range" id="bpmSlider" min="40" max="220" value="120">
-            </div>
-            <div class="metronome-controls">
-                <button id="playBtn" class="metronome-btn play"><span class="material-icons">play_arrow</span></button>
-                <button id="stopBtn" class="metronome-btn stop"><span class="material-icons">stop</span></button>
-            </div>
-            <div class="pattern-grid" id="patternGrid"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- NOUVEL ENCART 4 : Fiches de suivi -->
-    <section class="kata-block wide-block">
-        <h2 class="spicy section-title">📝 Mes fiches de suivi</h2>
+    function playTick() {
+        const beatBtns = patternGrid.querySelectorAll('.beat-btn');
+        beatBtns.forEach(btn => btn.classList.remove('current'));
         
-        <div class="fiche-header">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSefEKw3CssjHA6MLv4Uq_6hImqztUgLmpnDrHOn0gQBDw8dEw/viewform?usp=header" 
-               target="_blank" 
-               class="btn primary kawaii">
-                <span class="material-icons">add_circle</span> Ajouter un kata
-            </a>
-            
-            <div class="selector-container">
-                <label for="kataSelector">Choisir une fiche à consulter :</label>
-                <select id="kataSelector" class="kata-selector">
-                    <option value="">-- Chargement en cours... --</option>
-                </select>
-            </div>
-        </div>
+        currentBeat = (currentBeat + 1) % rhythmPattern.length;
+        
+        beatBtns[currentBeat].classList.add('current');
 
-        <div id="kataCardDisplay">
-            <!-- La fiche sélectionnée sera affichée ici -->
-        </div>
-    </section>
+        const frequency = rhythmPattern[currentBeat] ? 1000 : 600;
+        playClickSound(frequency);
+        
+        updateDisplay();
+    }
 
-  </main>
+    function playClickSound(frequency) {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
 
-  <!-- SCRIPT -->
-  <!-- Script pour la zone d'entraînement -->
-  <script src="kata.js"></script>
-  <!-- NOUVEAU script pour la gestion des fiches -->
-  <script src="newkata.js"></script>
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
 
-</body>
+        oscillator.frequency.value = frequency;
+        oscillator.type = 'sine';
 
-</html>
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+    }
+
+    function startMetronome() {
+        if (isPlaying) return;
+        isPlaying = true;
+        const bpm = parseInt(bpmSlider.value);
+        const interval = 60000 / bpm;
+
+        intervalId = setInterval(playTick, interval);
+        playBtn.innerHTML = '<span class="material-icons">pause</span>';
+    }
+
+    function stopMetronome() {
+        if (!isPlaying) return;
+        isPlaying = false;
+        clearInterval(intervalId);
+        currentBeat = -1;
+        playBtn.innerHTML = '<span class="material-icons">play_arrow</span>';
+        updateDisplay();
+        patternGrid.querySelectorAll('.beat-btn').forEach(btn => btn.classList.remove('current'));
+    }
+
+    function updateDisplay() {
+        const bpm = bpmSlider.value;
+        const beat = currentBeat + 1;
+        lcdDisplay.textContent = `${bpm} | ${beat}`;
+    }
+
+    playBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            stopMetronome();
+        } else {
+            startMetronome();
+        }
+    });
+
+    stopBtn.addEventListener('click', stopMetronome);
+
+    bpmSlider.addEventListener('input', () => {
+        bpmValue.textContent = bpmSlider.value;
+        updateDisplay();
+        if (isPlaying) {
+            stopMetronome();
+            startMetronome();
+        }
+    });
+
+    // Initialisation au chargement de la page
+    initializePatternGrid();
+    updateDisplay();
+
+});
