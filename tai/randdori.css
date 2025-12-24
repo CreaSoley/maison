@@ -12,7 +12,7 @@
 .spicy { font-family: "Spicy", cursive; }
 
 /* =========================
-   VARIABLES & THÈME
+   VARIABLES
 ========================= */
 :root {
   --pink-0:#fff6fb;
@@ -26,17 +26,15 @@
 }
 
 /* =========================
-   RESET & BASE
+   BASE
 ========================= */
 *,
 *::before,
-*::after{
-  box-sizing:border-box;
-}
+*::after { box-sizing:border-box; }
 
 html,body{
   width:100%;
-  overflow-x:visible; /* évite tronquage */
+  overflow-x:hidden;
 }
 
 body{
@@ -46,38 +44,8 @@ body{
   color:var(--text);
 }
 
-img{
-  max-width:100%;
-  height:auto;
-  display:block;
-}
-
 /* =========================
-   APPBAR
-========================= */
-.appbar{
-  background:linear-gradient(135deg,#000 0%,#222 100%);
-  color:#fff;
-  padding:24px 12px;
-  border-bottom-left-radius:30px;
-  border-bottom-right-radius:30px;
-  box-shadow:0 6px 18px rgba(0,0,0,.25);
-  text-align:center;
-}
-
-.logo-big{
-  width:130px;
-  max-width:60vw;
-}
-
-.header-text .title{
-  color:#ffbde7;
-  font-size:2.2rem;
-  text-shadow:0 3px 0 #000;
-}
-
-/* =========================
-   CONTAINERS KAWAII
+   CARTE GÉNÉRALE
 ========================= */
 .card,
 .kawaii-card,
@@ -85,52 +53,24 @@ img{
   background:linear-gradient(180deg,#fff9fd,#fff4fb);
   border-radius:26px;
   border:3px solid var(--pink-2);
-  padding:18px;
+  padding:26px 20px;          /* ↑ aération */
+  margin-bottom:22px;         /* espace entre encarts */
   box-shadow:var(--card-shadow);
 }
 
-/* contour rose autour de la page */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  border:12px solid #ffd8ef;
-  border-radius:24px;
-  pointer-events:none;
-}
-
 /* =========================
-   TITRES KAWAII
-========================= */
-.section-title{
-  font-size:1.9rem;
-  text-align:center;
-  margin:10px 0 14px;
-  color:var(--hot-pink);
-  text-shadow:2px 2px 0 #ffe3f8, 4px 4px 0 #ffc6ec;
-  letter-spacing:1px;
-}
-
-/* =========================
-   GRID PRINCIPALE
+   GRILLE PRINCIPALE
 ========================= */
 .encarts-grid{
   max-width:1200px;
-  margin:24px auto;
+  margin:26px auto 40px auto;
   padding:0 14px;
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:22px;
-  min-width:0;
+  gap:28px;                   /* ↑ espace entre cartes */
 }
 
-.encarts-grid>*{
-  min-width:0;
-}
-
-.full-width-card{
-  grid-column:1/-1;
-}
+.full-width-card{ grid-column:1/-1; }
 
 @media(max-width:940px){
   .encarts-grid{
@@ -139,114 +79,121 @@ body::before{
 }
 
 /* =========================
-   BOUTONS
+   TITRES
 ========================= */
-.btn{
-  padding:10px 16px;
-  border-radius:999px;
-  font-weight:700;
-  border:none;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  box-shadow:0 4px 0 rgba(214,69,155,.6);
-  transition:transform .1s, box-shadow .1s, background .1s;
-}
-
-/* visuel kawaii */
-.btn.primary{
-  background:linear-gradient(135deg,#ff7ad6,#ff4fb4);
-  color:white;
-}
-
-.btn.ghost{
-  background:#fff;
-  border:2px solid var(--accent);
-  color:var(--accent);
-}
-
-/* état actif restauré */
-.btn.active,
-.btn.is-active{
-  background:linear-gradient(135deg,#ff2fa9,#ff6fd4);
-  color:#fff;
-  box-shadow:0 0 0 3px rgba(255,20,147,.25);
-}
-
-/* clic kawaii */
-.btn:active{
-  transform:translateY(2px);
-  box-shadow:0 2px 0 rgba(214,69,155,.6);
-}
-
-.btn-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
+.section-title{
+  font-size:1.9rem;
+  text-align:center;
+  margin:4px 0 22px;          /* ↓ pour respirer sous le titre */
+  color:var(--hot-pink);
+  text-shadow:2px 2px 0 #ffe3f8, 4px 4px 0 #ffc6ec;
 }
 
 /* =========================
-   CHIPS
+   BLOCS INTERNES
 ========================= */
+
+/* espace vertical homogène dans chaque carte */
+.card > * + *{
+  margin-top:14px;
+}
+
+/* texte introductif */
+p,
+label{
+  margin:6px 0 10px 0;
+}
+
+/* =========================
+   SELECTS & CONTROLES
+========================= */
+.selectors-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 14px;
+  margin-top:4px;
+  margin-bottom:14px;         /* ↑ espace dessous menus */
+}
+
+select,
+input[type="text"],
+input[type="range"]{
+  padding:10px 12px;
+  border-radius:14px;
+  border:2px solid var(--pink-2);
+  background:#fff;
+  font-family:'Fredoka';
+}
+
+/* =========================
+   BOUTONS
+========================= */
+.btn-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;                   /* ↑ espace entre boutons */
+  margin-top:12px;
+  margin-bottom:6px;
+}
+
+.btn{
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+/* état actif visuel */
+.btn.active{
+  background:linear-gradient(135deg,#ff2fa9,#ff6fd4);
+  color:white;
+}
+
+/* =========================
+   CHIPS EXERCICE 2
+========================= */
+.chips-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 8px;
+  margin-top:10px;
+  margin-bottom:14px;        /* ↑ espace sous la zone chips */
+}
+
 .chip{
-  padding:7px 12px;
+  padding:8px 14px;
   border-radius:999px;
   background:linear-gradient(180deg,#ffe8f5,#ffd4ee);
   border:2px solid #ffbde7;
   box-shadow:0 4px 0 rgba(255,170,210,.45);
-  font-weight:600;
-  cursor:pointer;
-  white-space:normal;
-}
-
-.chip:hover{
-  background:#ffdff2;
 }
 
 /* =========================
-   LISTE SÉQUENCE
+   SÉQUENCE LISTE
 ========================= */
+.sequence-zone{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:12px;
+}
+
 .sequence-item{
-  background:#fff;
+  padding:10px 12px;
   border-radius:16px;
-  padding:8px 12px;
+  background:white;
   box-shadow:0 4px 12px rgba(0,0,0,.05);
 }
 
 /* =========================
-   FICHE
-========================= */
-.fiche-row{
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap;
-}
-
-.fiche-left,
-.fiche-right{
-  width:50%;
-  min-width:0;
-}
-
-@media(max-width:900px){
-  .fiche-left,
-  .fiche-right{
-    width:100%;
-  }
-}
-
-/* =========================
-   ASSAUTS
+   ASSAUTS FLEX
 ========================= */
 .assauts-grid{
   display:flex;
   flex-wrap:wrap;
-  gap:20px;
+  gap:22px;                   /* ↑ espace entre colonnes */
 }
 
 .exercice{
   flex:1;
-  min-width:260px;
-  max-width:100%;
+  min-width:280px;
 }
