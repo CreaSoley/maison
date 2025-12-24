@@ -38,14 +38,14 @@
    "nom": "OSAE UKE",
    "categorie": "uke waza",
    "description": "Défense par pression ou immobilisation avec la main",
-   "photo": "https://i.pinimg.com/736x/83/52/0f/83520f6b9ba1e7adfa76055e12838bae.jpg",
+   "photo": "image manquante",
    "video": "https://www.youtube.com/embed/S5A5DRHl6NU"
  },
  {
    "nom": "TEISHO UKE",
    "categorie": "uke waza",
    "description": "Défense avec la paume",
-   "photo": "https://i.pinimg.com/736x/51/fb/b9/51fbb9809b630db1b9a53ed897856a85.jpg",
+   "photo": "image menquante",
    "video": "https://www.youtube.com/embed/Wnp8YTduX1A"
  },
  {
@@ -150,7 +150,7 @@
    "nom": "TEISHO UCHI",
    "categorie": "uchi wasa",
    "description": "\tAttaque avec la paume",
-   "photo": "manquante,png",
+   "photo": "https://i.pinimg.com/736x/74/b5/52/74b55270148b35cb1d87a50a6a579ee8.jpg",
    "video": "https://www.youtube.com/embed/tqf92CTip4s"
  },
  {
@@ -164,7 +164,7 @@
    "nom": "HIRAKEN UCHI",
    "categorie": "uchi wasa",
    "description": "Frappe avec les phalanges.",
-   "photo": "manquante,png",
+   "photo": "https://i.pinimg.com/1200x/8a/b1/3f/8ab13fb2a5d50268cfc979840dec80d9.jpg",
    "video": ""
  },
  {
@@ -287,5 +287,6 @@
    "video": "https://www.youtube.com/embed/JA8uIeC5prQ"
  }
 ]
+
 
 
