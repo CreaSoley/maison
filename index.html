@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/maison/manifest.json">
+<meta name="theme-color" content="#ff5fc1">
+
     <title>🎨 CreaSoley – Univers Créatif</title>
 
     <link rel="stylesheet" href="css/style.css">
@@ -178,6 +181,11 @@
 <script src="js/proverbe-du-jour.js"></script>
 <script src="js/devinette-du-jour.js" defer></script>
 <script src="js/defi.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/maison/sw.js");
+}
+</script>
 
 </body>
 </html>
