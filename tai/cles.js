@@ -72,12 +72,7 @@ function renderCleCard(ex, keyName) {
 
   // build left (photo) and right (infos)
   const leftHtml = ex.photo
-    const leftHtml = ex.photo
-    ? `<div class="fiche-left">
-         <div class="fiche-photo">
-           <img src="${escapeHtml(ex.photo)}" alt="" class="kawaii-img">
-         </div>
-       </div>`
+    ? `<div class="fiche-left"><div class="fiche-photo"><img src="${escapeHtml(ex.photo)}" alt=""></div></div>`
     : `<div class="fiche-left"><div class="fiche-photo"><div style="padding:20px;color:#888">Pas d'image</div></div></div>`;
 
   const rightHtml = `
