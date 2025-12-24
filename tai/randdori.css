@@ -97,7 +97,7 @@ img {
 .kawaii-card,
 .assaut-card,
 .full-width-card {
-  max-width: 100%;
+  max-width: 90%;
   overflow-wrap: break-word;
 }
 
@@ -110,7 +110,7 @@ img {
 @media (max-width: 940px) {
   .encarts-grid {
     grid-template-columns: 1fr;
-    width: 100%;
+    width: 90%;
   }
 }
 
