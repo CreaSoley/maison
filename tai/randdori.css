@@ -268,3 +268,32 @@ input[type="range"]{
   flex:1;
   min-width:280px;
 }
+/* 📱 Mobile par défaut */
+img.kawaii-img {
+  width: 190px;      /* ≈ 5 cm */
+  height: 190px;     /* carré */
+  object-fit: cover; /* respecte proportions sans déformation */
+  border-radius: 20px;
+}
+
+/* 🎥 Vidéos mobile */
+video.kawaii-video {
+  width: 190px;      /* ≈ 5 cm */
+  height: 170px;     /* ≈ 4,5 cm */
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* 💻 Desktop */
+@media (min-width: 768px) {
+
+  img.kawaii-img {
+    width: 340px;   /* ≈ 9 cm */
+    height: 340px;  /* carré */
+  }
+
+  video.kawaii-video {
+    width: 455px;  /* ≈ 12 cm */
+    height: 265px; /* ≈ 7 cm */
+  }
+}
