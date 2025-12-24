@@ -38,14 +38,14 @@
    "nom": "OSAE UKE",
    "categorie": "uke waza",
    "description": "Défense par pression ou immobilisation avec la main",
-   "photo": "manquante,png",
+   "photo": "https://i.pinimg.com/736x/83/52/0f/83520f6b9ba1e7adfa76055e12838bae.jpg",
    "video": "https://www.youtube.com/embed/S5A5DRHl6NU"
  },
  {
    "nom": "TEISHO UKE",
    "categorie": "uke waza",
    "description": "Défense avec la paume",
-   "photo": "manquante,png",
+   "photo": "https://i.pinimg.com/736x/51/fb/b9/51fbb9809b630db1b9a53ed897856a85.jpg",
    "video": "https://www.youtube.com/embed/Wnp8YTduX1A"
  },
  {
@@ -287,4 +287,5 @@
    "video": "https://www.youtube.com/embed/JA8uIeC5prQ"
  }
 ]
+
 
