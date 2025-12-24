@@ -89,20 +89,6 @@ img {
   height: auto;
   display: block;
 }
-.encart img,
-.encart video {
-  max-width: 100%;
-  height: auto;
-}
-img,
-video {
-  max-width: var(--media-max-width);
-  max-height: var(--media-max-height);
-  border-radius: 16px;
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;
-}
 
 /* sur petit écran, on limite encore plus */
 @media (max-width: 480px) {
@@ -142,7 +128,7 @@ video {
 .kawaii-card,
 .assaut-card,
 .full-width-card {
-  max-width: 100%;
+  max-width: 90%;
   overflow-wrap: break-word;
 }
 
@@ -155,7 +141,7 @@ video {
 @media (max-width: 940px) {
   .encarts-grid {
     grid-template-columns: 1fr;
-    width: 100%;
+    width: 90%;
   }
 }
 
