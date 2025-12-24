@@ -326,3 +326,30 @@ input[type="text"]:focus {
     background: #fff;
   }
 }
+/* =========================
+   FLEX GRID POUR EXERCICES
+========================= */
+.assauts-grid {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.exercice {
+  flex: 1;
+  min-width: 320px;
+}
+
+/* Espacement supplémentaire boutons exercice 2 */
+.btn-row-spaced {
+  margin-top: 18px;
+  gap: 12px;
+}
+
+/* Sur mobile, empiler les exercices */
+@media (max-width: 900px) {
+  .assauts-grid {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
