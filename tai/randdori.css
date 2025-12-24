@@ -43,6 +43,43 @@ body{
   font-family:'Fredoka',Arial,sans-serif;
   color:var(--text);
 }
+/* -------------------------------------------------------- */
+/* HEADER RESPONSIVE PARFAIT */
+/* -------------------------------------------------------- */
+.appbar {
+  background: black;
+  color: white;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* LOGO RESPONSIVE FIXÉ – ne peut plus exploser en taille */
+.logo-big {
+  display: block;
+  max-width: 150px;
+  width: auto !important;   /* Correction définitive */
+  height: auto;
+  margin-bottom: 15px;
+}
+
+/* Texte du header */
+.header-text .title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.header-text .subtitle {
+  font-size: 1.7rem;
+  margin-top: 18px;
+  letter-spacing: 2px;
+}
+
 /* =========================
    IMAGES & LOGO RESPONSIVE
 ========================= */
@@ -51,12 +88,6 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
-}
-
-/* logo en particulier */
-.logo {
-  max-width: 180px;      /* ajuste si tu veux plus petit */
-  height: auto;
 }
 
 /* sur petit écran, on limite encore plus */
