@@ -43,6 +43,28 @@ body{
   font-family:'Fredoka',Arial,sans-serif;
   color:var(--text);
 }
+/* =========================
+   IMAGES & LOGO RESPONSIVE
+========================= */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* logo en particulier */
+.logo {
+  max-width: 180px;      /* ajuste si tu veux plus petit */
+  height: auto;
+}
+
+/* sur petit écran, on limite encore plus */
+@media (max-width: 480px) {
+  .logo {
+    max-width: 140px;
+  }
+}
 
 /* =========================
    CARTE GÉNÉRALE
@@ -69,12 +91,26 @@ body{
   grid-template-columns:1fr 1fr;
   gap:28px;                   /* ↑ espace entre cartes */
 }
+/* empêche les grilles et cartes de dépasser */
+.encarts-grid,
+.card,
+.kawaii-card,
+.assaut-card,
+.full-width-card {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
 
 .full-width-card{ grid-column:1/-1; }
 
-@media(max-width:940px){
-  .encarts-grid{
-    grid-template-columns:1fr;
+/* =========================
+   GRILLE MOBILE SÛRE
+========================= */
+
+@media (max-width: 940px) {
+  .encarts-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
   }
 }
 
