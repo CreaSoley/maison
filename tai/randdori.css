@@ -49,7 +49,7 @@ body{
 ========================= */
 .appbar {
   background:black;
-  color:white;
+  color:#ff80d4;
   padding:25px 10px;
   display:flex;
   flex-direction:column;
