@@ -14,171 +14,127 @@
 
 <header class="appbar">
   <a href="index.html" class="logo-link">
-  <img src="logo.png" class="logo-big" alt="Accueil">
-</a>
-
+    <img src="logo.png" class="logo-big" alt="Accueil">
+  </a>
   <div class="header-text">
     <div class="title spicy">Préparation Techniques</div>
     <div class="subtitle spicy">Tai-Jitsu</div>
   </div>
 </header>
 
-  <!-- MAIN GRID: two columns on desktop, one column on mobile -->
-  <main class="encarts-grid">
+<main class="encarts-grid">
 
-    <!-- ENCART 1 — CLÉS ARTICULAIRES -->
-    <section class="card kawaii-card" id="encart-cles">
-      <h2 class="section-title spicy">🤲 Exercices — Clés Articulaires</h2>
-
-      <div class="selectors-row">
-        <select id="selectCle">
-          <option value="">Choisir une clé</option>
-        </select>
-
-        <select id="selectExercice">
-          <option value="">Choisir un exercice</option>
-        </select>
-      </div>
-
-      <div id="cleCard" class="fiche-container"></div>
-    </section>
-
-    <!-- ENCART 2 — TECHNIQUES RANDORI -->
-    <section class="card kawaii-card" id="encart-randori">
-      <h2 class="section-title spicy">🥋 Techniques Randori</h2>
-
-      <div class="selectors-row">
-        <select id="filterType">
-          <option value="">Filtrer par type</option>
-        </select>
-
-        <input type="text" id="searchBox" placeholder="Recherche rapide..." />
-
-        <select id="selectTech">
-          <option value="">Choisir une technique</option>
-        </select>
-
-        <button id="btnRandom" class="btn primary">🎲 Aléatoire</button>
-      </div>
-
-      <div id="randomResult" class="random-result">Technique sélectionnée : -</div>
-
-      <div id="techCard" class="fiche-container"></div>
-    </section>
-
-<!-- =========================
-     ENCART ASSAUTS
-========================= -->
-<section class="card kawaii-card full-width-card" id="encart-assauts">
-  <h2 class="section-title spicy">🎯 Exercices d’Assauts</h2>
-
-  <!-- Conteneur flex pour exercices 1 & 2 -->
-  <div class="assauts-grid">
-
-    <!-- ================= EXERCICE 1 ================= -->
-    <section class="assaut-card exercice">
-      <h3 class="section-title spicy">Exercice 1 – Assaut guidé</h3>
-
-      <div class="selectors-row">
-        <select id="assautSelect"></select>
-        <select id="configFilter">
-          <option value="">Configuration</option>
-          <option value="debout">Debout</option>
-          <option value="fauteuil">Fauteuil</option>
-        </select>
-        <button id="assautRandom" class="btn ghost">
-          <span class="btn-text">Aléatoire</span>
-          <span class="btn-icon">🎲</span>
-        </button>
-      </div>
-
-      <label>
-        Vitesse : <strong><span id="speedVal">1.0</span></strong>
-      </label>
-      <input type="range" id="speechSpeed" min="0.6" max="1.4" step="0.1" value="1">
-
-      <div class="btn-row">
-        <button id="playAssaut" class="btn primary">
-          <span class="btn-text">Lecture</span>
-          <span class="btn-icon">▶️</span>
-        </button>
-        <button id="stopAssaut" class="btn ghost">
-          <span class="btn-text">Stop</span>
-          <span class="btn-icon">⏹</span>
-        </button>
-        <button id="printAssaut" class="btn ghost">
-          <span class="btn-text">PDF</span>
-          <span class="btn-icon">🖨</span>
-        </button>
-      </div>
-
-      <div id="print-zone">
-        <div id="assautFiche"></div>
-      </div>
-    </section>
-
-    <!-- ================= EXERCICE 2 ================= -->
-    <section class="assaut-card exercice">
-      <h3 class="section-title spicy">Exercice 2 – Enchaînement</h3>
-
-      <p class="hint">Touchez une technique pour l’ajouter</p>
-      <div id="assautList" class="chips-list"></div>
-
-      <h4>Séquence</h4>
-      <div id="sequenceZone" class="sequence-zone"></div>
-
-      <label>
-        Intervalle : <strong><span id="intervalVal">10</span>s</strong>
-      </label>
-      <input type="range" id="intervalRange" min="3" max="60" value="10">
-
-      <label>Répétitions</label>
-      <select id="repeatCount">
-        <option value="1">x1</option>
-        <option value="10">x10</option>
-        <option value="20">x20</option>
-        <option value="30">x30</option>
-        <option value="0">Libre</option>
+  <!-- ENCART 1 — CLÉS ARTICULAIRES -->
+  <section class="card kawaii-card" id="encart-cles">
+    <h2 class="section-title spicy">🤲 Exercices — Clés Articulaires</h2>
+    <div class="selectors-row">
+      <select id="selectCle">
+        <option value="">Choisir une clé</option>
       </select>
+      <select id="selectExercice">
+        <option value="">Choisir un exercice</option>
+      </select>
+    </div>
+    <div id="cleCard" class="fiche-container"></div>
+  </section>
 
-      <div class="btn-row btn-row-spaced">
-        <button id="playSequence" class="btn primary">
-          <span class="btn-text">Lecture</span>
-          <span class="btn-icon">▶️</span>
-        </button>
+  <!-- ENCART 2 — TECHNIQUES RANDORI -->
+  <section class="card kawaii-card" id="encart-randori">
+    <h2 class="section-title spicy">🥋 Techniques Randori</h2>
+    <div class="selectors-row">
+      <select id="filterType">
+        <option value="">Filtrer par type</option>
+      </select>
+      <input type="text" id="searchBox" placeholder="Recherche rapide..." />
+      <select id="selectTech">
+        <option value="">Choisir une technique</option>
+      </select>
+      <button id="btnRandom" class="btn primary">🎲 Aléatoire</button>
+    </div>
+    <div id="randomResult" class="random-result">Technique sélectionnée : -</div>
+    <div id="techCard" class="fiche-container"></div>
+  </section>
 
-        <button id="loopSeq" class="btn ghost">
-          <span class="btn-text">Boucle</span>
-          <span class="btn-icon">🔁</span>
-        </button>
+  <!-- ENCART 3 — EXERCICES D’ASSAUTS -->
+  <section class="card kawaii-card full-width-card" id="encart-assauts">
+    <h2 class="section-title spicy">🎯 Exercices d’Assauts</h2>
 
-        <button id="randomSeq" class="btn ghost">
-          <span class="btn-text">Aléatoire</span>
-          <span class="btn-icon">🔀</span>
-        </button>
+    <div class="assauts-grid">
 
-        <button id="stopSequence" class="btn ghost">
-          <span class="btn-text">Stop</span>
-          <span class="btn-icon">⏹</span>
-        </button>
-      </div>
+      <!-- EXERCICE 1 -->
+      <section class="assaut-card exercice">
+        <h3 class="section-title spicy">Exercice 1 – Assaut guidé</h3>
+        <div class="selectors-row">
+          <select id="assautSelect"></select>
+          <select id="configFilter">
+            <option value="">Configuration</option>
+            <option value="debout">Debout</option>
+            <option value="fauteuil">Fauteuil</option>
+          </select>
+          <button id="assautRandom" class="btn ghost">
+            <span class="btn-text">Aléatoire</span>
+            <span class="btn-icon">🎲</span>
+          </button>
+        </div>
 
-      <input type="text" id="saveName" placeholder="Nom de la séquence">
-      <div class="btn-row">
-        <button id="saveSeq" class="btn ghost">Sauvegarder</button>
-        <select id="loadSeq"></select>
-      </div>
+        <label>Vitesse : <strong><span id="speedVal">1.0</span></strong></label>
+        <input type="range" id="speechSpeed" min="0.6" max="1.4" step="0.1" value="1">
 
-      <canvas id="qrSeq"></canvas>
-    </section>
-  </div>
-</section>
+        <div class="btn-row">
+          <button id="playAssaut" class="btn primary">▶️ Lecture</button>
+          <button id="stopAssaut" class="btn ghost">⏹ Stop</button>
+          <button id="printAssaut" class="btn ghost">🖨 PDF</button>
+        </div>
+
+        <div id="print-zone">
+          <div id="assautFiche"></div>
+        </div>
+      </section>
+
+      <!-- EXERCICE 2 -->
+      <section class="assaut-card exercice">
+        <h3 class="section-title spicy">Exercice 2 – Enchaînement</h3>
+        <p class="hint">Touchez une technique pour l’ajouter</p>
+        <div id="assautList" class="chips-list"></div>
+
+        <h4>Séquence</h4>
+        <div id="sequenceZone" class="sequence-zone"></div>
+
+        <label>Intervalle : <strong><span id="intervalVal">10</span>s</strong></label>
+        <input type="range" id="intervalRange" min="3" max="60" value="10">
+
+        <label>Répétitions</label>
+        <select id="repeatCount">
+          <option value="1">x1</option>
+          <option value="10">x10</option>
+          <option value="20">x20</option>
+          <option value="30">x30</option>
+          <option value="0">Libre</option>
+        </select>
+
+        <div class="btn-row btn-row-spaced">
+          <button id="playSequence" class="btn primary">▶️ Lecture</button>
+          <button id="loopSeq" class="btn ghost">🔁 Boucle</button>
+          <button id="randomSeq" class="btn ghost">🔀 Aléatoire</button>
+          <button id="stopSequence" class="btn ghost">⏹ Stop</button>
+        </div>
+
+        <input type="text" id="saveName" placeholder="Nom de la séquence">
+        <div class="btn-row">
+          <button id="saveSeq" class="btn ghost">Sauvegarder</button>
+          <select id="loadSeq"></select>
+        </div>
+
+        <canvas id="qrSeq"></canvas>
+      </section>
+
+    </div>
+  </section>
 
 </main>
 
-  <!-- SCRIPTS (separate files) -->
-  <script src="cles.js"></script>
-  <script src="randori.js"></script>
- <script src="randori_impose.js"></script>
+<script src="cles.js"></script>
+<script src="randori.js"></script>
+<script src="randori_impose.js"></script>
 </body>
 </html>
