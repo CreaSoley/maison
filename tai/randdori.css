@@ -43,66 +43,29 @@ body{
   font-family:'Fredoka',Arial,sans-serif;
   color:var(--text);
 }
-/* -------------------------------------------------------- */
-/* HEADER RESPONSIVE PARFAIT */
-/* -------------------------------------------------------- */
-.appbar {
-  background: black;
-  color: white;
-  padding: 25px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  position: relative;
-  z-index: 10;
-}
-
-/* LOGO RESPONSIVE FIXÉ – ne peut plus exploser en taille */
-.logo-big {
-  display: block;
-  max-width: 150px;
-  width: auto !important;   /* Correction définitive */
-  height: auto;
-  margin-bottom: 15px;
-}
-
-/* Texte du header */
-.header-text .title {
-  font-size: 2.5rem;
-  letter-spacing: 2px;
-}
-
-.header-text .subtitle {
-  font-size: 1.7rem;
-  margin-top: 18px;
-  letter-spacing: 2px;
-}
 
 /* =========================
-   IMAGES & LOGO RESPONSIVE
+   HEADER
 ========================= */
-
-img,
-video {
-  max-width: var(--media-max-width);
-  max-height: var(--media-max-height);
-  border-radius: 16px;
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;
+.appbar {
+  background:black;
+  color:white;
+  padding:25px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
 }
 
-/* sur petit écran, on limite encore plus */
-@media (max-width: 480px) {
-  .logo {
-    max-width: 140px;
-  }
+.logo-big{
+  display:block;
+  max-width:150px;
+  height:auto;
+  margin-bottom:15px;
 }
 
 /* =========================
-   CARTE GÉNÉRALE
+   CARTES
 ========================= */
 .card,
 .kawaii-card,
@@ -110,8 +73,8 @@ video {
   background:linear-gradient(180deg,#fff9fd,#fff4fb);
   border-radius:26px;
   border:3px solid var(--pink-2);
-  padding:26px 20px;          /* ↑ aération */
-  margin-bottom:22px;         /* espace entre encarts */
+  padding:26px 20px;
+  margin-bottom:22px;
   box-shadow:var(--card-shadow);
 }
 
@@ -124,28 +87,26 @@ video {
   padding:0 14px;
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:28px;                   /* ↑ espace entre cartes */
-}
-/* empêche les grilles et cartes de dépasser */
-.encarts-grid,
-.card,
-.kawaii-card,
-.assaut-card,
-.full-width-card {
-  max-width: 90%;
-  overflow-wrap: break-word;
+  gap:28px;
 }
 
 .full-width-card{ grid-column:1/-1; }
 
-/* =========================
-   GRILLE MOBILE SÛRE
-========================= */
+/* empêche TOUT débordement horizontal */
+.encarts-grid,
+.card,
+.kawaii-card,
+.assaut-card{
+  width:100%;
+  overflow:hidden;
+}
 
-@media (max-width: 940px) {
-  .encarts-grid {
-    grid-template-columns: 1fr;
-    width: 90%;
+/* =========================
+   MOBILE : 1 seule colonne
+========================= */
+@media (max-width:940px){
+  .encarts-grid{
+    grid-template-columns:1fr;
   }
 }
 
@@ -155,35 +116,19 @@ video {
 .section-title{
   font-size:1.9rem;
   text-align:center;
-  margin:4px 0 22px;          /* ↓ pour respirer sous le titre */
+  margin:6px 0 20px;
   color:var(--hot-pink);
-  text-shadow:2px 2px 0 #ffe3f8, 4px 4px 0 #ffc6ec;
+  text-shadow:2px 2px 0 #ffe3f8,4px 4px 0 #ffc6ec;
 }
 
 /* =========================
-   BLOCS INTERNES
-========================= */
-
-/* espace vertical homogène dans chaque carte */
-.card > * + *{
-  margin-top:14px;
-}
-
-/* texte introductif */
-p,
-label{
-  margin:6px 0 10px 0;
-}
-
-/* =========================
-   SELECTS & CONTROLES
+   FORMULAIRES
 ========================= */
 .selectors-row{
   display:flex;
   flex-wrap:wrap;
-  gap:12px 14px;
-  margin-top:4px;
-  margin-bottom:14px;         /* ↑ espace dessous menus */
+  gap:12px;
+  margin-bottom:14px;
 }
 
 select,
@@ -202,32 +147,33 @@ input[type="range"]{
 .btn-row{
   display:flex;
   flex-wrap:wrap;
-  gap:14px;                   /* ↑ espace entre boutons */
+  gap:14px;
   margin-top:12px;
-  margin-bottom:6px;
 }
 
 .btn{
   padding:12px 18px;
   border-radius:999px;
   font-weight:700;
+  background:white;
+  border:2px solid var(--accent);
+  box-shadow:0 4px 0 rgba(255,120,180,.35);
 }
 
-/* état actif visuel */
+/* état actif */
 .btn.active{
   background:linear-gradient(135deg,#ff2fa9,#ff6fd4);
   color:white;
+  box-shadow:0 0 0 3px rgba(255,20,147,.25);
 }
 
 /* =========================
-   CHIPS EXERCICE 2
+   CHIPS
 ========================= */
 .chips-list{
   display:flex;
   flex-wrap:wrap;
-  gap:10px 8px;
-  margin-top:10px;
-  margin-bottom:14px;        /* ↑ espace sous la zone chips */
+  gap:8px;
 }
 
 .chip{
@@ -235,65 +181,94 @@ input[type="range"]{
   border-radius:999px;
   background:linear-gradient(180deg,#ffe8f5,#ffd4ee);
   border:2px solid #ffbde7;
-  box-shadow:0 4px 0 rgba(255,170,210,.45);
 }
 
 /* =========================
-   SÉQUENCE LISTE
+   SÉQUENCE
 ========================= */
 .sequence-zone{
   display:flex;
   flex-direction:column;
   gap:8px;
-  margin-top:12px;
 }
 
 .sequence-item{
   padding:10px 12px;
   border-radius:16px;
   background:white;
-  box-shadow:0 4px 12px rgba(0,0,0,.05);
 }
 
 /* =========================
-   ASSAUTS FLEX
+   ASSAUTS LAYOUT
 ========================= */
 .assauts-grid{
   display:flex;
   flex-wrap:wrap;
-  gap:22px;                   /* ↑ espace entre colonnes */
+  gap:22px;
 }
 
 .exercice{
   flex:1;
   min-width:280px;
 }
-/* 📱 Mobile par défaut */
-img.kawaii-img {
-  width: 190px;      /* ≈ 5 cm */
-  height: 190px;     /* carré */
-  object-fit: cover; /* respecte proportions sans déformation */
-  border-radius: 20px;
+
+/* =========================================================
+   🔥 TAILLES DEMANDÉES SANS MODIFIER TON JS
+   → cible TOUTES les images et vidéos dans des fiches/cartes
+========================================================= */
+
+/* Images (desktop par défaut) ≈ 9 cm */
+.card img,
+.kawaii-card img,
+.assaut-card img{
+  width:340px;
+  height:340px;
+  object-fit:cover;
+  border-radius:20px;
+  box-shadow:0 8px 18px rgba(255,105,180,.25);
+  display:block;
+  margin:auto;
 }
 
-/* 🎥 Vidéos mobile */
-video.kawaii-video {
-  width: 190px;      /* ≈ 5 cm */
-  height: 170px;     /* ≈ 4,5 cm */
-  object-fit: cover;
-  border-radius: 20px;
+/* Vidéos (desktop) 12 × 7 cm */
+.card video,
+.kawaii-card video,
+.assaut-card video{
+  width:455px;
+  height:265px;
+  object-fit:cover;
+  border-radius:20px;
+  box-shadow:0 8px 18px rgba(255,105,180,.25);
+  display:block;
+  margin:auto;
 }
 
-/* 💻 Desktop */
-@media (min-width: 768px) {
+/* 📱 MOBILE */
+@media (max-width:768px){
 
-  img.kawaii-img {
-    width: 340px;   /* ≈ 9 cm */
-    height: 340px;  /* carré */
+  .card img,
+  .kawaii-card img,
+  .assaut-card img{
+    width:190px;
+    height:190px;
   }
 
-  video.kawaii-video {
-    width: 455px;  /* ≈ 12 cm */
-    height: 265px; /* ≈ 7 cm */
+  .card video,
+  .kawaii-card video,
+  .assaut-card video{
+    width:190px;
+    height:170px;
+  }
+}
+
+/* empêche tout tronquage horizontal mobile */
+@media(max-width:768px){
+  body, html{
+    overflow-x:hidden;
+  }
+  .card,
+  .kawaii-card,
+  .assaut-card{
+    max-width:100%;
   }
 }
