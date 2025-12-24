@@ -14,11 +14,11 @@ const bbp = new Audio("bbp.mp3");
    LOAD JSON
 ======================= */
 fetch("exercices_assauts.json")
-.then(r => r.json())
-.then(d => {
-  assauts = d.exercices;
-  init();
-});
+  .then(r => r.json())
+  .then(d => {
+    assauts = d.exercices;
+    init();
+  });
 
 /* =======================
    INIT
@@ -28,6 +28,12 @@ function init() {
   renderAssautChips();
   bindUI();
   loadSavedList();
+
+  // Drag & Drop avec SortableJS (https://sortablejs.github.io/Sortable/)
+  new Sortable(sequenceZone, {
+    animation: 150,
+    onEnd: () => renderSequence()
+  });
 }
 
 /* =======================
@@ -49,15 +55,34 @@ function bindUI() {
 
   playAssaut.onclick = () => speak(buildSpeech(currentAssaut), speechSpeed.value);
   stopAssaut.onclick = stopSpeech;
+
   printAssaut.onclick = () => window.print();
 
   playSequence.onclick = playSequenceHandler;
   stopSequence.onclick = stopAll;
-  loopSeq.onclick = () => loop = !loop;
-  randomSeq.onclick = shuffleSequence;
+
+  loopSeq.onclick = () => {
+    loop = !loop;
+    loopSeq.classList.toggle("active", loop);
+  };
+
+  randomSeq.onclick = () => {
+    shuffleSequence();
+    randomSeq.classList.toggle("active");
+  };
 
   saveSeq.onclick = saveNamedSequence;
   loadSeq.onchange = loadNamedSequence;
+
+  // Clear sequence
+  const clearBtn = document.createElement("button");
+  clearBtn.textContent = "Effacer";
+  clearBtn.className = "btn ghost";
+  clearBtn.onclick = () => {
+    sequence = [];
+    renderSequence();
+  };
+  document.querySelector("#sequenceZone").insertAdjacentElement("afterend", clearBtn);
 }
 
 /* =======================
@@ -78,9 +103,7 @@ function renderFiche(a) {
       <img src="${a.image}" alt="">
       <h3 class="tech-title">${a.assaut}</h3>
     </div>
-
     <p class="fiche-objectif">🎯 ${a.objectif}</p>
-
     <div class="fiche-row">
       <div>
         <h4>🧠 Points clés</h4>
@@ -91,7 +114,6 @@ function renderFiche(a) {
         <ul>${a.erreurs_a_eviter.map(e => `<li>${e}</li>`).join("")}</ul>
       </div>
     </div>
-
     <h4>📜 Déroulé</h4>
     <div class="deroule-grid">
       ${a.deroule.map(d => `<p>${d.etape}. ${d.texte}</p>`).join("")}
@@ -187,7 +209,8 @@ async function playSequenceHandler() {
   const interval = intervalRange.value * 1000;
   const repeat = parseInt(repeatCount.value);
 
-  await wait(5000);
+  bbp.play(); // Son début
+  await wait(5000); // Latence avant lecture
 
   let rounds = repeat === 0 ? Infinity : repeat;
 
@@ -199,7 +222,7 @@ async function playSequenceHandler() {
       speak(a.assaut);
       await wait(interval);
     }
-    bbp.play();
+    if (!loop) bbp.play();
     if (!loop) break;
   }
 
