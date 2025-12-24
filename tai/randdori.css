@@ -140,6 +140,14 @@ input[type="range"]{
   background:#fff;
   font-family:'Fredoka';
 }
+/* 📱 Réduction taille menus déroulants mobile */
+@media (max-width: 768px) {
+  select {
+    width: 220px;        /* change la largeur ici */
+    font-size: 0.9rem;   /* texte plus petit */
+  }
+}
+
 
 /* =========================
    BOUTONS
