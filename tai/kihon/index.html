@@ -374,23 +374,29 @@
 
   </style>
 </head>
-<body>
-
+<body data-title="Kihon – Entraînement">
+  
 <div id="bannerContainer"></div>
 
 <script>
-  fetch("../banner.html")
-    .then(r => r.text())
-    .then(html => {
-      document.getElementById("bannerContainer").innerHTML = html;
+fetch("../banner.html")
+  .then(r => r.text())
+  .then(html => {
+    document.getElementById("bannerContainer").innerHTML = html;
 
-      // optionnel : injecter le titre automatiquement
-      const title = document.querySelector("title")?.textContent || "";
-      const titleDiv = document.querySelector(".header-text .title");
-      if (titleDiv && title) titleDiv.textContent = title;
-    });
+    // 1) priorité : data-title sur <body>
+    let pageTitle =
+      document.body.dataset.title ||
+      document.querySelector("h1")?.textContent ||
+      document.querySelector("title")?.textContent ||
+      "";
+
+    const target = document.querySelector(".header-text .title");
+    if (target && pageTitle) {
+      target.textContent = pageTitle;
+    }
+  });
 </script>
-
 
 <div class="main-wrapper">
     <div class="grid">
