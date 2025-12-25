@@ -15,9 +15,11 @@
   font-family: "Fredoka", Arial, sans-serif;
 }
 
-.meatball 
+.meatball {
   font-family: "SuperMeatball", sans-serif;
 }
+}
+
 .appbar {
   background: black;
   color: white;
