@@ -3,12 +3,17 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Tai-Jitsu – Accueil</title>
+<title>Tai-Jitsu – Programme officiel</title>
 
 <style>
 @font-face { 
   font-family: "Spicy"; 
   src: url("Spicy Sale.ttf"); 
+}
+
+@font-face{
+  font-family:"Shanghai";
+  src:url("shanghai.ttf");
 }
 
 /* Palette & thème global */
@@ -29,28 +34,43 @@ body {
   background: linear-gradient(180deg,#fff6fb 0%, #ffeef6 100%);
   font-family: 'Fredoka', Arial, sans-serif;
   color:#222;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ==== BANNIÈRE NOIRE ==== */
+/* ==== BANNIÈRE NOIRE IDENTIQUE ==== */
 header {
   background:#000;
   color:#fff;
-  padding:24px 12px;
+  padding:24px 12px 28px 12px;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:18px;
   box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  flex-wrap:wrap;
+  text-align:center;
 }
-header img { height:86px; cursor:pointer; }
-header h1 {
+
+header img{
+  height:86px;
+  cursor:pointer;
+}
+
+/* Titre principal kawaii */
+header .banner-title{
   font-family:"Spicy", cursive;
-  font-size:2.9rem;
-  margin:0;
+  font-size:3rem;
   color:var(--pink-2);
+  margin:0;
   letter-spacing:2px;
+}
+
+/* Sous-titre Shanghai */
+header .banner-subtitle{
+  font-family:"Shanghai", serif;
+  font-size:1.7rem;
+  color:#fff;
+  margin-top:4px;
+  letter-spacing:1px;
 }
 
 /* MAIN */
@@ -89,15 +109,18 @@ header h1 {
   border: 2px solid var(--pink-2);
   box-shadow: var(--card-shadow);
 }
+
 .uv-card:hover {
   transform: translateY(-6px);
   box-shadow:0 18px 36px rgba(255,110,180,0.25);
 }
+
 .uv-card img {
   max-width:60%;
   max-height:60%;
   margin-bottom:6px;
 }
+
 .uv-card span {
   font-family:"Spicy", cursive;
   color:var(--accent);
@@ -105,21 +128,42 @@ header h1 {
   text-align:center;
 }
 
-/* ==== BOUTON EXAMEN / PLANNING SPÉCIAUX (DESKTOP seulement) ==== */
-.uv-card.examen {
+/* ==== BOUTONS EXAMEN / PLANNING AVEC AURA SPÉCIALE ==== */
+.uv-card.examen{
   position:relative;
   width:6.5cm !important;
   height:6.5cm !important;
+
+  /* AURA MAGENTA PULSANTE */
   box-shadow:
-    0 0 18px rgba(255,120,180,0.45),
-    0 0 32px rgba(255,80,150,0.25),
-    0 0 48px rgba(255,60,130,0.20);
+    0 0 14px rgba(255,90,170,0.45),
+    0 0 32px rgba(255,60,150,0.35),
+    0 0 60px rgba(255,40,140,0.25);
+  animation:auraPulse 3.5s infinite ease-in-out;
 }
-.uv-card.examen:hover {
-  box-shadow:
-    0 0 28px rgba(255,120,180,0.65),
-    0 0 60px rgba(255,80,150,0.45),
-    0 0 90px rgba(255,60,130,0.40);
+
+@keyframes auraPulse{
+  0%{
+    box-shadow:
+      0 0 10px rgba(255,100,180,0.35),
+      0 0 30px rgba(255,80,170,0.25),
+      0 0 45px rgba(255,60,150,0.20);
+  }
+  50%{
+    box-shadow:
+      0 0 20px rgba(255,140,200,0.65),
+      0 0 55px rgba(255,100,180,0.45),
+      0 0 90px rgba(255,80,160,0.40);
+  }
+  100%{
+    box-shadow:
+      0 0 10px rgba(255,100,180,0.35),
+      0 0 30px rgba(255,80,170,0.25),
+      0 0 45px rgba(255,60,150,0.20);
+  }
+}
+
+.uv-card.examen:hover{
   transform:translateY(-6px) scale(1.05);
 }
 
@@ -135,6 +179,17 @@ header h1 {
 
 /* ==== MOBILE ==== */
 @media(max-width:900px){
+  header{
+    padding-bottom:22px;
+  }
+
+  .banner-title{
+    font-size:2.3rem;
+  }
+
+  .banner-subtitle{
+    font-size:1.3rem;
+  }
 
   .uv-grid {
     grid-template-columns:1fr;
@@ -150,7 +205,6 @@ header h1 {
 
   .uv-card img {
     margin-right:14px;
-    margin-left:0;
     max-width:42px;
     max-height:42px;
   }
@@ -160,16 +214,13 @@ header h1 {
     font-size:1.3rem;
   }
 
-  /* >>> important :
-     Examen & Planning se comportent EXACTEMENT comme Kihon <<< */
-  .uv-card.examen {
-    box-shadow: var(--card-shadow);
+  /* examen & planning se comportent comme les autres boutons */
+  .uv-card.examen{
     width:100% !important;
     height:70px !important;
-    transform:none !important;
   }
 
-  .uv-row-exam {
+  .uv-row-exam{
     flex-direction:column;
     gap:14px;
   }
@@ -191,7 +242,6 @@ header h1 {
   overflow:hidden;
 }
 
-/* Titre */
 .accordion-header {
   cursor:pointer;
   padding:10px 14px;
@@ -200,7 +250,6 @@ header h1 {
   color:var(--hot-pink);
 }
 
-/* Corps fermé par défaut */
 .accordion-body {
   display:none;
   padding:10px 14px 14px;
@@ -209,12 +258,10 @@ header h1 {
   border-top:1px dashed var(--pink-2);
 }
 
-/* Accordéon ouvert */
 .accordion.open .accordion-body {
   display:block;
 }
 
-/* iFrames responsives */
 .accordion-body iframe{
   width:100%;
   aspect-ratio:16/9;
@@ -223,7 +270,6 @@ header h1 {
   margin-bottom:8px;
 }
 
-/* Mobile accordéons */
 @media(max-width:900px){
   .accordion-container {
     grid-template-columns:1fr;
@@ -236,7 +282,11 @@ header h1 {
 
 <header>
   <a href="../index.html"><img src="logo.png" alt="Logo"></a>
-  <h1>Tai-Jitsu</h1>
+
+  <div>
+    <div class="banner-title">Programme officiel</div>
+    <div class="banner-subtitle">Taï-jitsu</div>
+  </div>
 </header>
 
 <div class="main-wrapper">
@@ -265,7 +315,6 @@ header h1 {
         <img src="lrandori.png" alt="Randori"><span>Randori</span>
       </div>
 
-      <!-- groupe examen + planning -->
       <div class="uv-row-exam">
 
         <div class="uv-card examen" onclick="location.href='oral.html'">
