@@ -262,14 +262,14 @@
    "nom": "MAWASHI GERI",
    "categorie": "geri waza",
    "description": "Coup de pied circulaire (fouetté)",
-   "photo": "manquante,png",
+   "photo": "https://i.pinimg.com/736x/2d/35/12/2d35122cd17a1e67e61a3a8195fea46d.jpg",
    "video": "https://www.youtube.com/embed/QVK3rco5A0c"
  },
  {
    "nom": "YOKO GERI KEKOMI",
    "categorie": "geri waza",
    "description": "Coup de pied latéral défonçant (chassé)",
-   "photo": "manquante,png",
+   "photo": "https://i.pinimg.com/736x/3a/f5/bc/3af5bce99d94b4cb47e1978a03d8ea0f.jpg",
    "video": "https://www.youtube.com/embed/xqqfYgIFqDY"
  },
  {
@@ -287,6 +287,7 @@
    "video": "https://www.youtube.com/embed/JA8uIeC5prQ"
  }
 ]
+
 
 
 
