@@ -10,6 +10,8 @@
 
   <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../banner.css">
+
 
   <style>
     @font-face {
@@ -20,19 +22,26 @@
   </style>
 </head>
 
-<body>
+<body data-title="Ippon kumite – Entraînement">
+<script>
+fetch("../banner.html")
+  .then(r => r.text())
+  .then(html => {
+    document.getElementById("bannerContainer").innerHTML = html;
 
-  <!-- HEADER -->
-  <header class="appbar">
-    <a href="index.html">
-      <img src="logo.png" alt="logo" class="logo-big">
-    </a>
-    <div class="header-text">
-      <div class="title spicy">Ippon Kumite</div>
-      <div class="subtitle spicy">Tai-Jitsu</div>
-    </div>
-  </header>
+    // 1) priorité : data-title sur <body>
+    let pageTitle =
+      document.body.dataset.title ||
+      document.querySelector("h1")?.textContent ||
+      document.querySelector("title")?.textContent ||
+      "";
 
+    const target = document.querySelector(".header-text .title");
+    if (target && pageTitle) {
+      target.textContent = pageTitle;
+    }
+  });
+</script>
   <!-- BANDEAU FICHES EXERCICES -->
   <section class="top-banner">
     <div class="controls">
