@@ -36,41 +36,43 @@ body {
   color:#222;
 }
 
-/* ==== BANNIÈRE NOIRE IDENTIQUE ==== */
-header {
+/* ===================== */
+/*     BANNIÈRE NOIRE     */
+/* ===================== */
+
+header{
   background:#000;
   color:#fff;
-  padding:24px 12px 28px 12px;
+  padding:22px 14px 28px;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+
   display:flex;
+  flex-direction:column;         /* logo au-dessus */
   align-items:center;
-  justify-content:center;
-  gap:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.25);
-  flex-wrap:wrap;
   text-align:center;
+  gap:8px;
 }
 
 header img{
-  height:86px;
+  height:92px;
   cursor:pointer;
 }
 
-/* Titre principal kawaii */
-header .banner-title{
-  font-family:"Spicy", cursive;
-  font-size:3rem;
+header h1{
+  font-family:"Spicy",cursive;
   color:var(--pink-2);
-  margin:0;
-  letter-spacing:2px;
+  font-size:2.8rem;
+  letter-spacing:1px;
+  margin:6px 0 0 0;
 }
 
-/* Sous-titre Shanghai */
-header .banner-subtitle{
-  font-family:"Shanghai", serif;
-  font-size:1.7rem;
+/* ⭐ Sous-titre Shanghai */
+header .subtitle{
+  font-family:"Shanghai",cursive;
   color:#fff;
+  font-size:1.5rem;
   margin-top:4px;
-  letter-spacing:1px;
+  letter-spacing:.5px;
 }
 
 /* MAIN */
