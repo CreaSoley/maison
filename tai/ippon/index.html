@@ -8,40 +8,118 @@
 
   <!-- CSS principal -->
   <link rel="stylesheet" href="style-ippon.css">
+  <link rel="stylesheet" href="banner.css">
 
-  <!-- Material Icons + Banner CSS -->
+  <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="../banner.css">
 
-  <!-- Police Spicy locale -->
+  <!-- Polices locales -->
   <style>
     @font-face {
       font-family: "Spicy";
       src: url("Spicy Sale.ttf") format("truetype");
     }
+    @font-face {
+      font-family: "Shanghaï";
+      src: url("shanghai.ttf") format("truetype");
+    }
+    @font-face {
+      font-family: "Fredoka";
+      src: url("Fredoka.ttf") format("truetype");
+    }
+
     .spicy { font-family: "Spicy", cursive; }
+    .shanghai { font-family: "Shanghaï", cursive; }
+    .fredoka { font-family: "Fredoka", Arial, sans-serif; }
+
+    /* Layout 2 colonnes desktop, 1 colonne mobile */
+    .layout-4cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .card-block {
+      background: #f7f7f7;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-block h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .controls {
+      margin-bottom: 10px;
+    }
+
+    .accordion-item {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      background: #ddd;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 10px;
+      background: #fff;
+    }
+
+    img.fiche-img {
+      width: 100%;
+      max-width: 400px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Styles entrainement */
+    #trainingControls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #trainingControls input[type=range] {
+      width: 100%;
+    }
+
+    #trainingOutput {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      text-align: center;
+      min-height: 2em;
+    }
   </style>
 </head>
 
 <body data-title="Ippon kumite – Entraînement">
 
-  <!-- CONTENEUR POUR LA BANNIÈRE -->
+  <!-- BANNIÈRE -->
   <div id="bannerContainer"></div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      fetch("../banner.html")
+      fetch("banner.html")
         .then(r => r.text())
         .then(html => {
           document.getElementById("bannerContainer").innerHTML = html;
-
-          // Priorité : data-title sur <body>
           let pageTitle =
             document.body.dataset.title ||
             document.querySelector("h1")?.textContent ||
-            document.querySelector("title")?.textContent ||
-            "";
-
+            document.querySelector("title")?.textContent || "";
           const target = document.querySelector(".header-text .title");
           if (target && pageTitle) target.textContent = pageTitle;
         })
@@ -49,31 +127,17 @@
     });
   </script>
 
-  <!-- BANDEAU FICHES EXERCICES -->
-  <section class="top-banner">
-    <div class="controls">
-      <button class="fiche-btn" title="Fondamentaux et visualisation" onclick="window.open('F1 Fondamentaux & Visualisation.pdf','_blank')">Fiche 1</button>
-      <button class="fiche-btn" title="Maîtrise du placement" onclick="window.open('tai/fiche2.pdf','_blank')">Fiche 2</button>
-      <button class="fiche-btn" title="Fluidité & rythme" onclick="window.open('tai/fiche3.pdf','_blank')">Fiche 3</button>
-      <button class="fiche-btn" title="Gestion de l'épreuve" onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
-      <button class="fiche-btn" title="Réactivité" onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
-      <button class="fiche-btn" title="Rien pour le moment" onclick="window.open('tai/fiche6.pdf','_blank')">Fiche 6</button>
-      <button id="btnSurprise" class="btn ghost kawaii">✨ Surprise</button>
-    </div>
-    <div id="surpriseResult"></div>
-  </section>
+  <!-- 4 ENCARTS -->
+  <main class="layout-4cards">
 
-  <!-- 3 COLONNES : GAUCHE / CENTRE / DROITE -->
-  <main class="layout-desktop">
-
-    <!-- COLONNE GAUCHE — ACCORDEON -->
+    <!-- ENCADRÉ 1 : Techniques par côté -->
     <section class="card-block" id="script1">
       <h2 class="spicy section-title">🥋 Techniques par côté</h2>
       <div class="controls controls-column">
         <select id="selectSerieAccordion">
           <option value="">Choisir une série</option>
         </select>
-        <select id="filterSide">
+        <select id="filterSideAccordion">
           <option value="">Choisir un côté</option>
           <option value="droite">Droite</option>
           <option value="gauche">Gauche</option>
@@ -82,7 +146,7 @@
       <div id="accordionList"></div>
     </section>
 
-    <!-- COLONNE CENTRALE — FICHE TECHNIQUE -->
+    <!-- ENCADRÉ 2 : Fiche technique -->
     <section class="card-block" id="script2">
       <h2 class="spicy section-title">💫 Fiche technique</h2>
       <div class="controls controls-column">
@@ -101,17 +165,103 @@
       <div id="resultCard"></div>
     </section>
 
-    <!-- COLONNE DROITE — TIMER -->
-    <section class="card-block" id="timerBlock">
-      <h2 class="spicy section-title">⏱️ Timer</h2>
-      <iframe src="https://martinkoban.com/interval-timer/?m1=00&amp;s1=10&amp;m2=00&amp;s2=05&d=5&amp;dt=rounds&amp;wu=5&amp;wut=seconds&amp;nm=0&amp;iframe=1&amp;p1n=Phase%201&amp;p2n=Phase%202&amp;volume=1" 
-              style="border:none;" title="Interval Timer by MartinKoban.com" width="340" height="650" scrolling="no"></iframe>
+    <!-- ENCADRÉ 3 : Fiches de travail en PNG -->
+    <section class="card-block" id="script3">
+      <h2 class="spicy section-title">🖼️ Fiches de travail</h2>
+      <div class="controls">
+        <select id="filterSidePng">
+          <option value="">Choisir un côté</option>
+          <option value="droite">Droite</option>
+          <option value="gauche">Gauche</option>
+        </select>
+      </div>
+      <div id="accordionPng"></div>
+    </section>
+
+    <!-- ENCADRÉ 4 : Entraînement aléatoire -->
+    <section class="card-block" id="script4">
+      <h2 class="spicy section-title">⚡ Entraînement vocal aléatoire</h2>
+      <div id="trainingControls">
+        <button id="startTraining">Démarrer l'entraînement</button>
+        <button id="stopTraining">Arrêter</button>
+        <label>Intervalle entre techniques : <span id="intervalValue">5</span> secondes</label>
+        <input type="range" id="intervalRange" min="3" max="60" value="5">
+      </div>
+      <div id="trainingOutput"></div>
     </section>
 
   </main>
 
-  <!-- SCRIPT PRINCIPAL -->
-  <script src="ipponkumite.js"></script>
+  <script>
+    // --- ENCADRÉ 3 : Accordéon PNG ---
+    const fiches = [
+      { name: "OÏ tsuki jodan", file: "otjd.png", side: "droite" },
+      { name: "OÏ tsuki chudan", file: "otjc.png", side: "gauche" },
+      { name: "Mae geri", file: "maegeri.png", side: "droite" },
+      // Ajouter jusqu'à 10 techniques
+    ];
+
+    function buildAccordionPng(sideFilter = "") {
+      const container = document.getElementById("accordionPng");
+      container.innerHTML = "";
+      const filtered = fiches.filter(f => !sideFilter || f.side === sideFilter);
+      filtered.forEach(f => {
+        const item = document.createElement("div");
+        item.className = "accordion-item";
+        const header = document.createElement("div");
+        header.className = "accordion-header";
+        header.textContent = f.name;
+        const content = document.createElement("div");
+        content.className = "accordion-content";
+        const img = document.createElement("img");
+        img.src = f.file;
+        img.className = "fiche-img";
+        content.appendChild(img);
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "block" ? "none" : "block";
+        });
+        item.appendChild(header);
+        item.appendChild(content);
+        container.appendChild(item);
+      });
+    }
+
+    document.getElementById("filterSidePng").addEventListener("change", (e) => {
+      buildAccordionPng(e.target.value);
+    });
+
+    buildAccordionPng();
+
+    // --- ENCADRÉ 4 : Entraînement vocal aléatoire ---
+    const techniques = [
+      "OÏ tsuki jodan", "OÏ tsuki chudan", "Mae geri", 
+      "Yoko geri", "Gyaku tsuki", "Kizami tsuki", 
+      "Ura mawashi geri", "Soto uke", "Uchi uke", "Shuto uke"
+    ];
+    let trainingInterval, synth = window.speechSynthesis;
+
+    const intervalRange = document.getElementById("intervalRange");
+    const intervalValue = document.getElementById("intervalValue");
+    intervalRange.addEventListener("input", () => intervalValue.textContent = intervalRange.value);
+
+    document.getElementById("startTraining").addEventListener("click", () => {
+      document.getElementById("trainingOutput").textContent = "Préparation... 5 secondes";
+      setTimeout(() => {
+        trainingInterval = setInterval(() => {
+          const t = techniques[Math.floor(Math.random() * techniques.length)];
+          document.getElementById("trainingOutput").textContent = t;
+          const utter = new SpeechSynthesisUtterance(t);
+          utter.lang = "fr-FR";
+          synth.speak(utter);
+        }, intervalRange.value * 1000);
+      }, 5000);
+    });
+
+    document.getElementById("stopTraining").addEventListener("click", () => {
+      clearInterval(trainingInterval);
+      document.getElementById("trainingOutput").textContent = "Entraînement arrêté";
+    });
+  </script>
 
 </body>
 </html>
