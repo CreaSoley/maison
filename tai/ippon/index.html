@@ -262,7 +262,7 @@ function speak(text, lang="fr-FR", gender="female"){
 
 let baseData=[];
 
-fetch("ippon/ippon.json")
+fetch("ippon.json")
 .then(r=>r.json())
 .then(data=>{
   baseData=data;
@@ -324,7 +324,7 @@ document.getElementById("fCote").onchange=refreshEncart1;
 let vocalData=[];
 let playing=false, paused=false, timerId=null;
 
-fetch("ippon/ipponvocal.json")
+fetch("ipponvocal.json")
 .then(r=>r.json())
 .then(data=>{
   vocalData=data;
