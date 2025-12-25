@@ -11,7 +11,7 @@
 
   <!-- Material Icons + Banner CSS -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="banner.css">
+  <link rel="stylesheet" href="../banner.css">
 
   <!-- Police Spicy locale -->
   <style>
@@ -30,7 +30,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      fetch("banner.html")
+      fetch("../banner.html")
         .then(r => r.text())
         .then(html => {
           document.getElementById("bannerContainer").innerHTML = html;
