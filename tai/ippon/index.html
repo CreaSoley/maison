@@ -7,20 +7,9 @@
 
 <!-- FONTS -->
 <style>
-@font-face {
-  font-family:"Shanghai";
-  src:url("../shanghai.ttf") format("truetype");
-}
-
-@font-face {
-  font-family:"Spicy";
-  src:url("../Spicy Sale.ttf") format("truetype");
-}
-
-@font-face {
-  font-family:"SuperMeatball";
-  src:url("../SuperMeatball.ttf") format("truetype");
-}
+@font-face { font-family:"Shanghai"; src:url("../shanghai.ttf") format("truetype"); }
+@font-face { font-family:"Spicy"; src:url("../Spicy Sale.ttf") format("truetype"); }
+@font-face { font-family:"SuperMeatball"; src:url("../SuperMeatball.ttf") format("truetype"); }
 
 body{
   font-family:"Fredoka", Arial, sans-serif;
@@ -29,7 +18,6 @@ body{
 }
 
 /* ---------------------- BANNIERE ---------------------- */
-
 .appbar{
   background:black;
   color:white;
@@ -37,9 +25,7 @@ body{
   text-align:center;
 }
 
-.appbar img{
-  width:110px;
-}
+.appbar img{ width:110px; }
 
 .title{
   font-family:"Spicy";
@@ -59,9 +45,8 @@ body{
 }
 
 /* ---------------------- LAYOUT ---------------------- */
-
 .container{
-  max-width:1400px;            /* 🔥 élargi desktop */
+  max-width:1400px;
   margin:auto;
   padding:15px;
 }
@@ -77,7 +62,6 @@ body{
 }
 
 /* ---------------------- CARDS ---------------------- */
-
 .card{
   background:white;
   border-radius:22px;
@@ -92,7 +76,6 @@ body{
 }
 
 /* ---------------------- ACCORDEON ---------------------- */
-
 .accordion-item{
   background:#ffe3f5;
   padding:10px;
@@ -111,7 +94,6 @@ body{
 }
 
 /* ---------------------- FORM / STATE ---------------------- */
-
 .state{
   padding:8px 10px;
   background:#fff0fb;
@@ -127,6 +109,7 @@ button{
   background:#ff7cbc;
   color:white;
   cursor:pointer;
+  font-family:"Fredoka";
 }
 
 button:hover{background:#ff9fd0;}
@@ -190,7 +173,7 @@ input[type=range]{width:100%;}
   Répéter :
   <input type="number" id="repeatCount" value="1" min="1" max="20"><br><br>
 
-  ⏱️ Délai entre éléments :
+  ⏱️ Intervalle entre assauts :
   <input type="range" id="tempo" min="5" max="60" value="8">
   <span id="tempoValue">8</span>s<br><br>
 
@@ -218,6 +201,16 @@ input[type=range]{width:100%;}
     <option value="all">Tous</option>
     <option value="gauche">Gauche</option>
     <option value="droite">Droite</option>
+  </select>
+
+  Technique :
+  <select id="filterTech">
+    <option value="all">Toutes</option>
+    <option value="Oi Tsuki Jodan">Oï tsuki jodan</option>
+    <option value="Oi Tsuki Chudan">Oï tsuki chudan</option>
+    <option value="Mae Geri">Mae geri</option>
+    <option value="Mawashi Geri">Mawashi geri</option>
+    <option value="Yoko Geri">Yoko geri</option>
   </select>
 
   <div id="ficheZone"></div>
@@ -259,15 +252,11 @@ function speak(text, lang="fr-FR", gender="female"){
 }
 
 /* ------------ ENCARt 1 -------------------- */
-
 let baseData=[];
-
 fetch("ippon.json")
 .then(r=>r.json())
 .then(data=>{
   baseData=data;
-
-  // remplir liste series
   const s=[...new Set(data.map(x=>x.serie))];
   const sel=document.getElementById("fSerie");
   sel.innerHTML=`<option value="">Toutes</option>`;
@@ -314,13 +303,11 @@ function refreshEncart1(){
       c.style.display=c.style.display==="block"?"none":"block";
     };
   });
-
 }
 document.getElementById("fSerie").onchange=refreshEncart1;
 document.getElementById("fCote").onchange=refreshEncart1;
 
 /* ------------ ENCARt 2 VOCAL -------------------- */
-
 let vocalData=[];
 let playing=false, paused=false, timerId=null;
 
@@ -328,7 +315,6 @@ fetch("ipponvocal.json")
 .then(r=>r.json())
 .then(data=>{
   vocalData=data;
-
   const s=[...new Set(data.map(x=>x["Série"]))];
   s.forEach(v=>{
     serieSelect.innerHTML+=`<option value="${v}">Série ${v}</option>`;
@@ -338,14 +324,12 @@ fetch("ipponvocal.json")
 tempo.oninput=e=>tempoValue.innerText=e.target.value;
 
 startBtn.onclick=()=>{
-
   if(!serieSelect.value) return alert("Choisis une série");
-
   vocalState.innerText="▶️ lecture en cours";
   playing=true; paused=false;
 
   const serie=parseInt(serieSelect.value);
-  const delay=tempo.value*1000;
+  const delay=parseInt(tempo.value)*1000;
   const repeat=parseInt(repeatCount.value);
   const gender=voiceType.value;
 
@@ -353,46 +337,46 @@ startBtn.onclick=()=>{
   const D=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="droite");
 
   let seq=[];
-
   for(let n=0;n<repeat;n++){
     seq.push(["fr","Commençons l'entraînement"]);
     seq.push(["fr","côté gauche"]);
-
     G.forEach(t=>{
       seq.push(["ja",t.Assaut]);
-      seq.push(["fr","blocage"]);
+      seq.push(["fr","pause",2000]);
       seq.push(["ja",t.blocage]);
-      seq.push(["fr","contre"]);
+      seq.push(["fr","pause",2000]);
       seq.push(["ja",t.contre]);
+      seq.push(["fr","pause",delay]);
     });
-
     seq.push(["fr","côté droit"]);
-
     D.forEach(t=>{
       seq.push(["ja",t.Assaut]);
-      seq.push(["fr","blocage"]);
+      seq.push(["fr","pause",2000]);
       seq.push(["ja",t.blocage]);
-      seq.push(["fr","contre"]);
+      seq.push(["fr","pause",2000]);
       seq.push(["ja",t.contre]);
+      seq.push(["fr","pause",delay]);
     });
   }
-
   seq.push(["fr","fin de l'entraînement"]);
 
   let i=0;
-
   function step(){
     if(!playing) return;
     if(paused){timerId=setTimeout(step,300); return;}
 
-    const [lang,txt]=seq[i++];
+    const item=seq[i++];
+    let lang=item[0], txt=item[1];
     displayText.innerText=txt;
 
     if(lang==="ja") speak(txt,"ja-JP",gender);
-    else speak(txt,"fr-FR",gender);
+    else if(txt!=="pause") speak(txt,"fr-FR",gender);
 
-    if(i<seq.length) timerId=setTimeout(step,delay);
-    else{ playing=false; vocalState.innerText="✔️ terminé"; }
+    let nextDelay=(item[1]==="pause")?item[2]:0;
+    if(nextDelay===0) nextDelay=0;
+
+    if(i<seq.length) timerId=setTimeout(step,nextDelay || 500);
+    else { playing=false; vocalState.innerText="✔️ terminé"; }
   }
 
   setTimeout(step,2000);
@@ -414,16 +398,47 @@ stopBtn.onclick=()=>{
   displayText.innerText="";
 };
 
-/* ------------ ENCARt 4 ALEATOIRE -------------------- */
+/* ------------ ENCARt 3 FICHES -------------------- */
+const fiches=[
+  {tech:"Oï tsuki jodan", cote:"gauche", img:"construction.jpg"},
+  {tech:"Oï tsuki chudan", cote:"gauche", img:"construction.jpg"},
+  {tech:"Mae geri", cote:"gauche", img:"construction.jpg"},
+  {tech:"Mawashi geri", cote:"gauche", img:"construction.jpg"},
+  {tech:"Yoko geri", cote:"gauche", img:"construction.jpg"},
+  {tech:"Oï tsuki jodan", cote:"droite", img:"construction.jpg"},
+  {tech:"Oï tsuki chudan", cote:"droite", img:"construction.jpg"},
+  {tech:"Mae geri", cote:"droite", img:"construction.jpg"},
+  {tech:"Mawashi geri", cote:"droite", img:"construction.jpg"},
+  {tech:"Yoko geri", cote:"droite", img:"construction.jpg"}
+];
 
+function refreshFiches(){
+  const side=document.getElementById("filterSide").value;
+  const tech=document.getElementById("filterTech").value;
+  const zone=document.getElementById("ficheZone");
+  zone.innerHTML="";
+  fiches.forEach(f=>{
+    if((side==="all"||f.cote===side) && (tech==="all"||f.tech===tech)){
+      zone.innerHTML+=`<div class="accordion-item"><div class="accordion-title">${f.tech} — ${f.cote}</div><div class="accordion-content"><img class="fiche-img" src="${f.img}"></div></div>`;
+    }
+  });
+
+  document.querySelectorAll("#ficheZone .accordion-title")
+  .forEach(t=>{
+    t.onclick=()=>{ let c=t.nextElementSibling; c.style.display=c.style.display==="block"?"none":"block"; };
+  });
+}
+
+document.getElementById("filterSide").onchange=refreshFiches;
+document.getElementById("filterTech").onchange=refreshFiches;
+
+/* ------------ ENCARt 4 ALEATOIRE -------------------- */
 randTempo.oninput=e=>randTempoValue.innerText=e.target.value;
 
 let run=false;
-
 randStart.onclick=()=>{
   run=true;
   randState.innerText="▶️ en cours";
-
   function loop(){
     if(!run) return;
     const tech=["Oi tsuki","Mae geri","Mawashi geri","Gyaku tsuki"];
@@ -432,7 +447,6 @@ randStart.onclick=()=>{
     speak(t,"ja-JP");
     setTimeout(loop,randTempo.value*1000);
   }
-
   setTimeout(loop,1000);
 };
 
