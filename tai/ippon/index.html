@@ -7,9 +7,20 @@
 
 <!-- FONTS -->
 <style>
-@font-face { font-family:"Shanghai"; src:url("../shanghai.ttf") format("truetype"); }
-@font-face { font-family:"Spicy"; src:url("../Spicy Sale.ttf") format("truetype"); }
-@font-face { font-family:"SuperMeatball"; src:url("../SuperMeatball.ttf") format("truetype"); }
+@font-face {
+  font-family:"Shanghai";
+  src:url("../shanghai.ttf") format("truetype");
+}
+
+@font-face {
+  font-family:"Spicy";
+  src:url("../Spicy Sale.ttf") format("truetype");
+}
+
+@font-face {
+  font-family:"SuperMeatball";
+  src:url("../SuperMeatball.ttf") format("truetype");
+}
 
 body{
   font-family:"Fredoka", Arial, sans-serif;
@@ -25,7 +36,9 @@ body{
   text-align:center;
 }
 
-.appbar img{ width:110px; }
+.appbar img{
+  width:110px;
+}
 
 .title{
   font-family:"Spicy";
@@ -46,7 +59,7 @@ body{
 
 /* ---------------------- LAYOUT ---------------------- */
 .container{
-  max-width:1400px;
+  max-width:1400px;            
   margin:auto;
   padding:15px;
 }
@@ -100,27 +113,6 @@ body{
   border-radius:15px;
   margin-top:8px;
   font-size:.9rem;
-  display:flex;
-  align-items:center;
-}
-
-.state span.indicator{
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:#ff7cbc;
-  margin-right:8px;
-  animation:none;
-}
-
-.state span.indicator.active{
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.5);}
-  100%{transform:scale(1);}
 }
 
 button{
@@ -130,7 +122,7 @@ button{
   background:#ff7cbc;
   color:white;
   cursor:pointer;
-  font-family:"Fredoka";
+  margin:4px 2px;
 }
 
 button:hover{background:#ff9fd0;}
@@ -143,22 +135,19 @@ input, select{
 
 input[type=range]{width:100%;}
 
-/* espacements mobile filtres */
-@media(max-width:600px){
-  select, input[type=number]{margin-bottom:10px; display:block;}
-}
-
 /* fiches PNG */
 .fiche-img{
   width:100%;
   border-radius:16px;
+  margin-top:8px;
 }
 
-/* boutons fiches sous bannière */
-.fiches-btn{
-  margin:5px 5px 5px 0;
-  font-family:"Fredoka";
-  font-size:0.9rem;
+/* MOBILE FILTRES */
+@media(max-width:600px){
+  .card select, .card input{
+    display:block;
+    margin-bottom:8px;
+  }
 }
 </style>
 </head>
@@ -171,82 +160,103 @@ input[type=range]{width:100%;}
   <div class="subtitle">Entraînement interactif</div>
 </header>
 
-<!-- ----------------- BOUTONS FICHES ----------------- -->
+<!-- FICHES PDF SOUS BANNIERE -->
 <div class="container">
-  <div class="state">📄 Fiches exercices</div>
-  <button class="fiches-btn" onclick="window.open('tai/fiche1.pdf','_blank')">Fiche 1</button>
-  <button class="fiches-btn" onclick="window.open('tai/fiche2.pdf','_blank')">Fiche 2</button>
-  <button class="fiches-btn" onclick="window.open('tai/fiche3.pdf','_blank')">Fiche 3</button>
-  <button class="fiches-btn" onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
-  <button class="fiches-btn" onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
-  <button class="fiches-btn" onclick="window.open('tai/fiche6.pdf','_blank')">Fiche 6</button>
+  <div style="margin:15px 0; text-align:center;">
+    <button onclick="window.open('tai/fiche1.pdf','_blank')">Fiche 1</button>
+    <button onclick="window.open('tai/fiche2.pdf','_blank')">Fiche 2</button>
+    <button onclick="window.open('tai/fiche3.pdf','_blank')">Fiche 3</button>
+    <button onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
+    <button onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
+  </div>
 </div>
 
 <div class="container">
+
 <div class="grid">
 
 <!-- ============ ENCARt 1 ================= -->
 <div class="card">
   <h3>📚 Techniques détaillées</h3>
+
   Série :
   <select id="fSerie"></select>
+
   Côté :
   <select id="fCote">
     <option value="">Tous</option>
     <option value="gauche">Gauche</option>
     <option value="droite">Droite</option>
   </select>
-  <div id="encart1note" class="state"><span class="indicator"></span>🔎 Choisis une série et/ou un côté</div>
+
+  <div id="encart1note" class="state">
+    🔎 Choisis une série et/ou un côté
+  </div>
+
   <div id="encart1"></div>
 </div>
 
 <!-- ============ ENCARt 2 ================= -->
 <div class="card">
   <h3>🎤 Entraînement vocal (séries complètes)</h3>
+
   Série :
   <select id="serieSelect"></select><br><br>
+
   Répéter :
   <input type="number" id="repeatCount" value="1" min="1" max="20"><br><br>
-  ⏱️ Intervalle entre assauts :
+
+  ⏱️ Délai entre assauts :
   <input type="range" id="tempo" min="5" max="60" value="8">
   <span id="tempoValue">8</span>s<br><br>
+
   Voix :
   <select id="voiceType">
     <option value="female">Féminine</option>
     <option value="male">Masculine</option>
   </select><br><br>
+
   <button id="startBtn">▶️ Lancer</button>
   <button id="pauseBtn">⏸️ Pause</button>
   <button id="stopBtn">⛔ Stop</button>
-  <div id="vocalState" class="state"><span class="indicator"></span>⛔ En attente</div>
+
+  <div id="vocalState" class="state">⛔ En attente</div>
+
   <div class="output" id="displayText"></div>
 </div>
 
 <!-- ============ ENCARt 3 ================= -->
 <div class="card">
   <h3>🖼️ Fiches PNG</h3>
+
   Côté :
   <select id="filterSide">
     <option value="all">Tous</option>
     <option value="gauche">Gauche</option>
     <option value="droite">Droite</option>
   </select>
+
   Technique :
-  <select id="filterTech">
+  <select id="filterTechnique">
     <option value="all">Toutes</option>
   </select>
+
   <div id="ficheZone"></div>
 </div>
 
 <!-- ============ ENCARt 4 ================= -->
 <div class="card">
   <h3>🎧 Entraînement aléatoire continu</h3>
+
   Rythme :
   <input type="range" id="randTempo" min="3" max="60" value="6">
   <span id="randTempoValue">6</span>s<br><br>
+
   <button id="randStart">🚀 Démarrer</button>
   <button id="randStop">🛑 Arrêter</button>
-  <div id="randState" class="state"><span class="indicator"></span>⛔ arrêt</div>
+
+  <div id="randState" class="state">⛔ arrêt</div>
+
   <div class="output" id="randDisplay"></div>
 </div>
 
@@ -255,18 +265,19 @@ input[type=range]{width:100%;}
 
 <script>
 /* ---------------- SPEECH HELP ---------------- */
-function speak(text, lang="fr-FR", gender="female", callback){
+function speak(text, lang="fr-FR", gender="female"){
   const u=new SpeechSynthesisUtterance(text);
   u.lang=lang;
+
   const voices=speechSynthesis.getVoices();
-  const found=voices.find(v=>
-    gender==="female"
-      ? v.name.toLowerCase().includes("f")
-      : v.name.toLowerCase().includes("m")
-  );
-  if(found) u.voice=found;
-  u.onstart=()=>{ /* activer indicateur */ };
-  u.onend=callback;
+  if(voices.length>0){
+    const found=voices.find(v=>
+      gender==="female"
+        ? v.name.toLowerCase().includes("f")
+        : v.name.toLowerCase().includes("m")
+    );
+    if(found) u.voice=found;
+  }
   speechSynthesis.speak(u);
 }
 
@@ -276,23 +287,37 @@ fetch("ippon.json")
 .then(r=>r.json())
 .then(data=>{
   baseData=data;
+
   const s=[...new Set(data.map(x=>x.serie))];
   const sel=document.getElementById("fSerie");
   sel.innerHTML=`<option value="">Toutes</option>`;
   s.forEach(v=>{
     sel.innerHTML+=`<option value="${v}">Série ${v}</option>`;
   });
+
+  const techSet=new Set(data.map(x=>x.attaque));
+  const fTech=document.getElementById("filterTechnique");
+  techSet.forEach(t=>fTech.innerHTML+=`<option value="${t}">${t}</option>`);
 });
+
 function refreshEncart1(){
   const serie=document.getElementById("fSerie").value;
   const cote=document.getElementById("fCote").value;
   const zone=document.getElementById("encart1");
   zone.innerHTML="";
+
   let list=baseData;
+
   if(serie) list=list.filter(x=>x.serie==serie);
   if(cote) list=list.filter(x=>x.cote==cote);
-  if(list.length===0){ encart1note.innerText="🩷 Aucun résultat"; return; }
+
+  if(list.length===0){
+    encart1note.innerText="🩷 Aucun résultat";
+    return;
+  }
+
   encart1note.innerText="✔️ résultats affichés";
+
   list.forEach(t=>{
     zone.innerHTML+=`
       <div class="accordion-item">
@@ -305,77 +330,75 @@ function refreshEncart1(){
         </div>
       </div>`;
   });
+
   document.querySelectorAll("#encart1 .accordion-title")
-  .forEach(t=>{ t.onclick=()=>{ let c=t.nextElementSibling; c.style.display=c.style.display==="block"?"none":"block"; }; });
+  .forEach(t=>{
+    t.onclick=()=>{
+      let c=t.nextElementSibling;
+      c.style.display=c.style.display==="block"?"none":"block";
+    };
+  });
 }
 document.getElementById("fSerie").onchange=refreshEncart1;
 document.getElementById("fCote").onchange=refreshEncart1;
 
 /* ------------ ENCARt 2 VOCAL -------------------- */
-let vocalData=[], playing=false, paused=false, timerId=null;
+let vocalData=[];
+let playing=false, paused=false, timerId=null;
+
 fetch("ipponvocal.json")
 .then(r=>r.json())
 .then(data=>{
   vocalData=data;
   const s=[...new Set(data.map(x=>x["Série"]))];
-  s.forEach(v=>{ serieSelect.innerHTML+=`<option value="${v}">Série ${v}</option>`; });
+  s.forEach(v=>serieSelect.innerHTML+=`<option value="${v}">Série ${v}</option>`);
 });
 
 tempo.oninput=e=>tempoValue.innerText=e.target.value;
 
-function updateIndicator(stateId, active){
-  const span=document.querySelector(`#${stateId} span.indicator`);
-  if(active) span.classList.add("active");
-  else span.classList.remove("active");
-}
-
-function speakSequence(seq, idx=0){
-  if(idx>=seq.length){ playing=false; vocalState.innerText="✔️ terminé"; updateIndicator('vocalState',false); return; }
-  if(!playing){ updateIndicator('vocalState',false); return; }
-  if(paused){ timerId=setTimeout(()=>speakSequence(seq,idx),300); return; }
-  const item=seq[idx];
-  displayText.innerText=item.text;
-  if(item.type==="text"){
-    updateIndicator('vocalState',true);
-    speak(item.text,item.lang,voiceType.value,()=>{
-      updateIndicator('vocalState',false);
-      timerId=setTimeout(()=>speakSequence(seq,idx+1),item.delay);
-    });
-  } else {
-    timerId=setTimeout(()=>speakSequence(seq,idx+1),item.delay);
-  }
-}
-
 startBtn.onclick=()=>{
   if(!serieSelect.value) return alert("Choisis une série");
-  vocalState.innerText="▶️ lecture en cours";
-  playing=true; paused=false;
-
+  vocalState.innerText="▶️ lecture en cours"; playing=true; paused=false;
   const serie=parseInt(serieSelect.value);
   const delay=parseInt(tempo.value)*1000;
   const repeat=parseInt(repeatCount.value);
+  const gender=voiceType.value;
 
   const G=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="gauche");
   const D=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="droite");
 
   let seq=[];
-  for(let r=0;r<repeat;r++){
-    seq.push({type:"text", text:"Commençons l'entraînement", lang:"fr", delay:0});
-    seq.push({type:"text", text:"côté gauche", lang:"fr", delay:0});
-    G.forEach(a=>{
-      seq.push({type:"text", text:a.Assaut, lang:"ja", delay:2000});
-      seq.push({type:"text", text:a.blocage, lang:"ja", delay:2000});
-      seq.push({type:"text", text:a.contre, lang:"ja", delay:delay});
+  for(let n=0;n<repeat;n++){
+    seq.push(["fr","Commençons l'entraînement"]);
+    seq.push(["fr","côté gauche"]);
+    G.forEach(t=>{
+      seq.push(["ja",t.Assaut]);
+      seq.push(["fr","blocage"]);
+      seq.push(["ja",t.blocage]);
+      seq.push(["fr","contre"]);
+      seq.push(["ja",t.contre]);
     });
-    seq.push({type:"text", text:"côté droit", lang:"fr", delay:0});
-    D.forEach(a=>{
-      seq.push({type:"text", text:a.Assaut, lang:"ja", delay:2000});
-      seq.push({type:"text", text:a.blocage, lang:"ja", delay:2000});
-      seq.push({type:"text", text:a.contre, lang:"ja", delay:delay});
+    seq.push(["fr","côté droit"]);
+    D.forEach(t=>{
+      seq.push(["ja",t.Assaut]);
+      seq.push(["fr","blocage"]);
+      seq.push(["ja",t.blocage]);
+      seq.push(["fr","contre"]);
+      seq.push(["ja",t.contre]);
     });
   }
-  seq.push({type:"text", text:"fin de l'entraînement", lang:"fr", delay:0});
-  speakSequence(seq);
+  seq.push(["fr","fin de l'entraînement"]);
+
+  let i=0;
+  function step(){
+    if(!playing) return;
+    if(paused){timerId=setTimeout(step,300); return;}
+    const [lang,txt]=seq[i++];
+    displayText.innerText=txt;
+    if(lang==="ja") speak(txt,"ja-JP",gender); else speak(txt,"fr-FR",gender);
+    if(i<seq.length) timerId=setTimeout(step,delay); else{ playing=false; vocalState.innerText="✔️ terminé"; }
+  }
+  setTimeout(step,2000);
 };
 
 pauseBtn.onclick=()=>{
@@ -386,66 +409,76 @@ pauseBtn.onclick=()=>{
 };
 
 stopBtn.onclick=()=>{
-  playing=false;
-  paused=false;
-  clearTimeout(timerId);
-  speechSynthesis.cancel();
-  vocalState.innerText="⛔ arrêté";
-  displayText.innerText="";
-  updateIndicator('vocalState',false);
+  playing=false; paused=false; clearTimeout(timerId); speechSynthesis.cancel(); vocalState.innerText="⛔ arrêté"; displayText.innerText="";
 };
 
-/* ------------ ENCARt 3 FICHES -------------------- */
-const fiches=[
-  {tech:"Oï tsuki jodan", cote:"gauche", img:"construction.jpg"},
-  {tech:"Oï tsuki chudan", cote:"gauche", img:"construction.jpg"},
-  {tech:"Mae geri", cote:"gauche", img:"construction.jpg"},
-  {tech:"Mawashi geri", cote:"gauche", img:"construction.jpg"},
-  {tech:"Yoko geri", cote:"gauche", img:"construction.jpg"},
-  {tech:"Oï tsuki jodan", cote:"droite", img:"construction.jpg"},
-  {tech:"Oï tsuki chudan", cote:"droite", img:"construction.jpg"},
-  {tech:"Mae geri", cote:"droite", img:"construction.jpg"},
-  {tech:"Mawashi geri", cote:"droite", img:"construction.jpg"},
-  {tech:"Yoko geri", cote:"droite", img:"construction.jpg"}
+/* ------------ ENCARt 3 -------------------- */
+const pngTechniques=[
+  {Assaut:"Oï tsuki jodan",Côté:"gauche",img:"construction.jpg"},
+  {Assaut:"Oï tsuki chudan",Côté:"gauche",img:"construction.jpg"},
+  {Assaut:"Mae geri",Côté:"gauche",img:"construction.jpg"},
+  {Assaut:"Mawashi geri",Côté:"gauche",img:"construction.jpg"},
+  {Assaut:"Yoko geri",Côté:"gauche",img:"construction.jpg"},
+  {Assaut:"Oï tsuki jodan",Côté:"droite",img:"construction.jpg"},
+  {Assaut:"Oï tsuki chudan",Côté:"droite",img:"construction.jpg"},
+  {Assaut:"Mae geri",Côté:"droite",img:"construction.jpg"},
+  {Assaut:"Mawashi geri",Côté:"droite",img:"construction.jpg"},
+  {Assaut:"Yoko geri",Côté:"droite",img:"construction.jpg"}
 ];
 
-const filterTech=document.getElementById("filterTech");
-const uniqueTechs=[...new Set(fiches.map(f=>f.tech))];
-uniqueTechs.forEach(t=>{ filterTech.innerHTML+=`<option value="${t}">${t}</option>`; });
-
-function refreshFiches(){
-  const side=document.getElementById("filterSide").value;
-  const tech=document.getElementById("filterTech").value;
+const fSide=document.getElementById("filterSide");
+const fTech=document.getElementById("filterTechnique");
+function refreshEncart3(){
+  const side=fSide.value;
+  const tech=fTech.value;
   const zone=document.getElementById("ficheZone");
   zone.innerHTML="";
-  fiches.forEach(f=>{
-    if((side==="all"||f.cote===side) && (tech==="all"||f.tech===tech)){
-      zone.innerHTML+=`<div class="accordion-item"><div class="accordion-title">${f.tech} — ${f.cote}</div><div class="accordion-content"><img class="fiche-img" src="${f.img}"></div></div>`;
-    }
+  let list=pngTechniques;
+  if(side!=="all") list=list.filter(x=>x.Côté===side);
+  if(tech!=="all") list=list.filter(x=>x.Assaut===tech);
+  if(list.length===0){ zone.innerHTML="🩷 Aucun résultat"; return;}
+  list.forEach(t=>{
+    zone.innerHTML+=`<div class="accordion-item">
+      <div class="accordion-title">${t.Assaut} — ${t.Côté}</div>
+      <div class="accordion-content"><img src="${t.img}" class="fiche-img"></div>
+    </div>`;
   });
-  document.querySelectorAll("#ficheZone .accordion-title")
-  .forEach(t=>{ t.onclick=()=>{ let c=t.nextElementSibling; c.style.display=c.style.display==="block"?"none":"block"; }; });
+  document.querySelectorAll("#ficheZone .accordion-title").forEach(t=>{
+    t.onclick=()=>{
+      let c=t.nextElementSibling;
+      c.style.display=c.style.display==="block"?"none":"block";
+    };
+  });
 }
-document.getElementById("filterSide").onchange=refreshFiches;
-document.getElementById("filterTech").onchange=refreshFiches;
-refreshFiches();
+fSide.onchange=refreshEncart3;
+fTech.onchange=refreshEncart3;
 
 /* ------------ ENCARt 4 ALEATOIRE -------------------- */
 randTempo.oninput=e=>randTempoValue.innerText=e.target.value;
+
 let run=false;
+
 randStart.onclick=()=>{
   run=true;
   randState.innerText="▶️ en cours";
-  updateIndicator('randState',true);
   function loop(){
-    if(!run){ updateIndicator('randState',false); return; }
+    if(!run) return;
     const tech=["Oi tsuki","Mae geri","Mawashi geri","Gyaku tsuki"];
     const t=tech[Math.floor(Math.random()*tech.length)];
     randDisplay.innerText=t;
-    speak(t,"fr-FR","female",()=>{ if(run)setTimeout(loop,randTempo.value*1000); });
+    speak(t,"fr-FR");
+    setTimeout(loop,randTempo.value*1000);
   }
   setTimeout(loop,1000);
 };
+
 randStop.onclick=()=>{
   run=false;
- 
+  randDisplay.innerText="";
+  randState.innerText="⛔ arrêt";
+  speechSynthesis.cancel();
+};
+</script>
+
+</body>
+</html>
