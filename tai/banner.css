@@ -1,10 +1,10 @@
 @font-face {
   font-family: "shanghai";
-  src: url("shanghai.ttf");
+  src: url("shanghai.ttf") format("truetype");
 }
 
-.shanghai {
-  font-family: "shanghai";
+.shanghai{
+  font-family: "shanghai", cursive;
 }
 
 .appbar {
