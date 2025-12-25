@@ -191,77 +191,211 @@
     </section>
 
   </main>
+<script>
+let data = [];
 
-  <script>
-    // --- ENCADRÉ 3 : Accordéon PNG ---
-    const fiches = [
-      { name: "OÏ tsuki jodan", file: "otjd.png", side: "droite" },
-      { name: "OÏ tsuki chudan", file: "otjc.png", side: "gauche" },
-      { name: "Mae geri", file: "maegeri.png", side: "droite" },
-      // Ajouter jusqu'à 10 techniques
-    ];
+// Charger JSON
+fetch("ippon.json")
+  .then(r => r.json())
+  .then(json => {
+    data = json;
+    buildSerieSelectors();
+    buildAccordionTechniques();
+  });
 
-    function buildAccordionPng(sideFilter = "") {
-      const container = document.getElementById("accordionPng");
-      container.innerHTML = "";
-      const filtered = fiches.filter(f => !sideFilter || f.side === sideFilter);
-      filtered.forEach(f => {
-        const item = document.createElement("div");
-        item.className = "accordion-item";
-        const header = document.createElement("div");
-        header.className = "accordion-header";
-        header.textContent = f.name;
-        const content = document.createElement("div");
-        content.className = "accordion-content";
-        const img = document.createElement("img");
-        img.src = f.file;
-        img.className = "fiche-img";
-        content.appendChild(img);
-        header.addEventListener("click", () => {
-          content.style.display = content.style.display === "block" ? "none" : "block";
-        });
-        item.appendChild(header);
-        item.appendChild(content);
-        container.appendChild(item);
-      });
-    }
+/* --------- ENCADRÉ 1 : ACCORDÉON TECHNIQUES PAR CÔTÉ --------- */
 
-    document.getElementById("filterSidePng").addEventListener("change", (e) => {
-      buildAccordionPng(e.target.value);
+function buildAccordionTechniques() {
+  const container = document.getElementById("accordionList");
+  const serie = document.getElementById("selectSerieAccordion").value;
+  const side = document.getElementById("filterSideAccordion").value;
+
+  const filtered = data.filter(item =>
+    (!serie || item.serie == serie) &&
+    (!side || item.cote === side)
+  );
+
+  container.innerHTML = "";
+
+  filtered.forEach(item => {
+    const block = document.createElement("div");
+    block.className = "accordion-item";
+
+    const head = document.createElement("div");
+    head.className = "accordion-header";
+    head.textContent = `${item.attaque} — ${item.cote}`;
+
+    const content = document.createElement("div");
+    content.className = "accordion-content";
+    content.innerHTML = `
+      <p><b>Tai sabaki :</b> ${item["tai sabaki"]}</p>
+      <p><b>Blocage :</b> ${item.blocage}</p>
+      <p><b>Défense :</b> ${item.defense}</p>
+      <iframe width="300" height="180" src="${item.video}" allowfullscreen></iframe>
+    `;
+
+    head.onclick = () => {
+      head.classList.toggle("open");
+      content.style.display =
+        content.style.display === "block" ? "none" : "block";
+    };
+
+    block.appendChild(head);
+    block.appendChild(content);
+    container.appendChild(block);
+  });
+}
+
+document.getElementById("selectSerieAccordion").onchange = buildAccordionTechniques;
+document.getElementById("filterSideAccordion").onchange = buildAccordionTechniques;
+
+/* Remplit les listes séries */
+function buildSerieSelectors() {
+  const selects = [
+    document.getElementById("selectSerieAccordion"),
+    document.getElementById("selectSerie")
+  ];
+
+  const series = [...new Set(data.map(x => x.serie))];
+
+  selects.forEach(sel => {
+    series.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s;
+      opt.textContent = `Série ${s}`;
+      sel.appendChild(opt);
     });
+  });
+}
 
-    buildAccordionPng();
+/* --------- ENCADRÉ 2 : FICHE TECHNIQUE --------- */
 
-    // --- ENCADRÉ 4 : Entraînement vocal aléatoire ---
-    const techniques = [
-      "OÏ tsuki jodan", "OÏ tsuki chudan", "Mae geri", 
-      "Yoko geri", "Gyaku tsuki", "Kizami tsuki", 
-      "Ura mawashi geri", "Soto uke", "Uchi uke", "Shuto uke"
-    ];
-    let trainingInterval, synth = window.speechSynthesis;
+document.getElementById("selectSerie").onchange = updateCard;
+document.getElementById("selectAttack").onchange = updateCard;
+document.getElementById("selectSide").onchange = updateCard;
 
-    const intervalRange = document.getElementById("intervalRange");
-    const intervalValue = document.getElementById("intervalValue");
-    intervalRange.addEventListener("input", () => intervalValue.textContent = intervalRange.value);
+function updateCard() {
+  const serie = selectSerie.value;
+  const atk = selectAttack.value;
+  const side = selectSide.value;
 
-    document.getElementById("startTraining").addEventListener("click", () => {
-      document.getElementById("trainingOutput").textContent = "Préparation... 5 secondes";
-      setTimeout(() => {
-        trainingInterval = setInterval(() => {
-          const t = techniques[Math.floor(Math.random() * techniques.length)];
-          document.getElementById("trainingOutput").textContent = t;
-          const utter = new SpeechSynthesisUtterance(t);
-          utter.lang = "fr-FR";
-          synth.speak(utter);
-        }, intervalRange.value * 1000);
-      }, 5000);
+  const card = data.find(x =>
+    x.serie == serie &&
+    (!atk || x.attaque === atk) &&
+    (!side || x.cote === side)
+  );
+
+  const target = document.getElementById("resultCard");
+
+  if (!card) {
+    target.innerHTML = "<i>Aucune fiche trouvée</i>";
+    return;
+  }
+
+  target.innerHTML = `
+    <p><b>Attaque :</b> ${card.attaque}</p>
+    <p><b>Côté :</b> ${card.cote}</p>
+    <p><b>Tai sabaki :</b> ${card["tai sabaki"]}</p>
+    <p><b>Blocage :</b> ${card.blocage}</p>
+    <p><b>Défense :</b> ${card.defense}</p>
+    <iframe width="320" height="200" src="${card.video}" allowfullscreen></iframe>
+  `;
+
+  // remplir attaques dynamiquement
+  const attacks = [...new Set(data
+    .filter(x => x.serie == serie)
+    .map(x => x.attaque))];
+
+  selectAttack.innerHTML = `<option value="">Choisir une attaque</option>`;
+  attacks.forEach(a => {
+    const o = document.createElement("option");
+    o.textContent = a;
+    o.value = a;
+    selectAttack.appendChild(o);
+  });
+}
+
+const fichesPng = [
+  { name: "Oï tsuki jodan", file: "otjd.png", side: "droite" },
+  { name: "Oï tsuki jodan", file: "otjd.png", side: "gauche" }
+];
+
+function buildAccordionPngKawaii(side="") {
+  const container = document.getElementById("accordionPng");
+  container.innerHTML = "";
+
+  fichesPng
+    .filter(f => !side || f.side === side)
+    .forEach(f => {
+      const item = document.createElement("div");
+      item.className = "accordion-item";
+
+      const head = document.createElement("div");
+      head.className = "accordion-header";
+      head.textContent = `${f.name} — ${f.side}`;
+
+      const content = document.createElement("div");
+      content.className = "accordion-content";
+      content.innerHTML =
+        `<img src="${f.file}" class="fiche-img">`;
+
+      head.onclick = () => {
+        head.classList.toggle("open");
+        content.style.display =
+          content.style.display === "block" ? "none" : "block";
+      };
+
+      item.appendChild(head);
+      item.appendChild(content);
+      container.appendChild(item);
     });
+}
 
-    document.getElementById("stopTraining").addEventListener("click", () => {
-      clearInterval(trainingInterval);
-      document.getElementById("trainingOutput").textContent = "Entraînement arrêté";
-    });
-  </script>
+document.getElementById("filterSidePng").onchange =
+  e => buildAccordionPngKawaii(e.target.value);
+
+buildAccordionPngKawaii();
+
+const techs = [
+  "Oi tsuki jodan",
+  "Oi tsuki chudan",
+  "Mae geri",
+  "Yoko geri",
+  "Gyaku tsuki",
+  "Kizami tsuki",
+  "Soto uke",
+  "Uchi uke",
+  "Ura mawashi geri",
+  "Shuto uke"
+];
+
+let timer = null;
+const synth = window.speechSynthesis;
+
+intervalRange.oninput = () =>
+  intervalValue.textContent = intervalRange.value;
+
+startTraining.onclick = () => {
+  trainingOutput.textContent = "⏳ Préparation…";
+  setTimeout(() => {
+    timer = setInterval(() => {
+      const t = techs[Math.floor(Math.random() * techs.length)];
+      trainingOutput.textContent = "🔥 " + t;
+
+      const u = new SpeechSynthesisUtterance(t);
+      u.lang = "fr-FR";
+      synth.speak(u);
+    }, intervalRange.value * 1000);
+  }, 5000);
+};
+
+stopTraining.onclick = () => {
+  clearInterval(timer);
+  synth.cancel();
+  trainingOutput.textContent = "🛑 entraînement arrêté";
+};
+</script>
+
 
 </body>
 </html>
