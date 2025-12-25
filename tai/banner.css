@@ -70,3 +70,11 @@
   letter-spacing: 2px;
   color: #ffd0ea;
 }
+
+/* mobile */
+@media (max-width: 600px) {
+  .header-text .title {
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+}
