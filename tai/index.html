@@ -33,7 +33,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* HEADER – on garde le fond noir */
+/* ==== BANNIÈRE NOIRE ==== */
 header {
   background:#000;
   color:#fff;
@@ -71,7 +71,7 @@ header h1 {
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(5cm, 1fr));
   gap:22px;
-  justify-items:center;   /* centre chaque carte dans sa cellule */
+  justify-items:center;
 }
 
 /* Cartes UV façon boutons kawaii */
@@ -105,7 +105,7 @@ header h1 {
   text-align:center;
 }
 
-/* ==== BOUTON EXAMEN / PLANNING SPÉCIAUX ==== */
+/* ==== BOUTON EXAMEN / PLANNING SPÉCIAUX (DESKTOP seulement) ==== */
 .uv-card.examen {
   position:relative;
   width:6.5cm !important;
@@ -123,18 +123,19 @@ header h1 {
   transform:translateY(-6px) scale(1.05);
 }
 
-/* Conteneur des deux cartes spéciales (Examen + Planning) */
+/* groupe examen+planning centré */
 .uv-grid > .uv-row-exam {
-  grid-column: 1 / -1;       /* prend toute la largeur de la grille */
+  grid-column: 1 / -1;
   display:flex;
-  justify-content:center;    /* centre le groupe */
+  justify-content:center;
   gap:20px;
   margin-top:20px;
   width:100%;
 }
 
-/* ==== MOBILE : BARRES ==== */
+/* ==== MOBILE ==== */
 @media(max-width:900px){
+
   .uv-grid {
     grid-template-columns:1fr;
   }
@@ -159,9 +160,18 @@ header h1 {
     font-size:1.3rem;
   }
 
+  /* >>> important :
+     Examen & Planning se comportent EXACTEMENT comme Kihon <<< */
   .uv-card.examen {
+    box-shadow: var(--card-shadow);
     width:100% !important;
-    height:80px !important;
+    height:70px !important;
+    transform:none !important;
+  }
+
+  .uv-row-exam {
+    flex-direction:column;
+    gap:14px;
   }
 }
 
@@ -204,13 +214,21 @@ header h1 {
   display:block;
 }
 
-/* Mobile */
+/* iFrames responsives */
+.accordion-body iframe{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:14px;
+  border:0;
+  margin-bottom:8px;
+}
+
+/* Mobile accordéons */
 @media(max-width:900px){
   .accordion-container {
     grid-template-columns:1fr;
   }
 }
-
 </style>
 </head>
 
@@ -247,8 +265,9 @@ header h1 {
         <img src="lrandori.png" alt="Randori"><span>Randori</span>
       </div>
 
-      <!-- BOUTONS CENTRÉS EXAMEN + PLANNING -->
+      <!-- groupe examen + planning -->
       <div class="uv-row-exam">
+
         <div class="uv-card examen" onclick="location.href='oral.html'">
           <img src="lexamen.png" alt="Examen"><span>Examen</span>
         </div>
@@ -256,6 +275,7 @@ header h1 {
         <div class="uv-card examen" onclick="location.href='retro/index.html'">
           <img src="lplanning.png" alt="Planning"><span>Planning</span>
         </div>
+
       </div>
 
     </div>
@@ -309,21 +329,19 @@ header h1 {
 </div>
 
 <script>
+/* Accordéons */
 document.querySelectorAll('.accordion-header').forEach(header => {
   header.addEventListener('click', () => {
     const accordion = header.parentElement;
 
-    // Ferme les autres (optionnel)
     document.querySelectorAll('.accordion').forEach(a => {
       if (a !== accordion) a.classList.remove('open');
     });
 
-    // Toggle celui cliqué
     accordion.classList.toggle('open');
   });
 });
 </script>
-
 
 </body>
 </html>
