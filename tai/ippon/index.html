@@ -8,7 +8,7 @@
 
   <!-- CSS principal -->
   <link rel="stylesheet" href="style-ippon.css">
-  <link rel="stylesheet" href="banner.css">
+  <link rel="stylesheet" href="../banner.css">
 
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -112,7 +112,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      fetch("banner.html")
+      fetch("../banner.html")
         .then(r => r.text())
         .then(html => {
           document.getElementById("bannerContainer").innerHTML = html;
