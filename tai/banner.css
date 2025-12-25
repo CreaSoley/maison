@@ -1,3 +1,7 @@
+/* ========================= */
+/* POLICES PERSONNALISÉES    */
+/* ========================= */
+
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf") format("truetype");
@@ -8,17 +12,34 @@
   src: url("SuperMeatball.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "shanghai";
+  src: url("shanghai.ttf") format("truetype");
+}
+
+/* ========================= */
+/* CLASSES DE POLICE         */
+/* ========================= */
+
+.spicy{
+  font-family: "Spicy", cursive;
+}
+
+.meatball{
+  font-family: "SuperMeatball", sans-serif;
+}
+
 .shanghai{
   font-family: "shanghai", cursive;
 }
+
 .fredoka{
   font-family: "Fredoka", Arial, sans-serif;
 }
 
-.meatball {
-  font-family: "SuperMeatball", sans-serif;
-}
-}
+/* ========================= */
+/* BANNIÈRE / HEADER         */
+/* ========================= */
 
 .appbar {
   background: black;
