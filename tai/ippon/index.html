@@ -1,446 +1,447 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Ippon Kumite</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- FONTS -->
+<title>Ippon Kumite – Tai Jitsu</title>
+
+<!-- Banner CSS -->
+<link rel="stylesheet" href="../banner.css">
+
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <style>
-@font-face {
-  font-family:"Shanghai";
-  src:url("../shanghai.ttf") format("truetype");
-}
+/* ---------------------- FONTS ------------------------ */
 
-@font-face {
+@font-face{
   font-family:"Spicy";
-  src:url("../Spicy Sale.ttf") format("truetype");
+  src:url("Spicy Sale.ttf");
 }
 
-@font-face {
-  font-family:"SuperMeatball";
-  src:url("../SuperMeatball.ttf") format("truetype");
+@font-face{
+  font-family:"Shanghai";
+  src:url("Shanghai.ttf");
 }
+
+/* fallback si introuvable */
+.kawaii-title{
+  font-family:"Shanghai","Spicy","Comic Sans MS",cursive;
+}
+
+/* ---------------------- LAYOUT ------------------------ */
 
 body{
-  font-family:"Fredoka", Arial, sans-serif;
-  background:#fff3fc;
+  background:#fff5fc;
   margin:0;
+  font-family:Arial, Helvetica, sans-serif;
 }
-
-/* ---------------------- BANNIERE ---------------------- */
-
-.appbar{
-  background:black;
-  color:white;
-  padding:20px 10px;
-  text-align:center;
-}
-
-.appbar img{
-  width:110px;
-}
-
-.title{
-  font-family:"Spicy";
-  font-size:2.4rem;
-  color:#ffd6ec;
-}
-
-.subtitle{
-  font-family:"Shanghai";
-  font-size:1.5rem;
-  color:#ffd0ec;
-}
-
-@media(max-width:600px){
-  .title{font-size:1.6rem;}
-  .subtitle{font-size:1.1rem;}
-}
-
-/* ---------------------- LAYOUT ---------------------- */
 
 .container{
-  max-width:1400px;            /* 🔥 élargi desktop */
+  max-width:1400px;
   margin:auto;
-  padding:15px;
+  padding:10px;
 }
 
+/* desktop grid : plus large qu'avant */
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:20px;
 }
 
-@media(max-width:800px){
-  .grid{grid-template-columns:1fr;}
+/* mobile */
+@media(max-width:900px){
+  .grid{
+    grid-template-columns:1fr;
+  }
 }
 
-/* ---------------------- CARDS ---------------------- */
+/* ---------------------- CARDS ------------------------ */
 
 .card{
   background:white;
-  border-radius:22px;
-  padding:18px;
-  box-shadow:0 8px 20px rgba(0,0,0,.15);
+  border-radius:20px;
+  padding:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,.1);
 }
 
-.card h3{
-  color:#ff5fa2;
-  margin-top:0;
-  font-family:"SuperMeatball";
+.card h2{
+  text-align:center;
+  font-family:"Spicy",cursive;
+  margin-top:5px;
 }
 
-/* ---------------------- ACCORDEON ---------------------- */
+/* kawaii controls  */
+button,
+select,
+input{
+  border-radius:25px;
+  border:2px solid #ffb7e5;
+  padding:6px 10px;
+}
+
+button{
+  cursor:pointer;
+  background:#ffe2f4;
+}
+
+button:hover{
+  background:#ffd2ef;
+}
+
+/* ---------------------- ACCORDION ------------------------ */
 
 .accordion-item{
-  background:#ffe3f5;
-  padding:10px;
-  border-radius:18px;
-  margin:7px 0;
-}
-
-.accordion-title{
-  font-weight:bold;
+  background:#fff0fb;
+  border-radius:16px;
+  margin-bottom:8px;
+  padding:8px 12px;
   cursor:pointer;
 }
 
 .accordion-content{
   display:none;
-  padding-top:8px;
-}
-
-/* ---------------------- FORM / STATE ---------------------- */
-
-.state{
-  padding:8px 10px;
-  background:#fff0fb;
-  border-radius:15px;
-  margin-top:8px;
-  font-size:.9rem;
-}
-
-button{
-  border:none;
-  padding:10px 18px;
-  border-radius:22px;
-  background:#ff7cbc;
-  color:white;
-  cursor:pointer;
-}
-
-button:hover{background:#ff9fd0;}
-
-input, select{
-  border-radius:18px;
   padding:6px 10px;
-  border:1px solid #ffb7e3;
 }
 
-input[type=range]{width:100%;}
+/* ---------------------- STATUS ------------------------ */
 
-/* fiches PNG */
-.fiche-img{
-  width:100%;
-  border-radius:16px;
+.status{
+  text-align:center;
+  font-weight:bold;
+  margin-top:10px;
 }
+
+.status.play{ color:#2e7d32; }
+.status.pause{ color:#ff6f00; }
+.status.stop{ color:#c62828; }
 </style>
 </head>
 
-<body>
+<body data-title="Ippon kumite – Entraînement">
 
-<header class="appbar">
-  <a href="../index.html"><img src="../logo.png" alt="logo"></a>
-  <div class="title">IPPON KUMITE</div>
-  <div class="subtitle">Entraînement interactif</div>
-</header>
+<!-- injected banner -->
+<div id="bannerContainer"></div>
+
+<script>
+fetch("../banner.html")
+.then(r=>r.text())
+.then(html=>{
+  document.getElementById("bannerContainer").innerHTML=html;
+  const t=document.querySelector(".header-text .title");
+  if(t) t.textContent=document.body.dataset.title || "Ippon kumite";
+});
+</script>
 
 <div class="container">
 
 <div class="grid">
 
-<!-- ============ ENCARt 1 ================= -->
+<!-- ========================================================= -->
+<!-- ======================= ENCARt 1 ======================== -->
+<!-- ========================================================= -->
+
 <div class="card">
-  <h3>📚 Techniques détaillées</h3>
+<h2>🥋 Accordéon – techniques par côté</h2>
 
-  Série :
-  <select id="fSerie"></select>
+<select id="fSerie">
+<option value="">Choisir une série</option>
+</select>
 
-  Côté :
-  <select id="fCote">
-    <option value="">Tous</option>
-    <option value="gauche">Gauche</option>
-    <option value="droite">Droite</option>
-  </select>
+<select id="fCote">
+<option value="">Choisir un côté</option>
+<option value="gauche">gauche</option>
+<option value="droite">droite</option>
+</select>
 
-  <div id="encart1note" class="state">
-    🔎 Choisis une série et/ou un côté
-  </div>
-
-  <div id="encart1"></div>
+<div id="accordion1"></div>
 </div>
 
-<!-- ============ ENCARt 2 ================= -->
+<!-- ========================================================= -->
+<!-- ======================= ENCARt 2 ======================== -->
+<!-- ========================================================= -->
+
 <div class="card">
-  <h3>🎤 Entraînement vocal (séries complètes)</h3>
+<h2>🗣️ Entraînement vocal guidé</h2>
 
-  Série :
-  <select id="serieSelect"></select><br><br>
+<select id="serieVocale">
+<option value="">Choisir une série</option>
+</select>
 
-  Répéter :
-  <input type="number" id="repeatCount" value="1" min="1" max="20"><br><br>
+<label>⏱️ intervalle assaut → assaut :
+<span id="intervalValue">10s</span></label>
+<input id="intervalRange" type="range" min="5" max="60" value="10">
 
-  ⏱️ Délai entre éléments :
-  <input type="range" id="tempo" min="5" max="60" value="8">
-  <span id="tempoValue">8</span>s<br><br>
-
-  Voix :
-  <select id="voiceType">
-    <option value="female">Féminine</option>
-    <option value="male">Masculine</option>
-  </select><br><br>
-
-  <button id="startBtn">▶️ Lancer</button>
-  <button id="pauseBtn">⏸️ Pause</button>
-  <button id="stopBtn">⛔ Stop</button>
-
-  <div id="vocalState" class="state">⛔ En attente</div>
-
-  <div class="output" id="displayText"></div>
+<div style="text-align:center;margin-top:10px;">
+<button id="btnStart">▶️ Lancer</button>
+<button id="btnPause">⏸️ Pause</button>
+<button id="btnStop">⏹️ Stop</button>
 </div>
 
-<!-- ============ ENCARt 3 ================= -->
+<div class="status" id="vocalStatus">⏹️ arrêté</div>
+
+<div id="vocalDisplay" style="text-align:center;font-size:1.3em;margin-top:10px;"></div>
+</div>
+
+<!-- ========================================================= -->
+<!-- ======================= ENCARt 3 ======================== -->
+<!-- ========================================================= -->
+
 <div class="card">
-  <h3>🖼️ Fiches PNG</h3>
+<h2>📄 Fiches d’entraînement (PNG)</h2>
 
-  Côté :
-  <select id="filterSide">
-    <option value="all">Tous</option>
-    <option value="gauche">Gauche</option>
-    <option value="droite">Droite</option>
-  </select>
+<select id="fichesCote">
+<option value="">Choisir un côté</option>
+<option value="gauche">gauche</option>
+<option value="droit">droit</option>
+</select>
 
-  <div id="ficheZone"></div>
+<div id="accordion3"></div>
 </div>
 
-<!-- ============ ENCARt 4 ================= -->
+<!-- ========================================================= -->
+<!-- ======================= ENCARt 4 ======================== -->
+<!-- ========================================================= -->
+
 <div class="card">
-  <h3>🎧 Entraînement aléatoire continu</h3>
+<h2>🎲 Entraînement aléatoire</h2>
 
-  Rythme :
-  <input type="range" id="randTempo" min="3" max="60" value="6">
-  <span id="randTempoValue">6</span>s<br><br>
+<button id="randStart">Démarrer</button>
+<button id="randStop">Arrêter</button>
 
-  <button id="randStart">🚀 Démarrer</button>
-  <button id="randStop">🛑 Arrêter</button>
-
-  <div id="randState" class="state">⛔ arrêt</div>
-
-  <div class="output" id="randDisplay"></div>
+<div id="randText" style="text-align:center;margin-top:10px;"></div>
 </div>
 
 </div>
 </div>
+
+<!-- ============================ SCRIPTS =============================== -->
 
 <script>
-/* ---------------- SPEECH HELP ---------------- */
-function speak(text, lang="fr-FR", gender="female"){
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=lang;
+/* ================= ENCARt 1 : ippon.json ================== */
 
-  const voices=speechSynthesis.getVoices();
-  const found=voices.find(v=>
-    gender==="female"
-      ? v.name.toLowerCase().includes("f")
-      : v.name.toLowerCase().includes("m")
-  );
-  if(found) u.voice=found;
-  speechSynthesis.speak(u);
-}
-
-/* ------------ ENCARt 1 -------------------- */
-
-let baseData=[];
+let ipponData=[];
 
 fetch("ippon.json")
 .then(r=>r.json())
 .then(data=>{
-  baseData=data;
+  ipponData=data;
+  const series=[...new Set(data.map(d=>d.serie||d.Série))];
+  const s1=document.getElementById("fSerie");
+  const s2=document.getElementById("serieVocale");
 
-  // remplir liste series
-  const s=[...new Set(data.map(x=>x.serie))];
-  const sel=document.getElementById("fSerie");
-  sel.innerHTML=`<option value="">Toutes</option>`;
-  s.forEach(v=>{
-    sel.innerHTML+=`<option value="${v}">Série ${v}</option>`;
+  series.forEach(n=>{
+    const o=document.createElement("option");
+    o.value=n;o.textContent="Série "+n;
+    s1.appendChild(o.cloneNode(true));
+    s2.appendChild(o.cloneNode(true));
   });
 });
 
-function refreshEncart1(){
+document.getElementById("fSerie").addEventListener("change",renderAcc1);
+document.getElementById("fCote").addEventListener("change",renderAcc1);
+
+function renderAcc1(){
   const serie=document.getElementById("fSerie").value;
   const cote=document.getElementById("fCote").value;
-  const zone=document.getElementById("encart1");
-  zone.innerHTML="";
+  const cont=document.getElementById("accordion1");
+  cont.innerHTML="";
 
-  let list=baseData;
+  if(!serie && !cote) return;
 
-  if(serie) list=list.filter(x=>x.serie==serie);
-  if(cote) list=list.filter(x=>x.cote==cote);
+  ipponData
+  .filter(d=>(!serie||d.serie==serie||d.Série==serie)
+              &&(!cote||d.cote==cote||d.Côté==cote))
+  .forEach(item=>{
+    const wrap=document.createElement("div");
+    wrap.className="accordion-item";
+    wrap.textContent=item.attaque||item.Assaut;
 
-  if(list.length===0){
-    encart1note.innerText="🩷 Aucun résultat";
-    return;
-  }
+    const content=document.createElement("div");
+    content.className="accordion-content";
+    content.innerHTML=
+      "<b>Tai sabaki :</b> "+(item["tai sabaki"]||"—")+"<br>"+
+      "<b>Blocage :</b> "+(item.blocage||"—")+"<br>"+
+      "<b>Défense :</b> "+(item.defense||item.contre||"—")+"<br>";
 
-  encart1note.innerText="✔️ résultats affichés";
+    wrap.addEventListener("click",()=>{
+      content.style.display=
+        content.style.display=="block"?"none":"block";
+    });
 
-  list.forEach(t=>{
-    zone.innerHTML+=`
-      <div class="accordion-item">
-        <div class="accordion-title">${t.attaque} — ${t.cote}</div>
-        <div class="accordion-content">
-          Tai sabaki : ${t["tai sabaki"]}<br>
-          Blocage : ${t.blocage}<br>
-          Défense : ${t.defense}<br>
-          <iframe width="100%" height="190" src="${t.video}" allowfullscreen></iframe>
-        </div>
-      </div>`;
+    cont.appendChild(wrap);
+    cont.appendChild(content);
   });
-
-  document.querySelectorAll("#encart1 .accordion-title")
-  .forEach(t=>{
-    t.onclick=()=>{
-      let c=t.nextElementSibling;
-      c.style.display=c.style.display==="block"?"none":"block";
-    };
-  });
-
 }
-document.getElementById("fSerie").onchange=refreshEncart1;
-document.getElementById("fCote").onchange=refreshEncart1;
 
-/* ------------ ENCARt 2 VOCAL -------------------- */
+/* ================= ENCARt 2 : ipponvocal.json ================== */
 
 let vocalData=[];
-let playing=false, paused=false, timerId=null;
+let vocalTimer=null;
+let paused=false;
+let queue=[];
+let intervalAssaut=10;
 
 fetch("ipponvocal.json")
 .then(r=>r.json())
-.then(data=>{
-  vocalData=data;
+.then(d=>vocalData=d);
 
-  const s=[...new Set(data.map(x=>x["Série"]))];
-  s.forEach(v=>{
-    serieSelect.innerHTML+=`<option value="${v}">Série ${v}</option>`;
-  });
-});
+const synth=window.speechSynthesis;
 
-tempo.oninput=e=>tempoValue.innerText=e.target.value;
+function speak(txt,lang="fr-FR"){
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang=lang;
+  synth.speak(u);
+}
 
-startBtn.onclick=()=>{
-
-  if(!serieSelect.value) return alert("Choisis une série");
-
-  vocalState.innerText="▶️ lecture en cours";
-  playing=true; paused=false;
-
-  const serie=parseInt(serieSelect.value);
-  const delay=tempo.value*1000;
-  const repeat=parseInt(repeatCount.value);
-  const gender=voiceType.value;
-
-  const G=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="gauche");
-  const D=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="droite");
-
-  let seq=[];
-
-  for(let n=0;n<repeat;n++){
-    seq.push(["fr","Commençons l'entraînement"]);
-    seq.push(["fr","côté gauche"]);
-
-    G.forEach(t=>{
-      seq.push(["ja",t.Assaut]);
-      seq.push(["fr","blocage"]);
-      seq.push(["ja",t.blocage]);
-      seq.push(["fr","contre"]);
-      seq.push(["ja",t.contre]);
-    });
-
-    seq.push(["fr","côté droit"]);
-
-    D.forEach(t=>{
-      seq.push(["ja",t.Assaut]);
-      seq.push(["fr","blocage"]);
-      seq.push(["ja",t.blocage]);
-      seq.push(["fr","contre"]);
-      seq.push(["ja",t.contre]);
-    });
-  }
-
-  seq.push(["fr","fin de l'entraînement"]);
-
-  let i=0;
-
-  function step(){
-    if(!playing) return;
-    if(paused){timerId=setTimeout(step,300); return;}
-
-    const [lang,txt]=seq[i++];
-    displayText.innerText=txt;
-
-    if(lang==="ja") speak(txt,"ja-JP",gender);
-    else speak(txt,"fr-FR",gender);
-
-    if(i<seq.length) timerId=setTimeout(step,delay);
-    else{ playing=false; vocalState.innerText="✔️ terminé"; }
-  }
-
-  setTimeout(step,2000);
+document.getElementById("intervalRange").oninput=e=>{
+  intervalAssaut=parseInt(e.target.value);
+  document.getElementById("intervalValue").textContent=intervalAssaut+"s";
 };
 
-pauseBtn.onclick=()=>{
-  if(!playing) return;
-  paused=!paused;
-  paused?(vocalState.innerText="⏸️ en pause", speechSynthesis.pause())
-        :(vocalState.innerText="▶️ lecture en cours", speechSynthesis.resume());
-};
+function setStatus(t,c){
+  const s=document.getElementById("vocalStatus");
+  s.textContent=t;
+  s.className="status "+c;
+}
 
-stopBtn.onclick=()=>{
-  playing=false;
+document.getElementById("btnStart").onclick=()=>{
+  const serie=document.getElementById("serieVocale").value;
+  if(!serie) return;
+
   paused=false;
-  clearTimeout(timerId);
-  speechSynthesis.cancel();
-  vocalState.innerText="⛔ arrêté";
-  displayText.innerText="";
+  synth.cancel();
+  setStatus("▶️ lecture","play");
+
+  const list=vocalData.filter(x=>x.Série==serie);
+
+  queue=[];
+
+  queue.push(()=>speak("Commençons l'entraînement"));
+  queue.push(()=>speak("côté gauche"));
+
+  list.filter(x=>x.Côté=="gauche").forEach(x=>{
+    queue.push(()=>sequenceAssaut(x));
+  });
+
+  queue.push(()=>speak("côté droit"));
+
+  list.filter(x=>x.Côté=="droit"||x.Côté=="droite").forEach(x=>{
+    queue.push(()=>sequenceAssaut(x));
+  });
+
+  queue.push(()=>{
+    speak("Fin de l'entraînement");
+    setStatus("⏹️ terminé","stop");
+  });
+
+  runQueue();
 };
 
-/* ------------ ENCARt 4 ALEATOIRE -------------------- */
-
-randTempo.oninput=e=>randTempoValue.innerText=e.target.value;
-
-let run=false;
-
-randStart.onclick=()=>{
-  run=true;
-  randState.innerText="▶️ en cours";
-
-  function loop(){
-    if(!run) return;
-    const tech=["Oi tsuki","Mae geri","Mawashi geri","Gyaku tsuki"];
-    const t=tech[Math.floor(Math.random()*tech.length)];
-    randDisplay.innerText=t;
-    speak(t,"ja-JP");
-    setTimeout(loop,randTempo.value*1000);
+document.getElementById("btnPause").onclick=()=>{
+  paused=!paused;
+  if(paused){
+    synth.pause();
+    setStatus("⏸️ pause","pause");
+  }else{
+    synth.resume();
+    setStatus("▶️ lecture","play");
   }
-
-  setTimeout(loop,1000);
 };
 
-randStop.onclick=()=>{
-  run=false;
-  randDisplay.innerText="";
-  randState.innerText="⛔ arrêt";
-  speechSynthesis.cancel();
+document.getElementById("btnStop").onclick=()=>{
+  synth.cancel();
+  queue=[];
+  setStatus("⏹️ arrêté","stop");
+};
+
+function sequenceAssaut(x){
+  const disp=document.getElementById("vocalDisplay");
+
+  // assaut
+  disp.textContent=x.Assaut;
+  speak(x.Assaut,"ja-JP");
+
+  setTimeout(()=>{
+    disp.textContent=x.blocage;
+    speak(x.blocage,"ja-JP");
+  },2000);
+
+  setTimeout(()=>{
+    disp.textContent=x.contre;
+    speak(x.contre,"ja-JP");
+  },4000);
+}
+
+function runQueue(){
+  if(queue.length===0) return;
+
+  const step=queue.shift();
+  step();
+
+  // enforce minimal interval >=6 to fit 2+2+2
+  const wait=Math.max(intervalAssaut*1000,6000);
+
+  setTimeout(()=>{
+    if(!paused) runQueue();
+    else queue.unshift(step);
+  },wait);
+}
+
+/* ================= ENCARt 3 : fiches ================== */
+
+const ficheList=[
+"Oï tsuki jodan gauche",
+"Oï tsuki chudan gauche",
+"Mae geri gauche",
+"Mawashi geri gauche",
+"Yoko geri gauche",
+"Oï tsuki jodan droit",
+"Oï tsuki chudan droit",
+"Mae geri droit",
+"Mawashi geri droit",
+"Yoko geri droit"
+];
+
+document.getElementById("fichesCote").onchange=renderFiches;
+
+function renderFiches(){
+  const cont=document.getElementById("accordion3");
+  cont.innerHTML="";
+  ficheList.forEach(f=>{
+    const item=document.createElement("div");
+    item.className="accordion-item";
+    item.textContent=f;
+
+    const img=document.createElement("div");
+    img.className="accordion-content";
+    img.innerHTML=`<img src="construction.jpg" style="max-width:100%;">`;
+
+    item.onclick=()=>{
+      img.style.display=img.style.display=="block"?"none":"block";
+    };
+
+    cont.appendChild(item);
+    cont.appendChild(img);
+  });
+}
+
+/* ================= ENCARt 4 ================== */
+
+let randInterval=null;
+
+document.getElementById("randStart").onclick=()=>{
+  const disp=document.getElementById("randText");
+  randInterval=setInterval(()=>{
+    const r=Math.floor(Math.random()*ficheList.length);
+    disp.textContent=ficheList[r];
+  },3000);
+};
+
+document.getElementById("randStop").onclick=()=>{
+  clearInterval(randInterval);
 };
 </script>
 
