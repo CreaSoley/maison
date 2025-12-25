@@ -1,6 +1,11 @@
 @font-face {
-  font-family: "shanghai";
-  src: url("shanghai.ttf") format("truetype");
+  font-family: "Spicy";
+  src: url("Spicy Sale.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "SuperMeatball";
+  src: url("SuperMeatball.ttf") format("truetype");
 }
 
 .shanghai{
@@ -9,8 +14,9 @@
 .fredoka{
   font-family: "Fredoka", Arial, sans-serif;
 }
-.Super Meatball{
-  font-family: "Super Meatball",cursive;
+
+.meatball 
+  font-family: "SuperMeatball", sans-serif;
 }
 .appbar {
   background: black;
