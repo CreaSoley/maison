@@ -4,409 +4,389 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+
   <title>Ippon Kumite – Tai Jitsu</title>
 
   <!-- CSS principal -->
   <link rel="stylesheet" href="style-ippon.css">
+
+  <!-- bannière -->
   <link rel="stylesheet" href="../banner.css">
 
-  <!-- Material Icons -->
+  <!-- Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <!-- Polices locales -->
+  <!-- police Shanghai -->
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
+  <!-- kawaii + responsive -->
   <style>
-    @font-face {
-      font-family: "Spicy";
-      src: url("Spicy Sale.ttf") format("truetype");
-    }
-    @font-face {
-      font-family: "Shanghaï";
-      src: url("shanghai.ttf") format("truetype");
-    }
-    @font-face {
-      font-family: "Fredoka";
-      src: url("Fredoka.ttf") format("truetype");
-    }
 
-    .spicy { font-family: "Spicy", cursive; }
-    .shanghai { font-family: "Shanghaï", cursive; }
-    .fredoka { font-family: "Fredoka", Arial, sans-serif; }
+  /* ---------------------- BANNIÈRE ------------------------ */
 
-    /* Layout 2 colonnes desktop, 1 colonne mobile */
-    .layout-4cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      width: 100%;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+  .header-text .title{
+    font-size:2.4rem;
+  }
 
-    .card-block {
-      background: #f7f7f7;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  @media(max-width:600px){
+    .header-text .title{
+      font-size:1.4rem;
+      line-height:1.2;
     }
+  }
 
-    .card-block h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
+  .header-text .subtitle{
+    font-family:"Ma Shan Zheng", cursive;
+  }
 
-    .controls {
-      margin-bottom: 10px;
-    }
+  /* ---------------------- LAYOUT ------------------------ */
 
-    .accordion-item {
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      overflow: hidden;
-    }
+  body{
+    background:#fff5fb;
+    margin:0;
+    font-family:Arial, sans-serif;
+  }
 
-    .accordion-header {
-      background: #ddd;
-      padding: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    padding:16px;
+  }
 
-    .accordion-content {
-      display: none;
-      padding: 10px;
-      background: #fff;
+  @media(max-width:900px){
+    .layout{
+      grid-template-columns:1fr;
     }
+  }
 
-    img.fiche-img {
-      width: 100%;
-      max-width: 400px;
-      display: block;
-      margin: 0 auto;
-    }
+  /* ---------------------- CARD KAWAII ------------------------ */
 
-    /* Styles entrainement */
-    #trainingControls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+  .card{
+    background:#fff2fb;
+    border-radius:22px;
+    padding:18px;
+    border:2px solid #ffbde9;
+    box-shadow:0 10px 18px rgba(255,126,190,.25);
+  }
 
-    #trainingControls input[type=range] {
-      width: 100%;
-    }
+  .card h2{
+    margin-top:0;
+    color:#ff2f9a;
+    text-shadow:0 2px 4px rgba(255,0,120,.2);
+  }
 
-    #trainingOutput {
-      margin-top: 15px;
-      font-size: 1.2rem;
-      text-align: center;
-      min-height: 2em;
-    }
+  select,
+  input,
+  button{
+    border-radius:999px;
+    border:2px solid #ffc9ef;
+    background:#fff7fd;
+    padding:8px 12px;
+  }
+
+  button{
+    background:#ffbde9;
+    font-weight:bold;
+    cursor:pointer;
+  }
+
+  /* ---------------------- VIDEO RESPONSIVE ------------------------ */
+
+  .video-wrapper{
+    position:relative;
+    width:100%;
+    padding-top:56.25%;
+  }
+
+  .video-wrapper iframe{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    border:none;
+  }
+
+  /* ---------------------- ACCORDÉON ------------------------ */
+
+  .accordion-item{
+    background:white;
+    border-radius:18px;
+    margin:8px 0;
+    border:2px solid #ffd2f0;
+  }
+
+  .accordion-header{
+    padding:10px 14px;
+    font-weight:bold;
+    cursor:pointer;
+  }
+
+  .accordion-content{
+    display:none;
+    padding:10px 14px;
+  }
+
   </style>
+
 </head>
 
-<body data-title="Ippon kumite – Entraînement">
+<body data-title="Ippon Kumite – Entraînement">
 
-  <!-- BANNIÈRE -->
-  <div id="bannerContainer"></div>
+<!-- bannière chargée -->
+<div id="bannerContainer"></div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      fetch("../banner.html")
-        .then(r => r.text())
-        .then(html => {
-          document.getElementById("bannerContainer").innerHTML = html;
-          let pageTitle =
-            document.body.dataset.title ||
-            document.querySelector("h1")?.textContent ||
-            document.querySelector("title")?.textContent || "";
-          const target = document.querySelector(".header-text .title");
-          if (target && pageTitle) target.textContent = pageTitle;
-        })
-        .catch(err => console.error("Erreur chargement bannière :", err));
-    });
-  </script>
+<script>
+fetch("../banner.html")
+.then(r=>r.text())
+.then(html=>{
+  document.getElementById("bannerContainer").innerHTML = html;
 
-  <section class="top-banner">
-  <div class="controls">
-    <button onclick="window.open('F1.pdf','_blank')">Fiche 1</button>
-    <button onclick="window.open('F2.pdf','_blank')">Fiche 2</button>
-    <button onclick="window.open('F3.pdf','_blank')">Fiche 3</button>
-    <button onclick="window.open('F4.pdf','_blank')">Fiche 4</button>
-    <button onclick="window.open('F5.pdf','_blank')">Fiche 5</button>
-    <button onclick="window.open('F6.pdf','_blank')">Fiche 6</button>
-  </div>
+  let pageTitle =
+    document.body.dataset.title ||
+    document.querySelector("h1")?.textContent ||
+    document.querySelector("title")?.textContent || "";
+
+  const target=document.querySelector(".header-text .title");
+  if(target) target.textContent=pageTitle;
+});
+</script>
+
+<!-- ⭐ BOUTONS FICHES PDF -->
+<section class="top-banner card">
+  <h2>📚 Fiches d'entraînement</h2>
+
+  <button onclick="window.open('../F1.pdf')">Fiche 1</button>
+  <button onclick="window.open('../F2.pdf')">Fiche 2</button>
+  <button onclick="window.open('../F3.pdf')">Fiche 3</button>
+  <button onclick="window.open('../F4.pdf')">Fiche 4</button>
+  <button onclick="window.open('../F5.pdf')">Fiche 5</button>
+  <button onclick="window.open('../F6.pdf')">Fiche 6</button>
 </section>
 
-  <!-- 4 ENCARTS -->
-  <main class="layout-4cards">
+<!-- ===================== 4 ENCARTS ====================== -->
 
-    <!-- ENCADRÉ 1 : Techniques par côté -->
-    <section class="card-block" id="script1">
-      <h2 class="spicy section-title">🥋 Techniques par côté</h2>
-      <div class="controls controls-column">
-        <select id="selectSerieAccordion">
-          <option value="">Choisir une série</option>
-        </select>
-        <select id="filterSideAccordion">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-      </div>
-      <div id="accordionList"></div>
-    </section>
+<main class="layout">
 
-    <!-- ENCADRÉ 2 : Fiche technique -->
-    <section class="card-block" id="script2">
-      <h2 class="spicy section-title">💫 Fiche technique</h2>
-      <div class="controls controls-column">
-        <select id="selectSerie">
-          <option value="">Choisir une série</option>
-        </select>
-        <select id="selectAttack">
-          <option value="">Choisir une attaque</option>
-        </select>
-        <select id="selectSide">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-      </div>
-      <div id="resultCard"></div>
-    </section>
+<!-- 1) ACCORDÉON TECHNIQUES PAR CÔTÉ -->
+<section class="card">
+  <h2>🥋 Techniques par côté</h2>
 
-    <!-- ENCADRÉ 3 : Fiches de travail en PNG -->
-    <section class="card-block" id="script3">
-      <h2 class="spicy section-title">🖼️ Fiches de travail</h2>
-      <div class="controls">
-        <select id="filterSidePng">
-          <option value="">Choisir un côté</option>
-          <option value="droite">Droite</option>
-          <option value="gauche">Gauche</option>
-        </select>
-      </div>
-      <div id="accordionPng"></div>
-    </section>
+  <select id="selectSerieAccordion">
+    <option value="">Choisir une série</option>
+  </select>
 
-    <!-- ENCADRÉ 4 : Entraînement aléatoire -->
-    <section class="card-block" id="script4">
-      <h2 class="spicy section-title">⚡ Entraînement vocal aléatoire</h2>
-      <div id="trainingControls">
-        <button id="startTraining">Démarrer l'entraînement</button>
-        <button id="stopTraining">Arrêter</button>
-        <label>Intervalle entre techniques : <span id="intervalValue">5</span> secondes</label>
-        <input type="range" id="intervalRange" min="3" max="60" value="5">
-      </div>
-      <div id="trainingOutput"></div>
-    </section>
+  <select id="filterSideAccordion">
+    <option value="">Choisir un côté</option>
+    <option value="droite">Droite</option>
+    <option value="gauche">Gauche</option>
+  </select>
 
-  </main>
+  <div id="accordionList"></div>
+</section>
+
+<!-- 2) FICHE TECHNIQUE -->
+<section class="card">
+  <h2>💫 Fiche technique</h2>
+
+  <select id="selectSerie">
+    <option value="">Choisir une série</option>
+  </select>
+
+  <select id="selectAttack">
+    <option value="">Choisir une attaque</option>
+  </select>
+
+  <select id="selectSide">
+    <option value="">Choisir un côté</option>
+    <option value="droite">Droite</option>
+    <option value="gauche">Gauche</option>
+  </select>
+
+  <div id="resultCard"></div>
+</section>
+
+<!-- 3) ACCORDÉON PNG FICHES -->
+<section class="card">
+  <h2>🧾 Fiches de travail (images)</h2>
+
+  <select id="imageSide">
+    <option value="">Choisir un côté</option>
+    <option value="droite">Droite</option>
+    <option value="gauche">Gauche</option>
+  </select>
+
+  <div id="imageAccordion"></div>
+</section>
+
+<!-- 4) ENTRAÎNEMENT VOCAL -->
+<section class="card">
+  <h2>🎤 Entraînement vocal aléatoire</h2>
+
+  <label>⏱️ Intervalle (secondes)</label>
+  <input type="range" id="rangeTime" min="3" max="60" value="10">
+  <span id="timeValue">10s</span>
+
+  <br><br>
+
+  <button id="start">🚀 Lancer</button>
+  <button id="stop">🛑 Stop</button>
+</section>
+
+</main>
+
+<!-- ================= SCRIPTS =================== -->
+
 <script>
-let data = [];
+/* ===== JSON SIMPLIFIÉ (tu remplaces par fetch plus tard si tu veux) ===== */
+const data = [
+  {"serie":1,"attaque":"Oi Tsuki Jodan","cote":"droite","tai sabaki":"extérieur","blocage":"age uke","defense":"empi","video":"https://www.youtube.com/embed/Rp1drfqOMKY"},
+  {"serie":1,"attaque":"Oi Tsuki Jodan","cote":"gauche","tai sabaki":"esquive","blocage":"age uke","defense":"mae geri","video":"https://www.youtube.com/embed/W1C3zZQ4KtQ"}
+];
 
-// Charger JSON
-fetch("ippon.json")
-  .then(r => r.json())
-  .then(json => {
-    data = json;
-    buildSerieSelectors();
-    buildAccordionTechniques();
+/* ---------- remplir selects série ---------- */
+let series=[...new Set(data.map(x=>x.serie))];
+for(let s of series){
+  document.querySelectorAll("#selectSerie,#selectSerieAccordion").forEach(sel=>{
+    const o=document.createElement("option");
+    o.value=s;o.textContent="Série "+s;
+    sel.appendChild(o);
   });
+}
 
-/* --------- ENCADRÉ 1 : ACCORDÉON TECHNIQUES PAR CÔTÉ --------- */
-
-function buildAccordionTechniques() {
-  const container = document.getElementById("accordionList");
+/* ---------- ACCORDÉON 1 ---------- */
+document.getElementById("selectSerieAccordion").onchange =
+document.getElementById("filterSideAccordion").onchange = function(){
   const serie = document.getElementById("selectSerieAccordion").value;
   const side = document.getElementById("filterSideAccordion").value;
 
-  const filtered = data.filter(item =>
-    (!serie || item.serie == serie) &&
-    (!side || item.cote === side)
-  );
+  let list = data.filter(x=>(!serie||x.serie==serie)&&(!side||x.cote==side));
 
-  container.innerHTML = "";
+  const container=document.getElementById("accordionList");
+  container.innerHTML="";
 
-  filtered.forEach(item => {
-    const block = document.createElement("div");
-    block.className = "accordion-item";
+  list.forEach(item=>{
+    const wrap=document.createElement("div");
+    wrap.className="accordion-item";
 
-    const head = document.createElement("div");
-    head.className = "accordion-header";
-    head.textContent = `${item.attaque} — ${item.cote}`;
-
-    const content = document.createElement("div");
-    content.className = "accordion-content";
-    content.innerHTML = `
-      <p><b>Tai sabaki :</b> ${item["tai sabaki"]}</p>
-      <p><b>Blocage :</b> ${item.blocage}</p>
-      <p><b>Défense :</b> ${item.defense}</p>
-      <iframe width="300" height="180" src="${item.video}" allowfullscreen></iframe>
+    wrap.innerHTML=`
+      <div class="accordion-header">${item.attaque} (${item.cote})</div>
+      <div class="accordion-content">
+        Tai sabaki : ${item["tai sabaki"]}<br>
+        Blocage : ${item.blocage}<br>
+        Défense : ${item.defense}
+        <div class="video-wrapper"><iframe src="${item.video}"></iframe></div>
+      </div>
     `;
 
-    head.onclick = () => {
-      head.classList.toggle("open");
-      content.style.display =
-        content.style.display === "block" ? "none" : "block";
+    wrap.querySelector(".accordion-header").onclick=()=>{
+      const c = wrap.querySelector(".accordion-content");
+      c.style.display = c.style.display==="block" ? "none":"block";
     };
 
-    block.appendChild(head);
-    block.appendChild(content);
-    container.appendChild(block);
+    container.appendChild(wrap);
   });
-}
-
-document.getElementById("selectSerieAccordion").onchange = buildAccordionTechniques;
-document.getElementById("filterSideAccordion").onchange = buildAccordionTechniques;
-
-/* Remplit les listes séries */
-function buildSerieSelectors() {
-  const selects = [
-    document.getElementById("selectSerieAccordion"),
-    document.getElementById("selectSerie")
-  ];
-
-  const series = [...new Set(data.map(x => x.serie))];
-
-  selects.forEach(sel => {
-    series.forEach(s => {
-      const opt = document.createElement("option");
-      opt.value = s;
-      opt.textContent = `Série ${s}`;
-      sel.appendChild(opt);
-    });
-  });
-}
-
-/* --------- ENCADRÉ 2 : FICHE TECHNIQUE --------- */
-
-document.getElementById("selectSerie").onchange = updateCard;
-document.getElementById("selectAttack").onchange = updateCard;
-document.getElementById("selectSide").onchange = updateCard;
-
-function updateCard() {
-  const serie = selectSerie.value;
-  const atk = selectAttack.value;
-  const side = selectSide.value;
-
-  const card = data.find(x =>
-    x.serie == serie &&
-    (!atk || x.attaque === atk) &&
-    (!side || x.cote === side)
-  );
-
-  const target = document.getElementById("resultCard");
-
-  if (!card) {
-    target.innerHTML = "<i>Aucune fiche trouvée</i>";
-    return;
-  }
-
-  target.innerHTML = `
-    <p><b>Attaque :</b> ${card.attaque}</p>
-    <p><b>Côté :</b> ${card.cote}</p>
-    <p><b>Tai sabaki :</b> ${card["tai sabaki"]}</p>
-    <p><b>Blocage :</b> ${card.blocage}</p>
-    <p><b>Défense :</b> ${card.defense}</p>
-    <iframe width="320" height="200" src="${card.video}" allowfullscreen></iframe>
-  `;
-
-  // remplir attaques dynamiquement
-  const attacks = [...new Set(data
-    .filter(x => x.serie == serie)
-    .map(x => x.attaque))];
-
-  selectAttack.innerHTML = `<option value="">Choisir une attaque</option>`;
-  attacks.forEach(a => {
-    const o = document.createElement("option");
-    o.textContent = a;
-    o.value = a;
-    selectAttack.appendChild(o);
-  });
-}
-
-const fichesPng = [
-  { name: "Oï tsuki jodan", file: "otjd.png", side: "droite" },
-  { name: "Oï tsuki jodan", file: "otjd.png", side: "gauche" }
-];
-
-function buildAccordionPngKawaii(side="") {
-  const container = document.getElementById("accordionPng");
-  container.innerHTML = "";
-
-  fichesPng
-    .filter(f => !side || f.side === side)
-    .forEach(f => {
-      const item = document.createElement("div");
-      item.className = "accordion-item";
-
-      const head = document.createElement("div");
-      head.className = "accordion-header";
-      head.textContent = `${f.name} — ${f.side}`;
-
-      const content = document.createElement("div");
-      content.className = "accordion-content";
-      content.innerHTML =
-        `<img src="${f.file}" class="fiche-img">`;
-
-      head.onclick = () => {
-        head.classList.toggle("open");
-        content.style.display =
-          content.style.display === "block" ? "none" : "block";
-      };
-
-      item.appendChild(head);
-      item.appendChild(content);
-      container.appendChild(item);
-    });
-}
-
-document.getElementById("filterSidePng").onchange =
-  e => buildAccordionPngKawaii(e.target.value);
-
-buildAccordionPngKawaii();
-
-const techs = [
-  "Oi tsuki jodan",
-  "Oi tsuki chudan",
-  "Mae geri",
-  "Yoko geri",
-  "Gyaku tsuki",
-  "Kizami tsuki",
-  "Soto uke",
-  "Uchi uke",
-  "Ura mawashi geri",
-  "Shuto uke"
-];
-
-let timer = null;
-const synth = window.speechSynthesis;
-
-intervalRange.oninput = () =>
-  intervalValue.textContent = intervalRange.value;
-
-startTraining.onclick = () => {
-  trainingOutput.textContent = "⏳ Préparation…";
-  setTimeout(() => {
-    timer = setInterval(() => {
-      const t = techs[Math.floor(Math.random() * techs.length)];
-      trainingOutput.textContent = "🔥 " + t;
-
-      const u = new SpeechSynthesisUtterance(t);
-      u.lang = "fr-FR";
-      synth.speak(u);
-    }, intervalRange.value * 1000);
-  }, 5000);
 };
 
-stopTraining.onclick = () => {
-  clearInterval(timer);
+/* ---------- FICHE TECHNIQUE ---------- */
+document.getElementById("selectSerie").onchange = function(){
+  const s=this.value;
+  const attacks=[...new Set(data.filter(x=>x.serie==s).map(x=>x.attaque))];
+  const sel=document.getElementById("selectAttack");
+  sel.innerHTML=`<option value="">Choisir une attaque</option>`;
+  attacks.forEach(a=>{
+    const o=document.createElement("option");
+    o.value=a;o.textContent=a;sel.appendChild(o);
+  });
+};
+
+document.querySelectorAll("#selectAttack,#selectSide").forEach(el=>{
+  el.onchange=function(){
+    const serie=document.getElementById("selectSerie").value;
+    const atk=document.getElementById("selectAttack").value;
+    const side=document.getElementById("selectSide").value;
+
+    let res=data.find(x=>x.serie==serie&&x.attaque==atk&&x.cote==side);
+    if(!res){document.getElementById("resultCard").innerHTML="";return;}
+
+    document.getElementById("resultCard").innerHTML=`
+      <p>${res.attaque} — ${res.cote}</p>
+      <p><b>Tai sabaki :</b> ${res["tai sabaki"]}</p>
+      <p><b>Blocage :</b> ${res.blocage}</p>
+      <p><b>Défense :</b> ${res.defense}</p>
+      <div class="video-wrapper"><iframe src="${res.video}"></iframe></div>
+    `;
+  };
+});
+
+/* ---------- ACCORDÉON IMAGES PNG ---------- */
+const imageTechniques = [
+  {name:"Oi tsuki jodan", file:"otjd.png", cote:"droite"},
+];
+
+document.getElementById("imageSide").onchange=function(){
+  let side=this.value;
+  const cont=document.getElementById("imageAccordion");
+  cont.innerHTML="";
+
+  imageTechniques
+    .filter(x=>!side||x.cote==side)
+    .forEach(img=>{
+      const div=document.createElement("div");
+      div.className="accordion-item";
+      div.innerHTML=`
+        <div class="accordion-header">${img.name}</div>
+        <div class="accordion-content">
+          <img src="../${img.file}" style="width:100%;border-radius:18px">
+        </div>`;
+      div.querySelector(".accordion-header").onclick=()=>{
+        const c=div.querySelector(".accordion-content");
+        c.style.display=c.style.display==="block"?"none":"block";
+      };
+      cont.appendChild(div);
+    });
+};
+
+/* ---------- ENTRAÎNEMENT VOCAL ---------- */
+const synth=window.speechSynthesis;
+let interval=null;
+
+const techniques = [
+ "Oi tsuki jodan",
+ "Oi tsuki chudan",
+ "Gyaku tsuki",
+ "Mae geri",
+ "Mawashi geri",
+ "Yoko geri",
+ "Uchi uke",
+ "Soto uke",
+ "Age uke",
+ "Gedan barai"
+];
+
+document.getElementById("rangeTime").oninput=function(){
+  document.getElementById("timeValue").textContent=this.value+"s";
+};
+
+document.getElementById("start").onclick=function(){
+  if(interval) return;
+  setTimeout(()=>{
+    interval=setInterval(()=>{
+      let t=techniques[Math.floor(Math.random()*techniques.length)];
+      let u=new SpeechSynthesisUtterance(t);
+      u.lang="fr-FR";
+      synth.speak(u);
+    }, document.getElementById("rangeTime").value*1000);
+  },5000);
+};
+
+document.getElementById("stop").onclick=function(){
+  clearInterval(interval);
+  interval=null;
   synth.cancel();
-  trainingOutput.textContent = "🛑 entraînement arrêté";
 };
 </script>
-
 
 </body>
 </html>
