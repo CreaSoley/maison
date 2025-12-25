@@ -1,449 +1,291 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ippon Kumite – Tai Jitsu</title>
 
-<!-- Banner CSS -->
+<!-- CSS Externe -->
+<link rel="stylesheet" href="style-ippon.css">
 <link rel="stylesheet" href="../banner.css">
-
-<!-- Material Icons -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
-/* ---------------------- FONTS ------------------------ */
-
-@font-face{
-  font-family:"Spicy";
-  src:url("Spicy Sale.ttf");
+/* ================= FONTS ================= */
+@font-face {
+  font-family: "Shanghai";
+  src: url("../tai/shanghai.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Fredoka";
+  src: url("../tai/Fredoka-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Spicy";
+  src: url("../tai/Spicy Sale.ttf") format("truetype");
+}
+@font-face {
+  font-family: "SuperMeatball";
+  src: url("../tai/SuperMeatball.ttf") format("truetype");
 }
 
-@font-face{
-  font-family:"Shanghai";
-  src:url("Shanghai.ttf");
+/* ================= BANDEAU ================= */
+.appbar {
+  background: black;
+  color: white;
+  padding: 25px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
+.logo-big { width: 110px; margin-bottom: 15px; }
+.header-text .title { font-size: 2.5rem; letter-spacing: 2px; color: #ffd6ec; }
+.header-text .subtitle { font-size: 1.7rem; margin-top: 18px; letter-spacing: 2px; color: #ffd0ea; font-family: "Shanghai", cursive; }
 
-/* fallback si introuvable */
-.kawaii-title{
-  font-family:"Shanghai","Spicy","Comic Sans MS",cursive;
-}
+/* ================= FICHES BANNIERE ================= */
+.top-banner { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:20px; }
+.fiche-btn { background:#ffb6d9; color:white; border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:6px; transition:0.2s; }
+.fiche-btn:hover { background:#ff8ac0; transform:translateY(-2px); }
 
-/* ---------------------- LAYOUT ------------------------ */
+/* ================= ENCARTE GLOBAL ================= */
+.card-block { background:#fff0f8; padding:18px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.15); margin-bottom:20px; color:#ff66aa; width:48%; min-width:300px; box-sizing:border-box; }
+.layout-desktop { display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px; }
+.spicy { font-family:"Spicy", cursive; }
+.shanghai { font-family:"Shanghai", cursive; }
+.fredoka { font-family:"Fredoka", Arial, sans-serif; }
 
-body{
-  background:#fff5fc;
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-}
+/* ================= RESPONSIVE ================= */
+@media(max-width:900px){ .card-block{ width:100%; } .header-text .title{ font-size:2rem; } .header-text .subtitle{ font-size:1.4rem; } }
+@media(max-width:500px){ .header-text .title{ font-size:1.5rem; } .header-text .subtitle{ font-size:1.2rem; } }
 
-.container{
-  max-width:1400px;
-  margin:auto;
-  padding:10px;
-}
+/* ================= ACCORDION ================= */
+.accordion-item { background:#fff0f8; border-radius:10px; margin-bottom:10px; overflow:hidden; }
+.accordion-header { padding:10px 15px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:bold; }
+.accordion-content { display:none; padding:10px 15px; background:#ffe6f0; border-top:1px solid #ffb6d9; }
 
-/* desktop grid : plus large qu'avant */
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
+/* ================= ENCARTE 4 ================= */
+.encart4 input, .encart4 select { border-radius:10px; padding:8px 12px; border:1px solid #ffb6d9; margin-right:10px; margin-bottom:10px; }
+.encart4 button { background:#ffb6d9; color:white; border:none; padding:8px 14px; border-radius:12px; cursor:pointer; margin-right:8px; }
+.encart4 button:hover { background:#ff8ac0; }
 
-/* mobile */
-@media(max-width:900px){
-  .grid{
-    grid-template-columns:1fr;
-  }
-}
-
-/* ---------------------- CARDS ------------------------ */
-
-.card{
-  background:white;
-  border-radius:20px;
-  padding:15px;
-  box-shadow:0 10px 20px rgba(0,0,0,.1);
-}
-
-.card h2{
-  text-align:center;
-  font-family:"Spicy",cursive;
-  margin-top:5px;
-}
-
-/* kawaii controls  */
-button,
-select,
-input{
-  border-radius:25px;
-  border:2px solid #ffb7e5;
-  padding:6px 10px;
-}
-
-button{
-  cursor:pointer;
-  background:#ffe2f4;
-}
-
-button:hover{
-  background:#ffd2ef;
-}
-
-/* ---------------------- ACCORDION ------------------------ */
-
-.accordion-item{
-  background:#fff0fb;
-  border-radius:16px;
-  margin-bottom:8px;
-  padding:8px 12px;
-  cursor:pointer;
-}
-
-.accordion-content{
-  display:none;
-  padding:6px 10px;
-}
-
-/* ---------------------- STATUS ------------------------ */
-
-.status{
-  text-align:center;
-  font-weight:bold;
-  margin-top:10px;
-}
-
-.status.play{ color:#2e7d32; }
-.status.pause{ color:#ff6f00; }
-.status.stop{ color:#c62828; }
+/* ================= ETAT BOUTONS ================= */
+.status { font-weight:bold; margin-left:10px; }
 </style>
+
 </head>
+<body data-title="Ippon Kumite – Entraînement">
 
-<body data-title="Ippon kumite – Entraînement">
+<!-- ================= BANNIERE ================= -->
+<header class="appbar">
+  <a href="../index.html"><img src="logo.png" alt="logo" class="logo-big"></a>
+  <div class="header-text">
+    <div class="title shanghai" id="pageTitle"></div>
+    <div class="subtitle shanghai">Taï-Jitsu</div>
+  </div>
+</header>
 
-<!-- injected banner -->
-<div id="bannerContainer"></div>
+<!-- ================= FICHES ================= -->
+<section class="top-banner">
+  <button class="fiche-btn" onclick="window.open('tai/fiche1.pdf','_blank')">Fiche 1</button>
+  <button class="fiche-btn" onclick="window.open('tai/fiche2.pdf','_blank')">Fiche 2</button>
+  <button class="fiche-btn" onclick="window.open('tai/fiche3.pdf','_blank')">Fiche 3</button>
+  <button class="fiche-btn" onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
+  <button class="fiche-btn" onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
+  <button class="fiche-btn" onclick="window.open('tai/fiche6.pdf','_blank')">Fiche 6</button>
+</section>
 
+<!-- ================= ENCARTE 1 À 4 ================= -->
+<main class="layout-desktop">
+
+  <!-- ENCARTE 1 : TECHNIQUES PAR COTE -->
+  <section class="card-block" id="encart1">
+    <h2 class="spicy section-title">🥋 Techniques par côté</h2>
+    <div>
+      <select id="selectSerie1"><option value="">Choisir une série</option></select>
+      <select id="selectCote1"><option value="">Choisir un côté</option><option value="droite">Droite</option><option value="gauche">Gauche</option></select>
+    </div>
+    <div id="accordionTech"></div>
+  </section>
+
+  <!-- ENCARTE 2 : ENTRAINEMENT VOCAL -->
+  <section class="card-block" id="encart2">
+    <h2 class="spicy section-title">🎤 Entraînement vocal</h2>
+    <div>
+      <select id="selectSerie2"><option value="">Choisir série</option></select>
+      <label>Intervalle (s) : <span id="intervalValue">10</span></label>
+      <input type="range" id="intervalRanger" min="5" max="60" value="10">
+      <select id="voiceChoice"><option value="female">Féminin</option><option value="male">Masculin</option></select>
+      <input type="number" id="repeatSeries" min="1" max="10" value="1" style="width:60px;"> 🔁
+    </div>
+    <div>
+      <button id="startVocal">▶️ Démarrer</button>
+      <button id="pauseVocal">⏸️ Pause</button>
+      <span class="status" id="statusVocal">Arrêté</span>
+    </div>
+    <div id="textVocal"></div>
+  </section>
+
+  <!-- ENCARTE 3 : FICHES TRAVAIL -->
+  <section class="card-block" id="encart3">
+    <h2 class="spicy section-title">📄 Fiches de travail</h2>
+    <select id="selectCote3"><option value="">Choisir côté</option><option value="droite">Droite</option><option value="gauche">Gauche</option></select>
+    <div id="accordionFiches"></div>
+  </section>
+
+  <!-- ENCARTE 4 : ENTRAINEMENT SPECIALE -->
+  <section class="card-block encart4" id="encart4">
+    <h2 class="spicy section-title">💫 Entraînement spécial</h2>
+    <div>
+      <input type="number" id="interval4" min="3" max="60" value="10"> secondes intervalle<br>
+      <select id="voice4"><option value="female">Féminin</option><option value="male">Masculin</option></select>
+      <input type="number" id="repeat4" min="1" max="10" value="1"> 🔁 répétitions
+    </div>
+    <div>
+      <button id="start4">▶️ Démarrer</button>
+      <button id="pause4">⏸️ Pause</button>
+      <span class="status" id="status4">Arrêté</span>
+    </div>
+    <div id="text4"></div>
+  </section>
+
+</main>
+
+<!-- ================= SCRIPTS ================= -->
 <script>
-fetch("../banner.html")
-.then(r=>r.text())
-.then(html=>{
-  document.getElementById("bannerContainer").innerHTML=html;
-  const t=document.querySelector(".header-text .title");
-  if(t) t.textContent=document.body.dataset.title || "Ippon kumite";
-});
-</script>
+// ================= BANNIERE =================
+document.getElementById("pageTitle").textContent = document.body.dataset.title || "";
 
-<div class="container">
-
-<div class="grid">
-
-<!-- ========================================================= -->
-<!-- ======================= ENCARt 1 ======================== -->
-<!-- ========================================================= -->
-
-<div class="card">
-<h2>🥋 Accordéon – techniques par côté</h2>
-
-<select id="fSerie">
-<option value="">Choisir une série</option>
-</select>
-
-<select id="fCote">
-<option value="">Choisir un côté</option>
-<option value="gauche">gauche</option>
-<option value="droite">droite</option>
-</select>
-
-<div id="accordion1"></div>
-</div>
-
-<!-- ========================================================= -->
-<!-- ======================= ENCARt 2 ======================== -->
-<!-- ========================================================= -->
-
-<div class="card">
-<h2>🗣️ Entraînement vocal guidé</h2>
-
-<select id="serieVocale">
-<option value="">Choisir une série</option>
-</select>
-
-<label>⏱️ intervalle assaut → assaut :
-<span id="intervalValue">10s</span></label>
-<input id="intervalRange" type="range" min="5" max="60" value="10">
-
-<div style="text-align:center;margin-top:10px;">
-<button id="btnStart">▶️ Lancer</button>
-<button id="btnPause">⏸️ Pause</button>
-<button id="btnStop">⏹️ Stop</button>
-</div>
-
-<div class="status" id="vocalStatus">⏹️ arrêté</div>
-
-<div id="vocalDisplay" style="text-align:center;font-size:1.3em;margin-top:10px;"></div>
-</div>
-
-<!-- ========================================================= -->
-<!-- ======================= ENCARt 3 ======================== -->
-<!-- ========================================================= -->
-
-<div class="card">
-<h2>📄 Fiches d’entraînement (PNG)</h2>
-
-<select id="fichesCote">
-<option value="">Choisir un côté</option>
-<option value="gauche">gauche</option>
-<option value="droit">droit</option>
-</select>
-
-<div id="accordion3"></div>
-</div>
-
-<!-- ========================================================= -->
-<!-- ======================= ENCARt 4 ======================== -->
-<!-- ========================================================= -->
-
-<div class="card">
-<h2>🎲 Entraînement aléatoire</h2>
-
-<button id="randStart">Démarrer</button>
-<button id="randStop">Arrêter</button>
-
-<div id="randText" style="text-align:center;margin-top:10px;"></div>
-</div>
-
-</div>
-</div>
-
-<!-- ============================ SCRIPTS =============================== -->
-
-<script>
-/* ================= ENCARt 1 : ippon.json ================== */
-
-let ipponData=[];
-
-fetch("ippon.json")
-.then(r=>r.json())
-.then(data=>{
+// ================= ENCARTE 1 =================
+let ipponData = [];
+fetch('ippon/ippon.json').then(r=>r.json()).then(data=>{
   ipponData=data;
-  const series=[...new Set(data.map(d=>d.serie||d.Série))];
-  const s1=document.getElementById("fSerie");
-  const s2=document.getElementById("serieVocale");
+  let series = [...new Set(data.map(e=>e.serie))];
+  let selectS = document.getElementById('selectSerie1');
+  series.forEach(s=>selectS.innerHTML+=`<option value="${s}">${s}</option>`);
+});
+document.getElementById('selectSerie1').addEventListener('change',updateAccordion1);
+document.getElementById('selectCote1').addEventListener('change',updateAccordion1);
 
-  series.forEach(n=>{
-    const o=document.createElement("option");
-    o.value=n;o.textContent="Série "+n;
-    s1.appendChild(o.cloneNode(true));
-    s2.appendChild(o.cloneNode(true));
+function updateAccordion1(){
+  let s = document.getElementById('selectSerie1').value;
+  let c = document.getElementById('selectCote1').value;
+  let html='';
+  if(!s || !c) { document.getElementById('accordionTech').innerHTML=''; return; }
+  ipponData.filter(e=>e.serie==s && e.cote==c).forEach((e,i)=>{
+    html+=`<div class="accordion-item">
+      <div class="accordion-header">${e.attaque} <span>▼</span></div>
+      <div class="accordion-content">
+        Tai sabaki: ${e["tai sabaki"]}<br>
+        Blocage: ${e.blocage}<br>
+        Défense: ${e.defense}<br>
+        <iframe src="${e.video}" style="width:100%;height:200px;border:none;"></iframe>
+      </div>
+    </div>`;
   });
+  document.getElementById('accordionTech').innerHTML=html;
+  document.querySelectorAll('.accordion-header').forEach(h=>{
+    h.onclick=()=>h.nextElementSibling.style.display=h.nextElementSibling.style.display==='block'?'none':'block';
+  });
+}
+
+// ================= ENCARTE 2 =================
+let ipponVocalData=[];
+fetch('ippon/ipponvocal.json').then(r=>r.json()).then(data=>{
+  ipponVocalData=data;
+  let series=[...new Set(data.map(e=>e.Série))];
+  let selectS2=document.getElementById('selectSerie2');
+  series.forEach(s=>selectS2.innerHTML+=`<option value="${s}">${s}</option>`);
 });
 
-document.getElementById("fSerie").addEventListener("change",renderAcc1);
-document.getElementById("fCote").addEventListener("change",renderAcc1);
+let vocalStatus=document.getElementById('statusVocal');
+let vocalInterval=parseInt(document.getElementById('intervalRanger').value)*1000;
+let repeatSeries=document.getElementById('repeatSeries').value;
+let synth=new SpeechSynthesisUtterance();
+let isPlaying=false, pauseFlag=false;
+document.getElementById('intervalRanger').addEventListener('input',e=>{document.getElementById('intervalValue').textContent=e.target.value; vocalInterval=e.target.value*1000;});
+document.getElementById('startVocal').addEventListener('click',()=>{if(!isPlaying){startVocal();}});
+document.getElementById('pauseVocal').addEventListener('click',()=>{pauseFlag=!pauseFlag; vocalStatus.textContent=pauseFlag?'En pause':'En lecture'; speechSynthesis.pause();});
 
-function renderAcc1(){
-  const serie=document.getElementById("fSerie").value;
-  const cote=document.getElementById("fCote").value;
-  const cont=document.getElementById("accordion1");
-  cont.innerHTML="";
-
-  if(!serie && !cote) return;
-
-  ipponData
-  .filter(d=>(!serie||d.serie==serie||d.Série==serie)
-              &&(!cote||d.cote==cote||d.Côté==cote))
-  .forEach(item=>{
-    const wrap=document.createElement("div");
-    wrap.className="accordion-item";
-    wrap.textContent=item.attaque||item.Assaut;
-
-    const content=document.createElement("div");
-    content.className="accordion-content";
-    content.innerHTML=
-      "<b>Tai sabaki :</b> "+(item["tai sabaki"]||"—")+"<br>"+
-      "<b>Blocage :</b> "+(item.blocage||"—")+"<br>"+
-      "<b>Défense :</b> "+(item.defense||item.contre||"—")+"<br>";
-
-    wrap.addEventListener("click",()=>{
-      content.style.display=
-        content.style.display=="block"?"none":"block";
-    });
-
-    cont.appendChild(wrap);
-    cont.appendChild(content);
-  });
-}
-
-/* ================= ENCARt 2 : ipponvocal.json ================== */
-
-let vocalData=[];
-let vocalTimer=null;
-let paused=false;
-let queue=[];
-let intervalAssaut=10;
-
-fetch("ipponvocal.json")
-.then(r=>r.json())
-.then(d=>vocalData=d);
-
-const synth=window.speechSynthesis;
-
-function speak(txt,lang="fr-FR"){
-  const u=new SpeechSynthesisUtterance(txt);
-  u.lang=lang;
-  synth.speak(u);
-}
-
-document.getElementById("intervalRange").oninput=e=>{
-  intervalAssaut=parseInt(e.target.value);
-  document.getElementById("intervalValue").textContent=intervalAssaut+"s";
-};
-
-function setStatus(t,c){
-  const s=document.getElementById("vocalStatus");
-  s.textContent=t;
-  s.className="status "+c;
-}
-
-document.getElementById("btnStart").onclick=()=>{
-  const serie=document.getElementById("serieVocale").value;
-  if(!serie) return;
-
-  paused=false;
-  synth.cancel();
-  setStatus("▶️ lecture","play");
-
-  const list=vocalData.filter(x=>x.Série==serie);
-
-  queue=[];
-
-  queue.push(()=>speak("Commençons l'entraînement"));
-  queue.push(()=>speak("côté gauche"));
-
-  list.filter(x=>x.Côté=="gauche").forEach(x=>{
-    queue.push(()=>sequenceAssaut(x));
-  });
-
-  queue.push(()=>speak("côté droit"));
-
-  list.filter(x=>x.Côté=="droit"||x.Côté=="droite").forEach(x=>{
-    queue.push(()=>sequenceAssaut(x));
-  });
-
-  queue.push(()=>{
-    speak("Fin de l'entraînement");
-    setStatus("⏹️ terminé","stop");
-  });
-
-  runQueue();
-};
-
-document.getElementById("btnPause").onclick=()=>{
-  paused=!paused;
-  if(paused){
-    synth.pause();
-    setStatus("⏸️ pause","pause");
-  }else{
-    synth.resume();
-    setStatus("▶️ lecture","play");
+function startVocal(){
+  let s=document.getElementById('selectSerie2').value;
+  if(!s) return alert('Sélectionner une série');
+  let voiceChoice=document.getElementById('voiceChoice').value;
+  let repeats=parseInt(document.getElementById('repeatSeries').value)||1;
+  let list=ipponVocalData.filter(e=>e.Série==s);
+  let sides=['gauche','droite'];
+  let idx=0, repCount=0;
+  isPlaying=true; pauseFlag=false; vocalStatus.textContent='En lecture';
+  document.getElementById('textVocal').innerHTML='';
+  function speakNext(){
+    if(repCount>=repeats){ vocalStatus.textContent='Arrêté'; isPlaying=false; return; }
+    if(idx>=list.length){ idx=0; repCount++; }
+    if(!isPlaying) return;
+    let item=list[idx++];
+    let texts=[item.Assaut,item.blocage,item.contre];
+    let side=item.Côté;
+    let i=0;
+    function say(){
+      if(i>=texts.length){ setTimeout(speakNext,vocalInterval); return; }
+      document.getElementById('textVocal').innerHTML=texts[i];
+      synth.text=texts[i];
+      synth.lang=i==0?'ja-JP':'ja-JP';
+      synth.rate=1; synth.pitch=1;
+      synth.voice=speechSynthesis.getVoices().find(v=>voiceChoice=='female'?v.name.includes('F') : v.name.includes('M')) || null;
+      speechSynthesis.speak(synth);
+      i++;
+      setTimeout(say,2000);
+    }
+    say();
   }
-};
-
-document.getElementById("btnStop").onclick=()=>{
-  synth.cancel();
-  queue=[];
-  setStatus("⏹️ arrêté","stop");
-};
-
-function sequenceAssaut(x){
-  const disp=document.getElementById("vocalDisplay");
-
-  // assaut
-  disp.textContent=x.Assaut;
-  speak(x.Assaut,"ja-JP");
-
-  setTimeout(()=>{
-    disp.textContent=x.blocage;
-    speak(x.blocage,"ja-JP");
-  },2000);
-
-  setTimeout(()=>{
-    disp.textContent=x.contre;
-    speak(x.contre,"ja-JP");
-  },4000);
+  speakNext();
 }
 
-function runQueue(){
-  if(queue.length===0) return;
-
-  const step=queue.shift();
-  step();
-
-  // enforce minimal interval >=6 to fit 2+2+2
-  const wait=Math.max(intervalAssaut*1000,6000);
-
-  setTimeout(()=>{
-    if(!paused) runQueue();
-    else queue.unshift(step);
-  },wait);
-}
-
-/* ================= ENCARt 3 : fiches ================== */
-
-const ficheList=[
-"Oï tsuki jodan gauche",
-"Oï tsuki chudan gauche",
-"Mae geri gauche",
-"Mawashi geri gauche",
-"Yoko geri gauche",
-"Oï tsuki jodan droit",
-"Oï tsuki chudan droit",
-"Mae geri droit",
-"Mawashi geri droit",
-"Yoko geri droit"
-];
-
-document.getElementById("fichesCote").onchange=renderFiches;
-
-function renderFiches(){
-  const cont=document.getElementById("accordion3");
-  cont.innerHTML="";
-  ficheList.forEach(f=>{
-    const item=document.createElement("div");
-    item.className="accordion-item";
-    item.textContent=f;
-
-    const img=document.createElement("div");
-    img.className="accordion-content";
-    img.innerHTML=`<img src="construction.jpg" style="max-width:100%;">`;
-
-    item.onclick=()=>{
-      img.style.display=img.style.display=="block"?"none":"block";
-    };
-
-    cont.appendChild(item);
-    cont.appendChild(img);
+// ================= ENCARTE 3 =================
+let fiches3=[{Assaut:"Oï tsuki jodan",Côté:"gauche",img:"construction.jpg"},{Assaut:"Oï tsuki chudan",Côté:"gauche",img:"construction.jpg"},{Assaut:"Mae geri",Côté:"gauche",img:"construction.jpg"},{Assaut:"Mawashi geri",Côté:"gauche",img:"construction.jpg"},{Assaut:"Yoko geri",Côté:"gauche",img:"construction.jpg"},{Assaut:"Oï tsuki jodan",Côté:"droite",img:"construction.jpg"},{Assaut:"Oï tsuki chudan",Côté:"droite",img:"construction.jpg"},{Assaut:"Mae geri",Côté:"droite",img:"construction.jpg"},{Assaut:"Mawashi geri",Côté:"droite",img:"construction.jpg"},{Assaut:"Yoko geri",Côté:"droite",img:"construction.jpg"}];
+let selectCote3=document.getElementById('selectCote3');
+selectCote3.addEventListener('change',updateFiches3);
+function updateFiches3(){
+  let c=selectCote3.value; let html=''; if(!c){document.getElementById('accordionFiches').innerHTML=''; return;}
+  fiches3.filter(f=>f.Côté==c).forEach((f,i)=>{
+    html+=`<div class="accordion-item">
+      <div class="accordion-header">${f.Assaut} <span>▼</span></div>
+      <div class="accordion-content"><img src="${f.img}" style="width:100%;border-radius:10px;"></div>
+    </div>`;
   });
+  document.getElementById('accordionFiches').innerHTML=html;
+  document.querySelectorAll('#accordionFiches .accordion-header').forEach(h=>{h.onclick=()=>h.nextElementSibling.style.display=h.nextElementSibling.style.display==='block'?'none':'block';});
 }
 
-/* ================= ENCARt 4 ================== */
+// ================= ENCARTE 4 =================
+let start4=document.getElementById('start4'), pause4=document.getElementById('pause4'), status4=document.getElementById('status4'), text4=document.getElementById('text4');
+let interval4=document.getElementById('interval4'), voice4=document.getElementById('voice4'), repeat4=document.getElementById('repeat4');
+let synth4=new SpeechSynthesisUtterance(); let isPlaying4=false; let pauseFlag4=false;
+start4.addEventListener('click',()=>{if(!isPlaying4) play4();});
+pause4.addEventListener('click',()=>{pauseFlag4=!pauseFlag4; status4.textContent=pauseFlag4?'En pause':'En lecture'; speechSynthesis.pause();});
 
-let randInterval=null;
+function play4(){
+  let repeats=parseInt(repeat4.value)||1;
+  let interv=parseInt(interval4.value)*1000;
+  let voiceChoice=voice4.value;
+  let items=["Assaut 1","Assaut 2","Assaut 3","Assaut 4","Assaut 5","Assaut 6","Assaut 7","Assaut 8","Assaut 9","Assaut 10"];
+  let idx=0, repCount=0; isPlaying4=true; pauseFlag4=false; status4.textContent='En lecture'; text4.innerHTML='';
+  function next(){
+    if(repCount>=repeats){ status4.textContent='Arrêté'; isPlaying4=false; return;}
+    if(idx>=items.length){ idx=0; repCount++; }
+    if(!isPlaying4) return;
+    let t=items[idx++];
+    text4.innerHTML=t;
+    synth4.text=t; synth4.lang='fr-FR'; synth4.rate=1; synth4.pitch=1;
+    synth4.voice=speechSynthesis.getVoices().find(v=>voiceChoice=='female'?v.name.includes('F'):v.name.includes('M')) || null;
+    speechSynthesis.speak(synth4);
+    setTimeout(next,interv);
+  }
+  next();
+}
 
-document.getElementById("randStart").onclick=()=>{
-  const disp=document.getElementById("randText");
-  randInterval=setInterval(()=>{
-    const r=Math.floor(Math.random()*ficheList.length);
-    disp.textContent=ficheList[r];
-  },3000);
-};
-
-document.getElementById("randStop").onclick=()=>{
-  clearInterval(randInterval);
-};
 </script>
-
 </body>
 </html>
