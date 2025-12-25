@@ -8,12 +8,14 @@
 <style>
 @font-face { 
   font-family: "Spicy"; 
-  src: url("Spicy Sale.ttf"); 
+  src: url("Spicy Sale.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face{
   font-family:"Shanghai";
-  src:url("shanghai.ttf");
+  src:url("shanghai.ttf") format("truetype");
+  font-display: swap;
 }
 
 /* Palette & thème global */
@@ -47,7 +49,7 @@ header{
   box-shadow:0 6px 18px rgba(0,0,0,.25);
 
   display:flex;
-  flex-direction:column;         /* logo au-dessus */
+  flex-direction:column;
   align-items:center;
   text-align:center;
   gap:8px;
@@ -58,20 +60,21 @@ header img{
   cursor:pointer;
 }
 
-header h1{
+/* Titre */
+.banner-title{
   font-family:"Spicy",cursive;
   color:var(--pink-2);
   font-size:2.8rem;
   letter-spacing:1px;
-  margin:6px 0 0 0;
+  margin-top:6px;
 }
 
-/* ⭐ Sous-titre Shanghai */
-header .subtitle{
+/* Sous-titre */
+.banner-subtitle{
   font-family:"Shanghai",cursive;
   color:#fff;
   font-size:1.5rem;
-  margin-top:4px;
+  margin-top:2px;
   letter-spacing:.5px;
 }
 
@@ -95,7 +98,6 @@ header .subtitle{
   gap:22px;
   justify-items:center;
 }
-  }
 
 /* Cartes UV façon boutons kawaii */
 .uv-card {
@@ -131,38 +133,39 @@ header .subtitle{
   text-align:center;
 }
 
-/* ==== BOUTONS EXAMEN / PLANNING AVEC AURA SPÉCIALE ==== */
+/* ==== BOUTONS EXAMEN / PLANNING AVEC AURA DORÉE PULSANTE ==== */
 .uv-card.examen{
   position:relative;
   width:6.5cm !important;
   height:6.5cm !important;
 
-  /* AURA MAGENTA PULSANTE */
   box-shadow:
-    0 0 14px rgba(255,90,170,0.45),
-    0 0 32px rgba(255,60,150,0.35),
-    0 0 60px rgba(255,40,140,0.25);
-  animation:auraPulse 3.5s infinite ease-in-out;
+    0 0 14px rgba(255,215,0,0.45),
+    0 0 32px rgba(255,200,0,0.35),
+    0 0 60px rgba(255,185,0,0.25);
+
+  animation:goldPulse 3.5s infinite ease-in-out;
 }
 
-@keyframes auraPulse{
+/* Animation aura or */
+@keyframes goldPulse{
   0%{
     box-shadow:
-      0 0 10px rgba(255,100,180,0.35),
-      0 0 30px rgba(255,80,170,0.25),
-      0 0 45px rgba(255,60,150,0.20);
+      0 0 12px rgba(255,215,0,0.35),
+      0 0 28px rgba(255,200,0,0.25),
+      0 0 45px rgba(255,185,0,0.20);
   }
   50%{
     box-shadow:
-      0 0 20px rgba(255,140,200,0.65),
-      0 0 55px rgba(255,100,180,0.45),
-      0 0 90px rgba(255,80,160,0.40);
+      0 0 22px rgba(255,235,120,0.85),
+      0 0 60px rgba(255,215,50,0.55),
+      0 0 95px rgba(255,200,0,0.45);
   }
   100%{
     box-shadow:
-      0 0 10px rgba(255,100,180,0.35),
-      0 0 30px rgba(255,80,170,0.25),
-      0 0 45px rgba(255,60,150,0.20);
+      0 0 12px rgba(255,215,0,0.35),
+      0 0 28px rgba(255,200,0,0.25),
+      0 0 45px rgba(255,185,0,0.20);
   }
 }
 
@@ -182,8 +185,9 @@ header .subtitle{
 
 /* ==== MOBILE ==== */
 @media(max-width:900px){
-  header{
-    padding-bottom:22px;
+
+  header img{
+    height:78px;
   }
 
   .banner-title{
@@ -217,7 +221,6 @@ header .subtitle{
     font-size:1.3rem;
   }
 
-  /* examen & planning se comportent comme les autres boutons */
   .uv-card.examen{
     width:100% !important;
     height:70px !important;
@@ -286,10 +289,8 @@ header .subtitle{
 <header>
   <a href="../index.html"><img src="logo.png" alt="Logo"></a>
 
-  <div>
-    <div class="banner-title">Programme officiel</div>
-    <div class="banner-subtitle">Taï-jitsu</div>
-  </div>
+  <div class="banner-title">Programme officiel</div>
+  <div class="banner-subtitle">Taï-jitsu</div>
 </header>
 
 <div class="main-wrapper">
