@@ -1,10 +1,10 @@
 @font-face {
-  font-family: "Spicy";
-  src: url("Spicy Sale.ttf");
+  font-family: "Shanghai";
+  src: url("shanghai.ttf");
 }
 
-.spicy {
-  font-family: "Spicy", cursive;
+.shanghai {
+  font-family: "Shanghai";
 }
 
 .appbar {
