@@ -1,0 +1,142 @@
+[
+ {
+   "Série": 1,
+   "Assaut": "Oï tsuki jodan",
+   "Côté": "gauche",
+   "blocage": "uchi uke ",
+   "contre": "age tsuki"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Oï tsuki chudan",
+   "Côté": "gauche",
+   "blocage": "soto uke",
+   "contre": "yoko empi"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Mae geri",
+   "Côté": "gauche",
+   "blocage": "sukui uke",
+   "contre": "uraken tsuki"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Mawashi geri",
+   "Côté": "gauche",
+   "blocage": "heÏko uke",
+   "contre": "yoko empi"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Yoko geri",
+   "Côté": "gauche",
+   "blocage": "gedan baraï",
+   "contre": "yoko geri"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Oï tsuki jodan",
+   "Côté": "droit",
+   "blocage": "age uke",
+   "contre": "gyaku tsuki"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Oï tsuki chudan",
+   "Côté": "droit",
+   "blocage": "nagashi uke",
+   "contre": "kizami tsuki gyaku tsuki"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Mae geri",
+   "Côté": "droit",
+   "blocage": "gedan baraï",
+   "contre": "hiraken uchi"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Mawashi geri",
+   "Côté": "droit",
+   "blocage": "haÏwan uke",
+   "contre": "teisho uchi"
+ },
+ {
+   "Série": 1,
+   "Assaut": "Yoko geri",
+   "Côté": "droit",
+   "blocage": "osae uke",
+   "contre": "haïto uchi"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Oï tsuki jodan",
+   "Côté": "gauche",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Oï tsuki chudan",
+   "Côté": "gauche",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Mae geri",
+   "Côté": "gauche",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Mawashi geri",
+   "Côté": "gauche",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Yoko geri",
+   "Côté": "gauche",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Oï tsuki jodan",
+   "Côté": "droit",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Oï tsuki chudan",
+   "Côté": "droit",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Mae geri",
+   "Côté": "droit",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Mawashi geri",
+   "Côté": "droit",
+   "blocage": "a definir",
+   "contre": "a definir"
+ },
+ {
+   "Série": 2,
+   "Assaut": "Yoko geri",
+   "Côté": "droit",
+   "blocage": "a definir",
+   "contre": "a definir"
+ }
+]
