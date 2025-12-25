@@ -370,6 +370,24 @@
   .book-shelf {
     gap: 15px;
   }
+  /* 📱 Empilement des encarts sur mobile */
+@media (max-width: 900px) {
+  .grid{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .grid > div{
+    width: 100%;
+  }
+
+  .card-kawaii{
+    width: 100%;
+    margin: 0;
+  }
+}
+
 }
 
   </style>
