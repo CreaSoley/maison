@@ -6,42 +6,49 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ippon Kumite – Tai Jitsu</title>
 
+  <!-- CSS principal -->
   <link rel="stylesheet" href="style-ippon.css">
 
-  <!-- Material Icons + Police Spicy -->
+  <!-- Material Icons + Banner CSS -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="../banner.css">
+  <link rel="stylesheet" href="banner.css">
 
-
+  <!-- Police Spicy locale -->
   <style>
     @font-face {
       font-family: "Spicy";
-      src: url("Spicy Sale.ttf");
+      src: url("Spicy Sale.ttf") format("truetype");
     }
     .spicy { font-family: "Spicy", cursive; }
   </style>
 </head>
 
 <body data-title="Ippon kumite – Entraînement">
-<script>
-fetch("../banner.html")
-  .then(r => r.text())
-  .then(html => {
-    document.getElementById("bannerContainer").innerHTML = html;
 
-    // 1) priorité : data-title sur <body>
-    let pageTitle =
-      document.body.dataset.title ||
-      document.querySelector("h1")?.textContent ||
-      document.querySelector("title")?.textContent ||
-      "";
+  <!-- CONTENEUR POUR LA BANNIÈRE -->
+  <div id="bannerContainer"></div>
 
-    const target = document.querySelector(".header-text .title");
-    if (target && pageTitle) {
-      target.textContent = pageTitle;
-    }
-  });
-</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("banner.html")
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById("bannerContainer").innerHTML = html;
+
+          // Priorité : data-title sur <body>
+          let pageTitle =
+            document.body.dataset.title ||
+            document.querySelector("h1")?.textContent ||
+            document.querySelector("title")?.textContent ||
+            "";
+
+          const target = document.querySelector(".header-text .title");
+          if (target && pageTitle) target.textContent = pageTitle;
+        })
+        .catch(err => console.error("Erreur chargement bannière :", err));
+    });
+  </script>
+
   <!-- BANDEAU FICHES EXERCICES -->
   <section class="top-banner">
     <div class="controls">
@@ -51,71 +58,59 @@ fetch("../banner.html")
       <button class="fiche-btn" title="Gestion de l'épreuve" onclick="window.open('tai/fiche4.pdf','_blank')">Fiche 4</button>
       <button class="fiche-btn" title="Réactivité" onclick="window.open('tai/fiche5.pdf','_blank')">Fiche 5</button>
       <button class="fiche-btn" title="Rien pour le moment" onclick="window.open('tai/fiche6.pdf','_blank')">Fiche 6</button>
-
-      <!-- Boutique Surprise -->
       <button id="btnSurprise" class="btn ghost kawaii">✨ Surprise</button>
     </div>
-
     <div id="surpriseResult"></div>
   </section>
 
   <!-- 3 COLONNES : GAUCHE / CENTRE / DROITE -->
   <main class="layout-desktop">
 
-    <!-- COLONNE GAUCHE — ACCORDEON (AJOUT SELECT SÉRIE) -->
+    <!-- COLONNE GAUCHE — ACCORDEON -->
     <section class="card-block" id="script1">
       <h2 class="spicy section-title">🥋 Techniques par côté</h2>
-
       <div class="controls controls-column">
-        <!-- ⭐ NOUVEAU : Select série pour l'accordéon -->
         <select id="selectSerieAccordion">
           <option value="">Choisir une série</option>
         </select>
-
         <select id="filterSide">
           <option value="">Choisir un côté</option>
           <option value="droite">Droite</option>
           <option value="gauche">Gauche</option>
         </select>
       </div>
-
       <div id="accordionList"></div>
     </section>
 
-    <!-- COLONNE CENTRALE — FICHE TECHNIQUE (AJOUT SELECT SÉRIE) -->
+    <!-- COLONNE CENTRALE — FICHE TECHNIQUE -->
     <section class="card-block" id="script2">
       <h2 class="spicy section-title">💫 Fiche technique</h2>
-
       <div class="controls controls-column">
-        <!-- ⭐ NOUVEAU : Select série pour fiche + surprise -->
         <select id="selectSerie">
           <option value="">Choisir une série</option>
         </select>
-
         <select id="selectAttack">
           <option value="">Choisir une attaque</option>
         </select>
-
         <select id="selectSide">
           <option value="">Choisir un côté</option>
           <option value="droite">Droite</option>
           <option value="gauche">Gauche</option>
         </select>
       </div>
-
       <div id="resultCard"></div>
     </section>
 
     <!-- COLONNE DROITE — TIMER -->
     <section class="card-block" id="timerBlock">
       <h2 class="spicy section-title">⏱️ Timer</h2>
-
-      <iframe src="https://martinkoban.com/interval-timer/?m1=00&amp;s1=10&amp;m2=00&amp;s2=05&d=5&amp;dt=rounds&amp;wu=5&amp;wut=seconds&amp;nm=0&amp;iframe=1&amp;p1n=Phase%201&amp;p2n=Phase%202&amp;volume=1" style="border:none;" title="Interval Timer by MartinKoban.com" width="340" height="650" scrolling="no"></iframe>
+      <iframe src="https://martinkoban.com/interval-timer/?m1=00&amp;s1=10&amp;m2=00&amp;s2=05&d=5&amp;dt=rounds&amp;wu=5&amp;wut=seconds&amp;nm=0&amp;iframe=1&amp;p1n=Phase%201&amp;p2n=Phase%202&amp;volume=1" 
+              style="border:none;" title="Interval Timer by MartinKoban.com" width="340" height="650" scrolling="no"></iframe>
     </section>
 
   </main>
 
-  <!-- SCRIPT -->
+  <!-- SCRIPT PRINCIPAL -->
   <script src="ipponkumite.js"></script>
 
 </body>
