@@ -52,7 +52,7 @@
    "nom": "JUJI UKE",
    "categorie": "uke waza",
    "description": "Défense double avec les deux bras croisés",
-   "photo": "Hhttps://i.pinimg.com/736x/76/4b/61/764b61ba69fa2032966d6bbba611f74a.jpg",
+   "photo": "https://i.pinimg.com/736x/76/4b/61/764b61ba69fa2032966d6bbba611f74a.jpg",
    "video": "https://www.youtube.com/embed/Rp1drfqOMKY"
  },
  {
@@ -122,7 +122,7 @@
    "nom": "SHUTO UCHI",
    "categorie": "uchi wasa",
    "description": "Attaque circulaire avec le tranchant de la main",
-   "photo": "manquante,png",
+   "photo": "https://i.pinimg.com/736x/19/a0/1e/19a01ee670a5e2c8d846a0cf6def48a4.jpg",
    "video": "https://www.youtube.com/embed/2IiaM-3s0To"
  },
  {
@@ -287,6 +287,7 @@
    "video": "https://www.youtube.com/embed/JA8uIeC5prQ"
  }
 ]
+
 
 
 
