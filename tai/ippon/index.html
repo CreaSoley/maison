@@ -184,7 +184,7 @@ input[type=range]{width:100%;}
   Répéter la série :
   <input type="number" id="repeatCount" value="1" min="1" max="20"><br><br>
 
-  ⏱️ Temps entre lectues :
+  ⏱️ Temps entre lectures :
   <input type="range" id="tempo" min="5" max="60" value="10">
   <span id="tempoValue">10</span> s<br><br>
 
@@ -256,7 +256,7 @@ function speak(text, lang, gender="female"){
 
 /* ---------- ENCARt 1 ---------- */
 
-fetch("ippon/ippon.json")
+fetch("ippon.json")
 .then(r=>r.json())
 .then(data=>{
   const zone=document.getElementById("encart1");
@@ -321,7 +321,7 @@ let playing=false;
 let paused=false;
 let timeoutId;
 
-fetch("ippon/ipponvocal.json")
+fetch("ipponvocal.json")
 .then(r=>r.json())
 .then(data=>{
   vocalData=data;
