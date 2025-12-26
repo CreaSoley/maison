@@ -14,21 +14,33 @@
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
 
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../banner.css">
 </head>
 
-<body>
+<body data-title="Kata – Entraînement">
 
   <!-- HEADER -->
-  <header class="appbar">
-    <a class="logo" href="../index.html" title="Accueil">
-      <!-- Vérifiez que le fichier logo.png est bien ici -->
-      <img src="logo.png" alt="logo" class="logo-big">
-    </a>
-    <div class="header-text">
-      <div class="title spicy">Préparation 2eme Dan</div>
-      <div class="subtitle spicy">Tai-Jitsu – Kata</div>
-    </div>
-  </header>
+  <<div id="bannerContainer"></div>
+
+<script>
+fetch("../banner.html")
+  .then(r => r.text())
+  .then(html => {
+    document.getElementById("bannerContainer").innerHTML = html;
+
+    // 1) priorité : data-title sur <body>
+    let pageTitle =
+      document.body.dataset.title ||
+      document.querySelector("h1")?.textContent ||
+      document.querySelector("title")?.textContent ||
+      "";
+
+    const target = document.querySelector(".header-text .title");
+    if (target && pageTitle) {
+      target.textContent = pageTitle;
+    }
+  });
+</script>
 
 <!-- CONTENU -->
 <main class="kata-container">
