@@ -1,74 +1,142 @@
 [
   {
     "Série": 1,
-    "Assaut": "追い突き 上段",
+    "Assaut": "オイヅキ ジョウダン",
     "Côté": "gauche",
-    "blocage": "内受け",
-    "contre": "上げ突き"
+    "blocage": "ウチウケ",
+    "contre": "アゲヅキ"
   },
   {
     "Série": 1,
-    "Assaut": "追い突き 中段",
+    "Assaut": "オイヅキ チュウダン",
     "Côté": "gauche",
-    "blocage": "外受け",
-    "contre": "横猿臂打ち"
+    "blocage": "ソトウケ",
+    "contre": "ヨコエンピウチ"
   },
   {
     "Série": 1,
-    "Assaut": "前蹴り 中段",
+    "Assaut": "マエゲリ チュウダン",
     "Côté": "gauche",
-    "blocage": "掬い受け",
-    "contre": "裏拳突き"
+    "blocage": "スクイウケ",
+    "contre": "ウラケンヅキ"
   },
   {
     "Série": 1,
-    "Assaut": "回し蹴り 中段",
+    "Assaut": "マワシゲリ チュウダン",
     "Côté": "gauche",
-    "blocage": "平行受け",
-    "contre": "横猿臂打ち"
+    "blocage": "ヘイコウウケ",
+    "contre": "ヨコエンピウチ"
   },
   {
     "Série": 1,
-    "Assaut": "横蹴り 中段",
+    "Assaut": "ヨコゲリ チュウダン",
     "Côté": "gauche",
-    "blocage": "下段払い",
-    "contre": "横蹴り"
+    "blocage": "ゲダンバライ",
+    "contre": "ヨコゲリ"
   },
   {
     "Série": 1,
-    "Assaut": "追い突き 上段",
+    "Assaut": "オイヅキ ジョウダン",
     "Côté": "droit",
-    "blocage": "上げ受け",
-    "contre": "逆突き"
+    "blocage": "アゲウケ",
+    "contre": "ギャクヅキ"
   },
   {
     "Série": 1,
-    "Assaut": "追い突き 中段",
+    "Assaut": "オイヅキ チュウダン",
     "Côté": "droit",
-    "blocage": "流し受け",
-    "contre": "刻み突き 逆突き"
+    "blocage": "ナガシウケ",
+    "contre": "キザミヅキ ギャクヅキ"
   },
   {
     "Série": 1,
-    "Assaut": "前蹴り 中段",
+    "Assaut": "マエゲリ チュウダン",
     "Côté": "droit",
-    "blocage": "下段払い",
-    "contre": "平拳打ち"
+    "blocage": "ゲダンバライ",
+    "contre": "ヒラケンウチ"
   },
   {
     "Série": 1,
-    "Assaut": "回し蹴り 中段",
+    "Assaut": "マワシゲリ チュウダン",
     "Côté": "droit",
-    "blocage": "背腕受け",
-    "contre": "掌底打ち"
+    "blocage": "ハイワンウケ",
+    "contre": "テイショウウチ"
   },
   {
     "Série": 1,
-    "Assaut": "横蹴り 中段",
+    "Assaut": "ヨコゲリ チュウダン",
     "Côté": "droit",
-    "blocage": "押さえ受け",
-    "contre": "背刀打ち"
+    "blocage": "オサエウケ",
+    "contre": "ハイトウウチ"
+  },
+  {
+    "Série": 2,
+    "Assaut": "オイヅキ ジョウダン",
+    "Côté": "gauche",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "オイヅキ チュウダン",
+    "Côté": "gauche",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "マエゲリ チュウダン",
+    "Côté": "gauche",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "マワシゲリ チュウダン",
+    "Côté": "gauche",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "ヨコゲリ チュウダン",
+    "Côté": "gauche",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "オイヅキ ジョウダン",
+    "Côté": "droit",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "オイヅキ チュウダン",
+    "Côté": "droit",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "マエゲリ チュウダン",
+    "Côté": "droit",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "マワシゲリ チュウダン",
+    "Côté": "droit",
+    "blocage": "a definir",
+    "contre": "a definir"
+  },
+  {
+    "Série": 2,
+    "Assaut": "ヨコゲリ チュウダン",
+    "Côté": "droit",
+    "blocage": "a definir",
+    "contre": "a definir"
   }
 ]
-
-
