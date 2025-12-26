@@ -272,14 +272,14 @@ startBtn.onclick=()=>{
     seq.push({type:"fr",text:"Commençons l'entraînement",wait:5000});
     seq.push({type:"fr",text:"côté gauche",wait:2000});
     G.forEach(t=>{
-      seq.push({type:"ja",text:t.Assaut,wait:2000});
-      seq.push({type:"ja",text:t.blocage,wait:2000});
+      seq.push({type:"ja",text:t.Assaut,wait:3000});
+      seq.push({type:"ja",text:t.blocage,wait:3000});
       seq.push({type:"ja",text:t.contre,wait:delay});
     });
-    seq.push({type:"fr",text:"côté droit",wait:2000});
+    seq.push({type:"fr",text:"côté droit",wait:3000});
     D.forEach(t=>{
-      seq.push({type:"ja",text:t.Assaut,wait:2000});
-      seq.push({type:"ja",text:t.blocage,wait:2000});
+      seq.push({type:"ja",text:t.Assaut,wait:3000});
+      seq.push({type:"ja",text:t.blocage,wait:3000});
       seq.push({type:"ja",text:t.contre,wait:delay});
     });
   }
