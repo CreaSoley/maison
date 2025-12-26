@@ -362,7 +362,7 @@ randStart.onclick=()=>{
   randState.innerText="▶️ en cours";
   function loop(){
     if(!run) return;
-    const tech=[""Oi tsuki jodan à gauche","Mae geri à gauche","Mawashi geri à gauche","yoko geri à gauche","Oi tsuki chudan à gauche","Oi tsuki jodan à droite","Mae geri à droite","Mawashi geri à droite","yoko geri à droite", "Oi tsuki chudan à droite"];
+    const tech=["Oi tsuki jodan à gauche","Mae geri à gauche","Mawashi geri à gauche","Yoko geri à gauche","Oi tsuki chudan à gauche","Oi tsuki jodan à droite","Mae geri à droite","Mawashi geri à droite","yoko geri à droite", "Oi tsuki chudan à droite"];
     const t=tech[Math.floor(Math.random()*tech.length)];
     randDisplay.innerText=t;
     speak(t,"fr-FR"); // voix française
