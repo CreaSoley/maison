@@ -8,7 +8,7 @@
 <!-- Material Icons + Police Spicy -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="../banner.css">
+   <link rel="stylesheet" href="banner.css">
 <style>
 @font-face { 
   font-family: "Spicy"; 
@@ -252,7 +252,7 @@ body {
 <div id="bannerContainer"></div>
 
 <script>
-fetch("../banner.html")
+fetch("banner.html")
   .then(r => r.text())
   .then(html => {
     document.getElementById("bannerContainer").innerHTML = html;
