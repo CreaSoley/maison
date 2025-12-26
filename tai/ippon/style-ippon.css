@@ -9,433 +9,110 @@
 @font-face { font-family:"SuperMeatball"; src:url("../SuperMeatball.ttf") format("truetype"); }
 }
 
-.spicy {
-  font-family: "Spicy", cursive;
+<!-- FONTS -->
+<style>
+@font-face { font-family:"Shanghai"; src:url("../shanghai.ttf") format("truetype"); }
+@font-face { font-family:"Spicy"; src:url("../Spicy Sale.ttf") format("truetype"); }
+@font-face { font-family:"SuperMeatball"; src:url("../SuperMeatball.ttf") format("truetype"); }
+
+body{
+  font-family:"Fredoka", Arial, sans-serif;
+  background:#fff3fc;
+  margin:0;
 }
 
-/* Police standard pour le reste */
-body, button, input, select, p, div, li {
-  font-family: 'Fredoka', Arial, sans-serif;
+/* ---------------------- BANNIERE ---------------------- */
+.appbar{
+  background:black;
+  color:white;
+  padding:20px 10px;
+  text-align:center;
+}
+.appbar img{ width:110px; }
+.title{ font-family:"Spicy"; font-size:2.4rem; color:#ffd6ec; }
+.subtitle{ font-family:"Shanghai"; font-size:1.5rem; color:#ffd0ec; }
+
+@media(max-width:600px){
+  .title{font-size:1.6rem;}
+  .subtitle{font-size:1.1rem;}
 }
 
-/* PALETTE KAWAII GLOBALE */
-:root {
-  --pink-1:#fff0f6;
-  --pink-2:#ffd6ec;
-  --pink-3:#ffe3f4;
-  --accent:#ff5fc1;
-  --hot-pink:#ff1493;
-  --card-shadow: 0 10px 24px rgba(255,120,180,0.18);
-  --text:#222;
-  --bg-gradient: linear-gradient(180deg, #fff6fb 0%, #ffeef6 100%);
+/* ---------------------- LAYOUT ---------------------- */
+.container{
+  max-width:1400px;
+  margin:auto;
+  padding:15px;
 }
-
-/* ------------------------- */
-/* STRUCTURE GLOBALE */
-/* ------------------------- */
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg-gradient);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
 }
-
-/* ------------------------- */
-/* BANNIÈRE / HEADER */
-/* ------------------------- */
-.appbar {
-  background: black;
-  color: white;
-  padding: 25px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-}
-
-.logo-big {
-  width: 110px;
-  margin-bottom: 15px;
-}
-
-.header-text .title {
-  font-size: 2.5rem;
-  letter-spacing: 2px;
-  color: var(--pink-2);
-}
-
-.header-text .subtitle {
-  font-size: 1.7rem;
-  margin-top: 18px;
-  letter-spacing: 2px;
-  color: #ffd0ea;
-}
-
-/* ------------------------- */
-/* TOP BANNER (fiches 1–6 + surprise) */
-/* ------------------------- */
-.top-banner {
-  width: 100%;
-  background: #fffdfd;
-  padding: 20px 25px 18px;
-  box-shadow: 0 4px 12px rgba(255,120,180,0.18);
-  margin-bottom: 25px;
-  border-bottom: 2px solid var(--pink-2);
-}
-
-.top-banner .controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-
-/* ------------------------- */
-/* BOUTONS GÉNÉRAUX */
-/* ------------------------- */
-.btn {
-  padding: 9px 16px;
-  border-radius: 999px;
-  cursor: pointer;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: 'Fredoka', Arial, sans-serif;
-  box-shadow: 0 4px 0 rgba(214, 69, 155, 0.7);
-  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s, color 0.15s;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.btn.primary {
-  background: var(--accent);
-  color: white;
-}
-
-.btn.ghost {
-  background: white;
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  box-shadow: 0 4px 0 rgba(255, 128, 200, 0.6);
-}
-
-.kawaii {
-  border-radius: 999px;
-}
-
-/* Effets hover / active */
-.btn:hover,
-.fiche-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 rgba(214, 69, 155, 0.9);
-}
-
-.btn:active,
-.fiche-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 0 rgba(214, 69, 155, 0.8);
-}
-
-/* Boutons fiches exercices */
-.fiche-btn {
-  font-family: "Spicy", cursive !important;
-  font-size: 1.2rem;
-  padding: 10px 18px;
-  background: #ffd7f6;
-  border-radius: 999px;
-  border: 2px solid #ff9bdd;
-  cursor: pointer;
-  transition: 0.15s;
-  position: relative;
-  box-shadow: 0 4px 0 rgba(255, 153, 221, 0.8);
-}
-
-.fiche-btn:hover {
-  background: #ffb9ee;
-}
-
-.fiche-btn[title]:hover::after {
-  content: attr(title);
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #222;
-  color: #fff;
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  border-radius: 6px;
-  z-index: 10;
-}
-
-/* Résultat surprise */
-#surpriseResult {
-  margin-top: 20px;
-}
-
-/* ------------------------- */
-/* CARD BLOCKS */
-/* ------------------------- */
-.card-block {
-  background: linear-gradient(180deg, #fff9fc 0%, #fff4fb 100%);
-  padding: 22px;
-  border-radius: 20px;
-  box-shadow: var(--card-shadow);
-  border: 2px solid var(--pink-2);
-  height: 100%;               /* ✅ Force la même hauteur */
-  display: flex;
-  flex-direction: column;
-}
-
-/* TITRES DE SECTION */
-.section-title {
-  font-size: 1.8rem;
-  margin-bottom: 16px;
-  color: var(--hot-pink);
-  text-align: center;
-  text-shadow: 2px 2px 0 var(--pink-3);
-  flex-shrink: 0;             /* Empêche le titre de rétrécir */
-}
-
-/* ------------------------- */
-/* LAYOUT DESKTOP (3 colonnes) */
-/* ------------------------- */
-.layout-desktop {
-  display: grid;
-  grid-template-columns: 340px 1fr 340px;
-  gap: 30px;                  /* ✅ Plus d'espace entre les colonnes */
-  padding: 0 25px 25px 25px;
-  height: fit-content;        /* Adapte la hauteur */
-}
-
-.layout-desktop > section {
-  width: 100%;
-}
-
-/* VERSION MOBILE */
-@media(max-width: 800px){
-  .layout-desktop {
-    display: flex;
-    flex-direction: column;
-    padding: 0 14px 20px;
-    gap: 25px;
-  }
-}
-
-/* ------------------------- */
-/* CONTROLS (selects, etc.) */
-/* ------------------------- */
-.controls {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 18px;
-}
-
-.controls-column {
-  flex-direction: column;
-  gap: 12px;
-}
-
-select {
-  padding: 10px 16px;
-  border-radius: 12px;
-  border: 2px solid var(--pink-2);
-  background: #fff;
-  font-size: 1rem;
-  font-family: 'Fredoka', Arial, sans-serif;
-  box-shadow: 0 3px 0 rgba(255, 182, 193, 0.7);
-  transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  min-width: 180px;           /* ✅ Largeur minimale */
-}
-
-select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 4px 0 rgba(255, 128, 200, 0.8);
-  transform: translateY(-1px);
-  background: #fffdfc;
-}
-
-/* ------------------------- */
-/* ACCORDÉONS */
-/* ------------------------- */
-.ippon-accordion {
-  background: #ffeef7;
-  border-radius: 14px;
-  padding: 14px 16px;
-  margin-bottom: 18px;        /* ✅ Plus d'espace entre les accordéons */
-  border: 2px solid #ffb4e6;
-  box-shadow: 0 6px 14px rgba(255, 153, 221, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.ippon-accordion:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(255, 153, 221, 0.4);
-}
-
-.ippon-acc-header {
-  font-family: "Spicy", cursive;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 8px 4px;
-  color: var(--hot-pink);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ippon-acc-header::after {
-  content: "▼";
-  font-size: 0.9rem;
-  transition: transform 0.2s;
-}
-
-.ippon-acc-header[aria-expanded="true"]::after {
-  transform: rotate(180deg);
-}
-
-.ippon-acc-content {
-  display: none;
-  padding: 14px 0 8px 0;
-  border-top: 1px dashed #ffb4e6;
-  margin-top: 10px;
-}
-
-.ippon-acc-content p {
-  margin: 10px 0;            /* ✅ Espace entre les lignes */
-  padding: 4px 0;
-  display: flex;
-  align-items: flex-start;
-}
-
-.ippon-acc-content strong {
-  font-weight: 600;
-  width: 140px;               /* ✅ Largeur fixe pour l'alignement */
-  min-width: 140px;
-  display: inline-block;
-  color: #444;
-}
-
-.ippon-acc-content .result-text {
-  flex: 1;
-}
-
-/* ------------------------- */
-/* FICHE TECHNIQUE */
-/* ------------------------- */
-.result-card {
-  background: #fff3fb;
-  border-radius: 16px;
-  padding: 20px;
-  border: 2px solid #ffb4e6;
-  margin-top: 20px;
-  box-shadow: 0 8px 18px rgba(255, 120, 190, 0.12);
-  flex-grow: 1;                /* Prend l'espace disponible */
-}
-
-.tech-title {
-  font-family: "Spicy", cursive;
-  font-size: 1.8rem;
-  margin-bottom: 8px;
-  color: var(--hot-pink);
-}
-
-.tech-serie {
-  font-family: "Spicy", cursive;
-  font-size: 1.4rem;
-  color: var(--accent);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tech-side {
-  font-family: "Spicy", cursive;
-  font-size: 1.5rem;
-  margin-bottom: 16px;
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.result-card p {
-  margin: 12px 0;
-  padding: 4px 0;
-  display: flex;
-  align-items: flex-start;
-}
-
-.result-title {
-  font-weight: 600;
-  width: 140px;               /* ✅ Aligné avec l'accordéon */
-  min-width: 140px;
-  color: #444;
-}
-
-.result-text {
-  flex: 1;
-}
-
-/* Vidéo intégrée */
-.video-frame {
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 12px;
-  margin-top: 16px;
-  border: none;
-}
-
-/* ------------------------- */
-/* SURPRISE CARD */
-/* ------------------------- */
-#surpriseResult .result-card {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  margin-top: 15px;
-}
-
-#surpriseResult .result-card > div:first-child {
-  flex: 1 1 300px;
-}
-
-#surpriseResult .result-card iframe {
-  flex: 1 1 300px;
-  border-radius: 14px;
-}
-
 @media(max-width:800px){
-  #surpriseResult .result-card {
-    flex-direction: column;
-  }
+  .grid{grid-template-columns:1fr;}
 }
 
-/* ------------------------- */
-/* TIMER COLUMN */
-/* ------------------------- */
-#timerBlock iframe {
-  width: 100%;
-  max-width: 100%;
-  border-radius: 18px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-  flex-shrink: 0;             /* Ne rétrécit pas */
+/* ---------------------- CARDS ---------------------- */
+.card{
+  background:white;
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+.card h3{
+  color:#ff5fa2;
+  margin-top:0;
+  font-family:"SuperMeatball";
 }
 
-/* ------------------------- */
-/* BOUTON SURPRISE */
-/* ------------------------- */
-#btnSurprise {
-  margin-top: 12px;
-  align-self: flex-start;
+/* ---------------------- ACCORDEON ---------------------- */
+.accordion-item{
+  background:#ffe3f5;
+  padding:10px;
+  border-radius:18px;
+  margin:7px 0;
+}
+.accordion-title{
+  font-weight:bold;
+  cursor:pointer;
+}
+.accordion-content{
+  display:none;
+  padding-top:8px;
+}
+
+/* ---------------------- FORM / STATE ---------------------- */
+.state{
+  padding:8px 10px;
+  background:#fff0fb;
+  border-radius:15px;
+  margin-top:8px;
+  font-size:.9rem;
+}
+
+button{
+  border:none;
+  padding:10px 18px;
+  border-radius:22px;
+  background:#ff7cbc;
+  color:white;
+  cursor:pointer;
+}
+button:hover{background:#ff9fd0;}
+input, select{
+  border-radius:18px;
+  padding:6px 10px;
+  border:1px solid #ffb7e3;
+}
+input[type=range]{width:100%;}
+
+/* fiches PNG */
+.fiche-img{
+  width:100%;
+  border-radius:16px;
+}
+
+/* MOBILE FILTER SPACING */
+@media(max-width:600px){
+  select, input{margin-bottom:10px;}
 }
