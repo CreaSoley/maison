@@ -2,221 +2,84 @@
   {
     "specialite": ["Uke waza", "multi-directionnel"],
     "fr": "Gedan Barai, Gyaku Tsuki",
-    "jp": "下段払い、逆突き"
+    "jp": "ゲダンバライ、ギャクヅキ"
   },
   {
     "specialite": ["Uke waza"],
     "fr": "Soto Uke, Gyaku Tsuki",
-    "jp": "外受け、逆突き"
+    "jp": "ソトウケ、ギャクヅキ"
   },
   {
     "specialite": ["Uke waza"],
     "fr": "Uchi Uke, Oi Tsuki",
-    "jp": "内受け、追い突き"
+    "jp": "ウチウケ、オイヅキ"
   },
   {
     "specialite": ["Uke waza"],
     "fr": "Shuto Uke, Gyaku Tsuki",
-    "jp": "手刀受け、逆突き"
+    "jp": "シュトウウケ、ギャクヅキ"
   },
   {
     "specialite": ["Uke waza", "multi-directionnel"],
     "fr": "Age Uke, Gyaku Tsuki",
-    "jp": "上げ受け、逆突き"
+    "jp": "アゲウケ、ギャクヅキ"
   },
   {
     "specialite": ["Geri waza", "multi-directionnel", "Yoko waza"],
     "fr": "Gedan Barai, Mae Geri",
-    "jp": "下段払い、前蹴り"
+    "jp": "ゲダンバライ、マエゲリ"
   },
   {
     "specialite": ["Geri waza", "multi-directionnel"],
     "fr": "Soto Uke, Mae Geri",
-    "jp": "外受け、前蹴り"
+    "jp": "ソトウケ、マエゲリ"
   },
   {
     "specialite": ["Geri waza", "multi-directionnel"],
     "fr": "Uchi Uke, Hiza Geri",
-    "jp": "内受け、膝蹴り"
+    "jp": "ウチウケ、ヒザゲリ"
   },
   {
     "specialite": ["Geri waza", "multi-directionnel"],
     "fr": "Gedan Barai, Kin Geri",
-    "jp": "下段払い、金蹴り"
+    "jp": "ゲダンバライ、キンゲリ"
   },
   {
     "specialite": ["Geri waza", "multi-directionnel"],
     "fr": "Age Uke, Mae Geri",
-    "jp": "上げ受け、前蹴り"
+    "jp": "アゲウケ、マエゲリ"
   },
   {
     "specialite": ["3 techniques"],
     "fr": "Gedan Barai, Gyaku Tsuki, Mae Geri",
-    "jp": "下段払い、逆突き、前蹴り"
+    "jp": "ゲダンバライ、ギャクヅキ、マエゲリ"
   },
   {
     "specialite": ["3 techniques"],
     "fr": "Soto Uke, Gyaku Tsuki, Mae Geri",
-    "jp": "外受け、逆突き、前蹴り"
+    "jp": "ソトウケ、ギャクヅキ、マエゲリ"
   },
   {
     "specialite": ["3 techniques"],
     "fr": "Age Uke, Gyaku Tsuki, Gyaku Tsuki",
-    "jp": "上げ受け、逆突き、逆突き"
+    "jp": "アゲウケ、ギャクヅキ、ギャクヅキ"
   },
   {
     "specialite": ["3 techniques", "multi-directionnel"],
     "fr": "Gedan Barai, Oi Tsuki, Gyaku Tsuki",
-    "jp": "下段払い、追い突き、逆突き"
+    "jp": "ゲダンバライ、オイヅキ、ギャクヅキ"
   },
   {
     "specialite": ["3 techniques"],
     "fr": "Uchi Uke, Gyaku Tsuki, Mae Geri",
-    "jp": "内受け、逆突き、前蹴り"
+    "jp": "ウチウケ、ギャクヅキ、マエゲリ"
   },
   {
     "specialite": ["Yoko waza", "multi-directionnel"],
     "fr": "Gedan Barai, Tsuki Chudan",
-    "jp": "下段払い、中段突き"
+    "jp": "ゲダンバライ、チュウダンヅキ"
   },
   {
     "specialite": ["Yoko waza"],
     "fr": "Shuto Uke, Gyaku Tsuki",
-    "jp": "手刀受け、逆突き"
-  },
-  {
-    "specialite": ["Yoko waza"],
-    "fr": "Shuto Uke, Mae Geri",
-    "jp": "手刀受け、前蹴り"
-  },
-  {
-    "specialite": ["Yoko waza"],
-    "fr": "Soto Uke, Uraken",
-    "jp": "外受け、裏拳"
-  },
-  {
-    "specialite": ["Tai-jitsu"],
-    "fr": "Gedan Barai, Teisho",
-    "jp": "下段払い、底掌"
-  },
-  {
-    "specialite": ["Tai-jitsu"],
-    "fr": "Soto Uke, Empi",
-    "jp": "外受け、肘打ち"
-  },
-  {
-    "specialite": ["Tai-jitsu", "multi-directionnel"],
-    "fr": "Age Uke, Empi",
-    "jp": "上げ受け、肘打ち"
-  },
-  {
-    "specialite": ["Tai-jitsu"],
-    "fr": "Uchi Uke, Tsuki Chudan",
-    "jp": "内受け、中段突き"
-  },
-  {
-    "specialite": ["Tai-jitsu"],
-    "fr": "Gedan Barai, Hiza Geri",
-    "jp": "下段払い、膝蹴り"
-  },
-  {
-    "specialite": ["multi-directionnel"],
-    "fr": "Shuto Uke, Gyaku Tsuki",
-    "jp": "手刀受け、逆突き"
-  },
-  {
-    "specialite": ["multi-directionnel"],
-    "fr": "Soto Uke, Mae Geri, Tsuki",
-    "jp": "外受け、前蹴り、突き"
-  },
-  {
-    "specialite": ["multi-directionnel"],
-    "fr": "Age Uke, Gyaku Tsuki, Mae Geri",
-    "jp": "上げ受け、逆突き、前蹴り"
-  },
-  {
-    "specialite": ["multi-directionnel"],
-    "fr": "Gedan Barai, Tsuki Chudan, Tsuki Jodan",
-    "jp": "下段払い、中段突き、上段突き"
-  },
-  {
-    "specialite": ["multi-directionnel", "Tai-jitsu"],
-    "fr": "Uchi Uke, Gyaku Tsuki",
-    "jp": "内受け、逆突き"
-  },
-  {
-    "specialite": ["Tai-jitsu"],
-    "fr": "Shuto Uke, Gyaku Tsuki",
-    "jp": "手刀受け、逆突き"
-  },
-  {
-    "specialite": ["multi-directionnel", "3 techniques"],
-    "fr": "Shuto Uke, Gyaku Tsuki, Mae Geri",
-    "jp": "手刀受け、逆突き、前蹴り"
-  },
-  {
-    "specialite": ["multi-directionnel", "Uke waza"],
-    "fr": "Gedan Barai, Oi Tsuki",
-    "jp": "下段払い、追い突き"
-  },
-   {
-    "specialite": ["sonoba"],
-    "fr": "Gedan Barai, Gyaku Tsuki",
-    "jp": "下段払い、逆突き"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Soto Uke, Gyaku Tsuki",
-    "jp": "外受け、逆突き"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Uchi Uke, Oi Tsuki",
-    "jp": "内受け、追い突き"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Age Uke, Gyaku Tsuki",
-    "jp": "上段受け、逆突き"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Gedan Barai, Oi Tsuki",
-    "jp": "下段払い、追い突き"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Soto Uke, Uraken",
-    "jp": "外受け、裏拳"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Uchi Uke, Empi Uchi",
-    "jp": "内受け、肘打ち"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Age Uke, Mae Geri",
-    "jp": "上段受け、前蹴り"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Soto Uke, Tai Sabaki, Gyaku Tsuki",
-    "jp": "外受け、体捌き、逆突き"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Gedan Barai, Shuto Uchi",
-    "jp": "下段払い、手刀打ち"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Uchi Uke, Hiza Geri",
-    "jp": "内受け、膝蹴り"
-  },
-  {
-    "specialite": ["sonoba"],
-    "fr": "Gedan Barai, Soto Uke, Gyaku Tsuki",
-    "jp": "下段払い、外受け、逆突き"
-  }
-]
+    "jp": "シュトウウケ、ギ
