@@ -5,7 +5,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tai-Jitsu – Programme officiel</title>
-
+<!-- Material Icons + Police Spicy -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../banner.css">
 <style>
 @font-face { 
   font-family: "Spicy"; 
@@ -38,47 +41,6 @@ body {
   font-family: 'Fredoka', Arial, sans-serif;
   color:#222;
 }
-
-/* ===================== */
-/*     BANNIÈRE NOIRE     */
-/* ===================== */
-
-header{
-  background:#000;
-  color:#fff;
-  padding:22px 14px 28px;
-  box-shadow:0 6px 18px rgba(0,0,0,.25);
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  gap:8px;
-}
-
-header img{
-  height:92px;
-  cursor:pointer;
-}
-
-/* Titre */
-.banner-title{
-  font-family:"Spicy",cursive;
-  color:var(--pink-2);
-  font-size:2.8rem;
-  letter-spacing:1px;
-  margin-top:6px;
-}
-
-/* Sous-titre */
-.banner-subtitle{
-  font-family:"Shanghai",cursive;
-  color:#fff;
-  font-size:1.5rem;
-  margin-top:2px;
-  letter-spacing:.5px;
-}
-
 /* MAIN */
 .main-wrapper {
   max-width:1600px;
@@ -285,15 +247,29 @@ header img{
 </style>
 </head>
 
-<body>
+<body data-title="Programme d'entraînement">
 
-<header>
-  <a href="../index.html"><img src="logo.png" alt="Logo"></a>
+<div id="bannerContainer"></div>
 
-  <div class="banner-title">Programme officiel</div>
-  <div class="banner-subtitle">Taï-jitsu</div>
-</header>
+<script>
+fetch("../banner.html")
+  .then(r => r.text())
+  .then(html => {
+    document.getElementById("bannerContainer").innerHTML = html;
 
+    // 1) priorité : data-title sur <body>
+    let pageTitle =
+      document.body.dataset.title ||
+      document.querySelector("h1")?.textContent ||
+      document.querySelector("title")?.textContent ||
+      "";
+
+    const target = document.querySelector(".header-text .title");
+    if (target && pageTitle) {
+      target.textContent = pageTitle;
+    }
+  });
+</script>
 <div class="main-wrapper">
 
   <!-- ==== BOUTONS UV ==== -->
