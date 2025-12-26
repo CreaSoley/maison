@@ -265,7 +265,7 @@ startBtn.onclick=()=>{
   const repeat=parseInt(repeatCount.value);
   const gender=voiceType.value;
   const G=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="gauche");
-  const D=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="droite");
+  const D=vocalData.filter(x=>x["Série"]===serie && x["Côté"]==="droit");
 
   let seq=[];
   for(let n=0;n<repeat;n++){
