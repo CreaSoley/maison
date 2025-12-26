@@ -4,6 +4,9 @@
 @font-face {
   font-family: "Spicy";
   src: url("Spicy Sale.ttf");
+@font-face { font-family:"Shanghai"; src:url("../shanghai.ttf") format("truetype"); }
+@font-face { font-family:"Spicy"; src:url("../Spicy Sale.ttf") format("truetype"); }
+@font-face { font-family:"SuperMeatball"; src:url("../SuperMeatball.ttf") format("truetype"); }
 }
 
 .spicy {
