@@ -20,23 +20,6 @@ body{
   background:#fff3fc;
   margin:0;
 }
-
-/* ---------------------- BANNIERE ---------------------- */
-.appbar{
-  background:black;
-  color:white;
-  padding:20px 10px;
-  text-align:center;
-}
-.appbar img{ width:110px; }
-.title{ font-family:"Spicy"; font-size:2.4rem; color:#ffd6ec; }
-.subtitle{ font-family:"Shanghai"; font-size:1.5rem; color:#ffd0ec; }
-
-@media(max-width:600px){
-  .title{font-size:1.6rem;}
-  .subtitle{font-size:1.1rem;}
-}
-
 /* ---------------------- LAYOUT ---------------------- */
 .container{
   max-width:1400px;
