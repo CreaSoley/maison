@@ -7,17 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
      * DONNÉES
      ********************************************************************/
     const IPPON = [
-        { romaji: "Oi Tsuki Jodan", jp: "追い突き 上段" },
-        { romaji: "Oi Tsuki Chudan", jp: "追い突き 中段" },
-        { romaji: "Mae Geri Chudan", jp: "前蹴り 中段" },
-        { romaji: "Mawashi Geri Chudan", jp: "回し蹴り 中段" },
-        { romaji: "Yoko Geri Chudan", jp: "横蹴り 中段" },
+        { romaji: "Oi Tsuki Jodan", jp: "オイヅキ ジョウダン" },
+{ romaji: "Oi Tsuki Chudan", jp: "オイヅキ チュウダン" },
+{ romaji: "Mae Geri Chudan", jp: "マエゲリ チュウダン" },
+{ romaji: "Mawashi Geri Chudan", jp: "マワシゲリ チュウダン" },
+{ romaji: "Yoko Geri Chudan", jp: "ヨコゲリ チュウダン" },
 
-        { romaji: "Oi Tsuki Jodan", jp: "追い突き 上段" },
-        { romaji: "Oi Tsuki Chudan", jp: "追い突き 中段" },
-        { romaji: "Mae Geri Chudan", jp: "前蹴り 中段" },
-        { romaji: "Mawashi Geri Chudan", jp: "回し蹴り 中段" },
-        { romaji: "Yoko Geri Chudan", jp: "横蹴り 中段" }
+{ romaji: "Oi Tsuki Jodan", jp: "オイヅキ ジョウダン" },
+{ romaji: "Oi Tsuki Chudan", jp: "オイヅキ チュウダン" },
+{ romaji: "Mae Geri Chudan", jp: "マエゲリ チュウダン" },
+{ romaji: "Mawashi Geri Chudan", jp: "マワシゲリ チュウダン" },
+{ romaji: "Yoko Geri Chudan", jp: "ヨコゲリ チュウダン" }
+        
     ];
 
     /********************************************************************
