@@ -40,20 +40,6 @@
     }
     a{ color:inherit; }
 
-    /* ---------- Header (GARDÉ NOIR/BLANC) ---------- */
-    header{
-      background:#000;
-      color:#fff;
-      padding:18px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:18px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.25);
-    }
-    header img{ height:64px; }
-    header h1{ font-family:"Spicy"; font-size:2.2rem; margin:0; color:var(--pink-2); }
-
     /* ---------- Layout ---------- */
     .main-wrapper{ max-width:1400px; margin:20px auto; padding:0 18px 40px; }
     .grid{
@@ -244,13 +230,29 @@
     .muted { color:#999; font-size:0.9rem; }
   </style>
 </head>
-<body>
-  <header>
-    <a class="logo" href="../index.html" title="Accueil">
-      <img src="logo.png" alt="logo" class="logo-big">
-    </a>
-    <h1>Tai-Jitsu</h1>
-  </header>
+<body data-title="Mode examen">
+  
+<div id="bannerContainer"></div>
+
+<script>
+fetch("../banner.html")
+  .then(r => r.text())
+  .then(html => {
+    document.getElementById("bannerContainer").innerHTML = html;
+
+    // 1) priorité : data-title sur <body>
+    let pageTitle =
+      document.body.dataset.title ||
+      document.querySelector("h1")?.textContent ||
+      document.querySelector("title")?.textContent ||
+      "";
+
+    const target = document.querySelector(".header-text .title");
+    if (target && pageTitle) {
+      target.textContent = pageTitle;
+    }
+  });
+</script>
 
   <main class="main-wrapper">
     <div class="grid">
