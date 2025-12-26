@@ -6,21 +6,33 @@
 <title>Préparation Techniques – Tai-Jitsu</title>
 
 <link rel="stylesheet" href="randdori.css">
+ <link rel="stylesheet" href="../banner.css">
+  
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 </head>
 
-<body>
+<div id="bannerContainer"></div>
 
-<header class="appbar">
-  <a href="index.html" class="logo-link">
-    <img src="logo.png" class="logo-big" alt="Accueil">
-  </a>
-  <div class="header-text">
-    <div class="title spicy">Préparation Techniques</div>
-    <div class="subtitle spicy">Tai-Jitsu</div>
-  </div>
-</header>
+<script>
+fetch("../banner.html")
+  .then(r => r.text())
+  .then(html => {
+    document.getElementById("bannerContainer").innerHTML = html;
+
+    // 1) priorité : data-title sur <body>
+    let pageTitle =
+      document.body.dataset.title ||
+      document.querySelector("h1")?.textContent ||
+      document.querySelector("title")?.textContent ||
+      "";
+
+    const target = document.querySelector(".header-text .title");
+    if (target && pageTitle) {
+      target.textContent = pageTitle;
+    }
+  });
+</script>
 
 <main class="encarts-grid">
 
