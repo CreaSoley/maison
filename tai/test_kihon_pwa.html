@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kihon – Techniques de base</title>
+<style>
+    body {
+        font-family: "Comic Sans MS", sans-serif;
+        background-color: #FFF0F5; /* pastel doux */
+        margin: 0; padding: 0;
+        display: flex; flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        width: 100%;
+        background-color: #FFB6C1;
+        padding: 10px;
+        text-align: center;
+        position: relative;
+    }
+
+    #sensei {
+        position: absolute;
+        top: 5px; left: 10px;
+        width: 50px;
+        height: 50px;
+    }
+
+    h1 {
+        margin: 0;
+        color: #800080;
+    }
+
+    #exercise-area {
+        margin: 20px;
+        text-align: center;
+    }
+
+    #exercise {
+        font-size: 1.5em;
+        margin: 15px 0;
+    }
+
+    #instructions {
+        font-size: 1.2em;
+        margin: 10px 0;
+    }
+
+    #notes {
+        width: 90%;
+        height: 100px;
+        font-size: 1em;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 2px solid #FFB6C1;
+    }
+
+    button {
+        background-color: #FF69B4;
+        color: white;
+        font-size: 1em;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    button:hover {
+        background-color: #FF1493;
+    }
+
+    .sensei-bubble {
+        background-color: #FFE4E1;
+        border: 2px solid #FFB6C1;
+        border-radius: 15px;
+        padding: 10px;
+        margin: 10px;
+        max-width: 300px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <img id="sensei" src="sensei.png" alt="Sensei kawaii">
+    <h1>Kihon – Techniques de base</h1>
+</header>
+
+<div id="exercise-area">
+    <div class="sensei-bubble" id="senseiBubble">
+        Salut ! Prêt à répéter tes bases aujourd’hui ? 🐾
+    </div>
+
+    <div id="exercise">Exercice à générer</div>
+    <div id="instructions">Instructions ici</div>
+
+    <button onclick="genererExercice()">🎯 Générer un exercice</button>
+    <button onclick="lireExercice()">🔊 Écouter</button>
+
+    <textarea id="notes" placeholder="Écris tes observations ici..."></textarea>
+    <button onclick="sauvegarderNotes()">💾 Sauvegarder</button>
+</div>
+
+<script>
+    const exercises = [
+        {name: "Uchi uke ✋", instruction: "Lève le bras pour bloquer l’attaque. Respire doucement et concentre-toi. 🌸"},
+        {name: "Soto uke 🤚", instruction: "Bloque vers l'extérieur en gardant la posture stable. ✨"},
+        {name: "Gedan barai 🦵", instruction: "Balaye vers le bas pour protéger tes jambes. 🐾"},
+        {name: "Shomen uchi ✋", instruction: "Simule un coup vers l’avant, contrôle le mouvement. 🌸"}
+    ];
+
+    function genererExercice() {
+        const ex = exercises[Math.floor(Math.random() * exercises.length)];
+        document.getElementById("exercise").innerText = ex.name;
+        document.getElementById("instructions").innerText = ex.instruction;
+        document.getElementById("senseiBubble").innerText = "Concentre-toi sur ce geste ! 💪";
+        window.currentExercise = ex; // pour synthèse vocale
+    }
+
+    function lireExercice() {
+        if (!window.currentExercise) return alert("Génère d'abord un exercice !");
+        const synth = window.speechSynthesis;
+        const utter = new SpeechSynthesisUtterance(window.currentExercise.instruction);
+        synth.speak(utter);
+    }
+
+    // Carnet de notes localStorage
+    function sauvegarderNotes() {
+        const notes = document.getElementById("notes").value;
+        localStorage.setItem("notesKihon", notes);
+        document.getElementById("senseiBubble").innerText = "⭐ Note sauvegardée ! Bravo ! 🌸";
+    }
+
+    // Charger les notes existantes
+    window.onload = function() {
+        const notes = localStorage.getItem("notesKihon") || "";
+        document.getElementById("notes").value = notes;
+    }
+</script>
+
+</body>
+</html>
