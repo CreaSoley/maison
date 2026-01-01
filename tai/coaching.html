@@ -192,3 +192,125 @@ function render(){
   });
   drag();
 }
+
+function speak(txt){
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang="fr-FR";
+  synth.speak(u);
+}
+
+function start(){
+  const next=exercises.findIndex(e=>!e.done);
+  if(next!==-1) currentIndex=next;
+  play();
+}
+
+function play(){
+  if(currentIndex>=exercises.length){
+    speak("Fin de l'entraînement");
+    saveStats();
+    return;
+  }
+
+  const ex=exercises[currentIndex];
+  const li=program.children[currentIndex];
+  document.querySelectorAll("li").forEach(l=>l.classList.remove("active"));
+  li.classList.add("active");
+
+  speak(ex.speech);
+  setTimeout(()=>ding.play(),2000);
+  if(navigator.vibrate) navigator.vibrate(200);
+
+  remaining=(ex.duration*60)-(ex.progress/100*ex.duration*60);
+
+  interval=setInterval(()=>{
+    remaining--;
+    ex.progress=100-(remaining/(ex.duration*60))*100;
+    li.querySelector(".progress div").style.width=ex.progress+"%";
+    updateGlobal();
+    saveState();
+    if(remaining<=0){
+      clearInterval(interval);
+      ding.play();
+      if(navigator.vibrate) navigator.vibrate([300,100,300]);
+      speak("Fin de l'exercice");
+      ex.done=true;
+      currentIndex++;
+      play();
+    }
+  },1000);
+}
+
+function pause(){
+  clearInterval(interval);
+  synth.cancel();
+  saveState();
+}
+
+function stop(){
+  clearInterval(interval);
+  synth.cancel();
+  currentIndex=0;
+  saveState();
+}
+
+function updateGlobal(){
+  const total=exercises.reduce((a,e)=>a+e.duration,0);
+  const done=exercises.reduce((a,e)=>a+(e.progress/100*e.duration),0);
+  document.getElementById("globalProgress").style.width=(done/total*100)+"%";
+}
+
+function drag(){
+  let src;
+  program.querySelectorAll("li").forEach(li=>{
+    li.ondragstart=()=>src=li;
+    li.ondragover=e=>e.preventDefault();
+    li.ondrop=()=>{
+      program.insertBefore(src,li);
+      sync();
+    };
+  });
+}
+
+function sync(){
+  const newEx=[];
+  program.querySelectorAll("li").forEach((li,i)=>{
+    newEx.push(exercises[i]);
+  });
+  exercises=newEx;
+  saveState();
+}
+
+function saveState(){
+  localStorage.setItem("state",JSON.stringify({exercises,currentIndex}));
+}
+
+function loadState(){
+  const s=localStorage.getItem("state");
+  if(s){
+    const d=JSON.parse(s);
+    exercises=d.exercises;
+    currentIndex=d.currentIndex;
+  }
+}
+
+function saveStats(){
+  const d=new Date().toISOString().slice(0,10);
+  const stats=JSON.parse(localStorage.getItem("stats")||"{}");
+  stats[d]=(stats[d]||0)+1;
+  localStorage.setItem("stats",JSON.stringify(stats));
+  showStats();
+}
+
+function showStats(){
+  const stats=JSON.parse(localStorage.getItem("stats")||"{}");
+  let html="";
+  Object.keys(stats).slice(-7).forEach(d=>{
+    html+=`${d} : ${stats[d]} séance(s)<br>`;
+  });
+  document.getElementById("stats").innerHTML=html||"Aucune donnée";
+}
+</script>
+
+</body>
+</html>
