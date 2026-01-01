@@ -131,4 +131,138 @@ function newSession(){
  for(var i=0;i<exercises.length;i++){
   exercises[i].progress=0;
  }
- r
+ render();
+}
+
+/* ---------- SESSIONS ---------- */
+function logExercise(name){
+ var d=new Date().toISOString().slice(0,10);
+ var s=JSON.parse(localStorage.getItem("sessions")||"{}");
+ if(!s[d]) s[d]={exercises:[]};
+ if(s[d].exercises.indexOf(name)===-1){
+  s[d].exercises.push(name);
+ }
+ localStorage.setItem("sessions",JSON.stringify(s));
+}
+
+/* ---------- EVAL STORAGE ---------- */
+function getEvals(){
+ return JSON.parse(localStorage.getItem("evals")||"{}");
+}
+function saveEvals(e){
+ localStorage.setItem("evals",JSON.stringify(e));
+}
+
+/* ---------- AUTO-EVAL ---------- */
+function openEval(){
+ var modal=document.getElementById("evalModal");
+ var c=document.getElementById("evalContent");
+ c.innerHTML="";
+
+ var d=new Date().toISOString().slice(0,10);
+ var sessions=JSON.parse(localStorage.getItem("sessions")||"{}");
+ var evals=getEvals();
+
+ var done=[];
+
+ // exercices faits aujourd’hui
+ if(sessions[d] && sessions[d].exercises){
+  done=sessions[d].exercises.slice();
+ }
+
+ // exercices déjà évalués aujourd’hui
+ if(evals[d] && evals[d].exercises){
+  for(var ex in evals[d].exercises){
+   if(done.indexOf(ex)===-1){
+    done.push(ex);
+   }
+  }
+ }
+
+ if(done.length===0){
+  c.innerHTML="<p>Aucune donnée aujourd’hui.</p>";
+  modal.style.display="flex";
+  return;
+ }
+
+ for(var i=0;i<done.length;i++){
+  var name=done[i];
+  var exObj=null;
+
+  for(var j=0;j<exercises.length;j++){
+   if(exercises[j].name===name) exObj=exercises[j];
+  }
+  if(!exObj) continue;
+
+  c.innerHTML+="<h4>"+name+"</h4>";
+  var criteria=UV_CRITERIA[exObj.uv];
+
+  for(var k=0;k<criteria.length;k++){
+   var cr=criteria[k];
+   c.innerHTML+=cr+" : ";
+
+   for(var v=1;v<=5;v++){
+    var active="";
+    if(
+     evals[d] &&
+     evals[d].exercises &&
+     evals[d].exercises[name] &&
+     evals[d].exercises[name][cr]===v
+    ){
+     active=" active";
+    }
+
+    c.innerHTML+=
+     "<span class='smile"+active+
+     "' data-ex='"+name+
+     "' data-cr='"+cr+
+     "' data-v='"+v+"'>"+
+     ["😞","😐","🙂","😄","🔥"][v-1]+
+     "</span>";
+   }
+   c.innerHTML+="<br>";
+  }
+ }
+
+ var smiles=document.querySelectorAll(".smile");
+ for(var s=0;s<smiles.length;s++){
+  smiles[s].onclick=function(){
+   var list=this.parentNode.querySelectorAll(".smile");
+   for(var i=0;i<list.length;i++){
+    list[i].classList.remove("active");
+   }
+   this.classList.add("active");
+  };
+ }
+
+ modal.style.display="flex";
+}
+
+function saveEval(){
+ var d=new Date().toISOString().slice(0,10);
+ var evals=getEvals();
+ if(!evals[d]) evals[d]={exercises:{}};
+
+ var active=document.querySelectorAll(".smile.active");
+ for(var i=0;i<active.length;i++){
+  var s=active[i];
+  var ex=s.getAttribute("data-ex");
+  var cr=s.getAttribute("data-cr");
+  var v=parseInt(s.getAttribute("data-v"),10);
+
+  if(!evals[d].exercises[ex]) evals[d].exercises[ex]={};
+  evals[d].exercises[ex][cr]=v;
+ }
+
+ saveEvals(evals);
+ alert("Évaluation enregistrée ✅");
+ closeEval();
+}
+
+function closeEval(){
+ document.getElementById("evalModal").style.display="none";
+}
+</script>
+
+</body>
+</html>
