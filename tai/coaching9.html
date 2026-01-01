@@ -31,7 +31,6 @@ li{
  box-shadow:0 6px 12px rgba(0,0,0,.15)
 }
 .active{border:3px solid #84fab0}
-.done{opacity:.6;text-decoration:line-through}
 
 .progress{height:8px;background:#eee;border-radius:8px;margin-top:6px}
 .progress div{height:100%;background:var(--g2)}
@@ -60,33 +59,28 @@ textarea{width:100%}
 
 <header>
 <h1>🥋 Carnet d’entraînement Karaté</h1>
-<p id="modeLabel">✏️ Mode édition</p>
 </header>
 
 <div class="container">
 
-<button class="small" onclick="toggleMode()">🔄 Mode</button>
 <button class="primary" onclick="start()">▶ Lancer</button>
 <button class="warn" onclick="pause()">⏸ Pause</button>
-<button class="danger" onclick="stop()">⏹ Stop</button>
 <button onclick="newSession()">♻ Nouvelle séance</button>
 <button onclick="openEval()">📝 Auto-évaluation</button>
-<button onclick="exportCSV()">📤 CSV</button>
-<button onclick="openReport()">🖨 PDF</button>
 
 <h3>Progression globale</h3>
 <div class="timeline"><div id="global"></div></div>
 
 <ul id="program"></ul>
 
-<h3>📊 Radar technique (7 jours)</h3>
+<h3>📊 Radar (7 jours)</h3>
 <canvas id="radar" width="320" height="320"></canvas>
 
 </div>
 
 <div class="modal" id="evalModal">
  <div class="card">
-  <h2>📝 Auto-évaluation du jour</h2>
+  <h2>📝 Auto-évaluation</h2>
   <div id="evalContent"></div>
 
   <h4>💬 Commentaire</h4>
@@ -97,36 +91,25 @@ textarea{width:100%}
  </div>
 </div>
 
-<audio id="ding" src="ding.mp3"></audio>
-
 <script>
 /* ---------- CONFIG ---------- */
 const UV_CRITERIA={
- Kihon:["distance","kime","précision","posture","rythme"],
- Kata:["précision","équilibre","fluidité","kime","regard"],
- Randori:["distance","timing","tai sabaki","engagement","lucidité"]
+ Kihon:["distance","kime","précision"],
+ Kata:["fluidité","équilibre","kime"],
+ Randori:["distance","timing","engagement"]
 };
 
 /* ---------- STATE ---------- */
-let mode="edit",interval,currentIndex=0,remaining;
-const synth=speechSynthesis;
-const ding=document.getElementById("ding");
+let interval=null,currentIndex=0,remaining=0;
+const synth = window.speechSynthesis || null;
 
 let exercises=[
- {label:"🥋 Kihon",speech:"Kihon",uv:"Kihon",duration:15,progress:0},
- {label:"🧘 Kata",speech:"Kata",uv:"Kata",duration:10,progress:0},
- {label:"🔥 Randori",speech:"Randori",uv:"Randori",duration:10,progress:0}
+ {speech:"Kihon",uv:"Kihon",duration:1,progress:0},
+ {speech:"Kata",uv:"Kata",duration:1,progress:0},
+ {speech:"Randori",uv:"Randori",duration:1,progress:0}
 ];
 
-load();render();update();
-
-/* ---------- MODE ---------- */
-function toggleMode(){
- mode=mode==="edit"?"train":"edit";
- document.getElementById("modeLabel").textContent=
-  mode==="edit"?"✏️ Mode édition":"🥋 Mode entraînement";
- render();
-}
+render();update();
 
 /* ---------- RENDER ---------- */
 function render(){
@@ -135,20 +118,8 @@ function render(){
  exercises.forEach((e,i)=>{
   const li=document.createElement("li");
   if(i===currentIndex) li.classList.add("active");
-
-  li.innerHTML=`
-   <strong>${e.label}</strong><br>
-   ${mode==="edit"?`⏱ <input type="number" min="1" value="${e.duration}" style="width:60px"> min`:""}
-   <div class="progress"><div style="width:${e.progress}%"></div></div>
-  `;
-
-  if(mode==="edit"){
-   li.querySelector("input").onchange=ev=>{
-    e.duration=parseInt(ev.target.value,10);
-    e.progress=0;
-    save();update();
-   };
-  }
+  li.innerHTML=`<strong>${e.speech}</strong>
+   <div class="progress"><div style="width:${e.progress}%"></div></div>`;
   ul.appendChild(li);
  });
 }
@@ -164,54 +135,49 @@ function play(){
   speak("Fin de l'entraînement");
   return;
  }
-
  const e=exercises[currentIndex];
  speak(e.speech);
- remaining=(e.duration*60)-(e.progress/100*e.duration*60);
-
+ remaining=e.duration*60;
  interval=setInterval(()=>{
   remaining--;
   e.progress=100-(remaining/(e.duration*60))*100;
   update();
-
   if(remaining<=0){
    clearInterval(interval);interval=null;
-   logExercise(e.speech); // ✅ ENREGISTREMENT FIABLE
-   ding.play();
-   speak("Fin de l'exercice");
+   logExercise(e.speech);
    currentIndex++;
    play();
   }
  },1000);
 }
 
-function pause(){clearInterval(interval);interval=null;save();}
-function stop(){clearInterval(interval);interval=null;save();}
+function pause(){
+ clearInterval(interval);interval=null;
+}
 
-/* ---------- SESSION ---------- */
 function newSession(){
- clearInterval(interval);
- interval=null;currentIndex=0;
+ pause();
+ currentIndex=0;
  exercises.forEach(e=>e.progress=0);
- save();render();update();
+ update();
 }
 
 /* ---------- SPEECH ---------- */
 function speak(t){
+ if(!synth) return;
  synth.cancel();
  const u=new SpeechSynthesisUtterance(t);
- u.lang="fr-FR";synth.speak(u);
+ u.lang="fr-FR";
+ synth.speak(u);
 }
 
 /* ---------- JOURNAL ---------- */
 function logExercise(name){
  const d=new Date().toISOString().slice(0,10);
- const sessions=JSON.parse(localStorage.getItem("sessions")||"{}");
- sessions[d]=sessions[d]||{exercises:[]};
- if(!sessions[d].exercises.includes(name)){
-  sessions[d].exercises.push(name);
- }
- localStorage.setItem("sessions",JSON.stringify(sessions));
+ const s=JSON.parse(localStorage.getItem("sessions")||"{}");
+ s[d]=s[d]||{exercises:[]};
+ if(!s[d].exercises.includes(name)) s[d].exercises.push(name);
+ localStorage.setItem("sessions",JSON.stringify(s));
 }
 
 /* ---------- AUTO-EVAL ---------- */
@@ -219,47 +185,38 @@ function openEval(){
  const c=document.getElementById("evalContent");
  c.innerHTML="";
  const d=new Date().toISOString().slice(0,10);
- const sessions=JSON.parse(localStorage.getItem("sessions")||"{}");
- const done=sessions[d]?.exercises||[];
+ const s=JSON.parse(localStorage.getItem("sessions")||"{}");
+ const done=s[d]?.exercises||[];
 
  if(!done.length){
   c.innerHTML="<p>Aucun exercice terminé aujourd’hui.</p>";
  }else{
   done.forEach(name=>{
    const e=exercises.find(x=>x.speech===name);
-   if(!e) return;
-   let html=`<h4>${e.speech}</h4>`;
+   let html=`<h4>${name}</h4>`;
    UV_CRITERIA[e.uv].forEach(cr=>{
     html+=`${cr} :
      ${[1,2,3,4,5].map(v=>
       `<span class="smile" data-ex="${name}" data-cr="${cr}" data-v="${v}">
-       ${["😞","😐","🙂","😄","🔥"][v-1]}
-      </span>`).join("")}<br>`;
+       ${["😞","😐","🙂","😄","🔥"][v-1]}</span>`).join("")}<br>`;
    });
-   c.innerHTML+=html+"<hr>";
+   c.innerHTML+=html;
   });
  }
+
  document.querySelectorAll(".smile").forEach(s=>{
   s.onclick=()=>{
    s.parentNode.querySelectorAll(".smile").forEach(x=>x.classList.remove("active"));
    s.classList.add("active");
   };
  });
+
  document.getElementById("evalModal").style.display="flex";
 }
 
 function saveEval(){
- const d=new Date().toISOString().slice(0,10);
- const evals=JSON.parse(localStorage.getItem("evals")||"{}");
- evals[d]=evals[d]||{exercises:{}};
- document.querySelectorAll(".smile.active").forEach(s=>{
-  const ex=s.dataset.ex,cr=s.dataset.cr,v=parseInt(s.dataset.v);
-  evals[d].exercises[ex]=evals[d].exercises[ex]||{};
-  evals[d].exercises[ex][cr]=v;
- });
- evals[d].comment=document.getElementById("comment").value;
- localStorage.setItem("evals",JSON.stringify(evals));
- closeEval();drawRadar();
+ closeEval();
+ drawRadar();
 }
 
 function closeEval(){
@@ -270,68 +227,11 @@ function closeEval(){
 function drawRadar(){
  const ctx=document.getElementById("radar").getContext("2d");
  ctx.clearRect(0,0,320,320);
- const evals=JSON.parse(localStorage.getItem("evals")||"{}");
- const since=Date.now()-7*86400000;
- const acc={};
-
- Object.entries(evals).forEach(([d,val])=>{
-  if(new Date(d).getTime()<since) return;
-  Object.values(val.exercises||{}).forEach(ex=>{
-   Object.entries(ex).forEach(([k,v])=>{
-    acc[k]=acc[k]||[];acc[k].push(v);
-   });
-  });
- });
-
- const keys=Object.keys(acc);if(!keys.length) return;
- const cx=160,cy=160,r=120;
- keys.forEach((k,i)=>{
-  const a=(Math.PI*2/keys.length)*i-Math.PI/2;
-  const avg=acc[k].reduce((a,b)=>a+b)/acc[k].length;
-  ctx.beginPath();
-  ctx.moveTo(cx,cy);
-  ctx.lineTo(cx+Math.cos(a)*r*avg/5,cy+Math.sin(a)*r*avg/5);
-  ctx.stroke();
-  ctx.fillText(k,cx+Math.cos(a)*(r+10),cy+Math.sin(a)*(r+10));
- });
 }
 
-/* ---------- EXPORT ---------- */
-function exportCSV(){
- const evals=JSON.parse(localStorage.getItem("evals")||"{}");
- let csv="Date,Exercice,Critère,Note,Commentaire\n";
- Object.entries(evals).forEach(([d,val])=>{
-  Object.entries(val.exercises||{}).forEach(([ex,crs])=>{
-   Object.entries(crs).forEach(([c,v])=>{
-    csv+=`${d},${ex},${c},${v},"${val.comment||""}"\n`;
-   });
-  });
- });
- const a=document.createElement("a");
- a.href=URL.createObjectURL(new Blob([csv]));
- a.download="carnet.csv";a.click();
-}
-
-/* ---------- REPORT ---------- */
-function openReport(){
- const w=window.open("");
- w.document.write("<pre>"+JSON.stringify(
-  JSON.parse(localStorage.getItem("evals")||"{}"),null,2)+"</pre>");
- w.print();
-}
-
-/* ---------- PERSIST ---------- */
-function save(){
- localStorage.setItem("state",JSON.stringify({exercises,currentIndex}));
-}
-function load(){
- const s=localStorage.getItem("state");
- if(s){const d=JSON.parse(s);exercises=d.exercises;currentIndex=d.currentIndex;}
-}
+/* ---------- UI ---------- */
 function update(){
- renderGlobal();save();
-}
-function renderGlobal(){
+ render();
  const t=exercises.reduce((a,e)=>a+e.duration,0);
  const d=exercises.reduce((a,e)=>a+(e.progress/100*e.duration),0);
  document.getElementById("global").style.width=(d/t*100)+"%";
