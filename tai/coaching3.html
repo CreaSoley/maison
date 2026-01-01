@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥋 Coach Karaté</title>
+
+<style>
+:root{
+  --grad1:linear-gradient(to right,#ffecd2,#fcb69f);
+  --grad2:linear-gradient(120deg,#84fab0,#8fd3f4);
+}
+body{
+  margin:0;font-family:system-ui;
+  background:var(--grad1);
+}
+header{
+  background:var(--grad2);
+  padding:16px;text-align:center;
+}
+.container{padding:16px;max-width:800px;margin:auto}
+button{
+  padding:14px 18px;margin:6px;
+  border:none;border-radius:22px;
+  font-size:16px;
+  box-shadow:0 6px 12px rgba(0,0,0,.2);
+}
+.primary{background:#84fab0}
+.warn{background:#ffd86f}
+.danger{background:#ff8a8a}
+.small{font-size:14px;padding:8px 12px}
+
+ul{list-style:none;padding:0;margin:0}
+li{
+  background:#fff;margin:10px 0;padding:14px;
+  border-radius:20px;
+  box-shadow:0 6px 12px rgba(0,0,0,.15);
+}
+li.active{border:3px solid #84fab0}
+li.done{opacity:.5;text-decoration:line-through}
+
+.row{display:flex;justify-content:space-between;align-items:center}
+.progress{height:8px;background:#eee;border-radius:8px;overflow:hidden}
+.progress div{height:100%;background:var(--grad2);width:0}
+
+.timeline{height:14px;background:#eee;border-radius:10px;overflow:hidden}
+.timeline div{height:100%;background:var(--grad2);width:0}
+
+#focus{
+  position:fixed;inset:0;display:none;
+  background:var(--grad2);
+  align-items:center;justify-content:center;
+  font-size:72px;font-weight:bold;
+}
+.mode{margin-top:10px;font-weight:bold}
+.badge{display:inline-block;padding:6px 12px;
+  border-radius:12px;background:#ffd86f;margin:4px}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🥋 Coach Karaté</h1>
+<p id="modeLabel">✏️ Mode édition</p>
+</header>
+
+<div class="container">
+
+<button onclick="toggleMode()" class="small">🔄 Changer de mode</button>
+
+<div id="controls">
+<button class="primary" onclick="start()">▶ Lancer / Reprendre</button>
+<button class="warn" onclick="pause()">⏸ Pause</button>
+<button class="danger" onclick="stop()">⏹ Stop</button>
+<button onclick="toggleFocus()">⏱ Focus</button>
+<button onclick="exportCSV()">📤 CSV</button>
+<button onclick="window.print()">🖨 PDF</button>
+</div>
+
+<h3>Progression globale</h3>
+<div class="timeline"><div id="global"></div></div>
+
+<ul id="program"></ul>
+
+<h3>📊 Temps hebdomadaire</h3>
+<div id="weekly"></div>
+
+<h3>🏅 Badges</h3>
+<div id="badges"></div>
+
+</div>
+
+<div id="focus"></div>
+<audio id="ding" src="ding.mp3"></audio>
+
+<script>
+const synth=speechSynthesis,ding=document.getElementById("ding");
+let mode="edit",interval,currentIndex=0,remaining;
+
+let exercises=[
+ {label:"🥋 Kihon",speech:"Kihon",duration:15,progress:0,done:false,time:0},
+ {label:"🎯 Cibles",speech:"Cibles",duration:10,progress:0,done:false,time:0},
+ {label:"⚡ Ippon",speech:"Ippon kumite",duration:10,progress:0,done:false,time:0},
+ {label:"🧘 Kata",speech:"Kata",duration:10,progress:0,done:false,time:0},
+ {label:"🔥 Randori",speech:"Randori",duration:10,progress:0,done:false,time:0}
+];
+
+load(); render(); update();
+
+function toggleMode(){
+ mode=mode==="edit"?"train":"edit";
+ document.getElementById("modeLabel").textContent=
+  mode==="edit"?"✏️ Mode édition":"🥋 Mode entraînement";
+ render();
+}
+
+function render(){
+ const ul=document.getElementById("program");
+ ul.innerHTML="";
+ exercises.forEach((e,i)=>{
+  const li=document.createElement("li");
+  if(i===currentIndex) li.classList.add("active");
+  if(e.done) li.classList.add("done");
+  li.draggable=(mode==="edit");
+
+  li.innerHTML=`
+   <div class="row">
+    <strong>${e.label}</strong>
+    ${
+     mode==="edit"?
+     `<input type="number" min="1" value="${e.duration}" style="width:60px"> min`
+     :""
+    }
+   </div>
+   <div class="progress"><div style="width:${e.progress}%"></div></div>
+  `;
+
+  if(mode==="edit"){
+   li.querySelector("input").onchange=ev=>{
+    e.duration=parseInt(ev.target.value);
+    e.progress=0;e.done=false;
+    save();update();
+   };
+  }else{
+   li.onclick=()=>{currentIndex=i;save();render();}
+  }
+
+  ul.appendChild(li);
+ });
+ drag();
+}
+
+function start(){
+ const next=exercises.findIndex(e=>!e.done);
+ if(next!==-1) currentIndex=next;
+ play();
+}
+
+function play(){
+ if(currentIndex>=exercises.length){
+  speak("Fin de l'entraînement");saveSession();return;
+ }
+ const e=exercises[currentIndex];
+ speak(e.speech);
+ setTimeout(()=>ding.play(),2000);
+ if(navigator.vibrate) navigator.vibrate(200);
+
+ remaining=(e.duration*60)-(e.progress/100*e.duration*60);
+ interval=setInterval(()=>{
+  remaining--;e.time++;
+  e.progress=100-(remaining/(e.duration*60))*100;
+  document.getElementById("focus").textContent=
+   Math.floor(remaining/60)+":"+String(remaining%60).padStart(2,"0");
+  update();
+  if(remaining<=0){
+   clearInterval(interval);
+   ding.play();
+   if(navigator.vibrate) navigator.vibrate([300,100,300]);
+   speak("Fin de l'exercice");
+   e.done=true;currentIndex++;play();
+  }
+ },1000);
+}
+
+function pause(){clearInterval(interval);save();}
+function stop(){clearInterval(interval);currentIndex=0;save();}
+
+function speak(t){
+ const u=new SpeechSynthesisUtterance(t);
+ u.lang="fr-FR";synth.speak(u);
+}
+
+function update(){
+ renderGlobal();renderWeekly();renderBadges();save();
+}
+
+function renderGlobal(){
+ const t=exercises.reduce((a,e)=>a+e.duration,0);
+ const d=exercises.reduce((a,e)=>a+(e.progress/100*e.duration),0);
+ document.getElementById("global").style.width=(d/t*100)+"%";
+}
+
+function renderWeekly(){
+ let html="";
+ exercises.forEach(e=>{
+  html+=`${e.label} : ${Math.floor(e.time/60)} min<br>`;
+ });
+ document.getElementById("weekly").innerHTML=html;
+}
+
+function renderBadges(){
+ const stats=JSON.parse(localStorage.getItem("stats")||"{}");
+ const days=Object.keys(stats).sort();
+ let streak=1;
+ for(let i=days.length-1;i>0;i--){
+  if(new Date(days[i])-new Date(days[i-1])===86400000) streak++;
+  else break;
+ }
+ let html="";
+ if(streak>=7) html+='<span class="badge">🔥 7 jours</span>';
+ document.getElementById("badges").innerHTML=html||"—";
+}
+
+function toggleFocus(){
+ const f=document.getElementById("focus");
+ f.style.display=f.style.display==="flex"?"none":"flex";
+ if(f.requestFullscreen) f.requestFullscreen();
+}
+
+function exportCSV(){
+ let csv="Exercice,Minutes\n";
+ exercises.forEach(e=>csv+=`${e.speech},${Math.floor(e.time/60)}\n`);
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([csv]));
+ a.download="suivi.csv";a.click();
+}
+
+function saveSession(){
+ const d=new Date().toISOString().slice(0,10);
+ const s=JSON.parse(localStorage.getItem("stats")||"{}");
+ s[d]=(s[d]||0)+1;
+ localStorage.setItem("stats",JSON.stringify(s));
+}
+
+function drag(){
+ if(mode!=="edit") return;
+ let src;
+ document.querySelectorAll("li").forEach(li=>{
+  li.ondragstart=()=>src=li;
+  li.ondragover=e=>e.preventDefault();
+  li.ondrop=()=>{li.parentNode.insertBefore(src,li);save();}
+ });
+}
+
+function save(){
+ localStorage.setItem("state",JSON.stringify({exercises,currentIndex}));
+}
+function load(){
+ const s=localStorage.getItem("state");
+ if(s){const d=JSON.parse(s);exercises=d.exercises;currentIndex=d.currentIndex;}
+}
+</script>
+
+</body>
+</html>
