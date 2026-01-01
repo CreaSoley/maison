@@ -2,32 +2,82 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🥋 Carnet Karaté</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥋 Carnet d’entraînement Karaté</title>
 
 <style>
 :root{
  --g1:linear-gradient(to right,#ffecd2,#fcb69f);
  --g2:linear-gradient(120deg,#84fab0,#8fd3f4);
 }
-body{margin:0;font-family:system-ui;background:var(--g1)}
-header{text-align:center;padding:14px;background:var(--g2)}
-.container{max-width:900px;margin:auto;padding:16px}
-button{padding:12px 18px;border:none;border-radius:20px;margin:6px;font-size:16px;box-shadow:0 6px 12px rgba(0,0,0,.2)}
+body{
+ margin:0;
+ font-family:system-ui;
+ background:var(--g1);
+}
+header{
+ background:var(--g2);
+ text-align:center;
+ padding:14px;
+}
+.container{
+ max-width:900px;
+ margin:auto;
+ padding:16px;
+}
+button{
+ padding:12px 18px;
+ border:none;
+ border-radius:20px;
+ margin:6px;
+ font-size:16px;
+ box-shadow:0 6px 12px rgba(0,0,0,.2);
+}
 .primary{background:#84fab0}
 .warn{background:#ffd86f}
-.danger{background:#ff8a8a}
-.small{font-size:14px;padding:8px 12px}
 ul{list-style:none;padding:0}
-li{background:#fff;margin:10px 0;padding:14px;border-radius:18px;box-shadow:0 6px 12px rgba(0,0,0,.15)}
-.active{border:3px solid #84fab0}
-.done{opacity:.6;text-decoration:line-through}
-.progress{height:8px;background:#eee;border-radius:8px;margin-top:6px}
-.progress div{height:100%;background:var(--g2)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
-.card{background:white;border-radius:20px;padding:20px;width:90%;max-width:520px;max-height:90%;overflow:auto}
-.smile{font-size:26px;padding:6px;cursor:pointer}
-.smile.active{transform:scale(1.3)}
+li{
+ background:#fff;
+ margin:10px 0;
+ padding:14px;
+ border-radius:18px;
+ box-shadow:0 6px 12px rgba(0,0,0,.15);
+}
+.progress{
+ height:8px;
+ background:#eee;
+ border-radius:8px;
+ margin-top:6px;
+}
+.progress div{
+ height:100%;
+ background:var(--g2);
+}
+.modal{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.5);
+ display:none;
+ align-items:center;
+ justify-content:center;
+}
+.card{
+ background:white;
+ border-radius:20px;
+ padding:20px;
+ width:90%;
+ max-width:520px;
+ max-height:90%;
+ overflow:auto;
+}
+.smile{
+ font-size:26px;
+ padding:6px;
+ cursor:pointer;
+}
+.smile.active{
+ transform:scale(1.3);
+}
 canvas{max-width:100%}
 textarea{width:100%}
 </style>
@@ -43,7 +93,7 @@ textarea{width:100%}
 
 <button class="primary" onclick="start()">▶ Lancer</button>
 <button class="warn" onclick="pause()">⏸ Pause</button>
-<button class="danger" onclick="newSession()">♻ Nouvelle séance</button>
+<button onclick="newSession()">♻ Nouvelle séance</button>
 <button onclick="openEval()">📝 Auto-évaluation</button>
 
 <ul id="program"></ul>
@@ -70,24 +120,30 @@ textarea{width:100%}
 <audio id="ding" src="ding.mp3"></audio>
 
 <script>
+/* ===== CONFIG ===== */
 const UV_CRITERIA={
  Kihon:["distance","kime","précision","posture","rythme"],
  Kata:["précision","équilibre","fluidité","kime","regard"],
  Randori:["distance","timing","tai sabaki","engagement","lucidité"]
 };
 
+/* ===== DONNÉES ===== */
 let exercises=[
- {label:"🥋 Kihon",speech:"Kihon",uv:"Kihon",duration:1,progress:0},
- {label:"🧘 Kata",speech:"Kata",uv:"Kata",duration:1,progress:0},
- {label:"🔥 Randori",speech:"Randori",uv:"Randori",duration:1,progress:0}
+ {name:"Kihon",label:"🥋 Kihon",duration:1,progress:0},
+ {name:"Kata",label:"🧘 Kata",duration:1,progress:0},
+ {name:"Randori",label:"🔥 Randori",duration:1,progress:0}
 ];
 
-let interval,currentIndex=0,remaining;
+let currentIndex=0;
+let interval=null;
+let remaining=0;
+
 const synth=speechSynthesis;
 const ding=document.getElementById("ding");
 
 const today=()=>new Date().toISOString().slice(0,10);
 
+/* ===== JOURNAL ===== */
 function getLog(){
  return JSON.parse(localStorage.getItem("trainingLog")||"{}");
 }
@@ -95,20 +151,24 @@ function saveLog(log){
  localStorage.setItem("trainingLog",JSON.stringify(log));
 }
 
+/* ===== RENDER ===== */
 function render(){
  const ul=document.getElementById("program");
  ul.innerHTML="";
- exercises.forEach((e,i)=>{
+ exercises.forEach(e=>{
   const li=document.createElement("li");
-  if(i===currentIndex) li.classList.add("active");
-  li.innerHTML=`<strong>${e.label}</strong>
-   <div class="progress"><div style="width:${e.progress}%"></div></div>`;
+  li.innerHTML=`
+   <strong>${e.label}</strong>
+   <div class="progress"><div style="width:${e.progress}%"></div></div>
+  `;
   ul.appendChild(li);
  });
 }
 render();
 
+/* ===== TIMER ===== */
 function start(){
+ if(interval) return;
  play();
 }
 
@@ -116,12 +176,13 @@ function play(){
  if(currentIndex>=exercises.length){
   synth.cancel();
   synth.speak(new SpeechSynthesisUtterance("Fin de l'entraînement"));
+
   const log=getLog();
   log[today()]={ exercises:{} };
   exercises.forEach(e=>{
-    if(e.progress>=100){
-      log[today()].exercises[e.speech]={duration:e.duration};
-    }
+   if(e.progress>=100){
+    log[today()].exercises[e.name]={duration:e.duration};
+   }
   });
   saveLog(log);
   drawRadar();
@@ -130,15 +191,17 @@ function play(){
 
  const e=exercises[currentIndex];
  synth.cancel();
- synth.speak(new SpeechSynthesisUtterance(e.speech));
+ synth.speak(new SpeechSynthesisUtterance(e.name));
  remaining=e.duration*60;
 
  interval=setInterval(()=>{
   remaining--;
   e.progress=100-(remaining/(e.duration*60))*100;
   render();
+
   if(remaining<=0){
    clearInterval(interval);
+   interval=null;
    ding.play();
    currentIndex++;
    play();
@@ -146,70 +209,94 @@ function play(){
  },1000);
 }
 
-function pause(){clearInterval(interval)}
+function pause(){
+ clearInterval(interval);
+ interval=null;
+}
 
 function newSession(){
- clearInterval(interval);
+ pause();
  currentIndex=0;
  exercises.forEach(e=>e.progress=0);
  render();
 }
 
+/* ===== AUTO-ÉVALUATION ===== */
 function openEval(){
  const log=getLog()[today()];
  const c=document.getElementById("evalContent");
  c.innerHTML="";
+
  if(!log || !Object.keys(log.exercises).length){
   c.innerHTML="<p>Aucun exercice terminé aujourd’hui.</p>";
  }else{
   Object.keys(log.exercises).forEach(ex=>{
-   const uv=ex;
    let html=`<h4>${ex}</h4>`;
-   UV_CRITERIA[uv].forEach(cr=>{
+   UV_CRITERIA[ex].forEach(cr=>{
     html+=`${cr} :
      ${[1,2,3,4,5].map(v=>
       `<span class="smile" data-ex="${ex}" data-cr="${cr}" data-v="${v}">
-      ${["😞","😐","🙂","😄","🔥"][v-1]}</span>`).join("")}<br>`;
+       ${["😞","😐","🙂","😄","🔥"][v-1]}
+      </span>`).join("")}<br>`;
    });
    c.innerHTML+=html+"<hr>";
   });
  }
+
  document.querySelectorAll(".smile").forEach(s=>{
-  s.onclick=()=>{s.parentNode.querySelectorAll(".smile").forEach(x=>x.classList.remove("active"));s.classList.add("active")}
+  s.onclick=()=>{
+   s.parentNode.querySelectorAll(".smile").forEach(x=>x.classList.remove("active"));
+   s.classList.add("active");
+  };
  });
+
  document.getElementById("evalModal").style.display="flex";
 }
 
 function saveEval(){
  const log=getLog();
  log[today()].eval={};
+
  document.querySelectorAll(".smile.active").forEach(s=>{
-  log[today()].eval[s.dataset.ex]=log[today()].eval[s.dataset.ex]||{};
-  log[today()].eval[s.dataset.ex][s.dataset.cr]=parseInt(s.dataset.v);
+  const ex=s.dataset.ex;
+  const cr=s.dataset.cr;
+  const v=parseInt(s.dataset.v);
+  log[today()].eval[ex]=log[today()].eval[ex]||{};
+  log[today()].eval[ex][cr]=v;
  });
+
  log[today()].comment=document.getElementById("comment").value;
  saveLog(log);
  closeEval();
  drawRadar();
 }
 
-function closeEval(){document.getElementById("evalModal").style.display="none"}
+function closeEval(){
+ document.getElementById("evalModal").style.display="none";
+}
 
+/* ===== RADAR ===== */
 function drawRadar(){
  const ctx=document.getElementById("radar").getContext("2d");
  ctx.clearRect(0,0,320,320);
+
  const log=getLog();
  const since=Date.now()-7*86400000;
  const acc={};
+
  Object.entries(log).forEach(([d,val])=>{
   if(new Date(d).getTime()<since||!val.eval) return;
   Object.values(val.eval).forEach(ex=>{
    Object.entries(ex).forEach(([k,v])=>{
-    acc[k]=acc[k]||[];acc[k].push(v);
+    acc[k]=acc[k]||[];
+    acc[k].push(v);
    });
   });
  });
- const keys=Object.keys(acc); if(!keys.length) return;
+
+ const keys=Object.keys(acc);
+ if(!keys.length) return;
+
  const cx=160,cy=160,r=120;
  keys.forEach((k,i)=>{
   const a=(Math.PI*2/keys.length)*i-Math.PI/2;
@@ -222,6 +309,7 @@ function drawRadar(){
  });
 }
 
+/* ===== DICTÉE ===== */
 function dictate(){
  const r=new (window.SpeechRecognition||webkitSpeechRecognition)();
  r.lang="fr-FR";
@@ -231,5 +319,6 @@ function dictate(){
  r.start();
 }
 </script>
+
 </body>
 </html>
