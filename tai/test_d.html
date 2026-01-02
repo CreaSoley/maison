@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Coach Tai Jitsu – 2e Dan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: system-ui;
+  background: linear-gradient(to right,#ffecd2,#fcb69f);
+  margin:0;
+}
+h1 { text-align:center; }
+
+.container { max-width:900px; margin:auto; padding:1rem; }
+
+.exercise {
+  background:white;
+  margin:.4rem 0;
+  padding:.6rem;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
+  cursor:grab;
+}
+.exercise.done { text-decoration: line-through; opacity:.6; }
+.exercise.current { background:#ffe0f0; }
+
+.controls button {
+  padding:.6rem 1.2rem;
+  margin:.2rem;
+  border:none;
+  border-radius:20px;
+}
+
+.status, .panel {
+  background:white;
+  border-radius:20px;
+  padding:1rem;
+  margin-top:1rem;
+}
+
+.slider { width:120px; }
+
+.emoji button {
+  font-size:1.6rem;
+  margin:.1rem;
+  opacity:.3;
+}
+.emoji button.active { opacity:1; }
+
+.fullscreen {
+  position:fixed;
+  inset:0;
+  background:#000;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2.5rem;
+  z-index:999;
+}
+</style>
+</head>
+
+<body>
+<h1>🥋 Coach Tai Jitsu – Passage 2e Dan</h1>
+<div class="container">
+
+<h3>📋 Séquence</h3>
+<div id="list"></div>
+
+<div class="controls">
+  <button onclick="start()">▶️</button>
+  <button onclick="pause()">⏸</button>
+  <button onclick="stop()">⏹</button>
+  <button onclick="toggleFull()">⛶ Plein écran</button>
+</div>
+
+<div class="status">
+  <div id="current">En attente…</div>
+</div>
+
+<div class="panel">
+  <h3>📝 Carnet de notes</h3>
+  <textarea id="note" rows="3" placeholder="Ressenti du jour..."></textarea>
+</div>
+
+<div class="panel">
+  <h3>😀 Évaluation par UV</h3>
+  <div id="ratings"></div>
+</div>
+
+<div class="panel">
+  <h3>🎯 Objectifs hebdomadaires (minutes)</h3>
+  <div id="goals"></div>
+</div>
+
+<div class="panel">
+  <h3>📊 Total hebdomadaire (minutes)</h3>
+  <div id="weekly"></div>
+</div>
+</div>
+
+<div class="panel">
+  <h3>📅 Historique journalier / hebdomadaire</h3>
+  <select id="historyMode" onchange="renderHistory()">
+    <option value="day">Par jour</option>
+    <option value="week">Par semaine</option>
+  </select>
+  <div id="history"></div>
+</div>
+</div>
+
+</div>
+
+<div id="fs" class="fullscreen" style="display:none"></div>
+
+<audio id="beep" src="beep.mp3"></audio>
+<audio id="ding" src="ding.mp3"></audio>
+
+<script>
+const today = new Date().toISOString().slice(0,10);
+const weekKey = new Date().getFullYear() + '-W' + getWeek();
+
+const uvCriteria = {
+  'UV1':['Kime 💥','Zanshin 👀'],
+  'UV2':['Maai 📏','Réactivité ⚡'],
+  'UV3':['Fluidité 🌊','Précision 🎯'],
+  'UV4':['Puissance 🔥','Contrôle 🧠'],
+  'UV5':['Engagement 🥋','Lucidité 👁️'],
+  'UV6':['Adaptation 🔄','Endurance 🫁']
+};
+
+let sequence = JSON.parse(localStorage.getItem('sequence')) || [
+  // UV1 – Kihon
+  {uv:'UV1', name:'Kihon simple', duration:5},
+  {uv:'UV1', name:'Enchaînement de kihon', duration:5},
+  {uv:'UV1', name:'Cibles', duration:5},
+
+  // UV2 – Déplacements
+  {uv:'UV2', name:'Taï sabaki', duration:5},
+  {uv:'UV2', name:'Slow ippon', duration:5},
+  {uv:'UV2', name:'Ippon kumite', duration:5},
+
+  // UV3 – Kata
+  {uv:'UV3', name:'Slow kata', duration:5},
+  {uv:'UV3', name:'Kata nidan', duration:5},
+  {uv:'UV3', name:'Bunkaï', duration:5},
+
+  // UV4 – Techniques de base
+  {uv:'UV4', name:'Shadow', duration:5},
+
+  // UV5 – Randori
+  {uv:'UV5', name:'Shadow randori', duration:5},
+
+  // UV6 – Randori avancé
+  {uv:'UV6', name:'Randori libre', duration:5}
+];
+
+let done = [];
+let currentIndex = 0;
+let remaining = 0;
+let timer = null;
+let running = false;
+
+function render(){
+  const list = document.getElementById('list');
+  list.innerHTML='';
+
+  sequence.forEach((ex,i)=>{
+    const div = document.createElement('div');
+    div.className='exercise';
+    if(done.includes(i)) div.classList.add('done');
+    if(i===currentIndex && running) div.classList.add('current');
+    div.draggable=true;
+    div.dataset.index=i;
+
+    div.innerHTML=`
+      <span>☰ ${ex.uv} – ${ex.name}</span>
+      <input class="slider" type="range" min="1" max="60" value="${ex.duration}">
+      <span>${ex.duration} min</span>`;
+
+    const slider = div.querySelector('input');
+    slider.oninput=()=>{
+      ex.duration=+slider.value;
+      div.querySelector('span:last-child').textContent=slider.value+' min';
+      persist();
+    };
+
+    div.addEventListener('dragstart',e=>e.dataTransfer.setData('i',i));
+    div.addEventListener('dragover',e=>e.preventDefault());
+    div.addEventListener('drop',e=>{
+      const from=+e.dataTransfer.getData('i');
+      const moved=sequence.splice(from,1)[0];
+      sequence.splice(i,0,moved);
+      persist(); render();
+    });
+
+    list.appendChild(div);
+  });
+}
+render();
+
+function speak(t){ const u=new SpeechSynthesisUtterance(t); u.lang='fr-FR'; speechSynthesis.speak(u); }
+
+function start(){ if(running) return; running=true; if(remaining===0) run(); else runTimer(); }
+
+function run(){
+  if(currentIndex>=sequence.length){ speak('Fin de séance'); stop(); return; }
+  const ex=sequence[currentIndex];
+  remaining=ex.duration*60;
+  speak(ex.name);
+  document.getElementById('beep').play();
+  runTimer();
+}
+
+function runTimer(){
+  timer=setInterval(()=>{
+    remaining--;
+    const ex=sequence[currentIndex];
+    document.getElementById('current').textContent=`${ex.name} – ${Math.floor(remaining/60)}:${String(remaining%60).padStart(2,'0')}`;
+    document.getElementById('fs').textContent=document.getElementById('current').textContent;
+    if(remaining<=0){
+      clearInterval(timer);
+      document.getElementById('ding').play();
+      logTime(ex);
+      done.push(currentIndex);
+      currentIndex++; run();
+    }
+    render();
+  },1000);
+}
+
+function pause(){ clearInterval(timer); running=false; }
+function stop(){ clearInterval(timer); running=false; remaining=0; currentIndex=0; done=[]; render(); }
+
+function renderRatings(){
+  const r=document.getElementById('ratings');
+  r.innerHTML='';
+  const store=JSON.parse(localStorage.getItem('ratings-'+today))||{};
+
+  sequence.forEach(ex=>{
+    if(!uvCriteria[ex.uv]) return;
+    const box=document.createElement('div');
+    box.innerHTML=`<strong>${ex.uv}</strong><br>`;
+
+    uvCriteria[ex.uv].forEach(c=>{
+      const row=document.createElement('div');
+      row.className='emoji';
+      row.textContent=c+' ';
+      for(let i=1;i<=5;i++){
+        const b=document.createElement('button');
+        b.textContent = ['😐','🙂','😀','😃','🤩'][i-1];
+        if(store[ex.uv]?.[c]===i) b.classList.add('active');
+        b.onclick=()=>{
+          store[ex.uv]=store[ex.uv]||{};
+          store[ex.uv][c]=i;
+          localStorage.setItem('ratings-'+today,JSON.stringify(store));
+          renderRatings();
+        };
+        row.appendChild(b);
+      }
+      }
+      box.appendChild(row);
+    });
+    r.appendChild(box);
+  });
+}
+renderRatings();
+
+const note=document.getElementById('note');
+note.value=localStorage.getItem('note-'+today)||'';
+note.onblur=()=>localStorage.setItem('note-'+today,note.value);
+
+function logTime(ex){
+  const w=JSON.parse(localStorage.getItem('week-'+weekKey))||{};
+  w[ex.name]=(w[ex.name]||0)+ex.duration;
+  localStorage.setItem('week-'+weekKey,JSON.stringify(w));
+  renderGoals();
+renderWeekly();
+renderHistory();
+}
+
+function renderGoals(){
+  const g=document.getElementById('goals');
+  const store=JSON.parse(localStorage.getItem('goals'))||{};
+  g.innerHTML='';
+  Object.keys(uvCriteria).forEach(uv=>{
+    const v=store[uv]||60;
+    g.innerHTML+=`${uv} : <input type="number" value="${v}" min="0" style="width:60px"> min<br>`;
+  });
+  [...g.querySelectorAll('input')].forEach((inp,i)=>{
+    inp.onchange=()=>{
+      store[Object.keys(uvCriteria)[i]] = +inp.value;
+      localStorage.setItem('goals',JSON.stringify(store));
+    };
+  });
+}
+
+function renderWeekly(){
+  const w=JSON.parse(localStorage.getItem('week-'+weekKey))||{};
+  const d=document.getElementById('weekly');
+  d.innerHTML='';
+  Object.entries(w).forEach(([k,v])=>d.innerHTML+=`${k} : ${v} min<br>`);
+}
+renderWeekly();
+
+function renderHistory(){
+  const mode=document.getElementById('historyMode').value;
+  const h=document.getElementById('history');
+  h.innerHTML='';
+
+  if(mode==='day'){
+    Object.keys(localStorage).filter(k=>k.startsWith('week-')===false && k.startsWith('ratings-')===false && k.startsWith('note-')).forEach(k=>{});
+    Object.keys(localStorage).filter(k=>k.startsWith('week-')).forEach(()=>{});
+
+    Object.keys(localStorage).filter(k=>k.startsWith('note-')).forEach(k=>{
+      const d=k.replace('note-','');
+      h.innerHTML+=`<strong>${d}</strong><br>${localStorage.getItem(k)||''}<br><br>`;
+    });
+  }
+
+  if(mode==='week'){
+    Object.keys(localStorage).filter(k=>k.startsWith('week-')).forEach(k=>{
+      const data=JSON.parse(localStorage.getItem(k));
+      h.innerHTML+=`<strong>${k.replace('week-','')}</strong><br>`;
+      Object.entries(data).forEach(([ex,v])=>h.innerHTML+=`${ex} : ${v} min<br>`);
+      h.innerHTML+='<br>';
+    });
+  }
+}
+
+function persist(){ localStorage.setItem('sequence',JSON.stringify(sequence)); }
+
+function toggleFull(){
+  const f=document.getElementById('fs');
+  f.style.display = f.style.display==='none' ? 'flex' : 'none';
+}
+
+function getWeek(){
+  const d=new Date(); d.setHours(0,0,0,0);
+  d.setDate(d.getDate()+4-(d.getDay()||7));
+  const y=new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d-y)/86400000)+1)/7);
+}
+</script>
+</body>
+</html>
