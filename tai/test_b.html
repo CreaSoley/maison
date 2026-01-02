@@ -2,42 +2,40 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🥋 Carnet d’entraînement Karaté</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🥋 Entraînement Karaté</title>
 
 <style>
 :root{
- --g1:linear-gradient(to right,#ffecd2,#fcb69f);
- --g2:linear-gradient(120deg,#84fab0,#8fd3f4);
+ --grad:linear-gradient(120deg,#84fab0,#8fd3f4);
 }
-body{margin:0;font-family:system-ui;background:var(--g1)}
-header{text-align:center;padding:14px;background:var(--g2)}
-.container{max-width:900px;margin:auto;padding:16px}
+body{margin:0;font-family:system-ui;background:#f5f5f5}
+header{text-align:center;padding:14px;background:var(--grad)}
+.container{padding:16px;max-width:900px;margin:auto}
 
 button{
- padding:12px 18px;border:none;border-radius:20px;
+ padding:12px 18px;border:none;border-radius:18px;
  margin:6px;font-size:16px;
- box-shadow:0 6px 12px rgba(0,0,0,.2)
+ box-shadow:0 4px 8px rgba(0,0,0,.2)
 }
 .primary{background:#84fab0}
 .warn{background:#ffd86f}
 .danger{background:#ff8a8a}
-.small{font-size:14px;padding:8px 12px}
 
 ul{list-style:none;padding:0}
 li{
  background:white;margin:10px 0;padding:14px;
- border-radius:18px;
- box-shadow:0 6px 12px rgba(0,0,0,.15)
+ border-radius:16px;
+ box-shadow:0 4px 10px rgba(0,0,0,.15)
 }
 .active{border:3px solid #84fab0}
-.done{opacity:.6;text-decoration:line-through}
+.done{opacity:.5;text-decoration:line-through}
 
 .progress{height:8px;background:#eee;border-radius:8px;margin-top:6px}
-.progress div{height:100%;background:var(--g2)}
+.progress div{height:100%;background:var(--grad)}
 
-.timeline{height:14px;background:#eee;border-radius:10px}
-.timeline div{height:100%;background:var(--g2)}
+.timeline{height:14px;background:#ddd;border-radius:10px}
+.timeline div{height:100%;background:var(--grad)}
 
 .modal{
  position:fixed;inset:0;
@@ -45,14 +43,15 @@ li{
  display:none;
  align-items:center;
  justify-content:center;
- z-index:9999;
+ z-index:9999
 }
 .card{
- background:white;border-radius:20px;padding:20px;
- width:90%;max-width:520px;max-height:90%;overflow:auto
+ background:white;border-radius:18px;
+ padding:18px;width:90%;max-width:520px;
+ max-height:90%;overflow:auto
 }
 
-.smile{font-size:26px;padding:6px;cursor:pointer}
+.smile{font-size:26px;cursor:pointer;padding:6px}
 .smile.active{transform:scale(1.3)}
 
 canvas{max-width:100%}
@@ -63,17 +62,15 @@ textarea{width:100%}
 <body>
 
 <header>
-<h1>🥋 Carnet d’entraînement Karaté</h1>
-<p id="modeLabel">✏️ Mode édition</p>
+<h1>🥋 Carnet d’entraînement</h1>
+<p id="stateLabel">⏹ Inactif</p>
 </header>
 
 <div class="container">
 
-<button class="small" onclick="toggleMode()">🔄 Mode</button>
-<button class="primary" onclick="start()">▶ Lancer</button>
+<button class="primary" onclick="start()">▶ Start / Reprendre</button>
 <button class="warn" onclick="pause()">⏸ Pause</button>
 <button class="danger" onclick="stop()">⏹ Stop</button>
-<button onclick="newSession()">♻ Nouvelle séance</button>
 <button onclick="openEval()">📝 Auto-évaluation</button>
 
 <h3>Progression globale</h3>
@@ -81,14 +78,15 @@ textarea{width:100%}
 
 <ul id="program"></ul>
 
-<h3>📊 Radar technique (7 jours)</h3>
+<h3>📊 Radar (7 jours)</h3>
 <canvas id="radar" width="320" height="320"></canvas>
 
 </div>
 
+<!-- MODAL -->
 <div class="modal" id="evalModal">
  <div class="card">
-  <h2>📝 Auto-évaluation du jour</h2>
+  <h2>📝 Auto-évaluation</h2>
   <div id="evalContent"></div>
 
   <h4>💬 Commentaire</h4>
@@ -100,146 +98,128 @@ textarea{width:100%}
 </div>
 
 <script>
-/* ================= CONFIG ================= */
-const UV_CRITERIA={
+/* ========= CONFIG ========= */
+const UV={
  Kihon:["distance","kime","précision","posture","rythme"],
  Kata:["précision","équilibre","fluidité","kime","regard"],
  Randori:["distance","timing","tai sabaki","engagement","lucidité"]
 };
-
-/* ================= UTILS ================= */
 const synth=speechSynthesis;
-function todayKey(){return new Date().toISOString().slice(0,10)}
-function getStore(k,d){return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}
-function setStore(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
-/* ================= STATE ================= */
-let mode="edit";
-let trainingState="idle"; // idle | running | paused
-let interval=null,currentIndex=0,remaining=0;
+/* ========= STATE ========= */
+let trainingState="idle"; // idle | running | paused | finished
+let timer=null;
+let index=0;
+let remaining=0;
 
 let exercises=[
- {label:"🥋 Kihon",speech:"Kihon",uv:"Kihon",duration:15,progress:0,done:false},
- {label:"🧘 Kata",speech:"Kata",uv:"Kata",duration:10,progress:0,done:false},
- {label:"🔥 Randori",speech:"Randori",uv:"Randori",duration:10,progress:0,done:false}
+ {name:"Kihon",uv:"Kihon",duration:10,progress:0,done:false},
+ {name:"Kata",uv:"Kata",duration:8,progress:0,done:false},
+ {name:"Randori",uv:"Randori",duration:8,progress:0,done:false}
 ];
 
-/* ================= INIT ================= */
-(function(){
- const s=getStore("state",null);
- if(s){exercises=s.exercises;currentIndex=s.currentIndex||0}
- render();update();drawRadar();
-})();
+/* ========= INIT ========= */
+render();updateLabel();drawRadar();
 
-/* ================= MODE ================= */
-function toggleMode(){
- mode=mode==="edit"?"train":"edit";
- document.getElementById("modeLabel").innerText=
-  mode==="edit"?"✏️ Mode édition":"🥋 Mode entraînement";
- render();
-}
-
-/* ================= RENDER ================= */
-function render(){
- const ul=document.getElementById("program");
- ul.innerHTML="";
- exercises.forEach((e,i)=>{
-  const li=document.createElement("li");
-  if(i===currentIndex) li.classList.add("active");
-  if(e.done) li.classList.add("done");
-  li.innerHTML=`
-   <strong>${e.label}</strong><br>
-   ${mode==="edit"?`⏱ <input type="number" min="1" value="${e.duration}" style="width:60px"> min`:""}
-   <div class="progress"><div style="width:${e.progress}%"></div></div>
-  `;
-  if(mode==="edit"){
-   li.querySelector("input").onchange=ev=>{
-    e.duration=parseInt(ev.target.value,10);
-    e.progress=0;e.done=false;save();
-   };
-  }
-  ul.appendChild(li);
- });
-}
-
-/* ================= TIMER ================= */
+/* ========= CORE ========= */
 function start(){
  if(trainingState==="running") return;
+
+ if(trainingState==="finished"){
+  resetTraining();
+ }
+
  trainingState="running";
- play();
+ updateLabel();
+ runCurrent();
 }
 
-function play(){
- if(currentIndex>=exercises.length){
-  trainingState="idle";
+function runCurrent(){
+ if(index>=exercises.length){
+  trainingState="finished";
+  updateLabel();
   speak("Fin de l'entraînement");
   return;
  }
- const e=exercises[currentIndex];
- speak(e.speech);
- remaining=(e.duration*60)-(e.progress/100*e.duration*60);
- interval=setInterval(()=>{
+
+ const ex=exercises[index];
+ if(!remaining){
+  remaining=ex.duration*60*(1-ex.progress/100);
+  speak(ex.name);
+ }
+
+ timer=setInterval(()=>{
   remaining--;
-  e.progress=100-(remaining/(e.duration*60))*100;
-  update();
+  ex.progress=100*(1-remaining/(ex.duration*60));
+  render();
+  updateGlobal();
+
   if(remaining<=0){
-   clearInterval(interval);interval=null;
-   e.done=true;
+   clearInterval(timer);
+   timer=null;
+   remaining=0;
+   ex.done=true;
    speak("Fin de l'exercice");
-   currentIndex++;
-   play();
+   index++;
+   runCurrent();
   }
  },1000);
 }
 
 function pause(){
- if(interval){clearInterval(interval);interval=null}
+ if(timer){clearInterval(timer);timer=null}
  synth.cancel();
  trainingState="paused";
- save();
+ updateLabel();
 }
 
 function stop(){
  pause();
  trainingState="idle";
+ index=0;
+ remaining=0;
+ exercises.forEach(e=>{e.progress=0;e.done=false});
+ render();updateGlobal();updateLabel();
 }
 
-/* ================= AUTO-EVAL (CORRIGÉ) ================= */
+function resetTraining(){
+ index=0;
+ remaining=0;
+ exercises.forEach(e=>{e.progress=0;e.done=false});
+}
+
+/* ========= AUTO-EVAL ========= */
 function openEval(){
- // 🔥 correction clé
  pause();
 
  const modal=document.getElementById("evalModal");
  const c=document.getElementById("evalContent");
- const comment=document.getElementById("comment");
+ const com=document.getElementById("comment");
+ c.innerHTML="";com.value="";
 
- c.innerHTML="";comment.value="";
  const done=exercises.filter(e=>e.done);
-
  if(!done.length){
-  c.innerHTML="<p>Aucun exercice terminé aujourd’hui.</p>";
+  c.innerHTML="<p>Aucun exercice terminé.</p>";
   modal.style.display="flex";
   return;
  }
 
- const evals=getStore("evals",{});
- const d=todayKey();
- const today=evals[d]||{exercises:{},comment:""};
- comment.value=today.comment||"";
+ const data=loadEval();
+ const today=data[todayKey()]||{exercises:{},comment:""};
+ com.value=today.comment||"";
 
- done.forEach(e=>{
-  let html=`<h4>${e.speech}</h4>`;
-  const saved=today.exercises[e.speech]||{};
-  UV_CRITERIA[e.uv].forEach(cr=>{
-   html+=`<div>${cr} : `;
+ done.forEach(ex=>{
+  c.innerHTML+=`<h4>${ex.name}</h4>`;
+  UV[ex.uv].forEach(cr=>{
+   c.innerHTML+=`<div>${cr} : `;
    [1,2,3,4,5].forEach(v=>{
-    html+=`<span class="smile ${saved[cr]===v?"active":""}"
-     data-ex="${e.speech}" data-cr="${cr}" data-v="${v}">
+    const a=today.exercises?.[ex.name]?.[cr]===v?"active":"";
+    c.innerHTML+=`<span class="smile ${a}" data-ex="${ex.name}" data-cr="${cr}" data-v="${v}">
      ${["😞","😐","🙂","😄","🔥"][v-1]}</span>`;
    });
-   html+="</div>";
+   c.innerHTML+="</div>";
   });
-  c.innerHTML+=html+"<hr>";
+  c.innerHTML+="<hr>";
  });
 
  document.querySelectorAll(".smile").forEach(s=>{
@@ -253,19 +233,18 @@ function openEval(){
 }
 
 function saveEval(){
+ const data=loadEval();
  const d=todayKey();
- const evals=getStore("evals",{});
- if(!evals[d]) evals[d]={exercises:{},comment:""};
+ if(!data[d]) data[d]={exercises:{},comment:""};
 
  document.querySelectorAll(".smile.active").forEach(s=>{
   const ex=s.dataset.ex,cr=s.dataset.cr,v=+s.dataset.v;
-  evals[d].exercises[ex]=evals[d].exercises[ex]||{};
-  evals[d].exercises[ex][cr]=v;
+  data[d].exercises[ex]=data[d].exercises[ex]||{};
+  data[d].exercises[ex][cr]=v;
  });
 
- evals[d].comment=document.getElementById("comment").value;
- setStore("evals",evals);
-
+ data[d].comment=document.getElementById("comment").value;
+ localStorage.setItem("evals",JSON.stringify(data));
  closeEval();drawRadar();
 }
 
@@ -273,21 +252,45 @@ function closeEval(){
  document.getElementById("evalModal").style.display="none";
 }
 
-/* ================= RADAR ================= */
+/* ========= UI ========= */
+function render(){
+ const ul=document.getElementById("program");
+ ul.innerHTML="";
+ exercises.forEach((e,i)=>{
+  ul.innerHTML+=`
+   <li class="${i===index?"active":""} ${e.done?"done":""}">
+    <strong>${e.name}</strong>
+    <div class="progress"><div style="width:${e.progress}%"></div></div>
+   </li>`;
+ });
+}
+function updateGlobal(){
+ const t=exercises.reduce((a,e)=>a+e.duration,0);
+ const d=exercises.reduce((a,e)=>a+e.duration*(e.progress/100),0);
+ document.getElementById("global").style.width=(d/t*100)+"%";
+}
+function updateLabel(){
+ const map={
+  idle:"⏹ Inactif",
+  running:"▶ En cours",
+  paused:"⏸ En pause",
+  finished:"✅ Terminé"
+ };
+ document.getElementById("stateLabel").innerText=map[trainingState];
+}
+
+/* ========= RADAR ========= */
 function drawRadar(){
  const c=document.getElementById("radar");
  const ctx=c.getContext("2d");
- ctx.clearRect(0,0,c.width,c.height);
+ ctx.clearRect(0,0,320,320);
 
- const evals=getStore("evals",{});
- const since=Date.now()-7*86400000;
+ const data=loadEval();
  const acc={};
-
- Object.entries(evals).forEach(([d,v])=>{
-  if(new Date(d).getTime()<since) return;
-  Object.values(v.exercises||{}).forEach(ex=>{
-   Object.entries(ex).forEach(([k,val])=>{
-    acc[k]=acc[k]||[];acc[k].push(val);
+ Object.values(data).forEach(d=>{
+  Object.values(d.exercises||{}).forEach(ex=>{
+   Object.entries(ex).forEach(([k,v])=>{
+    acc[k]=acc[k]||[];acc[k].push(v);
    });
   });
  });
@@ -297,24 +300,20 @@ function drawRadar(){
 
  const cx=160,cy=160,r=120;
  keys.forEach((k,i)=>{
-  const a=(Math.PI*2/keys.length)*i-Math.PI/2;
+  const a=2*Math.PI/keys.length*i-Math.PI/2;
   const avg=acc[k].reduce((a,b)=>a+b)/acc[k].length;
   ctx.beginPath();
   ctx.moveTo(cx,cy);
   ctx.lineTo(cx+Math.cos(a)*r*avg/5,cy+Math.sin(a)*r*avg/5);
   ctx.stroke();
-  ctx.fillText(k,cx+Math.cos(a)*(r+10),cy+Math.sin(a)*(r+10));
+  ctx.fillText(k,cx+Math.cos(a)*(r+8),cy+Math.sin(a)*(r+8));
  });
 }
 
-/* ================= PERSIST ================= */
-function save(){setStore("state",{exercises,currentIndex})}
-function update(){renderGlobal();save()}
-function renderGlobal(){
- const t=exercises.reduce((a,e)=>a+e.duration,0);
- const d=exercises.reduce((a,e)=>a+(e.progress/100*e.duration),0);
- document.getElementById("global").style.width=(d/t*100)+"%";
-}
+/* ========= UTILS ========= */
+function speak(t){synth.cancel();synth.speak(new SpeechSynthesisUtterance(t))}
+function todayKey(){return new Date().toISOString().slice(0,10)}
+function loadEval(){return JSON.parse(localStorage.getItem("evals")||"{}")}
 </script>
 </body>
 </html>
