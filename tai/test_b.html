@@ -45,16 +45,11 @@ li{
  display:none;
  align-items:center;
  justify-content:center;
- z-index:1000;
+ z-index:9999;
 }
 .card{
- background:white;
- border-radius:20px;
- padding:20px;
- width:90%;
- max-width:520px;
- max-height:90%;
- overflow:auto;
+ background:white;border-radius:20px;padding:20px;
+ width:90%;max-width:520px;max-height:90%;overflow:auto
 }
 
 .smile{font-size:26px;padding:6px;cursor:pointer}
@@ -80,7 +75,6 @@ textarea{width:100%}
 <button class="danger" onclick="stop()">⏹ Stop</button>
 <button onclick="newSession()">♻ Nouvelle séance</button>
 <button onclick="openEval()">📝 Auto-évaluation</button>
-<button onclick="exportCSV()">📤 CSV</button>
 
 <h3>Progression globale</h3>
 <div class="timeline"><div id="global"></div></div>
@@ -92,7 +86,6 @@ textarea{width:100%}
 
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="evalModal">
  <div class="card">
   <h2>📝 Auto-évaluation du jour</h2>
@@ -100,14 +93,11 @@ textarea{width:100%}
 
   <h4>💬 Commentaire</h4>
   <textarea id="comment" rows="3"></textarea>
-  <button onclick="dictate()">🎙 Dicter</button>
 
   <button class="primary" onclick="saveEval()">💾 Enregistrer</button>
   <button onclick="closeEval()">Fermer</button>
  </div>
 </div>
-
-<audio id="ding"></audio>
 
 <script>
 /* ================= CONFIG ================= */
@@ -118,16 +108,15 @@ const UV_CRITERIA={
 };
 
 /* ================= UTILS ================= */
-function todayKey(){
- return new Date().toISOString().slice(0,10);
-}
+const synth=speechSynthesis;
+function todayKey(){return new Date().toISOString().slice(0,10)}
 function getStore(k,d){return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}
 function setStore(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
 /* ================= STATE ================= */
-let mode="edit",interval,currentIndex=0,remaining;
-let sessionFinished=false;
-const synth=speechSynthesis;
+let mode="edit";
+let trainingState="idle"; // idle | running | paused
+let interval=null,currentIndex=0,remaining=0;
 
 let exercises=[
  {label:"🥋 Kihon",speech:"Kihon",uv:"Kihon",duration:15,progress:0,done:false},
@@ -135,7 +124,7 @@ let exercises=[
  {label:"🔥 Randori",speech:"Randori",uv:"Randori",duration:10,progress:0,done:false}
 ];
 
-/* ================= LOAD ================= */
+/* ================= INIT ================= */
 (function(){
  const s=getStore("state",null);
  if(s){exercises=s.exercises;currentIndex=s.currentIndex||0}
@@ -158,21 +147,16 @@ function render(){
   const li=document.createElement("li");
   if(i===currentIndex) li.classList.add("active");
   if(e.done) li.classList.add("done");
-
   li.innerHTML=`
    <strong>${e.label}</strong><br>
    ${mode==="edit"?`⏱ <input type="number" min="1" value="${e.duration}" style="width:60px"> min`:""}
    <div class="progress"><div style="width:${e.progress}%"></div></div>
   `;
-
   if(mode==="edit"){
    li.querySelector("input").onchange=ev=>{
     e.duration=parseInt(ev.target.value,10);
-    e.progress=0;e.done=false;
-    save();
+    e.progress=0;e.done=false;save();
    };
-  }else{
-   li.onclick=()=>{currentIndex=i;save();render();}
   }
   ul.appendChild(li);
  });
@@ -180,28 +164,24 @@ function render(){
 
 /* ================= TIMER ================= */
 function start(){
- if(interval) return;
- const next=exercises.findIndex(e=>!e.done);
- if(next!==-1) currentIndex=next;
+ if(trainingState==="running") return;
+ trainingState="running";
  play();
 }
 
 function play(){
  if(currentIndex>=exercises.length){
-  sessionFinished=true;
+  trainingState="idle";
   speak("Fin de l'entraînement");
   return;
  }
-
  const e=exercises[currentIndex];
  speak(e.speech);
  remaining=(e.duration*60)-(e.progress/100*e.duration*60);
-
  interval=setInterval(()=>{
   remaining--;
   e.progress=100-(remaining/(e.duration*60))*100;
   update();
-
   if(remaining<=0){
    clearInterval(interval);interval=null;
    e.done=true;
@@ -212,26 +192,23 @@ function play(){
  },1000);
 }
 
-function pause(){clearInterval(interval);interval=null;save()}
-function stop(){clearInterval(interval);interval=null;save()}
-
-/* ================= SESSION ================= */
-function newSession(){
- clearInterval(interval);
- interval=null;sessionFinished=false;currentIndex=0;
- exercises.forEach(e=>{e.done=false;e.progress=0});
- save();render();update();
-}
-
-/* ================= SPEECH ================= */
-function speak(t){
+function pause(){
+ if(interval){clearInterval(interval);interval=null}
  synth.cancel();
- const u=new SpeechSynthesisUtterance(t);
- u.lang="fr-FR";synth.speak(u);
+ trainingState="paused";
+ save();
 }
 
-/* ================= AUTO-EVAL ================= */
+function stop(){
+ pause();
+ trainingState="idle";
+}
+
+/* ================= AUTO-EVAL (CORRIGÉ) ================= */
 function openEval(){
+ // 🔥 correction clé
+ pause();
+
  const modal=document.getElementById("evalModal");
  const c=document.getElementById("evalContent");
  const comment=document.getElementById("comment");
@@ -282,7 +259,7 @@ function saveEval(){
 
  document.querySelectorAll(".smile.active").forEach(s=>{
   const ex=s.dataset.ex,cr=s.dataset.cr,v=+s.dataset.v;
-  if(!evals[d].exercises[ex]) evals[d].exercises[ex]={};
+  evals[d].exercises[ex]=evals[d].exercises[ex]||{};
   evals[d].exercises[ex][cr]=v;
  });
 
@@ -330,43 +307,13 @@ function drawRadar(){
  });
 }
 
-/* ================= EXPORT ================= */
-function exportCSV(){
- const evals=getStore("evals",{});
- let csv="Date,Exercice,Critère,Note,Commentaire\n";
- Object.entries(evals).forEach(([d,v])=>{
-  Object.entries(v.exercises||{}).forEach(([ex,crs])=>{
-   Object.entries(crs).forEach(([c,val])=>{
-    csv+=`${d},${ex},${c},${val},"${v.comment||""}"\n`;
-   });
-  });
- });
- const a=document.createElement("a");
- a.href=URL.createObjectURL(new Blob([csv]));
- a.download="carnet.csv";a.click();
-}
-
 /* ================= PERSIST ================= */
-function save(){
- setStore("state",{exercises,currentIndex});
-}
-function update(){
- renderGlobal();save();
-}
+function save(){setStore("state",{exercises,currentIndex})}
+function update(){renderGlobal();save()}
 function renderGlobal(){
  const t=exercises.reduce((a,e)=>a+e.duration,0);
  const d=exercises.reduce((a,e)=>a+(e.progress/100*e.duration),0);
  document.getElementById("global").style.width=(d/t*100)+"%";
-}
-
-/* ================= VOICE ================= */
-function dictate(){
- const r=new (window.SpeechRecognition||webkitSpeechRecognition)();
- r.lang="fr-FR";
- r.onresult=e=>{
-  document.getElementById("comment").value+=e.results[0][0].transcript;
- };
- r.start();
 }
 </script>
 </body>
