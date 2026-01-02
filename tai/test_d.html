@@ -191,13 +191,23 @@ function render(){
       persist();
     };
 
-    div.addEventListener('dragstart',e=>e.dataTransfer.setData('i',i));
-    div.addEventListener('dragover',e=>e.preventDefault());
+    div.addEventListener('dragstart',e=>{
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain', i);
+    });
+    div.addEventListener('dragover',e=>{
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+    });
     div.addEventListener('drop',e=>{
-      const from=+e.dataTransfer.getData('i');
-      const moved=sequence.splice(from,1)[0];
+      e.preventDefault();
+      const from = Number(e.dataTransfer.getData('text/plain'));
+      if (from === i) return;
+      const moved = sequence.splice(from,1)[0];
       sequence.splice(i,0,moved);
-      persist(); render();
+      persist();
+      render();
+    });
     });
 
     list.appendChild(div);
