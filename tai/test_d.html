@@ -78,8 +78,6 @@ h1 { text-align:center; }
   <button onclick="pause()">⏸</button>
   <button onclick="stop()">⏹</button>
   <button onclick="toggleFull()">⛶ Plein écran</button>
-<button onclick="resetSequence()">♻️ Réinitialiser la séquence</button>
-
 </div>
 
 <div class="status">
@@ -359,12 +357,6 @@ function getWeek(){
   const y=new Date(d.getFullYear(),0,1);
   return Math.ceil((((d-y)/86400000)+1)/7);
 }
-function resetSequence() {
-  localStorage.removeItem('sequence');
-  alert("Séquence réinitialisée. Recharge la page.");
-  location.reload();
-}
-
 </script>
 </body>
 </html>
