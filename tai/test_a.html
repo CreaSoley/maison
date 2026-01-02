@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coach Tai Jitsu – 2e Dan</title>
-  <link rel="manifest" href="manifest.json">
+
   <style>
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
@@ -12,29 +12,20 @@
       min-height: 100vh;
       background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
     }
-    h1 {
-      text-align: center;
-      padding: 1rem;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 1rem;
-    }
+    h1 { text-align: center; padding: 1rem; }
+
+    .container { max-width: 900px; margin: auto; padding: 1rem; }
+
     .uv {
       background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
       border-radius: 20px;
       padding: 1rem;
       margin-bottom: 1rem;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 20px rgba(0,0,0,.15);
     }
-    .uv h2 {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-    }
+
     .exercise {
-      background: #fff;
+      background: white;
       border-radius: 15px;
       padding: .75rem;
       margin: .5rem 0;
@@ -42,39 +33,37 @@
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 4px 10px rgba(0,0,0,.1);
+      cursor: grab;
     }
+
     .exercise.dragging { opacity: .5; }
+
     .controls button {
       border: none;
       border-radius: 50px;
       padding: .6rem 1.2rem;
-      margin: .2rem;
+      margin: .3rem;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0,0,0,.2);
     }
-    .controls button.active {
-      background: #84fab0;
-      color: #000;
-    }
+
     .status {
-      background: #fff;
+      background: white;
       border-radius: 20px;
       padding: 1rem;
       margin-top: 1rem;
       box-shadow: 0 6px 12px rgba(0,0,0,.15);
     }
-    .highlight {
-      background: #ffe0f0 !important;
-    }
+
     textarea {
       width: 100%;
       border-radius: 15px;
       padding: .75rem;
       border: none;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,.15);
     }
   </style>
 </head>
+
 <body>
 <h1>🥋 Coach Tai Jitsu – Passage 2e Dan</h1>
 <div class="container" id="app"></div>
@@ -83,7 +72,14 @@
 <audio id="ding" src="ding.mp3"></audio>
 
 <script>
+/* ===================== DATA ===================== */
+
 const synth = window.speechSynthesis;
+let isRunning = false;
+let timer = null;
+let currentIndex = 0;
+let remaining = 0;
+let sequence = [];
 
 const data = JSON.parse(localStorage.getItem('tj-exercises')) || [
   { uv: '🥋 UV 1 – Kihon', items: [
@@ -109,98 +105,190 @@ const data = JSON.parse(localStorage.getItem('tj-exercises')) || [
   ]}
 ];
 
-let sequence = [];
-let currentIndex = 0;
-let timer = null;
-let remaining = 0;
+/* ===================== RENDER ===================== */
 
 function render() {
   const app = document.getElementById('app');
   app.innerHTML = '';
+
   data.forEach((uv, uvi) => {
     const block = document.createElement('div');
     block.className = 'uv';
     block.innerHTML = `<h2>${uv.uv}</h2>`;
 
     uv.items.forEach((ex, exi) => {
-      const div = document.createElement('div');
-      div.className = 'exercise';
-      div.draggable = true;
-      div.dataset.uv = uvi;
-      div.dataset.index = exi;
+      const el = document.createElement('div');
+      el.className = 'exercise';
+      el.draggable = true;
+      el.dataset.uv = uvi;
+      el.dataset.index = exi;
 
-      div.innerHTML = `
+      el.innerHTML = `
         <span>☰ ${ex.name}</span>
-        <input type="range" min="1" max="60" value="${ex.duration}" 
-          oninput="this.nextElementSibling.textContent=this.value+' min'; data[${uvi}].items[${exi}].duration=this.value; save();" />
-        <span>${ex.duration} min</span>`;
+        <input type="range" min="1" max="60" value="${ex.duration}">
+        <span>${ex.duration} min</span>
+      `;
 
-      div.addEventListener('dragstart', dragStart);
-      div.addEventListener('dragover', dragOver);
-      div.addEventListener('drop', drop);
-      div.addEventListener('dragend', dragEnd);
+      const range = el.querySelector('input');
+      range.oninput = () => {
+        ex.duration = Number(range.value);
+        el.querySelector('span:last-child').textContent = range.value + ' min';
+        save();
+      };
 
-      block.appendChild(div);
+      el.addEventListener('dragstart', dragStart);
+      el.addEventListener('dragover', e => e.preventDefault());
+      el.addEventListener('drop', drop);
+      el.addEventListener('dragend', dragEnd);
+
+      block.appendChild(el);
     });
 
     app.appendChild(block);
   });
 
-  const controls = document.createElement('div');
-  controls.className = 'controls';
-  controls.innerHTML = `
-    <button onclick="start()">▶️ Lecture</button>
-    <button onclick="pause()">⏸ Pause</button>
-    <button onclick="stop()">⏹ Stop</button>
-    <button onclick="save()">💾 Enregistrer l'ordre</button>
-    <button onclick="exportCSV()">📤 Export CSV</button>`;
-  app.appendChild(controls);
+  app.innerHTML += `
+    <div class="controls">
+      <button onclick="start()">▶️ Lecture</button>
+      <button onclick="pause()">⏸ Pause</button>
+      <button onclick="stop()">⏹ Stop</button>
+      <button onclick="save()">💾 Enregistrer</button>
+      <button onclick="exportCSV()">📤 Export CSV</button>
+    </div>
 
-  const status = document.createElement('div');
-  status.className = 'status';
-  status.innerHTML = `
-    <h3>📍 Suivi de séance</h3>
-    <div id="current"></div>
-    <h4>📝 Carnet de notes</h4>
-    <textarea rows="4" placeholder="Ressenti du jour..." onblur="saveNote(this.value)">${localStorage.getItem('tj-note')||''}</textarea>
-    <h4>⭐ Évaluation</h4>
-    Kime 💥 <input type="range" min="1" max="5" />
-    Zanshin 👀 <input type="range" min="1" max="5" />
-    Réactivité ⚡ <input type="range" min="1" max="5" />
+    <div class="status">
+      <h3>📍 Suivi</h3>
+      <div id="current">En attente…</div>
+
+      <h4>📝 Notes</h4>
+      <textarea rows="3" onblur="saveNote(this.value)">${localStorage.getItem('tj-note')||''}</textarea>
+    </div>
   `;
-  app.appendChild(status);
 }
 
-let dragged = null;
+/* ===================== DRAG & DROP ===================== */
+
+let dragSource = null;
 
 function dragStart(e) {
-  dragged = e.currentTarget;
-  dragged.classList.add('dragging');
-}
-
-function dragOver(e) {
-  e.preventDefault();
+  dragSource = e.currentTarget;
+  dragSource.classList.add('dragging');
 }
 
 function drop(e) {
   e.preventDefault();
-  if (!dragged || dragged === e.currentTarget) return;
+  const target = e.currentTarget;
+  if (dragSource === target) return;
 
-  const fromUV = dragged.dataset.uv;
-  const fromIndex = dragged.dataset.index;
-  const toUV = e.currentTarget.dataset.uv;
-  const toIndex = e.currentTarget.dataset.index;
+  const uvFrom = +dragSource.dataset.uv;
+  const iFrom = +dragSource.dataset.index;
+  const uvTo = +target.dataset.uv;
+  const iTo = +target.dataset.index;
 
-  const moved = data[fromUV].items.splice(fromIndex, 1)[0];
-  data[toUV].items.splice(toIndex, 0, moved);
+  const moved = data[uvFrom].items.splice(iFrom, 1)[0];
+  data[uvTo].items.splice(iTo, 0, moved);
 
   save();
   render();
 }
 
 function dragEnd() {
-  if (dragged) dragged.classList.remove('dragging');
-  dragged = null;
+  if (dragSource) dragSource.classList.remove('dragging');
+  dragSource = null;
+}
+
+/* ===================== TRAINING ===================== */
+
+function buildSequence() {
+  sequence = [];
+  data.forEach(uv => uv.items.forEach(ex => sequence.push(ex)));
+}
+
+function speak(txt) {
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'fr-FR';
+  synth.speak(u);
+}
+
+function start() {
+  if (isRunning) return;
+  buildSequence();
+  if (!sequence.length) return;
+
+  isRunning = true;
+  currentIndex = 0;
+  speak("Commençons la séance");
+  setTimeout(runExercise, 1200);
+}
+
+function runExercise() {
+  if (!isRunning) return;
+
+  if (currentIndex >= sequence.length) {
+    speak("Fin de l'entraînement, à bientôt !");
+    isRunning = false;
+    return;
+  }
+
+  const ex = sequence[currentIndex];
+  document.getElementById('beep').play();
+  speak(`Exercice ${currentIndex + 1} : ${ex.name}`);
+
+  remaining = ex.duration * 60;
+  updateStatus(ex);
+
+  timer = setInterval(() => {
+    remaining--;
+    updateStatus(ex);
+
+    if (remaining <= 0) {
+      clearInterval(timer);
+      document.getElementById('ding').play();
+      speak("Fin de l'exercice");
+      currentIndex++;
+      setTimeout(runExercise, 1200);
+    }
+  }, 1000);
+}
+
+function updateStatus(ex) {
+  document.getElementById('current').textContent =
+    `${ex.name} – ${Math.floor(remaining/60)}:${String(remaining%60).padStart(2,'0')}`;
+}
+
+function pause() {
+  clearInterval(timer);
+  isRunning = false;
+}
+
+function stop() {
+  clearInterval(timer);
+  isRunning = false;
+  currentIndex = 0;
+  document.getElementById('current').textContent = 'Séance arrêtée';
+}
+
+/* ===================== STORAGE ===================== */
+
+function save() {
+  localStorage.setItem('tj-exercises', JSON.stringify(data));
+  alert('✅ Séance enregistrée');
+}
+
+function saveNote(v) {
+  localStorage.setItem('tj-note', v);
+}
+
+function exportCSV() {
+  let csv = 'Exercice;Durée (min)\n';
+  buildSequence();
+  sequence.forEach(e => csv += `${e.name};${e.duration}\n`);
+
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'entrainement_taijitsu.csv';
+  a.click();
 }
 
 render();
