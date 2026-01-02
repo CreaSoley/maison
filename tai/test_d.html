@@ -2,408 +2,279 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Coach Tai Jitsu – 2e Dan</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Tai Jitsu – 2e Dan</title>
 
 <style>
-body {
-  font-family: system-ui;
-  background: linear-gradient(to right,#ffecd2,#fcb69f);
+body{
   margin:0;
+  font-family:'Segoe UI',system-ui;
+  background-image:linear-gradient(to right,#ffecd2 0%,#fcb69f 100%);
 }
-h1 { text-align:center; }
-
-.container { max-width:900px; margin:auto; padding:1rem; }
-
-.exercise {
-  background:white;
-  margin:.4rem 0;
-  padding:.6rem;
-  border-radius:15px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  box-shadow:0 4px 10px rgba(0,0,0,.1);
-  cursor:grab;
+h1,h2,h3{
+  text-align:center;
 }
-.exercise.done { text-decoration: line-through; opacity:.6; }
-.exercise.current { background:#ffe0f0; }
-
-.controls button {
-  padding:.6rem 1.2rem;
-  margin:.2rem;
-  border:none;
-  border-radius:20px;
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:1rem;
 }
-
-.status, .panel {
-  background:white;
+.uv{
+  background-image:linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%);
   border-radius:20px;
   padding:1rem;
-  margin-top:1rem;
+  margin-bottom:1rem;
+  box-shadow:0 10px 20px rgba(0,0,0,.15);
 }
-
-.slider { width:120px; }
-
-.emoji button {
-  font-size:1.6rem;
-  margin:.1rem;
-  opacity:.3;
-}
-.emoji button.active { opacity:1; }
-
-.fullscreen {
-  position:fixed;
-  inset:0;
-  background:#000;
-  color:#fff;
+.exercise{
+  background:#fff;
+  border-radius:15px;
+  padding:.5rem;
+  margin:.4rem 0;
   display:flex;
+  justify-content:space-between;
   align-items:center;
-  justify-content:center;
-  font-size:2.5rem;
-  z-index:999;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
 }
+.exercise.done{
+  text-decoration:line-through;
+  opacity:.5;
+}
+.exercise.active{
+  background:#ffe0f0;
+}
+button{
+  border:none;
+  border-radius:20px;
+  padding:.4rem .8rem;
+  cursor:pointer;
+  margin:.1rem;
+  box-shadow:0 4px 8px rgba(0,0,0,.2);
+}
+.controls button.active{
+  background:#84fab0;
+}
+textarea{
+  width:100%;
+  border-radius:15px;
+  padding:.5rem;
+  border:none;
+}
+input[type=range]{width:100px}
 </style>
 </head>
 
 <body>
 <h1>🥋 Coach Tai Jitsu – Passage 2e Dan</h1>
+
 <div class="container">
 
-<h3>📋 Banque d’exercices</h3>
+<h2>📋 Banque d’exercices</h2>
 <div id="bank"></div>
 
-<h3>🧩 Sélection de séance</h3>
-<div id="list"></div>
+<h2>🧩 Sélection de séance</h2>
+<div id="selection"></div>
 <button onclick="validateSelection()">✅ Valider la sélection</button>
 
+<h2>⏱️ Séance validée</h2>
+<div id="sequence"></div>
+
+<h2>🎮 Commandes</h2>
 <div class="controls">
-  <button onclick="start()">▶️</button>
-  <button onclick="pause()">⏸</button>
-  <button onclick="stop()">⏹</button>
-  <button onclick="toggleFull()">⛶ Plein écran</button>
+  <button id="playBtn" onclick="start()">▶️ Lecture</button>
+  <button onclick="pause()">⏸ Pause</button>
+  <button onclick="stop()">⏹ Stop</button>
 </div>
 
-<div class="status">
-  <div id="current">En attente…</div>
-</div>
+<h2>⭐ Évaluation du jour</h2>
+<div id="evaluation"></div>
 
-<div class="panel">
-  <h3>📝 Carnet de notes</h3>
-  <textarea id="note" rows="3" placeholder="Ressenti du jour..."></textarea>
-</div>
-
-<div class="panel">
-  <h3>😀 Évaluation par UV</h3>
-  <div id="ratings"></div>
-</div>
-
-<div class="panel">
-  <h3>🎯 Objectifs hebdomadaires (minutes)</h3>
-  <div id="goals"></div>
-</div>
-
-<div class="panel">
-  <h3>📊 Total hebdomadaire (minutes)</h3>
-  <div id="weekly"></div>
-</div>
-</div>
-
-<div class="panel">
-  <h3>📅 Historique journalier / hebdomadaire</h3>
-  <select id="historyMode" onchange="renderHistory()">
-    <option value="day">Par jour</option>
-    <option value="week">Par semaine</option>
-  </select>
-  <div id="history"></div>
-</div>
-</div>
+<h2>📝 Carnet de notes</h2>
+<textarea id="note" rows="4" placeholder="Ressenti du jour..."></textarea>
 
 </div>
-
-<div id="fs" class="fullscreen" style="display:none"></div>
 
 <audio id="beep" src="beep.mp3"></audio>
 <audio id="ding" src="ding.mp3"></audio>
 
 <script>
-const today = new Date().toISOString().slice(0,10);
-const weekKey = new Date().getFullYear() + '-W' + getWeek();
+/* ===== DONNÉES ===== */
+const synth = window.speechSynthesis;
 
-const uvCriteria = {
-  'UV1':['Kime 💥','Zanshin 👀'],
-  'UV2':['Maai 📏','Réactivité ⚡'],
-  'UV3':['Fluidité 🌊','Précision 🎯'],
-  'UV4':['Puissance 🔥','Contrôle 🧠'],
-  'UV5':['Engagement 🥋','Lucidité 👁️'],
-  'UV6':['Adaptation 🔄','Endurance 🫁']
-};
-
-const bank = [
-  {uv:'UV1', name:'Kihon simple'},
-  {uv:'UV1', name:'Enchaînement de kihon'},
-  {uv:'UV1', name:'Cibles'},
-  {uv:'UV2', name:'Taï sabaki'},
-  {uv:'UV2', name:'Slow ippon'},
-  {uv:'UV2', name:'Ippon kumite'},
-  {uv:'UV3', name:'Slow kata'},
-  {uv:'UV3', name:'Kata nidan'},
-  {uv:'UV3', name:'Bunkaï'},
-  {uv:'UV4', name:'Shadow'},
-  {uv:'UV5', name:'Shadow randori'},
-  {uv:'UV6', name:'Randori libre'}
+const bankData = [
+ {uv:'🥋 UV 1 – Kihon', criteria:['Kime','Zanshin','Précision'], items:[
+  'Kihon simple','Enchaînement kihon','Cibles']},
+ {uv:'🌀 UV 2 – Déplacements', criteria:['Maai','Fluidité','Réactivité'], items:[
+  'Tai sabaki','Slow ippon','Ippon kumite']},
+ {uv:'📐 UV 3 – Kata', criteria:['Rythme','Stabilité','Intention'], items:[
+  'Slow kata','Kata nidan','Bunkaï']},
+ {uv:'⚙️ UV 4 – Technique de base', criteria:['Structure','Relâchement'], items:[
+  'Shadow']},
+ {uv:'🔥 UV 5 & 6 – Randori', criteria:['Adaptation','Endurance'], items:[
+  'Shadow randori']}
 ];
 
 let selection = JSON.parse(localStorage.getItem('selection')) || [];
-let sequence = [];
+let sequence = JSON.parse(localStorage.getItem('sequence')) || [];
+let note = localStorage.getItem('note') || '';
 
-let done = [];
-let currentIndex = 0;
-let remaining = 0;
+let current = 0;
 let timer = null;
-let running = false;
+let remaining = 0;
 
+/* ===== RENDER ===== */
 function render(){
   renderBank();
   renderSelection();
+  renderSequence();
+  renderEvaluation();
+  document.getElementById('note').value = note;
 }
-
 function renderBank(){
-  const b=document.getElementById('bank');
-  b.innerHTML='';
-  bank.forEach(ex=>{
-    const d=document.createElement('div');
-    d.className='exercise';
-    d.innerHTML=`${ex.uv} – ${ex.name} <button>➕</button>`;
-    d.querySelector('button').onclick=()=>{
-      selection.push({...ex});
-      localStorage.setItem('selection',JSON.stringify(selection));
-      render();
-    };
-    b.appendChild(d);
+  const bank = document.getElementById('bank');
+  bank.innerHTML='';
+  bankData.forEach(uv=>{
+    const div=document.createElement('div');
+    div.className='uv';
+    div.innerHTML=`<h3>${uv.uv}</h3>`;
+    uv.items.forEach(name=>{
+      const e=document.createElement('div');
+      e.className='exercise';
+      e.innerHTML=`<span>${name}</span>
+      <button onclick="addExercise('${name}','${uv.uv}')">➕</button>`;
+      div.appendChild(e);
+    });
+    bank.appendChild(div);
   });
 }
-
 function renderSelection(){
-  const list=document.getElementById('list');
-  list.innerHTML='';
+  const sel=document.getElementById('selection');
+  sel.innerHTML='';
   selection.forEach((ex,i)=>{
     const d=document.createElement('div');
     d.className='exercise';
     d.innerHTML=`
-      <span>${ex.uv} – ${ex.name}</span>
+      <span>${ex.name}</span>
       <div>
-        <button onclick="moveUp(${i})">⬆️</button>
-        <button onclick="moveDown(${i})">⬇️</button>
+        <button onclick="moveSel(${i},-1)">⬆️</button>
+        <button onclick="moveSel(${i},1)">⬇️</button>
         <button onclick="removeSel(${i})">❌</button>
       </div>`;
-    list.appendChild(d);
+    sel.appendChild(d);
   });
 }
-){
-  const list = document.getElementById('list');
-  list.innerHTML='';
-
+function renderSequence(){
+  const seq=document.getElementById('sequence');
+  seq.innerHTML='';
   sequence.forEach((ex,i)=>{
-    const div = document.createElement('div');
-    div.className='exercise';
-    if(done.includes(i)) div.classList.add('done');
-    if(i===currentIndex && running) div.classList.add('current');
-    div.draggable=true;
-    div.dataset.index=i;
-
-    div.innerHTML=`
-      <span>☰ ${ex.uv} – ${ex.name}</span>
-      <input class="slider" type="range" min="1" max="60" value="${ex.duration}">
-      <span>${ex.duration} min</span>`;
-
-    const slider = div.querySelector('input');
-    slider.oninput=()=>{
-      ex.duration=+slider.value;
-      div.querySelector('span:last-child').textContent=slider.value+' min';
-      persist();
-    };
-
-    div.addEventListener('dragstart',e=>{
-      e.dataTransfer.effectAllowed='move';
-      e.dataTransfer.setData('text/plain', i);
-    });
-    div.addEventListener('dragover',e=>{
-      e.preventDefault();
-      e.dataTransfer.dropEffect='move';
-    });
-    div.addEventListener('drop',e=>{
-      e.preventDefault();
-      const from = Number(e.dataTransfer.getData('text/plain'));
-      if (from === i) return;
-      const moved = sequence.splice(from,1)[0];
-      sequence.splice(i,0,moved);
-      persist();
-      render();
-    });
-    });
-
-    list.appendChild(div);
+    const d=document.createElement('div');
+    d.className='exercise '+(ex.done?'done':'')+(i===current?' active':'');
+    d.innerHTML=`
+      <span>${ex.name}</span>
+      <div>
+        <input type="range" min="1" max="60" value="${ex.duration}"
+          onchange="updateDuration(${i},this.value)">
+        <span>${ex.duration} min</span>
+      </div>`;
+    seq.appendChild(d);
   });
 }
-render();
-
-function speak(t){ const u=new SpeechSynthesisUtterance(t); u.lang='fr-FR'; speechSynthesis.speak(u); }
-
-function start(){ if(running) return; running=true; if(remaining===0) run(); else runTimer(); }
-
-function run(){
-  if(currentIndex>=sequence.length){ speak('Fin de séance'); stop(); return; }
-  const ex=sequence[currentIndex];
-  remaining=ex.duration*60;
-  speak(ex.name);
-  document.getElementById('beep').play();
-  runTimer();
+function renderEvaluation(){
+  const evalDiv=document.getElementById('evaluation');
+  evalDiv.innerHTML='';
+  const uvs=[...new Set(sequence.map(s=>s.uv))];
+  uvs.forEach(uv=>{
+    const u=bankData.find(b=>b.uv===uv);
+    if(!u) return;
+    const block=document.createElement('div');
+    block.className='uv';
+    block.innerHTML=`<h3>${uv}</h3>`;
+    u.criteria.forEach(c=>{
+      block.innerHTML+=`${c} 
+      <input type="range" min="1" max="5"><br>`;
+    });
+    evalDiv.appendChild(block);
+  });
 }
 
-function runTimer(){
+/* ===== ACTIONS ===== */
+function addExercise(name,uv){
+  selection.push({name,uv});
+  save();
+}
+function moveSel(i,d){
+  const n=i+d;
+  if(n<0||n>=selection.length)return;
+  [selection[i],selection[n]]=[selection[n],selection[i]];
+  save();
+}
+function removeSel(i){
+  selection.splice(i,1);
+  save();
+}
+function validateSelection(){
+  sequence = selection.map(e=>({...e,duration:5,done:false}));
+  selection=[];
+  current=0;
+  speak('Commençons la séance');
+  save();
+}
+function updateDuration(i,v){
+  sequence[i].duration=Number(v);
+  save();
+}
+
+/* ===== LECTURE ===== */
+function start(){
+  if(!sequence.length)return;
+  if(timer)return;
+  run();
+}
+function run(){
+  if(current>=sequence.length){
+    speak('Fin de l’entraînement, à bientôt');
+    return;
+  }
+  const ex=sequence[current];
+  ex.done=true;
+  remaining=ex.duration*60;
+  document.getElementById('beep').play();
+  speak(`Exercice ${current+1} ${ex.name}`);
   timer=setInterval(()=>{
     remaining--;
-    const ex=sequence[currentIndex];
-    document.getElementById('current').textContent=`${ex.name} – ${Math.floor(remaining/60)}:${String(remaining%60).padStart(2,'0')}`;
-    document.getElementById('fs').textContent=document.getElementById('current').textContent;
     if(remaining<=0){
-      clearInterval(timer);
+      clearInterval(timer); timer=null;
       document.getElementById('ding').play();
-      logTime(ex);
-      done.push(currentIndex);
-      currentIndex++; run();
+      current++;
+      render();
+      run();
     }
-    render();
   },1000);
 }
-
-function pause(){ clearInterval(timer); running=false; }
-function stop(){ clearInterval(timer); running=false; remaining=0; currentIndex=0; done=[]; render(); }
-
-function renderRatings(){
-  const r=document.getElementById('ratings');
-  r.innerHTML='';
-  const store=JSON.parse(localStorage.getItem('ratings-'+today))||{};
-
-  sequence.forEach(ex=>{
-    if(!uvCriteria[ex.uv]) return;
-    const box=document.createElement('div');
-    box.innerHTML=`<strong>${ex.uv}</strong><br>`;
-
-    uvCriteria[ex.uv].forEach(c=>{
-      const row=document.createElement('div');
-      row.className='emoji';
-      row.textContent=c+' ';
-      for(let i=1;i<=5;i++){
-        const b=document.createElement('button');
-        b.textContent = ['😐','🙂','😀','😃','🤩'][i-1];
-        if(store[ex.uv]?.[c]===i) b.classList.add('active');
-        b.onclick=()=>{
-          store[ex.uv]=store[ex.uv]||{};
-          store[ex.uv][c]=i;
-          localStorage.setItem('ratings-'+today,JSON.stringify(store));
-          renderRatings();
-        };
-        row.appendChild(b);
-      }
-      }
-      box.appendChild(row);
-    });
-    r.appendChild(box);
-  });
+function pause(){
+  clearInterval(timer); timer=null;
 }
-renderRatings();
-
-const note=document.getElementById('note');
-note.value=localStorage.getItem('note-'+today)||'';
-note.onblur=()=>localStorage.setItem('note-'+today,note.value);
-
-function logTime(ex){
-  const w=JSON.parse(localStorage.getItem('week-'+weekKey))||{};
-  w[ex.name]=(w[ex.name]||0)+ex.duration;
-  localStorage.setItem('week-'+weekKey,JSON.stringify(w));
-  renderGoals();
-renderWeekly();
-renderHistory();
-}
-
-function renderGoals(){
-  const g=document.getElementById('goals');
-  const store=JSON.parse(localStorage.getItem('goals'))||{};
-  g.innerHTML='';
-  Object.keys(uvCriteria).forEach(uv=>{
-    const v=store[uv]||60;
-    g.innerHTML+=`${uv} : <input type="number" value="${v}" min="0" style="width:60px"> min<br>`;
-  });
-  [...g.querySelectorAll('input')].forEach((inp,i)=>{
-    inp.onchange=()=>{
-      store[Object.keys(uvCriteria)[i]] = +inp.value;
-      localStorage.setItem('goals',JSON.stringify(store));
-    };
-  });
-}
-
-function renderWeekly(){
-  const w=JSON.parse(localStorage.getItem('week-'+weekKey))||{};
-  const d=document.getElementById('weekly');
-  d.innerHTML='';
-  Object.entries(w).forEach(([k,v])=>d.innerHTML+=`${k} : ${v} min<br>`);
-}
-renderWeekly();
-
-function renderHistory(){
-  const mode=document.getElementById('historyMode').value;
-  const h=document.getElementById('history');
-  h.innerHTML='';
-
-  if(mode==='day'){
-    Object.keys(localStorage).filter(k=>k.startsWith('week-')===false && k.startsWith('ratings-')===false && k.startsWith('note-')).forEach(k=>{});
-    Object.keys(localStorage).filter(k=>k.startsWith('week-')).forEach(()=>{});
-
-    Object.keys(localStorage).filter(k=>k.startsWith('note-')).forEach(k=>{
-      const d=k.replace('note-','');
-      h.innerHTML+=`<strong>${d}</strong><br>${localStorage.getItem(k)||''}<br><br>`;
-    });
-  }
-
-  if(mode==='week'){
-    Object.keys(localStorage).filter(k=>k.startsWith('week-')).forEach(k=>{
-      const data=JSON.parse(localStorage.getItem(k));
-      h.innerHTML+=`<strong>${k.replace('week-','')}</strong><br>`;
-      Object.entries(data).forEach(([ex,v])=>h.innerHTML+=`${ex} : ${v} min<br>`);
-      h.innerHTML+='<br>';
-    });
-  }
-}
-
-function validateSelection(){
-  sequence = selection.map(ex=>({...ex, duration:5}));
-  localStorage.setItem('sequence',JSON.stringify(sequence));
-  selection = [];
-  localStorage.removeItem('selection');
+function stop(){
+  clearInterval(timer); timer=null;
+  current=0;
+  sequence.forEach(e=>e.done=false);
   render();
-  alert('Sélection validée. Réglez maintenant les durées.');
 }
 
-function moveUp(i){ if(i===0) return; [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; persistSel(); }
-function moveDown(i){ if(i===selection.length-1) return; [selection[i+1],selection[i]]=[selection[i],selection[i+1]]; persistSel(); }
-function removeSel(i){ selection.splice(i,1); persistSel(); }
-function persistSel(){ localStorage.setItem('selection',JSON.stringify(selection)); render(); }
-
-function persist(){ localStorage.setItem('sequence',JSON.stringify(sequence)); }
-
-function toggleFull(){
-  const f=document.getElementById('fs');
-  f.style.display = f.style.display==='none' ? 'flex' : 'none';
+/* ===== UTILS ===== */
+function speak(t){
+  synth.cancel();
+  synth.speak(new SpeechSynthesisUtterance(t));
+}
+function save(){
+  localStorage.setItem('selection',JSON.stringify(selection));
+  localStorage.setItem('sequence',JSON.stringify(sequence));
+  localStorage.setItem('note',document.getElementById('note').value);
+  render();
 }
 
-function getWeek(){
-  const d=new Date(); d.setHours(0,0,0,0);
-  d.setDate(d.getDate()+4-(d.getDay()||7));
-  const y=new Date(d.getFullYear(),0,1);
-  return Math.ceil((((d-y)/86400000)+1)/7);
-}
+document.getElementById('note').addEventListener('blur',save);
+render();
 </script>
 </body>
 </html>
