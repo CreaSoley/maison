@@ -70,8 +70,12 @@ h1 { text-align:center; }
 <h1>🥋 Coach Tai Jitsu – Passage 2e Dan</h1>
 <div class="container">
 
-<h3>📋 Séquence</h3>
+<h3>📋 Banque d’exercices</h3>
+<div id="bank"></div>
+
+<h3>🧩 Sélection de séance</h3>
 <div id="list"></div>
+<button onclick="validateSelection()">✅ Valider la sélection</button>
 
 <div class="controls">
   <button onclick="start()">▶️</button>
@@ -135,31 +139,23 @@ const uvCriteria = {
   'UV6':['Adaptation 🔄','Endurance 🫁']
 };
 
-let sequence = JSON.parse(localStorage.getItem('sequence')) || [
-  // UV1 – Kihon
-  {uv:'UV1', name:'Kihon simple', duration:5},
-  {uv:'UV1', name:'Enchaînement de kihon', duration:5},
-  {uv:'UV1', name:'Cibles', duration:5},
-
-  // UV2 – Déplacements
-  {uv:'UV2', name:'Taï sabaki', duration:5},
-  {uv:'UV2', name:'Slow ippon', duration:5},
-  {uv:'UV2', name:'Ippon kumite', duration:5},
-
-  // UV3 – Kata
-  {uv:'UV3', name:'Slow kata', duration:5},
-  {uv:'UV3', name:'Kata nidan', duration:5},
-  {uv:'UV3', name:'Bunkaï', duration:5},
-
-  // UV4 – Techniques de base
-  {uv:'UV4', name:'Shadow', duration:5},
-
-  // UV5 – Randori
-  {uv:'UV5', name:'Shadow randori', duration:5},
-
-  // UV6 – Randori avancé
-  {uv:'UV6', name:'Randori libre', duration:5}
+const bank = [
+  {uv:'UV1', name:'Kihon simple'},
+  {uv:'UV1', name:'Enchaînement de kihon'},
+  {uv:'UV1', name:'Cibles'},
+  {uv:'UV2', name:'Taï sabaki'},
+  {uv:'UV2', name:'Slow ippon'},
+  {uv:'UV2', name:'Ippon kumite'},
+  {uv:'UV3', name:'Slow kata'},
+  {uv:'UV3', name:'Kata nidan'},
+  {uv:'UV3', name:'Bunkaï'},
+  {uv:'UV4', name:'Shadow'},
+  {uv:'UV5', name:'Shadow randori'},
+  {uv:'UV6', name:'Randori libre'}
 ];
+
+let selection = JSON.parse(localStorage.getItem('selection')) || [];
+let sequence = [];
 
 let done = [];
 let currentIndex = 0;
@@ -168,6 +164,43 @@ let timer = null;
 let running = false;
 
 function render(){
+  renderBank();
+  renderSelection();
+}
+
+function renderBank(){
+  const b=document.getElementById('bank');
+  b.innerHTML='';
+  bank.forEach(ex=>{
+    const d=document.createElement('div');
+    d.className='exercise';
+    d.innerHTML=`${ex.uv} – ${ex.name} <button>➕</button>`;
+    d.querySelector('button').onclick=()=>{
+      selection.push({...ex});
+      localStorage.setItem('selection',JSON.stringify(selection));
+      render();
+    };
+    b.appendChild(d);
+  });
+}
+
+function renderSelection(){
+  const list=document.getElementById('list');
+  list.innerHTML='';
+  selection.forEach((ex,i)=>{
+    const d=document.createElement('div');
+    d.className='exercise';
+    d.innerHTML=`
+      <span>${ex.uv} – ${ex.name}</span>
+      <div>
+        <button onclick="moveUp(${i})">⬆️</button>
+        <button onclick="moveDown(${i})">⬇️</button>
+        <button onclick="removeSel(${i})">❌</button>
+      </div>`;
+    list.appendChild(d);
+  });
+}
+){
   const list = document.getElementById('list');
   list.innerHTML='';
 
@@ -343,6 +376,20 @@ function renderHistory(){
     });
   }
 }
+
+function validateSelection(){
+  sequence = selection.map(ex=>({...ex, duration:5}));
+  localStorage.setItem('sequence',JSON.stringify(sequence));
+  selection = [];
+  localStorage.removeItem('selection');
+  render();
+  alert('Sélection validée. Réglez maintenant les durées.');
+}
+
+function moveUp(i){ if(i===0) return; [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; persistSel(); }
+function moveDown(i){ if(i===selection.length-1) return; [selection[i+1],selection[i]]=[selection[i],selection[i+1]]; persistSel(); }
+function removeSel(i){ selection.splice(i,1); persistSel(); }
+function persistSel(){ localStorage.setItem('selection',JSON.stringify(selection)); render(); }
 
 function persist(){ localStorage.setItem('sequence',JSON.stringify(sequence)); }
 
