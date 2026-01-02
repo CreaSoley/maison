@@ -1,319 +1,239 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>🥋 Entraînement Karaté</title>
-
-<style>
-:root{
- --grad:linear-gradient(120deg,#84fab0,#8fd3f4);
-}
-body{margin:0;font-family:system-ui;background:#f5f5f5}
-header{text-align:center;padding:14px;background:var(--grad)}
-.container{padding:16px;max-width:900px;margin:auto}
-
-button{
- padding:12px 18px;border:none;border-radius:18px;
- margin:6px;font-size:16px;
- box-shadow:0 4px 8px rgba(0,0,0,.2)
-}
-.primary{background:#84fab0}
-.warn{background:#ffd86f}
-.danger{background:#ff8a8a}
-
-ul{list-style:none;padding:0}
-li{
- background:white;margin:10px 0;padding:14px;
- border-radius:16px;
- box-shadow:0 4px 10px rgba(0,0,0,.15)
-}
-.active{border:3px solid #84fab0}
-.done{opacity:.5;text-decoration:line-through}
-
-.progress{height:8px;background:#eee;border-radius:8px;margin-top:6px}
-.progress div{height:100%;background:var(--grad)}
-
-.timeline{height:14px;background:#ddd;border-radius:10px}
-.timeline div{height:100%;background:var(--grad)}
-
-.modal{
- position:fixed;inset:0;
- background:rgba(0,0,0,.5);
- display:none;
- align-items:center;
- justify-content:center;
- z-index:9999
-}
-.card{
- background:white;border-radius:18px;
- padding:18px;width:90%;max-width:520px;
- max-height:90%;overflow:auto
-}
-
-.smile{font-size:26px;cursor:pointer;padding:6px}
-.smile.active{transform:scale(1.3)}
-
-canvas{max-width:100%}
-textarea{width:100%}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach Tai Jitsu – 2e Dan</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+    }
+    h1 {
+      text-align: center;
+      padding: 1rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 1rem;
+    }
+    .uv {
+      background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+      border-radius: 20px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    .uv h2 {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .exercise {
+      background: #fff;
+      border-radius: 15px;
+      padding: .75rem;
+      margin: .5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    }
+    .exercise.dragging { opacity: .5; }
+    .controls button {
+      border: none;
+      border-radius: 50px;
+      padding: .6rem 1.2rem;
+      margin: .2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,.2);
+    }
+    .controls button.active {
+      background: #84fab0;
+      color: #000;
+    }
+    .status {
+      background: #fff;
+      border-radius: 20px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 6px 12px rgba(0,0,0,.15);
+    }
+    .highlight {
+      background: #ffe0f0 !important;
+    }
+    textarea {
+      width: 100%;
+      border-radius: 15px;
+      padding: .75rem;
+      border: none;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,.15);
+    }
+  </style>
 </head>
-
 <body>
+<h1>🥋 Coach Tai Jitsu – Passage 2e Dan</h1>
+<div class="container" id="app"></div>
 
-<header>
-<h1>🥋 Carnet d’entraînement</h1>
-<p id="stateLabel">⏹ Inactif</p>
-</header>
-
-<div class="container">
-
-<button class="primary" onclick="start()">▶ Start / Reprendre</button>
-<button class="warn" onclick="pause()">⏸ Pause</button>
-<button class="danger" onclick="stop()">⏹ Stop</button>
-<button onclick="openEval()">📝 Auto-évaluation</button>
-
-<h3>Progression globale</h3>
-<div class="timeline"><div id="global"></div></div>
-
-<ul id="program"></ul>
-
-<h3>📊 Radar (7 jours)</h3>
-<canvas id="radar" width="320" height="320"></canvas>
-
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="evalModal">
- <div class="card">
-  <h2>📝 Auto-évaluation</h2>
-  <div id="evalContent"></div>
-
-  <h4>💬 Commentaire</h4>
-  <textarea id="comment" rows="3"></textarea>
-
-  <button class="primary" onclick="saveEval()">💾 Enregistrer</button>
-  <button onclick="closeEval()">Fermer</button>
- </div>
-</div>
+<audio id="beep" src="beep.mp3"></audio>
+<audio id="ding" src="ding.mp3"></audio>
 
 <script>
-/* ========= CONFIG ========= */
-const UV={
- Kihon:["distance","kime","précision","posture","rythme"],
- Kata:["précision","équilibre","fluidité","kime","regard"],
- Randori:["distance","timing","tai sabaki","engagement","lucidité"]
-};
-const synth=speechSynthesis;
+const synth = window.speechSynthesis;
 
-/* ========= STATE ========= */
-let trainingState="idle"; // idle | running | paused | finished
-let timer=null;
-let index=0;
-let remaining=0;
-
-let exercises=[
- {name:"Kihon",uv:"Kihon",duration:10,progress:0,done:false},
- {name:"Kata",uv:"Kata",duration:8,progress:0,done:false},
- {name:"Randori",uv:"Randori",duration:8,progress:0,done:false}
+const data = JSON.parse(localStorage.getItem('tj-exercises')) || [
+  { uv: '🥋 UV 1 – Kihon', items: [
+    { name: 'Kihon simple', duration: 15 },
+    { name: 'Enchaînement de kihon', duration: 20 },
+    { name: 'Cibles', duration: 10 }
+  ]},
+  { uv: '🌀 UV 2 – Déplacements', items: [
+    { name: 'Taï sabaki', duration: 10 },
+    { name: 'Slow ippon', duration: 10 },
+    { name: 'Ippon kumite', duration: 10 }
+  ]},
+  { uv: '📐 UV 3 – Kata', items: [
+    { name: 'Slow kata', duration: 10 },
+    { name: 'Kata nidan', duration: 10 },
+    { name: 'Bunkaï', duration: 5 }
+  ]},
+  { uv: '⚙️ UV 4 – Technique de base', items: [
+    { name: 'Shadow', duration: 10 }
+  ]},
+  { uv: '🔥 UV 5 & 6 – Randori', items: [
+    { name: 'Shadow randori', duration: 10 }
+  ]}
 ];
 
-/* ========= INIT ========= */
-render();updateLabel();drawRadar();
+let sequence = [];
+let currentIndex = 0;
+let timer = null;
+let remaining = 0;
 
-/* ========= CORE ========= */
-function start(){
- if(trainingState==="running") return;
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  data.forEach((uv, uvi) => {
+    const block = document.createElement('div');
+    block.className = 'uv';
+    block.innerHTML = `<h2>${uv.uv}</h2>`;
+    uv.items.forEach((ex, exi) => {
+      const div = document.createElement('div');
+      div.className = 'exercise';
+      div.draggable = true;
+      div.innerHTML = `
+        <span>${ex.name}</span>
+        <input type="range" min="1" max="60" value="${ex.duration}" 
+          oninput="this.nextElementSibling.textContent=this.value+' min'; data[${uvi}].items[${exi}].duration=this.value; save();" />
+        <span>${ex.duration} min</span>`;
+      block.appendChild(div);
+    });
+    app.appendChild(block);
+  });
 
- if(trainingState==="finished"){
-  resetTraining();
- }
+  const controls = document.createElement('div');
+  controls.className = 'controls';
+  controls.innerHTML = `
+    <button onclick="start()">▶️ Lecture</button>
+    <button onclick="pause()">⏸ Pause</button>
+    <button onclick="stop()">⏹ Stop</button>
+    <button onclick="exportCSV()">💾 Export CSV</button>`;
+  app.appendChild(controls);
 
- trainingState="running";
- updateLabel();
- runCurrent();
+  const status = document.createElement('div');
+  status.className = 'status';
+  status.innerHTML = `
+    <h3>📍 Suivi de séance</h3>
+    <div id="current"></div>
+    <h4>📝 Carnet de notes</h4>
+    <textarea rows="4" placeholder="Ressenti du jour..." onblur="saveNote(this.value)">${localStorage.getItem('tj-note')||''}</textarea>
+    <h4>⭐ Évaluation</h4>
+    Kime 💥 <input type="range" min="1" max="5" />
+    Zanshin 👀 <input type="range" min="1" max="5" />
+    Réactivité ⚡ <input type="range" min="1" max="5" />
+  `;
+  app.appendChild(status);
 }
 
-function runCurrent(){
- if(index>=exercises.length){
-  trainingState="finished";
-  updateLabel();
-  speak("Fin de l'entraînement");
-  return;
- }
+function speak(text, delay=0) {
+  setTimeout(() => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'fr-FR';
+    synth.speak(u);
+  }, delay);
+}
 
- const ex=exercises[index];
- if(!remaining){
-  remaining=ex.duration*60*(1-ex.progress/100);
-  speak(ex.name);
- }
+function buildSequence() {
+  sequence = [];
+  data.forEach(uv => uv.items.forEach(ex => sequence.push(ex)));
+}
 
- timer=setInterval(()=>{
-  remaining--;
-  ex.progress=100*(1-remaining/(ex.duration*60));
-  render();
-  updateGlobal();
+function start() {
+  buildSequence();
+  currentIndex = 0;
+  speak('Commençons la séance');
+  setTimeout(runExercise, 1000);
+}
 
-  if(remaining<=0){
-   clearInterval(timer);
-   timer=null;
-   remaining=0;
-   ex.done=true;
-   speak("Fin de l'exercice");
-   index++;
-   runCurrent();
+function runExercise() {
+  if (currentIndex >= sequence.length) {
+    speak("Fin de l'entraînement, à bientôt !");
+    return;
   }
- },1000);
+  const ex = sequence[currentIndex];
+  document.getElementById('beep').play();
+  speak(`Exercice ${currentIndex+1} : ${ex.name}`);
+  remaining = ex.duration * 60;
+  updateStatus(ex);
+  timer = setInterval(() => {
+    remaining--;
+    updateStatus(ex);
+    if (remaining <= 0) {
+      clearInterval(timer);
+      document.getElementById('ding').play();
+      speak('Fin de l\'exercice');
+      currentIndex++;
+      setTimeout(runExercise, 1000);
+    }
+  }, 1000);
 }
 
-function pause(){
- if(timer){clearInterval(timer);timer=null}
- synth.cancel();
- trainingState="paused";
- updateLabel();
+function updateStatus(ex) {
+  document.getElementById('current').innerText = `${ex.name} – Temps restant : ${Math.floor(remaining/60)}:${String(remaining%60).padStart(2,'0')}`;
 }
 
-function stop(){
- pause();
- trainingState="idle";
- index=0;
- remaining=0;
- exercises.forEach(e=>{e.progress=0;e.done=false});
- render();updateGlobal();updateLabel();
+function pause() {
+  clearInterval(timer);
 }
 
-function resetTraining(){
- index=0;
- remaining=0;
- exercises.forEach(e=>{e.progress=0;e.done=false});
+function stop() {
+  clearInterval(timer);
+  currentIndex = 0;
+  document.getElementById('current').innerText = 'Séance arrêtée';
 }
 
-/* ========= AUTO-EVAL ========= */
-function openEval(){
- pause();
-
- const modal=document.getElementById("evalModal");
- const c=document.getElementById("evalContent");
- const com=document.getElementById("comment");
- c.innerHTML="";com.value="";
-
- const done=exercises.filter(e=>e.done);
- if(!done.length){
-  c.innerHTML="<p>Aucun exercice terminé.</p>";
-  modal.style.display="flex";
-  return;
- }
-
- const data=loadEval();
- const today=data[todayKey()]||{exercises:{},comment:""};
- com.value=today.comment||"";
-
- done.forEach(ex=>{
-  c.innerHTML+=`<h4>${ex.name}</h4>`;
-  UV[ex.uv].forEach(cr=>{
-   c.innerHTML+=`<div>${cr} : `;
-   [1,2,3,4,5].forEach(v=>{
-    const a=today.exercises?.[ex.name]?.[cr]===v?"active":"";
-    c.innerHTML+=`<span class="smile ${a}" data-ex="${ex.name}" data-cr="${cr}" data-v="${v}">
-     ${["😞","😐","🙂","😄","🔥"][v-1]}</span>`;
-   });
-   c.innerHTML+="</div>";
-  });
-  c.innerHTML+="<hr>";
- });
-
- document.querySelectorAll(".smile").forEach(s=>{
-  s.onclick=()=>{
-   s.parentNode.querySelectorAll(".smile").forEach(x=>x.classList.remove("active"));
-   s.classList.add("active");
-  };
- });
-
- modal.style.display="flex";
+function exportCSV() {
+  let csv = 'Exercice;Durée (min)\n';
+  sequence.forEach(e => csv += `${e.name};${e.duration}\n`);
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'entrainement_taijitsu.csv';
+  a.click();
 }
 
-function saveEval(){
- const data=loadEval();
- const d=todayKey();
- if(!data[d]) data[d]={exercises:{},comment:""};
-
- document.querySelectorAll(".smile.active").forEach(s=>{
-  const ex=s.dataset.ex,cr=s.dataset.cr,v=+s.dataset.v;
-  data[d].exercises[ex]=data[d].exercises[ex]||{};
-  data[d].exercises[ex][cr]=v;
- });
-
- data[d].comment=document.getElementById("comment").value;
- localStorage.setItem("evals",JSON.stringify(data));
- closeEval();drawRadar();
+function save() {
+  localStorage.setItem('tj-exercises', JSON.stringify(data));
+}
+function saveNote(v) {
+  localStorage.setItem('tj-note', v);
 }
 
-function closeEval(){
- document.getElementById("evalModal").style.display="none";
-}
-
-/* ========= UI ========= */
-function render(){
- const ul=document.getElementById("program");
- ul.innerHTML="";
- exercises.forEach((e,i)=>{
-  ul.innerHTML+=`
-   <li class="${i===index?"active":""} ${e.done?"done":""}">
-    <strong>${e.name}</strong>
-    <div class="progress"><div style="width:${e.progress}%"></div></div>
-   </li>`;
- });
-}
-function updateGlobal(){
- const t=exercises.reduce((a,e)=>a+e.duration,0);
- const d=exercises.reduce((a,e)=>a+e.duration*(e.progress/100),0);
- document.getElementById("global").style.width=(d/t*100)+"%";
-}
-function updateLabel(){
- const map={
-  idle:"⏹ Inactif",
-  running:"▶ En cours",
-  paused:"⏸ En pause",
-  finished:"✅ Terminé"
- };
- document.getElementById("stateLabel").innerText=map[trainingState];
-}
-
-/* ========= RADAR ========= */
-function drawRadar(){
- const c=document.getElementById("radar");
- const ctx=c.getContext("2d");
- ctx.clearRect(0,0,320,320);
-
- const data=loadEval();
- const acc={};
- Object.values(data).forEach(d=>{
-  Object.values(d.exercises||{}).forEach(ex=>{
-   Object.entries(ex).forEach(([k,v])=>{
-    acc[k]=acc[k]||[];acc[k].push(v);
-   });
-  });
- });
-
- const keys=Object.keys(acc);
- if(!keys.length) return;
-
- const cx=160,cy=160,r=120;
- keys.forEach((k,i)=>{
-  const a=2*Math.PI/keys.length*i-Math.PI/2;
-  const avg=acc[k].reduce((a,b)=>a+b)/acc[k].length;
-  ctx.beginPath();
-  ctx.moveTo(cx,cy);
-  ctx.lineTo(cx+Math.cos(a)*r*avg/5,cy+Math.sin(a)*r*avg/5);
-  ctx.stroke();
-  ctx.fillText(k,cx+Math.cos(a)*(r+8),cy+Math.sin(a)*(r+8));
- });
-}
-
-/* ========= UTILS ========= */
-function speak(t){synth.cancel();synth.speak(new SpeechSynthesisUtterance(t))}
-function todayKey(){return new Date().toISOString().slice(0,10)}
-function loadEval(){return JSON.parse(localStorage.getItem("evals")||"{}")}
+render();
 </script>
 </body>
 </html>
