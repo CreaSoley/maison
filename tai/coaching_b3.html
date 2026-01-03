@@ -4,75 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coach Tai Jitsu – Séance + Entraînement</title>
-
 <style>
-body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
-  background: linear-gradient(to right, #ffecd2, #fcb69f);
-}
-h1 { text-align: center; padding: 1rem; }
-
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.panel {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1rem;
-  box-shadow: 0 6px 14px rgba(0,0,0,.15);
-}
-
-.uv { margin-bottom: 1rem; }
-
-.exercise {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: .5rem .7rem;
-  border-radius: 10px;
-  margin: .3rem 0;
-  background: #f5f5f5;
-}
-
-.exercise.selected { background: #d1f5d3; }
-.exercise.active { background: #ffe8b3; }
-.exercise.done { text-decoration: line-through; opacity: .6; }
-
-.exercise button { border: none; border-radius: 8px; padding: .3rem .6rem; cursor: pointer; font-size: 1rem; }
-
-.controls { margin-top: .8rem; display: flex; gap: .5rem; flex-wrap: wrap; }
-
-input[type=text] { width: 100%; padding: .6rem; border-radius: 10px; border: 1px solid #ccc; margin-bottom: .5rem; }
-
-#progress { width: 100%; height: 16px; margin-top: .8rem; }
-
-/* Overlay plein écran exercice */
-#trainingOverlay {
-  display: none; /* caché par défaut */
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(to right, #84fab0, #8fd3f4);
-  z-index: 999;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #000;
-  font-family: system-ui, sans-serif;
-}
-#trainingOverlay h1 { font-size: 3rem; margin-bottom: 1rem; }
-#trainingOverlay #timer { font-size: 4rem; margin-bottom: 1rem; }
-#trainingOverlay progress { width: 80%; height: 24px; }
+body { font-family: system-ui,sans-serif; margin:0; background:linear-gradient(to right,#ffecd2,#fcb69f);}
+h1 { text-align:center; padding:1rem; }
+.container { max-width:1100px; margin:auto; padding:1rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem;}
+.panel { background:#fff; border-radius:16px; padding:1rem; box-shadow:0 6px 14px rgba(0,0,0,.15);}
+.uv { margin-bottom:1rem; }
+.exercise { display:flex; justify-content:space-between; align-items:center; padding:.5rem .7rem; border-radius:10px; margin:.3rem 0; background:#f5f5f5;}
+.exercise.selected { background:#d1f5d3; }
+.exercise.active { background:#ffe8b3; }
+.exercise.done { text-decoration:line-through; opacity:.6; }
+.exercise button { border:none; border-radius:8px; padding:.3rem .6rem; cursor:pointer; font-size:1rem; }
+.controls { margin-top:.8rem; display:flex; gap:.5rem; flex-wrap:wrap; }
+input[type=text] { width:100%; padding:.6rem; border-radius:10px; border:1px solid #ccc; margin-bottom:.5rem; }
+input[type=range]{ width:120px; margin-left:.5rem; }
+#progress { width:100%; height:16px; margin-top:.8rem; }
+/* Overlay plein écran */
+#trainingOverlay { display:none; position:fixed; inset:0; background:linear-gradient(to right,#84fab0,#8fd3f4); z-index:999; flex-direction:column; justify-content:center; align-items:center; color:#000; font-family:system-ui,sans-serif;}
+#trainingOverlay h1 { font-size:3rem; margin-bottom:1rem; }
+#trainingOverlay #timer { font-size:4rem; margin-bottom:1rem; }
+#trainingOverlay progress { width:80%; height:24px; }
 #trainingOverlay button { margin-top:2rem;padding:1rem 2rem;font-size:1.2rem;border-radius:12px; cursor:pointer; }
+textarea { width:100%; border-radius:12px; padding:.6rem; margin-top:.5rem; }
 </style>
 </head>
-
 <body>
 <h1>🥋 Coach Tai Jitsu – Séance + Entraînement</h1>
 
@@ -88,10 +43,13 @@ input[type=text] { width: 100%; padding: .6rem; border-radius: 10px; border: 1px
     <h2>📝 Séance sélectionnée</h2>
     <input type="text" id="sessionName" placeholder="Nom de la séance">
     <div id="selection"></div>
+    <label>Carnet de notes :</label>
+    <textarea id="notes" rows="3" placeholder="Ressenti du jour..."></textarea>
     <div class="controls">
       <button onclick="saveSession()">💾 Sauvegarder la séance</button>
       <button onclick="clearSelection()">🧹 Vider la sélection</button>
       <button onclick="startSession()">▶️ Commencer entraînement</button>
+      <button onclick="toggleFullscreen()">📱 Plein écran</button>
     </div>
     <progress id="progress" value="0" max="100"></progress>
   </div>
@@ -102,7 +60,7 @@ input[type=text] { width: 100%; padding: .6rem; border-radius: 10px; border: 1px
   <h1 id="exerciseName">Exercice</h1>
   <div id="timer">00:00</div>
   <progress id="sessionProgress" value="0" max="100"></progress>
-  <button onclick="endTraining()">❌ Quitter l'entraînement</button>
+  <button onclick="toggleFullscreen()">❌ Quitter plein écran</button>
 </div>
 
 <audio id="beep" src="beep.mp3"></audio>
@@ -117,26 +75,19 @@ const bankData = [
   { uv:'⚙️ UV 4 – Technique de base', items:['Shadow'] },
   { uv:'🔥 UV 5 & 6 – Randori', items:['Randori shadow'] }
 ];
-
-/* --------- ÉTAT --------- */
 let selection = JSON.parse(localStorage.getItem('tj-selection')) || [];
 let sessions  = JSON.parse(localStorage.getItem('tj-sessions')) || {};
-
-let seqIndex = 0;
-let timer = null;
+let seqIndex = 0, timer = null;
+let fullscreen=false;
 
 /* --------- RENDER BANQUE --------- */
 function renderBank(){
-  const bank = document.getElementById('bank');
-  bank.innerHTML='';
+  const bank=document.getElementById('bank'); bank.innerHTML='';
   bankData.forEach(u=>{
-    const div = document.createElement('div');
-    div.className='uv';
-    div.innerHTML = `<h3>${u.uv}</h3>`;
+    const div=document.createElement('div'); div.className='uv'; div.innerHTML=`<h3>${u.uv}</h3>`;
     u.items.forEach(name=>{
-      const ex = document.createElement('div');
-      ex.className='exercise';
-      ex.innerHTML = `<span>${name}</span> <button onclick="addExercise('${u.uv}','${name}')">➕</button>`;
+      const ex=document.createElement('div'); ex.className='exercise';
+      ex.innerHTML=`<span>${name}</span> <button onclick="addExercise('${u.uv}','${name}')">➕</button>`;
       div.appendChild(ex);
     });
     bank.appendChild(div);
@@ -145,15 +96,15 @@ function renderBank(){
 
 /* --------- RENDER SÉLECTION --------- */
 function renderSelection(){
-  const sel = document.getElementById('selection');
-  sel.innerHTML='';
-  if(selection.length===0){ sel.innerHTML='<em>Aucun exercice sélectionné</em>'; return; }
+  const sel=document.getElementById('selection'); sel.innerHTML='';
+  if(selection.length===0){ sel.innerHTML='<em>Aucun exercice sélectionné</em>'; return;}
   selection.forEach((ex,i)=>{
-    const d = document.createElement('div');
-    d.className='exercise selected';
-    d.innerHTML = `
+    const d=document.createElement('div'); d.className='exercise selected';
+    d.innerHTML=`
       <span>${ex.uv} – ${ex.name}</span>
       <div>
+        <input type="range" min="1" max="60" value="${ex.duration}" oninput="updateDuration(${i},this.value)">
+        <span>${ex.duration} min</span>
         <button onclick="moveUp(${i})">⬆️</button>
         <button onclick="moveDown(${i})">⬇️</button>
         <button onclick="removeExercise(${i})">❌</button>
@@ -162,65 +113,58 @@ function renderSelection(){
   });
 }
 
-/* --------- ACTIONS SÉLECTION --------- */
+function updateDuration(i,val){ selection[i].duration=parseInt(val); saveSelection(); }
+
 function addExercise(uv,name){ selection.push({uv,name,duration:5}); saveSelection(); }
 function removeExercise(i){ selection.splice(i,1); saveSelection(); }
 function moveUp(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection(); }}
-function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i+1],selection[i]]=[selection[i+1],selection[i]]; saveSelection(); }}
+function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i+1],selection[i]]; saveSelection(); }}
 function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(selection)); renderSelection(); }
 function clearSelection(){ if(confirm('Vider la sélection ?')){ selection=[]; saveSelection(); } }
-function saveSession(){ const name=document.getElementById('sessionName').value.trim(); if(!name){alert('Nom obligatoire'); return;} sessions[name]=[...selection]; localStorage.setItem('tj-sessions',JSON.stringify(sessions)); alert('Séance sauvegardée ✔️'); }
+
+function saveSession(){
+  const name=document.getElementById('sessionName').value.trim();
+  if(!name){ alert('Nom obligatoire'); return; }
+  sessions[name]={exercises:[...selection], notes:document.getElementById('notes').value};
+  localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+  alert('Séance sauvegardée ✔️');
+}
 
 /* --------- SYNTHÈSE VOCALE & ENTRAÎNEMENT --------- */
 function speak(txt,cb){ const u=new SpeechSynthesisUtterance(txt); u.onend=cb; speechSynthesis.speak(u); }
 
 function startSession(){
-  if(selection.length===0){ alert('Sélectionnez des exercices'); return; }
+  if(selection.length===0){ alert('Sélectionnez des exercices'); return;}
   seqIndex=0;
-  document.getElementById('trainingOverlay').style.display='flex';
-  speak("Commençons l'entraînement", ()=>setTimeout(nextExercise,1000));
+  nextExercise();
 }
 
-function endTraining(){
-  clearInterval(timer);
-  document.getElementById('trainingOverlay').style.display='none';
-  seqIndex=0;
-  renderSelection();
-  document.getElementById('progress').value=0;
-  speechSynthesis.cancel();
+function toggleFullscreen(){
+  fullscreen=!fullscreen;
+  document.getElementById('trainingOverlay').style.display=fullscreen?'flex':'none';
 }
 
 function nextExercise(){
-  if(seqIndex>=selection.length){
-    speak("Entraînement terminé, à bientôt !");
-    endTraining();
-    return;
-  }
-
-  const ex = selection[seqIndex];
-  const timerEl = document.getElementById('timer');
-  const progressEl = document.getElementById('sessionProgress');
-  document.getElementById('exerciseName').textContent = ex.name;
-
+  if(seqIndex>=selection.length){ speak("Entraînement terminé, à bientôt !"); return; }
+  const ex=selection[seqIndex];
+  const timerEl=document.getElementById('timer');
+  const progressEl=document.getElementById('sessionProgress');
+  document.getElementById('exerciseName').textContent=ex.name;
   updateState();
-
-  speak(`Exercice ${seqIndex+1} : ${ex.name}`, ()=>{
+  speak(`Exercice ${seqIndex+1} : ${ex.name}`,()=>{
     setTimeout(()=>{
       document.getElementById('beep').play();
-      let t = ex.duration*60;
-      timerEl.textContent = formatTime(t);
-
-      timer = setInterval(()=>{
+      let t=ex.duration*60;
+      timerEl.textContent=formatTime(t);
+      timer=setInterval(()=>{
         t--;
-        timerEl.textContent = formatTime(t);
-        progressEl.value = ((seqIndex + (ex.duration*60 - t)/(ex.duration*60))/selection.length)*100;
-
+        timerEl.textContent=formatTime(t);
+        progressEl.value=((seqIndex+(ex.duration*60-t)/(ex.duration*60))/selection.length)*100;
         if(t<=0){
           clearInterval(timer);
           document.getElementById('ding').play();
-          speak("Fin de l'exercice", ()=>{
-            seqIndex++;
-            setTimeout(nextExercise,1000);
+          speak("Fin de l'exercice",()=>{
+            seqIndex++; setTimeout(nextExercise,1000);
           });
         }
       },1000);
@@ -230,16 +174,12 @@ function nextExercise(){
 
 function updateState(){
   document.querySelectorAll('#selection .exercise').forEach((e,i)=>{
-    e.classList.toggle('active', i===seqIndex);
-    e.classList.toggle('done', i<seqIndex);
+    e.classList.toggle('active',i===seqIndex);
+    e.classList.toggle('done',i<seqIndex);
   });
 }
 
-function formatTime(sec){
-  const m = Math.floor(sec/60);
-  const s = sec%60;
-  return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-}
+function formatTime(sec){ const m=Math.floor(sec/60); const s=sec%60; return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
 
 /* --------- INIT --------- */
 renderBank();
