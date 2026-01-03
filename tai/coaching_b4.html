@@ -50,7 +50,7 @@ label{ font-weight:bold; display:block; margin-top:.5rem; }
     <label>Carnet de notes :</label>
     <textarea id="notes" rows="3" placeholder="Ressenti du jour..."></textarea>
     <div class="controls">
-      <button onclick="saveSession()">💾 Sauvegarder la séance</button>
+      <button onclick="saveSelection()">💾 Sauvegarder la sélection</button>
       <button onclick="clearSelection()">🧹 Vider la sélection</button>
       <button onclick="startSession()">▶️ Commencer entraînement</button>
       <button onclick="toggleFullscreen()">📱 Plein écran</button>
@@ -94,6 +94,7 @@ const bankData = [
 let selection = JSON.parse(localStorage.getItem('tj-selection')) || [];
 let sessions  = JSON.parse(localStorage.getItem('tj-sessions')) || {};
 let seqIndex = 0, timer=null, fullscreen=false;
+let currentSessionName = "";
 
 /* ------------------ RENDER BANQUE ------------------ */
 function renderBank(){
@@ -139,12 +140,13 @@ function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[s
 function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(selection)); renderSelection(); }
 function clearSelection(){ if(confirm('Vider la sélection ?')){ selection=[]; saveSelection(); } }
 
-function saveSession(){
+/* ------------------ SAUVEGARDE DE SÉANCE ------------------ */
+function saveSessionAuto(){
   const name=document.getElementById('sessionName').value.trim();
-  if(!name){ alert('Nom obligatoire'); return; }
-  sessions[name]={exercises:[...selection], notes:document.getElementById('notes').value, evaluation:null, date:new Date().toLocaleString()};
+  if(!name) currentSessionName = "Séance " + new Date().toLocaleString();
+  else currentSessionName=name;
+  sessions[currentSessionName]={exercises:[...selection], notes:document.getElementById('notes').value, evaluation:null, date:new Date().toLocaleString()};
   localStorage.setItem('tj-sessions',JSON.stringify(sessions));
-  alert('Séance sauvegardée ✔️');
 }
 
 /* ------------------ SYNTHÈSE VOCALE & ENTRAÎNEMENT ------------------ */
@@ -152,8 +154,9 @@ function speak(txt,cb){ const u=new SpeechSynthesisUtterance(txt); u.onend=cb; s
 
 function startSession(){
   if(selection.length===0){ alert('Sélectionnez des exercices'); return;}
+  saveSessionAuto();
   seqIndex=0;
-  nextExercise();
+  speak("Commençons l'entraînement",()=>{ nextExercise(); });
 }
 
 function toggleFullscreen(){ fullscreen=!fullscreen; document.getElementById('trainingOverlay').style.display=fullscreen?'flex':'none'; }
@@ -191,9 +194,7 @@ function formatTime(sec){ const m=Math.floor(sec/60); const s=sec%60; return `${
 
 /* ------------------ ÉVALUATION FINALE ------------------ */
 function endSessionEvaluation(){
-  // Masquer overlay mais garder l'entraînement terminé
   fullscreen=false; document.getElementById('trainingOverlay').style.display='none';
-  // Créer interface évaluation
   let html='<h3>📝 Évaluation finale</h3>';
   selection.forEach(ex=>{
     const criteria=bankData.find(u=>u.uv===ex.uv).criteria;
@@ -207,22 +208,16 @@ function endSessionEvaluation(){
   const modal=document.getElementById('modal'); modal.style.display='flex'; document.getElementById('historyList').innerHTML=html;
 }
 
-/* Stockage temporaire des évaluations */
 let tempEvaluation={};
 function selectEmoji(el,exName,crit){ 
   if(!tempEvaluation[exName]) tempEvaluation[exName]={};
   tempEvaluation[exName][crit]=el.textContent;
-  // marquer sélection
   Array.from(el.parentNode.children).forEach(sib=>sib.classList.remove('selected-emoji'));
   el.classList.add('selected-emoji');
 }
 
 function saveEvaluation(){
-  const name=document.getElementById('sessionName').value.trim();
-  if(!name){ alert('Nom obligatoire'); return;}
-  if(!sessions[name]) sessions[name]={exercises:[...selection], notes:document.getElementById('notes').value};
-  sessions[name].evaluation=tempEvaluation;
-  sessions[name].date=new Date().toLocaleString();
+  sessions[currentSessionName].evaluation=tempEvaluation;
   localStorage.setItem('tj-sessions',JSON.stringify(sessions));
   alert('Évaluation enregistrée ✔️');
   tempEvaluation={};
