@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Tai Jitsu – Séance + Évaluation</title>
+
+<style>
+body{font-family:system-ui,sans-serif;margin:0;background:linear-gradient(to right,#ffecd2,#fcb69f);}
+h1{text-align:center;padding:1rem;}
+.container{max-width:1100px;margin:auto;padding:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.panel{background:#fff;border-radius:16px;padding:1rem;box-shadow:0 6px 14px rgba(0,0,0,.15);}
+.exercise{display:flex;justify-content:space-between;align-items:center;padding:.5rem;border-radius:10px;margin:.3rem 0;background:#f5f5f5;}
+.exercise.selected{background:#d1f5d3;}
+.exercise.active{background:#ffe8b3;}
+.exercise.done{text-decoration:line-through;opacity:.6;}
+.controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem;}
+.goal-row{background:#f5f5f5;border-radius:10px;padding:.5rem;margin:.3rem 0;}
+progress{width:100%;}
+</style>
+</head>
+
+<body>
+<h1>🥋 Coach Tai Jitsu – Séance + Évaluation</h1>
+
+<div class="container">
+
+<div class="panel">
+<h2>🎯 Objectifs hebdomadaires</h2>
+<div id="weeklyGoals"></div>
+</div>
+
+<div class="panel">
+<h2>📚 Banque d'exercices</h2>
+<div id="bank"></div>
+</div>
+
+<div class="panel">
+<h2>📝 Séance sélectionnée</h2>
+<input id="sessionName" placeholder="Nom séance">
+<div id="selection"></div>
+<textarea id="notes" placeholder="Notes"></textarea>
+<div class="controls">
+<button onclick="startSession()">▶️ Démarrer</button>
+<button onclick="showHistory()">📊 Historique</button>
+</div>
+</div>
+
+</div>
+
+<div id="trainingOverlay" style="display:none;position:fixed;inset:0;background:#fff;justify-content:center;align-items:center;flex-direction:column;">
+<h1 id="exerciseName"></h1>
+<div id="timer"></div>
+<button onclick="toggleFullscreen()">❌ Quitter</button>
+</div>
+
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);justify-content:center;align-items:center;">
+<div style="background:#fff;padding:1rem;border-radius:12px;width:600px;max-width:90%;">
+<h2>Historique & Évaluation</h2>
+<div id="historyList"></div>
+<button onclick="closeModal()">Fermer</button>
+</div>
+</div>
+
+<script>
+/* ---------------- DONNÉES ---------------- */
+const bankData=[
+{uv:'UV1',items:['Kihon simple'],criteria:['Précision','Posture']},
+{uv:'UV2',items:['Slow kata'],criteria:['Maîtrise','Kime']}
+];
+
+let selection=[];
+let sessions=JSON.parse(localStorage.getItem('tj-sessions'))||{};
+let weeklyGoals=JSON.parse(localStorage.getItem('tj-weekly-goals'))||{};
+let seqIndex=0,timer;
+
+/* ---------------- BANQUE ---------------- */
+function renderBank(){
+bank.innerHTML='';
+bankData.forEach(u=>{
+u.items.forEach(n=>{
+const d=document.createElement('div');
+d.className='exercise';
+d.innerHTML=`${n} <button onclick="addExercise('${u.uv}','${n}')">➕</button>`;
+bank.appendChild(d);
+});
+});
+}
+
+/* ---------------- SELECTION ---------------- */
+function addExercise(uv,name){
+selection.push({uv,name,duration:5});
+renderSelection();
+}
+
+function renderSelection(){
+selectionDiv.innerHTML='';
+selection.forEach((ex,i)=>{
+const d=document.createElement('div');
+d.className='exercise selected';
+d.innerHTML=`${ex.name} (${ex.duration} min)`;
+selectionDiv.appendChild(d);
+});
+}
+
+/* ---------------- SESSION ---------------- */
+function startSession(){
+if(!selection.length)return;
+const name=sessionName.value||new Date().toLocaleString();
+sessions[name]={date:new Date(),exercises:[...selection],notes:notes.value,evaluation:null};
+localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+seqIndex=0;toggleFullscreen();nextExercise();
+}
+
+function nextExercise(){
+if(seqIndex>=selection.length){toggleFullscreen();renderWeeklyGoals();return;}
+const ex=selection[seqIndex];
+exerciseName.textContent=ex.name;
+let t=ex.duration*60;
+timerDiv.textContent=t;
+timer=setInterval(()=>{
+t--;timerDiv.textContent=t;
+if(t<=0){clearInterval(timer);seqIndex++;nextExercise();}
+},1000);
+}
+
+function toggleFullscreen(){
+trainingOverlay.style.display=trainingOverlay.style.display==='flex'?'none':'flex';
+}
+
+/* ---------------- OBJECTIFS ---------------- */
+function getWeekSessions(){
+const now=new Date();
+const weekStart=new Date(now.setDate(now.getDate()-now.getDay()));
+return Object.values(sessions).filter(s=>new Date(s.date)>=weekStart);
+}
+
+function renderWeeklyGoals(){
+weeklyGoalsDiv.innerHTML='';
+const totals={};
+getWeekSessions().forEach(s=>{
+s.exercises.forEach(ex=>{
+totals[ex.name]=(totals[ex.name]||0)+ex.duration;
+});
+});
+
+Object.keys(weeklyGoals).forEach(name=>{
+const done=totals[name]||0;
+const goal=weeklyGoals[name];
+const pct=Math.min(done/goal*100,100).toFixed(0);
+weeklyGoalsDiv.innerHTML+=`
+<div class="goal-row">
+<strong>${name}</strong>
+<input type="number" value="${goal}" onchange="weeklyGoals['${name}']=this.value;saveGoals()">
+<progress value="${pct}" max="100"></progress>
+${done}/${goal} min
+</div>`;
+});
+}
+
+function saveGoals(){
+localStorage.setItem('tj-weekly-goals',JSON.stringify(weeklyGoals));
+renderWeeklyGoals();
+}
+
+/* ---------------- HISTORIQUE + EVALUATION ---------------- */
+function showHistory(){
+let html='';
+for(const n in sessions){
+const s=sessions[n];
+html+=`<div><strong>${n}</strong><br>${s.notes||''}</div>`;
+}
+historyList.innerHTML=html;
+modal.style.display='flex';
+}
+
+function closeModal(){modal.style.display='none';}
+
+/* ---------------- INIT ---------------- */
+const bank=document.getElementById('bank');
+const selectionDiv=document.getElementById('selection');
+const weeklyGoalsDiv=document.getElementById('weeklyGoals');
+const trainingOverlay=document.getElementById('trainingOverlay');
+const exerciseName=document.getElementById('exerciseName');
+const timerDiv=document.getElementById('timer');
+
+renderBank();
+renderSelection();
+renderWeeklyGoals();
+</script>
+</body>
+</html>
