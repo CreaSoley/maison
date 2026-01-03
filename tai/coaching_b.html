@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Tai Jitsu – 2e Dan</title>
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: linear-gradient(to right, #ffecd2, #fcb69f);
+}
+h1 { text-align: center; padding: 1rem; }
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.uv {
+  background: linear-gradient(120deg, #84fab0, #8fd3f4);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 14px rgba(0,0,0,.15);
+}
+
+.exercise {
+  background: #fff;
+  border-radius: 12px;
+  padding: .6rem;
+  margin: .4rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exercise.active { background: #ffe8b3; }
+.exercise.done { text-decoration: line-through; opacity: .6; }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+button {
+  padding: .6rem 1.2rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+}
+
+progress { width: 100%; height: 18px; }
+
+details {
+  background: #fff;
+  border-radius: 14px;
+  padding: .8rem;
+  margin: 1rem 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,.12);
+}
+
+textarea {
+  width: 100%;
+  min-height: 90px;
+  border-radius: 12px;
+  padding: .6rem;
+  border: none;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.2);
+}
+
+.fullscreen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #fff;
+  z-index: 999;
+}
+</style>
+</head>
+
+<body>
+<h1>🥋 Coach Tai Jitsu – 2e Dan</h1>
+<div class="container" id="app"></div>
+
+<audio id="beep" src="beep.mp3"></audio>
+<audio id="ding" src="ding.mp3"></audio>
+
+<script>
+const synth = speechSynthesis;
+
+const defaultData = [
+  { uv:'🥋 UV 1 – Kihon', criteria:['Kime','Précision'], items:[
+    {name:'Kihon simple',duration:5},
+    {name:'Enchaînement de kihon',duration:5},
+    {name:'Cibles',duration:5}
+  ]},
+  { uv:'🌀 UV 2 – Déplacements', criteria:['Maai','Fluidité'], items:[
+    {name:'Taï sabaki',duration:5},
+    {name:'Slow ippon',duration:5},
+    {name:'Ippon kumite',duration:5}
+  ]},
+  { uv:'📐 UV 3 – Kata', criteria:['Rythme','Mémorisation'], items:[
+    {name:'Slow kata',duration:5},
+    {name:'Kata nidan',duration:5},
+    {name:'Bunkaï',duration:5}
+  ]},
+  { uv:'⚙️ UV 4 – Technique de base', criteria:['Réalisme','Zanshin','Protection'], items:[
+    {name:'Shadow',duration:5}
+  ]},
+  { uv:'🔥 UV 5 & 6 – Randori', criteria:['Réalisme','Zanshin','Protection'], items:[
+    {name:'Randori shadow',duration:5}
+  ]}
+];
+
+let data = JSON.parse(localStorage.getItem('tj-data')) || defaultData;
+let history = JSON.parse(localStorage.getItem('tj-history')) || [];
+let notes = localStorage.getItem('tj-notes') || '';
+
+let sequence = [];
+let index = 0;
+let timer = null;
+
+function save(){ localStorage.setItem('tj-data',JSON.stringify(data)); }
+
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  data.forEach(uv=>{
+    const block = document.createElement('div');
+    block.className = 'uv';
+    block.innerHTML = `<h3>${uv.uv}</h3>`;
+
+    uv.items.forEach(ex=>{
+      const d = document.createElement('div');
+      d.className = 'exercise';
+      d.innerHTML = `
+        <span>${ex.name}</span>
+        <input type="range" min="1" max="30" value="${ex.duration}"
+          oninput="ex.duration=this.value;save()">`;
+      block.appendChild(d);
+    });
+
+    app.appendChild(block);
+  });
+
+  app.innerHTML += `
+    <div class="controls">
+      <button onclick="start()">▶️ Lecture</button>
+      <button onclick="toggleFull()">📱 Plein écran</button>
+      <button onclick="resetApp()">🧹 Réinitialiser</button>
+    </div>
+
+    <progress id="progress" value="0" max="100"></progress>
+
+    <details>
+      <summary>🎯 Objectifs</summary>
+      <p>Objectifs définis par UV (évolutif).</p>
+    </details>
+
+    <details>
+      <summary>⭐ Évaluation de fin de séance</summary>
+      ${data.map(u=>`
+        <strong>${u.uv}</strong><br>
+        ${u.criteria.map(c=>`${c} <input type="range" min="1" max="5"><br>`).join('')}
+      `).join('')}
+      <button onclick="saveEval()">💾 Enregistrer</button>
+    </details>
+
+    <details>
+      <summary>📊 Historique</summary>
+      ${history.map(h=>`<div>${h.date} – ${h.uv}</div>`).join('') || 'Aucun historique'}
+    </details>
+
+    <details>
+      <summary>📝 Carnet de notes</summary>
+      <textarea onblur="saveNotes(this.value)">${notes}</textarea>
+    </details>
+  `;
+}
+
+function speak(txt, cb){
+  const u = new SpeechSynthesisUtterance(txt);
+  u.onend = cb;
+  synth.speak(u);
+}
+
+function start(){
+  sequence = data.flatMap(u=>u.items.map(i=>({...i,uv:u.uv})));
+  index = 0;
+  speak("Commençons l'entraînement", ()=>setTimeout(nextExercise,1000));
+}
+
+function nextExercise(){
+  if(index >= sequence.length){
+    speak("Entraînement terminé, à bientôt !");
+    return;
+  }
+
+  const ex = sequence[index];
+  updateState();
+
+  speak(`Exercice ${index+1} : ${ex.name}`, ()=>{
+    setTimeout(()=>{
+      document.getElementById('beep').play();
+      let t = ex.duration * 60;
+
+      timer = setInterval(()=>{
+        t--;
+        document.getElementById('progress').value = (index/sequence.length)*100;
+        if(t <= 0){
+          clearInterval(timer);
+          document.getElementById('ding').play();
+          speak("Fin de l'exercice", ()=>{
+            index++;
+            setTimeout(nextExercise,1000);
+          });
+        }
+      },1000);
+    },2000);
+  });
+}
+
+function updateState(){
+  document.querySelectorAll('.exercise').forEach((e,i)=>{
+    e.classList.toggle('active', i===index);
+    e.classList.toggle('done', i<index);
+  });
+}
+
+function toggleFull(){
+  document.body.classList.toggle('fullscreen');
+}
+
+function resetApp(){
+  if(confirm("Réinitialiser l'application ?")){
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+function saveEval(){
+  const date = new Date().toLocaleDateString();
+  data.forEach(u=>{
+    history.push({date,uv:u.uv});
+  });
+  localStorage.setItem('tj-history',JSON.stringify(history));
+  alert("Évaluation enregistrée");
+}
+
+function saveNotes(v){
+  notes = v;
+  localStorage.setItem('tj-notes',v);
+}
+
+render();
+</script>
+</body>
+</html>
