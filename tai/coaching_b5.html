@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coach Tai Jitsu – Objectifs Hebdomadaires</title>
+<title>Coach Tai Jitsu – Entraînement</title>
 
 <style>
 body {
@@ -14,7 +14,7 @@ body {
 h1 { text-align:center; padding:1rem; }
 
 .container {
-  max-width:1200px;
+  max-width:1100px;
   margin:auto;
   padding:1rem;
   display:grid;
@@ -32,7 +32,6 @@ h1 { text-align:center; padding:1rem; }
 .exercise {
   display:flex;
   justify-content:space-between;
-  align-items:center;
   padding:.4rem .6rem;
   margin:.3rem 0;
   border-radius:10px;
@@ -51,165 +50,168 @@ button {
 
 progress { width:100%; height:14px; }
 
-input[type=number] { width:60px; }
-
-/* 🔑 OVERLAY : BIEN CACHÉ PAR DÉFAUT */
-#trainingOverlay {
+/* Overlay entraînement */
+#overlay {
   display:none;
   position:fixed;
   inset:0;
   background:linear-gradient(to right,#84fab0,#8fd3f4);
-  z-index:999;
+  z-index:1000;
   flex-direction:column;
   justify-content:center;
   align-items:center;
 }
 
-#timer { font-size:4rem; margin:1rem 0; }
-#exerciseName { font-size:2.5rem; }
+#overlay h2 { font-size:2.5rem; }
+#overlay #timer { font-size:4rem; margin:1rem 0; }
 </style>
 </head>
 
 <body>
-<h1>🥋 Coach Tai Jitsu – Suivi & Objectifs</h1>
+
+<h1>🥋 Coach Tai Jitsu</h1>
 
 <div class="container">
 
-<!-- SÉLECTION -->
-<div class="panel">
-  <h2>📝 Séance</h2>
-  <div id="selection"></div>
-  <button onclick="startSession()">▶️ Commencer entraînement</button>
-</div>
+  <div class="panel">
+    <h2>📝 Sélection</h2>
+    <div id="selection"></div>
+    <button onclick="startTraining()">▶️ Commencer l’entraînement</button>
+  </div>
 
-<!-- OBJECTIFS -->
-<div class="panel">
-  <h2>🎯 Objectifs hebdomadaires</h2>
-  <div id="goals"></div>
-</div>
+  <div class="panel">
+    <h2>🎯 Objectifs hebdomadaires</h2>
+    <div id="goals"></div>
+  </div>
 
 </div>
 
-<!-- OVERLAY ENTRAÎNEMENT -->
-<div id="trainingOverlay">
-  <div id="exerciseName"></div>
+<!-- Overlay entraînement -->
+<div id="overlay">
+  <h2 id="currentExercise"></h2>
   <div id="timer">00:00</div>
-  <progress id="sessionProgress" value="0" max="100"></progress>
-  <button onclick="hideOverlay()">❌ Quitter affichage</button>
+  <progress id="progress" value="0" max="100"></progress>
+  <button onclick="hideOverlay()">❌ Quitter l’affichage</button>
 </div>
 
 <audio id="beep" src="beep.mp3"></audio>
 <audio id="ding" src="ding.mp3"></audio>
 
 <script>
-/* ------------------ DONNÉES ------------------ */
-const exercises = [
-  'Kihon simple','Enchaînement de kihon','Cibles',
-  'Taï sabaki','Slow ippon','Ippon kumite',
-  'Slow kata','Kata nidan','Bunkaï',
-  'Shadow','Randori shadow'
+/* ================= DONNÉES ================= */
+
+const defaultSelection = [
+  { name:'Kihon simple', duration:5 },
+  { name:'Enchaînement de kihon', duration:5 },
+  { name:'Cibles', duration:5 },
+  { name:'Taï sabaki', duration:5 },
+  { name:'Slow kata', duration:5 }
 ];
 
-let selection = JSON.parse(localStorage.getItem('tj-selection')) ||
-  exercises.map(e => ({ name:e, duration:5 }));
-
-let history = JSON.parse(localStorage.getItem('tj-history')) || [];
-let goals = JSON.parse(localStorage.getItem('tj-goals')) || {};
+let selection = JSON.parse(localStorage.getItem('tj-selection')) || defaultSelection;
+let history   = JSON.parse(localStorage.getItem('tj-history')) || [];
+let goals     = JSON.parse(localStorage.getItem('tj-goals')) || {};
 
 let index = 0;
-let timer = null;
-let trainingRunning = false;
+let interval = null;
+let running = false;
 
-/* ------------------ UTILITAIRES ------------------ */
-function speak(txt, cb){
-  const u = new SpeechSynthesisUtterance(txt);
-  u.onend = cb;
+/* ================= UTILITAIRES ================= */
+
+function speak(text, cb){
+  const u = new SpeechSynthesisUtterance(text);
+  u.onend = cb || null;
   speechSynthesis.speak(u);
 }
 
 function weekKey(){
   const d = new Date();
-  const onejan = new Date(d.getFullYear(),0,1);
+  const jan1 = new Date(d.getFullYear(),0,1);
   return d.getFullYear() + '-W' +
-    Math.ceil((((d - onejan) / 86400000) + onejan.getDay()+1)/7);
+    Math.ceil((((d - jan1)/86400000) + jan1.getDay()+1)/7);
 }
 
-/* ------------------ RENDER ------------------ */
+/* ================= RENDER ================= */
+
 function renderSelection(){
-  const div = document.getElementById('selection');
-  div.innerHTML='';
-  selection.forEach((e,i)=>{
-    div.innerHTML += `
+  const el = document.getElementById('selection');
+  el.innerHTML='';
+  selection.forEach((ex,i)=>{
+    el.innerHTML += `
       <div class="exercise ${i<index?'done':i===index?'active':''}">
-        ${e.name} – ${e.duration} min
+        ${ex.name} – ${ex.duration} min
       </div>`;
   });
 }
 
 function renderGoals(){
-  const div = document.getElementById('goals');
-  div.innerHTML='';
+  const el = document.getElementById('goals');
+  el.innerHTML='';
   const wk = weekKey();
 
-  exercises.forEach(ex=>{
-    const target = goals[ex] || 30;
+  selection.forEach(ex=>{
+    const target = goals[ex.name] || 30;
     const done = history
-      .filter(h=>h.week===wk && h.name===ex)
+      .filter(h=>h.week===wk && h.name===ex.name)
       .reduce((s,h)=>s+h.duration,0);
 
-    div.innerHTML += `
+    el.innerHTML += `
       <div>
-        <strong>${ex}</strong><br>
+        <strong>${ex.name}</strong><br>
         Objectif :
-        <input type="number" value="${target}" onchange="setGoal('${ex}',this.value)"> min
+        <input type="number" value="${target}" min="0"
+          onchange="setGoal('${ex.name}',this.value)"> min
         <progress value="${done}" max="${target}"></progress>
         ${done}/${target} min
       </div>`;
   });
 }
 
-/* ------------------ OBJECTIFS ------------------ */
-function setGoal(ex,val){
-  goals[ex]=parseInt(val);
+/* ================= OBJECTIFS ================= */
+
+function setGoal(name,val){
+  goals[name]=parseInt(val)||0;
   localStorage.setItem('tj-goals',JSON.stringify(goals));
   renderGoals();
 }
 
-/* ------------------ ENTRAÎNEMENT ------------------ */
-function startSession(){
-  if(trainingRunning) return;
-  trainingRunning = true;
+/* ================= ENTRAÎNEMENT ================= */
+
+function startTraining(){
+  if(running) return;
+  running = true;
   index = 0;
   showOverlay();
-  speak("Commençons l'entraînement", runExercise);
+  speak("Commençons l'entraînement", nextExercise);
 }
 
-function runExercise(){
+function nextExercise(){
   if(index >= selection.length){
     speak("Entraînement terminé, à bientôt !");
-    trainingRunning = false;
+    running = false;
     hideOverlay();
     renderGoals();
     return;
   }
 
+  renderSelection();
   const ex = selection[index];
-  document.getElementById('exerciseName').textContent = ex.name;
-  let t = ex.duration * 60;
+  document.getElementById('currentExercise').textContent = ex.name;
+
+  let remaining = ex.duration * 60;
+  updateTimer(remaining);
 
   speak(`Exercice ${index+1} : ${ex.name}`, ()=>{
     setTimeout(()=>{
       document.getElementById('beep').play();
-      timer = setInterval(()=>{
-        t--;
-        document.getElementById('timer').textContent =
-          `${Math.floor(t/60).toString().padStart(2,'0')}:${(t%60).toString().padStart(2,'0')}`;
+      interval = setInterval(()=>{
+        remaining--;
+        updateTimer(remaining);
+        document.getElementById('progress').value =
+          ((index + (ex.duration*60-remaining)/(ex.duration*60)) / selection.length) * 100;
 
-        document.getElementById('sessionProgress').value =
-          ((index + (ex.duration*60 - t)/(ex.duration*60)) / selection.length) * 100;
-
-        if(t <= 0){
-          clearInterval(timer);
+        if(remaining <= 0){
+          clearInterval(interval);
           document.getElementById('ding').play();
 
           history.push({
@@ -218,12 +220,11 @@ function runExercise(){
             week: weekKey(),
             date: new Date().toISOString()
           });
-          localStorage.setItem('tj-history', JSON.stringify(history));
+          localStorage.setItem('tj-history',JSON.stringify(history));
 
           speak("Fin de l'exercice", ()=>{
             index++;
-            renderSelection();
-            runExercise();
+            nextExercise();
           });
         }
       },1000);
@@ -231,17 +232,27 @@ function runExercise(){
   });
 }
 
-/* ------------------ OVERLAY ------------------ */
-function showOverlay(){
-  document.getElementById('trainingOverlay').style.display='flex';
-}
-function hideOverlay(){
-  document.getElementById('trainingOverlay').style.display='none';
+function updateTimer(sec){
+  const m = Math.floor(sec/60);
+  const s = sec%60;
+  document.getElementById('timer').textContent =
+    `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 }
 
-/* ------------------ INIT ------------------ */
+/* ================= OVERLAY ================= */
+
+function showOverlay(){
+  document.getElementById('overlay').style.display='flex';
+}
+function hideOverlay(){
+  document.getElementById('overlay').style.display='none';
+}
+
+/* ================= INIT ================= */
+
 renderSelection();
 renderGoals();
 </script>
+
 </body>
 </html>
