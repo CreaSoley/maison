@@ -3,292 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coach Tai Jitsu</title>
+<title>Coach Tai Jitsu – Séance + Évaluation</title>
 
 <style>
-body{
-  font-family:system-ui,sans-serif;
-  margin:0;
-  background:#f2f2f2;
-}
-h1,h2,h3{margin:.5rem 0}
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:1rem;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1rem;
-}
-.panel{
-  background:#fff;
-  border-radius:12px;
-  padding:1rem;
-  box-shadow:0 4px 12px rgba(0,0,0,.1);
-}
-.exercise{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:.4rem .6rem;
-  margin:.3rem 0;
-  background:#eee;
-  border-radius:8px;
-}
-.exercise.selected{background:#d1f5d3}
-.exercise.active{background:#ffe7b3}
-.exercise.done{opacity:.5;text-decoration:line-through}
-button{
-  border:none;
-  border-radius:8px;
-  padding:.3rem .6rem;
-  cursor:pointer;
-}
-input[type=range]{width:100px}
-progress{width:100%;height:16px}
+body{font-family:system-ui,sans-serif;margin:0;background:linear-gradient(to right,#ffecd2,#fcb69f);}
+h1{text-align:center;padding:1rem;}
+.container{max-width:1100px;margin:auto;padding:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.panel{background:#fff;border-radius:16px;padding:1rem;box-shadow:0 6px 14px rgba(0,0,0,.15);}
+.uv{margin-bottom:1rem;}
+.exercise{display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;border-radius:10px;margin:.3rem 0;background:#f5f5f5;}
+.exercise.selected{background:#d1f5d3;}
+.exercise.active{background:#ffe8b3;}
+.exercise.done{text-decoration:line-through;opacity:.6;}
+.exercise button{border:none;border-radius:8px;padding:.3rem .6rem;cursor:pointer;}
+.controls{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;}
+input[type=text]{width:100%;padding:.6rem;border-radius:10px;border:1px solid #ccc;margin-bottom:.5rem;}
+input[type=range]{width:120px;}
+textarea{width:100%;border-radius:12px;padding:.6rem;margin-top:.5rem;}
+label{font-weight:bold;}
+progress{width:100%;height:14px}
 
-#overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#000;
-  color:#fff;
-  z-index:999;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-#overlay h1{font-size:2.5rem}
-#overlay #timer{font-size:4rem;margin:1rem 0}
-#overlay progress{width:80%;height:24px}
+/* Objectifs */
+.goal-row{background:#f5f5f5;border-radius:12px;padding:.6rem;margin:.4rem 0;}
+.goal-row input{width:70px;}
+.goal-row progress{height:12px}
 
-#modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  z-index:1000;
-  justify-content:center;
-  align-items:center;
-}
-#modal .box{
-  background:#fff;
-  color:#000;
-  border-radius:12px;
-  padding:1rem;
-  max-width:600px;
-  width:100%;
-  max-height:80vh;
-  overflow:auto;
-}
+/* Overlay */
+#trainingOverlay{display:none;position:fixed;inset:0;background:linear-gradient(to right,#84fab0,#8fd3f4);z-index:999;
+flex-direction:column;justify-content:center;align-items:center;}
+#trainingOverlay h1{font-size:3rem;}
+#trainingOverlay #timer{font-size:4rem;}
+#trainingOverlay button{margin-top:2rem;padding:1rem 2rem;font-size:1.2rem;border-radius:12px;}
 </style>
 </head>
 
 <body>
-
-<h1 style="text-align:center">🥋 Coach Tai Jitsu</h1>
+<h1>🥋 Coach Tai Jitsu – Séance + Évaluation</h1>
 
 <div class="container">
 
-<!-- BANQUE -->
-<div class="panel">
-  <h2>📚 Banque d'exercices</h2>
-  <div id="bank"></div>
-</div>
-
-<!-- SÉLECTION -->
-<div class="panel">
-  <h2>📝 Séance</h2>
-  <input id="sessionName" placeholder="Nom de la séance" style="width:100%;padding:.4rem">
-  <div id="selection"></div>
-
-  <textarea id="notes" placeholder="Carnet de notes..." style="width:100%;margin-top:.5rem"></textarea>
-
-  <div style="margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap">
-    <button onclick="startSession()">▶️ Démarrer</button>
-    <button onclick="toggleFullscreen()">📱 Plein écran</button>
-    <button onclick="clearSelection()">🧹 Vider</button>
-    <button onclick="showHistory()">📊 Historique</button>
+  <div class="panel">
+    <h2>🎯 Objectifs hebdomadaires</h2>
+    <div id="weeklyGoals"></div>
   </div>
 
-  <progress id="progress" value="0" max="100"></progress>
-</div>
+  <div class="panel">
+    <h2>📚 Banque d'exercices</h2>
+    <div id="bank"></div>
+  </div>
+
+  <div class="panel">
+    <h2>📝 Séance sélectionnée</h2>
+    <input type="text" id="sessionName" placeholder="Nom de la séance">
+    <div id="selection"></div>
+    <label>Carnet de notes :</label>
+    <textarea id="notes" rows="3"></textarea>
+    <div class="controls">
+      <button onclick="saveSelection()">💾 Sauvegarder</button>
+      <button onclick="clearSelection()">🧹 Vider</button>
+      <button onclick="startSession()">▶️ Démarrer</button>
+    </div>
+    <progress id="progress" value="0" max="100"></progress>
+  </div>
 
 </div>
 
-<!-- OVERLAY EXERCICE -->
-<div id="overlay">
-  <h1 id="overlayName"></h1>
+<div id="trainingOverlay">
+  <h1 id="exerciseName"></h1>
   <div id="timer">00:00</div>
-  <progress id="overlayProgress" value="0" max="100"></progress>
-  <button onclick="toggleFullscreen()" style="margin-top:1rem">❌ Quitter</button>
+  <progress id="sessionProgress" value="0" max="100"></progress>
+  <button onclick="toggleFullscreen()">❌ Quitter</button>
 </div>
-
-<!-- MODAL HISTORIQUE -->
-<div id="modal">
-  <div class="box">
-    <h2>📊 Historique</h2>
-    <div id="historyContent"></div>
-    <button onclick="closeModal()">Fermer</button>
-  </div>
-</div>
-
-<audio id="beep" src="beep.mp3"></audio>
-<audio id="ding" src="ding.mp3"></audio>
 
 <script>
-/* ================== DONNÉES ================== */
+/* ------------------ BANQUE ------------------ */
 const bankData=[
- {uv:'UV1 – Kihon',items:['Kihon simple','Enchaînement','Cibles']},
- {uv:'UV2 – Déplacements',items:['Tai sabaki','Slow ippon','Ippon kumite']},
- {uv:'UV3 – Kata',items:['Slow kata','Kata nidan','Bunkaï']},
- {uv:'UV4 – Technique',items:['Shadow']},
- {uv:'UV5-6 – Randori',items:['Randori shadow']}
+{uv:'🥋 UV 1 – Kihon',items:['Kihon simple','Enchaînement de kihon','Cibles']},
+{uv:'🌀 UV 2 – Déplacements',items:['Taï sabaki','Slow ippon','Ippon kumite']},
+{uv:'📐 UV 3 – Kata',items:['Slow kata','Kata nidan','Bunkaï']},
+{uv:'⚙️ UV 4 – Technique',items:['Shadow']},
+{uv:'🔥 UV 5 & 6 – Randori',items:['Randori shadow']}
 ];
 
+/* ------------------ ÉTAT ------------------ */
 let selection=JSON.parse(localStorage.getItem('tj-selection'))||[];
+let weeklyGoals=JSON.parse(localStorage.getItem('tj-weekly-goals'))||{};
+let weeklyProgress=JSON.parse(localStorage.getItem('tj-weekly-progress'))||{};
+let seqIndex=0,timer=null,fullscreen=false;
 
-/* sessions NORMALISÉ */
-let rawSessions=JSON.parse(localStorage.getItem('tj-sessions'))||[];
-let sessions=Array.isArray(rawSessions)?rawSessions:Object.values(rawSessions);
+/* ------------------ RESET HEBDO ------------------ */
+function checkWeek(){
+ const w=new Date().getFullYear()+"-W"+Math.ceil(new Date().getDate()/7);
+ if(localStorage.getItem('tj-week')!==w){
+  weeklyProgress={};
+  localStorage.setItem('tj-week',w);
+ }
+}
+checkWeek();
 
-let index=0,timer=null,fullscreen=false;
+/* ------------------ OBJECTIFS ------------------ */
+function renderWeeklyGoals(){
+ const d=document.getElementById('weeklyGoals'); d.innerHTML='';
+ if(selection.length===0){d.innerHTML='<em>Aucun exercice</em>';return;}
+ selection.forEach(ex=>{
+  if(!weeklyGoals[ex.name]) weeklyGoals[ex.name]=60;
+  if(!weeklyProgress[ex.name]) weeklyProgress[ex.name]=0;
+  const pct=Math.min(weeklyProgress[ex.name]/weeklyGoals[ex.name]*100,100).toFixed(0);
+  d.innerHTML+=`
+  <div class="goal-row">
+   <strong>${ex.name}</strong><br>
+   Objectif <input type="number" min="1" value="${weeklyGoals[ex.name]}"
+    onchange="weeklyGoals['${ex.name}']=this.value;saveWeekly();renderWeeklyGoals()"> min
+   <progress value="${pct}" max="100"></progress>
+   <small>${weeklyProgress[ex.name]} / ${weeklyGoals[ex.name]} min (${pct}%)</small>
+  </div>`;
+ });
+ saveWeekly();
+}
 
-/* ================== RENDER ================== */
+function saveWeekly(){
+ localStorage.setItem('tj-weekly-goals',JSON.stringify(weeklyGoals));
+ localStorage.setItem('tj-weekly-progress',JSON.stringify(weeklyProgress));
+}
+
+/* ------------------ BANQUE ------------------ */
 function renderBank(){
- const b=document.getElementById('bank');
- b.innerHTML='';
+ const b=document.getElementById('bank'); b.innerHTML='';
  bankData.forEach(u=>{
-  const d=document.createElement('div');
-  d.innerHTML=`<h3>${u.uv}</h3>`;
+  const div=document.createElement('div'); div.className='uv'; div.innerHTML=`<h3>${u.uv}</h3>`;
   u.items.forEach(n=>{
-   d.innerHTML+=`
-    <div class="exercise">
-      <span>${n}</span>
-      <button onclick="addExercise('${u.uv}','${n}')">➕</button>
-    </div>`;
+   const e=document.createElement('div'); e.className='exercise';
+   e.innerHTML=`<span>${n}</span><button onclick="addExercise('${u.uv}','${n}')">➕</button>`;
+   div.appendChild(e);
   });
-  b.appendChild(d);
+  b.appendChild(div);
  });
 }
 
+/* ------------------ SÉLECTION ------------------ */
 function renderSelection(){
- const s=document.getElementById('selection');
- s.innerHTML='';
- if(!selection.length){s.innerHTML='<em>Aucun exercice</em>';return;}
- selection.forEach((e,i)=>{
-  s.innerHTML+=`
-   <div class="exercise selected">
-    ${e.uv} – ${e.name}
-    <div>
-     <input type="range" min="1" max="60" value="${e.duration}"
-       oninput="updateDuration(${i},this.value)">
-     ${e.duration}min
-     <button onclick="moveUp(${i})">⬆️</button>
-     <button onclick="moveDown(${i})">⬇️</button>
-     <button onclick="removeExercise(${i})">❌</button>
-    </div>
-   </div>`;
+ const s=document.getElementById('selection'); s.innerHTML='';
+ selection.forEach((ex,i)=>{
+  const d=document.createElement('div'); d.className='exercise selected';
+  d.innerHTML=`${ex.name}
+   <input type="range" min="1" max="60" value="${ex.duration}"
+    oninput="selection[${i}].duration=this.value;saveSelection()"> ${ex.duration} min
+   <button onclick="selection.splice(${i},1);saveSelection()">❌</button>`;
+  s.appendChild(d);
  });
+ renderWeeklyGoals();
 }
 
-/* ================== ACTIONS ================== */
 function addExercise(uv,name){
  selection.push({uv,name,duration:5});
  saveSelection();
 }
-function updateDuration(i,v){selection[i].duration=+v;saveSelection();}
-function moveUp(i){
- if(i>0){[selection[i-1],selection[i]]=[selection[i],selection[i-1]];saveSelection();}
-}
-function moveDown(i){
- if(i<selection.length-1){[selection[i+1],selection[i]]=[selection[i],selection[i+1]];saveSelection();}
-}
-function removeExercise(i){selection.splice(i,1);saveSelection();}
-function clearSelection(){if(confirm('Vider ?')){selection=[];saveSelection();}}
 function saveSelection(){
  localStorage.setItem('tj-selection',JSON.stringify(selection));
  renderSelection();
 }
+function clearSelection(){selection=[];saveSelection();}
 
-/* ================== VOIX ================== */
-function speak(txt,cb){
- const u=new SpeechSynthesisUtterance(txt);
- u.lang='fr-FR';
- u.onend=cb;
- speechSynthesis.speak(u);
-}
-function format(t){return String(Math.floor(t/60)).padStart(2,'0')+":"+String(t%60).padStart(2,'0');}
-
-/* ================== ENTRAÎNEMENT ================== */
+/* ------------------ SESSION ------------------ */
 function startSession(){
- if(!selection.length)return alert('Aucun exercice');
- index=0;
- const name=sessionName.value||'Séance '+new Date().toLocaleString();
- sessions.push({name,date:new Date().toLocaleString(),exercises:JSON.parse(JSON.stringify(selection)),notes:notes.value});
- localStorage.setItem('tj-sessions',JSON.stringify(sessions));
- speak("Commençons l'entraînement",nextExercise);
+ if(selection.length===0)return alert('Aucun exercice');
+ seqIndex=0; toggleFullscreen(); nextExercise();
+}
+
+function toggleFullscreen(){
+ fullscreen=!fullscreen;
+ document.getElementById('trainingOverlay').style.display=fullscreen?'flex':'none';
 }
 
 function nextExercise(){
- if(index>=selection.length){
-  speak("Entraînement terminé, à bientôt !");
-  document.getElementById('progress').value=100;
-  return;
- }
- const ex=selection[index];
- overlayName.textContent=ex.name;
- updateState();
- speak(`Exercice ${index+1} : ${ex.name}`,()=>{
-  setTimeout(()=>{
-   beep.play();
-   let t=ex.duration*60;
-   timerEl=setInterval(()=>{
-    t--;
-    timer.textContent=format(t);
-    overlayProgress.value=((index+(ex.duration*60-t)/(ex.duration*60))/selection.length)*100;
-    progress.value=overlayProgress.value;
-    if(t<=0){
-     clearInterval(timerEl);
-     ding.play();
-     speak("Fin de l'exercice",()=>{
-      index++;
-      nextExercise();
-     });
-    }
-   },1000);
-  },2000);
- });
+ if(seqIndex>=selection.length){toggleFullscreen();return;}
+ const ex=selection[seqIndex];
+ let t=ex.duration*60;
+ document.getElementById('exerciseName').textContent=ex.name;
+ document.getElementById('timer').textContent=format(t);
+ timer=setInterval(()=>{
+  t--;
+  document.getElementById('timer').textContent=format(t);
+  if(t<=0){
+   clearInterval(timer);
+   weeklyProgress[ex.name]=(weeklyProgress[ex.name]||0)+ex.duration;
+   saveWeekly(); renderWeeklyGoals();
+   seqIndex++; nextExercise();
+  }
+ },1000);
 }
 
-function updateState(){
- document.querySelectorAll('#selection .exercise').forEach((e,i)=>{
-  e.classList.toggle('active',i===index);
-  e.classList.toggle('done',i<index);
- });
+function format(s){
+ return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');
 }
 
-/* ================== UI ================== */
-function toggleFullscreen(){
- fullscreen=!fullscreen;
- overlay.style.display=fullscreen?'flex':'none';
-}
-function showHistory(){
- let html='';
- sessions.forEach(s=>{
-  html+=`<strong>${s.name}</strong> (${s.date})<br>`;
-  s.exercises.forEach(e=>html+=`- ${e.name} (${e.duration}min)<br>`);
-  html+=`Notes: ${s.notes||''}<hr>`;
- });
- historyContent.innerHTML=html||'Aucune séance';
- modal.style.display='flex';
-}
-function closeModal(){modal.style.display='none';}
-
-/* ================== INIT ================== */
+/* ------------------ INIT ------------------ */
 renderBank();
 renderSelection();
+renderWeeklyGoals();
 </script>
-
 </body>
 </html>
