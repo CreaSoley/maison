@@ -178,6 +178,84 @@ function setGoal(n,v){ goals[n]=parseInt(v)||0; renderGoals(); }
 renderBank();
 renderSelection();
 renderGoals();
+  <script>
+/* ======== LECTURE / ENTRAÎNEMENT ======== */
+
+function speak(text, cb){
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR';
+  u.onend = cb;
+  speechSynthesis.speak(u);
+}
+
+function startSession(){
+  if(selection.length === 0){
+    alert("Sélection vide");
+    return;
+  }
+
+  // sauvegarde automatique de la séance
+  const name = document.getElementById('sessionName').value || 
+               "Séance " + new Date().toLocaleString();
+
+  sessions[name] = {
+    date: new Date().toLocaleString(),
+    week: weekKey(),
+    exercises: JSON.parse(JSON.stringify(selection)),
+    notes: document.getElementById('notes').value
+  };
+  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
+
+  seqIndex = 0;
+  toggleFullscreen();
+  speak("Commençons l'entraînement", () => {
+    setTimeout(nextExercise, 1000);
+  });
+}
+
+function nextExercise(){
+  if(seqIndex >= selection.length){
+    speak("Entraînement terminé, à bientôt !");
+    toggleFullscreen();
+    return;
+  }
+
+  const ex = selection[seqIndex];
+  document.getElementById('exerciseName').textContent = ex.name;
+
+  speak(`Exercice ${seqIndex + 1} : ${ex.name}`, () => {
+    setTimeout(() => {
+      document.getElementById('beep').play();
+      startTimer(ex.duration * 60);
+    }, 2000);
+  });
+}
+
+function startTimer(seconds){
+  const timerEl = document.getElementById('timer');
+  const prog = document.getElementById('sessionProgress');
+  let remaining = seconds;
+
+  clearInterval(timer);
+  timer = setInterval(() => {
+    remaining--;
+    timerEl.textContent = formatTime(remaining);
+
+    const done = (seqIndex + 1) / selection.length * 100;
+    prog.value = done;
+
+    if(remaining <= 0){
+      clearInterval(timer);
+      document.getElementById('ding').play();
+      speak("Fin de l'exercice", () => {
+        seqIndex++;
+        setTimeout(nextExercise, 1000);
+      });
+    }
+  }, 1000);
+}
+</script>
+
 </script>
 </body>
 </html>
