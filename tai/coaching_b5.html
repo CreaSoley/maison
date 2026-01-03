@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coach Tai Jitsu</title>
+<title>Coach Tai Jitsu – Séance & Historique</title>
 
 <style>
 body{
@@ -75,13 +75,11 @@ progress{width:100%;height:14px}
 
 <div class="container">
 
-<!-- BANQUE -->
 <div class="panel">
   <h2>📚 Banque d’exercices</h2>
   <div id="bank"></div>
 </div>
 
-<!-- SÉLECTION -->
 <div class="panel">
   <h2>📝 Séance</h2>
   <input id="sessionName" placeholder="Nom de la séance">
@@ -106,7 +104,6 @@ progress{width:100%;height:14px}
 
 </div>
 
-<!-- OVERLAY -->
 <div id="trainingOverlay">
   <h2 id="exerciseName"></h2>
   <div id="timer">00:00</div>
@@ -118,7 +115,7 @@ progress{width:100%;height:14px}
 <audio id="ding" src="ding.mp3"></audio>
 
 <script>
-/* ========= DONNÉES ========= */
+/* ===== DONNÉES ===== */
 const bankData=[
  {uv:'UV1 Kihon',items:['Kihon simple','Enchaînement','Cibles']},
  {uv:'UV2 Déplacements',items:['Taï sabaki','Slow ippon','Ippon kumite']},
@@ -131,21 +128,20 @@ let selection=JSON.parse(localStorage.getItem('tj-selection'))||[];
 let sessions=JSON.parse(localStorage.getItem('tj-sessions'))||{};
 let goals=JSON.parse(localStorage.getItem('tj-goals'))||{};
 let seqIndex=0,timer=null,fullscreen=false;
+let currentSessionName="";
 
-/* ========= UTILS ========= */
+/* ===== UTIL ===== */
 function weekKey(){
  const d=new Date(),j=new Date(d.getFullYear(),0,1);
  return d.getFullYear()+"-W"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);
 }
-function speak(t,cb){
- const u=new SpeechSynthesisUtterance(t);
+function speak(txt,cb){
+ const u=new SpeechSynthesisUtterance(txt);
  u.lang='fr-FR'; u.onend=cb; speechSynthesis.speak(u);
 }
-function formatTime(s){
- return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');
-}
+function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');}
 
-/* ========= RENDER ========= */
+/* ===== RENDER ===== */
 function renderBank(){
  const b=document.getElementById('bank'); b.innerHTML='';
  bankData.forEach(u=>{
@@ -184,7 +180,7 @@ function renderGoals(){
   let done=0;
   Object.values(sessions).forEach(s=>{
    if(s.week===wk)
-    s.exercises.forEach(e=>{if(e.name===ex.name) done+=e.duration;});
+    s.exercises.forEach(e=>{if(e.name===ex.name && e.doneMinutes) done+=e.doneMinutes;});
   });
   const pct=Math.min(100,Math.round(done/goals[ex.name]*100));
   g.innerHTML+=`
@@ -198,27 +194,21 @@ function renderGoals(){
  localStorage.setItem('tj-goals',JSON.stringify(goals));
 }
 
-/* ========= ACTIONS ========= */
-function addExercise(uv,name){
- selection.push({uv,name,duration:5});
- saveSelection();
-}
+/* ===== ACTIONS ===== */
+function addExercise(uv,name){ selection.push({uv,name,duration:5,doneMinutes:0}); saveSelection();}
 function updateDuration(i,v){selection[i].duration=parseInt(v);saveSelection();}
 function moveUp(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection();}}
-function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i],selection[i+1]]; saveSelection();}}
+function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i+1],selection[i]]; saveSelection();}}
 function removeExercise(i){selection.splice(i,1);saveSelection();}
-function saveSelection(){
- localStorage.setItem('tj-selection',JSON.stringify(selection));
- renderSelection(); renderGoals();
-}
-function clearSelection(){
- if(confirm("Vider ?")){selection=[];saveSelection();}
-}
+function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(selection)); renderSelection(); renderGoals();}
+function clearSelection(){ if(confirm("Vider la sélection ?")){selection=[];saveSelection();} }
+function setGoal(name,v){goals[name]=parseInt(v); renderGoals();}
 
-/* ========= ENTRAÎNEMENT ========= */
+/* ===== ENTRAÎNEMENT ===== */
 function startSession(){
- if(!selection.length){alert("Sélection vide");return;}
+ if(!selection.length){alert("Sélection vide"); return;}
  const name=document.getElementById('sessionName').value||"Séance "+new Date().toLocaleString();
+ currentSessionName=name;
  sessions[name]={date:new Date().toLocaleString(),week:weekKey(),exercises:JSON.parse(JSON.stringify(selection)),notes:notes.value};
  localStorage.setItem('tj-sessions',JSON.stringify(sessions));
  seqIndex=0;
@@ -233,12 +223,10 @@ function nextExercise(){
  const ex=selection[seqIndex];
  exerciseName.textContent=ex.name;
  if(fullscreen) trainingOverlay.style.display='flex';
-
- speak("Exercice "+(seqIndex+1)+" : "+ex.name,()=>{
+ speak(`Exercice ${seqIndex+1} : ${ex.name}`,()=>{
   setTimeout(()=>{
    beep.play();
    let remaining=ex.duration*60;
-   timer=document.getElementById('timer');
    clearInterval(window._t);
    window._t=setInterval(()=>{
     remaining--;
@@ -247,30 +235,42 @@ function nextExercise(){
     if(remaining<=0){
      clearInterval(window._t);
      ding.play();
-     speak("Fin de l'exercice",()=>{seqIndex++;setTimeout(nextExercise,1000);});
+     // Mise à jour durée réelle
+     selection[seqIndex].doneMinutes = ex.duration;
+     sessions[currentSessionName].exercises[seqIndex].doneMinutes = ex.duration;
+     localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+     seqIndex++;
+     setTimeout(nextExercise,1000);
     }
    },1000);
   },2000);
  });
 }
 
-/* ========= FULLSCREEN ========= */
+/* ===== FULLSCREEN ===== */
 function toggleFullscreen(){
  fullscreen=!fullscreen;
  trainingOverlay.style.display=fullscreen?'flex':'none';
 }
 
-/* ========= HISTORIQUE ========= */
+/* ===== HISTORIQUE ===== */
 function showHistory(){
  let txt='';
  for(const n in sessions){
-  txt+=`${n} (${sessions[n].date})\n`;
+  const s=sessions[n];
+  txt+=`${n} (${s.date})\n`;
+  s.exercises.forEach(e=>{
+   txt+=`- ${e.name}: ${e.doneMinutes||0} min\n`;
+  });
+  txt+=`Notes: ${s.notes||''}\n\n`;
  }
  alert(txt||"Aucune séance");
 }
 
-/* ========= INIT ========= */
-renderBank(); renderSelection(); renderGoals();
+/* ===== INIT ===== */
+renderBank();
+renderSelection();
+renderGoals();
 </script>
 </body>
 </html>
