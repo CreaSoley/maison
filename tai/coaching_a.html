@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Tai Jitsu – 2e Dan</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',system-ui;
+  background:linear-gradient(to right,#ffecd2,#fcb69f);
+}
+h1,h2,h3{text-align:center}
+.container{max-width:1100px;margin:auto;padding:1rem}
+.exercise{
+  background:#fff;
+  border-radius:15px;
+  padding:.6rem;
+  margin:.3rem 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 4px 10px rgba(0,0,0,.1)
+}
+.exercise.done{text-decoration:line-through;opacity:.5}
+.exercise.active{background:#ffe0f0}
+button{
+  border:none;
+  border-radius:20px;
+  padding:.4rem .9rem;
+  margin:.2rem;
+  cursor:pointer;
+  box-shadow:0 4px 8px rgba(0,0,0,.2)
+}
+.progress{
+  width:100%;
+  height:16px;
+  background:#eee;
+  border-radius:10px;
+  overflow:hidden
+}
+.progress div{
+  height:100%;
+  background:#84fab0;
+  width:0%
+}
+#fullscreen{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000;
+  color:#fff;
+  z-index:999;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center
+}
+#fsTimer{font-size:5rem}
+</style>
+</head>
+
+<body>
+<h1>🥋 Coach Tai Jitsu – 2e Dan</h1>
+
+<div class="container">
+
+<h2>🧩 Séquence validée</h2>
+<div id="sequence"></div>
+
+<div class="progress"><div id="sessionBar"></div></div>
+
+<h2>🎮 Commandes</h2>
+<button onclick="startSequence()">▶️ Lecture</button>
+<button onclick="pauseSequence()">⏸ Pause</button>
+<button onclick="stopSequence()">⏹ Stop</button>
+<button onclick="clearSequence()">🗑️ Effacer la séance</button>
+<button onclick="openFullscreen()">📱 Plein écran</button>
+
+</div>
+
+<div id="fullscreen">
+  <div id="fsName"></div>
+  <div id="fsTimer">00:00</div>
+  <div class="progress" style="width:80%">
+    <div id="fsBar"></div>
+  </div>
+  <button onclick="closeFullscreen()">⬅️ Quitter</button>
+</div>
+
+<audio id="beep" src="beep.mp3"></audio>
+<audio id="ding" src="ding.mp3"></audio>
+
+<script>
+const synth = speechSynthesis;
+const beep = document.getElementById('beep');
+const ding = document.getElementById('ding');
+
+let sequence = JSON.parse(localStorage.getItem('sequence')) || [
+  {name:'Kihon simple', duration:5},
+  {name:'Enchaînement kihon', duration:5}
+];
+
+let index = 0;
+let paused = false;
+let stopFlag = false;
+let elapsed = 0;
+let totalTime = sequence.reduce((a,b)=>a+b.duration*60,0);
+
+// ===== UTIL =====
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+function speak(txt){
+  synth.cancel();
+  synth.speak(new SpeechSynthesisUtterance(txt));
+}
+
+// ===== RENDER =====
+function render(){
+  const s=document.getElementById('sequence');
+  s.innerHTML='';
+  sequence.forEach((e,i)=>{
+    s.innerHTML+=`
+      <div class="exercise ${i===index?'active':''} ${e.done?'done':''}">
+        ${e.name}
+        <span>${e.duration} min</span>
+      </div>`;
+  });
+}
+render();
+
+// ===== SEQUENCE ENGINE =====
+async function startSequence(){
+  paused = false;
+  stopFlag = false;
+
+  if(index === 0){
+    speak("Commençons l'entraînement");
+    await sleep(1000);
+  }
+
+  for(; index < sequence.length; index++){
+    if(stopFlag) break;
+    while(paused) await sleep(300);
+
+    const ex = sequence[index];
+    render();
+
+    speak(`Exercice ${index+1} : ${ex.name}`);
+    await sleep(2000);
+
+    beep.play();
+    let remaining = ex.duration * 60;
+
+    while(remaining > 0){
+      if(stopFlag) return;
+      while(paused) await sleep(300);
+
+      remaining--;
+      elapsed++;
+
+      updateUI(ex.name, remaining);
+      await sleep(1000);
+    }
+
+    ding.play();
+    speak("Fin de l'exercice");
+    ex.done = true;
+    render();
+    await sleep(1000);
+  }
+
+  speak("Entraînement terminé, à bientôt !");
+  index = 0;
+  elapsed = 0;
+  sequence.forEach(e=>e.done=false);
+  render();
+  save();
+}
+
+// ===== CONTROLS =====
+function pauseSequence(){ paused = true; }
+function stopSequence(){
+  stopFlag = true;
+  paused = false;
+  index = 0;
+  elapsed = 0;
+  sequence.forEach(e=>e.done=false);
+  render();
+}
+function clearSequence(){
+  if(!confirm("Supprimer la séance ?")) return;
+  sequence = [];
+  index = 0;
+  elapsed = 0;
+  localStorage.removeItem('sequence');
+  render();
+}
+
+// ===== FULLSCREEN =====
+function openFullscreen(){
+  document.getElementById('fullscreen').style.display='flex';
+}
+function closeFullscreen(){
+  document.getElementById('fullscreen').style.display='none';
+}
+
+// ===== UI =====
+function updateUI(name, remaining){
+  document.getElementById('fsName').textContent = name;
+  document.getElementById('fsTimer').textContent =
+    Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0');
+
+  const pct = totalTime ? elapsed/totalTime*100 : 0;
+  document.getElementById('fsBar').style.width = pct+'%';
+  document.getElementById('sessionBar').style.width = pct+'%';
+}
+
+// ===== SAVE =====
+function save(){
+  localStorage.setItem('sequence',JSON.stringify(sequence));
+}
+</script>
+</body>
+</html>
