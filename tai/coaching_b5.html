@@ -51,13 +51,15 @@ button {
 
 progress { width:100%; height:14px; }
 
+input[type=number] { width:60px; }
+
+/* 🔑 OVERLAY : BIEN CACHÉ PAR DÉFAUT */
 #trainingOverlay {
   display:none;
   position:fixed;
   inset:0;
   background:linear-gradient(to right,#84fab0,#8fd3f4);
   z-index:999;
-  display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
@@ -65,13 +67,6 @@ progress { width:100%; height:14px; }
 
 #timer { font-size:4rem; margin:1rem 0; }
 #exerciseName { font-size:2.5rem; }
-
-.goal { font-size:.9rem; margin:.3rem 0; }
-.goal progress { height:10px; }
-
-input[type=number] {
-  width:60px;
-}
 </style>
 </head>
 
@@ -100,7 +95,7 @@ input[type=number] {
   <div id="exerciseName"></div>
   <div id="timer">00:00</div>
   <progress id="sessionProgress" value="0" max="100"></progress>
-  <button onclick="exitFullscreen()">❌ Quitter affichage</button>
+  <button onclick="hideOverlay()">❌ Quitter affichage</button>
 </div>
 
 <audio id="beep" src="beep.mp3"></audio>
@@ -123,6 +118,7 @@ let goals = JSON.parse(localStorage.getItem('tj-goals')) || {};
 
 let index = 0;
 let timer = null;
+let trainingRunning = false;
 
 /* ------------------ UTILITAIRES ------------------ */
 function speak(txt, cb){
@@ -134,7 +130,8 @@ function speak(txt, cb){
 function weekKey(){
   const d = new Date();
   const onejan = new Date(d.getFullYear(),0,1);
-  return d.getFullYear() + '-W' + Math.ceil((((d - onejan) / 86400000) + onejan.getDay()+1)/7);
+  return d.getFullYear() + '-W' +
+    Math.ceil((((d - onejan) / 86400000) + onejan.getDay()+1)/7);
 }
 
 /* ------------------ RENDER ------------------ */
@@ -161,7 +158,7 @@ function renderGoals(){
       .reduce((s,h)=>s+h.duration,0);
 
     div.innerHTML += `
-      <div class="goal">
+      <div>
         <strong>${ex}</strong><br>
         Objectif :
         <input type="number" value="${target}" onchange="setGoal('${ex}',this.value)"> min
@@ -180,24 +177,27 @@ function setGoal(ex,val){
 
 /* ------------------ ENTRAÎNEMENT ------------------ */
 function startSession(){
-  index=0;
-  document.getElementById('trainingOverlay').style.display='flex';
-  speak("Commençons l'entraînement",()=>runExercise());
+  if(trainingRunning) return;
+  trainingRunning = true;
+  index = 0;
+  showOverlay();
+  speak("Commençons l'entraînement", runExercise);
 }
 
 function runExercise(){
-  if(index>=selection.length){
+  if(index >= selection.length){
     speak("Entraînement terminé, à bientôt !");
-    document.getElementById('trainingOverlay').style.display='none';
+    trainingRunning = false;
+    hideOverlay();
     renderGoals();
     return;
   }
 
   const ex = selection[index];
   document.getElementById('exerciseName').textContent = ex.name;
-  let t = ex.duration*60;
+  let t = ex.duration * 60;
 
-  speak(`Exercice ${index+1} : ${ex.name}`,()=>{
+  speak(`Exercice ${index+1} : ${ex.name}`, ()=>{
     setTimeout(()=>{
       document.getElementById('beep').play();
       timer = setInterval(()=>{
@@ -206,14 +206,21 @@ function runExercise(){
           `${Math.floor(t/60).toString().padStart(2,'0')}:${(t%60).toString().padStart(2,'0')}`;
 
         document.getElementById('sessionProgress').value =
-          ((index + (ex.duration*60-t)/(ex.duration*60))/selection.length)*100;
+          ((index + (ex.duration*60 - t)/(ex.duration*60)) / selection.length) * 100;
 
-        if(t<=0){
+        if(t <= 0){
           clearInterval(timer);
           document.getElementById('ding').play();
-          history.push({ name:ex.name, duration:ex.duration, week:weekKey(), date:new Date().toISOString() });
-          localStorage.setItem('tj-history',JSON.stringify(history));
-          speak("Fin de l'exercice",()=>{
+
+          history.push({
+            name: ex.name,
+            duration: ex.duration,
+            week: weekKey(),
+            date: new Date().toISOString()
+          });
+          localStorage.setItem('tj-history', JSON.stringify(history));
+
+          speak("Fin de l'exercice", ()=>{
             index++;
             renderSelection();
             runExercise();
@@ -224,7 +231,11 @@ function runExercise(){
   });
 }
 
-function exitFullscreen(){
+/* ------------------ OVERLAY ------------------ */
+function showOverlay(){
+  document.getElementById('trainingOverlay').style.display='flex';
+}
+function hideOverlay(){
   document.getElementById('trainingOverlay').style.display='none';
 }
 
