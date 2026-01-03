@@ -7,11 +7,11 @@
 
 <style>
 body{
-  margin:0;
   font-family:system-ui,sans-serif;
-  background:linear-gradient(to right,#ffecd2,#fcb69f);
+  margin:0;
+  background:#f2f2f2;
 }
-h1{text-align:center;margin:1rem}
+h1,h2,h3{margin:.5rem 0}
 .container{
   max-width:1100px;
   margin:auto;
@@ -22,270 +22,273 @@ h1{text-align:center;margin:1rem}
 }
 .panel{
   background:#fff;
-  border-radius:16px;
+  border-radius:12px;
   padding:1rem;
-  box-shadow:0 6px 14px rgba(0,0,0,.15);
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
 }
 .exercise{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:.5rem;
+  padding:.4rem .6rem;
   margin:.3rem 0;
-  background:#f3f3f3;
-  border-radius:10px;
+  background:#eee;
+  border-radius:8px;
 }
-.exercise.active{background:#ffe6a7}
+.exercise.selected{background:#d1f5d3}
+.exercise.active{background:#ffe7b3}
 .exercise.done{opacity:.5;text-decoration:line-through}
 button{
   border:none;
   border-radius:8px;
-  padding:.4rem .7rem;
+  padding:.3rem .6rem;
   cursor:pointer;
 }
-.controls{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
-progress{width:100%;height:14px}
-textarea,input{width:100%;border-radius:8px;padding:.4rem}
+input[type=range]{width:100px}
+progress{width:100%;height:16px}
+
 #overlay{
   display:none;
   position:fixed;
   inset:0;
-  background:linear-gradient(to right,#84fab0,#8fd3f4);
-  z-index:1000;
+  background:#000;
+  color:#fff;
+  z-index:999;
   flex-direction:column;
   justify-content:center;
   align-items:center;
 }
-#overlay h2{font-size:3rem}
-#timer{font-size:4rem}
-.emoji{font-size:1.6rem;cursor:pointer}
-.sel{outline:2px solid black;border-radius:6px}
+#overlay h1{font-size:2.5rem}
+#overlay #timer{font-size:4rem;margin:1rem 0}
+#overlay progress{width:80%;height:24px}
+
+#modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:1000;
+  justify-content:center;
+  align-items:center;
+}
+#modal .box{
+  background:#fff;
+  color:#000;
+  border-radius:12px;
+  padding:1rem;
+  max-width:600px;
+  width:100%;
+  max-height:80vh;
+  overflow:auto;
+}
 </style>
 </head>
 
 <body>
-<h1>🥋 Coach Tai Jitsu</h1>
+
+<h1 style="text-align:center">🥋 Coach Tai Jitsu</h1>
 
 <div class="container">
 
+<!-- BANQUE -->
 <div class="panel">
-<h3>📚 Banque</h3>
-<div id="bank"></div>
+  <h2>📚 Banque d'exercices</h2>
+  <div id="bank"></div>
 </div>
 
+<!-- SÉLECTION -->
 <div class="panel">
-<h3>📝 Séance</h3>
+  <h2>📝 Séance</h2>
+  <input id="sessionName" placeholder="Nom de la séance" style="width:100%;padding:.4rem">
+  <div id="selection"></div>
 
-<input id="sessionName" placeholder="Nom de la séance">
+  <textarea id="notes" placeholder="Carnet de notes..." style="width:100%;margin-top:.5rem"></textarea>
 
-<div class="controls">
-<button onclick="saveSelection()">💾 Enregistrer sélection</button>
-<button onclick="loadSelection()">📂 Charger sélection</button>
-<button onclick="clearSelection()">🗑️ Vider</button>
-</div>
+  <div style="margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap">
+    <button onclick="startSession()">▶️ Démarrer</button>
+    <button onclick="toggleFullscreen()">📱 Plein écran</button>
+    <button onclick="clearSelection()">🧹 Vider</button>
+    <button onclick="showHistory()">📊 Historique</button>
+  </div>
 
-<div id="selection"></div>
-
-<label>Notes</label>
-<textarea id="notes"></textarea>
-
-<div class="controls">
-<button onclick="startSession()">▶️ Démarrer</button>
-<button onclick="pauseSession()">⏸️ Pause</button>
-<button onclick="resumeSession()">▶️ Reprendre</button>
-<button onclick="stopSession()">⏹️ Stop</button>
-<button onclick="toggleFullscreen()">📱 Plein écran</button>
-<button onclick="showHistory()">📊 Historique</button>
-</div>
-
-<progress id="sessionProgress" value="0" max="100"></progress>
-
-<h4>🎯 Objectifs hebdomadaires</h4>
-<div id="goals"></div>
+  <progress id="progress" value="0" max="100"></progress>
 </div>
 
 </div>
 
-<!-- OVERLAY -->
+<!-- OVERLAY EXERCICE -->
 <div id="overlay">
-<h2 id="overlayName"></h2>
-<div id="timer">00:00</div>
-<progress id="overlayProgress" value="0" max="100"></progress>
-<button onclick="toggleFullscreen()">❌ Quitter</button>
+  <h1 id="overlayName"></h1>
+  <div id="timer">00:00</div>
+  <progress id="overlayProgress" value="0" max="100"></progress>
+  <button onclick="toggleFullscreen()" style="margin-top:1rem">❌ Quitter</button>
 </div>
+
+<!-- MODAL HISTORIQUE -->
+<div id="modal">
+  <div class="box">
+    <h2>📊 Historique</h2>
+    <div id="historyContent"></div>
+    <button onclick="closeModal()">Fermer</button>
+  </div>
+</div>
+
+<audio id="beep" src="beep.mp3"></audio>
+<audio id="ding" src="ding.mp3"></audio>
 
 <script>
-/* ===== DONNÉES ===== */
+/* ================== DONNÉES ================== */
 const bankData=[
- {uv:'UV1 Kihon',items:['Kihon simple','Enchaînement','Cibles'],criteria:['Précision','Posture','Rythme']},
- {uv:'UV2 Déplacements',items:['Taï sabaki','Slow ippon','Ippon kumite'],criteria:['Fluidité','Équilibre','Timing']},
- {uv:'UV3 Kata',items:['Slow kata','Kata nidan','Bunkaï'],criteria:['Exactitude','Kime','Zanchin']},
+ {uv:'UV1 – Kihon',items:['Kihon simple','Enchaînement','Cibles']},
+ {uv:'UV2 – Déplacements',items:['Tai sabaki','Slow ippon','Ippon kumite']},
+ {uv:'UV3 – Kata',items:['Slow kata','Kata nidan','Bunkaï']},
+ {uv:'UV4 – Technique',items:['Shadow']},
+ {uv:'UV5-6 – Randori',items:['Randori shadow']}
 ];
 
 let selection=JSON.parse(localStorage.getItem('tj-selection'))||[];
-let savedSelections=JSON.parse(localStorage.getItem('tj-saved'))||{};
-let sessions=JSON.parse(localStorage.getItem('tj-sessions'))||[];
-let goals=JSON.parse(localStorage.getItem('tj-goals'))||{};
-let idx=0,remaining=0,timer=null;
-let running=false,paused=false,fullscreen=false;
 
-/* ===== UTILS ===== */
+/* sessions NORMALISÉ */
+let rawSessions=JSON.parse(localStorage.getItem('tj-sessions'))||[];
+let sessions=Array.isArray(rawSessions)?rawSessions:Object.values(rawSessions);
+
+let index=0,timer=null,fullscreen=false;
+
+/* ================== RENDER ================== */
+function renderBank(){
+ const b=document.getElementById('bank');
+ b.innerHTML='';
+ bankData.forEach(u=>{
+  const d=document.createElement('div');
+  d.innerHTML=`<h3>${u.uv}</h3>`;
+  u.items.forEach(n=>{
+   d.innerHTML+=`
+    <div class="exercise">
+      <span>${n}</span>
+      <button onclick="addExercise('${u.uv}','${n}')">➕</button>
+    </div>`;
+  });
+  b.appendChild(d);
+ });
+}
+
+function renderSelection(){
+ const s=document.getElementById('selection');
+ s.innerHTML='';
+ if(!selection.length){s.innerHTML='<em>Aucun exercice</em>';return;}
+ selection.forEach((e,i)=>{
+  s.innerHTML+=`
+   <div class="exercise selected">
+    ${e.uv} – ${e.name}
+    <div>
+     <input type="range" min="1" max="60" value="${e.duration}"
+       oninput="updateDuration(${i},this.value)">
+     ${e.duration}min
+     <button onclick="moveUp(${i})">⬆️</button>
+     <button onclick="moveDown(${i})">⬇️</button>
+     <button onclick="removeExercise(${i})">❌</button>
+    </div>
+   </div>`;
+ });
+}
+
+/* ================== ACTIONS ================== */
+function addExercise(uv,name){
+ selection.push({uv,name,duration:5});
+ saveSelection();
+}
+function updateDuration(i,v){selection[i].duration=+v;saveSelection();}
+function moveUp(i){
+ if(i>0){[selection[i-1],selection[i]]=[selection[i],selection[i-1]];saveSelection();}
+}
+function moveDown(i){
+ if(i<selection.length-1){[selection[i+1],selection[i]]=[selection[i],selection[i+1]];saveSelection();}
+}
+function removeExercise(i){selection.splice(i,1);saveSelection();}
+function clearSelection(){if(confirm('Vider ?')){selection=[];saveSelection();}}
+function saveSelection(){
+ localStorage.setItem('tj-selection',JSON.stringify(selection));
+ renderSelection();
+}
+
+/* ================== VOIX ================== */
 function speak(txt,cb){
- speechSynthesis.cancel();
  const u=new SpeechSynthesisUtterance(txt);
  u.lang='fr-FR';
  u.onend=cb;
  speechSynthesis.speak(u);
 }
-function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');}
-function weekKey(){
- const d=new Date(),j=new Date(d.getFullYear(),0,1);
- return d.getFullYear()+"-W"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);
-}
+function format(t){return String(Math.floor(t/60)).padStart(2,'0')+":"+String(t%60).padStart(2,'0');}
 
-/* ===== RENDER ===== */
-function renderBank(){
- const b=document.getElementById('bank');b.innerHTML='';
- bankData.forEach(u=>{
-  b.innerHTML+=`<h4>${u.uv}</h4>`;
-  u.items.forEach(n=>{
-   b.innerHTML+=`
-   <div class="exercise">${n}
-    <button onclick="addExercise('${u.uv}','${n}')">➕</button>
-   </div>`;
-  });
- });
-}
-
-function renderSelection(){
- const s=document.getElementById('selection');s.innerHTML='';
- selection.forEach((e,i)=>{
-  s.innerHTML+=`
-  <div class="exercise ${i===idx?'active':i<idx?'done':''}">
-   ${e.name} (${e.duration} min)
-   <div>
-    <input type="range" min="1" max="60" value="${e.duration}" oninput="setDuration(${i},this.value)">
-    <button onclick="moveUp(${i})">⬆️</button>
-    <button onclick="moveDown(${i})">⬇️</button>
-   </div>
-  </div>`;
- });
-}
-
-/* ===== ACTIONS ===== */
-function addExercise(uv,name){selection.push({uv,name,duration:5});persist();}
-function setDuration(i,v){selection[i].duration=+v;persist();}
-function moveUp(i){ if(i>0){[selection[i-1],selection[i]]=[selection[i],selection[i-1]];persist();}}
-function moveDown(i){ if(i<selection.length-1){[selection[i+1],selection[i]]=[selection[i],selection[i+1]];persist();}}
-function persist(){
- localStorage.setItem('tj-selection',JSON.stringify(selection));
- renderSelection();renderGoals();
-}
-function clearSelection(){selection=[];persist();}
-
-function saveSelection(){
- const name=prompt("Nom de la sélection");
- if(!name)return;
- savedSelections[name]=selection;
- localStorage.setItem('tj-saved',JSON.stringify(savedSelections));
-}
-function loadSelection(){
- const name=prompt("Nom ?");
- if(savedSelections[name]){
-  selection=savedSelections[name];
-  persist();
- }
-}
-
-/* ===== OBJECTIFS ===== */
-function renderGoals(){
-  const g=document.getElementById('goals');
-  g.innerHTML='';
-  const wk=weekKey();
-
-  selection.forEach(ex=>{
-    if(!goals[ex.name]) goals[ex.name]=30;
-
-    let done=0;
-    sessions.forEach(s=>{
-      if(s.week===wk && Array.isArray(s.exercises)){
-        s.exercises.forEach(e=>{
-          if(e.name===ex.name) done+=e.done;
-        });
-      }
-    });
-
-    const pct=Math.min(100,Math.round(done/goals[ex.name]*100));
-    g.innerHTML+=`
-      <div>
-        <strong>${ex.name}</strong><br>
-        Objectif 
-        <input type="number" value="${goals[ex.name]}" 
-          onchange="goals['${ex.name}']=+this.value;saveGoals()">
-        min
-        <progress value="${pct}" max="100"></progress> ${pct}%
-      </div>
-    `;
-  });
-}
-
-function saveGoals(){localStorage.setItem('tj-goals',JSON.stringify(goals));renderGoals();}
-
-/* ===== ENTRAINEMENT ===== */
+/* ================== ENTRAÎNEMENT ================== */
 function startSession(){
- if(!selection.length||running)return;
- running=true;paused=false;idx=0;
- sessions.push({date:new Date().toLocaleString(),week:weekKey(),exercises:[],notes:notes.value});
- speak("Commençons l'entraînement",runExercise);
+ if(!selection.length)return alert('Aucun exercice');
+ index=0;
+ const name=sessionName.value||'Séance '+new Date().toLocaleString();
+ sessions.push({name,date:new Date().toLocaleString(),exercises:JSON.parse(JSON.stringify(selection)),notes:notes.value});
+ localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+ speak("Commençons l'entraînement",nextExercise);
 }
 
-function runExercise(){
- if(!running||paused)return;
- if(idx>=selection.length){
+function nextExercise(){
+ if(index>=selection.length){
   speak("Entraînement terminé, à bientôt !");
-  localStorage.setItem('tj-sessions',JSON.stringify(sessions));
-  running=false;return;
- }
- const ex=selection[idx];
- overlayName.textContent=ex.name;
- remaining=ex.duration*60;
- speak(`Exercice ${idx+1} ${ex.name}`,tick);
-}
-
-function tick(){
- if(!running||paused)return;
- timer=document.getElementById('timer');
- timer.textContent=fmt(remaining);
- const p=((idx+(selection[idx].duration*60-remaining)/(selection[idx].duration*60))/selection.length)*100;
- sessionProgress.value=p;overlayProgress.value=p;
- if(remaining--<=0){
-  sessions[sessions.length-1].exercises.push({name:selection[idx].name,done:selection[idx].duration});
-  speak("Fin de l'exercice",()=>{idx++;runExercise();});
+  document.getElementById('progress').value=100;
   return;
  }
- setTimeout(tick,1000);
+ const ex=selection[index];
+ overlayName.textContent=ex.name;
+ updateState();
+ speak(`Exercice ${index+1} : ${ex.name}`,()=>{
+  setTimeout(()=>{
+   beep.play();
+   let t=ex.duration*60;
+   timerEl=setInterval(()=>{
+    t--;
+    timer.textContent=format(t);
+    overlayProgress.value=((index+(ex.duration*60-t)/(ex.duration*60))/selection.length)*100;
+    progress.value=overlayProgress.value;
+    if(t<=0){
+     clearInterval(timerEl);
+     ding.play();
+     speak("Fin de l'exercice",()=>{
+      index++;
+      nextExercise();
+     });
+    }
+   },1000);
+  },2000);
+ });
 }
 
-/* ===== CONTROLES ===== */
-function pauseSession(){paused=true;}
-function resumeSession(){if(paused){paused=false;tick();}}
-function stopSession(){running=false;paused=false;}
+function updateState(){
+ document.querySelectorAll('#selection .exercise').forEach((e,i)=>{
+  e.classList.toggle('active',i===index);
+  e.classList.toggle('done',i<index);
+ });
+}
+
+/* ================== UI ================== */
 function toggleFullscreen(){
  fullscreen=!fullscreen;
  overlay.style.display=fullscreen?'flex':'none';
 }
-
-/* ===== HISTORIQUE ===== */
 function showHistory(){
- alert(sessions.map(s=>`${s.date}\n${s.exercises.map(e=>e.name+' '+e.done+'m').join(', ')}`).join('\n\n')||"Aucune séance");
+ let html='';
+ sessions.forEach(s=>{
+  html+=`<strong>${s.name}</strong> (${s.date})<br>`;
+  s.exercises.forEach(e=>html+=`- ${e.name} (${e.duration}min)<br>`);
+  html+=`Notes: ${s.notes||''}<hr>`;
+ });
+ historyContent.innerHTML=html||'Aucune séance';
+ modal.style.display='flex';
 }
+function closeModal(){modal.style.display='none';}
 
-/* INIT */
-let sessionsRaw = JSON.parse(localStorage.getItem('tj-sessions')) || [];
-let sessions = Array.isArray(sessionsRaw)
-  ? sessionsRaw
-  : Object.values(sessionsRaw);
-
+/* ================== INIT ================== */
+renderBank();
+renderSelection();
 </script>
+
 </body>
 </html>
