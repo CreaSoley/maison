@@ -45,7 +45,6 @@ button{
   padding:.4rem .8rem;
   cursor:pointer;
 }
-
 input[type=range]{width:120px}
 input[type=text],textarea,input[type=number]{
   width:100%;
@@ -54,7 +53,6 @@ input[type=text],textarea,input[type=number]{
   border:1px solid #ccc;
   margin-bottom:.4rem;
 }
-
 progress{width:100%;height:14px}
 
 #trainingOverlay{
@@ -83,7 +81,7 @@ progress{width:100%;height:14px}
   <div id="bank"></div>
 </div>
 
-<!-- SELECTION -->
+<!-- SÉLECTION -->
 <div class="panel">
   <h2>📝 Séance</h2>
   <input id="sessionName" placeholder="Nom de la séance">
@@ -159,6 +157,7 @@ function renderBank(){
   b.appendChild(d);
  });
 }
+
 function renderSelection(){
  const s=document.getElementById('selection'); s.innerHTML='';
  if(!selection.length){s.innerHTML='<em>Aucun exercice</em>';return;}
@@ -169,11 +168,14 @@ function renderSelection(){
     <div>
      <input type="range" min="1" max="60" value="${e.duration}" oninput="updateDuration(${i},this.value)">
      ${e.duration} min
+     <button onclick="moveUp(${i})">⬆️</button>
+     <button onclick="moveDown(${i})">⬇️</button>
      <button onclick="removeExercise(${i})">❌</button>
     </div>
    </div>`;
  });
 }
+
 function renderGoals(){
  const g=document.getElementById('goals'); g.innerHTML='';
  const wk=weekKey();
@@ -202,6 +204,8 @@ function addExercise(uv,name){
  saveSelection();
 }
 function updateDuration(i,v){selection[i].duration=parseInt(v);saveSelection();}
+function moveUp(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection();}}
+function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i],selection[i+1]]; saveSelection();}}
 function removeExercise(i){selection.splice(i,1);saveSelection();}
 function saveSelection(){
  localStorage.setItem('tj-selection',JSON.stringify(selection));
@@ -220,6 +224,7 @@ function startSession(){
  seqIndex=0;
  speak("Commençons l'entraînement",()=>setTimeout(nextExercise,1000));
 }
+
 function nextExercise(){
  if(seqIndex>=selection.length){
   speak("Entraînement terminé, à bientôt !");
@@ -227,15 +232,20 @@ function nextExercise(){
  }
  const ex=selection[seqIndex];
  exerciseName.textContent=ex.name;
+ if(fullscreen) trainingOverlay.style.display='flex';
+
  speak("Exercice "+(seqIndex+1)+" : "+ex.name,()=>{
   setTimeout(()=>{
    beep.play();
-   let t=ex.duration*60;
-   timer=setInterval(()=>{
-    t--; timerEl.textContent=formatTime(t);
-    sessionProgress.value=((seqIndex+(ex.duration*60-t)/(ex.duration*60))/selection.length)*100;
-    if(t<=0){
-     clearInterval(timer);
+   let remaining=ex.duration*60;
+   timer=document.getElementById('timer');
+   clearInterval(window._t);
+   window._t=setInterval(()=>{
+    remaining--;
+    timer.textContent=formatTime(remaining);
+    sessionProgress.value=((seqIndex+(ex.duration*60-remaining)/(ex.duration*60))/selection.length)*100;
+    if(remaining<=0){
+     clearInterval(window._t);
      ding.play();
      speak("Fin de l'exercice",()=>{seqIndex++;setTimeout(nextExercise,1000);});
     }
