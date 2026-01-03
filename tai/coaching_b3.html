@@ -55,7 +55,7 @@ input[type=text] { width: 100%; padding: .6rem; border-radius: 10px; border: 1px
 
 /* Overlay plein écran exercice */
 #trainingOverlay {
-  display: none;
+  display: none; /* caché par défaut */
   position: fixed;
   inset: 0;
   background: linear-gradient(to right, #84fab0, #8fd3f4);
@@ -64,12 +64,12 @@ input[type=text] { width: 100%; padding: .6rem; border-radius: 10px; border: 1px
   justify-content: center;
   align-items: center;
   color: #000;
-  display: flex;
   font-family: system-ui, sans-serif;
 }
 #trainingOverlay h1 { font-size: 3rem; margin-bottom: 1rem; }
 #trainingOverlay #timer { font-size: 4rem; margin-bottom: 1rem; }
 #trainingOverlay progress { width: 80%; height: 24px; }
+#trainingOverlay button { margin-top:2rem;padding:1rem 2rem;font-size:1.2rem;border-radius:12px; cursor:pointer; }
 </style>
 </head>
 
@@ -102,6 +102,7 @@ input[type=text] { width: 100%; padding: .6rem; border-radius: 10px; border: 1px
   <h1 id="exerciseName">Exercice</h1>
   <div id="timer">00:00</div>
   <progress id="sessionProgress" value="0" max="100"></progress>
+  <button onclick="endTraining()">❌ Quitter l'entraînement</button>
 </div>
 
 <audio id="beep" src="beep.mp3"></audio>
@@ -165,7 +166,7 @@ function renderSelection(){
 function addExercise(uv,name){ selection.push({uv,name,duration:5}); saveSelection(); }
 function removeExercise(i){ selection.splice(i,1); saveSelection(); }
 function moveUp(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection(); }}
-function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i],selection[i+1]]; saveSelection(); }}
+function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i+1],selection[i]]=[selection[i+1],selection[i]]; saveSelection(); }}
 function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(selection)); renderSelection(); }
 function clearSelection(){ if(confirm('Vider la sélection ?')){ selection=[]; saveSelection(); } }
 function saveSession(){ const name=document.getElementById('sessionName').value.trim(); if(!name){alert('Nom obligatoire'); return;} sessions[name]=[...selection]; localStorage.setItem('tj-sessions',JSON.stringify(sessions)); alert('Séance sauvegardée ✔️'); }
@@ -180,13 +181,19 @@ function startSession(){
   speak("Commençons l'entraînement", ()=>setTimeout(nextExercise,1000));
 }
 
+function endTraining(){
+  clearInterval(timer);
+  document.getElementById('trainingOverlay').style.display='none';
+  seqIndex=0;
+  renderSelection();
+  document.getElementById('progress').value=0;
+  speechSynthesis.cancel();
+}
+
 function nextExercise(){
   if(seqIndex>=selection.length){
     speak("Entraînement terminé, à bientôt !");
-    document.getElementById('trainingOverlay').style.display='none';
-    seqIndex=0;
-    renderSelection();
-    document.getElementById('progress').value=0;
+    endTraining();
     return;
   }
 
