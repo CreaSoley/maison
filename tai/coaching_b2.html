@@ -52,21 +52,6 @@ h1 { text-align: center; padding: 1rem; }
 input[type=text] { width: 100%; padding: .6rem; border-radius: 10px; border: 1px solid #ccc; margin-bottom: .5rem; }
 
 #progress { width: 100%; height: 16px; margin-top: .8rem; }
-
-.fullscreen {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  color: #fff;
-  z-index: 999;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.fullscreen h1 { color: #fff; }
-.fullscreen .exercise { font-size: 1.5rem; margin: .5rem 0; background: #444; color: #fff; border-radius: 12px; }
 </style>
 </head>
 
@@ -114,7 +99,6 @@ let sessions  = JSON.parse(localStorage.getItem('tj-sessions')) || {};
 
 let seqIndex = 0;
 let timer = null;
-let fullMode = false;
 
 /* --------- RENDER BANQUE --------- */
 function renderBank(){
@@ -162,8 +146,16 @@ function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(sel
 function clearSelection(){ if(confirm('Vider la sélection ?')){ selection=[]; saveSelection(); } }
 function saveSession(){ const name=document.getElementById('sessionName').value.trim(); if(!name){alert('Nom obligatoire'); return;} sessions[name]=[...selection]; localStorage.setItem('tj-sessions',JSON.stringify(sessions)); alert('Séance sauvegardée ✔️'); }
 
-/* --------- PLEIN ÉCRAN --------- */
-function toggleFull(){ fullMode=!fullMode; document.body.classList.toggle('fullscreen'); }
+/* --------- PLEIN ÉCRAN NATIF --------- */
+function toggleFull(){
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      alert(`Impossible de passer en plein écran : ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
 
 /* --------- SYNTHÈSE VOCALE & ENTRAÎNEMENT --------- */
 function speak(txt,cb){ const u=new SpeechSynthesisUtterance(txt); u.onend=cb; speechSynthesis.speak(u); }
@@ -179,6 +171,7 @@ function nextExercise(){
     speak("Entraînement terminé, à bientôt !");
     seqIndex=0;
     renderSelection();
+    document.getElementById('progress').value = 0;
     return;
   }
   const ex = selection[seqIndex];
