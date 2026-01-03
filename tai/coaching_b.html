@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coach Tai Jitsu – 2e Dan</title>
+<title>Coach Tai Jitsu – Sélection de séance</title>
 
 <style>
 body {
@@ -11,256 +11,227 @@ body {
   margin: 0;
   background: linear-gradient(to right, #ffecd2, #fcb69f);
 }
-h1 { text-align: center; padding: 1rem; }
 
-.container {
-  max-width: 900px;
-  margin: auto;
+h1 {
+  text-align: center;
   padding: 1rem;
 }
 
-.uv {
-  background: linear-gradient(120deg, #84fab0, #8fd3f4);
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.panel {
+  background: #fff;
   border-radius: 16px;
   padding: 1rem;
-  margin-bottom: 1rem;
   box-shadow: 0 6px 14px rgba(0,0,0,.15);
 }
 
+.uv {
+  margin-bottom: 1rem;
+}
+
 .exercise {
-  background: #fff;
-  border-radius: 12px;
-  padding: .6rem;
-  margin: .4rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: .5rem .7rem;
+  border-radius: 10px;
+  margin: .3rem 0;
+  background: #f5f5f5;
 }
 
-.exercise.active { background: #ffe8b3; }
-.exercise.done { text-decoration: line-through; opacity: .6; }
+.exercise.selected {
+  background: #d1f5d3;
+}
+
+.exercise button {
+  border: none;
+  border-radius: 8px;
+  padding: .3rem .6rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
 
 .controls {
+  margin-top: .8rem;
   display: flex;
-  flex-wrap: wrap;
   gap: .5rem;
-  justify-content: center;
-  margin: 1rem 0;
+  flex-wrap: wrap;
 }
 
-button {
-  padding: .6rem 1.2rem;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,.2);
-}
-
-progress { width: 100%; height: 18px; }
-
-details {
-  background: #fff;
-  border-radius: 14px;
-  padding: .8rem;
-  margin: 1rem 0;
-  box-shadow: 0 4px 10px rgba(0,0,0,.12);
-}
-
-textarea {
+input[type=text] {
   width: 100%;
-  min-height: 90px;
-  border-radius: 12px;
   padding: .6rem;
-  border: none;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,.2);
-}
-
-.fullscreen {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  color: #fff;
-  z-index: 999;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: .5rem;
 }
 </style>
 </head>
 
 <body>
-<h1>🥋 Coach Tai Jitsu – 2e Dan</h1>
-<div class="container" id="app"></div>
+<h1>🥋 Coach Tai Jitsu – Sélection de séance</h1>
 
-<audio id="beep" src="beep.mp3"></audio>
-<audio id="ding" src="ding.mp3"></audio>
+<div class="container">
+
+  <!-- BANQUE -->
+  <div class="panel">
+    <h2>📚 Banque d'exercices</h2>
+    <div id="bank"></div>
+  </div>
+
+  <!-- SÉLECTION -->
+  <div class="panel">
+    <h2>📝 Séance sélectionnée</h2>
+    <input type="text" id="sessionName" placeholder="Nom de la séance">
+    <div id="selection"></div>
+
+    <div class="controls">
+      <button onclick="saveSession()">💾 Sauvegarder la séance</button>
+      <button onclick="clearSelection()">🧹 Vider la sélection</button>
+    </div>
+  </div>
+
+</div>
 
 <script>
-const synth = speechSynthesis;
-
-const defaultData = [
-  { uv:'🥋 UV 1 – Kihon', criteria:['Kime','Précision'], items:[
-    {name:'Kihon simple',duration:5},
-    {name:'Enchaînement de kihon',duration:5},
-    {name:'Cibles',duration:5}
+/* --------- DONNÉES BANQUE --------- */
+const bankData = [
+  { uv:'🥋 UV 1 – Kihon', items:[
+    'Kihon simple',
+    'Enchaînement de kihon',
+    'Cibles'
   ]},
-  { uv:'🌀 UV 2 – Déplacements', criteria:['Maai','Fluidité'], items:[
-    {name:'Taï sabaki',duration:5},
-    {name:'Slow ippon',duration:5},
-    {name:'Ippon kumite',duration:5}
+  { uv:'🌀 UV 2 – Déplacements', items:[
+    'Taï sabaki',
+    'Slow ippon',
+    'Ippon kumite'
   ]},
-  { uv:'📐 UV 3 – Kata', criteria:['Rythme','Mémorisation'], items:[
-    {name:'Slow kata',duration:5},
-    {name:'Kata nidan',duration:5},
-    {name:'Bunkaï',duration:5}
+  { uv:'📐 UV 3 – Kata', items:[
+    'Slow kata',
+    'Kata nidan',
+    'Bunkaï'
   ]},
-  { uv:'⚙️ UV 4 – Technique de base', criteria:['Réalisme','Zanshin','Protection'], items:[
-    {name:'Shadow',duration:5}
+  { uv:'⚙️ UV 4 – Technique de base', items:[
+    'Shadow'
   ]},
-  { uv:'🔥 UV 5 & 6 – Randori', criteria:['Réalisme','Zanshin','Protection'], items:[
-    {name:'Randori shadow',duration:5}
+  { uv:'🔥 UV 5 & 6 – Randori', items:[
+    'Randori shadow'
   ]}
 ];
 
-let data = JSON.parse(localStorage.getItem('tj-data')) || defaultData;
-let history = JSON.parse(localStorage.getItem('tj-history')) || [];
-let notes = localStorage.getItem('tj-notes') || '';
+/* --------- ÉTAT --------- */
+let selection = JSON.parse(localStorage.getItem('tj-selection')) || [];
+let sessions  = JSON.parse(localStorage.getItem('tj-sessions')) || {};
 
-let sequence = [];
-let index = 0;
-let timer = null;
+/* --------- RENDER BANQUE --------- */
+function renderBank(){
+  const bank = document.getElementById('bank');
+  bank.innerHTML = '';
 
-function save(){ localStorage.setItem('tj-data',JSON.stringify(data)); }
+  bankData.forEach(uv => {
+    const div = document.createElement('div');
+    div.className = 'uv';
+    div.innerHTML = `<h3>${uv.uv}</h3>`;
 
-function render(){
-  const app = document.getElementById('app');
-  app.innerHTML = '';
-
-  data.forEach(uv=>{
-    const block = document.createElement('div');
-    block.className = 'uv';
-    block.innerHTML = `<h3>${uv.uv}</h3>`;
-
-    uv.items.forEach(ex=>{
-      const d = document.createElement('div');
-      d.className = 'exercise';
-      d.innerHTML = `
-        <span>${ex.name}</span>
-        <input type="range" min="1" max="30" value="${ex.duration}"
-          oninput="ex.duration=this.value;save()">`;
-      block.appendChild(d);
+    uv.items.forEach(name => {
+      const ex = document.createElement('div');
+      ex.className = 'exercise';
+      ex.innerHTML = `
+        <span>${name}</span>
+        <button onclick="addExercise('${uv.uv}','${name}')">➕</button>
+      `;
+      div.appendChild(ex);
     });
 
-    app.appendChild(block);
+    bank.appendChild(div);
   });
-
-  app.innerHTML += `
-    <div class="controls">
-      <button onclick="start()">▶️ Lecture</button>
-      <button onclick="toggleFull()">📱 Plein écran</button>
-      <button onclick="resetApp()">🧹 Réinitialiser</button>
-    </div>
-
-    <progress id="progress" value="0" max="100"></progress>
-
-    <details>
-      <summary>🎯 Objectifs</summary>
-      <p>Objectifs définis par UV (évolutif).</p>
-    </details>
-
-    <details>
-      <summary>⭐ Évaluation de fin de séance</summary>
-      ${data.map(u=>`
-        <strong>${u.uv}</strong><br>
-        ${u.criteria.map(c=>`${c} <input type="range" min="1" max="5"><br>`).join('')}
-      `).join('')}
-      <button onclick="saveEval()">💾 Enregistrer</button>
-    </details>
-
-    <details>
-      <summary>📊 Historique</summary>
-      ${history.map(h=>`<div>${h.date} – ${h.uv}</div>`).join('') || 'Aucun historique'}
-    </details>
-
-    <details>
-      <summary>📝 Carnet de notes</summary>
-      <textarea onblur="saveNotes(this.value)">${notes}</textarea>
-    </details>
-  `;
 }
 
-function speak(txt, cb){
-  const u = new SpeechSynthesisUtterance(txt);
-  u.onend = cb;
-  synth.speak(u);
-}
+/* --------- RENDER SÉLECTION --------- */
+function renderSelection(){
+  const sel = document.getElementById('selection');
+  sel.innerHTML = '';
 
-function start(){
-  sequence = data.flatMap(u=>u.items.map(i=>({...i,uv:u.uv})));
-  index = 0;
-  speak("Commençons l'entraînement", ()=>setTimeout(nextExercise,1000));
-}
-
-function nextExercise(){
-  if(index >= sequence.length){
-    speak("Entraînement terminé, à bientôt !");
+  if(selection.length === 0){
+    sel.innerHTML = '<em>Aucun exercice sélectionné</em>';
     return;
   }
 
-  const ex = sequence[index];
-  updateState();
-
-  speak(`Exercice ${index+1} : ${ex.name}`, ()=>{
-    setTimeout(()=>{
-      document.getElementById('beep').play();
-      let t = ex.duration * 60;
-
-      timer = setInterval(()=>{
-        t--;
-        document.getElementById('progress').value = (index/sequence.length)*100;
-        if(t <= 0){
-          clearInterval(timer);
-          document.getElementById('ding').play();
-          speak("Fin de l'exercice", ()=>{
-            index++;
-            setTimeout(nextExercise,1000);
-          });
-        }
-      },1000);
-    },2000);
+  selection.forEach((ex,i) => {
+    const d = document.createElement('div');
+    d.className = 'exercise selected';
+    d.innerHTML = `
+      <span>${ex.uv} – ${ex.name}</span>
+      <div>
+        <button onclick="moveUp(${i})">⬆️</button>
+        <button onclick="moveDown(${i})">⬇️</button>
+        <button onclick="removeExercise(${i})">❌</button>
+      </div>
+    `;
+    sel.appendChild(d);
   });
 }
 
-function updateState(){
-  document.querySelectorAll('.exercise').forEach((e,i)=>{
-    e.classList.toggle('active', i===index);
-    e.classList.toggle('done', i<index);
-  });
+/* --------- ACTIONS --------- */
+function addExercise(uv,name){
+  selection.push({uv,name});
+  saveSelection();
 }
 
-function toggleFull(){
-  document.body.classList.toggle('fullscreen');
+function removeExercise(i){
+  selection.splice(i,1);
+  saveSelection();
 }
 
-function resetApp(){
-  if(confirm("Réinitialiser l'application ?")){
-    localStorage.clear();
-    location.reload();
+function moveUp(i){
+  if(i > 0){
+    [selection[i-1], selection[i]] = [selection[i], selection[i-1]];
+    saveSelection();
   }
 }
 
-function saveEval(){
-  const date = new Date().toLocaleDateString();
-  data.forEach(u=>{
-    history.push({date,uv:u.uv});
-  });
-  localStorage.setItem('tj-history',JSON.stringify(history));
-  alert("Évaluation enregistrée");
+function moveDown(i){
+  if(i < selection.length - 1){
+    [selection[i+1], selection[i]] = [selection[i], selection[i+1]];
+    saveSelection();
+  }
 }
 
-function saveNotes(v){
-  notes = v;
-  localStorage.setItem('tj-notes',v);
+function saveSelection(){
+  localStorage.setItem('tj-selection', JSON.stringify(selection));
+  renderSelection();
 }
 
-render();
+function clearSelection(){
+  if(confirm('Vider la sélection ?')){
+    selection = [];
+    saveSelection();
+  }
+}
+
+function saveSession(){
+  const name = document.getElementById('sessionName').value.trim();
+  if(!name){
+    alert('Merci de donner un nom à la séance');
+    return;
+  }
+  sessions[name] = [...selection];
+  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
+  alert('Séance sauvegardée ✔️');
+}
+
+/* --------- INIT --------- */
+renderBank();
+renderSelection();
 </script>
+
 </body>
 </html>
