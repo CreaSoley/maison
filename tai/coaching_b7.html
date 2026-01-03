@@ -199,25 +199,36 @@ function loadSelection(){
 
 /* ===== OBJECTIFS ===== */
 function renderGoals(){
- const g=document.getElementById('goals');g.innerHTML='';
- const wk=weekKey();
- selection.forEach(e=>{
-  if(!goals[e.name]) goals[e.name]=30;
-  let done=0;
-  sessions.forEach(s=>{
-   if(s.week===wk){
-    s.exercises.forEach(x=>{if(x.name===e.name)done+=x.done;});
-   }
+  const g=document.getElementById('goals');
+  g.innerHTML='';
+  const wk=weekKey();
+
+  selection.forEach(ex=>{
+    if(!goals[ex.name]) goals[ex.name]=30;
+
+    let done=0;
+    sessions.forEach(s=>{
+      if(s.week===wk && Array.isArray(s.exercises)){
+        s.exercises.forEach(e=>{
+          if(e.name===ex.name) done+=e.done;
+        });
+      }
+    });
+
+    const pct=Math.min(100,Math.round(done/goals[ex.name]*100));
+    g.innerHTML+=`
+      <div>
+        <strong>${ex.name}</strong><br>
+        Objectif 
+        <input type="number" value="${goals[ex.name]}" 
+          onchange="goals['${ex.name}']=+this.value;saveGoals()">
+        min
+        <progress value="${pct}" max="100"></progress> ${pct}%
+      </div>
+    `;
   });
-  const pct=Math.min(100,Math.round(done/goals[e.name]*100));
-  g.innerHTML+=`
-  <div>
-   ${e.name}
-   <input type="number" value="${goals[e.name]}" onchange="goals['${e.name}']=+this.value;saveGoals()">
-   <progress value="${pct}" max="100"></progress> ${pct}%
-  </div>`;
- });
 }
+
 function saveGoals(){localStorage.setItem('tj-goals',JSON.stringify(goals));renderGoals();}
 
 /* ===== ENTRAINEMENT ===== */
@@ -270,7 +281,11 @@ function showHistory(){
 }
 
 /* INIT */
-renderBank();renderSelection();renderGoals();
+let sessionsRaw = JSON.parse(localStorage.getItem('tj-sessions')) || [];
+let sessions = Array.isArray(sessionsRaw)
+  ? sessionsRaw
+  : Object.values(sessionsRaw);
+
 </script>
 </body>
 </html>
