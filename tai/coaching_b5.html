@@ -209,6 +209,7 @@ function startSession(){
   if(!selection.length){ alert("Sélectionnez des exercices"); return; }
   const name = document.getElementById('sessionName').value || "Séance " + new Date().toLocaleString();
   currentSessionName = name;
+
   // Copier la sélection pour cette séance
   sessions[name] = {
     date: new Date().toLocaleString(),
@@ -217,7 +218,10 @@ function startSession(){
     notes: notes.value
   };
   localStorage.setItem('tj-sessions', JSON.stringify(sessions));
+
   seqIndex = 0;
+
+  // Commence la séance avec la voix
   speak("Commençons l'entraînement", nextExercise);
 }
 
@@ -231,34 +235,34 @@ function nextExercise(){
   exerciseName.textContent = ex.name;
   if(fullscreen) trainingOverlay.style.display='flex';
 
+  // Annonce l'exercice
   speak(`Exercice ${seqIndex+1} : ${ex.name}`, ()=>{
-    setTimeout(()=>{
-      beep.play();
-      let remaining = ex.duration*60;
+    // Lance immédiatement le beep et le timer
+    beep.play();
+    let remaining = ex.duration*60;
+    timer.textContent = formatTime(remaining);
+    sessionProgress.value = (seqIndex)/selection.length*100;
+
+    clearInterval(window._t);
+    window._t = setInterval(()=>{
+      remaining--;
       timer.textContent = formatTime(remaining);
-      sessionProgress.value = (seqIndex)/selection.length*100;
+      sessionProgress.value = (seqIndex + (ex.duration*60-remaining)/(ex.duration*60))/selection.length*100;
+      if(remaining <= 0){
+        clearInterval(window._t);
+        ding.play();
+        // Sauvegarde la durée effectuée
+        selection[seqIndex].doneMinutes = ex.duration;
+        sessions[currentSessionName].exercises[seqIndex].doneMinutes = ex.duration;
+        localStorage.setItem('tj-sessions', JSON.stringify(sessions));
 
-      clearInterval(window._t);
-      window._t = setInterval(()=>{
-        remaining--;
-        timer.textContent = formatTime(remaining);
-        sessionProgress.value = (seqIndex + (ex.duration*60-remaining)/(ex.duration*60))/selection.length*100;
-        if(remaining <= 0){
-          clearInterval(window._t);
-          ding.play();
-          // Durée réelle
-          selection[seqIndex].doneMinutes = ex.duration;
-          sessions[currentSessionName].exercises[seqIndex].doneMinutes = ex.duration;
-          localStorage.setItem('tj-sessions', JSON.stringify(sessions));
-
-          speak("Fin de l'exercice", ()=>{
-            seqIndex++;
-            nextExercise(); // lance le suivant dans le callback
-          });
-        }
-      },1000);
-
-    },2000); // latence avant beep
+        // Fin de l'exercice, passe au suivant
+        speak("Fin de l'exercice", ()=>{
+          seqIndex++;
+          nextExercise();
+        });
+      }
+    },1000);
   });
 }
 
