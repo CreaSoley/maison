@@ -135,7 +135,7 @@ function renderSelection(){
    const range=document.createElement('input'); range.type='range'; range.min=1; range.max=60; range.value=e.duration; range.oninput=(ev)=>updateDuration(i,ev.target.value);
    const spanVal=document.createElement('span'); spanVal.textContent=`${e.duration} min`;
    const btnUp=document.createElement('button'); btnUp.textContent='⬆️'; btnUp.onclick=()=>moveUp(i);
-   const btnDown=document.createElement('button'); btnDown.textContent='⬇️'; btnDown.onclick=()=>moveDown(i);
+  const btnDown=document.createElement('button'); btnDown.textContent='⬇️'; btnDown.onclick=()=>moveDown(i);
    const btnDel=document.createElement('button'); btnDel.textContent='❌'; btnDel.onclick=()=>removeExercise(i);
    const criteriaDiv=document.createElement('div'); criteriaDiv.style.fontSize='.8rem'; criteriaDiv.style.color='#555'; criteriaDiv.textContent=`Critères: ${criteria}`;
    innerDiv.appendChild(range); innerDiv.appendChild(spanVal); innerDiv.appendChild(btnUp); innerDiv.appendChild(btnDown); innerDiv.appendChild(btnDel); innerDiv.appendChild(criteriaDiv);
@@ -244,11 +244,17 @@ function showHistory(){
  for(const n in sessions){
    const s=sessions[n];
    let div=document.createElement('div'); div.className='history-item';
-   div.innerHTML=`<strong>${n}</strong> (${s.date})<br>`;
-   s.exercises.forEach(e=>{div.innerHTML+=`- ${e.name}: ${e.doneMinutes||0} min<br>`;});
-   div.innerHTML+=`Notes: ${s.notes||''}<br><br>`;
+   let html = `<strong>${n}</strong> (${s.date})<br>`;
+   if(s.exercises && s.exercises.length){
+       s.exercises.forEach(e=>{
+           html += `- ${e.name}: ${e.doneMinutes || 0} min<br>`;
+       });
+   }
+   html += `Notes: ${s.notes||''}<br><br>`;
+   div.innerHTML = html;
    h.appendChild(div);
- }
+}
+
 }
 function closeModal(){ document.getElementById('modal').style.display='none';}
 
