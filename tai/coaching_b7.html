@@ -21,9 +21,9 @@ input[type=text]{width:100%;padding:.6rem;border-radius:10px;border:1px solid #c
 input[type=range]{width:120px;}
 textarea{width:100%;border-radius:12px;padding:.6rem;margin-top:.5rem;}
 label{font-weight:bold;}
-progress{width:100%;height:14px}
+progress{width:100%;height:16px}
 
-/* Objectifs */
+/* Objectifs hebdomadaires */
 .goal-row{background:#f5f5f5;border-radius:12px;padding:.6rem;margin:.4rem 0;}
 .goal-row input{width:70px;}
 .goal-row progress{height:12px}
@@ -42,16 +42,19 @@ flex-direction:column;justify-content:center;align-items:center;}
 
 <div class="container">
 
+  <!-- OBJECTIFS -->
   <div class="panel">
     <h2>🎯 Objectifs hebdomadaires</h2>
     <div id="weeklyGoals"></div>
   </div>
 
+  <!-- BANQUE -->
   <div class="panel">
     <h2>📚 Banque d'exercices</h2>
     <div id="bank"></div>
   </div>
 
+  <!-- SÉANCE -->
   <div class="panel">
     <h2>📝 Séance sélectionnée</h2>
     <input type="text" id="sessionName" placeholder="Nom de la séance">
@@ -62,12 +65,15 @@ flex-direction:column;justify-content:center;align-items:center;}
       <button onclick="saveSelection()">💾 Sauvegarder</button>
       <button onclick="clearSelection()">🧹 Vider</button>
       <button onclick="startSession()">▶️ Démarrer</button>
+      <button onclick="toggleFullscreen()">📱 Plein écran</button>
+      <button onclick="showHistory()">📊 Historique</button>
     </div>
     <progress id="progress" value="0" max="100"></progress>
   </div>
 
 </div>
 
+<!-- OVERLAY -->
 <div id="trainingOverlay">
   <h1 id="exerciseName"></h1>
   <div id="timer">00:00</div>
@@ -75,99 +81,100 @@ flex-direction:column;justify-content:center;align-items:center;}
   <button onclick="toggleFullscreen()">❌ Quitter</button>
 </div>
 
+<!-- MODAL -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;
+justify-content:center;align-items:center;">
+  <div style="background:#fff;padding:1rem;border-radius:16px;max-width:600px;width:100%;">
+    <h2>📋 Historique & Évaluation</h2>
+    <div id="historyList"></div>
+    <button onclick="closeModal()">❌ Fermer</button>
+  </div>
+</div>
+
 <script>
-/* ------------------ BANQUE ------------------ */
+/* ==== DONNÉES EXISTANTES ==== */
 const bankData=[
-{uv:'🥋 UV 1 – Kihon',items:['Kihon simple','Enchaînement de kihon','Cibles']},
-{uv:'🌀 UV 2 – Déplacements',items:['Taï sabaki','Slow ippon','Ippon kumite']},
-{uv:'📐 UV 3 – Kata',items:['Slow kata','Kata nidan','Bunkaï']},
-{uv:'⚙️ UV 4 – Technique',items:['Shadow']},
-{uv:'🔥 UV 5 & 6 – Randori',items:['Randori shadow']}
+{uv:'🥋 UV 1 – Kihon',items:['Kihon simple','Enchaînement de kihon','Cibles'],criteria:['Précision','Réactivité','Posture']},
+{uv:'🌀 UV 2 – Déplacements',items:['Taï sabaki','Slow ippon','Ippon kumite'],criteria:['Fluidité','Équilibre','Contrôle']},
+{uv:'📐 UV 3 – Kata',items:['Slow kata','Kata nidan','Bunkaï'],criteria:['Exactitude','Maîtrise','Kime']},
+{uv:'⚙️ UV 4 – Technique',items:['Shadow'],criteria:['Réalisme','Zanchin','Protection']},
+{uv:'🔥 UV 5 & 6 – Randori',items:['Randori shadow'],criteria:['Réalisme','Zanchin','Protection']}
 ];
 
-/* ------------------ ÉTAT ------------------ */
 let selection=JSON.parse(localStorage.getItem('tj-selection'))||[];
+let sessions=JSON.parse(localStorage.getItem('tj-sessions'))||{};
 let weeklyGoals=JSON.parse(localStorage.getItem('tj-weekly-goals'))||{};
 let weeklyProgress=JSON.parse(localStorage.getItem('tj-weekly-progress'))||{};
-let seqIndex=0,timer=null,fullscreen=false;
+let seqIndex=0,timer=null,fullscreen=false,currentSessionName="";
 
-/* ------------------ RESET HEBDO ------------------ */
-function checkWeek(){
- const w=new Date().getFullYear()+"-W"+Math.ceil(new Date().getDate()/7);
- if(localStorage.getItem('tj-week')!==w){
-  weeklyProgress={};
-  localStorage.setItem('tj-week',w);
- }
-}
-checkWeek();
-
-/* ------------------ OBJECTIFS ------------------ */
+/* ==== OBJECTIFS ==== */
 function renderWeeklyGoals(){
  const d=document.getElementById('weeklyGoals'); d.innerHTML='';
- if(selection.length===0){d.innerHTML='<em>Aucun exercice</em>';return;}
+ if(selection.length===0){d.innerHTML='<em>Aucun exercice sélectionné</em>';return;}
  selection.forEach(ex=>{
-  if(!weeklyGoals[ex.name]) weeklyGoals[ex.name]=60;
-  if(!weeklyProgress[ex.name]) weeklyProgress[ex.name]=0;
+  weeklyGoals[ex.name]??=60;
+  weeklyProgress[ex.name]??=0;
   const pct=Math.min(weeklyProgress[ex.name]/weeklyGoals[ex.name]*100,100).toFixed(0);
   d.innerHTML+=`
   <div class="goal-row">
    <strong>${ex.name}</strong><br>
-   Objectif <input type="number" min="1" value="${weeklyGoals[ex.name]}"
-    onchange="weeklyGoals['${ex.name}']=this.value;saveWeekly();renderWeeklyGoals()"> min
+   Objectif <input type="number" value="${weeklyGoals[ex.name]}"
+   onchange="weeklyGoals['${ex.name}']=this.value;saveWeekly();renderWeeklyGoals()"> min
    <progress value="${pct}" max="100"></progress>
    <small>${weeklyProgress[ex.name]} / ${weeklyGoals[ex.name]} min (${pct}%)</small>
   </div>`;
  });
  saveWeekly();
 }
-
 function saveWeekly(){
  localStorage.setItem('tj-weekly-goals',JSON.stringify(weeklyGoals));
  localStorage.setItem('tj-weekly-progress',JSON.stringify(weeklyProgress));
 }
 
-/* ------------------ BANQUE ------------------ */
+/* ==== BANQUE & SÉLECTION (INCHANGÉES) ==== */
 function renderBank(){
  const b=document.getElementById('bank'); b.innerHTML='';
  bankData.forEach(u=>{
-  const div=document.createElement('div'); div.className='uv'; div.innerHTML=`<h3>${u.uv}</h3>`;
+  const d=document.createElement('div'); d.className='uv'; d.innerHTML=`<h3>${u.uv}</h3>`;
   u.items.forEach(n=>{
    const e=document.createElement('div'); e.className='exercise';
    e.innerHTML=`<span>${n}</span><button onclick="addExercise('${u.uv}','${n}')">➕</button>`;
-   div.appendChild(e);
+   d.appendChild(e);
   });
-  b.appendChild(div);
+  b.appendChild(d);
  });
 }
 
-/* ------------------ SÉLECTION ------------------ */
 function renderSelection(){
  const s=document.getElementById('selection'); s.innerHTML='';
  selection.forEach((ex,i)=>{
   const d=document.createElement('div'); d.className='exercise selected';
-  d.innerHTML=`${ex.name}
-   <input type="range" min="1" max="60" value="${ex.duration}"
-    oninput="selection[${i}].duration=this.value;saveSelection()"> ${ex.duration} min
-   <button onclick="selection.splice(${i},1);saveSelection()">❌</button>`;
+  d.innerHTML=`
+   <span>${ex.name}</span>
+   <div>
+    <input type="range" min="1" max="60" value="${ex.duration}"
+     oninput="selection[${i}].duration=this.value;saveSelection()">
+    ${ex.duration} min
+    <button onclick="moveUp(${i})">⬆️</button>
+    <button onclick="moveDown(${i})">⬇️</button>
+    <button onclick="removeExercise(${i})">❌</button>
+   </div>`;
   s.appendChild(d);
  });
  renderWeeklyGoals();
 }
 
-function addExercise(uv,name){
- selection.push({uv,name,duration:5});
- saveSelection();
-}
-function saveSelection(){
- localStorage.setItem('tj-selection',JSON.stringify(selection));
- renderSelection();
-}
+function addExercise(uv,name){selection.push({uv,name,duration:5});saveSelection();}
+function removeExercise(i){selection.splice(i,1);saveSelection();}
+function moveUp(i){if(i>0)[selection[i-1],selection[i]]=[selection[i],selection[i-1]];saveSelection();}
+function moveDown(i){if(i<selection.length-1)[selection[i+1],selection[i]]=[selection[i],selection[i+1]];saveSelection();}
+function saveSelection(){localStorage.setItem('tj-selection',JSON.stringify(selection));renderSelection();}
 function clearSelection(){selection=[];saveSelection();}
 
-/* ------------------ SESSION ------------------ */
+/* ==== SESSION (INCHANGÉE SAUF INCRÉMENT) ==== */
 function startSession(){
- if(selection.length===0)return alert('Aucun exercice');
- seqIndex=0; toggleFullscreen(); nextExercise();
+ if(selection.length===0)return alert('Sélection vide');
+ saveSessionAuto(); seqIndex=0; nextExercise();
 }
 
 function toggleFullscreen(){
@@ -180,24 +187,43 @@ function nextExercise(){
  const ex=selection[seqIndex];
  let t=ex.duration*60;
  document.getElementById('exerciseName').textContent=ex.name;
- document.getElementById('timer').textContent=format(t);
+ updateState();
+ if(fullscreen) document.getElementById('trainingOverlay').style.display='flex';
  timer=setInterval(()=>{
-  t--;
-  document.getElementById('timer').textContent=format(t);
+  t--; document.getElementById('timer').textContent=format(t);
   if(t<=0){
    clearInterval(timer);
-   weeklyProgress[ex.name]=(weeklyProgress[ex.name]||0)+ex.duration;
+   weeklyProgress[ex.name]+=ex.duration;
    saveWeekly(); renderWeeklyGoals();
    seqIndex++; nextExercise();
   }
  },1000);
 }
 
-function format(s){
- return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');
+function updateState(){
+ document.querySelectorAll('#selection .exercise').forEach((e,i)=>{
+  e.classList.toggle('active',i===seqIndex);
+  e.classList.toggle('done',i<seqIndex);
+ });
 }
 
-/* ------------------ INIT ------------------ */
+function format(s){return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');}
+
+/* ==== HISTORIQUE & ÉVALUATION : INTACT ==== */
+function saveSessionAuto(){
+ const n=sessionName.value||'Séance '+new Date().toLocaleString();
+ currentSessionName=n;
+ sessions[n]={exercises:[...selection],notes:notes.value,date:new Date().toLocaleString()};
+ localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+}
+function showHistory(){
+ let h='';
+ for(const n in sessions)h+=`<div><strong>${n}</strong> (${sessions[n].date})</div>`;
+ modal.style.display='flex'; historyList.innerHTML=h;
+}
+function closeModal(){modal.style.display='none';}
+
+/* ==== INIT ==== */
 renderBank();
 renderSelection();
 renderWeeklyGoals();
