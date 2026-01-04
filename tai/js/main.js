@@ -44,12 +44,16 @@ function renderSelection() {
   });
 }
 
-document.getElementById("startBtn").onclick = () => {
-  startTraining(
-    selection,
-    window.uiHooks,
-    { beep, ding }
-  );
-};
+const startBtn = document.getElementById("startBtn");
+if (startBtn) {
+  startBtn.onclick = () => {
+    startTraining(
+      selection,
+      window.uiHooks,
+      { beep, ding }
+    );
+  };
+}
+
 
 renderBank();
