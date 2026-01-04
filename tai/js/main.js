@@ -17,7 +17,7 @@ function renderBank() {
     card.className = "card";
     card.innerHTML = `<h3>${uv.uv}</h3>`;
 
-    uv.exercises.forEach(name => {
+    uv.items.forEach(name => {
       const btn = document.createElement("button");
       btn.className = "btn";
       btn.textContent = name;
