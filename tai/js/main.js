@@ -1,35 +1,55 @@
-import { renderBank, renderSelection, renderGoals } from './ui.js';
-import { selection } from './training.js';
-import { loadSelection, saveSelection, loadSessions } from './storage.js';
-import { startTraining, toggleFullscreen } from './training.js';
+// js/main.js
+import { bankData } from "./data.js";
+import { startTraining } from "./training.js";
 
-window.addExercise = function(uv,name){
-  selection.push({uv,name,duration:5,doneMinutes:0});
-  saveSelection(selection);
-  renderSelection('selection');
-  renderGoals('goals');
+const bank = document.getElementById("bank");
+const selectionDiv = document.getElementById("selection");
+
+const beep = document.getElementById("beep");
+const ding = document.getElementById("ding");
+
+let selection = [];
+
+function renderBank() {
+  bank.innerHTML = "";
+  bankData.forEach(uv => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h3>${uv.uv}</h3>`;
+
+    uv.exercises.forEach(name => {
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.textContent = name;
+      btn.onclick = () => addExercise(name);
+      card.appendChild(btn);
+    });
+
+    bank.appendChild(card);
+  });
+}
+
+function addExercise(name) {
+  selection.push({ name, duration: 5 });
+  renderSelection();
+}
+
+function renderSelection() {
+  selectionDiv.innerHTML = "";
+  selection.forEach(e => {
+    const div = document.createElement("div");
+    div.className = "sequence-item";
+    div.textContent = e.name;
+    selectionDiv.appendChild(div);
+  });
+}
+
+document.getElementById("startBtn").onclick = () => {
+  startTraining(
+    selection,
+    window.uiHooks,
+    { beep, ding }
+  );
 };
 
-window.updateDuration = function(i,v){ selection[i].duration = parseInt(v); saveSelection(selection); renderSelection('selection'); };
-
-window.moveUp = function(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection(selection); renderSelection('selection'); } };
-window.moveDown = function(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i],selection[i+1]]; saveSelection(selection); renderSelection('selection'); } };
-window.removeExercise = function(i){ selection.splice(i,1); saveSelection(selection); renderSelection('selection'); renderGoals('goals'); };
-
-window.setGoal = function(name,v){ const goals=JSON.parse(localStorage.getItem('tj-goals'))||{}; goals[name]=parseInt(v); localStorage.setItem('tj-goals',JSON.stringify(goals)); renderGoals('goals'); };
-
-window.startSession = function(){
-  const sessionName = document.getElementById('sessionName').value || "Séance " + new Date().toLocaleString();
-  const overlay = document.getElementById('trainingOverlay');
-  const timerEl = document.getElementById('timer');
-  const progressBar = document.getElementById('sessionProgress');
-  startTraining(selection, sessionName, overlay, timerEl, progressBar);
-};
-
-window.toggleFullscreenUI = toggleFullscreen;
-
-window.onload = function(){
-  renderBank('bank');
-  renderSelection('selection');
-  renderGoals('goals');
-};
+renderBank();
