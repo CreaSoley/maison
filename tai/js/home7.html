@@ -225,11 +225,16 @@ if(remaining<=0){
 speech("Fin de l'exercice",()=>{
 selection[idx].done=true;
 history.at(-1).exercises.push({
-name:selection[idx].name,
-minutes:selection[idx].duration
+  name: selection[idx].name,
+  minutes: selection[idx].duration
 });
+
+// 🔐 sauvegarde immédiate
+localStorage.setItem("tj-history", JSON.stringify(history));
+
 idx++;
 runExercise();
+
 });
 return;
 }
