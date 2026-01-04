@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coaching Karate</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#f4f4f4;padding:10px}
+h2{text-align:center}
+.card{background:#fff;border-radius:12px;padding:12px;margin-bottom:12px}
+.btn{padding:6px 12px;border-radius:18px;border:2px solid #ff64c4;background:white;font-weight:bold}
+.btn-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.sequence-item{padding:8px;border-radius:8px;margin-bottom:6px;background:#eee}
+.sequence-item.active{background:#ffd6ec;font-weight:bold}
+.sequence-item.done{text-decoration:line-through;opacity:.6}
+progress{width:100%}
+
+textarea{
+  width:100%;
+  min-height:80px;
+  border-radius:8px;
+  padding:8px;
+  border:1px solid #ccc;
+}
+
+details summary{
+  cursor:pointer;
+  font-weight:bold;
+  padding:6px 0;
+}
+
+#overlay{
+display:none;
+position:fixed;
+inset:0;
+background:black;
+color:white;
+z-index:999;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+gap:12px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🥋 Coaching Karate</h2>
+
+<div class="card">
+<h3>Banque</h3>
+<div id="bank"></div>
+</div>
+
+<div class="card">
+<h3>Sélection</h3>
+<div id="selection"></div>
+
+<label><strong>📝 Notes de séance</strong></label>
+<textarea id="notes" placeholder="Ressenti, points à améliorer…"></textarea>
+
+<div class="btn-row">
+<button class="btn" onclick="startTraining()">▶️ Démarrer</button>
+<button class="btn" onclick="showOverlay()">🖥 Plein écran</button>
+<button class="btn" onclick="editGoals()">🎯 Éditer objectifs</button>
+<button class="btn" onclick="showHistory()">📜 Historique</button>
+</div>
+</div>
+
+<div class="card">
+<details open>
+<summary>🎯 Objectifs hebdomadaires</summary>
+<div id="goalsView"></div>
+</details>
+</div>
+
+<div id="overlay">
+<h2 id="oTitle"></h2>
+<div id="oTimer" style="font-size:2rem"></div>
+<progress id="oProgress" value="0" max="100"></progress>
+
+<div class="btn-row">
+<button class="btn" onclick="pause()">⏸ Pause</button>
+<button class="btn" onclick="resume()">▶️ Reprendre</button>
+<button class="btn" onclick="hideOverlay()">⬅️ Quitter</button>
+</div>
+</div>
+
+<script>
+/* ===== DATA ===== */
+const bankData=[
+{uv:"UV1 – Kihon",ex:["Kihon simple","Enchaînement kihon","Travail aux cibles"]},
+{uv:"UV2 – Déplacements",ex:["Taï sabaki","Slow ippon","Ippon kumite"]},
+{uv:"UV3 – Kata",ex:["Slow kata","Kata nidan","Bunkaï"]},
+{uv:"UV4 – Techniques",ex:["Shadow technique","Enchaînements libres"]},
+{uv:"UV5-6 – Randori",ex:["Randori shadow","Randori dirigé"]}
+];
+
+let selection=[];
+let idx=0;
+let remaining=0;
+let timer=null;
+let paused=false;
+
+let history=JSON.parse(localStorage.getItem("tj-history")||"[]");
+let goals=JSON.parse(localStorage.getItem("tj-goals")||"{}");
+
+/* ===== UTIL ===== */
+function weekKey(){
+const d=new Date();
+const onejan=new Date(d.getFullYear(),0,1);
+return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+}
+
+/* ===== UI ===== */
+function renderBank(){
+const b=document.getElementById("bank");b.innerHTML="";
+bankData.forEach(u=>{
+const d=document.createElement("div");
+d.innerHTML=`<strong>${u.uv}</strong><br>`;
+u.ex.forEach(n=>{
+const btn=document.createElement("button");
+btn.className="btn";
+btn.textContent=n;
+btn.onclick=()=>addExercise(n);
+d.appendChild(btn);
+});
+b.appendChild(d);
+});
+}
+
+function renderSelection(){
+const s=document.getElementById("selection");s.innerHTML="";
+selection.forEach((e,i)=>{
+const d=document.createElement("div");
+d.className="sequence-item"+(i===idx?" active":"")+(e.done?" done":"");
+d.innerHTML=`
+${e.name}<br>
+<input type="number" min="1" value="${e.duration}" onchange="setDuration(${i},this.value)"> min
+<button onclick="up(${i})">⬆️</button>
+<button onclick="down(${i})">⬇️</button>
+<button onclick="removeEx(${i})">❌</button>
+`;
+s.appendChild(d);
+});
+}
+
+function renderGoals(){
+const g=document.getElementById("goalsView");
+g.innerHTML="";
+const wk=weekKey();
+const totals={};
+
+history.forEach(s=>{
+if(s.week===wk){
+s.exercises.forEach(e=>{
+totals[e.name]=(totals[e.name]||0)+e.minutes;
+});
+}
+});
+
+Object.keys(goals).forEach(name=>{
+const done=totals[name]||0;
+const target=goals[name];
+const pct=Math.min(100,Math.round(done/target*100));
+g.innerHTML+=`
+<div style="margin-bottom:8px">
+<strong>${name}</strong><br>
+${done} / ${target} min
+<progress value="${pct}" max="100"></progress>
+${pct}%
+</div>`;
+});
+}
+
+function addExercise(n){
+selection.push({name:n,duration:5,done:false});
+renderSelection();
+}
+
+/* ===== TRAINING ===== */
+function startTraining(){
+if(!selection.length)return;
+
+speech("Commençons l'entraînement",()=>{
+idx=0;
+selection.forEach(e=>e.done=false);
+history.push({
+date:new Date().toLocaleString(),
+week:weekKey(),
+notes:document.getElementById("notes").value,
+exercises:[]
+});
+runExercise();
+});
+}
+
+function runExercise(){
+if(idx>=selection.length){
+speech("Fin de l'entraînement, à bientôt");
+localStorage.setItem("tj-history",JSON.stringify(history));
+renderSelection();
+renderGoals();
+return;
+}
+const ex=selection[idx];
+speech("Exercice "+(idx+1)+" : "+ex.name,()=>{
+remaining=ex.duration*60;
+updateOverlay(ex.name);
+tick();
+renderSelection();
+});
+}
+
+function tick(){
+if(paused)return;
+document.getElementById("oTimer").textContent=
+Math.floor(remaining/60)+":"+String(remaining%60).padStart(2,"0");
+document.getElementById("oProgress").value=
+100*(1-remaining/(selection[idx].duration*60));
+
+if(remaining<=0){
+speech("Fin de l'exercice",()=>{
+selection[idx].done=true;
+history.at(-1).exercises.push({
+name:selection[idx].name,
+minutes:selection[idx].duration
+});
+idx++;
+runExercise();
+});
+return;
+}
+remaining--;
+timer=setTimeout(tick,1000);
+}
+
+/* ===== CONTROLS ===== */
+function pause(){paused=true;clearTimeout(timer);}
+function resume(){if(!paused)return;paused=false;tick();}
+function setDuration(i,v){selection[i].duration=Number(v);}
+function removeEx(i){selection.splice(i,1);renderSelection();}
+function up(i){if(i>0)[selection[i],selection[i-1]]=[selection[i-1],selection[i]],renderSelection();}
+function down(i){if(i<selection.length-1)[selection[i],selection[i+1]]=[selection[i+1],selection[i]],renderSelection();}
+
+/* ===== OVERLAY ===== */
+function showOverlay(){document.getElementById("overlay").style.display="flex";}
+function hideOverlay(){document.getElementById("overlay").style.display="none";}
+function updateOverlay(t){document.getElementById("oTitle").textContent=t;}
+
+/* ===== VOICE ===== */
+function speech(t,cb){
+const u=new SpeechSynthesisUtterance(t);
+u.lang="fr-FR";u.onend=cb||null;
+speechSynthesis.speak(u);
+}
+
+/* ===== GOALS ===== */
+function editGoals(){
+selection.forEach(e=>{
+const v=prompt("Objectif hebdomadaire (minutes) pour "+e.name,goals[e.name]||30);
+if(v)goals[e.name]=Number(v);
+});
+localStorage.setItem("tj-goals",JSON.stringify(goals));
+renderGoals();
+}
+
+/* ===== HISTORY ===== */
+function showHistory(){
+let t="";
+history.forEach(s=>{
+t+=s.date+"\n";
+if(s.notes)t+="Notes: "+s.notes+"\n";
+s.exercises.forEach(e=>t+=`- ${e.name}: ${e.minutes} min\n`);
+t+="\n";
+});
+alert(t||"Aucun historique");
+}
+
+/* INIT */
+renderBank();
+renderSelection();
+renderGoals();
+</script>
+
+</body>
+</html>
