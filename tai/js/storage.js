@@ -18,3 +18,11 @@ export function loadGoals() {
 export function saveGoals(goals) {
   localStorage.setItem('tj-goals', JSON.stringify(goals));
 }
+// AJOUTER À storage.js
+export function saveSession(session) {
+  const sessions = loadSessions();
+  const key = session.name || ("Séance " + Date.now());
+  sessions[key] = session;
+  saveSessions(sessions);
+}
+
