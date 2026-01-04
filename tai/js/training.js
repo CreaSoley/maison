@@ -1,67 +1,51 @@
-import { speak, playBeep, playDing } from './audio.js';
-import { saveSessions, loadSessions } from './storage.js';
+// js/training.js
+import { speak, safePlay } from "./audio.js";
 
-let seqIndex = 0;
+let index = 0;
 let timer = null;
 
-export let currentSessionName = '';
-export let selection = [];
-export let fullscreen = false;
-export let trainingOverlay, timerEl, progressEl;
+export function startTraining(sequence, ui, sounds) {
+  if (!sequence.length) return;
 
-export function startTraining(sel, sessionName, overlay, timerElement, progressBar) {
-  selection = sel;
-  currentSessionName = sessionName;
-  trainingOverlay = overlay;
-  timerEl = timerElement;
-  progressEl = progressBar;
-  seqIndex = 0;
-  nextExercise();
-}
-
-export function nextExercise() {
-  if (seqIndex >= selection.length) {
-    speak("Entraînement terminé, à bientôt !");
-    if (fullscreen) trainingOverlay.style.display = 'none';
-    return;
-  }
-
-  const ex = selection[seqIndex];
-  if (fullscreen) trainingOverlay.style.display = 'flex';
-  timerEl.textContent = `${ex.duration}:00`;
-
-  speak(`Exercice ${seqIndex + 1}: ${ex.name}`, () => {
-    setTimeout(() => {
-      playBeep();
-      let remaining = ex.duration * 60;
-      clearInterval(timer);
-      timer = setInterval(() => {
-        remaining--;
-        const min = Math.floor(remaining / 60).toString().padStart(2, '0');
-        const sec = (remaining % 60).toString().padStart(2, '0');
-        timerEl.textContent = `${min}:${sec}`;
-        progressEl.value = ((seqIndex + (ex.duration*60-remaining)/(ex.duration*60)) / selection.length) * 100;
-
-        if (remaining <= 0) {
-          clearInterval(timer);
-          playDing();
-          // enregistrer durée réelle
-          const sessions = loadSessions();
-          if (sessions[currentSessionName]) {
-            sessions[currentSessionName].exercises[seqIndex].doneMinutes = ex.duration;
-            saveSessions(sessions);
-          }
-          speak("Fin de l'exercice", () => {
-            seqIndex++;
-            nextExercise();
-          });
-        }
-      }, 1000);
-    }, 2000);
+  index = 0;
+  speak("Commençons l'entraînement", () => {
+    next(sequence, ui, sounds);
   });
 }
 
-export function toggleFullscreen() {
-  fullscreen = !fullscreen;
-  if (trainingOverlay) trainingOverlay.style.display = fullscreen ? 'flex' : 'none';
+function next(sequence, ui, sounds) {
+  if (index >= sequence.length) {
+    speak("Entraînement terminé, à bientôt !");
+    ui.onFinish();
+    return;
+  }
+
+  const ex = sequence[index];
+  ui.showExercise(ex, index, sequence.length);
+
+  speak(`Exercice ${index + 1} ${ex.name}`, () => {
+    setTimeout(() => {
+      safePlay(sounds.beep);
+
+      let remaining = ex.duration * 60;
+      ui.updateTimer(remaining);
+
+      clearInterval(timer);
+      timer = setInterval(() => {
+        remaining--;
+        ui.updateTimer(remaining);
+        ui.updateProgress(index, remaining, ex.duration, sequence.length);
+
+        if (remaining <= 0) {
+          clearInterval(timer);
+          safePlay(sounds.ding);
+
+          speak("Fin de l'exercice", () => {
+            index++;
+            next(sequence, ui, sounds);
+          });
+        }
+      }, 1000);
+    }, 1000);
+  });
 }
