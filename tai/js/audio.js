@@ -1,12 +1,22 @@
-export const beep = new Audio('beep.mp3');
-export const ding = new Audio('ding.mp3');
-
-export function speak(text, callback) {
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'fr-FR';
-  utter.onend = callback;
-  speechSynthesis.speak(utter);
+// js/audio.js
+export function speak(text, onEnd = null) {
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "fr-FR";
+    if (onEnd) u.onend = onEnd;
+    speechSynthesis.speak(u);
+  } catch (e) {
+    console.warn("Synthèse vocale indisponible", e);
+    if (onEnd) onEnd();
+  }
 }
 
-export function playBeep() { beep.play(); }
-export function playDing() { ding.play(); }
+export function safePlay(audio) {
+  if (!audio) return;
+  try {
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => {});
+  } catch (e) {
+    console.warn("Audio bloqué", e);
+  }
+}
