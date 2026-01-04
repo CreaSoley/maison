@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Tai Jitsu – Mobile Optimisé</title>
+<style>
+body { font-family: 'Fredoka', sans-serif; margin:0; background:linear-gradient(180deg,#fff7fc,#ffeef7);}
+h1 { text-align:center; padding:1rem; color:#ff1493; text-shadow:2px 2px #ffe3f8;}
+.container { max-width:900px; margin:auto; padding:1rem; display:grid; grid-template-columns:1fr; gap:1rem;}
+.panel { background:#fff; border-radius:16px; padding:1rem; box-shadow:0 6px 14px rgba(0,0,0,.15);}
+.exercise { display:flex; justify-content:space-between; align-items:center; padding:.5rem .7rem; border-radius:10px; margin:.3rem 0; background:#f5f5f5; }
+.exercise.active { background:#ffe8b3; }
+.exercise.done { text-decoration:line-through; opacity:.6; }
+button { border:none; border-radius:8px; padding:.3rem .6rem; cursor:pointer; font-size:1rem; margin-left:.2rem; }
+input[type=range]{ width:80px; margin-left:.5rem; }
+progress { width:100%; height:16px; margin-top:.8rem; }
+#trainingOverlay { display:none; position:fixed; inset:0; background:linear-gradient(to right,#84fab0,#8fd3f4); z-index:999; flex-direction:column; justify-content:center; align-items:center; color:#000;}
+#trainingOverlay h1 { font-size:2.5rem; margin-bottom:1rem; }
+#trainingOverlay #timer { font-size:3rem; margin-bottom:1rem; }
+#trainingOverlay progress { width:80%; height:24px; }
+#trainingOverlay button { margin-top:1rem;padding:.8rem 1.5rem;font-size:1rem;border-radius:12px; cursor:pointer; }
+#modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); color:#000; z-index:1000; justify-content:center; align-items:center; padding:1rem; overflow:auto; }
+#modal-content { background:#fff; border-radius:16px; padding:1rem; max-width:600px; width:100%; max-height:90vh; overflow-y:auto; }
+label{ font-weight:bold; display:block; margin-top:.5rem; }
+</style>
+</head>
+<body>
+
+<h1>🥋 Coach Tai Jitsu – Mobile</h1>
+
+<div class="container">
+
+  <!-- BANQUE -->
+  <div class="panel">
+    <h2>📚 Banque d'exercices</h2>
+    <div id="bank"></div>
+  </div>
+
+  <!-- SÉLECTION + NOTES + OBJECTIFS -->
+  <div class="panel">
+    <h2>📝 Séance sélectionnée</h2>
+    <input type="text" id="sessionName" placeholder="Nom de la séance">
+    <div id="selection"></div>
+
+    <label>Carnet de notes :</label>
+    <textarea id="notes" rows="3" placeholder="Ressenti du jour..."></textarea>
+    <button onclick="saveNotes()">💾 Sauvegarder le carnet</button>
+
+    <h3>🎯 Objectifs hebdomadaires</h3>
+    <div id="goals"></div>
+
+    <div style="margin-top:.5rem;">
+      <button onclick="startSession()">▶️ Commencer entraînement</button>
+      <button onclick="toggleFullscreen()">📱 Plein écran</button>
+      <button onclick="showHistory()">📊 Historique</button>
+      <button onclick="clearSelection()">🧹 Vider la sélection</button>
+    </div>
+    <progress id="progress" value="0" max="100"></progress>
+  </div>
+
+</div>
+
+<!-- Overlay plein écran -->
+<div id="trainingOverlay">
+  <h1 id="exerciseName">Exercice</h1>
+  <div id="timer">00:00</div>
+  <progress id="sessionProgress" value="0" max="100"></progress>
+  <button onclick="toggleFullscreen()">❌ Quitter plein écran</button>
+</div>
+
+<!-- Modal historique -->
+<div id="modal">
+  <div id="modal-content">
+    <h2>📋 Historique & Évaluation</h2>
+    <div id="historyList"></div>
+    <button onclick="closeModal()">❌ Fermer</button>
+  </div>
+</div>
+
+<audio id="beep" src="beep.mp3"></audio>
+<audio id="ding" src="ding.mp3"></audio>
+
+<script>
+/* ====================== DONNÉES ====================== */
+const bankData=[
+  {uv:'🥋 UV 1 – Kihon', items:['Kihon simple','Enchaînement de kihon','Travail aux cibles'], criteria:['Précision','Réactivité','Posture']},
+  {uv:'🌀 UV 2 – Déplacements', items:['Taï sabaki','Slow ippon','Ippon kumite'], criteria:['Fluidité','Équilibre','Contrôle']},
+  {uv:'📐 UV 3 – Kata', items:['Slow kata','Kata nidan','Bunkaï'], criteria:['Exactitude','Maîtrise','Kime']},
+  {uv:'⚙️ UV 4 – Techniques de base', items:['Shadow','Enchaînements libres'], criteria:['Réalisme','Zanchin','Protection']},
+  {uv:'🔥 UV 5 & 6 – Randori', items:['Randori shadow','Randori dirigé'], criteria:['Réalisme','Zanchin','Protection']}
+];
+
+let selection = JSON.parse(localStorage.getItem('tj-selection'))||[];
+let sessions  = JSON.parse(localStorage.getItem('tj-sessions'))||{};
+let goals     = JSON.parse(localStorage.getItem('tj-goals'))||{};
+let seqIndex=0, timer=null, fullscreen=false;
+let currentSessionName="";
+
+/* ====================== RENDER ====================== */
+function renderBank(){
+  const bank=document.getElementById('bank'); bank.innerHTML='';
+  bankData.forEach(u=>{
+    const div=document.createElement('div'); div.className='card';
+    div.innerHTML=`<h3>${u.uv}</h3>`;
+    u.items.forEach(name=>{
+      const btn=document.createElement('button'); btn.className='btn'; btn.textContent=name;
+      btn.onclick=()=>{ selection.push({uv:u.uv,name,duration:5,doneMinutes:0}); saveSelection(); };
+      div.appendChild(btn);
+    });
+    bank.appendChild(div);
+  });
+}
+
+function renderSelection(){
+  const sel=document.getElementById('selection'); sel.innerHTML='';
+  if(!selection.length){ sel.innerHTML='<em>Aucun exercice sélectionné</em>'; return; }
+  selection.forEach((ex,i)=>{
+    const d=document.createElement('div'); d.className='exercise selected';
+    d.id='sel-'+i;
+    d.innerHTML=`${ex.uv} – ${ex.name} 
+      <div>
+        <input type="range" min="1" max="60" value="${ex.duration}" oninput="updateDuration(${i},this.value)">
+        ${ex.duration} min
+        <button onclick="moveUp(${i})">⬆️</button>
+        <button onclick="moveDown(${i})">⬇️</button>
+        <button onclick="removeExercise(${i})">❌</button>
+      </div>`;
+    sel.appendChild(d);
+  });
+  renderGoals();
+}
+
+function renderGoals(){
+  const g=document.getElementById('goals'); g.innerHTML='';
+  const wk=new Date().toISOString().slice(0,10);
+  selection.forEach(ex=>{
+    if(!goals[ex.name]) goals[ex.name]=30;
+    const done=ex.doneMinutes||0;
+    const pct=Math.min(100,Math.round(done/goals[ex.name]*100));
+    g.innerHTML+=`<div>
+      <strong>${ex.name}</strong><br>
+      Objectif <input type="number" value="${goals[ex.name]}" onchange="setGoal('${ex.name}',this.value)"> min
+      <progress value="${pct}" max="100"></progress> ${pct}%
+    </div>`;
+  });
+  localStorage.setItem('tj-goals',JSON.stringify(goals));
+}
+
+/* ====================== ACTIONS ====================== */
+function updateDuration(i,v){ selection[i].duration=parseInt(v); saveSelection(); }
+function moveUp(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection(); } }
+function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i+1],selection[i]]; saveSelection(); } }
+function removeExercise(i){ selection.splice(i,1); saveSelection(); }
+function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(selection)); renderSelection(); }
+function clearSelection(){ if(confirm('Vider la sélection ?')){ selection=[]; saveSelection(); } }
+function setGoal(name,v){ goals[name]=parseInt(v); renderGoals(); }
+
+function saveNotes(){
+  if(!currentSessionName) currentSessionName="Séance "+new Date().toLocaleString();
+  if(!sessions[currentSessionName]) sessions[currentSessionName]={exercises:[...selection],notes:'',date:new Date().toLocaleString()};
+  sessions[currentSessionName].notes=document.getElementById('notes').value;
+  localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+  alert('Carnet enregistré ✔️');
+}
+
+/* ====================== ENTRAÎNEMENT ====================== */
+function startSession(){
+  if(!selection.length){ alert('Sélectionnez des exercices'); return; }
+  currentSessionName=document.getElementById('sessionName').value||"Séance "+new Date().toLocaleString();
+  sessions[currentSessionName]={date:new Date().toLocaleString(),exercises:selection.map(e=>({...e,doneMinutes:0})),notes:document.getElementById('notes').value};
+  localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+  seqIndex=0;
+  speak("Commençons l'entraînement", nextExercise);
+}
+
+function nextExercise(){
+  if(seqIndex>=selection.length){ speak("Entraînement terminé, à bientôt !"); updateSelectionState(); return; }
+  const ex=selection[seqIndex];
+  const overlay=document.getElementById('trainingOverlay');
+  const timerEl=document.getElementById('timer');
+  const progEl=document.getElementById('sessionProgress');
+  document.getElementById('exerciseName').textContent=ex.name;
+  overlay.style.display=fullscreen?'flex':'none';
+  updateSelectionState();
+
+  speak(`Exercice ${seqIndex+1} : ${ex.name}`,()=>{
+    setTimeout(()=>{
+      document.getElementById('beep').play();
+      let remaining=ex.duration*60;
+      timerEl.textContent=formatTime(remaining);
+      progEl.value=(seqIndex)/selection.length*100;
+
+      clearInterval(window._t);
+      window._t=setInterval(()=>{
+        remaining--;
+        timerEl.textContent=formatTime(remaining);
+        progEl.value=((seqIndex+(ex.duration*60-remaining)/(ex.duration*60))/selection.length*100);
+        if(remaining<=0){
+          clearInterval(window._t);
+          document.getElementById('ding').play();
+          selection[seqIndex].doneMinutes=ex.duration;
+          sessions[currentSessionName].exercises[seqIndex].doneMinutes=ex.duration;
+          localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+          speak("Fin de l'exercice",()=>{ seqIndex++; nextExercise(); });
+        }
+      },1000);
+
+    },2000);
+  });
+}
+
+function updateSelectionState(){
+  selection.forEach((e,i)=>{
+    const el=document.getElementById('sel-'+i);
+    if(el){ el.classList.toggle('active',i===seqIndex); el.classList.toggle('done',i<seqIndex); }
+  });
+}
+
+/* ====================== FULLSCREEN ====================== */
+function toggleFullscreen(){ fullscreen=!fullscreen; document.getElementById('trainingOverlay').style.display=fullscreen?'flex':'none'; }
+
+/* ====================== HISTORIQUE ====================== */
+function showHistory(){
+  const list=document.getElementById('historyList'); list.innerHTML='';
+  for(const name in sessions){
+    const s=sessions[name];
+    list.innerHTML+=`<div style="margin-bottom:1rem;"><strong>${name}</strong> (${s.date})<br>`;
+    s.exercises.forEach(e=>{ list.innerHTML+=`- ${e.name}: ${e.doneMinutes||0} min<br>`; });
+    list.innerHTML+=`Notes: ${s.notes||''}<br></div>`;
+  }
+  document.getElementById('modal').style.display='flex';
+}
+function closeModal(){ document.getElementById('modal').style.display='none'; }
+
+/* ====================== UTIL ====================== */
+function speak(txt,cb){ const u=new SpeechSynthesisUtterance(txt); u.lang='fr-FR'; u.onend=cb; speechSynthesis.speak(u); }
+function formatTime(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+
+/* ====================== INIT ====================== */
+renderBank(); renderSelection();
+</script>
+
+</body>
+</html>
