@@ -47,9 +47,14 @@ gap:12px;
 <div class="btn-row">
 <button class="btn" onclick="startTraining()">▶️ Démarrer</button>
 <button class="btn" onclick="showOverlay()">🖥 Plein écran</button>
-<button class="btn" onclick="editGoals()">🎯 Objectifs</button>
+<button class="btn" onclick="editGoals()">🎯 Éditer objectifs</button>
 <button class="btn" onclick="showHistory()">📜 Historique</button>
 </div>
+</div>
+
+<div class="card">
+<h3>🎯 Objectifs hebdomadaires</h3>
+<div id="goalsView"></div>
 </div>
 
 <div id="overlay">
@@ -82,6 +87,14 @@ let paused=false;
 
 let history=JSON.parse(localStorage.getItem("tj-history")||"[]");
 let goals=JSON.parse(localStorage.getItem("tj-goals")||"{}");
+let currentSession=null;
+
+/* ===== UTIL ===== */
+function weekKey(){
+const d=new Date();
+const onejan=new Date(d.getFullYear(),0,1);
+return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+}
 
 /* ===== UI ===== */
 function renderBank(){
@@ -116,6 +129,34 @@ s.appendChild(d);
 });
 }
 
+function renderGoals(){
+const g=document.getElementById("goalsView");
+g.innerHTML="";
+const wk=weekKey();
+
+const totals={};
+history.forEach(s=>{
+if(s.week===wk){
+s.exercises.forEach(e=>{
+totals[e.name]=(totals[e.name]||0)+e.minutes;
+});
+}
+});
+
+Object.keys(goals).forEach(name=>{
+const done=totals[name]||0;
+const target=goals[name];
+const pct=Math.min(100,Math.round(done/target*100));
+g.innerHTML+=`
+<div style="margin-bottom:8px">
+<strong>${name}</strong><br>
+${done} / ${target} min
+<progress value="${pct}" max="100"></progress>
+${pct}%
+</div>`;
+});
+}
+
 function addExercise(n){
 selection.push({name:n,duration:5,done:false});
 renderSelection();
@@ -124,10 +165,20 @@ renderSelection();
 /* ===== TRAINING ===== */
 function startTraining(){
 if(!selection.length)return;
+
 speech("Commençons l'entraînement",()=>{
 idx=0;
 selection.forEach(e=>e.done=false);
-history.push({date:new Date().toLocaleString(),exercises:[]});
+
+currentSession={
+date:new Date().toLocaleString(),
+week:weekKey(),
+exercises:[]
+};
+
+history.push(currentSession);
+localStorage.setItem("tj-history",JSON.stringify(history));
+
 runExercise();
 });
 }
@@ -135,10 +186,11 @@ runExercise();
 function runExercise(){
 if(idx>=selection.length){
 speech("Fin de l'entraînement, à bientôt");
-localStorage.setItem("tj-history",JSON.stringify(history));
 renderSelection();
+renderGoals();
 return;
 }
+
 const ex=selection[idx];
 speech("Exercice "+(idx+1)+" : "+ex.name,()=>{
 remaining=ex.duration*60;
@@ -150,23 +202,30 @@ renderSelection();
 
 function tick(){
 if(paused)return;
+
 document.getElementById("oTimer").textContent=
 Math.floor(remaining/60)+":"+String(remaining%60).padStart(2,"0");
+
 document.getElementById("oProgress").value=
 100*(1-remaining/(selection[idx].duration*60));
 
 if(remaining<=0){
 speech("Fin de l'exercice",()=>{
 selection[idx].done=true;
-history.at(-1).exercises.push({
+
+currentSession.exercises.push({
 name:selection[idx].name,
 minutes:selection[idx].duration
 });
+
+localStorage.setItem("tj-history",JSON.stringify(history));
+
 idx++;
 runExercise();
 });
 return;
 }
+
 remaining--;
 timer=setTimeout(tick,1000);
 }
@@ -187,33 +246,47 @@ function updateOverlay(t){document.getElementById("oTitle").textContent=t;}
 /* ===== VOICE ===== */
 function speech(t,cb){
 const u=new SpeechSynthesisUtterance(t);
-u.lang="fr-FR";u.onend=cb||null;
+u.lang="fr-FR";
+u.onend=cb||null;
 speechSynthesis.speak(u);
 }
 
 /* ===== GOALS ===== */
 function editGoals(){
 selection.forEach(e=>{
-const v=prompt("Objectif hebdo (min) pour "+e.name,goals[e.name]||30);
+const v=prompt("Objectif hebdomadaire (minutes) pour "+e.name,goals[e.name]||30);
 if(v)goals[e.name]=Number(v);
 });
 localStorage.setItem("tj-goals",JSON.stringify(goals));
+renderGoals();
 }
 
 /* ===== HISTORY ===== */
 function showHistory(){
-let t="";
-history.forEach(s=>{
-t+=s.date+"\n";
-s.exercises.forEach(e=>t+=`- ${e.name}: ${e.minutes} min\n`);
-t+="\n";
+if(!history.length){
+alert("Aucun historique");
+return;
+}
+
+let t="📜 HISTORIQUE DÉTAILLÉ\n\n";
+
+history.forEach((s,i)=>{
+let total=0;
+t+=`Séance ${i+1}\n${s.date}\n`;
+s.exercises.forEach(e=>{
+total+=e.minutes;
+t+=`- ${e.name} : ${e.minutes} min\n`;
 });
-alert(t||"Aucun historique");
+t+=`Total séance : ${total} min\n\n`;
+});
+
+alert(t);
 }
 
 /* INIT */
 renderBank();
 renderSelection();
+renderGoals();
 </script>
 
 </body>
