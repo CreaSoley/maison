@@ -229,7 +229,7 @@ history.at(-1).exercises.push({
   minutes: selection[idx].duration
 });
 
-  console.log(localStorage.getItem("tj-history"))
+  console.log("HISTORY UPDATE", history);
 
 // 🔐 sauvegarde immédiate
 localStorage.setItem("tj-history", JSON.stringify(history));
