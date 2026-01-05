@@ -210,19 +210,22 @@ document.getElementById("oProgress").value=
 100*(1-remaining/(selection[idx].duration*60));
 
 if(remaining<=0){
-speech("Fin de l'exercice",()=>{
+
+// ✅ ENREGISTREMENT IMMÉDIAT (FIABLE)
 selection[idx].done=true;
 
 currentSession.exercises.push({
-name:selection[idx].name,
-minutes:selection[idx].duration
+name: selection[idx].name,
+minutes: selection[idx].duration
 });
 
-localStorage.setItem("tj-history",JSON.stringify(history));
+localStorage.setItem("tj-history", JSON.stringify(history));
+
+// 🔊 VOIX NON BLOQUANTE
+speech("Fin de l'exercice");
 
 idx++;
 runExercise();
-});
 return;
 }
 
