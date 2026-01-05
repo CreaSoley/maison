@@ -1,105 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coach Tai Jitsu – Séance + Évaluation</title>
-<style>
-body { font-family: system-ui,sans-serif; margin:0; background:linear-gradient(to right,#ffecd2,#fcb69f);}
-h1 { text-align:center; padding:1rem; }
-.container { max-width:1100px; margin:auto; padding:1rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem;}
-.panel { background:#fff; border-radius:16px; padding:1rem; box-shadow:0 6px 14px rgba(0,0,0,.15);}
-.uv { margin-bottom:1rem; }
-.exercise { display:flex; justify-content:space-between; align-items:center; padding:.5rem .7rem; border-radius:10px; margin:.3rem 0; background:#f5f5f5;}
-.exercise.selected { background:#d1f5d3; }
-.exercise.active { background:#ffe8b3; }
-.exercise.done { text-decoration:line-through; opacity:.6; }
-.exercise button { border:none; border-radius:8px; padding:.3rem .6rem; cursor:pointer; font-size:1rem; }
-.controls { margin-top:.8rem; display:flex; gap:.5rem; flex-wrap:wrap; }
-input[type=text] { width:100%; padding:.6rem; border-radius:10px; border:1px solid #ccc; margin-bottom:.5rem; }
-input[type=range]{ width:120px; margin-left:.5rem; }
-#progress { width:100%; height:16px; margin-top:.8rem; }
-textarea { width:100%; border-radius:12px; padding:.6rem; margin-top:.5rem; }
-label{ font-weight:bold; display:block; margin-top:.5rem; }
-.history-item{ border-bottom:1px solid #ccc; padding:.3rem 0; }
-
-/* Mobile : empilement */
-@media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
-
-/* Overlay plein écran */
-#trainingOverlay { display:none; position:fixed; inset:0; background:linear-gradient(to right,#84fab0,#8fd3f4); z-index:999; flex-direction:column; justify-content:center; align-items:center; }
-#trainingOverlay h1 { font-size:3rem; margin-bottom:1rem; }
-#trainingOverlay #timer { font-size:4rem; margin-bottom:1rem; }
-#trainingOverlay progress { width:80%; height:24px; }
-#trainingOverlay button { margin-top:2rem;padding:1rem 2rem;font-size:1.2rem;border-radius:12px; cursor:pointer; }
-
-/* Modal évaluation */
-#evalModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1100; justify-content:center; align-items:center; }
-#evalModal div { background:#fff; padding:1rem; border-radius:16px; width:90%; max-width:400px; }
-#evalModal textarea { height:120px; }
-</style>
-</head>
-<body>
-<h1>🥋 Coach Tai Jitsu – Séance + Évaluation</h1>
-
-<div class="container">
-  <div class="panel">
-    <h2>📚 Banque d'exercices</h2>
-    <div id="bank"></div>
-  </div>
-
-  <div class="panel">
-    <h2>📝 Séance sélectionnée</h2>
-    <input type="text" id="sessionName" placeholder="Nom de la séance">
-    <div id="selection"></div>
-
-    <label>Carnet de notes :</label>
-    <textarea id="notes" rows="3" placeholder="Ressenti du jour..."></textarea>
-
-    <div class="controls">
-      <button onclick="saveSelection()">💾 Sauvegarder la sélection</button>
-      <button onclick="clearSelection()">🧹 Vider la sélection</button>
-      <button onclick="startSession()">▶️ Commencer entraînement</button>
-      <button id="pauseBtn" onclick="togglePause()" disabled>⏸️ Pause</button>
-      <button onclick="toggleFullscreen()">📱 Plein écran exercice</button>
-      <button onclick="showHistory()">📊 Historique</button>
-    </div>
-
-    <progress id="progress" value="0" max="100"></progress>
-    <div id="goals"></div>
-  </div>
-</div>
-
-<div id="trainingOverlay">
-  <h1 id="exerciseName">Exercice</h1>
-  <div id="timer">00:00</div>
-  <progress id="sessionProgress" value="0" max="100"></progress>
-  <button onclick="toggleFullscreen()">❌ Quitter plein écran</button>
-</div>
-
-<div id="modal" style="display:none; position:fixed; inset:0;background:rgba(0,0,0,0.6); color:#000; z-index:1000; justify-content:center; align-items:center; padding:1rem; overflow:auto;">
-  <div style="background:#fff; border-radius:16px; padding:1rem; max-width:600px; width:100%;">
-    <h2>📋 Historique & Évaluation</h2>
-    <div id="historyList"></div>
-    <button onclick="closeModal()" style="margin-top:1rem;">❌ Fermer</button>
-  </div>
-</div>
-
-<div id="evalModal">
-  <div>
-    <h2>C'est le moment de l'évaluation 📝</h2>
-    <p>Écrivez vos notes ci-dessous :</p>
-    <textarea id="evalNotes"></textarea>
-    <h3>Auto-évaluation des exercices</h3>
-<div id="selfEvalContainer"></div>
-
-    <button onclick="finishEvaluation()">✅ J'ai fini d'écrire mes notes</button>
-  </div>
-</div>
-
-<audio id="beep" src="beep.mp3"></audio>
-<audio id="ding" src="ding.mp3"></audio>
-
 <script>
 /* ===== DONNÉES ===== */
 const bankData=[
@@ -117,7 +15,7 @@ let seqIndex=0, timer=null, fullscreen=false;
 let currentSessionName="", currentGoalExercise=null;
 let paused=false, remainingTime=0;
 let currentSessionId=null;
-let sessionFinalizing = false; // protection historique
+let sessionFinalizing=false;
 
 /* ===== UTIL ===== */
 function weekKey(){ const d=new Date(),j=new Date(d.getFullYear(),0,1); return d.getFullYear()+"-W"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);}
@@ -125,7 +23,20 @@ function speak(txt,cb){ const u=new SpeechSynthesisUtterance(txt); u.lang='fr-FR
 function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');}
 
 /* ===== BANQUE ===== */
-function renderBank(){ const b=document.getElementById('bank'); b.innerHTML=''; bankData.forEach(u=>{ const uvDiv=document.createElement('div'); uvDiv.className='uv'; const h4=document.createElement('h4'); h4.textContent = u.uv; uvDiv.appendChild(h4); u.items.forEach(n=>{ const exDiv=document.createElement('div'); exDiv.className='exercise'; const span=document.createElement('span'); span.textContent=n; const btn=document.createElement('button'); btn.textContent='➕'; btn.onclick = ()=>addExercise(u.uv,n); exDiv.appendChild(span); exDiv.appendChild(btn); uvDiv.appendChild(exDiv); }); b.appendChild(uvDiv); });}
+function renderBank(){ 
+  const b=document.getElementById('bank'); b.innerHTML=''; 
+  bankData.forEach(u=>{
+    const uvDiv=document.createElement('div'); uvDiv.className='uv'; 
+    const h4=document.createElement('h4'); h4.textContent = u.uv; uvDiv.appendChild(h4); 
+    u.items.forEach(n=>{
+      const exDiv=document.createElement('div'); exDiv.className='exercise'; 
+      const span=document.createElement('span'); span.textContent=n; 
+      const btn=document.createElement('button'); btn.textContent='➕'; btn.onclick = ()=>addExercise(u.uv,n); 
+      exDiv.appendChild(span); exDiv.appendChild(btn); uvDiv.appendChild(exDiv);
+    }); 
+    b.appendChild(uvDiv); 
+  });
+}
 
 /* ===== SÉLECTION ===== */
 function renderSelection(){ 
@@ -152,13 +63,10 @@ function renderSelection(){
 
 /* ===== OBJECTIFS ===== */
 function renderGoals(){
-  const g = document.getElementById('goals');
-  g.innerHTML = '';
+  const g = document.getElementById('goals'); g.innerHTML = '';
   const wk = weekKey();
-
   selection.forEach(ex=>{
     if(goals[ex.name] === undefined) goals[ex.name] = 30;
-
     let done = 0;
     Object.values(sessions).forEach(s=>{
       if(s.week === wk){
@@ -169,21 +77,13 @@ function renderGoals(){
         });
       }
     });
-
     const pct = Math.min(100, Math.round(done / goals[ex.name] * 100));
-
     const div = document.createElement('div');
-    div.innerHTML = `
-      <strong>${ex.name}</strong><br>
-      Objectif 
-      <input type="number" min="1" value="${goals[ex.name]}"
-        onchange="setGoal('${ex.name}', this.value)"> min
-      <progress value="${pct}" max="100"></progress> ${pct}%
-    `;
-
+    div.innerHTML = `<strong>${ex.name}</strong><br>
+      Objectif <input type="number" min="1" value="${goals[ex.name]}" onchange="setGoal('${ex.name}', this.value)"> min
+      <progress value="${pct}" max="100"></progress> ${pct}%`;
     g.appendChild(div);
   });
-
   localStorage.setItem('tj-goals', JSON.stringify(goals));
 }
 function setGoal(name,v){ goals[name] = parseInt(v); renderGoals(); }
@@ -213,12 +113,9 @@ function startSession(){
    exercises: selection.map(e=>({...e, doneMinutes:0})),
    notes: document.getElementById('notes').value
  };
-
  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
 
- seqIndex = 0;
- paused = false;
-
+ seqIndex = 0; paused = false;
  speak("Commençons l'entraînement", nextExercise);
  document.getElementById('pauseBtn').disabled = false;
 }
@@ -261,16 +158,10 @@ function nextExercise(){
 
            selection.forEach((e,i)=>{
              const el = document.querySelectorAll('.exercise.selected')[i];
-             if(i === seqIndex){
-               el.classList.remove('active');
-               el.classList.add('done');
-             }
+             if(i === seqIndex){ el.classList.remove('active'); el.classList.add('done'); }
            });
 
-           speak("Fin de l'exercice", ()=>{
-             seqIndex++;
-             nextExercise();
-           });
+           speak("Fin de l'exercice", ()=>{ seqIndex++; nextExercise(); });
          }
        }
      }, 1000);
@@ -283,7 +174,7 @@ function updateProgress(){
  let done=seqIndex;
  if(seqIndex<selection.length && document.getElementById('timer').textContent){
    const ex=selection[seqIndex];
-   const t=parseInt(document.getElementById('timer').textContent.split(':')[0])*60 + parseInt(document.getElementById('timer').textContent.split(':')[1]);
+   const t=parseInt(document.getElementById('timer').textContent.split(':')[0])*60+parseInt(document.getElementById('timer').textContent.split(':')[1]);
    done += (ex.duration*60 - t)/(ex.duration*60);
  }
  document.getElementById('progress').value = (done/selection.length)*100;
@@ -296,7 +187,7 @@ function togglePause(){
 }
 
 function finishEvaluation(){
- sessionFinalizing = true; // bloque sortie
+ sessionFinalizing = true;
  selection.forEach(ex => {
    const stored = sessions[currentSessionId].exercises.find(e => e.name === ex.name);
    if(stored) stored.selfEval = ex.selfEval || 3;
@@ -308,7 +199,6 @@ function finishEvaluation(){
  sessions[currentSessionId].date = new Date().toLocaleString();
 
  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
-
  renderGoals();
  document.getElementById('evalModal').style.display = 'none';
  sessionFinalizing = false;
@@ -322,18 +212,18 @@ function toggleFullscreen(){ fullscreen=!fullscreen; document.getElementById('tr
 function showHistory(){
  const modal=document.getElementById('modal'); modal.style.display='flex';
  const h=document.getElementById('historyList'); h.innerHTML='';
- for(const id in sessions){
-   const s = sessions[id];
+ Object.values(sessions).forEach(s=>{
    const div = document.createElement('div'); div.className='history-item';
    let html = `<strong>${s.name}</strong> (${s.date || 'Pas de date'})<br>`;
    if(s.exercises && s.exercises.length){ s.exercises.forEach(e=>{ html += `- ${e.name}: ${e.doneMinutes || 0} min<br>`; }); }
    html += `Notes: ${s.notes||''}<br><br>`;
    div.innerHTML = html;
    h.appendChild(div);
- }
+ });
 }
 function closeModal(){ document.getElementById('modal').style.display='none'; }
 
+/* ===== AUTO-ÉVALUATION ===== */
 function buildSelfEvaluation(){
  const container = document.getElementById('selfEvalContainer');
  container.innerHTML = '';
@@ -350,7 +240,7 @@ function buildSelfEvaluation(){
  });
 }
 
-/* ===== PROTECTION NAVIGATEUR PENDANT ÉVALUATION ===== */
+/* ===== PROTECTION NAVIGATEUR ===== */
 window.addEventListener("beforeunload", (e)=>{
   if(sessionFinalizing){
     e.preventDefault();
@@ -361,7 +251,3 @@ window.addEventListener("beforeunload", (e)=>{
 /* ===== INIT ===== */
 renderBank(); renderSelection(); renderGoals();
 </script>
-
-</body>
-</html>
-
