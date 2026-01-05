@@ -34,10 +34,9 @@ label{ font-weight:bold; display:block; margin-top:.5rem; }
 #trainingOverlay button { margin-top:2rem;padding:1rem 2rem;font-size:1.2rem;border-radius:12px; cursor:pointer; }
 
 /* Modal évaluation */
-#evalModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1100; justify-content:center; align-items:center; overflow:auto; }
-#evalModal div { background:#fff; padding:1rem; border-radius:16px; width:90%; max-width:500px; }
+#evalModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1100; justify-content:center; align-items:center; }
+#evalModal div { background:#fff; padding:1rem; border-radius:16px; width:90%; max-width:400px; }
 #evalModal textarea { height:120px; }
-#selfEvalContainer div { margin-bottom:.6rem; }
 </style>
 </head>
 <body>
@@ -91,11 +90,10 @@ label{ font-weight:bold; display:block; margin-top:.5rem; }
     <h2>C'est le moment de l'évaluation 📝</h2>
     <p>Écrivez vos notes ci-dessous :</p>
     <textarea id="evalNotes"></textarea>
+    <h3>Auto-évaluation des exercices</h3>
+<div id="selfEvalContainer"></div>
 
-    <h3>Auto-évaluation des exercices :</h3>
-    <div id="selfEvalContainer"></div>
-
-    <button onclick="finishEvaluation()">✅ J'ai fini d'écrire mes notes et d'évaluer</button>
+    <button onclick="finishEvaluation()">✅ J'ai fini d'écrire mes notes</button>
   </div>
 </div>
 
@@ -168,6 +166,11 @@ function renderGoals(){
  localStorage.setItem('tj-goals',JSON.stringify(goals));
 }
 
+function openGoalModal(name,val){ currentGoalExercise=name; document.getElementById('goalTitle').textContent=name; document.getElementById('goalValue').value=val; document.getElementById('goalModal').style.display='flex'; }
+function closeGoalModal(){ document.getElementById('goalModal').style.display='none'; }
+function confirmGoal(){ setGoal(currentGoalExercise, document.getElementById('goalValue').value); closeGoalModal(); }
+function setGoal(name,v){goals[name]=parseInt(v); renderGoals();}
+
 /* ===== ACTIONS SELECTION ===== */
 function addExercise(uv,name){ selection.push({uv,name,duration:5,doneMinutes:0}); saveSelection();}
 function updateDuration(i,v){selection[i].duration=parseInt(v); saveSelection();}
@@ -191,9 +194,14 @@ function startSession(){
 
 function nextExercise(){
  if(seqIndex>=selection.length){
-    showEvaluationModal();
-    return;
- }
+  document.getElementById('evalNotes').value =
+    document.getElementById('notes').value;
+
+  buildSelfEvaluation();
+  document.getElementById('evalModal').style.display = 'flex';
+  return;
+}
+
  const ex=selection[seqIndex];
  document.getElementById('exerciseName').textContent=ex.name;
  if(fullscreen) document.getElementById('trainingOverlay').style.display='flex';
@@ -240,44 +248,20 @@ function togglePause(){
  document.getElementById('pauseBtn').textContent = paused ? "▶️ Reprendre" : "⏸️ Pause";
 }
 
-/* ===== MODAL ÉVALUATION ===== */
-function showEvaluationModal() {
-  document.getElementById('evalNotes').value = document.getElementById('notes').value;
-  
-  const container = document.getElementById('selfEvalContainer');
-  container.innerHTML = ''; // vide le contenu
-  selection.forEach(ex => {
-      const div = document.createElement('div');
-      div.style.marginBottom = '0.8rem';
-      div.innerHTML = `
-        <label><strong>${ex.name}</strong></label>
-        <input type="range" min="0" max="5" value="${ex.selfEval || 0}" step="1" data-ex="${ex.name}">
-        <span id="evalVal_${ex.name}">${ex.selfEval || 0}</span>/5
-      `;
-      const slider = div.querySelector('input');
-      const span = div.querySelector('span');
-      slider.addEventListener('input', ()=>{ span.textContent = slider.value; ex.selfEval = parseInt(slider.value); });
-      container.appendChild(div);
-  });
-
-  document.getElementById('evalModal').style.display = 'flex';
-}
-
 function finishEvaluation(){
-  const finalNotes = document.getElementById('evalNotes').value;
-  document.getElementById('notes').value = finalNotes;
-  sessions[currentSessionName].notes = finalNotes;
-
-  selection.forEach(ex => {
-      const storedEx = sessions[currentSessionName].exercises.find(e => e.name === ex.name);
-      if(storedEx) storedEx.selfEval = ex.selfEval || 0;
-  });
-
-  sessions[currentSessionName].date = new Date().toLocaleString();
-  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
-  document.getElementById('evalModal').style.display='none';
-  speak("Fin de l'entraînement, à bientôt !");
-  updateProgress();
+ selection.forEach(ex => {
+  const stored = sessions[currentSessionName].exercises
+    .find(e => e.name === ex.name);
+  if(stored) stored.selfEval = ex.selfEval || 3;
+});
+const finalNotes = document.getElementById('evalNotes').value;
+ document.getElementById('notes').value = finalNotes;
+ sessions[currentSessionName].notes = finalNotes;
+ sessions[currentSessionName].date = new Date().toLocaleString();
+ localStorage.setItem('tj-sessions', JSON.stringify(sessions));
+ document.getElementById('evalModal').style.display='none';
+ speak("Fin de l'entraînement, à bientôt !");
+ updateProgress();
 }
 
 /* ===== PLEIN ÉCRAN ===== */
@@ -291,4 +275,42 @@ function showHistory(){
    const s=sessions[n];
    let div=document.createElement('div'); div.className='history-item';
    let html = `<strong>${n}</strong> (${s.date || 'Pas de date'})<br>`;
-   if(s.exercises && s.exercises.length){ s.exercises.forEach(e=>{ html += `- ${e.name}: ${e.doneMinutes || 0} min, Auto-éval: ${e.selfEval||0}/5<br>`; }); }
+   if(s.exercises && s.exercises.length){ s.exercises.forEach(e=>{ html += `- ${e.name}: ${e.doneMinutes || 0} min<br>`; }); }
+   html += `Notes: ${s.notes||''}<br><br>`;
+   div.innerHTML = html;
+   h.appendChild(div);
+ }
+}
+function closeModal(){ document.getElementById('modal').style.display='none'; }
+function buildSelfEvaluation() {
+  const container = document.getElementById('selfEvalContainer');
+  container.innerHTML = '';
+
+  selection.forEach(ex => {
+    const div = document.createElement('div');
+    div.style.marginBottom = '0.8rem';
+
+    div.innerHTML = `
+      <strong>${ex.name}</strong><br>
+      <input type="range" min="1" max="5" value="${ex.selfEval || 3}" step="1">
+      <span>${ex.selfEval || 3}</span>/5
+    `;
+
+    const slider = div.querySelector('input');
+    const label = div.querySelector('span');
+
+    slider.oninput = () => {
+      label.textContent = slider.value;
+      ex.selfEval = parseInt(slider.value);
+    };
+
+    container.appendChild(div);
+  });
+}
+
+/* ===== INIT ===== */
+renderBank(); renderSelection(); renderGoals();
+</script>
+</body>
+</html>
+
