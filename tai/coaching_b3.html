@@ -1,3 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Tai Jitsu – Séance + Évaluation</title>
+<style>
+body { font-family: system-ui,sans-serif; margin:0; background:linear-gradient(to right,#ffecd2,#fcb69f);}
+h1 { text-align:center; padding:1rem; }
+.container { max-width:1100px; margin:auto; padding:1rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem;}
+.panel { background:#fff; border-radius:16px; padding:1rem; box-shadow:0 6px 14px rgba(0,0,0,.15);}
+.uv { margin-bottom:1rem; }
+.exercise { display:flex; justify-content:space-between; align-items:center; padding:.5rem .7rem; border-radius:10px; margin:.3rem 0; background:#f5f5f5;}
+.exercise.selected { background:#d1f5d3; }
+.exercise.active { background:#ffe8b3; }
+.exercise.done { text-decoration:line-through; opacity:.6; }
+.exercise button { border:none; border-radius:8px; padding:.3rem .6rem; cursor:pointer; font-size:1rem; }
+.controls { margin-top:.8rem; display:flex; gap:.5rem; flex-wrap:wrap; }
+input[type=text] { width:100%; padding:.6rem; border-radius:10px; border:1px solid #ccc; margin-bottom:.5rem; }
+input[type=range]{ width:120px; margin-left:.5rem; }
+#progress { width:100%; height:16px; margin-top:.8rem; }
+textarea { width:100%; border-radius:12px; padding:.6rem; margin-top:.5rem; }
+label{ font-weight:bold; display:block; margin-top:.5rem; }
+.history-item{ border-bottom:1px solid #ccc; padding:.3rem 0; }
+
+/* Mobile : empilement */
+@media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
+
+/* Overlay plein écran */
+#trainingOverlay { display:none; position:fixed; inset:0; background:linear-gradient(to right,#84fab0,#8fd3f4); z-index:999; flex-direction:column; justify-content:center; align-items:center; }
+#trainingOverlay h1 { font-size:3rem; margin-bottom:1rem; }
+#trainingOverlay #timer { font-size:4rem; margin-bottom:1rem; }
+#trainingOverlay progress { width:80%; height:24px; }
+#trainingOverlay button { margin-top:2rem;padding:1rem 2rem;font-size:1.2rem;border-radius:12px; cursor:pointer; }
+
+/* Modal évaluation */
+#evalModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1100; justify-content:center; align-items:center; }
+#evalModal div { background:#fff; padding:1rem; border-radius:16px; width:90%; max-width:400px; }
+#evalModal textarea { height:120px; }
+</style>
+</head>
+<body>
+<h1>🥋 Coach Tai Jitsu – Séance + Évaluation</h1>
+
+<div class="container">
+  <div class="panel">
+    <h2>📚 Banque d'exercices</h2>
+    <div id="bank"></div>
+  </div>
+
+  <div class="panel">
+    <h2>📝 Séance sélectionnée</h2>
+    <input type="text" id="sessionName" placeholder="Nom de la séance">
+    <div id="selection"></div>
+
+    <label>Carnet de notes :</label>
+    <textarea id="notes" rows="3" placeholder="Ressenti du jour..."></textarea>
+
+    <div class="controls">
+      <button onclick="saveSelection()">💾 Sauvegarder la sélection</button>
+      <button onclick="clearSelection()">🧹 Vider la sélection</button>
+      <button onclick="startSession()">▶️ Commencer entraînement</button>
+      <button id="pauseBtn" onclick="togglePause()" disabled>⏸️ Pause</button>
+      <button onclick="toggleFullscreen()">📱 Plein écran exercice</button>
+      <button onclick="showHistory()">📊 Historique</button>
+    </div>
+
+    <progress id="progress" value="0" max="100"></progress>
+    <div id="goals"></div>
+  </div>
+</div>
+
+<div id="trainingOverlay">
+  <h1 id="exerciseName">Exercice</h1>
+  <div id="timer">00:00</div>
+  <progress id="sessionProgress" value="0" max="100"></progress>
+  <button onclick="toggleFullscreen()">❌ Quitter plein écran</button>
+</div>
+
+<div id="modal" style="display:none; position:fixed; inset:0;background:rgba(0,0,0,0.6); color:#000; z-index:1000; justify-content:center; align-items:center; padding:1rem; overflow:auto;">
+  <div style="background:#fff; border-radius:16px; padding:1rem; max-width:600px; width:100%;">
+    <h2>📋 Historique & Évaluation</h2>
+    <div id="historyList"></div>
+    <button onclick="closeModal()" style="margin-top:1rem;">❌ Fermer</button>
+  </div>
+</div>
+
+<div id="evalModal">
+  <div>
+    <h2>C'est le moment de l'évaluation 📝</h2>
+    <p>Écrivez vos notes ci-dessous :</p>
+    <textarea id="evalNotes"></textarea>
+    <h3>Auto-évaluation des exercices</h3>
+<div id="selfEvalContainer"></div>
+
+    <button onclick="finishEvaluation()">✅ J'ai fini d'écrire mes notes</button>
+  </div>
+</div>
+
+<audio id="beep" src="beep.mp3"></audio>
+<audio id="ding" src="ding.mp3"></audio>
+
 <script>
 /* ===== DONNÉES ===== */
 const bankData=[
@@ -251,3 +354,7 @@ window.addEventListener("beforeunload", (e)=>{
 /* ===== INIT ===== */
 renderBank(); renderSelection(); renderGoals();
 </script>
+
+
+</body>
+</html>
