@@ -318,15 +318,32 @@ function finishEvaluation(){
   document.getElementById('evalModal').style.display = 'none';
 }
 
-const finalNotes = document.getElementById('evalNotes').value;
- document.getElementById('notes').value = finalNotes;
- sessions[currentSessionName].notes = finalNotes;
- sessions[currentSessionName].date = new Date().toLocaleString();
- localStorage.setItem('tj-sessions', JSON.stringify(sessions));
- document.getElementById('evalModal').style.display='none';
- speak("Fin de l'entraînement, à bientôt !");
- updateProgress();
+function finishEvaluation(){
+  // auto-évaluation
+  selection.forEach(ex => {
+    const stored = sessions[currentSessionName].exercises
+      .find(e => e.name === ex.name);
+    if(stored){
+      stored.selfEval = ex.selfEval || 3;
+    }
+  });
+
+  // notes finales
+  const finalNotes = document.getElementById('evalNotes').value;
+  document.getElementById('notes').value = finalNotes;
+  sessions[currentSessionName].notes = finalNotes;
+
+  // date de fin réelle
+  sessions[currentSessionName].date = new Date().toLocaleString();
+
+  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
+
+  renderGoals();
+
+  document.getElementById('evalModal').style.display = 'none';
+  speak("Fin de l'entraînement, à bientôt !");
 }
+
 
 /* ===== PLEIN ÉCRAN ===== */
 function toggleFullscreen(){ fullscreen=!fullscreen; document.getElementById('trainingOverlay').style.display = fullscreen?'flex':'none'; }
