@@ -155,7 +155,7 @@ function renderGoals(){
   const wk = weekKey();
 
   selection.forEach(ex=>{
-    if(!goals[ex.name]) goals[ex.name] = 30;
+    if(goals[ex.name] === undefined) goals[ex.name] = 30;
 
     let done = 0;
     Object.values(sessions).forEach(s=>{
@@ -201,14 +201,33 @@ function clearSelection(){ if(confirm("Vider la sélection ?")){selection=[];sav
 
 /* ===== ENTRAÎNEMENT ===== */
 function startSession(){
- if(!selection.length){ alert("Sélectionnez des exercices"); return; }
- const name = document.getElementById('sessionName').value || "Séance " + new Date().toLocaleString();
+ if(!selection.length){
+   alert("Sélectionnez des exercices");
+   return;
+ }
+
+ const baseName =
+   document.getElementById('sessionName').value || "Séance";
+
+ const name =
+   baseName + " – " + new Date().toLocaleString();
+
  currentSessionName = name;
- sessions[name] = { exercises: selection.map(e=>({...e, doneMinutes:0})), week: weekKey() };
+
+ sessions[name] = {
+   date: new Date().toLocaleString(),
+   week: weekKey(),
+   exercises: selection.map(e=>({...e, doneMinutes:0})),
+   notes: document.getElementById('notes').value
+ };
+
  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
- seqIndex=0; paused=false;
+
+ seqIndex = 0;
+ paused = false;
+
  speak("Commençons l'entraînement", nextExercise);
- document.getElementById('pauseBtn').disabled=false;
+ document.getElementById('pauseBtn').disabled = false;
 }
 
 function nextExercise(){
