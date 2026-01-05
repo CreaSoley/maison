@@ -114,308 +114,270 @@ let selection = JSON.parse(localStorage.getItem('tj-selection')) || [];
 let sessions = JSON.parse(localStorage.getItem('tj-sessions')) || {};
 let goals = JSON.parse(localStorage.getItem('tj-goals')) || {};
 let seqIndex=0, timer=null, fullscreen=false;
-let currentSessionName="", currentGoalExercise=null;
+let currentSessionName="", currentSessionId=null;
 let paused=false, remainingTime=0;
 
 /* ===== UTIL ===== */
-function weekKey(){ const d=new Date(),j=new Date(d.getFullYear(),0,1); return d.getFullYear()+"-W"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);}
-function speak(txt,cb){ const u=new SpeechSynthesisUtterance(txt); u.lang='fr-FR'; u.onend=cb; speechSynthesis.speak(u);}
-function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');}
+function weekKey(){ 
+  const d=new Date(),j=new Date(d.getFullYear(),0,1); 
+  return d.getFullYear()+"-W"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);
+}
+function speak(txt,cb){ 
+  const u=new SpeechSynthesisUtterance(txt); 
+  u.lang='fr-FR'; 
+  u.onend=cb; 
+  speechSynthesis.speak(u);
+}
+function formatTime(s){
+  return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');
+}
 
 /* ===== BANQUE ===== */
-function renderBank(){ const b=document.getElementById('bank'); b.innerHTML=''; bankData.forEach(u=>{ const uvDiv=document.createElement('div'); uvDiv.className='uv'; const h4=document.createElement('h4'); h4.textContent = u.uv; uvDiv.appendChild(h4); u.items.forEach(n=>{ const exDiv=document.createElement('div'); exDiv.className='exercise'; const span=document.createElement('span'); span.textContent=n; const btn=document.createElement('button'); btn.textContent='➕'; btn.onclick = ()=>addExercise(u.uv,n); exDiv.appendChild(span); exDiv.appendChild(btn); uvDiv.appendChild(exDiv); }); b.appendChild(uvDiv); });}
+function renderBank(){
+  const b=document.getElementById('bank'); 
+  b.innerHTML='';
+  bankData.forEach(u=>{
+    const uvDiv=document.createElement('div'); 
+    uvDiv.className='uv';
+    const h4=document.createElement('h4'); 
+    h4.textContent=u.uv; 
+    uvDiv.appendChild(h4);
+    u.items.forEach(n=>{
+      const exDiv=document.createElement('div'); 
+      exDiv.className='exercise';
+      const span=document.createElement('span'); 
+      span.textContent=n;
+      const btn=document.createElement('button'); 
+      btn.textContent='➕'; 
+      btn.onclick=()=>addExercise(u.uv,n);
+      exDiv.appendChild(span); 
+      exDiv.appendChild(btn); 
+      uvDiv.appendChild(exDiv);
+    });
+    b.appendChild(uvDiv);
+  });
+}
 
 /* ===== SÉLECTION ===== */
 function renderSelection(){ 
- const s=document.getElementById('selection'); s.innerHTML=''; 
- if(!selection.length){ s.innerHTML='<em>Aucun exercice</em>'; return; }
+ const s=document.getElementById('selection'); 
+ s.innerHTML=''; 
+ if(!selection.length){ 
+   s.innerHTML='<em>Aucun exercice</em>'; 
+   return; 
+ }
  selection.forEach((e,i)=>{
    const criteria = bankData.find(u=>u.uv===e.uv)?.criteria.join(', ') || '';
-   const div=document.createElement('div'); div.className='exercise selected';
+   const div=document.createElement('div'); 
+   div.className='exercise selected';
    if(seqIndex===i) div.classList.add('active');
    if(e.doneMinutes) div.classList.add('done');
-   const innerDiv=document.createElement('div');
    div.textContent = `${e.uv} – ${e.name} `;
-   const range=document.createElement('input'); range.type='range'; range.min=1; range.max=60; range.value=e.duration; range.oninput=(ev)=>updateDuration(i,ev.target.value);
-   const spanVal=document.createElement('span'); spanVal.textContent=`${e.duration} min`;
-   const btnUp=document.createElement('button'); btnUp.textContent='⬆️'; btnUp.onclick=()=>moveUp(i);
-   const btnDown=document.createElement('button'); btnDown.textContent='⬇️'; btnDown.onclick=()=>moveDown(i);
-   const btnDel=document.createElement('button'); btnDel.textContent='❌'; btnDel.onclick=()=>removeExercise(i);
-   const criteriaDiv=document.createElement('div'); criteriaDiv.style.fontSize='.8rem'; criteriaDiv.style.color='#555'; criteriaDiv.textContent=`Critères: ${criteria}`;
-   innerDiv.appendChild(range); innerDiv.appendChild(spanVal); innerDiv.appendChild(btnUp); innerDiv.appendChild(btnDown); innerDiv.appendChild(btnDel); innerDiv.appendChild(criteriaDiv);
-   div.appendChild(innerDiv); s.appendChild(div);
+   const innerDiv=document.createElement('div');
+   const range=document.createElement('input'); 
+   range.type='range'; 
+   range.min=1; 
+   range.max=60; 
+   range.value=e.duration; 
+   range.oninput=(ev)=>updateDuration(i,ev.target.value);
+   const spanVal=document.createElement('span'); 
+   spanVal.textContent=`${e.duration} min`;
+   const btnUp=document.createElement('button'); 
+   btnUp.textContent='⬆️'; 
+   btnUp.onclick=()=>moveUp(i);
+   const btnDown=document.createElement('button'); 
+   btnDown.textContent='⬇️'; 
+   btnDown.onclick=()=>moveDown(i);
+   const btnDel=document.createElement('button'); 
+   btnDel.textContent='❌'; 
+   btnDel.onclick=()=>removeExercise(i);
+   const criteriaDiv=document.createElement('div'); 
+   criteriaDiv.style.fontSize='.8rem'; 
+   criteriaDiv.style.color='#555'; 
+   criteriaDiv.textContent=`Critères: ${criteria}`;
+   innerDiv.append(range,spanVal,btnUp,btnDown,btnDel,criteriaDiv);
+   div.appendChild(innerDiv); 
+   s.appendChild(div);
  });
  renderGoals();
 }
 
 /* ===== OBJECTIFS ===== */
 function renderGoals(){
-  const g = document.getElementById('goals');
-  g.innerHTML = '';
-  const wk = weekKey();
+  const g=document.getElementById('goals'); 
+  g.innerHTML='';
+  const wk=weekKey();
 
   selection.forEach(ex=>{
-    if(goals[ex.name] === undefined) goals[ex.name] = 30;
+    if(goals[ex.name]===undefined) goals[ex.name]=30;
 
-    let done = 0;
+    let done=0;
     Object.values(sessions).forEach(s=>{
-      if(s.week === wk){
-        s.exercises.forEach(e=>{
-          if(e.name === ex.name && e.doneMinutes){
-            done += e.doneMinutes;
+      if(s.week===wk){
+        s.exercises?.forEach(e=>{
+          if(e.name===ex.name && e.doneMinutes){
+            done+=e.doneMinutes;
           }
         });
       }
     });
 
-    const pct = Math.min(100, Math.round(done / goals[ex.name] * 100));
-
-    const div = document.createElement('div');
-    div.innerHTML = `
+    const pct=Math.min(100,Math.round(done/goals[ex.name]*100));
+    const div=document.createElement('div');
+    div.innerHTML=`
       <strong>${ex.name}</strong><br>
       Objectif 
       <input type="number" min="1" value="${goals[ex.name]}"
-        onchange="setGoal('${ex.name}', this.value)"> min
+        onchange="setGoal('${ex.name}',this.value)"> min
       <progress value="${pct}" max="100"></progress> ${pct}%
     `;
-
     g.appendChild(div);
   });
-
-  localStorage.setItem('tj-goals', JSON.stringify(goals));
+  localStorage.setItem('tj-goals',JSON.stringify(goals));
 }
 
-function openGoalModal(name,val){ currentGoalExercise=name; document.getElementById('goalTitle').textContent=name; document.getElementById('goalValue').value=val; document.getElementById('goalModal').style.display='flex'; }
-function closeGoalModal(){ document.getElementById('goalModal').style.display='none'; }
-function confirmGoal(){ setGoal(currentGoalExercise, document.getElementById('goalValue').value); closeGoalModal(); }
-function setGoal(name,v){goals[name]=parseInt(v); renderGoals();}
+function setGoal(name,v){
+  goals[name]=parseInt(v);
+  renderGoals();
+}
 
-/* ===== ACTIONS SELECTION ===== */
+/* ===== ACTIONS SÉLECTION ===== */
 function addExercise(uv,name){ selection.push({uv,name,duration:5,doneMinutes:0}); saveSelection();}
-function updateDuration(i,v){selection[i].duration=parseInt(v); saveSelection();}
+function updateDuration(i,v){ selection[i].duration=parseInt(v); saveSelection();}
 function moveUp(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection();}}
-function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i+1],selection[i]]; saveSelection();}}
-function removeExercise(i){selection.splice(i,1); saveSelection();}
+function moveDown(i){ if(i<selection.length-1){ [selection[i+1],selection[i]]=[selection[i],selection[i+1]]; saveSelection();}}
+function removeExercise(i){ selection.splice(i,1); saveSelection();}
 function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(selection)); renderSelection();}
-function clearSelection(){ if(confirm("Vider la sélection ?")){selection=[];saveSelection();}}
 
 /* ===== ENTRAÎNEMENT ===== */
 function startSession(){
- if(!selection.length){
-   alert("Sélectionnez des exercices");
-   return;
- }
+ if(!selection.length){ alert("Sélectionnez des exercices"); return; }
 
- const baseName =
-   document.getElementById('sessionName').value || "Séance";
+ const baseName=document.getElementById('sessionName').value||"Séance";
+ currentSessionId=Date.now().toString();
+ currentSessionName=baseName+" – "+new Date().toLocaleString();
 
- const name =
-   baseName + " – " + new Date().toLocaleString();
-
- currentSessionName = name;
-
- sessions[name] = {
-   date: new Date().toLocaleString(),
-   week: weekKey(),
-   exercises: selection.map(e=>({...e, doneMinutes:0})),
-   notes: document.getElementById('notes').value
+ sessions[currentSessionId]={
+  id:currentSessionId,
+  name:currentSessionName,
+  date:new Date().toLocaleString(),
+  week:weekKey(),
+  exercises:selection.map(e=>({...e,doneMinutes:0})),
+  notes:''
  };
 
- localStorage.setItem('tj-sessions', JSON.stringify(sessions));
-
- seqIndex = 0;
- paused = false;
-
- speak("Commençons l'entraînement", nextExercise);
- document.getElementById('pauseBtn').disabled = false;
+ localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+ seqIndex=0; paused=false;
+ speak("Commençons l'entraînement",nextExercise);
+ document.getElementById('pauseBtn').disabled=false;
 }
 
 function nextExercise(){
  if(seqIndex>=selection.length){
-  document.getElementById('evalNotes').value =
-    document.getElementById('notes').value;
-
+  document.getElementById('evalNotes').value=document.getElementById('notes').value;
   buildSelfEvaluation();
-  document.getElementById('evalModal').style.display = 'flex';
+  document.getElementById('evalModal').style.display='flex';
   return;
  }
 
- const ex = selection[seqIndex];
- document.getElementById('exerciseName').textContent = ex.name;
- if(fullscreen) document.getElementById('trainingOverlay').style.display = 'flex';
-
- selection.forEach((e,i)=>{
-   const el = document.querySelectorAll('.exercise.selected')[i];
-   el.classList.toggle('active', i === seqIndex);
+ const ex=selection[seqIndex];
+ document.getElementById('exerciseName').textContent=ex.name;
+ selection.forEach((_,i)=>{
+   document.querySelectorAll('.exercise.selected')[i]
+     .classList.toggle('active',i===seqIndex);
  });
 
- speak(`Exercice ${seqIndex+1} : ${ex.name}`, ()=>{
+ speak(`Exercice ${seqIndex+1} : ${ex.name}`,()=>{
    setTimeout(()=>{
      document.getElementById('beep').play();
-     remainingTime = ex.duration * 60;
+     remainingTime=ex.duration*60;
      clearInterval(timer);
-
-     timer = setInterval(()=>{
+     timer=setInterval(()=>{
        if(!paused){
          remainingTime--;
-         document.getElementById('timer').textContent = formatTime(remainingTime);
-         updateProgress();
-
-         if(remainingTime <= 0){
+         document.getElementById('timer').textContent=formatTime(remainingTime);
+         if(remainingTime<=0){
            clearInterval(timer);
-
-           // ✅ comptabilisation correcte
-           selection[seqIndex].doneMinutes = ex.duration;
-           sessions[currentSessionName].exercises[seqIndex].doneMinutes = ex.duration;
-
-           localStorage.setItem('tj-sessions', JSON.stringify(sessions));
-
-           // ✅ MAJ immédiate des objectifs
+           selection[seqIndex].doneMinutes=ex.duration;
+           sessions[currentSessionId].exercises[seqIndex].doneMinutes=ex.duration;
+           localStorage.setItem('tj-sessions',JSON.stringify(sessions));
            renderGoals();
-
-           // UI
-           selection.forEach((e,i)=>{
-             const el = document.querySelectorAll('.exercise.selected')[i];
-             if(i === seqIndex){
-               el.classList.remove('active');
-               el.classList.add('done');
-             }
-           });
-
-           speak("Fin de l'exercice", ()=>{
-             seqIndex++;
-             nextExercise();
-           });
+           document.querySelectorAll('.exercise.selected')[seqIndex]
+             .classList.add('done');
+           speak("Fin de l'exercice",()=>{ seqIndex++; nextExercise(); });
          }
        }
-     }, 1000);
-   }, 2000);
+     },1000);
+   },2000);
  });
-}
-
-
-function updateProgress(){
- if(!selection.length) return;
- let done=seqIndex;
- if(seqIndex<selection.length && document.getElementById('timer').textContent){
-   const ex=selection[seqIndex];
-   const t=parseInt(document.getElementById('timer').textContent.split(':')[0])*60+parseInt(document.getElementById('timer').textContent.split(':')[1]);
-   done += (ex.duration*60 - t)/(ex.duration*60);
- }
- document.getElementById('progress').value = (done/selection.length)*100;
- document.getElementById('sessionProgress').value = (done/selection.length)*100;
 }
 
 function togglePause(){
- paused = !paused;
- document.getElementById('pauseBtn').textContent = paused ? "▶️ Reprendre" : "⏸️ Pause";
+ paused=!paused;
+ document.getElementById('pauseBtn').textContent=paused?"▶️ Reprendre":"⏸️ Pause";
 }
 
+/* ===== AUTO-ÉVALUATION & FIN ===== */
 function finishEvaluation(){
-  // auto-évaluation
-  selection.forEach(ex => {
-    const stored = sessions[currentSessionName].exercises
-      .find(e => e.name === ex.name);
-    if(stored){
-      stored.selfEval = ex.selfEval || 3;
-    }
-  });
+ selection.forEach(ex=>{
+  const stored=sessions[currentSessionId].exercises.find(e=>e.name===ex.name);
+  if(stored) stored.selfEval=ex.selfEval||3;
+ });
 
-  // notes finales
-  sessions[currentSessionName].notes =
-    document.getElementById('evalNotes').value;
+ const finalNotes=document.getElementById('evalNotes').value;
+ document.getElementById('notes').value=finalNotes;
+ sessions[currentSessionId].notes=finalNotes;
+ sessions[currentSessionId].date=new Date().toLocaleString();
 
-  // date de fin réelle
-  sessions[currentSessionName].endDate =
-    new Date().toLocaleString();
-
-  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
-
-  // ✅ rafraîchit la progression objectifs
-  renderGoals();
-
-  document.getElementById('evalModal').style.display = 'none';
+ localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+ renderGoals();
+ document.getElementById('evalModal').style.display='none';
+ speak("Fin de l'entraînement, à bientôt !");
 }
-
-function finishEvaluation(){
-  // auto-évaluation
-  selection.forEach(ex => {
-    const stored = sessions[currentSessionName].exercises
-      .find(e => e.name === ex.name);
-    if(stored){
-      stored.selfEval = ex.selfEval || 3;
-    }
-  });
-
-  // notes finales
-  const finalNotes = document.getElementById('evalNotes').value;
-  document.getElementById('notes').value = finalNotes;
-  sessions[currentSessionName].notes = finalNotes;
-
-  // date de fin réelle
-  sessions[currentSessionName].date = new Date().toLocaleString();
-
-  localStorage.setItem('tj-sessions', JSON.stringify(sessions));
-
-  renderGoals();
-
-  document.getElementById('evalModal').style.display = 'none';
-  speak("Fin de l'entraînement, à bientôt !");
-}
-
-
-/* ===== PLEIN ÉCRAN ===== */
-function toggleFullscreen(){ fullscreen=!fullscreen; document.getElementById('trainingOverlay').style.display = fullscreen?'flex':'none'; }
 
 /* ===== HISTORIQUE ===== */
 function showHistory(){
- const modal=document.getElementById('modal'); modal.style.display='flex';
- const h=document.getElementById('historyList'); h.innerHTML='';
- for(const n in sessions){
-   const s=sessions[n];
-   let div=document.createElement('div'); div.className='history-item';
-   let html = `<strong>${n}</strong> (${s.date || 'Pas de date'})<br>`;
-   if(s.exercises && s.exercises.length){ s.exercises.forEach(e=>{ html += `- ${e.name}: ${e.doneMinutes || 0} min<br>`; }); }
-   html += `Notes: ${s.notes||''}<br><br>`;
-   div.innerHTML = html;
+ const modal=document.getElementById('modal'); 
+ modal.style.display='flex';
+ const h=document.getElementById('historyList'); 
+ h.innerHTML='';
+ for(const id in sessions){
+   const s=sessions[id];
+   const div=document.createElement('div');
+   let html=`<strong>${s.name}</strong><br>${s.date}<br>`;
+   s.exercises?.forEach(e=>{
+     html+=`- ${e.name} : ${e.doneMinutes||0} min<br>`;
+   });
+   html+=`Notes : ${s.notes||''}<br><br>`;
+   div.innerHTML=html;
    h.appendChild(div);
  }
 }
 function closeModal(){ document.getElementById('modal').style.display='none'; }
-function buildSelfEvaluation() {
-  const container = document.getElementById('selfEvalContainer');
-  container.innerHTML = '';
 
-  selection.forEach(ex => {
-    const div = document.createElement('div');
-    div.style.marginBottom = '0.8rem';
-
-    div.innerHTML = `
-      <strong>${ex.name}</strong><br>
-      <input type="range" min="1" max="5" value="${ex.selfEval || 3}" step="1">
-      <span>${ex.selfEval || 3}</span>/5
-    `;
-
-    const slider = div.querySelector('input');
-    const label = div.querySelector('span');
-
-    slider.oninput = () => {
-      label.textContent = slider.value;
-      ex.selfEval = parseInt(slider.value);
-    };
-
-    container.appendChild(div);
-  });
+/* ===== AUTO-ÉVALUATION UI ===== */
+function buildSelfEvaluation(){
+ const c=document.getElementById('selfEvalContainer');
+ c.innerHTML='';
+ selection.forEach(ex=>{
+  const div=document.createElement('div');
+  div.innerHTML=`
+    <strong>${ex.name}</strong><br>
+    <input type="range" min="1" max="5" value="${ex.selfEval||3}">
+    <span>${ex.selfEval||3}</span>/5
+  `;
+  const r=div.querySelector('input'), s=div.querySelector('span');
+  r.oninput=()=>{ s.textContent=r.value; ex.selfEval=parseInt(r.value); };
+  c.appendChild(div);
+ });
 }
-  function setGoal(name, v){
-  goals[name] = parseInt(v);
-  renderGoals();
-}
-
 
 /* ===== INIT ===== */
-renderBank(); renderSelection(); renderGoals();
+renderBank();
+renderSelection();
+renderGoals();
 </script>
+
 </body>
 </html>
 
