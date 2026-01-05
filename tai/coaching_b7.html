@@ -115,9 +115,9 @@ const bankData=[
 let selection = JSON.parse(localStorage.getItem('tj-selection')) || [];
 let sessions = JSON.parse(localStorage.getItem('tj-sessions')) || {};
 let goals = JSON.parse(localStorage.getItem('tj-goals')) || {};
-let seqIndex=0,timer=null,fullscreen=false,paused=false;
+let seqIndex=0, timer=null, fullscreen=false;
 let currentSessionName="", currentGoalExercise=null;
-let remainingTime=0;
+let paused=false, remainingTime=0;
 
 /* ===== UTIL ===== */
 function weekKey(){ const d=new Date(),j=new Date(d.getFullYear(),0,1); return d.getFullYear()+"-W"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);}
@@ -125,25 +125,11 @@ function speak(txt,cb){ const u=new SpeechSynthesisUtterance(txt); u.lang='fr-FR
 function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');}
 
 /* ===== BANQUE ===== */
-function renderBank(){
- const b=document.getElementById('bank'); b.innerHTML='';
- bankData.forEach(u=>{
-   const uvDiv=document.createElement('div'); uvDiv.className='uv';
-   const h4 = document.createElement('h4'); h4.textContent = u.uv; uvDiv.appendChild(h4);
-   u.items.forEach(n=>{
-     const exDiv=document.createElement('div'); exDiv.className='exercise';
-     const span=document.createElement('span'); span.textContent=n;
-     const btn=document.createElement('button'); btn.textContent='➕';
-     btn.onclick = ()=>addExercise(u.uv,n);
-     exDiv.appendChild(span); exDiv.appendChild(btn); uvDiv.appendChild(exDiv);
-   });
-   b.appendChild(uvDiv);
- });
-}
+function renderBank(){ const b=document.getElementById('bank'); b.innerHTML=''; bankData.forEach(u=>{ const uvDiv=document.createElement('div'); uvDiv.className='uv'; const h4=document.createElement('h4'); h4.textContent = u.uv; uvDiv.appendChild(h4); u.items.forEach(n=>{ const exDiv=document.createElement('div'); exDiv.className='exercise'; const span=document.createElement('span'); span.textContent=n; const btn=document.createElement('button'); btn.textContent='➕'; btn.onclick = ()=>addExercise(u.uv,n); exDiv.appendChild(span); exDiv.appendChild(btn); uvDiv.appendChild(exDiv); }); b.appendChild(uvDiv); });}
 
 /* ===== SÉLECTION ===== */
-function renderSelection(){
- const s=document.getElementById('selection'); s.innerHTML='';
+function renderSelection(){ 
+ const s=document.getElementById('selection'); s.innerHTML=''; 
  if(!selection.length){ s.innerHTML='<em>Aucun exercice</em>'; return; }
  selection.forEach((e,i)=>{
    const criteria = bankData.find(u=>u.uv===e.uv)?.criteria.join(', ') || '';
@@ -165,8 +151,9 @@ function renderSelection(){
 }
 
 /* ===== OBJECTIFS ===== */
-function renderGoals(){
- const g=document.getElementById('goals'); g.innerHTML=''; const wk=weekKey();
+function renderGoals(){ 
+ const g=document.getElementById('goals'); g.innerHTML=''; 
+ const wk=weekKey(); 
  selection.forEach(ex=>{
    if(!goals[ex.name]) goals[ex.name]=30;
    let done=0;
@@ -181,16 +168,11 @@ function renderGoals(){
  localStorage.setItem('tj-goals',JSON.stringify(goals));
 }
 
-function openGoalModal(name,val){
- currentGoalExercise=name;
- document.getElementById('goalTitle').textContent=name;
- document.getElementById('goalValue').value=val;
- document.getElementById('goalModal').style.display='flex';
-}
+function openGoalModal(name,val){ currentGoalExercise=name; document.getElementById('goalTitle').textContent=name; document.getElementById('goalValue').value=val; document.getElementById('goalModal').style.display='flex'; }
 function closeGoalModal(){ document.getElementById('goalModal').style.display='none'; }
 function confirmGoal(){ setGoal(currentGoalExercise, document.getElementById('goalValue').value); closeGoalModal(); }
 
-/* ===== ACTIONS SÉLECTION ===== */
+/* ===== ACTIONS SELECTION ===== */
 function addExercise(uv,name){ selection.push({uv,name,duration:5,doneMinutes:0}); saveSelection();}
 function updateDuration(i,v){selection[i].duration=parseInt(v); saveSelection();}
 function moveUp(i){ if(i>0){ [selection[i-1],selection[i]]=[selection[i],selection[i-1]]; saveSelection();}}
@@ -199,16 +181,18 @@ function removeExercise(i){selection.splice(i,1); saveSelection();}
 function saveSelection(){ localStorage.setItem('tj-selection',JSON.stringify(selection)); renderSelection();}
 function clearSelection(){ if(confirm("Vider la sélection ?")){selection=[];saveSelection();}}
 
-/* ===== ENTRAÎNEMENT ===== */
+/* ===== ENTRAÎNEMENT ORIGINAL ===== */
+let timerRunning=false;
 function startSession(){
  if(!selection.length){ alert("Sélectionnez des exercices"); return; }
  const name = document.getElementById('sessionName').value || "Séance " + new Date().toLocaleString();
  currentSessionName = name;
  sessions[name] = { date:new Date().toLocaleString(), week: weekKey(), exercises: selection.map(e=>({...e, doneMinutes:0})), notes: document.getElementById('notes').value };
  localStorage.setItem('tj-sessions',JSON.stringify(sessions));
- seqIndex=0; paused=false; remainingTime=0;
- document.getElementById('pauseBtn').disabled=false;
+ seqIndex=0;
  speak("Commençons l'entraînement", nextExercise);
+ document.getElementById('pauseBtn').disabled=false;
+ paused=false;
 }
 
 function nextExercise(){
@@ -221,28 +205,36 @@ function nextExercise(){
    setTimeout(()=>{
      document.getElementById('beep').play();
      remainingTime=ex.duration*60;
-     document.getElementById('timer').textContent=formatTime(remainingTime);
      clearInterval(timer);
-     timer=setInterval(stepTimer,1000);
+     timer=setInterval(()=>{
+       if(!paused){
+         remainingTime--;
+         updateProgress();
+         document.getElementById('timer').textContent=formatTime(remainingTime);
+         if(remainingTime<=0){
+           clearInterval(timer);
+           selection[seqIndex].doneMinutes=ex.duration;
+           sessions[currentSessionName].exercises[seqIndex].doneMinutes=ex.duration;
+           localStorage.setItem('tj-sessions',JSON.stringify(sessions));
+           selection.forEach((e,i)=>{ const el=document.querySelectorAll('.exercise.selected')[i]; if(i===seqIndex){ el.classList.remove('active'); el.classList.add('done'); }});
+           speak("Fin de l'exercice", ()=>{ seqIndex++; nextExercise(); });
+         }
+       }
+     },1000);
    },2000);
  });
 }
 
-function stepTimer(){
- if(paused) return;
- remainingTime--;
- updateProgress();
- document.getElementById('timer').textContent=formatTime(remainingTime);
- if(remainingTime<=0){
-   clearInterval(timer);
-   selection[seqIndex].doneMinutes=selection[seqIndex].duration;
-   sessions[currentSessionName].exercises[seqIndex].doneMinutes=selection[seqIndex].duration;
-   localStorage.setItem('tj-sessions',JSON.stringify(sessions));
-   selection.forEach((e,i)=>{ const el=document.querySelectorAll('.exercise.selected')[i]; el.classList.toggle('done',i===seqIndex); el.classList.remove('active'); });
-   speak("Fin de l'exercice", ()=>{
-     seqIndex++; nextExercise();
-   });
+function updateProgress(){
+ if(!selection.length) return;
+ let done=seqIndex;
+ if(seqIndex<selection.length && document.getElementById('timer').textContent){
+   const ex=selection[seqIndex];
+   const t=parseInt(document.getElementById('timer').textContent.split(':')[0])*60+parseInt(document.getElementById('timer').textContent.split(':')[1]);
+   done += (ex.duration*60 - t)/(ex.duration*60);
  }
+ document.getElementById('progress').value = (done/selection.length)*100;
+ document.getElementById('sessionProgress').value = (done/selection.length)*100;
 }
 
 function togglePause(){
@@ -261,9 +253,7 @@ function showHistory(){
    const s=sessions[n];
    let div=document.createElement('div'); div.className='history-item';
    let html = `<strong>${n}</strong> (${s.date})<br>`;
-   if(s.exercises && s.exercises.length){
-       s.exercises.forEach(e=>{ html += `- ${e.name}: ${e.doneMinutes || 0} min<br>`; });
-   }
+   if(s.exercises && s.exercises.length){ s.exercises.forEach(e=>{ html += `- ${e.name}: ${e.doneMinutes || 0} min<br>`; }); }
    html += `Notes: ${s.notes||''}<br><br>`;
    div.innerHTML = html;
    h.appendChild(div);
