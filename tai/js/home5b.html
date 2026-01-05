@@ -15,21 +15,8 @@ h2{text-align:center}
 .sequence-item.active{background:#ffd6ec;font-weight:bold}
 .sequence-item.done{text-decoration:line-through;opacity:.6}
 progress{width:100%}
-
-#overlay{
-display:none;
-position:fixed;
-inset:0;
-background:black;
-color:white;
-z-index:999;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-gap:12px;
-}
-
-#historyBox{display:none}
+#overlay{display:none;position:fixed;inset:0;background:black;color:white;z-index:999;
+align-items:center;justify-content:center;flex-direction:column;gap:12px}
 </style>
 </head>
 
@@ -45,11 +32,10 @@ gap:12px;
 <div class="card">
 <h3>Sélection</h3>
 <div id="selection"></div>
-
 <div class="btn-row">
 <button class="btn" onclick="startTraining()">▶️ Démarrer</button>
 <button class="btn" onclick="showOverlay()">🖥 Plein écran</button>
-<button class="btn" onclick="editGoals()">🎯 Éditer objectifs</button>
+<button class="btn" onclick="editGoals()">🎯 Objectifs</button>
 <button class="btn" onclick="showHistory()">📜 Historique</button>
 </div>
 </div>
@@ -59,17 +45,16 @@ gap:12px;
 <div id="goalsView"></div>
 </div>
 
-<div id="historyBox" class="card"></div>
+<div class="card" id="historyBox" style="display:none"></div>
 
 <div id="overlay">
 <h2 id="oTitle"></h2>
 <div id="oTimer" style="font-size:2rem"></div>
 <progress id="oProgress" value="0" max="100"></progress>
-
 <div class="btn-row">
-<button class="btn" onclick="pause()">⏸ Pause</button>
-<button class="btn" onclick="resume()">▶️ Reprendre</button>
-<button class="btn" onclick="hideOverlay()">⬅️ Quitter</button>
+<button class="btn" onclick="pause()">⏸</button>
+<button class="btn" onclick="resume()">▶️</button>
+<button class="btn" onclick="hideOverlay()">⬅️</button>
 </div>
 </div>
 
@@ -83,22 +68,15 @@ const bankData=[
 {uv:"UV5-6 – Randori",ex:["Randori shadow","Randori dirigé"]}
 ];
 
-let selection=[];
-let idx=0;
-let remaining=0;
-let timer=null;
-let paused=false;
-let trainingActive=false;
-
+let selection=[],idx=0,remaining=0,timer=null,paused=false,trainingActive=false;
 let history=JSON.parse(localStorage.getItem("tj-history")||"[]");
 let goals=JSON.parse(localStorage.getItem("tj-goals")||"{}");
 let currentSession=null;
 
 /* ===== UTIL ===== */
 function weekKey(){
-const d=new Date();
-const onejan=new Date(d.getFullYear(),0,1);
-return d.getFullYear()+"-W"+Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+const d=new Date(),o=new Date(d.getFullYear(),0,1);
+return d.getFullYear()+"-W"+Math.ceil((((d-o)/86400000)+o.getDay()+1)/7);
 }
 
 /* ===== UI ===== */
@@ -109,9 +87,8 @@ const d=document.createElement("div");
 d.innerHTML=`<strong>${u.uv}</strong><br>`;
 u.ex.forEach(n=>{
 const btn=document.createElement("button");
-btn.className="btn";
-btn.textContent=n;
-btn.onclick=()=>addExercise(n);
+btn.className="btn";btn.textContent=n;
+btn.onclick=()=>{selection.push({name:n,duration:5,done:false});renderSelection();}
 d.appendChild(btn);
 });
 b.appendChild(d);
@@ -121,146 +98,90 @@ b.appendChild(d);
 function renderSelection(){
 const s=document.getElementById("selection");s.innerHTML="";
 selection.forEach((e,i)=>{
-const d=document.createElement("div");
-d.className="sequence-item"+(i===idx?" active":"")+(e.done?" done":"");
-d.innerHTML=`
+s.innerHTML+=`
+<div class="sequence-item ${i===idx?"active":""} ${e.done?"done":""}">
 ${e.name}<br>
-<input type="number" min="1" value="${e.duration}" onchange="setDuration(${i},this.value)"> min
-<button onclick="up(${i})">⬆️</button>
-<button onclick="down(${i})">⬇️</button>
-<button onclick="removeEx(${i})">❌</button>
-`;
-s.appendChild(d);
-});
-}
-
-function renderGoals(){
-const g=document.getElementById("goalsView");
-g.innerHTML="";
-const wk=weekKey();
-const totals={};
-
-history.forEach(s=>{
-if(s.week===wk){
-s.exercises.forEach(e=>{
-totals[e.name]=(totals[e.name]||0)+e.minutes;
-});
-}
-});
-
-Object.keys(goals).forEach(name=>{
-const done=totals[name]||0;
-const target=goals[name];
-const pct=Math.min(100,Math.round(done/target*100));
-g.innerHTML+=`
-<div>
-<strong>${name}</strong><br>
-${done} / ${target} min
-<progress value="${pct}" max="100"></progress>
-${pct}%
+<input type="number" value="${e.duration}" min="1"
+onchange="selection[${i}].duration=Number(this.value)"> min
+<button onclick="selection.splice(${i},1);renderSelection()">❌</button>
 </div>`;
 });
 }
 
-function addExercise(n){
-selection.push({name:n,duration:5,done:false});
-renderSelection();
+function renderGoals(){
+const g=document.getElementById("goalsView");g.innerHTML="";
+const wk=weekKey(),tot={};
+history.forEach(s=>s.week===wk&&s.exercises.forEach(e=>{
+tot[e.name]=(tot[e.name]||0)+e.minutes;
+}));
+Object.keys(goals).forEach(n=>{
+const d=tot[n]||0,t=goals[n];
+g.innerHTML+=`${n} ${d}/${t} min<progress value="${Math.min(100,d/t*100)}"></progress>`;
+});
 }
 
 /* ===== TRAINING ===== */
 function startTraining(){
-if(trainingActive || !selection.length) return;
+if(trainingActive||!selection.length)return;
 trainingActive=true;
+idx=0;selection.forEach(e=>e.done=false);
 
-speech("Commençons l'entraînement",()=>{
-idx=0;
-selection.forEach(e=>e.done=false);
-
-currentSession={
-date:new Date().toLocaleString(),
-week:weekKey(),
-exercises:[]
-};
-
+currentSession={date:new Date().toLocaleString(),week:weekKey(),exercises:[]};
 history.push(currentSession);
 localStorage.setItem("tj-history",JSON.stringify(history));
 
+speech("Commençons l'entraînement");
 runExercise();
-});
 }
 
 function runExercise(){
 if(idx>=selection.length){
 trainingActive=false;
-speech("Fin de l'entraînement, à bientôt");
-renderSelection();
-renderGoals();
+speech("Fin de l'entraînement");
+renderGoals();renderSelection();
 return;
 }
-
 const ex=selection[idx];
-speech("Exercice "+(idx+1)+" : "+ex.name,()=>{
 remaining=ex.duration*60;
 updateOverlay(ex.name);
-tick();
-renderSelection();
-});
+speech("Exercice "+ex.name);
+tick();renderSelection();
 }
 
 function tick(){
-if(!trainingActive || paused) return;
-
+if(!trainingActive||paused)return;
 document.getElementById("oTimer").textContent=
 Math.floor(remaining/60)+":"+String(remaining%60).padStart(2,"0");
-
 document.getElementById("oProgress").value=
 100*(1-remaining/(selection[idx].duration*60));
-
-if(remaining<=0){
+if(remaining--<=0){
 selection[idx].done=true;
-
-currentSession.exercises.push({
-name:selection[idx].name,
-minutes:selection[idx].duration
-});
-
+currentSession.exercises.push({name:selection[idx].name,minutes:selection[idx].duration});
 localStorage.setItem("tj-history",JSON.stringify(history));
-
-speech("Fin de l'exercice");
-idx++;
-runExercise();
-return;
+idx++;runExercise();return;
 }
-
-remaining--;
 timer=setTimeout(tick,1000);
 }
 
 /* ===== CONTROLS ===== */
-function pause(){paused=true;clearTimeout(timer);}
-function resume(){if(!paused)return;paused=false;tick();}
-function setDuration(i,v){selection[i].duration=Number(v);}
-function removeEx(i){selection.splice(i,1);renderSelection();}
-function up(i){if(i>0)[selection[i],selection[i-1]]=[selection[i-1],selection[i]],renderSelection();}
-function down(i){if(i<selection.length-1)[selection[i],selection[i+1]]=[selection[i+1],selection[i]],renderSelection();}
-
-/* ===== OVERLAY ===== */
-function showOverlay(){document.getElementById("overlay").style.display="flex";}
-function hideOverlay(){document.getElementById("overlay").style.display="none";}
-function updateOverlay(t){document.getElementById("oTitle").textContent=t;}
+function pause(){paused=true;clearTimeout(timer)}
+function resume(){if(!paused)return;paused=false;tick()}
+function showOverlay(){overlay.style.display="flex"}
+function hideOverlay(){overlay.style.display="none"}
+function updateOverlay(t){oTitle.textContent=t}
 
 /* ===== VOICE ===== */
-function speech(t,cb){
+function speech(t){
+try{
 const u=new SpeechSynthesisUtterance(t);
-u.lang="fr-FR";
-u.onend=cb||null;
-speechSynthesis.speak(u);
+u.lang="fr-FR";speechSynthesis.speak(u);
+}catch(e){}
 }
 
 /* ===== GOALS ===== */
 function editGoals(){
 selection.forEach(e=>{
-const v=prompt("Objectif hebdomadaire (minutes) pour "+e.name,goals[e.name]||30);
+const v=prompt("Objectif pour "+e.name,goals[e.name]||30);
 if(v)goals[e.name]=Number(v);
 });
 localStorage.setItem("tj-goals",JSON.stringify(goals));
@@ -271,32 +192,18 @@ renderGoals();
 function showHistory(){
 const box=document.getElementById("historyBox");
 box.style.display="block";
-
-if(!history.length){
-box.innerHTML="<h3>📜 Historique</h3><p>Aucune séance</p>";
-return;
-}
-
-let html="<h3>📜 Historique détaillé</h3>";
-
+box.innerHTML="<h3>📜 Historique</h3>";
+if(!history.length){box.innerHTML+="Aucune séance";return;}
 history.forEach((s,i)=>{
-let total=0;
-html+=`<strong>Séance ${i+1}</strong><br>${s.date}<ul>`;
-s.exercises.forEach(e=>{
-total+=e.minutes;
-html+=`<li>${e.name} : ${e.minutes} min</li>`;
+let tot=0;
+box.innerHTML+=`<strong>Séance ${i+1}</strong><br>${s.date}<ul>`;
+s.exercises.forEach(e=>{tot+=e.minutes;box.innerHTML+=`<li>${e.name} ${e.minutes} min</li>`});
+box.innerHTML+=`</ul>Total ${tot} min<hr>`;
 });
-html+=`</ul><strong>Total : ${total} min</strong><hr>`;
-});
-
-box.innerHTML=html;
 }
 
 /* INIT */
-renderBank();
-renderSelection();
-renderGoals();
+renderBank();renderSelection();renderGoals();
 </script>
-
 </body>
 </html>
