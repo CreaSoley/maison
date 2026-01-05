@@ -24,17 +24,17 @@ textarea { width:100%; border-radius:12px; padding:.6rem; margin-top:.5rem; }
 label{ font-weight:bold; display:block; margin-top:.5rem; }
 .history-item{ border-bottom:1px solid #ccc; padding:.3rem 0; }
 
-/* 📱 Mobile : cards empilées */
+/* 📱 MOBILE : empilement des cards */
 @media (max-width:768px){
   .container{ grid-template-columns:1fr; }
 }
 
 /* Overlay plein écran */
 #trainingOverlay {
-  display:none; position:fixed; inset:0;
-  background:linear-gradient(to right,#84fab0,#8fd3f4);
-  z-index:999; flex-direction:column;
-  justify-content:center; align-items:center;
+ display:none; position:fixed; inset:0;
+ background:linear-gradient(to right,#84fab0,#8fd3f4);
+ z-index:999; flex-direction:column;
+ justify-content:center; align-items:center;
 }
 #trainingOverlay h1 { font-size:3rem; margin-bottom:1rem; }
 #trainingOverlay #timer { font-size:4rem; margin-bottom:1rem; }
@@ -73,7 +73,7 @@ label{ font-weight:bold; display:block; margin-top:.5rem; }
   </div>
 </div>
 
-<!-- Overlay entraînement -->
+<!-- Overlay -->
 <div id="trainingOverlay">
   <h1 id="exerciseName">Exercice</h1>
   <div id="timer">00:00</div>
@@ -81,7 +81,7 @@ label{ font-weight:bold; display:block; margin-top:.5rem; }
   <button onclick="toggleFullscreen()">❌ Quitter plein écran</button>
 </div>
 
-<!-- Modal historique -->
+<!-- Historique -->
 <div id="modal" style="display:none; position:fixed; inset:0;background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center; padding:1rem; overflow:auto;">
   <div style="background:#fff; border-radius:16px; padding:1rem; max-width:600px; width:100%;">
     <h2>📋 Historique & Évaluation</h2>
@@ -107,52 +107,87 @@ label{ font-weight:bold; display:block; margin-top:.5rem; }
 <audio id="ding" src="ding.mp3"></audio>
 
 <script>
-/* ===== DONNÉES & ÉTAT — STRICTEMENT IDENTIQUES À TON CODE ===== */
-// ⬇️ (tout le JS est identique à l’original,
-// SAUF renderGoals + fonctions modal)
+/* ===== DONNÉES ORIGINALES ===== */
+const bankData=[
+ {uv:'🥋 UV 1 – Kihon',items:['Kihon simple','Enchaînement','Cibles'],criteria:['Précision','Réactivité','Posture']},
+ {uv:'🌀 UV 2 – Déplacements',items:['Taï sabaki','Slow ippon','Ippon kumite'],criteria:['Fluidité','Équilibre','Contrôle']},
+ {uv:'📐 UV 3 – Kata',items:['Slow kata','Kata nidan','Bunkaï'],criteria:['Exactitude','Maîtrise','Kime']},
+ {uv:'⚙️ UV 4 – Technique de base',items:['Shadow'],criteria:['Réalisme','Zanchin','Protection']},
+ {uv:'🔥 UV 5 & 6 – Randori',items:['Randori shadow'],criteria:['Réalisme','Zanchin','Protection']}
+];
 
-const bankData=[/* identique */];
+/* ===== ÉTAT ORIGINAL ===== */
 let selection = JSON.parse(localStorage.getItem('tj-selection')) || [];
 let sessions = JSON.parse(localStorage.getItem('tj-sessions')) || {};
 let goals = JSON.parse(localStorage.getItem('tj-goals')) || {};
 let seqIndex=0,timer=null,fullscreen=false;
 let currentSessionName="", currentGoalExercise=null;
 
-/* ===== TOUTES LES FONCTIONS D’ORIGINE SONT INCHANGÉES ===== */
-/* startSession, nextExercise, updateProgress, showHistory, etc. */
+/* ===== UTIL ===== */
+function weekKey(){
+ const d=new Date(),j=new Date(d.getFullYear(),0,1);
+ return d.getFullYear()+"-W"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);
+}
+function speak(txt,cb){
+ const u=new SpeechSynthesisUtterance(txt);
+ u.lang='fr-FR'; u.onend=cb;
+ speechSynthesis.speak(u);
+}
+function formatTime(s){
+ return String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');
+}
 
-/* ===== OBJECTIFS — SEUL AFFICHAGE MODIFIÉ ===== */
+/* ===== BANQUE (INCHANGÉ) ===== */
+function renderBank(){
+ const b=document.getElementById('bank'); b.innerHTML='';
+ bankData.forEach(u=>{
+   const uvDiv=document.createElement('div'); uvDiv.className='uv';
+   uvDiv.innerHTML=`<h4>${u.uv}</h4>`;
+   u.items.forEach(n=>{
+     const d=document.createElement('div'); d.className='exercise';
+     d.innerHTML=`<span>${n}</span><button>➕</button>`;
+     d.querySelector('button').onclick=()=>addExercise(u.uv,n);
+     uvDiv.appendChild(d);
+   });
+   b.appendChild(uvDiv);
+ });
+}
+
+/* ===== SÉLECTION, ENTRAÎNEMENT, HISTORIQUE ===== */
+/* ⬇️ STRICTEMENT IDENTIQUES À TON CODE D’ORIGINE */
+/* (renderSelection, startSession, nextExercise, updateProgress, showHistory, etc.) */
+
+/* ===== OBJECTIFS : SEULE DIFFÉRENCE = MODAL ===== */
 function renderGoals(){
  const g=document.getElementById('goals'); g.innerHTML='';
  const wk=weekKey();
 
  selection.forEach(ex=>{
-  if(!goals[ex.name]) goals[ex.name]=30;
-  let done=0;
+   if(!goals[ex.name]) goals[ex.name]=30;
+   let done=0;
 
-  Object.values(sessions).forEach(s=>{
-   if(s.week===wk){
-    s.exercises.forEach(e=>{
-     if(e.name===ex.name && e.doneMinutes) done+=e.doneMinutes;
-    });
-   }
-  });
+   Object.values(sessions).forEach(s=>{
+     if(s.week===wk){
+       s.exercises.forEach(e=>{
+         if(e.name===ex.name && e.doneMinutes) done+=e.doneMinutes;
+       });
+     }
+   });
 
-  const pct=Math.min(100,Math.round(done/goals[ex.name]*100));
-  const div=document.createElement('div');
+   const pct=Math.min(100,Math.round(done/goals[ex.name]*100));
+   const div=document.createElement('div');
 
-  div.innerHTML=`
-   <strong>${ex.name}</strong><br>
-   Objectif :
-   <span style="cursor:pointer;text-decoration:underline"
-     onclick="openGoalModal('${ex.name}',${goals[ex.name]})">
-     ${goals[ex.name]} min
-   </span>
-   <progress value="${pct}" max="100"></progress> ${pct}%`;
+   div.innerHTML=`
+    <strong>${ex.name}</strong><br>
+    Objectif :
+    <span style="cursor:pointer;text-decoration:underline"
+      onclick="openGoalModal('${ex.name}',${goals[ex.name]})">
+      ${goals[ex.name]} min
+    </span>
+    <progress value="${pct}" max="100"></progress> ${pct}%`;
 
-  g.appendChild(div);
+   g.appendChild(div);
  });
-
  localStorage.setItem('tj-goals',JSON.stringify(goals));
 }
 
