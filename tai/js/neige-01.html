@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tai-Jitsu Coach – Ceinture Noire</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Fredoka', Arial, sans-serif;
+      background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+      color: #333;
+    }
+
+    h2 { margin-top: 0; }
+
+    .container {
+      padding: 12px;
+      max-width: 480px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    }
+
+    button {
+      border: none;
+      border-radius: 20px;
+      padding: 10px 14px;
+      font-family: 'Fredoka', Arial, sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .primary {
+      background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);
+      color: #000;
+    }
+
+    .secondary {
+      background: #e0f7fa;
+    }
+
+    .danger { background: #ff8a80; }
+    .active { background: #81c784 !important; }
+
+    .accordion-header {
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .accordion-content { display: none; margin-top: 10px; }
+    .accordion.open .accordion-content { display: block; }
+
+    .exercise {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .exercise.active { background: #fff9c4; }
+    .exercise.done { text-decoration: line-through; opacity: 0.5; }
+
+    input[type="range"] { width: 100%; }
+
+    .progress {
+      height: 12px;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);
+      width: 0%;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      max-height: 90vh;
+      overflow-y: auto;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    textarea { width: 100%; border-radius: 10px; padding: 8px; }
+
+    .rating label { margin-right: 6px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ETAPE 1 : OBJECTIFS -->
+  <div class="card accordion" id="objectifsCard">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      🎯 Objectifs hebdomadaires
+      <span>▼</span>
+    </div>
+    <div class="accordion-content" id="objectifs"></div>
+    <button class="secondary" onclick="editObjectifs()">✏️ Éditer les objectifs</button>
+  </div>
+
+  <!-- ETAPE 2 : SELECTION -->
+  <div class="card accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      🥋 Banque d'exercices
+      <span>▼</span>
+    </div>
+    <div class="accordion-content" id="banque"></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Séance sélectionnée</h2>
+    <div id="selection"></div>
+    <button class="secondary" onclick="viderSelection()">🗑️ Vider</button>
+  </div>
+
+  <!-- ETAPE 3 -->
+  <div class="card">
+    <h2>⏱️ Durées</h2>
+    <div id="durees"></div>
+  </div>
+
+  <!-- ETAPE 4 -->
+  <div class="card">
+    <h2>▶️ Séance</h2>
+    <div class="progress"><div class="progress-bar" id="progressGlobal"></div></div>
+    <p id="timerGlobal">00:00</p>
+    <button class="primary" onclick="startSession()">Commencer la séance</button>
+    <button class="secondary" id="pauseBtn" onclick="pauseResume()">⏸️ Pause</button>
+    <button class="danger" onclick="stopSession()">⏹️ Stop</button>
+  </div>
+
+</div>
+
+<!-- MODAL EVALUATION -->
+<div class="modal" id="modalEval">
+  <div class="modal-content">
+    <h2>📝 Auto-évaluation</h2>
+    <div id="evaluation"></div>
+    <h3>Carnet de notes</h3>
+    <textarea id="notes" rows="4"></textarea>
+    <button class="primary" onclick="validerEvaluation()">Valider</button>
+  </div>
+</div>
+
+<audio id="ding" src="assets/ding.mp3"></audio>
+<audio id="beep" src="assets/beep.mp3"></audio>
+
+<script>
+/* ===================== DATA ===================== */
+const EXERCICES = [
+  { name: "UV1 : Kihon simples", criteres: ["précision","kime","posture"] },
+  { name: "UV1 : Enchaînements", criteres: ["précision","kime","posture"] },
+  { name: "UV1 : Cibles", criteres: ["précision","kime","posture"] },
+  { name: "UV2 : Taï sabaki", criteres: ["fluidité","distance","contrôle"] },
+  { name: "UV2 : Ippon kumite lent", criteres: ["fluidité","distance","contrôle"] },
+  { name: "UV2 : Ippon kumite examen", criteres: ["fluidité","distance","contrôle"] },
+  { name: "UV3 : Kata lent", criteres: ["exactitude","kime","équilibre"] },
+  { name: "UV3 : Kata examen", criteres: ["exactitude","kime","équilibre"] },
+  { name: "UV3 : Bunkaï", criteres: ["exactitude","kime","équilibre"] },
+  { name: "UV4 : Technique de base", criteres: ["réalisme","zanchin","protection"] },
+  { name: "UV5-6 : Self-defense arme", criteres: ["réalisme","zanchin","protection"] },
+  { name: "UV5-6 : Self-defense atemi", criteres: ["réalisme","zanchin","protection"] },
+  { name: "UV5-6 : Self-defense saisie", criteres: ["réalisme","zanchin","protection"] }
+];
+
+let selection = [];
+let timers = [];
+let currentIndex = 0;
+let paused = false;
+let interval = null;
+
+/* ===================== UI ===================== */
+function toggleAccordion(el){ el.parentElement.classList.toggle('open'); }
+
+function renderBanque(){
+  const b = document.getElementById('banque');
+  b.innerHTML = '';
+  EXERCICES.forEach(e=>{
+    const div = document.createElement('div');
+    div.className='exercise';
+    div.innerHTML = `${e.name} <button onclick="addExercise('${e.name}')">➕</button>`;
+    b.appendChild(div);
+  });
+}
+
+function addExercise(name){
+  selection.push({ name, duree: 10 });
+  renderSelection();
+}
+
+function renderSelection(){
+  const s = document.getElementById('selection');
+  const d = document.getElementById('durees');
+  s.innerHTML = d.innerHTML = '';
+
+  selection.forEach((ex,i)=>{
+    s.innerHTML += `<div class="exercise">${ex.name}</div>`;
+    d.innerHTML += `<label>${ex.name} (${ex.duree} min)</label><input type="range" min="1" max="60" value="${ex.duree}" oninput="selection[${i}].duree=this.value">`;
+  });
+}
+
+function viderSelection(){ selection=[]; renderSelection(); }
+
+/* ===================== SESSION ===================== */
+function speak(txt){ speechSynthesis.speak(new SpeechSynthesisUtterance(txt)); }
+
+function startSession(){
+  if(!selection.length) return alert('Aucun exercice');
+  speak('Commençons l\'entraînement');
+  setTimeout(()=>runExercise(0),2000);
+}
+
+function runExercise(i){
+  if(i>=selection.length){ finishSession(); return; }
+  currentIndex=i;
+  const ex=selection[i];
+  speak(`${i+1}ème exercice, ${ex.name}`);
+  let t=ex.duree*60;
+  interval=setInterval(()=>{
+    if(paused) return;
+    t--;
+    if(t<=0){
+      clearInterval(interval);
+      document.getElementById('ding').play();
+      runExercise(i+1);
+    }
+  },1000);
+}
+
+function pauseResume(){ paused=!paused; document.getElementById('pauseBtn').classList.toggle('active'); }
+
+function stopSession(){ clearInterval(interval); finishSession(); }
+
+function finishSession(){
+  document.getElementById('beep').play();
+  setTimeout(()=>speak('Fin de l\'entraînement, place à l\'auto-évaluation'),4000);
+  openEvaluation();
+}
+
+/* ===================== EVALUATION ===================== */
+function openEvaluation(){
+  const e=document.getElementById('evaluation');
+  e.innerHTML='';
+  selection.forEach(ex=>{
+    const data=EXERCICES.find(x=>x.name===ex.name);
+    e.innerHTML+=`<h4>${ex.name}</h4>`;
+    data.criteres.forEach(c=>{
+      e.innerHTML+=`<div class="rating">${c}: ${[0,1,2,3,4,5].map(n=>`<label><input type="radio" name="${ex.name}-${c}" value="${n}">${n}</label>`).join('')}</div>`;
+    });
+  });
+  document.getElementById('modalEval').style.display='flex';
+}
+
+function validerEvaluation(){
+  const hist=JSON.parse(localStorage.getItem('historique')||'[]');
+  hist.push({ id: crypto.randomUUID(), date: new Date(), selection, notes: notes.value });
+  localStorage.setItem('historique',JSON.stringify(hist));
+  location.reload();
+}
+
+renderBanque();
+</script>
+
+</body>
+</html>
