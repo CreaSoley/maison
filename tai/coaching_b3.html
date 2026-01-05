@@ -334,6 +334,16 @@ function buildSelfEvaluation() {
 
 /* ===== INIT ===== */
 renderBank(); renderSelection(); renderGoals();
+
+/* ===== AVERTISSEMENT SORTIE ===== */
+window.addEventListener('beforeunload', (e) => {
+  // Si une séance est en cours et pas terminée
+  if(seqIndex < selection.length){
+    e.preventDefault();
+    e.returnValue = "⚠️ Votre séance n'est pas terminée. Attendez la fin pour ne pas perdre la progression.";
+  }
+});
+
 </script>
 
 </body>
