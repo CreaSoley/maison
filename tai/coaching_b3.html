@@ -254,7 +254,7 @@ function startSession(){
  if(!selection.length){ alert("Sélectionnez des exercices"); return; }
 
  const baseName=document.getElementById('sessionName').value||"Séance";
- currentSessionId=Date.now().toString();
+ currentSessionId = crypto.randomUUID();
  currentSessionName=baseName+" – "+new Date().toLocaleString();
 
  sessions[currentSessionId]={
@@ -319,7 +319,11 @@ function togglePause(){
 
 /* ===== AUTO-ÉVALUATION & FIN ===== */
 function finishEvaluation(){
- selection.forEach(ex=>{
+if(!currentSessionId || !sessions[currentSessionId]){
+  console.warn("Session invalide – historique préservé");
+  return;
+}
+  selection.forEach(ex=>{
   const stored=sessions[currentSessionId].exercises.find(e=>e.name===ex.name);
   if(stored) stored.selfEval=ex.selfEval||3;
  });
