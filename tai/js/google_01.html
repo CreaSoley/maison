@@ -138,7 +138,7 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
 <script>
 /* ================= CONFIG ================= */
-const GOOGLE_API_URL = "https://script.google.com/macros/s/XXX/exec";
+const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbw0XUFA42PqPRoROu_Dru3gKie9QfBZq0cVlxT3xxys6kDVUaKIg4d188rPmXebDFxnWg/exec";
 
 /* ================= DONNÉES ================= */
 const EXERCISES = [
@@ -163,7 +163,7 @@ let remainingExercise=0,remainingGlobal=0;
 /* ================= OBJECTIFS ================= */
 async function fetchObjectivesFromSheet(){
   try{
-    const r=await fetch(https://script.google.com/macros/s/AKfycbw0XUFA42PqPRoROu_Dru3gKie9QfBZq0cVlxT3xxys6kDVUaKIg4d188rPmXebDFxnWg/exec"?action=fetchObjectives");
+    const r=await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
     const data=await r.json();
     renderObjectives(data);
   }catch(e){
