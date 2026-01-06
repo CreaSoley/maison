@@ -365,7 +365,41 @@ function renderEvaluation(){
   pdf.save("Recap_TaiJitsu.pdf");
 }
 
-function saveEvaluation(){location.reload()}
+function saveEvaluation(){
+  const evaluations = [];
+
+  selection.forEach(ex=>{
+    const def = EXERCISES.find(e=>e.name===ex.name);
+    if(!def) return;
+
+    const criteria = {};
+    def.criteria.forEach(c=>{
+      const v = document.querySelector(
+        `input[name="${ex.name+c}"]:checked`
+      );
+      if(v) criteria[c] = parseInt(v.value);
+    });
+
+    evaluations.push({
+      name: ex.name,
+      criteria
+    });
+  });
+
+  const payload = {
+    action: "addEvaluation",
+    date: new Date().toISOString(),
+    notes: notes.value || "",
+    evaluations
+  };
+
+  fetch(GOOGLE_API_URL,{
+    method:"POST",
+    body: JSON.stringify(payload)
+  });
+
+  location.reload();
+}
 
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
