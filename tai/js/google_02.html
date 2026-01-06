@@ -190,7 +190,7 @@ function renderObjectivesChart(data){
   if(objectivesChart) objectivesChart.destroy();
 
   // Calcul du max Y arrondi + 20 pour l'esthétique
-  const maxY = Math.ceil(Math.max(...objectifs) / 10) * 10 + 20;
+  const maxY = Math.ceil(Math.max(...objectifs) / 10) * 10 + 5;
 
   objectivesChart = new Chart(ctx, {
     type: "bar",
@@ -231,7 +231,7 @@ function renderObjectivesChart(data){
           beginAtZero: true,
           suggestedMax: maxY,
           ticks: {
-            stepSize: 20
+            stepSize: 40
           },
           title: {
             display: true,
