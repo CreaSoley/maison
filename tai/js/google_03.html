@@ -2,67 +2,98 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tai-Jitsu Coach – Ceinture Noire</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 * { box-sizing: border-box; }
 body {
-  margin:0;
-  font-family:'Fredoka',Arial,sans-serif;
+  margin: 0;
+  font-family: 'Fredoka', Arial, sans-serif;
   background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-  color:#333;
-  overflow-x:hidden;
+  color: #333;
+  overflow-x: hidden;
 }
-h1,h2,h3{text-align:center;}
-.container{padding:12px;}
-.card{
+h1,h2,h3 { text-align: center; }
+.container { padding: 12px; }
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-family: 'Fredoka', Arial, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 4px 0;
+}
+
+button.active { background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%); color:#fff; }
+
+.btn-primary { background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%); color: #fff; }
+.btn-secondary { background: #84fab0; color: #fff; }
+.btn-danger { background: #ff6b6b; color: #fff; }
+
+.accordion-header {
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.accordion-content { display: none; margin-top: 10px; }
+
+.exercise {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ddd;
+}
+.exercise.active { background: #fff3cd; border-radius: 10px; padding: 6px; }
+.exercise.done { text-decoration: line-through; opacity: 0.5; }
+
+input[type=range]{ width:100%; }
+.progress{ width:100%; height:10px; background:#eee; border-radius:10px; overflow:hidden; margin:6px 0; }
+.progress-bar{ height:100%; width:0%; background-image: linear-gradient(to right,#fa709a 0%,#fee140 100%); transition: width 0.3s; }
+
+.timers{ text-align:center; font-weight:600; }
+
+.modal{
+  position: fixed;
+  inset:0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content:center;
+  align-items:center;
+  padding:12px;
+}
+.modal-content{
   background:white;
   border-radius:18px;
   padding:14px;
-  margin-bottom:14px;
-  box-shadow:0 6px 12px rgba(0,0,0,0.1);
+  max-height:90vh;
+  overflow-y:auto;
+  width:100%;
 }
-button{
-  border:none;
-  border-radius:14px;
-  padding:10px 14px;
+textarea{
+  width:100%;
+  border-radius:12px;
+  padding:8px;
+  border:1px solid #ccc;
   font-family:'Fredoka',Arial,sans-serif;
-  font-size:14px;
-  cursor:pointer;
-  margin:4px 0;
 }
-button.active{background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%); color:#fff;}
-.btn-primary{background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);color:#fff;}
-.btn-secondary{background:#84fab0;color:#fff;}
-.btn-danger{background:#ff6b6b;color:#fff;}
-.accordion-header{
-  font-weight:600;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.accordion-content{display:none;margin-top:10px;}
-.exercise{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:6px 0;
-  border-bottom:1px dashed #ddd;
-}
-.exercise.active{background:#fff3cd;border-radius:10px;padding:6px;}
-.exercise.done{text-decoration:line-through;opacity:0.5;}
-input[type=range]{width:100%;}
-.progress{width:100%;height:10px;background:#eee;border-radius:10px;overflow:hidden;margin:6px 0;}
-.progress-bar{height:100%;width:0%;background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);transition:width 0.3s;}
-.timers{text-align:center;font-weight:600;}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;padding:12px;}
-.modal-content{background:white;border-radius:18px;padding:14px;max-height:90vh;overflow-y:auto;width:100%;}
-textarea{width:100%;border-radius:12px;padding:8px;border:1px solid #ccc;font-family:'Fredoka',Arial,sans-serif;}
-.rating{display:flex;justify-content:space-between;margin-bottom:8px;}
-.rating label{font-size:12px;}
+.rating{ display:flex; justify-content:space-between; margin-bottom:8px; }
+.rating label{ font-size:12px; }
 </style>
 </head>
 <body>
@@ -70,25 +101,26 @@ textarea{width:100%;border-radius:12px;padding:8px;border:1px solid #ccc;font-fa
 <div class="container">
 <h1>🥋 Tai-Jitsu Coach</h1>
 
+<!-- Progression globale objectifs -->
+<div class="card">
+  <h3>📊 Progression hebdomadaire</h3>
+  <div id="progressSummary"></div>
+</div>
+
 <!-- Objectifs -->
 <div class="card">
   <div class="accordion-header" onclick="toggleAccordion(this)">🎯 Objectifs hebdomadaires <span>⬇️</span></div>
   <div class="accordion-content" id="objectifs"></div>
+  <button class="btn-secondary" onclick="editObjectives()">✏️ Éditer les objectifs</button>
 </div>
 
-<!-- Graphique Objectifs vs Réalisé -->
-<div class="card">
-  <h3>📊 Progression</h3>
-  <canvas id="objectivesChart" style="height:300px"></canvas>
-</div>
-
-<!-- Banque d’exercices -->
+<!-- Banque d'exercices -->
 <div class="card">
   <div class="accordion-header" onclick="toggleAccordion(this)">📚 Banque d'exercices <span>⬇️</span></div>
   <div class="accordion-content" id="bank"></div>
 </div>
 
-<!-- Sélection -->
+<!-- Séance sélectionnée -->
 <div class="card">
   <h3>📝 Séance sélectionnée</h3>
   <div id="selection"></div>
@@ -106,7 +138,7 @@ textarea{width:100%;border-radius:12px;padding:8px;border:1px solid #ccc;font-fa
 </div>
 </div>
 
-<!-- Modal Auto-évaluation -->
+<!-- Modal auto-évaluation -->
 <div class="modal" id="evaluationModal">
   <div class="modal-content">
     <h2>📝 Auto-évaluation</h2>
@@ -118,28 +150,27 @@ textarea{width:100%;border-radius:12px;padding:8px;border:1px solid #ccc;font-fa
 
 <script>
 /* ================= CONFIG ================= */
-const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbw0XUFA42PqPRoROu_Dru3gKie9QfBZq0cVlxT3xxys6kDVUaKIg4d188rPmXebDFxnWg/exec"; // → remplacer par ton URL
+const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbw0XUFA42PqPRoROu_Dru3gKie9QfBZq0cVlxT3xxys6kDVUaKIg4d188rPmXebDFxnWg/exec";
 
 /* ================= DONNÉES ================= */
-const EXERCISES = [
- {name:'UV1 : Kihon simples',criteria:['précision','kime','posture']},
- {name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
- {name:'UV1 : Cibles',criteria:['précision','kime','posture']},
- {name:'UV2 : Taï sabaki',criteria:['fluidité','distance','contrôle']},
- {name:'UV2 : Ippon kumite lent',criteria:['fluidité','distance','contrôle']},
- {name:'UV2 : Ippon kumite examen',criteria:['fluidité','distance','contrôle']},
- {name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
- {name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
- {name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
- {name:'UV4 : Technique de base',criteria:['réalisme','zanchin','protection']},
- {name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
- {name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
- {name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
+const EXERCISES=[
+  {name:'UV1 : Kihon simples',criteria:['précision','kime','posture']},
+  {name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
+  {name:'UV1 : Cibles',criteria:['précision','kime','posture']},
+  {name:'UV2 : Taï sabaki',criteria:['fluidité','distance','contrôle']},
+  {name:'UV2 : Ippon kumite lent',criteria:['fluidité','distance','contrôle']},
+  {name:'UV2 : Ippon kumite examen',criteria:['fluidité','distance','contrôle']},
+  {name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
+  {name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
+  {name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
+  {name:'UV4 : Technique de base',criteria:['réalisme','zanchin','protection']},
+  {name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
+  {name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
+  {name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
 ];
 
 let selection=[],currentIndex=0,timer=null,paused=false;
 let remainingExercise=0,remainingGlobal=0;
-let objectivesChart=null;
 
 /* ================= UI ================= */
 const bank=document.getElementById("bank");
@@ -160,35 +191,7 @@ function toggleAccordion(h){
   a.textContent=open?"⬇️":"⬆️";
 }
 
-/* ================= OBJECTIFS ================= */
-async function fetchObjectivesFromSheet(){
-  try{
-    const r = await fetch(GOOGLE_API_URL + "?action=fetchObjectives");
-    const data = await r.json();
-    renderObjectives(data);
-    renderObjectivesChart(data);
-  }catch(e){
-    document.getElementById("objectifs").innerHTML="Erreur chargement objectifs";
-    console.error(e);
-  }
-}
-
-function renderObjectives(list){
-  const div=document.getElementById("objectifs");
-  div.innerHTML="";
-  list.forEach(o=>{
-    const pct=o.ObjectifHebdo?Math.round((o.Réalisé/o.ObjectifHebdo)*100):0;
-    div.innerHTML+=`
-      <strong>${o.Exercice}</strong>
-      <div class="progress">
-        <div class="progress-bar" style="width:${pct}%"></div>
-      </div>
-      <small>${o.Réalisé}/${o.ObjectifHebdo} min (${pct}%)</small>
-    `;
-  });
-}
-
-/* ================= BANQUE ================= */
+/* ================= BANQUE D'EXERCICES ================= */
 function renderBank(){
   bank.innerHTML="";
   EXERCISES.forEach(e=>{
@@ -211,13 +214,58 @@ function renderSelection(){
     <div class="exercise ${i===currentIndex?'active':''}">
       <span>${e.name}</span>
       <input type="range" min="1" max="60" value="${e.duration}"
-        oninput="selection[${i}].duration=parseInt(this.value)">
+        oninput="selection[${i}].duration=this.value">
       <span>${e.duration} min</span>
     </div>`;
   });
 }
 
 function clearSelection(){selection=[];renderSelection()}
+
+/* ================= OBJECTIFS ================= */
+async function fetchObjectivesFromSheet(){
+  try{
+    const r=await fetch(`${GOOGLE_API_URL}?action=fetchObjectives`);
+    const data=await r.json();
+    renderObjectives(data);
+    renderProgressSummary(data);
+  }catch(e){
+    document.getElementById("objectifs").innerHTML="Erreur chargement objectifs";
+  }
+}
+
+function renderObjectives(list){
+  const div=document.getElementById("objectifs");
+  div.innerHTML="";
+  list.forEach(o=>{
+    const pct=o.ObjectifHebdo?Math.round((o.Réalisé/o.ObjectifHebdo)*100):0;
+    div.innerHTML+=`
+      <strong>${o.Exercice}</strong>
+      <div class="progress">
+        <div class="progress-bar" style="width:${pct}%"></div>
+      </div>
+      <small>${o.Réalisé}/${o.ObjectifHebdo} min (${pct}%)</small>
+    `;
+  });
+}
+
+// Barre synthèse
+function renderProgressSummary(list){
+  const div=document.getElementById("progressSummary");
+  div.innerHTML="";
+  list.forEach(o=>{
+    const pct=o.ObjectifHebdo?Math.round((o.Réalisé/o.ObjectifHebdo)*100):0;
+    div.innerHTML+=`
+      <strong>${o.Exercice}</strong>
+      <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+      <small>${o.Réalisé}/${o.ObjectifHebdo} min (${pct}%)</small>
+    `;
+  });
+}
+
+function editObjectives(){
+  alert("L'édition des objectifs sera via Google Sheet.");
+}
 
 /* ================= SESSION ================= */
 const ding=new Audio("ding.mp3");
@@ -234,15 +282,17 @@ function startSession(){
 }
 
 function runExercise(i){
-  if(i>=selection.length){endSession();return;}
+  if(i>=selection.length){endSession();return}
   currentIndex=i;
   renderSelection();
-  speak(`Exercice ${i+1}, ${selection[i].name}`);
+  const ordinals=["premier","deuxième","troisième","quatrième","cinquième","sixième","septième","huitième","neuvième","dixième"];
+  speak(`${ordinals[i]||i+1} exercice, ${selection[i].name}`);
   remainingExercise=selection[i].duration*60;
   timer=setInterval(()=>{
     if(!paused){
       remainingExercise--;remainingGlobal--;
-      updateTimers();updateProgress();
+      updateTimers();
+      updateProgress();
       if(remainingExercise<=0){
         clearInterval(timer);
         ding.play();
@@ -252,10 +302,14 @@ function runExercise(i){
   },1000);
 }
 
-function updateTimers(){timers.textContent=`${fmt(remainingExercise)} | ${fmt(remainingGlobal)}`}
+function updateTimers(){
+  timers.textContent=`${fmt(remainingExercise)} | ${fmt(remainingGlobal)}`;
+}
+
 function updateProgress(){
   const total=selection.reduce((s,e)=>s+e.duration*60,0);
-  globalProgress.style.width=`${100-(remainingGlobal/total*100)}%`
+  const done=total-remainingGlobal;
+  globalProgress.style.width=`${Math.round(done/total*100)}%`;
 }
 
 function pauseResume(){
@@ -264,30 +318,22 @@ function pauseResume(){
   pauseBtn.classList.toggle("active",paused);
 }
 
-function stopSession(){clearInterval(timer);endSession()}
+function stopSession(){
+  clearInterval(timer);
+  endSession();
+}
 
 function endSession(){
   beep.play();
+  speak("Fin de l'entraînement, place à l'auto-évaluation");
+  evaluationModal.style.display="flex";
+  renderEvaluation();
   sendSessionToSheet();
   fetchObjectivesFromSheet();
-  speak("Fin de l'entraînement, place à l'auto-évaluation");
-  evaluationModal.style.display='flex';
-  renderEvaluation();
 }
 
-/* ================= ENVOI GOOGLE SHEET ================= */
-function sendSessionToSheet(){
-  selection.forEach(ex => {
-    const params = new URLSearchParams({
-      action:"addSession",
-      exercice:ex.name,
-      duree:ex.duration,
-      notes:document.getElementById("notes")?.value || ""
-    });
-    fetch(`${GOOGLE_API_URL}?${params.toString()}`)
-      .then(r=>r.json())
-      .catch(err=>console.error("Erreur envoi session",err));
-  });
+function fmt(s){
+  return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
 }
 
 /* ================= ÉVALUATION ================= */
@@ -305,57 +351,30 @@ function renderEvaluation(){
   });
 }
 
-function saveEvaluation(){location.reload()}
-
-/* ================= GRAPHIQUE ================= */
-function renderObjectivesChart(data){
-  const labels = data.map(o => o.Exercice);
-  const objectifs = data.map(o => o.ObjectifHebdo);
-  const realises = data.map(o => o.Réalisé);
-
-  const ctx = document.getElementById("objectivesChart").getContext("2d");
-
-  if(objectivesChart) objectivesChart.destroy();
-
-  const maxY = Math.ceil(Math.max(...objectifs)/10)*10 + 20;
-
-  objectivesChart = new Chart(ctx,{
-    type:"bar",
-    data:{
-      labels:labels,
-      datasets:[
-        {label:"Objectif (min)", data:objectifs, backgroundColor:"rgba(255,159,64,0.7)"},
-        {label:"Réalisé (min)", data:realises, backgroundColor:"rgba(54,162,235,0.7)"}
-      ]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{labels:{font:{family:"Fredoka"}}},
-        tooltip:{
-          callbacks:{label: ctx => ctx.dataset.label+": "+ctx.raw+" min"}
-        }
-      },
-      scales:{
-        y:{
-          beginAtZero:true,
-          suggestedMax:maxY,
-          ticks:{stepSize:20},
-          title:{display:true,text:"Minutes",font:{family:"Fredoka",size:14}}
-        },
-        x:{ticks:{font:{family:"Fredoka",size:12}}}
-      }
-    }
-  });
+function saveEvaluation(){
+  // Simple reload pour l'instant
+  location.reload();
 }
 
-/* ================= FORMAT TIME ================= */
-function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+/* ================= ENVOI GOOGLE SHEET ================= */
+function sendSessionToSheet(){
+  selection.forEach(ex=>{
+    const params=new URLSearchParams({
+      action:"addSession",
+      exercice:ex.name,
+      duree:ex.duration,
+      notes:document.getElementById("notes")?.value||""
+    });
+    fetch(`${GOOGLE_API_URL}?${params.toString()}`)
+      .then(r=>r.json())
+      .catch(err=>console.error("Erreur envoi session",err));
+  });
+}
 
 /* ================= INIT ================= */
 renderBank();
 fetchObjectivesFromSheet();
 </script>
+
 </body>
 </html>
