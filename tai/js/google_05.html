@@ -76,6 +76,13 @@ textarea{width:100%;border-radius:12px;padding:8px}
  <button class="btn-primary" onclick="generatePDF()">📄 Générer le bilan PDF</button>
 
 </div>
+<div class="card">
+  <h3>📊 Analyse des évaluations</h3>
+  <input type="date" id="fromDate">
+  <input type="date" id="toDate">
+  <button class="btn-primary" onclick="showStats()">Afficher</button>
+  <canvas id="statsChart"></canvas>
+</div>
 
 <!-- ÉVALUATION -->
 <div class="modal" id="evaluationModal">
