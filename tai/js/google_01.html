@@ -4,67 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>Tai-Jitsu Coach – Ceinture Noire</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-* { box-sizing: border-box; }
-body {
-  margin:0;
-  font-family:'Fredoka', Arial, sans-serif;
-  background-image: linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%);
-  color:#333;
-  overflow-x:hidden;
-}
-h1,h2,h3{text-align:center;}
-.container{padding:12px;}
-.card{
-  background:white;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:14px;
-  box-shadow:0 6px 12px rgba(0,0,0,0.1);
-}
-button{
-  border:none;
-  border-radius:14px;
-  padding:10px 14px;
-  font-family:'Fredoka', Arial, sans-serif;
-  font-size:14px;
-  cursor:pointer;
-  margin:4px 0;
-}
-button.active{background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%); color:#fff;}
-.btn-primary{background-image:linear-gradient(to right,#fa709a 0%,#fee140 100%); color:#fff;}
-.btn-secondary{background:#84fab0; color:#fff;}
-.btn-danger{background:#ff6b6b; color:#fff;}
-.accordion-header{
-  font-weight:600;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.accordion-content{display:none; margin-top:10px;}
-.exercise{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:6px 0;
-  border-bottom:1px dashed #ddd;
-}
-.exercise.active{background:#fff3cd; border-radius:10px; padding:6px;}
-.exercise.done{text-decoration:line-through; opacity:0.5;}
-input[type=range]{width:100%;}
-.progress{width:100%; height:10px; background:#eee; border-radius:10px; overflow:hidden; margin:6px 0;}
-.progress-bar{height:100%; width:0%; background-image:linear-gradient(to right,#fa709a 0%,#fee140 100%); transition:width 0.3s;}
-.timers{text-align:center; font-weight:600;}
-.modal{position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; justify-content:center; align-items:center; padding:12px;}
-.modal-content{background:white; border-radius:18px; padding:14px; max-height:90vh; overflow-y:auto; width:100%;}
-textarea{width:100%; border-radius:12px; padding:8px; border:1px solid #ccc; font-family:'Fredoka', Arial, sans-serif;}
-.rating{display:flex; justify-content:space-between; margin-bottom:8px;}
-.rating label{font-size:12px;}
-canvas{max-width:100%; margin-top:10px;}
+*{box-sizing:border-box}body{margin:0;font-family:'Fredoka',Arial,sans-serif;background-image:linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%);color:#333;overflow-x:hidden}h1,h2,h3{text-align:center}.container{padding:12px}.card{background:white;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 6px 12px rgba(0,0,0,.1)}button{border:none;border-radius:14px;padding:10px 14px;font-family:'Fredoka',Arial,sans-serif;font-size:14px;cursor:pointer;margin:4px 0}button.active{background:linear-gradient(to top,#30cfd0 0%,#330867 100%);color:#fff} .btn-primary{background-image:linear-gradient(to right,#fa709a 0%,#fee140 100%);color:#fff}.btn-secondary{background:#84fab0;color:#fff}.btn-danger{background:#ff6b6b;color:#fff}.accordion-header{font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}.accordion-content{display:none;margin-top:10px}.exercise{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #ddd}.exercise.active{background:#fff3cd;border-radius:10px;padding:6px}.exercise.done{text-decoration:line-through;opacity:.5}input[type=range]{width:100%}.progress{width:100%;height:10px;background:#eee;border-radius:10px;overflow:hidden;margin:6px 0}.progress-bar{height:100%;width:0%;background-image:linear-gradient(to right,#fa709a 0%,#fee140 100%);transition:width .3s}.timers{text-align:center;font-weight:600}.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;justify-content:center;align-items:center;padding:12px}.modal-content{background:white;border-radius:18px;padding:14px;max-height:90vh;overflow-y:auto;width:100%}textarea{width:100%;border-radius:12px;padding:8px;border:1px solid #ccc;font-family:'Fredoka',Arial,sans-serif}.rating{display:flex;justify-content:space-between;margin-bottom:8px}.rating label{font-size:12px}
 </style>
 </head>
 <body>
@@ -72,248 +15,170 @@ canvas{max-width:100%; margin-top:10px;}
 <div class="container">
 <h1>🥋 Tai-Jitsu Coach</h1>
 
-<!-- OBJECTIFS -->
+<!-- Objectifs -->
 <div class="card">
   <div class="accordion-header" onclick="toggleAccordion(this)">🎯 Objectifs hebdomadaires <span>⬇️</span></div>
-  <div class="accordion-content" id="objectifsContent"></div>
-  <div class="accordion-content" id="objectifsEditor">
-    <table style="width:100%; margin-top:10px;">
-      <thead><tr><th>Exercice</th><th>Objectif (min)</th></tr></thead>
-      <tbody id="objectifsTable"></tbody>
-    </table>
-    <button class="btn-secondary" onclick="saveObjectives()">💾 Valider</button>
+  <div class="accordion-content" id="objectifs"></div>
+  <div id="objectifsEditor" style="display:none;margin-top:10px">
+    <h4>✏️ Éditer les objectifs</h4>
+    <div id="editorContent"></div>
+    <button class="btn-primary" onclick="saveObjectives()">Valider</button>
+    <button class="btn-secondary" onclick="cancelEditObjectives()">Annuler</button>
   </div>
 </div>
 
-<!-- BANQUE D'EXERCICES -->
+<!-- Banque exercices -->
 <div class="card">
   <div class="accordion-header" onclick="toggleAccordion(this)">📚 Banque d'exercices <span>⬇️</span></div>
   <div class="accordion-content" id="bank"></div>
 </div>
 
-<!-- SÉLECTION -->
+<!-- Sélection séance -->
 <div class="card">
-<h3>📝 Séance sélectionnée</h3>
-<div id="selection"></div>
-<button class="btn-secondary" onclick="clearSelection()">Vider la sélection</button>
+  <h3>📝 Séance sélectionnée</h3>
+  <div id="selection"></div>
+  <button class="btn-secondary" onclick="clearSelection()">Vider la sélection</button>
 </div>
 
-<!-- SESSION -->
+<!-- Lancer séance -->
 <div class="card">
-<h3>⏱️ Lancer la séance</h3>
-<div class="progress"><div class="progress-bar" id="globalProgress"></div></div>
-<div class="timers" id="timers">00:00 | 00:00</div>
-<button class="btn-primary" id="startBtn" onclick="startSession()">Commencer la séance</button>
-<button class="btn-secondary" id="pauseBtn" onclick="pauseResume()">Pause</button>
-<button class="btn-danger" onclick="stopSession()">Stopper</button>
+  <h3>⏱️ Lancer la séance</h3>
+  <div class="progress"><div class="progress-bar" id="globalProgress"></div></div>
+  <div class="timers" id="timers">00:00 | 00:00</div>
+  <button class="btn-primary" id="startBtn" onclick="startSession()">Commencer la séance</button>
+  <button class="btn-secondary" id="pauseBtn" onclick="pauseResume()">Pause</button>
+  <button class="btn-danger" onclick="stopSession()">Stopper</button>
+</div>
+
+<!-- Graphique Objectifs -->
+<div class="card">
+  <h3>📊 Progression Objectifs</h3>
+  <canvas id="chartObjectives" height="150"></canvas>
+</div>
+
+<!-- Modal évaluation -->
+<div class="modal" id="evaluationModal">
+  <div class="modal-content">
+    <h2>📝 Auto-évaluation</h2>
+    <textarea id="notes" placeholder="Carnet de notes..."></textarea>
+    <div id="evaluation"></div>
+    <button class="btn-primary" onclick="saveEvaluation()">Valider</button>
+  </div>
+</div>
+
+<!-- Sons -->
 <audio id="ding" src="ding.mp3"></audio>
 <audio id="beep" src="beep.mp3"></audio>
-</div>
 
-<!-- AUTO-EVALUATION -->
-<div class="modal" id="evaluationModal">
-<div class="modal-content">
-<h2>📝 Auto-évaluation</h2>
-<textarea id="notes" placeholder="Carnet de notes..."></textarea>
-<div id="evaluation"></div>
-<button class="btn-primary" onclick="saveEvaluation()">Valider</button>
-</div>
-</div>
-
-<canvas id="chartObjectives"></canvas>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-/********** CONFIG GOOGLE SHEET **********/
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxv2djhwcCc6cvMIHW2zi5Yy9E-atz1f5wkvzsuZpBB_aVqnAxYU6bALMdTy_Guzf0LHQ/exec"; // remplacer par ton Apps Script
-const DEFAULT_GOAL = 60;
-
-/********** DONNÉES **********/
-let selection=[];
-let currentIndex=0;
-let timer=null;
-let paused=false;
-let remainingExercise=0;
-let remainingGlobal=0;
-
+/******** DONNÉES ********/
+const DEFAULT_GOAL=60;
+let selection=[],currentIndex=0,timer=null,paused=false,remainingExercise=0,remainingGlobal=0;
+let objectivesData={};
 const EXERCISES=[
-{name:'UV1 : Kihon simples', criteria:['précision','kime','posture']},
-{name:'UV1 : Enchaînements', criteria:['précision','kime','posture']},
-{name:'UV1 : Cibles', criteria:['précision','kime','posture']},
-{name:'UV2 : Taï sabaki', criteria:['fluidité','distance','contrôle']},
-{name:'UV2 : Ippon kumite lent', criteria:['fluidité','distance','contrôle']},
-{name:'UV2 : Ippon kumite examen', criteria:['fluidité','distance','contrôle']},
-{name:'UV3 : Kata lent', criteria:['exactitude','kime','équilibre']},
-{name:'UV3 : Kata examen', criteria:['exactitude','kime','équilibre']},
-{name:'UV3 : Bunkaï', criteria:['exactitude','kime','équilibre']},
-{name:'UV4 : Technique de base', criteria:['réalisme','zanchin','protection']},
-{name:'UV5-6 : Self-defense arme', criteria:['réalisme','zanchin','protection']},
-{name:'UV5-6 : Self-defense atemi', criteria:['réalisme','zanchin','protection']},
-{name:'UV5-6 : Self-defense saisie', criteria:['réalisme','zanchin','protection']}
+{name:'UV1 : Kihon simples',criteria:['précision','kime','posture']},
+{name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
+{name:'UV1 : Cibles',criteria:['précision','kime','posture']},
+{name:'UV2 : Taï sabaki',criteria:['fluidité','distance','contrôle']},
+{name:'UV2 : Ippon kumite lent',criteria:['fluidité','distance','contrôle']},
+{name:'UV2 : Ippon kumite examen',criteria:['fluidité','distance','contrôle']},
+{name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
+{name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
+{name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
+{name:'UV4 : Technique de base',criteria:['réalisme','zanchin','protection']},
+{name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
+{name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
+{name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
 ];
+const ordinals=['premier','deuxième','troisième','quatrième','cinquième','sixième','septième','huitième','neuvième','dixième'];
 
-/********** UTILITAIRES **********/
-function getWeekKey(){ const d=new Date(); const onejan=new Date(d.getFullYear(),0,1); const week=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7); return `${d.getFullYear()}-W${week}`; }
-function toggleAccordion(h){ const c=h.nextElementSibling; const a=h.querySelector('span'); const o=c.style.display==='block'; c.style.display=o?'none':'block'; a.textContent=o?'⬇️':'⬆️'; }
-
-/********** OBJECTIFS SHEET **********/
-async function fetchObjectivesFromSheet(){
-  try{
-    const resp=await fetch(SHEET_API_URL);
-    const data=await resp.json();
-    const objData={week:getWeekKey(), goals:{}};
-    data.forEach(item=>{
-      objData.goals[item.Exercice]={target:parseInt(item.ObjectifHebdo), done:parseInt(item.Réalisé)};
-    });
-    localStorage.setItem('objectives', JSON.stringify(objData));
-    renderObjectives();
-    renderObjectivesEditor();
-    drawObjectivesChart();
-  }catch(e){console.error("Erreur fetch objectifs",e);}
+/******** OBJECTIFS ********/
+function getWeekKey(){const d=new Date();const onejan=new Date(d.getFullYear(),0,1);const week=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);return `${d.getFullYear()}-W${week}`;}
+function loadObjectives(){
+  let data=JSON.parse(localStorage.getItem('objectives'));
+  if(!data||data.week!==getWeekKey()){
+    data={week:getWeekKey(),goals:{}};
+    EXERCISES.forEach(ex=>data.goals[ex.name]={target:DEFAULT_GOAL,done:0});
+    localStorage.setItem('objectives',JSON.stringify(data));
+  }
+  objectivesData=data;
+  return data;
 }
-
 function renderObjectives(){
-  const data=JSON.parse(localStorage.getItem('objectives')||'{}');
-  const div=document.getElementById('objectifsContent');
+  const div=document.getElementById('objectifs');
   div.innerHTML='';
-  if(!data.goals) return;
-  Object.entries(data.goals).forEach(([n,g])=>{
+  Object.entries(objectivesData.goals).forEach(([n,g])=>{
     const pct=Math.min(100,Math.round((g.done/g.target)*100));
     div.innerHTML+=`<strong>${n}</strong>
-    <div class='progress'><div class='progress-bar' style='width:${pct}%'></div></div>
-    <small>${g.done}/${g.target} min (${pct}%)</small>`;
+      <div class='progress'><div class='progress-bar' style='width:${pct}%'></div></div>
+      <small>${g.done}/${g.target} min (${pct}%)</small>`;
   });
 }
-
-function renderObjectivesEditor(){
-  const data=JSON.parse(localStorage.getItem('objectives')||'{}');
-  const tbody=document.getElementById('objectifsTable');
-  tbody.innerHTML='';
-  Object.entries(data.goals).forEach(([n,g])=>{
-    tbody.innerHTML+=`<tr><td>${n}</td><td><input type='number' min='1' value='${g.target}' data-ex="${n}"></td></tr>`;
+function editObjectives(){
+  document.getElementById('objectifsEditor').style.display='block';
+  const editor=document.getElementById('editorContent');
+  editor.innerHTML='';
+  Object.entries(objectivesData.goals).forEach(([n,g])=>{
+    editor.innerHTML+=`<div style="margin-bottom:4px"><label>${n}: </label>
+    <input type="number" min="1" max="180" value="${g.target}" data-name="${n}"> min</div>`;
   });
 }
-
 function saveObjectives(){
-  const data=JSON.parse(localStorage.getItem('objectives')||'{}');
-  document.querySelectorAll('#objectifsTable input').forEach(inp=>{
-    const n=inp.dataset.ex;
-    data.goals[n].target=parseInt(inp.value);
-    data.goals[n].done=0; // reset progression
+  document.querySelectorAll('#editorContent input').forEach(inp=>{
+    const n=inp.dataset.name;
+    objectivesData.goals[n].target=parseInt(inp.value);
+    objectivesData.goals[n].done=0;
   });
-  localStorage.setItem('objectives', JSON.stringify(data));
-  renderObjectives();
-  drawObjectivesChart();
-  alert("Objectifs sauvegardés !");
-}
-
-function addProgressFromSession(){
-  const data=JSON.parse(localStorage.getItem('objectives')||'{}');
-  selection.forEach(ex=>{
-    if(data.goals[ex.name]) data.goals[ex.name].done+=ex.duration;
-  });
-  localStorage.setItem('objectives', JSON.stringify(data));
+  localStorage.setItem('objectives',JSON.stringify(objectivesData));
+  document.getElementById('objectifsEditor').style.display='none';
   renderObjectives();
   drawObjectivesChart();
 }
+function cancelEditObjectives(){document.getElementById('objectifsEditor').style.display='none';}
 
-/********** BANQUE D'EXERCICES **********/
-function renderBank(){ const b=document.getElementById('bank'); b.innerHTML=''; EXERCISES.forEach(ex=>{b.innerHTML+=`<div class='exercise'><span>${ex.name}</span><button onclick="addExercise('${ex.name}')">➕</button></div>`;}); }
-function addExercise(n){ const ex=EXERCISES.find(e=>e.name===n); selection.push({name:n,duration:ex.duration||10}); renderSelection(); }
-function renderSelection(){ const s=document.getElementById('selection'); s.innerHTML=''; selection.forEach((ex,i)=>{ s.innerHTML+=`<div class='exercise ${i===currentIndex?'active':''}'><span>${ex.name}</span>
-<input type='range' min='1' max='60' value='${ex.duration}' onchange='selection[${i}].duration=parseInt(this.value); renderSelection();'>
-<span>${ex.duration} min</span></div>`;}); }
-function clearSelection(){ selection=[]; renderSelection(); }
+/******** UI ********/
+function toggleAccordion(h){const c=h.nextElementSibling;const a=h.querySelector('span');const o=c.style.display==='block';c.style.display=o?'none':'block';a.textContent=o?'⬇️':'⬆️';}
+function renderBank(){const b=document.getElementById('bank');b.innerHTML='';EXERCISES.forEach(ex=>b.innerHTML+=`<div class='exercise'><span>${ex.name}</span><button onclick="addExercise('${ex.name}')">➕</button></div>`);}
+function addExercise(n){selection.push({name:n,duration:objectivesData.goals[n]?objectivesData.goals[n].target:10});renderSelection();}
+function renderSelection(){const s=document.getElementById('selection');s.innerHTML='';selection.forEach((ex,i)=>{s.innerHTML+=`<div class='exercise ${i===currentIndex?'active':''}'><span>${ex.name}</span><input type='range' min='1' max='60' value='${ex.duration}' onchange='selection[${i}].duration=parseInt(this.value)'><span>${ex.duration} min</span></div>`;});}
+function clearSelection(){selection=[];renderSelection();}
 
-/********** SESSION **********/
-function speak(t){ speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
-function startSession(){
-  if(selection.length===0) return;
-  document.getElementById('startBtn').disabled=true;
-  remainingGlobal=selection.reduce((s,e)=>s+e.duration*60,0);
-  speak("Commençons l'entraînement");
-  setTimeout(()=>runExercise(0),2000);
-}
-function runExercise(i){
-  if(i>=selection.length){ endSession(); return; }
-  currentIndex=i;
-  renderSelection();
-  speak(`premier exercice`+(i>0?`, ${selection[i].name}`:``) );
-  remainingExercise=selection[i].duration*60;
-  updateTimers();
-  timer=setInterval(()=>{
-    if(!paused){
-      remainingExercise--; remainingGlobal--;
-      updateTimers(); updateProgress();
-      if(remainingExercise<=0){
-        document.getElementById('ding').play();
-        clearInterval(timer);
-        runExercise(i+1);
-      }
-    }
-  },1000);
-}
-function updateTimers(){ document.getElementById('timers').textContent=`${formatTime(remainingExercise)} | ${formatTime(remainingGlobal)}`; }
-function updateProgress(){ const total=selection.reduce((s,e)=>s+e.duration*60,0); const done=total-remainingGlobal; document.getElementById('globalProgress').style.width=`${Math.round((done/total)*100)}%`; }
-function pauseResume(){ paused=!paused; const b=document.getElementById('pauseBtn'); b.textContent=paused?'Reprendre':'Pause'; b.classList.toggle('active',paused); }
-function stopSession(){ clearInterval(timer); document.getElementById('beep').play(); endSession(); }
-async function endSession(){
-  addProgressFromSession();
-  speak("Fin de l'entraînement, place à l'auto-évaluation");
-  document.getElementById('evaluationModal').style.display='flex';
-  renderEvaluation();
-  await sendSessionToSheet();
-}
-function formatTime(s){ const m=Math.floor(s/60).toString().padStart(2,'0'); const sec=(s%60).toString().padStart(2,'0'); return `${m}:${sec}`; }
+/******** SESSION ********/
+function speak(t){speechSynthesis.speak(new SpeechSynthesisUtterance(t));}
+function startSession(){if(selection.length===0)return;document.getElementById('startBtn').disabled=true;speak("Commençons l'entraînement");remainingGlobal=selection.reduce((s,e)=>s+e.duration*60,0);setTimeout(()=>runExercise(0),2000);}
+function runExercise(i){if(i>=selection.length){endSession();return;}currentIndex=i;renderSelection();speak(`${ordinals[i]} exercice, ${selection[i].name}`);remainingExercise=selection[i].duration*60;timer=setInterval(()=>{if(!paused){remainingExercise--;remainingGlobal--;updateTimers();updateProgress();if(remainingExercise<=0){document.getElementById('ding').play();clearInterval(timer);runExercise(i+1);}}},1000);}
+function updateTimers(){document.getElementById('timers').textContent=`${formatTime(remainingExercise)} | ${formatTime(remainingGlobal)}`;}
+function updateProgress(){const total=selection.reduce((s,e)=>s+e.duration*60,0);const done=total-remainingGlobal;document.getElementById('globalProgress').style.width=`${Math.round((done/total)*100)}%`;}
+function pauseResume(){paused=!paused;const b=document.getElementById('pauseBtn');b.textContent=paused?'Reprendre':'Pause';b.classList.toggle('active',paused);}
+function stopSession(){clearInterval(timer);document.getElementById('beep').play();endSession();}
+function endSession(){addProgressFromSession();document.getElementById('evaluationModal').style.display='flex';renderEvaluation();sendSessionToSheet();drawObjectivesChart();}
+function formatTime(s){const m=Math.floor(s/60).toString().padStart(2,'0');const sec=(s%60).toString().padStart(2,'0');return `${m}:${sec}`;}
+function addProgressFromSession(){selection.forEach(ex=>{if(objectivesData.goals[ex.name])objectivesData.goals[ex.name].done+=ex.duration;});localStorage.setItem('objectives',JSON.stringify(objectivesData));renderObjectives();}
 
-/********** AUTO-EVALUATION **********/
-function renderEvaluation(){
-  const d=document.getElementById('evaluation'); d.innerHTML='';
-  selection.forEach(ex=>{
-    const def=EXERCISES.find(e=>e.name===ex.name);
-    d.innerHTML+=`<h4>${ex.name}</h4>`;
-    def.criteria.forEach(c=>{
-      d.innerHTML+=`<div class='rating'><span>${c}</span>`+
-      Array.from({length:6},(_,i)=>`<label><input type='radio' name='${ex.name}-${c}' value='${i}'>${i}</label>`).join('')+`</div>`;
-    });
-  });
-}
-async function saveEvaluation(){
-  const h=JSON.parse(localStorage.getItem('history')||'[]');
-  h.push({id:crypto.randomUUID(),date:new Date().toISOString(),selection,notes:notes.value});
-  localStorage.setItem('history',JSON.stringify(h));
-  location.reload();
-}
+/******** ÉVALUATION ********/
+function renderEvaluation(){const d=document.getElementById('evaluation');d.innerHTML='';selection.forEach(ex=>{const def=EXERCISES.find(e=>e.name===ex.name);d.innerHTML+=`<h4>${ex.name}</h4>`;def.criteria.forEach(c=>{d.innerHTML+=`<div class='rating'><span>${c}</span>`+Array.from({length:6},(_,i)=>`<label><input type='radio' name='${ex.name}-${c}' value='${i}'>${i}</label>`).join('')+`</div>`;});});}
+function saveEvaluation(){const h=JSON.parse(localStorage.getItem('history')||'[]');h.push({id:crypto.randomUUID(),date:new Date().toISOString(),selection,notes:notes.value});localStorage.setItem('history',JSON.stringify(h));location.reload();}
 
-/********** GOOGLE SHEET SESSION **********/
-async function sendSessionToSheet(){
-  const totalDuration=selection.reduce((s,e)=>s+e.duration,0);
-  const sessionData={exercises:selection.map(e=>({name:e.name,duration:e.duration})), duration:totalDuration, notes:document.getElementById('notes').value};
-  try{
-    await fetch(SHEET_API_URL,{method:'POST',body:JSON.stringify(sessionData)});
-    console.log("Session envoyée sur Google Sheet");
-  }catch(e){console.error("Erreur envoi session",e);}
-}
+/******** GOOGLE SHEET ********/
+const GOOGLE_SCRIPT_URL = 'VOTRE_URL_API_GOOGLE_SCRIPT';
+async function sendSessionToSheet(){await fetch(GOOGLE_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'sendSession',data:{date:new Date().toISOString(),selection,notes:notes.value}}));}
+async function fetchObjectivesFromSheet(){try{const res=await fetch(GOOGLE_SCRIPT_URL+'?action=fetchObjectives');const data=await res.json();data.forEach(o=>{if(!objectivesData.goals[o.Exercice])objectivesData.goals[o.Exercice]={target:parseInt(o.ObjectifHebdo),done:parseInt(o.Realisé)};});renderObjectives();drawObjectivesChart();}catch(e){console.log('Erreur fetch objectifs',e);}}
 
-/********** CHART OBJECTIFS **********/
+/******** CHART ********/
 function drawObjectivesChart(){
-  const data=JSON.parse(localStorage.getItem('objectives')||'{}');
-  if(!data.goals) return;
-  const labels=Object.keys(data.goals);
-  const targets=labels.map(l=>data.goals[l].target);
-  const dones=labels.map(l=>data.goals[l].done);
-  new Chart(document.getElementById('chartObjectives'),{
-    type:'bar',
-    data:{labels, datasets:[{label:'Objectif',data:targets,backgroundColor:'#84fab0'},{label:'Réalisé',data:dones,backgroundColor:'#fa709a'}]},
-    options:{responsive:true}
-  });
+  const ctx=document.getElementById('chartObjectives').getContext('2d');
+  if(window.chart)window.chart.destroy();
+  const labels=Object.keys(objectivesData.goals);
+  const targets=labels.map(l=>objectivesData.goals[l].target);
+  const dones=labels.map(l=>objectivesData.goals[l].done);
+  window.chart=new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{label:'Objectif hebdo',data:targets,backgroundColor:'#84fab0'},{label:'Réalisé',data:dones,backgroundColor:'#fa709a'}]},options:{responsive:true,plugins:{legend:{position:'top'}}}});
 }
 
-/********** INIT **********/
-fetchObjectivesFromSheet();
+/******** INITIALISATION ********/
+loadObjectives();
+renderObjectives();
 renderBank();
-renderSelection();
+drawObjectivesChart();
 </script>
-
 </body>
 </html>
