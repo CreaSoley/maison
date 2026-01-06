@@ -130,7 +130,7 @@ function toggleAccordion(h){ const c=h.nextElementSibling; const a=h.querySelect
 /************** OBJECTIFS **************/
 async function fetchObjectivesFromSheet(){
   try{
-    const res = await fetch('TON_URL_API_GOOGLE?action=fetchObjectives');
+    const res = await fetch('https://script.google.com/macros/s/AKfycbxv2djhwcCc6cvMIHW2zi5Yy9E-atz1f5wkvzsuZpBB_aVqnAxYU6bALMdTy_Guzf0LHQ/exec?action=fetchObjectives');
     objectives = await res.json();
     renderObjectivesTable();
     updateChart();
