@@ -365,6 +365,37 @@ function saveEvaluation(){
 
   location.reload();
 }
+async function showStats(){
+  const from = new Date(fromDate.value);
+  const to = new Date(toDate.value);
+
+  const r = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
+  const data = await r.json();
+
+  const sum={},count={};
+
+  data.forEach(e=>{
+    const d=new Date(e.Date);
+    if(d<from||d>to)return;
+
+    const c=JSON.parse(e.Critères);
+    for(const k in c){
+      sum[k]=(sum[k]||0)+c[k];
+      count[k]=(count[k]||0)+1;
+    }
+  });
+
+  const avg=Object.keys(sum).map(k=>sum[k]/count[k]);
+
+  new Chart(statsChart,{
+    type:"bar",
+    data:{
+      labels:Object.keys(sum),
+      datasets:[{label:"Moyenne",data:avg,backgroundColor:"#84fab0"}]
+    },
+    options:{scales:{y:{min:0,max:5}}}
+  });
+}
 
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
