@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Tai-Jitsu Coach – Ceinture Noire</title>
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: 'Fredoka', Arial, sans-serif;
@@ -18,13 +16,8 @@
       color: #333;
       overflow-x: hidden;
     }
-
-    h1, h2, h3 {
-      text-align: center;
-    }
-
+    h1, h2, h3 { text-align: center; }
     .container { padding: 12px; }
-
     .card {
       background: white;
       border-radius: 18px;
@@ -32,7 +25,6 @@
       margin-bottom: 14px;
       box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
-
     button {
       border: none;
       border-radius: 14px;
@@ -42,22 +34,10 @@
       cursor: pointer;
       margin: 4px 0;
     }
-
-    .btn-primary {
-      background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);
-      color: #fff;
-    }
-
-    .btn-secondary {
-      background: #84fab0;
-      color: #fff;
-    }
-
-    .btn-danger {
-      background: #ff6b6b;
-      color: #fff;
-    }
-
+    button.active { background: #ffd166 !important; color: #333; }
+    .btn-primary { background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%); color: #fff; }
+    .btn-secondary { background: #84fab0; color: #fff; }
+    .btn-danger { background: #ff6b6b; color: #fff; }
     .accordion-header {
       font-weight: 600;
       cursor: pointer;
@@ -65,9 +45,7 @@
       justify-content: space-between;
       align-items: center;
     }
-
     .accordion-content { display: none; margin-top: 10px; }
-
     .exercise {
       display: flex;
       justify-content: space-between;
@@ -75,36 +53,14 @@
       padding: 6px 0;
       border-bottom: 1px dashed #ddd;
     }
-
     .exercise.active { background: #fff3cd; border-radius: 10px; padding: 6px; }
     .exercise.done { text-decoration: line-through; opacity: 0.5; }
-
     input[type=range] { width: 100%; }
-
-    .progress {
-      width: 100%; height: 10px;
-      background: #eee; border-radius: 10px; overflow: hidden; margin: 6px 0;
-    }
-
-    .progress-bar {
-      height: 100%; width: 0%;
-      background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);
-      transition: width 0.3s;
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.5);
-      display: none; justify-content: center; align-items: center;
-      padding: 12px;
-    }
-
-    .modal-content {
-      background: white; border-radius: 18px; padding: 14px;
-      max-height: 90vh; overflow-y: auto; width: 100%;
-    }
-
+    .progress { width: 100%; height: 10px; background: #eee; border-radius: 10px; overflow: hidden; margin: 6px 0; }
+    .progress-bar { height: 100%; width: 0%; background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%); transition: width 0.3s; }
+    .timers { text-align: center; font-weight: 600; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; padding: 12px; }
+    .modal-content { background: white; border-radius: 18px; padding: 14px; max-height: 90vh; overflow-y: auto; width: 100%; }
     textarea { width: 100%; border-radius: 12px; padding: 8px; border: 1px solid #ccc; font-family: 'Fredoka', Arial, sans-serif; }
     .rating { display: flex; justify-content: space-between; margin-bottom: 8px; }
     .rating label { font-size: 12px; }
@@ -115,14 +71,13 @@
 <div class="container">
   <h1>🥋 Tai-Jitsu Coach</h1>
 
-  <!-- STEP 1 OBJECTIFS -->
+  <!-- ENCADRE OBJECTIFS -->
   <div class="card">
     <div class="accordion-header" onclick="toggleAccordion(this)">🎯 Objectifs hebdomadaires <span>⬇️</span></div>
     <div class="accordion-content" id="objectifs"></div>
     <button class="btn-secondary" onclick="editObjectives()">✏️ Éditer les objectifs</button>
   </div>
 
-  <!-- STEP 2 SELECTION -->
   <div class="card">
     <div class="accordion-header" onclick="toggleAccordion(this)">📚 Banque d'exercices <span>⬇️</span></div>
     <div class="accordion-content" id="bank"></div>
@@ -134,24 +89,13 @@
     <button class="btn-secondary" onclick="clearSelection()">Vider la sélection</button>
   </div>
 
-  <!-- STEP 4 -->
   <div class="card">
     <h3>⏱️ Lancer la séance</h3>
     <div class="progress"><div class="progress-bar" id="globalProgress"></div></div>
-    <p id="timers" style="text-align:center; font-size:1.2em;">00:00 | 00:00</p>
-    <button class="btn-primary" onclick="startSession()">Commencer la séance</button>
-    <button class="btn-secondary" onclick="pauseResume()">Pause / Reprise</button>
+    <div class="timers" id="timers">00:00 | 00:00</div>
+    <button class="btn-primary" id="startBtn" onclick="startSession()">Commencer la séance</button>
+    <button class="btn-secondary" id="pauseBtn" onclick="pauseResume()">Pause</button>
     <button class="btn-danger" onclick="stopSession()">Stopper</button>
-  </div>
-</div>
-
-<!-- MODAL EDIT OBJECTIFS -->
-<div class="modal" id="objectivesModal">
-  <div class="modal-content">
-    <h2>🎯 Éditer les objectifs</h2>
-    <div id="objectivesForm"></div>
-    <button class="btn-primary" onclick="saveObjectives()">Valider</button>
-    <button class="btn-secondary" onclick="closeObjectivesModal()">Annuler</button>
   </div>
 </div>
 
@@ -166,65 +110,14 @@
 </div>
 
 <script>
+/************** DONNÉES **************/
 const DEFAULT_GOAL = 60;
 let selection = [];
 let currentIndex = 0;
 let timer = null;
 let paused = false;
-
-function getWeekKey(){
-  const d = new Date();
-  const onejan = new Date(d.getFullYear(),0,1);
-  const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay()+1)/7);
-  return `${d.getFullYear()}-W${week}`;
-}
-
-function loadObjectives(){
-  const weekKey = getWeekKey();
-  let data = JSON.parse(localStorage.getItem('objectives')) || {};
-  if(!data.week || data.week !== weekKey){
-    data = { week: weekKey, goals: {} };
-    EXERCISES.forEach(ex => data.goals[ex.name] = { target: DEFAULT_GOAL, done: 0 });
-    localStorage.setItem('objectives', JSON.stringify(data));
-  }
-  return data;
-}
-
-function renderObjectives(){
-  const data = loadObjectives();
-  const div = document.getElementById('objectifs');
-  div.innerHTML = '';
-  Object.entries(data.goals).forEach(([name,goal])=>{
-    const pct = Math.min(100, Math.round((goal.done/goal.target)*100));
-    const block = document.createElement('div');
-    block.innerHTML = `<strong>${name}</strong><div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div><small>${goal.done} / ${goal.target} min (${pct}%)</small>`;
-    div.appendChild(block);
-  });
-}
-
-function editObjectives(){
-  const data = loadObjectives();
-  const form = document.getElementById('objectivesForm');
-  form.innerHTML = '';
-  Object.entries(data.goals).forEach(([name,goal])=>{
-    form.innerHTML += `<label><strong>${name}</strong></label><input type="number" min="1" max="600" value="${goal.target}" data-name="${name}" style="width:100%;margin-bottom:8px;">`;
-  });
-  document.getElementById('objectivesModal').style.display='flex';
-}
-
-function closeObjectivesModal(){ document.getElementById('objectivesModal').style.display='none'; }
-
-function saveObjectives(){
-  const data = loadObjectives();
-  document.querySelectorAll('#objectivesForm input').forEach(input=>{
-    const name = input.dataset.name;
-    const val = parseInt(input.value,10);
-    if(!isNaN(val)){ data.goals[name].target = val; data.goals[name].done = 0; }
-  });
-  localStorage.setItem('objectives', JSON.stringify(data));
-  renderObjectives();
-  closeObjectivesModal();
-}
+let remainingExercise = 0;
+let remainingGlobal = 0;
 
 const EXERCISES = [
   { name: 'UV1 : Kihon simples', criteria: ['précision','kime','posture'] },
@@ -242,89 +135,34 @@ const EXERCISES = [
   { name: 'UV5-6 : Self-defense saisie', criteria: ['réalisme','zanchin','protection'] }
 ];
 
-function toggleAccordion(header){
-  const content = header.nextElementSibling;
-  content.style.display = content.style.display === 'block' ? 'none' : 'block';
-}
+/************** OBJECTIFS **************/
+function getWeekKey(){ const d=new Date(); const onejan=new Date(d.getFullYear(),0,1); const week=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7); return `${d.getFullYear()}-W${week}`; }
+function loadObjectives(){ let data=JSON.parse(localStorage.getItem('objectives')); if(!data||data.week!==getWeekKey()){ data={week:getWeekKey(),goals:{}}; EXERCISES.forEach(ex=>data.goals[ex.name]={target:DEFAULT_GOAL,done:0}); localStorage.setItem('objectives',JSON.stringify(data)); } return data; }
+function renderObjectives(){ const data=loadObjectives(); const div=document.getElementById('objectifs'); div.innerHTML=''; Object.entries(data.goals).forEach(([n,g])=>{ const pct=Math.min(100,Math.round((g.done/g.target)*100)); div.innerHTML+=`<strong>${n}</strong><div class='progress'><div class='progress-bar' style='width:${pct}%'></div></div><small>${g.done}/${g.target} min (${pct}%)</small>`; }); }
+function editObjectives(){ const data=loadObjectives(); for(const n in data.goals){ const v=prompt(`Durée hebdomadaire pour ${n}`,data.goals[n].target); if(v!==null) data.goals[n]={target:parseInt(v),done:0}; } localStorage.setItem('objectives',JSON.stringify(data)); renderObjectives(); }
+function addProgressFromSession(){ const data=loadObjectives(); selection.forEach(ex=>{ if(data.goals[ex.name]) data.goals[ex.name].done+=ex.duration; }); localStorage.setItem('objectives',JSON.stringify(data)); renderObjectives(); }
 
-function renderBank(){
-  const bank = document.getElementById('bank');
-  bank.innerHTML = '';
-  EXERCISES.forEach(ex => {
-    const div = document.createElement('div');
-    div.className = 'exercise';
-    div.innerHTML = `<span>${ex.name}</span><button onclick="addExercise('${ex.name}')">➕</button>`;
-    bank.appendChild(div);
-  });
-}
+/************** UI **************/
+function toggleAccordion(h){ const c=h.nextElementSibling; const a=h.querySelector('span'); const o=c.style.display==='block'; c.style.display=o?'none':'block'; a.textContent=o?'⬇️':'⬆️'; }
+function renderBank(){ const b=document.getElementById('bank'); b.innerHTML=''; EXERCISES.forEach(ex=>b.innerHTML+=`<div class='exercise'><span>${ex.name}</span><button onclick="addExercise('${ex.name}')">➕</button></div>`); }
+function addExercise(n){ selection.push({name:n,duration:10}); renderSelection(); }
+function renderSelection(){ const s=document.getElementById('selection'); s.innerHTML=''; selection.forEach((ex,i)=>{ s.innerHTML+=`<div class='exercise ${i===currentIndex?'active':''}'><span>${ex.name}</span><input type='range' min='1' max='60' value='${ex.duration}' onchange='selection[${i}].duration=parseInt(this.value)'><span>${ex.duration} min</span></div>`; }); }
+function clearSelection(){ selection=[]; renderSelection(); }
 
-function addExercise(name){ selection.push({ name, duration: 10 }); renderSelection(); }
-function renderSelection(){
-  const sel = document.getElementById('selection'); sel.innerHTML = '';
-  selection.forEach((ex,i)=>{
-    const div = document.createElement('div'); div.className='exercise';
-    div.innerHTML = `<span>${ex.name}</span><input type='range' min='1' max='60' value='${ex.duration}' onchange='setDuration(${i},this.value)'><span>${ex.duration} min</span>`;
-    sel.appendChild(div);
-  });
-}
-function setDuration(i,val){ selection[i].duration=parseInt(val); }
-function clearSelection(){ selection = []; renderSelection(); }
-
-function speak(text){ const u = new SpeechSynthesisUtterance(text); speechSynthesis.speak(u); }
-
-function startSession(){ if(selection.length===0) return; paused=false; speak("Commençons l'entraînement"); setTimeout(()=>runExercise(0),2000); }
-
-function runExercise(i){
-  if(i>=selection.length){ endSession(); return; }
-  currentIndex=i;
-  let remaining=selection[i].duration*60;
-  updateExerciseDisplay();
-  speak(`${i===0?'Premier':(i+1)+'ème'} exercice, ${selection[i].name}`);
-  timer=setInterval(()=>{
-    if(!paused){
-      remaining--;
-      if(remaining<=0){ clearInterval(timer); markExerciseDone(i); runExercise(i+1); }
-      updateTimers(remaining,i);
-    }
-  },1000);
-}
-
-function updateTimers(remaining,index){
-  const fmt=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
-  const timerEx=fmt(remaining);
-  let remainingTotal=0;
-  for(let j=index;j<selection.length;j++) remainingTotal+=selection[j].duration*60;
-  remainingTotal-=(selection[index].duration*60-remaining);
-  const timerTot=fmt(remainingTotal);
-  document.getElementById('timers').textContent=`${timerEx} | ${timerTot}`;
-}
-
-function markExerciseDone(i){ const selDivs=document.querySelectorAll('#selection .exercise'); if(selDivs[i]) selDivs[i].classList.add('done'); }
-function pauseResume(){ paused=!paused; const btn=event.target; if(paused){ btn.style.backgroundImage="linear-gradient(to top, #30cfd0 0%, #330867 100%)"; } else { btn.style.backgroundImage="linear-gradient(to right, #fa709a 0%, #fee140 100%)"; } }
+/************** SESSION **************/
+function speak(t){ speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
+function startSession(){ if(selection.length===0) return; document.getElementById('startBtn').disabled=true; speak("Commençons l'entraînement"); remainingGlobal=selection.reduce((s,e)=>s+e.duration*60,0); setTimeout(()=>runExercise(0),2000); }
+function runExercise(i){ if(i>=selection.length){ endSession(); return; } currentIndex=i; renderSelection(); speak(`${i===0?'Premier':(i+1)+'ème'} exercice, ${selection[i].name}`); remainingExercise=selection[i].duration*60; timer=setInterval(()=>{ if(!paused){ remainingExercise--; remainingGlobal--; updateTimers(); updateProgress(); if(remainingExercise<=0){ clearInterval(timer); runExercise(i+1); } } },1000); }
+function updateTimers(){ document.getElementById('timers').textContent=`${formatTime(remainingExercise)} | ${formatTime(remainingGlobal)}`; }
+function updateProgress(){ const total=selection.reduce((s,e)=>s+e.duration*60,0); const done=total-remainingGlobal; document.getElementById('globalProgress').style.width=`${Math.round((done/total)*100)}%`; }
+function pauseResume(){ paused=!paused; const b=document.getElementById('pauseBtn'); b.textContent=paused?'Reprendre':'Pause'; b.classList.toggle('active',paused); }
 function stopSession(){ clearInterval(timer); endSession(); }
-function endSession(){ speak('Fin de l\'entraînement, place à l\'auto-évaluation'); document.getElementById('evaluationModal').style.display='flex'; renderEvaluation(); }
+function endSession(){ addProgressFromSession(); speak("Fin de l'entraînement, place à l'auto-évaluation"); document.getElementById('evaluationModal').style.display='flex'; renderEvaluation(); }
+function formatTime(s){ const m=Math.floor(s/60).toString().padStart(2,'0'); const sec=(s%60).toString().padStart(2,'0'); return `${m}:${sec}`; }
 
-function renderEvaluation(){
-  const div=document.getElementById('evaluation'); div.innerHTML='';
-  selection.forEach(ex=>{
-    const def=EXERCISES.find(e=>e.name===ex.name);
-    const block=document.createElement('div'); block.innerHTML=`<h4>${ex.name}</h4>`;
-    def.criteria.forEach(c=>{
-      const row=document.createElement('div'); row.className='rating';
-      row.innerHTML=`<span>${c}</span>`+Array.from({length:6},(_,i)=>`<label><input type='radio' name='${ex.name}-${c}' value='${i}'>${i}</label>`).join('');
-      block.appendChild(row);
-    });
-    div.appendChild(block);
-  });
-}
-
-function saveEvaluation(){
-  const data={id:crypto.randomUUID(), date:new Date().toISOString(), selection, notes:document.getElementById('notes').value};
-  const hist=JSON.parse(localStorage.getItem('history')||'[]');
-  hist.push(data);
-  localStorage.setItem('history',JSON.stringify(hist));
-  location.reload();
-}
+/************** ÉVALUATION **************/
+function renderEvaluation(){ const d=document.getElementById('evaluation'); d.innerHTML=''; selection.forEach(ex=>{ const def=EXERCISES.find(e=>e.name===ex.name); d.innerHTML+=`<h4>${ex.name}</h4>`; def.criteria.forEach(c=>{ d.innerHTML+=`<div class='rating'><span>${c}</span>`+Array.from({length:6},(_,i)=>`<label><input type='radio' name='${ex.name}-${c}' value='${i}'>${i}</label>`).join('')+`</div>`; }); }); }
+function saveEvaluation(){ const h=JSON.parse(localStorage.getItem('history')||'[]'); h.push({id:crypto.randomUUID(),date:new Date().toISOString(),selection,notes:notes.value}); localStorage.setItem('history',JSON.stringify(h)); location.reload(); }
 
 renderObjectives();
 renderBank();
