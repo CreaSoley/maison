@@ -138,7 +138,7 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
 <script>
 /* ================= CONFIG ================= */
-const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbyP3i8ZmUt6K30TKd75pfoQbyj82ZfcpsadgwL5aZVn0HM46Hw-Oo9ylA1H4N0Tsaz8Ow/exec";
+const GOOGLE_API_URL = "https://script.google.com/macros/s/XXX/exec";
 
 /* ================= DONNÉES ================= */
 const EXERCISES = [
@@ -146,7 +146,15 @@ const EXERCISES = [
  {name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
  {name:'UV1 : Cibles',criteria:['précision','kime','posture']},
  {name:'UV2 : Taï sabaki',criteria:['fluidité','distance','contrôle']},
- {name:'UV3 : Kata',criteria:['exactitude','kime','équilibre']}
+ {name:'UV2 : Ippon kumite lent',criteria:['fluidité','distance','contrôle']},
+ {name:'UV2 : Ippon kumite examen',criteria:['fluidité','distance','contrôle']},
+ {name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
+ {name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
+ {name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
+ {name:'UV4: Technique de base',criteria:['réalisme','zanchin','protection']},
+ {name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
+ {name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
+ {name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
 ];
 
 let selection=[],currentIndex=0,timer=null,paused=false;
@@ -155,7 +163,7 @@ let remainingExercise=0,remainingGlobal=0;
 /* ================= OBJECTIFS ================= */
 async function fetchObjectivesFromSheet(){
   try{
-    const r=await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
+    const r=await fetch(https://script.google.com/macros/s/AKfycbw0XUFA42PqPRoROu_Dru3gKie9QfBZq0cVlxT3xxys6kDVUaKIg4d188rPmXebDFxnWg/exec"?action=fetchObjectives");
     const data=await r.json();
     renderObjectives(data);
   }catch(e){
@@ -190,7 +198,8 @@ function toggleAccordion(h){
 function renderBank(){
   bank.innerHTML="";
   EXERCISES.forEach(e=>{
-    bank.innerHTML+=`<div class="exercise">
+    bank.innerHTML+=`
+    <div class="exercise">
       <span>${e.name}</span>
       <button onclick="addExercise('${e.name}')">➕</button>
     </div>`;
@@ -209,7 +218,7 @@ function renderSelection(){
     <div class="exercise ${i===currentIndex?'active':''}">
       <span>${e.name}</span>
       <input type="range" min="1" max="60" value="${e.duration}"
-        oninput="selection[${i}].duration=this.value">
+        oninput="selection[${i}].duration=parseInt(this.value)">
       <span>${e.duration} min</span>
     </div>`;
   });
@@ -253,6 +262,7 @@ function runExercise(i){
 function updateTimers(){
   timers.textContent=`${fmt(remainingExercise)} | ${fmt(remainingGlobal)}`
 }
+
 function updateProgress(){
   const total=selection.reduce((s,e)=>s+e.duration*60,0);
   globalProgress.style.width=`${100-(remainingGlobal/total*100)}%`
@@ -267,10 +277,11 @@ function pauseResume(){
 function stopSession(){clearInterval(timer);endSession()}
 
 function endSession(){
-  sendSessionToSheet();          // ✅ envoi Google Sheet
-  fetchObjectivesFromSheet();    // ✅ refresh objectifs
+  sendSessionToSheet();
+  fetchObjectivesFromSheet();
+  beep.play();
   speak("Fin de l'entraînement, place à l'auto-évaluation");
-  document.getElementById('evaluationModal').style.display='flex';
+  evaluationModal.style.display="flex";
   renderEvaluation();
 }
 
@@ -278,45 +289,41 @@ function fmt(s){
   return String(Math.floor(s/60)).padStart(2,"0")+":"+
          String(s%60).padStart(2,"0")
 }
-  function sendSessionToSheet() {
-  selection.forEach(ex => {
-    const params = new URLSearchParams({
-      action: "addSession",
-      exercice: ex.name,
-      duree: ex.duration,
-      notes: document.getElementById("notes")?.value || ""
-    });
 
-    fetch(`${API_URL}?${params.toString()}`)
-      .then(r => r.json())
-      .catch(err => console.error("Erreur envoi session", err));
+/* ================= GOOGLE SHEET ================= */
+function sendSessionToSheet(){
+  selection.forEach(ex=>{
+    const params=new URLSearchParams({
+      action:"addSession",
+      exercice:ex.name,
+      duree:ex.duration,
+      notes:notes.value||""
+    });
+    fetch(GOOGLE_API_URL+"?"+params.toString());
   });
 }
-
 
 /* ================= ÉVALUATION ================= */
 function renderEvaluation(){
   evaluation.innerHTML="";
   selection.forEach(e=>{
     const def=EXERCISES.find(x=>x.name===e.name);
+    if(!def) return;
     evaluation.innerHTML+=`<h4>${e.name}</h4>`;
     def.criteria.forEach(c=>{
       evaluation.innerHTML+=`
-      <div class="rating">${c}
-      ${[0,1,2,3,4,5].map(v=>`<label><input type="radio" name="${e.name+c}" value="${v}">${v}</label>`).join("")}
+      <div class="rating">
+        ${c}
+        ${[0,1,2,3,4,5].map(v=>`
+          <label>
+            <input type="radio" name="${e.name+c}" value="${v}">${v}
+          </label>`).join("")}
       </div>`;
     });
   });
 }
 
 function saveEvaluation(){location.reload()}
-
-function fetchObjectivesFromSheet() {
-  fetch(API_URL + "?action=fetchObjectives")
-    .then(r => r.json())
-    .then(data => renderObjectivesFromSheet(data))
-    .catch(err => console.error("Erreur fetch objectifs", err));
-}
 
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
@@ -327,9 +334,11 @@ const startBtn=document.getElementById("startBtn");
 const pauseBtn=document.getElementById("pauseBtn");
 const evaluation=document.getElementById("evaluation");
 const evaluationModal=document.getElementById("evaluationModal");
+const notes=document.getElementById("notes");
 
 renderBank();
 fetchObjectivesFromSheet();
 </script>
+
 </body>
 </html>
