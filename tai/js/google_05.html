@@ -279,7 +279,8 @@ function renderEvaluation(){
         ${c}
         ${[0,1,2,3,4,5].map(v=>`
           <label>
-            <input type="radio" name="${e.name+c}" value="${v}">${v}
+            <input type="radio" name="${e.name}||${c}" value="${v}">
+
           </label>`).join("")}
       </div>`;
     });
