@@ -156,9 +156,17 @@ function renderObjectives(){
 }
 
 function editObjectives(){
-  const data=loadObjectives();
+  const data = loadObjectives();
   Object.keys(data.goals).forEach(name=>{
-    const v=prompt(`Objectif hebdomadaire pour ${name} (min)`,data.goals[name].target);
+    const val = window.prompt(`Durée hebdomadaire pour ${name} (minutes)`, data.goals[name].target);
+    if(val !== null && !isNaN(val) && val !== ''){
+      data.goals[name].target = parseInt(val,10);
+      data.goals[name].done = 0;
+    }
+  });
+  localStorage.setItem('objectives', JSON.stringify(data));
+  renderObjectives();
+} (min)`,data.goals[name].target);
     if(v!==null && !isNaN(v)){
       data.goals[name].target=parseInt(v);
       data.goals[name].done=0;
@@ -253,7 +261,21 @@ function updateTimers(){document.getElementById('timers').textContent=format(rem
 function updateProgress(){const total=selection.reduce((a,b)=>a+b.duration*60,0);document.getElementById('globalBar').style.width=((total-remainingTotal)/total*100)+'%';}
 function format(s){const m=Math.floor(s/60).toString().padStart(2,'0');const r=(s%60).toString().padStart(2,'0');return m+':'+r;}
 
-function endSession(normal){clearInterval(timer);setTimeout(()=>{speak("Fin de l'entraînement, place à l'auto-évaluation");openEval();},normal?4000:0);}
+function endSession(){
+  // Mise à jour des objectifs avec les exercices réellement effectués
+  const data = loadObjectives();
+  selection.forEach(ex=>{
+    if(data.goals[ex.name]){
+      data.goals[ex.name].done += ex.duration;
+    }
+  });
+  localStorage.setItem('objectives', JSON.stringify(data));
+  renderObjectives();
+
+  speak('Fin de l\'entraînement, place à l\'auto-évaluation');
+  document.getElementById('evaluationModal').style.display='flex';
+  renderEvaluation();
+},normal?4000:0);}
 
 /********************
  * ÉVALUATION
