@@ -14,6 +14,7 @@ h1,h3{text-align:center}
 button{border:none;border-radius:14px;padding:10px 14px;font-family:'Fredoka';cursor:pointer;margin:4px 0}
 .btn-primary{background-image:linear-gradient(to right,#fa709a 0%,#fee140 100%);color:#fff}
 .btn-secondary{background:#84fab0;color:#fff}
+.btn-secondary.active{background-image:linear-gradient(to top,#30cfd0 0%,#330867 100%);}
 .btn-danger{background:#ff6b6b;color:#fff}
 .accordion-header{display:flex;justify-content:space-between;font-weight:600;cursor:pointer}
 .accordion-content{display:none;margin-top:10px}
@@ -34,7 +35,7 @@ input[type=range]{flex:1}
 
 <div class="card">
 <div class="accordion-header" onclick="toggleAccordion(this)">🎯 Objectifs <span>⬇️</span></div>
-<div class="accordion-content" id="objectifs"></div>
+<div class="accordion-content" id="objectifs"><em>Chargement…</em></div>
 <button class="btn-secondary" onclick="editObjectives()">✏️ Éditer</button>
 </div>
 
@@ -52,7 +53,7 @@ input[type=range]{flex:1}
 <div class="card">
 <h3>⏱️ Séance</h3>
 <div class="progress"><div class="progress-bar" id="globalBar"></div></div>
-<p id="timers">00:00 | 00:00</p>
+<p id="timers" style="text-align:center;font-weight:600">00:00 | 00:00</p>
 <button class="btn-primary" onclick="startSession()">Commencer</button>
 <button class="btn-secondary" id="pauseBtn" onclick="pauseResume()">Pause</button>
 <button class="btn-danger" onclick="stopSession()">Stop</button>
@@ -108,7 +109,12 @@ function announceExercise(i){const label=i===0?'premier':(i+1)+'ème';speak(`${l
 
 function tick(){if(paused)return;remainingEx--;remainingTotal--;updateTimers();updateProgress();if(remainingEx===10)speak('10 secondes');if(remainingEx<=0){clearInterval(timer);if(current<selection.length-1)ding.play();else beep.play();setTimeout(()=>runExercise(current+1),1500)}}
 
-function pauseResume(){paused=!paused;document.getElementById('pauseBtn').textContent=paused?'Reprendre':'Pause'}
+function pauseResume(){
+  paused = !paused;
+  const btn = document.getElementById('pauseBtn');
+  btn.textContent = paused ? 'Reprendre' : 'Pause';
+  btn.classList.toggle('active', paused);
+}
 function stopSession(){clearInterval(timer);endSession(false)}
 
 function updateTimers(){document.getElementById('timers').textContent=format(remainingEx)+' | '+format(remainingTotal)}
@@ -124,7 +130,7 @@ function openEval(){const e=document.getElementById('evaluation');e.innerHTML=''
 
 function saveEvaluation(){document.getElementById('evalModal').style.display='none'}
 
-renderBank();renderSelection();
+renderObjectives();renderBank();renderSelection();
 </script>
 </body>
 </html>
