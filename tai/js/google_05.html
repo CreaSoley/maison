@@ -330,41 +330,22 @@ function renderEvaluation(){
   pdf.save("bilan_tai_jitsu.pdf");
 }
 
-function saveEvaluation(){
-  const evaluations = [];
+async function saveEvaluation(){
+  const radios = document.querySelectorAll("#evaluation input[type=radio]:checked");
 
-  selection.forEach(ex=>{
-    const def = EXERCISES.find(e=>e.name===ex.name);
-    if(!def) return;
-
-    const criteria = {};
-    def.criteria.forEach(c=>{
-      const v = document.querySelector(
-        `input[name="${ex.name+c}"]:checked`
-      );
-      if(v) criteria[c] = parseInt(v.value);
+  for(const r of radios){
+    const params = new URLSearchParams({
+      action: "addEvaluation",
+      exercice: r.name.replace(/[0-9]/g,""),
+      critere: r.name.replace(r.value,""),
+      note: r.value
     });
-
-    evaluations.push({
-      name: ex.name,
-      criteria
-    });
-  });
-
-  const payload = {
-    action: "addEvaluation",
-    date: new Date().toISOString(),
-    notes: notes.value || "",
-    evaluations
-  };
-
-  fetch(GOOGLE_API_URL,{
-    method:"POST",
-    body: JSON.stringify(payload)
-  });
+    await fetch(GOOGLE_API_URL+"?"+params.toString());
+  }
 
   location.reload();
 }
+
 async function showStats(){
   const from = new Date(fromDate.value);
   const to = new Date(toDate.value);
