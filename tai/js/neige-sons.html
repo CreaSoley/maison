@@ -70,67 +70,220 @@ input[type=range]{flex:1}
 </div>
 
 <script>
-const ding=new Audio('ding.mp3');
-const beep=new Audio('beep.mp3');
+/********************
+ * AUDIO
+ ********************/
+const ding = new Audio('ding.mp3');
+const beep = new Audio('beep.mp3');
 
-const EXERCISES=[
-{name:'UV1 : Kihon simples',criteria:['précision','kime','posture']},
-{name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
-{name:'UV1 : Cibles',criteria:['précision','kime','posture']},
-{name:'UV2 : Taï sabaki',criteria:['fluidité','distance','contrôle']},
-{name:'UV2 : Ippon kumite lent',criteria:['fluidité','distance','contrôle']},
-{name:'UV2 : Ippon kumite examen',criteria:['fluidité','distance','contrôle']},
-{name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
-{name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
-{name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
-{name:'UV4 : Technique de base',criteria:['réalisme','zanchin','protection']},
-{name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
-{name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
-{name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
+/********************
+ * DONNÉES
+ ********************/
+const DEFAULT_GOAL = 60;
+
+const EXERCISES = [
+  { name:'UV1 : Kihon simples',criteria:['précision','kime','posture']},
+  { name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
+  { name:'UV1 : Cibles',criteria:['précision','kime','posture']},
+  { name:'UV2 : Taï sabaki',criteria:['fluidité','distance','contrôle']},
+  { name:'UV2 : Ippon kumite lent',criteria:['fluidité','distance','contrôle']},
+  { name:'UV2 : Ippon kumite examen',criteria:['fluidité','distance','contrôle']},
+  { name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
+  { name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
+  { name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
+  { name:'UV4 : Technique de base',criteria:['réalisme','zanchin','protection']},
+  { name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
+  { name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
+  { name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
 ];
 
 let selection=[];
-let current=0,timer=null,paused=false;
-let remainingEx=0,remainingTotal=0;
+let timer=null;
+let paused=false;
+let current=0;
+let remainingEx=0;
+let remainingTotal=0;
 
-function toggleAccordion(h){const c=h.nextElementSibling;const s=h.querySelector('span');const o=c.style.display==='block';c.style.display=o?'none':'block';s.textContent=o?'⬇️':'⬆️'}
+/********************
+ * ACCORDÉON
+ ********************/
+function toggleAccordion(header){
+  const content = header.nextElementSibling;
+  const arrow = header.querySelector('span');
+  const open = content.style.display === 'block';
+  content.style.display = open ? 'none' : 'block';
+  if(arrow) arrow.textContent = open ? '⬇️' : '⬆️';
+}
 
-function renderBank(){const b=document.getElementById('bank');b.innerHTML='';EXERCISES.forEach(e=>{b.innerHTML+=`<div class='exercise'><span>${e.name}</span><button onclick="addExercise('${e.name}')">➕</button></div>`})}
-function addExercise(name){selection.push({name,duration:10});renderSelection()}
-function renderSelection(){const s=document.getElementById('selection');s.innerHTML='';selection.forEach((e,i)=>{s.innerHTML+=`<div class='exercise'><span>${e.name}</span><input type='range' min='1' max='60' value='${e.duration}' oninput='updateDuration(${i},this.value)'><span>${e.duration} min</span></div>`})}
-function updateDuration(i,v){selection[i].duration=parseInt(v);renderSelection()}
-function clearSelection(){selection=[];renderSelection()}
+/********************
+ * OBJECTIFS (FIX DEFINITIF)
+ ********************/
+function getWeekKey(){
+  const d=new Date();
+  const onejan=new Date(d.getFullYear(),0,1);
+  const week=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+  return `${d.getFullYear()}-W${week}`;
+}
 
-function startSession(){if(!selection.length)return;paused=false;document.getElementById('pauseBtn').textContent='Pause';remainingTotal=selection.reduce((a,b)=>a+b.duration*60,0);speak('Commençons l\'entraînement');setTimeout(()=>runExercise(0),2000)}
+function loadObjectives(){
+  const weekKey=getWeekKey();
+  let data=JSON.parse(localStorage.getItem('objectives'));
 
-function runExercise(i){if(i>=selection.length){endSession(true);return}current=i;remainingEx=selection[i].duration*60;renderActive();announceExercise(i);timer=setInterval(tick,1000)}
+  if(!data || data.week!==weekKey){
+    data={week:weekKey,goals:{}};
+    EXERCISES.forEach(ex=>{
+      data.goals[ex.name]={target:DEFAULT_GOAL,done:0};
+    });
+    localStorage.setItem('objectives',JSON.stringify(data));
+  }
+  return data;
+}
 
-function announceExercise(i){const label=i===0?'premier':(i+1)+'ème';speak(`${label} exercice, ${selection[i].name}`)}
+function renderObjectives(){
+  const container=document.getElementById('objectifs');
+  const data=loadObjectives();
+  container.innerHTML='';
 
-function tick(){if(paused)return;remainingEx--;remainingTotal--;updateTimers();updateProgress();if(remainingEx===10)speak('10 secondes');if(remainingEx<=0){clearInterval(timer);if(current<selection.length-1)ding.play();else beep.play();setTimeout(()=>runExercise(current+1),1500)}}
+  Object.entries(data.goals).forEach(([name,goal])=>{
+    const pct=Math.min(100,Math.round((goal.done/goal.target)*100));
+    container.innerHTML+=`
+      <div>
+        <strong>${name}</strong>
+        <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+        <small>${goal.done} / ${goal.target} min (${pct}%)</small>
+      </div>`;
+  });
+}
+
+function editObjectives(){
+  const data=loadObjectives();
+  Object.keys(data.goals).forEach(name=>{
+    const v=prompt(`Objectif hebdomadaire pour ${name} (min)`,data.goals[name].target);
+    if(v!==null && !isNaN(v)){
+      data.goals[name].target=parseInt(v);
+      data.goals[name].done=0;
+    }
+  });
+  localStorage.setItem('objectives',JSON.stringify(data));
+  renderObjectives();
+}
+
+/********************
+ * BANQUE / SÉLECTION
+ ********************/
+function renderBank(){
+  const bank=document.getElementById('bank');
+  bank.innerHTML='';
+  EXERCISES.forEach(ex=>{
+    bank.innerHTML+=`<div class="exercise"><span>${ex.name}</span><button onclick="addExercise('${ex.name}')">➕</button></div>`;
+  });
+}
+
+function addExercise(name){
+  selection.push({name,duration:10});
+  renderSelection();
+}
+
+function renderSelection(){
+  const s=document.getElementById('selection');
+  s.innerHTML='';
+  selection.forEach((ex,i)=>{
+    s.innerHTML+=`
+      <div class="exercise">
+        <span>${ex.name}</span>
+        <input type="range" min="1" max="60" value="${ex.duration}" oninput="updateDuration(${i},this.value)">
+        <span>${ex.duration} min</span>
+      </div>`;
+  });
+}
+
+function updateDuration(i,v){selection[i].duration=parseInt(v);renderSelection();}
+function clearSelection(){selection=[];renderSelection();}
+
+/********************
+ * SESSION
+ ********************/
+function speak(t){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';speechSynthesis.speak(u);}
+
+function startSession(){
+  if(!selection.length)return;
+  paused=false;
+  document.getElementById('pauseBtn').classList.remove('active');
+  document.getElementById('pauseBtn').textContent='Pause';
+  remainingTotal=selection.reduce((a,b)=>a+b.duration*60,0);
+  speak("Commençons l'entraînement");
+  setTimeout(()=>runExercise(0),2000);
+}
+
+function runExercise(i){
+  if(i>=selection.length){endSession(true);return;}
+  current=i;
+  remainingEx=selection[i].duration*60;
+  announceExercise(i);
+  timer=setInterval(tick,1000);
+}
+
+function announceExercise(i){
+  const label=i===0?'premier':(i+1)+'ème';
+  speak(`${label} exercice, ${selection[i].name}`);
+}
+
+function tick(){
+  if(paused)return;
+  remainingEx--;remainingTotal--;
+  updateTimers();updateProgress();
+  if(remainingEx===10)speak('10 secondes');
+  if(remainingEx<=0){
+    clearInterval(timer);
+    current<selection.length-1?ding.play():beep.play();
+    setTimeout(()=>runExercise(current+1),1500);
+  }
+}
 
 function pauseResume(){
-  paused = !paused;
-  const btn = document.getElementById('pauseBtn');
-  btn.textContent = paused ? 'Reprendre' : 'Pause';
-  btn.classList.toggle('active', paused);
+  paused=!paused;
+  const b=document.getElementById('pauseBtn');
+  b.textContent=paused?'Reprendre':'Pause';
+  b.classList.toggle('active',paused);
 }
-function stopSession(){clearInterval(timer);endSession(false)}
 
-function updateTimers(){document.getElementById('timers').textContent=format(remainingEx)+' | '+format(remainingTotal)}
-function updateProgress(){const total=selection.reduce((a,b)=>a+b.duration*60,0);document.getElementById('globalBar').style.width=((total-remainingTotal)/total*100)+'%'}
-function format(s){const m=Math.floor(s/60).toString().padStart(2,'0');const r=(s%60).toString().padStart(2,'0');return m+':'+r}
-function renderActive(){document.querySelectorAll('.exercise').forEach((e,i)=>{e.classList.toggle('active',i===current);e.classList.toggle('done',i<current)})}
+function stopSession(){clearInterval(timer);endSession(false);}
 
-function speak(t){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';speechSynthesis.speak(u)}
+function updateTimers(){document.getElementById('timers').textContent=format(remainingEx)+' | '+format(remainingTotal);}
+function updateProgress(){const total=selection.reduce((a,b)=>a+b.duration*60,0);document.getElementById('globalBar').style.width=((total-remainingTotal)/total*100)+'%';}
+function format(s){const m=Math.floor(s/60).toString().padStart(2,'0');const r=(s%60).toString().padStart(2,'0');return m+':'+r;}
 
-function endSession(normal){clearInterval(timer);setTimeout(()=>{speak("Fin de l'entraînement, place à l'auto-évaluation");openEval()},normal?4000:0)}
+function endSession(normal){clearInterval(timer);setTimeout(()=>{speak("Fin de l'entraînement, place à l'auto-évaluation");openEval();},normal?4000:0);}
 
-function openEval(){const e=document.getElementById('evaluation');e.innerHTML='';selection.forEach(ex=>{const def=EXERCISES.find(d=>d.name===ex.name);let html=`<h4>${ex.name}</h4>`;def.criteria.forEach(c=>{html+=`<div class='rating'><span>${c}</span>`;for(let i=0;i<=5;i++)html+=`<label><input type='radio' name='${ex.name}-${c}' value='${i}'>${i}</label>`;html+='</div>'});e.innerHTML+=html});document.getElementById('evalModal').style.display='flex'}
+/********************
+ * ÉVALUATION
+ ********************/
+function openEval(){
+  const e=document.getElementById('evaluation');
+  e.innerHTML='';
+  selection.forEach(ex=>{
+    const def=EXERCISES.find(d=>d.name===ex.name);
+    let html=`<h4>${ex.name}</h4>`;
+    def.criteria.forEach(c=>{
+      html+=`<div class="rating"><span>${c}</span>`;
+      for(let i=0;i<=5;i++)html+=`<label><input type="radio" name="${ex.name}-${c}" value="${i}">${i}</label>`;
+      html+='</div>';
+    });
+    e.innerHTML+=html;
+  });
+  document.getElementById('evalModal').style.display='flex';
+}
 
-function saveEvaluation(){document.getElementById('evalModal').style.display='none'}
+function saveEvaluation(){document.getElementById('evalModal').style.display='none';}
 
-renderObjectives();renderBank();renderSelection();
+/********************
+ * INIT (ORDRE CRITIQUE)
+ ********************/
+document.addEventListener('DOMContentLoaded',()=>{
+  renderObjectives();
+  renderBank();
+  renderSelection();
+});
 </script>
 </body>
 </html>
