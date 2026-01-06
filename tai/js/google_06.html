@@ -96,9 +96,8 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
 <script>
 /* ================= CONFIG ================= */
-const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbw0XUFA42PqPRoROu_Dru3gKie9QfBZq0cVlxT3xxys6kDVUaKIg4d188rPmXebDFxnWg/exec";
+const GOOGLE_API_URL = "https://script.google.com/macros/s/XXX/exec";
 
-/* ================= DONNÉES ================= */
 const EXERCISES = [
  {name:'UV1 : Kihon simples',criteria:['précision','kime','posture']},
  {name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
@@ -118,15 +117,13 @@ const EXERCISES = [
 let selection=[],currentIndex=0,timer=null,paused=false;
 let remainingExercise=0,remainingGlobal=0;
 
-/* ================= OBJECTIFS ================= */
+// =================== OBJECTIFS ===================
 async function fetchObjectivesFromSheet(){
   try{
     const r=await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
     const data=await r.json();
     renderObjectives(data);
-  }catch(e){
-    document.getElementById("objectifs").innerHTML="Erreur chargement objectifs";
-  }
+  }catch(e){ document.getElementById("objectifs").innerHTML="Erreur chargement objectifs"; }
 }
 
 function renderObjectives(list){
@@ -136,61 +133,18 @@ function renderObjectives(list){
     const pct=o.ObjectifHebdo?Math.round((o.Réalisé/o.ObjectifHebdo)*100):0;
     div.innerHTML+=`
       <strong>${o.Exercice}</strong>
-      <div class="progress">
-        <div class="progress-bar" style="width:${pct}%"></div>
-      </div>
+      <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
       <small>${o.Réalisé}/${o.ObjectifHebdo} min (${pct}%)</small>
     `;
   });
 }
 
-/* ================= UI ================= */
-function toggleAccordion(h){
-  const c=h.nextElementSibling;
-  const a=h.querySelector("span");
-  const open=c.style.display==="block";
-  c.style.display=open?"none":"block";
-  a.textContent=open?"⬇️":"⬆️";
-}
-
-function renderBank(){
-  bank.innerHTML="";
-  EXERCISES.forEach(e=>{
-    bank.innerHTML+=`
-    <div class="exercise">
-      <span>${e.name}</span>
-      <button onclick="addExercise('${e.name}')">➕</button>
-    </div>`;
-  });
-}
-
-function addExercise(n){
-  selection.push({name:n,duration:10});
-  renderSelection();
-}
-
-function renderSelection(){
-  selectionDiv.innerHTML="";
-  selection.forEach((e,i)=>{
-    selectionDiv.innerHTML+=`
-    <div class="exercise ${i===currentIndex?'active':''}">
-      <span>${e.name}</span>
-      <input type="range" min="1" max="60" value="${e.duration}"
-        oninput="selection[${i}].duration=parseInt(this.value)">
-      <span>${e.duration} min</span>
-    </div>`;
-  });
-}
-
-function clearSelection(){selection=[];renderSelection()}
-
-/* ================= SESSION ================= */
-const ding=new Audio("ding.mp3");
-const beep=new Audio("beep.mp3");
+// =================== SESSION ===================
+const ding = new Audio("ding.mp3");
+const beep = new Audio("beep.mp3");
 
 function speak(t){speechSynthesis.speak(new SpeechSynthesisUtterance(t))}
 
-// ==================== NOUVELLE SYNTHÈSE ====================
 function startSession(){
   if(!selection.length) return;
   startBtn.disabled=true;
@@ -200,31 +154,21 @@ function startSession(){
 }
 
 function runExerciseWithSpeech(i){
-  if(i>=selection.length){endSession(); return;}
-  currentIndex=i;
-  renderSelection();
+  if(i>=selection.length){endSessionSpeech(); return;}
+  currentIndex=i; renderSelection();
   const ordinals=["premier","deuxième","troisième","quatrième","cinquième","sixième","septième","huitième","neuvième","dixième"];
   speak(`${ordinals[i]||i+1} exercice, ${selection[i].name}`);
   remainingExercise = selection[i].duration*60;
 
-  // timer de l'exercice avec rappel 10s
   timer = setInterval(()=>{
     if(!paused){
       remainingExercise--; remainingGlobal--;
       updateTimers(); updateProgress();
-      if(remainingExercise===10){
-        speak("10 secondes");
-      }
+      if(remainingExercise===10) speak("10 secondes");
       if(remainingExercise<=0){
         clearInterval(timer);
-        if(i<selection.length-1){
-          ding.play();
-          setTimeout(()=>runExerciseWithSpeech(i+1),500);
-        } else {
-          // dernier exercice
-          beep.play();
-          setTimeout(()=>endSessionSpeech(),3000);
-        }
+        if(i<selection.length-1){ ding.play(); setTimeout(()=>runExerciseWithSpeech(i+1),500);}
+        else{ beep.play(); setTimeout(()=>endSessionSpeech(),3000);}
       }
     }
   },1000);
@@ -238,155 +182,108 @@ function endSessionSpeech(){
   fetchObjectivesFromSheet();
 }
 
-// ==================== TIMER ET PROGRESS ====================
+// =================== TIMERS / PROGRESS ===================
 function updateTimers(){ timers.textContent=`${fmt(remainingExercise)} | ${fmt(remainingGlobal)}` }
 function updateProgress(){
   const total=selection.reduce((s,e)=>s+e.duration*60,0);
   const done=total-remainingGlobal;
   globalProgress.style.width=`${Math.round(done/total*100)}%`;
 }
-function pauseResume(){
-  paused=!paused;
-  pauseBtn.textContent=paused?"Reprendre":"Pause";
-  pauseBtn.classList.toggle("active",paused);
-}
+function pauseResume(){ paused=!paused; pauseBtn.textContent=paused?"Reprendre":"Pause"; pauseBtn.classList.toggle("active",paused);}
 function stopSession(){ clearInterval(timer); endSessionSpeech(); }
 function fmt(s){ return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0") }
 
-/* ================= GOOGLE SHEET ================= */
+// =================== SEND TO SHEET ===================
 function sendSessionToSheet(){
   selection.forEach(ex=>{
-    const params=new URLSearchParams({
-      action:"addSession",
-      exercice:ex.name,
-      duree:ex.duration,
-      notes:notes.value||""
+    const params = new URLSearchParams({
+      action: "addSession",
+      exercice: ex.name,
+      duree: ex.duration,
+      notes: notes.value||""
     });
     fetch(GOOGLE_API_URL+"?"+params.toString());
   });
 }
 
-/* ================= ÉVALUATION ================= */
+// =================== ÉVALUATION ===================
 function renderEvaluation(){
   evaluation.innerHTML="";
   selection.forEach(e=>{
-    const def=EXERCISES.find(x=>x.name===e.name);
-    if(!def) return;
+    const def=EXERCISES.find(x=>x.name===e.name); if(!def) return;
     evaluation.innerHTML+=`<h4>${e.name}</h4>`;
     def.criteria.forEach(c=>{
       evaluation.innerHTML+=`
       <div class="rating">
         ${c}
-        ${[0,1,2,3,4,5].map(v=>`
-          <label>
-            <input type="radio" name="${e.name}||${c}" value="${v}">
-
-          </label>`).join("")}
+        ${[0,1,2,3,4,5].map(v=>`<label><input type="radio" name="${e.name+c}" value="${v}">${v}</label>`).join("")}
       </div>`;
     });
   });
 }
-  async function generatePDF(){
+
+async function saveEvaluation(){
+  const radios = document.querySelectorAll("#evaluation input[type=radio]:checked");
+  for(const r of radios){
+    const params = new URLSearchParams({
+      action: "addEvaluation",
+      exercice: r.name.replace(/[0-9]/g,""),
+      critere: r.name.replace(r.value,""),
+      note: r.value
+    });
+    await fetch(GOOGLE_API_URL+"?"+params.toString());
+  }
+  location.reload();
+}
+
+// =================== PDF ===================
+async function generatePDF(){
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF();
+  let y=10;
 
-  let y = 10;
+  pdf.setFontSize(16); pdf.text("Bilan hebdomadaire Tai-Jitsu",10,y); y+=10;
 
-  pdf.setFontSize(16);
-  pdf.text("Bilan hebdomadaire Tai-Jitsu",10,y);
-  y+=10;
-
-  // OBJECTIFS
+  // Objectifs
   const r = await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
   const goals = await r.json();
-
-  pdf.setFontSize(12);
-  pdf.text("Objectifs hebdomadaires",10,y);
-  y+=6;
-
+  pdf.setFontSize(12); pdf.text("Objectifs hebdomadaires",10,y); y+=6;
   goals.forEach(g=>{
-    const pct = Math.round((g.Réalisé/g.ObjectifHebdo)*100);
+    const pct=Math.round((g.Réalisé/g.ObjectifHebdo)*100);
     pdf.text(`${g.Exercice} : ${pct}%`,10,y);
-    pdf.rect(10,y+2,100,4);
-    pdf.rect(10,y+2,pct,4,"F");
-    y+=10;
+    pdf.rect(10,y+2,100,4); pdf.rect(10,y+2,pct,4,"F"); y+=10;
   });
 
-  // NOTES 7 JOURS
-  const e = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
-  const evals = await e.json();
+  // Notes 7 derniers jours
+  const e = await fetch(GOOGLE_API_URL+"?action=fetchSessions");
+  const sessions = await e.json();
+  pdf.addPage(); y=10; pdf.text("Notes – 7 derniers jours",10,y); y+=8;
 
-  pdf.addPage();
-  y=10;
-  pdf.text("Notes – 7 derniers jours",10,y);
-  y+=8;
-
-  evals.slice(-7).forEach(ev=>{
-    pdf.text(`${ev.Date} – ${ev.Exercice}`,10,y);
-    y+=5;
-    pdf.text(ev.Notes || "",12,y);
-    y+=8;
+  sessions.slice(-7).forEach(s=>{
+    pdf.text(`${s.Date} – ${s.Exercice}`,10,y); y+=5;
+    pdf.text(s.Notes||"",12,y); y+=8;
   });
+
+  // Radar Évaluations
+  const ev = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
+  const evals = await ev.json();
+  const critSum={}, critCount={};
+  evals.slice(-7).forEach(e=>{
+    const c=JSON.parse(e.Critères||"{}");
+    for(const k in c){ critSum[k]=(critSum[k]||0)+c[k]; critCount[k]=(critCount[k]||0)+1; }
+  });
+  const labels=Object.keys(critSum);
+  const data = labels.map(k=>Math.round(critSum[k]/critCount[k]*100)/100);
+
+  // Optionnel : affichage graphique radar via Chart.js sur page ou export image
+  // Ici juste texte
+  pdf.addPage(); y=10; pdf.text("Évaluation moyenne – 7 derniers jours",10,y); y+=6;
+  labels.forEach((l,i)=>{ pdf.text(`${l} : ${data[i]}`,12,y); y+=5; });
 
   pdf.save("bilan_tai_jitsu.pdf");
 }
 
-async function saveEvaluation(){
-  const dataByExercise = {};
-
-  document
-    .querySelectorAll("#evaluation input[type=radio]:checked")
-    .forEach(r=>{
-      const [ex, crit] = r.name.split("||");
-      dataByExercise[ex] ??= {};
-      dataByExercise[ex][crit] = Number(r.value);
-    });
-
-  for(const ex in dataByExercise){
-    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
-      action: "addEvaluation",
-      exercice: ex,
-      criteres: JSON.stringify(dataByExercise[ex])
-    }));
-  }
-
-  location.reload();
-}
-
-
-async function showStats(){
-  const from = new Date(fromDate.value);
-  const to = new Date(toDate.value);
-
-  const r = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
-  const data = await r.json();
-
-  const sum={},count={};
-
-  data.forEach(e=>{
-    const d=new Date(e.Date);
-    if(d<from||d>to)return;
-
-    const c=JSON.parse(e.Critères);
-    for(const k in c){
-      sum[k]=(sum[k]||0)+c[k];
-      count[k]=(count[k]||0)+1;
-    }
-  });
-
-  const avg=Object.keys(sum).map(k=>sum[k]/count[k]);
-
-  new Chart(statsChart,{
-    type:"bar",
-    data:{
-      labels:Object.keys(sum),
-      datasets:[{label:"Moyenne",data:avg,backgroundColor:"#84fab0"}]
-    },
-    options:{scales:{y:{min:0,max:5}}}
-  });
-}
-
-/* ================= INIT ================= */
+// ================= INIT ===================
 const bank=document.getElementById("bank");
 const selectionDiv=document.getElementById("selection");
 const timers=document.getElementById("timers");
@@ -399,6 +296,7 @@ const notes=document.getElementById("notes");
 
 renderBank();
 fetchObjectivesFromSheet();
+
 </script>
 </body>
 </html>
