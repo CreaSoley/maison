@@ -267,9 +267,10 @@ function pauseResume(){
 function stopSession(){clearInterval(timer);endSession()}
 
 function endSession(){
-  beep.play();
-  speak("Fin de séance");
-  evaluationModal.style.display="flex";
+  sendSessionToSheet();          // ✅ envoi Google Sheet
+  fetchObjectivesFromSheet();    // ✅ refresh objectifs
+  speak("Fin de l'entraînement, place à l'auto-évaluation");
+  document.getElementById('evaluationModal').style.display='flex';
   renderEvaluation();
 }
 
@@ -277,6 +278,21 @@ function fmt(s){
   return String(Math.floor(s/60)).padStart(2,"0")+":"+
          String(s%60).padStart(2,"0")
 }
+  function sendSessionToSheet() {
+  selection.forEach(ex => {
+    const params = new URLSearchParams({
+      action: "addSession",
+      exercice: ex.name,
+      duree: ex.duration,
+      notes: document.getElementById("notes")?.value || ""
+    });
+
+    fetch(`${API_URL}?${params.toString()}`)
+      .then(r => r.json())
+      .catch(err => console.error("Erreur envoi session", err));
+  });
+}
+
 
 /* ================= ÉVALUATION ================= */
 function renderEvaluation(){
@@ -294,6 +310,13 @@ function renderEvaluation(){
 }
 
 function saveEvaluation(){location.reload()}
+
+function fetchObjectivesFromSheet() {
+  fetch(API_URL + "?action=fetchObjectives")
+    .then(r => r.json())
+    .then(data => renderObjectivesFromSheet(data))
+    .catch(err => console.error("Erreur fetch objectifs", err));
+}
 
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
