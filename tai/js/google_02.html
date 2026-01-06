@@ -186,14 +186,16 @@ function renderObjectivesChart(data){
 
   const ctx = document.getElementById("objectivesChart").getContext("2d");
 
-  if (objectivesChart) {
-    objectivesChart.destroy();
-  }
+  // Détruire l'ancien graphique si existant
+  if(objectivesChart) objectivesChart.destroy();
+
+  // Calcul du max Y arrondi + 20 pour l'esthétique
+  const maxY = Math.ceil(Math.max(...objectifs) / 10) * 10 + 20;
 
   objectivesChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels,
+      labels: labels,
       datasets: [
         {
           label: "Objectif (min)",
@@ -215,19 +217,38 @@ function renderObjectivesChart(data){
           labels: {
             font: { family: "Fredoka" }
           }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ": " + context.raw + " min";
+            }
+          }
         }
       },
       scales: {
         y: {
           beginAtZero: true,
+          suggestedMax: maxY,
           ticks: {
-            stepSize: 30
+            stepSize: 20
+          },
+          title: {
+            display: true,
+            text: "Minutes",
+            font: { family: "Fredoka", size: 14 }
+          }
+        },
+        x: {
+          ticks: {
+            font: { family: "Fredoka", size: 12 }
           }
         }
       }
     }
   });
 }
+
 
 function renderObjectives(list){
   const div=document.getElementById("objectifs");
