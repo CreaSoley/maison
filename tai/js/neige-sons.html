@@ -168,6 +168,16 @@
   </div>
 </div>
 
+<!-- MODAL EDIT OBJECTIFS -->
+<div class="modal" id="objectivesModal">
+  <div class="modal-content">
+    <h2>🎯 Éditer les objectifs</h2>
+    <div id="objectivesForm"></div>
+    <button class="btn-primary" onclick="saveObjectives()">Valider</button>
+    <button class="btn-secondary" onclick="closeObjectivesModal()">Annuler</button>
+  </div>
+</div>
+
 <div class="modal" id="evaluationModal">
   <div class="modal-content">
     <h2>📝 Auto-évaluation</h2>
@@ -244,15 +254,36 @@ function renderObjectives(){
 
 function editObjectives(){
   const data = loadObjectives();
-  Object.keys(data.goals).forEach(name=>{
-    const val = window.prompt(`Durée hebdomadaire pour ${name} (minutes)`, data.goals[name].target);
-    if(val !== null && !isNaN(val) && val !== ''){
-      data.goals[name].target = parseInt(val,10);
+  const form = document.getElementById('objectivesForm');
+  form.innerHTML = '';
+
+  Object.entries(data.goals).forEach(([name,goal])=>{
+    form.innerHTML += `
+      <label><strong>${name}</strong></label>
+      <input type="number" min="1" max="600" value="${goal.target}" data-name="${name}" style="width:100%;margin-bottom:8px;">
+    `;
+  });
+
+  document.getElementById('objectivesModal').style.display='flex';
+}
+
+function closeObjectivesModal(){
+  document.getElementById('objectivesModal').style.display='none';
+}
+
+function saveObjectives(){
+  const data = loadObjectives();
+  document.querySelectorAll('#objectivesForm input').forEach(input=>{
+    const name = input.dataset.name;
+    const val = parseInt(input.value,10);
+    if(!isNaN(val)){
+      data.goals[name].target = val;
       data.goals[name].done = 0;
     }
   });
   localStorage.setItem('objectives', JSON.stringify(data));
   renderObjectives();
+  closeObjectivesModal();
 }
 
 function renderBank(){
