@@ -331,20 +331,27 @@ function renderEvaluation(){
 }
 
 async function saveEvaluation(){
-  const radios = document.querySelectorAll("#evaluation input[type=radio]:checked");
+  const dataByExercise = {};
 
-  for(const r of radios){
-    const params = new URLSearchParams({
-      action: "addEvaluation",
-      exercice: r.name.replace(/[0-9]/g,""),
-      critere: r.name.replace(r.value,""),
-      note: r.value
+  document
+    .querySelectorAll("#evaluation input[type=radio]:checked")
+    .forEach(r=>{
+      const [ex, crit] = r.name.split("||");
+      dataByExercise[ex] ??= {};
+      dataByExercise[ex][crit] = Number(r.value);
     });
-    await fetch(GOOGLE_API_URL+"?"+params.toString());
+
+  for(const ex in dataByExercise){
+    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
+      action: "addEvaluation",
+      exercice: ex,
+      criteres: JSON.stringify(dataByExercise[ex])
+    }));
   }
 
   location.reload();
 }
+
 
 async function showStats(){
   const from = new Date(fromDate.value);
