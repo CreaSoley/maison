@@ -276,94 +276,49 @@ function renderEvaluation(){
     });
   });
 }
-  async function generatePDF() {
+  async function generatePDF(){
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF();
 
-  // Titre
-  pdf.setFontSize(18);
-  pdf.text("Récapitulatif Tai-Jitsu Coach", 105, 15, { align: "center" });
+  let y = 10;
 
-  let y = 25;
+  pdf.setFontSize(16);
+  pdf.text("Bilan hebdomadaire Tai-Jitsu",10,y);
+  y+=10;
 
-  // ====== Objectifs hebdo ======
-  pdf.setFontSize(14);
-  pdf.text("🎯 Objectifs hebdomadaires", 10, y);
-  y += 8;
+  // OBJECTIFS
+  const r = await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
+  const goals = await r.json();
 
-  // Récupère objectifs actuels
-  let objectifs = [];
-  try {
-    const r = await fetch(GOOGLE_API_URL + "?action=fetchObjectives");
-    objectifs = await r.json();
-  } catch(e) {
-    console.error("Impossible de récupérer objectifs", e);
-  }
+  pdf.setFontSize(12);
+  pdf.text("Objectifs hebdomadaires",10,y);
+  y+=6;
 
-  objectifs.forEach(o => {
-    const pct = o.ObjectifHebdo ? Math.round((o.Réalisé / o.ObjectifHebdo) * 100) : 0;
-    pdf.text(`${o.Exercice}: ${o.Réalisé}/${o.ObjectifHebdo} min (${pct}%)`, 10, y);
-    y += 6;
+  goals.forEach(g=>{
+    const pct = Math.round((g.Réalisé/g.ObjectifHebdo)*100);
+    pdf.text(`${g.Exercice} : ${pct}%`,10,y);
+    pdf.rect(10,y+2,100,4);
+    pdf.rect(10,y+2,pct,4,"F");
+    y+=10;
   });
 
-  y += 6;
-  pdf.text("📝 Notes des 7 derniers jours", 10, y);
-  y += 8;
+  // NOTES 7 JOURS
+  const e = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
+  const evals = await e.json();
 
-  // ====== Récupérer les évaluations ======
-  const history = JSON.parse(localStorage.getItem("history") || "[]");
-  const last7days = history.filter(h => {
-    const d = new Date(h.date);
-    const now = new Date();
-    const diff = (now - d) / (1000*60*60*24);
-    return diff <= 7;
+  pdf.addPage();
+  y=10;
+  pdf.text("Notes – 7 derniers jours",10,y);
+  y+=8;
+
+  evals.slice(-7).forEach(ev=>{
+    pdf.text(`${ev.Date} – ${ev.Exercice}`,10,y);
+    y+=5;
+    pdf.text(ev.Notes || "",12,y);
+    y+=8;
   });
 
-  last7days.forEach(h => {
-    pdf.setFontSize(12);
-    pdf.text(`📅 ${new Date(h.date).toLocaleDateString()}`, 10, y);
-    y += 6;
-    if(h.notes) {
-      pdf.text(`- Notes: ${h.notes}`, 12, y);
-      y += 6;
-    }
-    h.selection.forEach(ex => {
-      pdf.text(`- ${ex.name}`, 12, y);
-      y += 5;
-      if(ex.criteria){
-        for(const c in ex.criteria){
-          pdf.text(`  • ${c}: ${ex.criteria[c]}`, 14, y);
-          y += 5;
-        }
-      }
-    });
-    y += 4;
-  });
-
-  // ====== Bilan ======
-  pdf.setFontSize(14);
-  pdf.text("📊 Bilan sur 7 jours", 10, y);
-  y += 8;
-
-  const sumCriteria = {};
-  let countCriteria = {};
-  last7days.forEach(h => {
-    h.selection.forEach(ex => {
-      if(!ex.criteria) return;
-      for(const c in ex.criteria){
-        sumCriteria[c] = (sumCriteria[c] || 0) + ex.criteria[c];
-        countCriteria[c] = (countCriteria[c] || 0) + 1;
-      }
-    });
-  });
-
-  for(const c in sumCriteria){
-    const avg = (sumCriteria[c]/countCriteria[c]).toFixed(2);
-    pdf.text(`- ${c}: moyenne ${avg}`, 12, y);
-    y += 6;
-  }
-
-  pdf.save("Recap_TaiJitsu.pdf");
+  pdf.save("bilan_tai_jitsu.pdf");
 }
 
 function saveEvaluation(){
