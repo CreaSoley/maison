@@ -282,6 +282,37 @@ async function generatePDF(){
 
   pdf.save("bilan_tai_jitsu.pdf");
 }
+// =================== BANQUE D'EXERCICES ===================
+function renderBank(){
+  bank.innerHTML="";
+  EXERCISES.forEach(e=>{
+    bank.innerHTML+=`
+    <div class="exercise">
+      <span>${e.name}</span>
+      <button onclick="addExercise('${e.name}')">➕</button>
+    </div>`;
+  });
+}
+
+function addExercise(n){
+  selection.push({name:n,duration:10});
+  renderSelection();
+}
+
+function renderSelection(){
+  selectionDiv.innerHTML="";
+  selection.forEach((e,i)=>{
+    selectionDiv.innerHTML+=`
+    <div class="exercise ${i===currentIndex?'active':''}">
+      <span>${e.name}</span>
+      <input type="range" min="1" max="60" value="${e.duration}"
+        oninput="selection[${i}].duration=parseInt(this.value)">
+      <span>${e.duration} min</span>
+    </div>`;
+  });
+}
+
+function clearSelection(){ selection=[]; renderSelection(); }
 
 // ================= INIT ===================
 const bank=document.getElementById("bank");
