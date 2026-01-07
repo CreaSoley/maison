@@ -36,6 +36,28 @@ button.active{background-image:linear-gradient(to top,#30cfd0,#330867);color:#ff
 .modal-content{background:#fff;border-radius:18px;padding:14px;width:100%;max-height:90vh;overflow:auto}
 textarea{width:100%;border-radius:12px;padding:8px}
 .rating{display:flex;justify-content:space-between;font-size:12px}
+  .journal-title{
+  font-size:22px;
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.journal-exercises{
+  font-family:Arial;
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+.journal-notes{
+  font-family:JBCursive, cursive;
+  font-size:18px;
+  white-space:pre-wrap;
+  background:#fff9e6;
+  padding:10px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+
 </style>
 </head>
 <body>
@@ -97,6 +119,26 @@ textarea{width:100%;border-radius:12px;padding:8px}
     <canvas id="journalChart" style="display:none; margin-top:10px;"></canvas>
   </div>
 </div>
+  <!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
+<div class="card">
+  <div class="accordion-header" onclick="toggleAccordion(this)">
+    📔 Carnet d’entraînement <span>⬇️</span>
+  </div>
+  <div class="accordion-content">
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
+      <input type="date" id="journalDate">
+      <button class="btn-primary" onclick="loadJournal()">Afficher</button>
+      <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
+    </div>
+
+    <div id="journalCard"></div>
+
+    <canvas id="journalRadar" style="display:none;margin-top:12px"></canvas>
+
+  </div>
+</div>
+
   <!-- ================== Moyennes par exercice ================== -->
 <div class="card">
   <h3>📊 Moyennes par exercice</h3>
@@ -954,6 +996,139 @@ async function generateJournalPDF() {
   labels.forEach((k,i) => pdf.text(`${k} : ${averages[i]}`, 12, y+=6));
 
   pdf.save(`Carnet_${date}.pdf`);
+}
+
+let journalRadarChart = null;
+
+async function loadJournal(){
+  const date = document.getElementById("journalDate").value;
+  if(!date) return alert("Choisis une date");
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  const dayData = data.filter(ev => ev.Date.startsWith(date));
+  const container = document.getElementById("journalCard");
+  container.innerHTML = "";
+
+  if(!dayData.length){
+    container.innerHTML = "<em>Aucune donnée pour cette date.</em>";
+    document.getElementById("journalRadar").style.display="none";
+    return;
+  }
+
+  /* ===== Durées cumulées par exercice ===== */
+  const durations = {};
+  dayData.forEach(ev=>{
+    durations[ev.Exercice] = (durations[ev.Exercice]||0) + (Number(ev.Durée)||0);
+  });
+
+  /* ===== Notes ===== */
+  const notes = dayData
+    .map(ev=>ev.Notes)
+    .filter(n=>n && n.trim())
+    .join("\n\n");
+
+  /* ===== Moyennes critères ===== */
+  const sum = {}, count = {};
+  dayData.forEach(ev=>{
+    const crit = JSON.parse(ev.Critères||"{}");
+    for(const c in crit){
+      sum[c] = (sum[c]||0) + crit[c];
+      count[c] = (count[c]||0) + 1;
+    }
+  });
+
+  const labels = Object.keys(sum);
+  const averages = labels.map(c => +(sum[c]/count[c]).toFixed(2));
+
+  /* ===== RENDER CARD ===== */
+  container.innerHTML = `
+    <div class="journal-title">Carnet d’entraînement – ${date}</div>
+
+    <div class="journal-exercises">
+      <strong>Durées par exercice :</strong><br>
+      ${Object.entries(durations)
+        .map(([k,v])=>`${k} : ${v} min`)
+        .join("<br>")}
+    </div>
+
+    ${notes ? `<div class="journal-notes">${notes}</div>` : ""}
+  `;
+
+  drawJournalRadar(labels, averages);
+}
+
+/* ===== Radar journal ===== */
+function drawJournalRadar(labels, data){
+  const canvas = document.getElementById("journalRadar");
+  canvas.style.display="block";
+  const ctx = canvas.getContext("2d");
+
+  if(journalRadarChart) journalRadarChart.destroy();
+
+  journalRadarChart = new Chart(ctx,{
+    type:"radar",
+    data:{
+      labels,
+      datasets:[{
+        label:"Moyenne du jour",
+        data,
+        fill:true,
+        backgroundColor:"rgba(250,112,154,0.3)",
+        borderColor:"#fa709a",
+        pointBackgroundColor:"#fa709a"
+      }]
+    },
+    options:{
+      scales:{ r:{ min:0,max:5,ticks:{stepSize:1} } }
+    }
+  });
+}
+
+/* ===== PDF CARNET ===== */
+async function generateJournalPDF(){
+  const date = document.getElementById("journalDate").value;
+  if(!date) return alert("Choisis une date");
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  let y=10;
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+  const dayData = data.filter(ev => ev.Date.startsWith(date));
+
+  pdf.setFontSize(18);
+  pdf.text("Carnet d’entraînement",10,y); y+=8;
+  pdf.setFontSize(12);
+  pdf.text(date,10,y); y+=10;
+
+  const durations = {};
+  dayData.forEach(ev=>{
+    durations[ev.Exercice]=(durations[ev.Exercice]||0)+(Number(ev.Durée)||0);
+  });
+
+  pdf.text("Durées par exercice :",10,y); y+=6;
+  Object.entries(durations).forEach(([k,v])=>{
+    pdf.text(`- ${k} : ${v} min`,12,y);
+    y+=6;
+  });
+
+  const notes = dayData
+    .map(ev=>ev.Notes)
+    .filter(n=>n && n.trim());
+
+  if(notes.length){
+    y+=4;
+    pdf.text("Notes :",10,y); y+=6;
+    notes.forEach(n=>{
+      pdf.text(n,12,y,{maxWidth:180});
+      y+=10;
+    });
+  }
+
+  pdf.save(`carnet_${date}.pdf`);
 }
 
 /* ================= INIT ================= */
