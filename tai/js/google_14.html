@@ -12,6 +12,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="https://fonts.googleapis.com/css2?family=JBCursive&display=swap" rel="stylesheet">
+
 
 
 <style>
@@ -116,15 +118,11 @@ textarea{width:100%;border-radius:12px;padding:8px}
 <!-- 📖 CARNET D'ENTRAÎNEMENT -->
 <div class="card">
   <h3>📖 Carnet d’entraînement</h3>
-
-  <input type="date" id="journalDate">
-  <button class="btn-primary" onclick="loadJournal()">Afficher</button>
-
-  <div id="journalDetails" style="margin-top:10px"></div>
-
-  <canvas id="journalChart" style="display:none; margin-top:10px"></canvas>
-
-  <button class="btn-secondary" onclick="generateJournalPDF()">📄 Export PDF</button>
+<div id="journalCard" class="card"></div>
+<canvas id="journalRadar" style="display:none"></canvas>
+<input type="date" id="journalDate">
+<button onclick="loadJournal()">Charger</button>
+<button onclick="generateJournalPDF()">PDF</button>
 </div>
 
   <!-- ================== Moyennes par exercice ================== -->
