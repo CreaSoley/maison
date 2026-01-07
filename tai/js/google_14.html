@@ -848,19 +848,22 @@ function drawUVEvolutionChart(labels, data, uv) {
 let journalChartObj = null;
 
 async function loadJournal() {
-  const date = journalDate.value;
-  if(!date) return alert("Sélectionne une date");
 
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
+  const date = document.getElementById("journalDate").value;
+  if (!date) return alert("Choisis une date");
 
-  // Filtrer par date YYYY-MM-DD
-  const daily = data.filter(ev => ev.Date.slice(0,10) === date);
+  // 1️⃣ récupération des données
+  const sessions = await fetchSessions();
+  const rEval = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const evaluations = await rEval.json();
 
+  // 2️⃣ LOGS DE DIAGNOSTIC 👉 ICI EXACTEMENT
+  console.log("SESSION", sessions[0]);
+  console.log("EVAL", evaluations[0]);
+
+  // 3️⃣ nettoyage de la card
+  const journalDetails = document.getElementById("journalDetails");
   journalDetails.innerHTML = "";
-  journalChart.style.display = "none";
-  if(!daily.length) {
-    journalDetails.innerHTML = "<em>Aucune donnée pour cette date</em>";
     return;
   }
 
