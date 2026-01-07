@@ -77,15 +77,18 @@ textarea{width:100%;border-radius:12px;padding:8px}
  <button class="btn-primary" onclick="generatePDF()">📄 Générer le bilan PDF</button>
 
 </div>
+<!-- ================== Moyennes par exercice ================== -->
 <div class="card">
-  <h3>📊 Analyse des évaluations</h3>
-  <input type="date" id="fromDate">
-  <input type="date" id="toDate">
-  <button class="btn-primary" onclick="showStats()">Afficher</button>
-  <canvas id="statsChart"></canvas>
-  <button class="btn-secondary" onclick="showExerciseAverages()">📊 Moyennes par exercice</button>
-<canvas id="exerciseChart"></canvas>
+  <h3>📊 Moyennes par exercice</h3>
+  <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+    <label>Du <input type="date" id="fromDateChart"></label>
+    <label>Au <input type="date" id="toDateChart"></label>
+    <button class="btn-primary" onclick="showExerciseAverages()">Afficher</button>
+    <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
+  </div>
+  <canvas id="exerciseChart" style="display:none"></canvas>
 </div>
+
 
 <!-- ÉVALUATION -->
 <div class="modal" id="evaluationModal">
@@ -366,73 +369,71 @@ async function saveEvaluation(){
 }
 
 /* ================= STATS ================= */
-async function showStats(){
-  const from = new Date(fromDate.value);
-  const to = new Date(toDate.value);
+let exerciseChartObj = null; // référence du graphique
+
+async function showExerciseAverages() {
+  const from = new Date(fromDateChart.value);
+  const to = new Date(toDateChart.value);
+
   const r = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
   const data = await r.json();
-  const sum={},count={};
 
-  data.forEach(e=>{
-    const d = new Date(e.Date);
-    if(d<from||d>to) return;
-    const c = JSON.parse(e.Critères);
-    for(const k in c){
-      sum[k] = (sum[k]||0)+c[k];
-      count[k] = (count[k]||0)+1;
+  // Moyennes par exercice
+  const sum = {}, count = {};
+  data.forEach(ev => {
+    const d = new Date(ev.Date);
+    if (fromDateChart.value && d < from) return;
+    if (toDateChart.value && d > to) return;
+
+    const crit = JSON.parse(ev.Critères);
+    for (const k in crit) {
+      sum[k] = (sum[k] || 0) + crit[k];
+      count[k] = (count[k] || 0) + 1;
     }
-  });
-
-  const avg = Object.keys(sum).map(k=>sum[k]/count[k]);
-  new Chart(statsChart,{
-    type:"bar",
-    data:{
-      labels:Object.keys(sum),
-      datasets:[{label:"Moyenne",data:avg,backgroundColor:"#84fab0"}]
-    },
-    options:{scales:{y:{min:0,max:5}}}
-  });
-}
-async function showExerciseAverages(){
-  const r = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
-  const data = await r.json();
-
-  // Calcul des moyennes par exercice
-  const sum={}, count={};
-
-  data.forEach(ev=>{
-    const criteres = JSON.parse(ev.Critères || "{}");
-    const values = Object.values(criteres);
-    if(values.length === 0) return;
-    const total = values.reduce((a,b)=>a+b,0);
-    const avg = total / values.length;
-
-    const ex = ev.Exercice;
-    sum[ex] = (sum[ex]||0) + avg;
-    count[ex] = (count[ex]||0) + 1;
   });
 
   const labels = Object.keys(sum);
-  const averages = labels.map(ex => Math.round((sum[ex]/count[ex])*100)/100);
+  const averages = labels.map(k => (sum[k]/count[k]).toFixed(2));
 
-  // Affichage graphique
   const ctx = document.getElementById("exerciseChart").getContext("2d");
-  if(window.exerciseChartObj) window.exerciseChartObj.destroy(); // supprime ancien graphique si présent
-  window.exerciseChartObj = new Chart(ctx,{
-    type: 'bar',
+  document.getElementById("exerciseChart").style.display = "block";
+
+  if (exerciseChartObj) exerciseChartObj.destroy(); // détruit ancien graphique
+
+  exerciseChartObj = new Chart(ctx, {
+    type: "bar",
     data: {
-      labels,
+      labels: labels,
       datasets: [{
-        label: 'Moyenne par exercice',
+        label: "Moyenne",
         data: averages,
-        backgroundColor: '#84fab0'
+        backgroundColor: "#84fab0",
       }]
     },
-    options:{
-      scales:{y:{min:0,max:5}}
+    plugins: [ChartDataLabels],
+    options: {
+      plugins: {
+        datalabels: {
+          anchor: 'end',
+          align: 'top',
+          formatter: val => val
+        }
+      },
+      scales: {
+        y: {
+          min: 0,
+          max: 5
+        }
+      }
     }
   });
 }
+
+function hideExerciseChart() {
+  if (exerciseChartObj) exerciseChartObj.destroy();
+  document.getElementById("exerciseChart").style.display = "none";
+}
+
 
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
