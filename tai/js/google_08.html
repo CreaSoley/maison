@@ -384,12 +384,18 @@ async function showExerciseAverages() {
   const r = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
   const data = await r.json();
 
-  // Moyennes par exercice
+  // 🔎 ICI EXACTEMENT
+  console.log("DEBUG fetchEvaluations → première ligne :", data[0]);
+  console.log("DEBUG clés reçues :", Object.keys(data[0] || {}));
+
+  // Moyennes par critère (actuel)
   const sum = {}, count = {};
   data.forEach(ev => {
     const d = new Date(ev.Date);
     if (fromDateChart.value && d < from) return;
     if (toDateChart.value && d > to) return;
+
+    if (!ev.Criteres) return; // sécurité
 
     const crit = JSON.parse(ev.Criteres);
     for (const k in crit) {
@@ -397,6 +403,10 @@ async function showExerciseAverages() {
       count[k] = (count[k] || 0) + 1;
     }
   });
+
+  console.log("DEBUG sum :", sum);
+  console.log("DEBUG count :", count);
+
 
   const labels = Object.keys(sum);
   const averages = labels.map(k => (sum[k]/count[k]).toFixed(2));
