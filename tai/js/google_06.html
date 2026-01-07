@@ -319,6 +319,7 @@ async function generatePDF(){
 
 /* ================= SAVE ÉVALUATION ================= */
 async function saveEvaluation(){
+  sendSessionToSheet(); // ✅ ENREGISTRE LA SESSION + NOTES
   const dataByExercise = {};
 
   document
