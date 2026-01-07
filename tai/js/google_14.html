@@ -113,23 +113,18 @@ textarea{width:100%;border-radius:12px;padding:8px}
 </div>
 
   <!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
+<!-- 📖 CARNET D'ENTRAÎNEMENT -->
 <div class="card">
-  <div class="accordion-header" onclick="toggleAccordion(this)">
-    📔 Carnet d’entraînement <span>⬇️</span>
-  </div>
-  <div class="accordion-content">
+  <h3>📖 Carnet d’entraînement</h3>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
-      <input type="date" id="journalDate">
-      <button class="btn-primary" onclick="loadJournal()">Afficher</button>
-      <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
-    </div>
+  <input type="date" id="journalDate">
+  <button class="btn-primary" onclick="loadJournal()">Afficher</button>
 
-    <div id="journalCard"></div>
+  <div id="journalDetails" style="margin-top:10px"></div>
 
-    <canvas id="journalRadar" style="display:none;margin-top:12px"></canvas>
+  <canvas id="journalChart" style="display:none; margin-top:10px"></canvas>
 
-  </div>
+  <button class="btn-secondary" onclick="generateJournalPDF()">📄 Export PDF</button>
 </div>
 
   <!-- ================== Moyennes par exercice ================== -->
@@ -363,9 +358,8 @@ function sendSessionToSheet(){
   selection.forEach(ex=>{
     const params = new URLSearchParams({
       action:"addSession",
-      exercice:ex.name,
-      duree:ex.duration,
-      notes: notes.value || ""        // ✅ Ajout texte auto-évaluation
+      exercice: ex.name,
+      duree: ex.duration
     });
     fetch(GOOGLE_API_URL + "?" + params.toString());
   });
@@ -865,6 +859,13 @@ async function loadJournal() {
 
   console.log("SESSION", sessions[0]);
   console.log("EVAL", evaluations[0]);
+
+  const journalDetails = document.getElementById("journalDetails");
+if (!journalDetails) {
+  console.error("❌ journalDetails introuvable dans le DOM");
+  return;
+}
+journalDetails.innerHTML = "";
 
   /* ===== FILTRAGE PAR DATE ===== */
   const daySessions = sessions.filter(s => s.Date.startsWith(date));
