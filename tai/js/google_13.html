@@ -139,6 +139,22 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
     <button class="btn-primary" onclick="saveEvaluation()">Valider</button>
   </div>
+  <!-- ================== Carnet d’entraînement ================== -->
+<div class="card">
+  <div class="accordion-header" onclick="toggleAccordion(this)">
+    📝 Carnet d’entraînement <span>⬇️</span>
+  </div>
+  <div class="accordion-content" id="journalContent" style="padding:10px;">
+    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
+      <label>Choisir la date : <input type="date" id="journalDate"></label>
+      <button class="btn-primary" onclick="loadJournal()">Afficher</button>
+      <button class="btn-secondary" onclick="generateJournalPDF()">PDF</button>
+    </div>
+    <div id="journalDetails"></div>
+    <canvas id="journalChart" style="display:none; margin-top:10px;"></canvas>
+  </div>
+</div>
+
 </div>
 
 
@@ -793,6 +809,119 @@ function drawUVEvolutionChart(labels, data, uv) {
     },
     plugins: [ChartDataLabels]
   });
+}
+let journalChartObj = null;
+
+async function loadJournal() {
+  const dateInput = document.getElementById("journalDate").value;
+  if (!dateInput) return alert("Sélectionne une date");
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  const dayData = data.filter(ev => ev.Date.startsWith(dateInput));
+  if (!dayData.length) {
+    document.getElementById("journalDetails").innerHTML = "<p>Aucune séance pour cette date.</p>";
+    if (journalChartObj) journalChartObj.destroy();
+    document.getElementById("journalChart").style.display = "none";
+    return;
+  }
+
+  // 1️⃣ Durées cumulées par exercice
+  const durationByEx = {};
+  dayData.forEach(ev => {
+    const crit = JSON.parse(ev.Critères);
+    const total = Object.values(crit).reduce((a,b)=>a+b,0); // somme critères = durée indicative
+    durationByEx[ev.Exercice] = (durationByEx[ev.Exercice] || 0) + total;
+  });
+
+  // 2️⃣ Moyenne par critère (tous exercices cumulés)
+  const sumCrit = {}, countCrit = {};
+  dayData.forEach(ev => {
+    const crit = JSON.parse(ev.Critères);
+    for (const k in crit) {
+      sumCrit[k] = (sumCrit[k] || 0) + crit[k];
+      countCrit[k] = (countCrit[k] || 0) + 1;
+    }
+  });
+
+  const avgCrit = {};
+  for (const k in sumCrit) avgCrit[k] = (sumCrit[k]/countCrit[k]).toFixed(2);
+
+  // 3️⃣ Notes
+  const notesList = dayData.map(ev => `<p style="font-family:'JBCursive'; margin:4px 0;">${ev.Notes || '–'}</p>`).join("");
+
+  // Affichage HTML
+  const detailsDiv = document.getElementById("journalDetails");
+  let html = `<h2 style="font-family:'Super Meatball'; font-size:24px; color:#fa709a;">Carnet d’entraînement</h2>`;
+  html += `<h3>Durées par exercice :</h3><ul>`;
+  for (const ex in durationByEx) html += `<li>${ex} : ${durationByEx[ex]} min</li>`;
+  html += `</ul>`;
+  html += `<h3>Notes :</h3>${notesList}`;
+  html += `<h3>Moyenne par critère :</h3><ul>`;
+  for (const k in avgCrit) html += `<li>${k} : ${avgCrit[k]}</li>`;
+  html += `</ul>`;
+  detailsDiv.innerHTML = html;
+
+  // 4️⃣ Graphique radar
+  const ctx = document.getElementById("journalChart").getContext("2d");
+  document.getElementById("journalChart").style.display = "block";
+  if (journalChartObj) journalChartObj.destroy();
+
+  journalChartObj = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: Object.keys(avgCrit),
+      datasets: [{
+        label: 'Moyenne par critère',
+        data: Object.values(avgCrit),
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: '#fa709a',
+        borderWidth: 2,
+        pointBackgroundColor: '#fa709a'
+      }]
+    },
+    options: {
+      scales: { r: { min:0, max:5, ticks:{ stepSize:1 } } },
+      plugins: { legend: { display:true }, datalabels:{ display:false } }
+    },
+    plugins: [ChartDataLabels]
+  });
+}
+async function generateJournalPDF() {
+  const dateInput = document.getElementById("journalDate").value;
+  if (!dateInput) return alert("Sélectionne une date");
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p','mm','a4');
+
+  // Polices
+  pdf.addFileToVFS('SuperMeatball.ttf', SUPER_MEATBALL_BASE64);
+  pdf.addFont('SuperMeatball.ttf','Super Meatball','normal');
+  pdf.addFileToVFS('JBCursive.otf', JBCURSIVE_BASE64);
+  pdf.addFont('JBCursive.otf','JBCursive','normal');
+
+  pdf.setFont('Super Meatball');
+  pdf.setFontSize(20);
+  pdf.text(`Carnet d’entraînement – ${dateInput}`,10,20);
+
+  pdf.setFont('JBCursive');
+  pdf.setFontSize(12);
+
+  const details = document.getElementById("journalDetails").innerText.split("\n");
+  let y = 30;
+  details.forEach(line => {
+    pdf.text(line, 10, y);
+    y += 6;
+  });
+
+  // Radar chart image
+  const chartCanvas = document.getElementById("journalChart");
+  const imgData = chartCanvas.toDataURL('image/png');
+  pdf.addImage(imgData, 'PNG', 10, y, 180, 100);
+
+  // Ouvrir PDF dans un nouvel onglet
+  pdf.output('dataurlnewwindow');
 }
 
 
