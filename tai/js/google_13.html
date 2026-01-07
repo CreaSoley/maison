@@ -103,22 +103,7 @@ textarea{width:100%;border-radius:12px;padding:8px}
  <button class="btn-primary" onclick="generatePDF()">📄 Générer le bilan PDF</button>
 
 </div>
-<div class="card">
-  <div class="accordion-header" onclick="toggleAccordion(this)">
-    📝 Carnet d’entraînement <span>⬇️</span>
-  </div>
-  <div class="accordion-content" id="journalContent" style="padding:10px;">
-    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
-      <label>Choisir la date :
-        <input type="date" id="journalDate">
-      </label>
-      <button class="btn-primary" onclick="loadJournal()">Afficher</button>
-      <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
-    </div>
-    <div id="journalDetails" style="font-family:Arial;"></div>
-    <canvas id="journalChart" style="display:none; margin-top:10px;"></canvas>
-  </div>
-</div>
+
   <!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
 <div class="card">
   <div class="accordion-header" onclick="toggleAccordion(this)">
