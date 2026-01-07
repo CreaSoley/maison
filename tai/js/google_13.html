@@ -50,102 +50,84 @@ textarea{width:100%;border-radius:12px;padding:8px}
 <body>
 
 <div class="container">
-<h1>🥋 Tai-Jitsu Coach</h1>
+  <h1>🥋 Tai-Jitsu Coach</h1>
 
-<!-- OBJECTIFS -->
-<div class="card">
-  <div class="accordion-header" onclick="toggleAccordion(this)">
-    🎯 Objectifs hebdomadaires <span>⬇️</span>
-  </div>
-  <div class="accordion-content" id="objectifs">Chargement…</div>
-</div>
-
-<!-- BANQUE -->
-<div class="card">
-  <div class="accordion-header" onclick="toggleAccordion(this)">
-    📚 Banque d'exercices <span>⬇️</span>
-  </div>
-  <div class="accordion-content" id="bank"></div>
-</div>
-
-<!-- SÉLECTION -->
-<div class="card">
-  <h3>📝 Séance sélectionnée</h3>
-  <div id="selection"></div>
-  <button class="btn-secondary" onclick="clearSelection()">Vider</button>
-</div>
-
-<!-- SESSION -->
-<div class="card">
-  <h3>⏱️ Séance</h3>
-  <div class="progress"><div class="progress-bar" id="globalProgress"></div></div>
-  <div class="timers" id="timers">00:00 | 00:00</div>
-  <button class="btn-primary" id="startBtn" onclick="startSession()">Commencer</button>
-  <button class="btn-secondary" id="pauseBtn" onclick="pauseResume()">Pause</button>
-  <button class="btn-danger" onclick="stopSession()">Stop</button>
-</div>
-
-</div>
-<div class="card">
-  <div class="accordion-header" onclick="toggleAccordion(this)">
-    📝 Carnet d’entraînement <span>⬇️</span>
-  </div>
-  <div class="accordion-content" id="journalContent" style="padding:10px;">
-    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
-      <label>Choisir la date :
-        <input type="date" id="journalDate">
-      </label>
-      <button class="btn-primary" onclick="loadJournal()">Afficher</button>
-      <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
+  <!-- OBJECTIFS -->
+  <div class="card">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      🎯 Objectifs hebdomadaires <span>⬇️</span>
     </div>
-    <div id="journalDetails" style="font-family:Arial;"></div>
-    <canvas id="journalChart" style="display:none; margin-top:10px;"></canvas>
+    <div class="accordion-content" id="objectifs">Chargement…</div>
   </div>
-</div>
 
+  <!-- BANQUE -->
+  <div class="card">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      📚 Banque d'exercices <span>⬇️</span>
+    </div>
+    <div class="accordion-content" id="bank"></div>
+  </div>
 
-</div>
-<!-- ================== Moyennes par exercice ================== -->
-<div class="card">
-  <h3>📊 Moyennes par exercice</h3>
-  <!-- Conteneur des filtres de dates et boutons -->
-<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
-  <label>Du <input type="date" id="fromDateChart"></label>
-  <label>Au <input type="date" id="toDateChart"></label>
+  <!-- SÉLECTION -->
+  <div class="card">
+    <h3>📝 Séance sélectionnée</h3>
+    <div id="selection"></div>
+    <button class="btn-secondary" onclick="clearSelection()">Vider</button>
+  </div>
 
-  <button class="btn-primary" onclick="showAverageByExercise()">
-    Moyenne par exercice
-  </button>
+  <!-- SESSION -->
+  <div class="card">
+    <h3>⏱️ Séance</h3>
+    <div class="progress"><div class="progress-bar" id="globalProgress"></div></div>
+    <div class="timers" id="timers">00:00 | 00:00</div>
+    <button class="btn-primary" id="startBtn" onclick="startSession()">Commencer</button>
+    <button class="btn-secondary" id="pauseBtn" onclick="pauseResume()">Pause</button>
+    <button class="btn-danger" onclick="stopSession()">Stop</button>
+  </div>
 
-  <button class="btn-secondary" onclick="showAverageByCriteria()">
-    Moyenne par critère
-  </button>
+  <!-- CARNET D'ENTRAINEMENT -->
+  <div class="card">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      📝 Carnet d’entraînement <span>⬇️</span>
+    </div>
+    <div class="accordion-content" id="journalContent" style="padding:10px;">
+      <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
+        <label>Choisir la date :
+          <input type="date" id="journalDate">
+        </label>
+        <button class="btn-primary" onclick="loadJournal()">Afficher</button>
+        <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
+      </div>
+      <div id="journalDetails" style="font-family:Arial;"></div>
+      <canvas id="journalChart" style="display:none; margin-top:10px;"></canvas>
+    </div>
+  </div>
 
-  <button class="btn-secondary" onclick="showRadarByUV()">
-  🧭 Radar par UV
-</button>
+  <!-- MOYENNES / GRAPHIQUES -->
+  <div class="card">
+    <h3>📊 Moyennes et graphiques</h3>
 
-  <button class="btn-secondary" onclick="compareUVRadar()">
-  🧭 Comparer plusieurs UV
-</button>
-  
-<button class="btn-secondary" onclick="showUVEvolution()">
-  📈 Évolution d’une UV
-</button>
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
+      <label>Du <input type="date" id="fromDateChart"></label>
+      <label>Au <input type="date" id="toDateChart"></label>
 
-  <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
-</div>
-<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
-  <select id="exerciseRadarSelect"></select>
+      <button class="btn-primary" onclick="showAverageByExercise()">Moyenne par exercice</button>
+      <button class="btn-secondary" onclick="showAverageByCriteria()">Moyenne par critère</button>
+      <button class="btn-secondary" onclick="showRadarByUV()">🧭 Radar par UV</button>
+      <button class="btn-secondary" onclick="compareUVRadar()">🧭 Comparer plusieurs UV</button>
+      <button class="btn-secondary" onclick="showUVEvolution()">📈 Évolution d’une UV</button>
+      <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
+    </div>
 
-  <button class="btn-secondary" onclick="showRadarByExercise()">
-    📡 Radar par exercice
-  </button>
-</div>
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
+      <select id="exerciseRadarSelect"></select>
+      <button class="btn-secondary" onclick="showRadarByExercise()">📡 Radar par exercice</button>
+    </div>
 
-  <canvas id="exerciseChart" style="display:none"></canvas>
-</div>
+    <canvas id="exerciseChart" style="display:none"></canvas>
+  </div>
 
+</div> <!-- Fin container -->
 
 <!-- ÉVALUATION -->
 <div class="modal" id="evaluationModal">
@@ -164,7 +146,6 @@ textarea{width:100%;border-radius:12px;padding:8px}
     <button class="btn-primary" onclick="saveEvaluation()">Valider</button>
   </div>
 </div>
-
 
 <script>
 /* ================= CONFIG ================= */
