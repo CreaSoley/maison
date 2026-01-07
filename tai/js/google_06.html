@@ -324,8 +324,8 @@ async function saveEvaluation(){
   document
     .querySelectorAll("#evaluation input[type=radio]:checked")
     .forEach(r=>{
-      const ex = r.getAttribute("data-exercice");
-      const crit = r.getAttribute("data-critere");
+      const ex = r.dataset.exercice;
+      const crit = r.dataset.critere;
 
       if(!ex || !crit) return;
 
@@ -333,23 +333,17 @@ async function saveEvaluation(){
       dataByExercise[ex][crit] = Number(r.value);
     });
 
+  for(const ex in dataByExercise){
+    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
+      action: "addEvaluation",
+      exercice: ex,
+      criteres: JSON.stringify(dataByExercise[ex])
+    }));
   }
 
-  // 2️⃣ Récupération des critères d’auto-évaluation
-  const dataByExercise = {};
-
-  document
-    .querySelectorAll("#evaluation input[type=radio]:checked")
-    .forEach(r=>{
-      const ex = r.dataset.exercice;
-const crit = r.dataset.critere;
-
-if(!ex || !crit) return;
-
-dataByExercise[ex] ??= {};
-dataByExercise[ex][crit] = Number(r.value);
-
-    });
+  fetchObjectivesFromSheet();
+  location.reload();
+}
 
   // 3️⃣ Envoi des évaluations
   for(const ex in dataByExercise){
