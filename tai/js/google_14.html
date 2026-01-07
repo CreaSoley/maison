@@ -242,6 +242,11 @@ function renderObjectives(list){
     `;
   });
 }
+async function fetchSessions() {
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchSessions");
+  const data = await r.json();
+  return data;
+}
 
 /* ================= UI ================= */
 function toggleAccordion(h){
