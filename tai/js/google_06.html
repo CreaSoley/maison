@@ -319,15 +319,20 @@ async function generatePDF(){
 
 /* ================= SAVE ÉVALUATION ================= */
 async function saveEvaluation(){
+  const dataByExercise = {};
 
-  // 1️⃣ Envoi des sessions AVEC notes texte
-  for(const ex of selection){
-    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
-      action: "addSession",
-      exercice: ex.name,
-      duree: ex.duration,
-      notes: notes.value || ""
-    }));
+  document
+    .querySelectorAll("#evaluation input[type=radio]:checked")
+    .forEach(r=>{
+      const ex = r.getAttribute("data-exercice");
+      const crit = r.getAttribute("data-critere");
+
+      if(!ex || !crit) return;
+
+      dataByExercise[ex] ??= {};
+      dataByExercise[ex][crit] = Number(r.value);
+    });
+
   }
 
   // 2️⃣ Récupération des critères d’auto-évaluation
