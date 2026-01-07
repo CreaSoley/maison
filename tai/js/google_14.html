@@ -1019,6 +1019,15 @@ async function generateJournalPDF() {
 
   pdf.save(`Carnet_${date}.pdf`);
 }
+async function sendSessionNotes() {
+  const text = notes.value?.trim();
+  if (!text) return;
+
+  await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
+    action: "addSessionNotes",
+    notes: text
+  }));
+}
 
 
 /* ================= INIT ================= */
