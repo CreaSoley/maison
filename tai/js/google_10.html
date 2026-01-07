@@ -97,6 +97,10 @@ textarea{width:100%;border-radius:12px;padding:8px}
     Moyenne par critère
   </button>
 
+  <button class="btn-secondary" onclick="showRadarByUV()">
+  🧭 Radar par UV
+</button>
+
   <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
 </div>
 <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
@@ -573,6 +577,43 @@ function drawRadarChart(labels, data, title) {
       }
     }
   });
+}
+async function showRadarByUV() {
+  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
+  const to = toDateChart.value ? new Date(toDateChart.value) : null;
+
+  const uv = prompt("Quelle UV ? (ex : UV1, UV2, UV3, UV4, UV5-6)");
+  if (!uv) return;
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  const sum = {};
+  const count = {};
+
+  data.forEach(ev => {
+    if (!ev.Exercice.startsWith(uv)) return;
+
+    const d = new Date(ev.Date);
+    if (from && d < from) return;
+    if (to && d > to) return;
+
+    const criteres = JSON.parse(ev.Critères);
+    for (const c in criteres) {
+      sum[c] = (sum[c] || 0) + criteres[c];
+      count[c] = (count[c] || 0) + 1;
+    }
+  });
+
+  const labels = Object.keys(sum);
+  if (!labels.length) {
+    alert("Aucune donnée pour cette UV sur la période.");
+    return;
+  }
+
+  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
+
+  drawRadarChart(labels, averages, `UV ${uv}`);
 }
 
 
