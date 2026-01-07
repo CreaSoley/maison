@@ -1,0 +1,604 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tai-Jitsu Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Fredoka',Arial,sans-serif;background-image:linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%)}
+.container{padding:12px}
+.card{background:#fff;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 6px 12px rgba(0,0,0,.1)}
+h1,h2,h3{text-align:center}
+button{border:none;border-radius:14px;padding:10px 14px;font-family:'Fredoka';cursor:pointer;margin:4px 0}
+.btn-primary{background-image:linear-gradient(to right,#fa709a,#fee140);color:#fff}
+.btn-secondary{background:#84fab0;color:#fff}
+.btn-danger{background:#ff6b6b;color:#fff}
+button.active{background-image:linear-gradient(to top,#30cfd0,#330867);color:#fff}
+.accordion-header{font-weight:600;display:flex;justify-content:space-between;cursor:pointer}
+.accordion-content{display:none;margin-top:10px}
+.exercise{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #ddd}
+.exercise.active{background:#fff3cd;border-radius:10px;padding:6px}
+.progress{width:100%;height:10px;background:#eee;border-radius:10px;overflow:hidden;margin:6px 0}
+.progress-bar{height:100%;background-image:linear-gradient(to right,#fa709a,#fee140)}
+.timers{text-align:center;font-weight:600}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;justify-content:center;align-items:center;padding:12px}
+.modal-content{background:#fff;border-radius:18px;padding:14px;width:100%;max-height:90vh;overflow:auto}
+textarea{width:100%;border-radius:12px;padding:8px}
+.rating{display:flex;justify-content:space-between;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>🥋 Tai-Jitsu Coach</h1>
+
+<!-- OBJECTIFS -->
+<div class="card">
+  <div class="accordion-header" onclick="toggleAccordion(this)">
+    🎯 Objectifs hebdomadaires <span>⬇️</span>
+  </div>
+  <div class="accordion-content" id="objectifs">Chargement…</div>
+</div>
+
+<!-- BANQUE -->
+<div class="card">
+  <div class="accordion-header" onclick="toggleAccordion(this)">
+    📚 Banque d'exercices <span>⬇️</span>
+  </div>
+  <div class="accordion-content" id="bank"></div>
+</div>
+
+<!-- SÉLECTION -->
+<div class="card">
+  <h3>📝 Séance sélectionnée</h3>
+  <div id="selection"></div>
+  <button class="btn-secondary" onclick="clearSelection()">Vider</button>
+</div>
+
+<!-- SESSION -->
+<div class="card">
+  <h3>⏱️ Séance</h3>
+  <div class="progress"><div class="progress-bar" id="globalProgress"></div></div>
+  <div class="timers" id="timers">00:00 | 00:00</div>
+  <button class="btn-primary" id="startBtn" onclick="startSession()">Commencer</button>
+  <button class="btn-secondary" id="pauseBtn" onclick="pauseResume()">Pause</button>
+  <button class="btn-danger" onclick="stopSession()">Stop</button>
+</div>
+
+</div>
+<div class="card">
+ <button class="btn-primary" onclick="generatePDF()">📄 Générer le bilan PDF</button>
+
+</div>
+<!-- ================== Moyennes par exercice ================== -->
+<div class="card">
+  <h3>📊 Moyennes par exercice</h3>
+  <!-- Conteneur des filtres de dates et boutons -->
+<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
+  <label>Du <input type="date" id="fromDateChart"></label>
+  <label>Au <input type="date" id="toDateChart"></label>
+
+  <button class="btn-primary" onclick="showAverageByExercise()">
+    Moyenne par exercice
+  </button>
+
+  <button class="btn-secondary" onclick="showAverageByCriteria()">
+    Moyenne par critère
+  </button>
+
+  <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
+</div>
+<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
+  <select id="exerciseRadarSelect"></select>
+
+  <button class="btn-secondary" onclick="showRadarByExercise()">
+    📡 Radar par exercice
+  </button>
+</div>
+
+  <canvas id="exerciseChart" style="display:none"></canvas>
+</div>
+
+
+<!-- ÉVALUATION -->
+<div class="modal" id="evaluationModal">
+  <div class="modal-content">
+    <h2>📝 Auto-évaluation</h2>
+
+    <p style="font-size:14px;margin-bottom:6px">
+      <strong>Quel est ton ressenti après cette séance ?</strong><br>
+      Bilan général, points à améliorer, ce qui a progressé, sensations…
+    </p>
+
+    <textarea id="notes" rows="4"></textarea>
+
+    <div id="evaluation"></div>
+
+    <button class="btn-primary" onclick="saveEvaluation()">Valider</button>
+  </div>
+</div>
+
+
+<script>
+/* ================= CONFIG ================= */
+const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbx0j_0ec2NhHcNYv8KwPUPM6yV8yG_xXm3A0F03WR5R2mnDtSm1mfzqOA19R4g-sRVikw/exec";
+
+/* ================= DONNÉES ================= */
+const EXERCISES = [
+ {name:'UV1 : Kihon simples',criteria:['précision','kime','posture']},
+ {name:'UV1 : Enchaînements',criteria:['précision','kime','posture']},
+ {name:'UV1 : Cibles',criteria:['précision','kime','posture']},
+ {name:'UV2 : Taï sabaki',criteria:['fluidité','distance','contrôle']},
+ {name:'UV2 : Ippon kumite lent',criteria:['fluidité','distance','contrôle']},
+ {name:'UV2 : Ippon kumite examen',criteria:['fluidité','distance','contrôle']},
+ {name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
+ {name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
+ {name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
+ {name:'UV4: Technique de base',criteria:['réalisme','zanchin','protection']},
+ {name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
+ {name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
+ {name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
+];
+
+let selection=[],currentIndex=0,timer=null,paused=false;
+let remainingExercise=0,remainingGlobal=0;
+
+/* ================= OBJECTIFS ================= */
+async function fetchObjectivesFromSheet(){
+  try{
+    const r=await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
+    const data=await r.json();
+    renderObjectives(data);
+  }catch(e){
+    document.getElementById("objectifs").innerHTML="Erreur chargement objectifs";
+  }
+}
+
+function renderObjectives(list){
+  const div=document.getElementById("objectifs");
+  div.innerHTML="";
+  list.forEach(o=>{
+    const pct=o.ObjectifHebdo?Math.round((o.Réalisé/o.ObjectifHebdo)*100):0;
+    div.innerHTML+=`
+      <strong>${o.Exercice}</strong>
+      <div class="progress">
+        <div class="progress-bar" style="width:${pct}%"></div>
+      </div>
+      <small>${o.Réalisé}/${o.ObjectifHebdo} min (${pct}%)</small>
+    `;
+  });
+}
+
+/* ================= UI ================= */
+function toggleAccordion(h){
+  const c=h.nextElementSibling;
+  const a=h.querySelector("span");
+  const open=c.style.display==="block";
+  c.style.display=open?"none":"block";
+  a.textContent=open?"⬇️":"⬆️";
+}
+
+function renderBank(){
+  bank.innerHTML="";
+  EXERCISES.forEach(e=>{
+    bank.innerHTML+=`
+    <div class="exercise">
+      <span>${e.name}</span>
+      <button onclick="addExercise('${e.name}')">➕</button>
+    </div>`;
+  });
+}
+function populateRadarSelect() {
+  const select = document.getElementById("exerciseRadarSelect");
+  select.innerHTML = "";
+
+  EXERCISES.forEach(e => {
+    const opt = document.createElement("option");
+    opt.value = e.name;
+    opt.textContent = e.name;
+    select.appendChild(opt);
+  });
+}
+
+function addExercise(n){
+  selection.push({name:n,duration:10});
+  renderSelection();
+}
+
+function renderSelection(){
+  selectionDiv.innerHTML="";
+  selection.forEach((e,i)=>{
+    selectionDiv.innerHTML+=`
+    <div class="exercise ${i===currentIndex?'active':''}">
+      <span>${e.name}</span>
+      <input type="range" min="1" max="60" value="${e.duration}"
+        oninput="selection[${i}].duration=parseInt(this.value)">
+      <span>${e.duration} min</span>
+    </div>`;
+  });
+}
+
+function clearSelection(){selection=[];renderSelection()}
+
+/* ================= SESSION ================= */
+const ding=new Audio("ding.mp3");
+const beep=new Audio("beep.mp3");
+
+function speak(t){speechSynthesis.speak(new SpeechSynthesisUtterance(t))}
+
+// ==================== SYNTHÈSE ====================
+function startSession(){
+  if(!selection.length) return;
+  startBtn.disabled=true;
+  remainingGlobal = selection.reduce((s,e)=>s+e.duration*60,0);
+  speak("Bonjour, commençons l'entraînement !");
+  setTimeout(()=>runExerciseWithSpeech(0),2000);
+}
+
+function runExerciseWithSpeech(i){
+  if(i>=selection.length){endSession(); return;}
+  currentIndex=i;
+  renderSelection();
+  const ordinals=["premier","deuxième","troisième","quatrième","cinquième","sixième","septième","huitième","neuvième","dixième"];
+  speak(`${ordinals[i]||i+1} exercice, ${selection[i].name}`);
+  remainingExercise = selection[i].duration*60;
+
+  timer = setInterval(()=>{
+    if(!paused){
+      remainingExercise--; remainingGlobal--;
+      updateTimers(); updateProgress();
+      if(remainingExercise===10) speak("10 secondes");
+      if(remainingExercise<=0){
+        clearInterval(timer);
+        if(i<selection.length-1){
+          ding.play();
+          setTimeout(()=>runExerciseWithSpeech(i+1),500);
+        } else {
+          beep.play();
+          setTimeout(()=>endSessionSpeech(),3000);
+        }
+      }
+    }
+  },1000);
+}
+
+function endSessionSpeech(){
+  speak("Fin de l'entraînement, place à l'auto-évaluation");
+  evaluationModal.style.display="flex";
+  renderEvaluation();
+}
+
+/* ================= TIMER / PROGRESS ================= */
+function updateTimers(){ timers.textContent=`${fmt(remainingExercise)} | ${fmt(remainingGlobal)}` }
+function updateProgress(){
+  const total=selection.reduce((s,e)=>s+e.duration*60,0);
+  const done=total-remainingGlobal;
+  globalProgress.style.width=`${Math.round(done/total*100)}%`;
+}
+function pauseResume(){ paused=!paused; pauseBtn.textContent=paused?"Reprendre":"Pause"; pauseBtn.classList.toggle("active",paused); }
+function stopSession(){ clearInterval(timer); endSessionSpeech(); }
+function fmt(s){ return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0") }
+
+/* ================= GOOGLE SHEET ================= */
+function sendSessionToSheet(){
+  selection.forEach(ex=>{
+    const params = new URLSearchParams({
+      action:"addSession",
+      exercice:ex.name,
+      duree:ex.duration,
+      notes: notes.value || ""        // ✅ Ajout texte auto-évaluation
+    });
+    fetch(GOOGLE_API_URL + "?" + params.toString());
+  });
+}
+
+/* ================= ÉVALUATION ================= */
+function renderEvaluation(){
+  evaluation.innerHTML="";
+  selection.forEach(e=>{
+    const def=EXERCISES.find(x=>x.name===e.name);
+    if(!def) return;
+    evaluation.innerHTML+=`<h4>${e.name}</h4>`;
+    def.criteria.forEach(c=>{
+  evaluation.innerHTML += `
+    <div style="margin-bottom:10px">
+      <label style="font-size:13px;font-weight:600">
+        ${c} : <span id="val-${e.name}-${c}">3</span>/5
+      </label>
+      <input
+        type="range"
+        min="1"
+        max="5"
+        value="3"
+        step="1"
+        style="width:100%"
+        data-exercice="${e.name}"
+        data-critere="${c}"
+        oninput="document.getElementById('val-${e.name}-${c}').textContent=this.value"
+      >
+    </div>
+  `;
+});
+
+  });
+}
+
+/* ================= PDF ================= */
+async function generatePDF(){
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  let y=10;
+
+  pdf.setFontSize(16);
+  pdf.text("Bilan hebdomadaire Tai-Jitsu",10,y); y+=10;
+
+  // Objectifs
+  const r = await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
+  const goals = await r.json();
+  pdf.setFontSize(12);
+  pdf.text("Objectifs hebdomadaires",10,y); y+=6;
+  goals.forEach(g=>{
+    const pct = Math.round((g.Réalisé/g.ObjectifHebdo)*100);
+    pdf.text(`${g.Exercice} : ${pct}%`,10,y);
+    pdf.rect(10,y+2,100,4);
+    pdf.rect(10,y+2,pct,4,"F");
+    y+=10;
+  });
+
+  // Notes 7 derniers jours
+  const e = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
+  const evals = await e.json();
+  pdf.addPage(); y=10;
+  pdf.text("Notes – 7 derniers jours",10,y); y+=8;
+  evals.slice(-7).forEach(ev=>{
+    pdf.text(`${ev.Date} – ${ev.Exercice}`,10,y);
+    y+=5;
+    pdf.text(ev.Notes || "",12,y);     // ✅ texte auto-évaluation
+    y+=8;
+  });
+
+  pdf.save("bilan_tai_jitsu.pdf");
+}
+
+/* ================= SAVE ÉVALUATION ================= */
+async function saveEvaluation(){
+  sendSessionToSheet(); // ✅ ENREGISTRE LA SESSION + NOTES
+  const dataByExercise = {};
+
+  document
+  .querySelectorAll("#evaluation input[type=range]")
+  .forEach(r=>{
+
+      const ex = r.dataset.exercice;
+      const crit = r.dataset.critere;
+
+      if(!ex || !crit) return;
+
+      dataByExercise[ex] ??= {};
+      dataByExercise[ex][crit] = Number(r.value);
+    });
+
+  for(const ex in dataByExercise){
+    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
+      action: "addEvaluation",
+      exercice: ex,
+      criteres: JSON.stringify(dataByExercise[ex])
+    }));
+  }
+
+  location.reload();
+}
+
+/* ================= STATS ================= */
+let exerciseChartObj = null; // référence du graphique
+
+async function showAverageByExercise() {
+  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
+  const to = toDateChart.value ? new Date(toDateChart.value) : null;
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  const sum = {};
+  const count = {};
+
+  data.forEach(ev => {
+    const d = new Date(ev.Date);
+    if (from && d < from) return;
+    if (to && d > to) return;
+
+    const criteres = JSON.parse(ev.Critères);
+    let total = 0;
+    let n = 0;
+
+    for (const c in criteres) {
+      total += criteres[c];
+      n++;
+    }
+
+    if (!n) return;
+
+    sum[ev.Exercice] = (sum[ev.Exercice] || 0) + total / n;
+    count[ev.Exercice] = (count[ev.Exercice] || 0) + 1;
+  });
+
+  const labels = Object.keys(sum);
+  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
+
+  drawBarChart(labels, averages, "Moyenne par exercice");
+}
+async function showAverageByCriteria() {
+  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
+  const to = toDateChart.value ? new Date(toDateChart.value) : null;
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  const sum = {};
+  const count = {};
+
+  data.forEach(ev => {
+    const d = new Date(ev.Date);
+    if (from && d < from) return;
+    if (to && d > to) return;
+
+    const criteres = JSON.parse(ev.Critères);
+
+    for (const c in criteres) {
+      sum[c] = (sum[c] || 0) + criteres[c];
+      count[c] = (count[c] || 0) + 1;
+    }
+  });
+
+  const labels = Object.keys(sum);
+  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
+
+  drawBarChart(labels, averages, "Moyenne par critère");
+}
+
+function drawBarChart(labels, data, title) {
+  const canvas = document.getElementById("exerciseChart");
+  const ctx = canvas.getContext("2d");
+
+  canvas.style.display = "block";
+  if (exerciseChartObj) exerciseChartObj.destroy();
+
+  exerciseChartObj = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: title,
+        data,
+        backgroundColor: "#84fab0"
+      }]
+    },
+    plugins: [ChartDataLabels],
+    options: {
+      responsive: true,
+      plugins: {
+        datalabels: {
+          anchor: "end",
+          align: "top",
+          formatter: v => v
+        }
+      },
+      scales: {
+        y: {
+          min: 0,
+          max: 5
+        }
+      }
+    }
+  });
+}
+
+function hideExerciseChart() {
+  if (exerciseChartObj) exerciseChartObj.destroy();
+  document.getElementById("exerciseChart").style.display = "none";
+}
+async function showRadarByExercise() {
+  const exercice = document.getElementById("exerciseRadarSelect").value;
+  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
+  const to = toDateChart.value ? new Date(toDateChart.value) : null;
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  const sum = {};
+  const count = {};
+
+  data.forEach(ev => {
+    if (ev.Exercice !== exercice) return;
+
+    const d = new Date(ev.Date);
+    if (from && d < from) return;
+    if (to && d > to) return;
+
+    const criteres = JSON.parse(ev.Critères);
+    for (const c in criteres) {
+      sum[c] = (sum[c] || 0) + criteres[c];
+      count[c] = (count[c] || 0) + 1;
+    }
+  });
+
+  const labels = Object.keys(sum);
+  if (!labels.length) {
+    alert("Aucune donnée pour cet exercice sur la période.");
+    return;
+  }
+
+  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
+
+  drawRadarChart(labels, averages, exercice);
+}
+function drawRadarChart(labels, data, title) {
+  const canvas = document.getElementById("exerciseChart");
+  const ctx = canvas.getContext("2d");
+
+  canvas.style.display = "block";
+  if (exerciseChartObj) exerciseChartObj.destroy();
+
+  exerciseChartObj = new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels,
+      datasets: [{
+        label: title,
+        data,
+        fill: true,
+        backgroundColor: "rgba(132,250,176,0.3)",
+        borderColor: "#84fab0",
+        pointBackgroundColor: "#fa709a"
+      }]
+    },
+    options: {
+      scales: {
+        r: {
+          min: 0,
+          max: 5,
+          ticks: { stepSize: 1 }
+        }
+      }
+    }
+  });
+}
+
+
+/* ================= INIT ================= */
+const bank=document.getElementById("bank");
+const selectionDiv=document.getElementById("selection");
+const timers=document.getElementById("timers");
+const globalProgress=document.getElementById("globalProgress");
+const startBtn=document.getElementById("startBtn");
+const pauseBtn=document.getElementById("pauseBtn");
+const evaluation=document.getElementById("evaluation");
+const evaluationModal=document.getElementById("evaluationModal");
+const notes=document.getElementById("notes");
+
+window.addEventListener("DOMContentLoaded", () => {
+  renderBank();
+  fetchObjectivesFromSheet();
+  flatpickr("#fromDateChart", { dateFormat: "Y-m-d" });
+  flatpickr("#toDateChart", { dateFormat: "Y-m-d" });
+  populateRadarSelect();
+
+  // ✅ Enregistrer le plugin DataLabels
+  Chart.register(ChartDataLabels);
+});
+
+</script>
+
+</body>
+</html>
