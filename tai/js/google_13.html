@@ -802,124 +802,142 @@ function drawUVEvolutionChart(labels, data, uv) {
 let journalChartObj = null;
 
 async function loadJournal() {
-  const dateInput = document.getElementById("journalDate").value;
-  if (!dateInput) return alert("Sélectionne une date");
+  const date = journalDate.value;
+  if(!date) return alert("Sélectionne une date");
 
   const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
   const data = await r.json();
 
-  const dayData = data.filter(ev => ev.Date.startsWith(dateInput));
-  if (!dayData.length) {
-    document.getElementById("journalDetails").innerHTML =
-      "<p>Aucune séance pour cette date.</p>";
-    if (journalChartObj) journalChartObj.destroy();
-    document.getElementById("journalChart").style.display = "none";
+  // Filtre par date (juste YYYY-MM-DD)
+  const daily = data.filter(ev => ev.Date.slice(0,10) === date);
+
+  if(!daily.length) {
+    journalDetails.innerHTML = "<em>Aucune note pour cette date</em>";
+    journalChart.style.display = "none";
     return;
   }
 
-  // Durées cumulées par exercice
-  const durationByEx = {};
-  dayData.forEach(ev => {
-    const crit = JSON.parse(ev.Critères);
-    const total = Object.values(crit).reduce((a, b) => a + b, 0);
-    durationByEx[ev.Exercice] = (durationByEx[ev.Exercice] || 0) + total;
-  });
+  // Construire le contenu HTML du journal
+  journalDetails.innerHTML = "";
+  const exerciseDurations = {};
+  const criteriaSum = {};
+  const criteriaCount = {};
 
-  // Moyennes par critère
-  const sumCrit = {}, countCrit = {};
-  dayData.forEach(ev => {
+  daily.forEach(ev => {
     const crit = JSON.parse(ev.Critères);
-    for (const k in crit) {
-      sumCrit[k] = (sumCrit[k] || 0) + crit[k];
-      countCrit[k] = (countCrit[k] || 0) + 1;
+
+    // cumul par exercice
+    exerciseDurations[ev.Exercice] = (exerciseDurations[ev.Exercice] || 0) + (ev.Duree || 0);
+
+    // cumul par critère
+    for(const k in crit) {
+      criteriaSum[k] = (criteriaSum[k] || 0) + crit[k];
+      criteriaCount[k] = (criteriaCount[k] || 0) + 1;
+    }
+
+    // notes écrites
+    if(ev.Notes && ev.Notes.trim() !== "") {
+      const p = document.createElement("p");
+      p.textContent = ev.Notes;
+      p.style.fontFamily = "JBCursive, cursive";
+      p.style.background = "#fff3cd";
+      p.style.padding = "6px";
+      p.style.borderRadius = "8px";
+      p.style.marginBottom = "4px";
+      journalDetails.appendChild(p);
     }
   });
-  const avgCrit = {};
-  for (const k in sumCrit) avgCrit[k] = (sumCrit[k] / countCrit[k]).toFixed(2);
 
-  // Notes écrites
-  const notesList = dayData
-    .map(ev => `<p style="font-family:'JBCursive'; margin:4px 0;">📍 ${ev.Notes || '–'}</p>`)
-    .join("");
-
-  // Génération HTML
-  const detailsDiv = document.getElementById("journalDetails");
-  let html = `<h2 style="font-family:'SuperMeatball'; font-size:26px; color:#fa709a;">
-                Carnet d’entraînement — ${dateInput}
-              </h2>`;
-
-  html += `<h3>⏱️ Durées par exercice</h3><ul>`;
-  for (const ex in durationByEx) {
-    html += `<li>${ex} : ${durationByEx[ex]} min</li>`;
+  // Afficher durées par exercice
+  for(const ex in exerciseDurations) {
+    const p = document.createElement("p");
+    p.textContent = `${ex} : ${exerciseDurations[ex]} min`;
+    p.style.fontFamily = "JBCursive, cursive";
+    p.style.fontWeight = "600";
+    journalDetails.appendChild(p);
   }
-  html += `</ul>`;
 
-  html += `<h3>📝 Notes</h3>${notesList}`;
+  // Afficher radar des moyennes par critère
+  const labels = Object.keys(criteriaSum);
+  const averages = labels.map(k => criteriaSum[k]/criteriaCount[k]);
 
-  html += `<h3>📊 Moyennes par critère</h3><ul>`;
-  for (const k in avgCrit) {
-    html += `<li>${k} : ${avgCrit[k]}</li>`;
-  }
-  html += `</ul>`;
+  const ctx = journalChart.getContext("2d");
+  journalChart.style.display = "block";
 
-  detailsDiv.innerHTML = html;
-
-  // Radar chart
-  const ctx = document.getElementById("journalChart").getContext("2d");
-  document.getElementById("journalChart").style.display = "block";
-  if (journalChartObj) journalChartObj.destroy();
-
-  journalChartObj = new Chart(ctx, {
+  if(window.journalChartObj) window.journalChartObj.destroy();
+  window.journalChartObj = new Chart(ctx, {
     type: "radar",
     data: {
-      labels: Object.keys(avgCrit),
+      labels,
       datasets: [{
-        label: "Moyenne par critère",
-        data: Object.values(avgCrit),
-        backgroundColor: "rgba(255, 99, 132, 0.25)",
-        borderColor: "#fa709a",
+        label: "Moyenne du jour",
+        data: averages,
+        backgroundColor: "rgba(132, 250, 176, 0.5)",
+        borderColor: "#84fab0",
         borderWidth: 2,
-        pointBackgroundColor: "#fa709a"
       }]
     },
-    options: {
-      scales: { r: { min: 0, max: 5, ticks: { stepSize: 1 } } },
-      plugins: { legend: { display: true } }
-    }
+    options: { scales: { r: { min: 0, max: 5 } } }
   });
 }
 
-// PDF simple et joli (pas de polices custom)
 async function generateJournalPDF() {
-  const dateInput = document.getElementById("journalDate").value;
-  if (!dateInput) return alert("Sélectionne une date");
+  const date = journalDate.value;
+  if(!date) return alert("Sélectionne une date");
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+  const daily = data.filter(ev => ev.Date.slice(0,10) === date);
+
+  if(!daily.length) return alert("Aucune donnée pour cette date");
 
   const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p','mm','a4');
+  const pdf = new jsPDF();
+  let y = 10;
 
-  pdf.setFont("helvetica");
-  pdf.setFontSize(20);
-  pdf.setTextColor(250, 112, 154);
-  pdf.text(`Carnet d’entraînement — ${dateInput}`, 10, 20);
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.text(`Carnet d’entraînement - ${date}`, 10, y); y += 12;
 
-  pdf.setFont("times");
+  // Notes
+  pdf.setFont("times", "normal");
   pdf.setFontSize(12);
-  pdf.setTextColor(0,0,0);
 
-  let y = 30;
-  const details = document.getElementById("journalDetails").innerText.split("\n");
-  details.forEach(line => {
-    if (y > 280) { pdf.addPage(); y = 10; }
-    pdf.text(line, 10, y);
-    y += 6;
+  daily.forEach(ev => {
+    if(ev.Notes && ev.Notes.trim() !== "") {
+      pdf.text(`Exercice: ${ev.Exercice}`, 10, y); y+=6;
+      pdf.text(ev.Notes, 12, y); y+=10;
+    }
   });
 
-  // Ajouter graphique
-  const chartCanvas = document.getElementById("journalChart");
-  const imgData = chartCanvas.toDataURL('image/png');
-  pdf.addImage(imgData, 'PNG', 10, y, 180, 100);
+  // Durées cumulées par exercice
+  const exerciseDurations = {};
+  daily.forEach(ev => exerciseDurations[ev.Exercice] = (exerciseDurations[ev.Exercice]||0) + (ev.Duree||0));
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Durée cumulée par exercice:", 10, y); y+=6;
+  pdf.setFont("times", "normal");
+  for(const ex in exerciseDurations) {
+    pdf.text(`${ex} : ${exerciseDurations[ex]} min`, 12, y); y+=6;
+  }
 
-  pdf.output("dataurlnewwindow"); // ouvre PDF dans nouvelle fenêtre
+  // Moyennes par critère
+  const criteriaSum = {}, criteriaCount = {};
+  daily.forEach(ev => {
+    const crit = JSON.parse(ev.Critères);
+    for(const k in crit) {
+      criteriaSum[k] = (criteriaSum[k]||0) + crit[k];
+      criteriaCount[k] = (criteriaCount[k]||0) + 1;
+    }
+  });
+  const labels = Object.keys(criteriaSum);
+  const averages = labels.map(k => (criteriaSum[k]/criteriaCount[k]).toFixed(2));
+
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Moyennes par critère:", 10, y); y+=6;
+  pdf.setFont("times", "normal");
+  labels.forEach((k,i) => pdf.text(`${k} : ${averages[i]}`, 12, y+=6));
+
+  pdf.save(`Carnet_${date}.pdf`);
 }
 
 /* ================= INIT ================= */
