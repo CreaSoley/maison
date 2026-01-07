@@ -15,17 +15,27 @@
 
 
 <style>
-  
-/* POLICES PERSONNALISÉES */
-<style>
-@font-face {
-  font-family: "SuperMeatball";
-  src: url("SuperMeatball.ttf") format("truetype");
-}
-@font-face {
-  font-family: "JBCursive";
-  src: url("JBCursive.otf") format("opentype");
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Fredoka',Arial,sans-serif;background-image:linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%)}
+.container{padding:12px}
+.card{background:#fff;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 6px 12px rgba(0,0,0,.1)}
+h1,h2,h3{text-align:center}
+button{border:none;border-radius:14px;padding:10px 14px;font-family:'Fredoka';cursor:pointer;margin:4px 0}
+.btn-primary{background-image:linear-gradient(to right,#fa709a,#fee140);color:#fff}
+.btn-secondary{background:#84fab0;color:#fff}
+.btn-danger{background:#ff6b6b;color:#fff}
+button.active{background-image:linear-gradient(to top,#30cfd0,#330867);color:#fff}
+.accordion-header{font-weight:600;display:flex;justify-content:space-between;cursor:pointer}
+.accordion-content{display:none;margin-top:10px}
+.exercise{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #ddd}
+.exercise.active{background:#fff3cd;border-radius:10px;padding:6px}
+.progress{width:100%;height:10px;background:#eee;border-radius:10px;overflow:hidden;margin:6px 0}
+.progress-bar{height:100%;background-image:linear-gradient(to right,#fa709a,#fee140)}
+.timers{text-align:center;font-weight:600}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;justify-content:center;align-items:center;padding:12px}
+.modal-content{background:#fff;border-radius:18px;padding:14px;width:100%;max-height:90vh;overflow:auto}
+textarea{width:100%;border-radius:12px;padding:8px}
+.rating{display:flex;justify-content:space-between;font-size:12px}
 </style>
 </head>
 <body>
@@ -71,24 +81,6 @@
  <button class="btn-primary" onclick="generatePDF()">📄 Générer le bilan PDF</button>
 
 </div>
-  <!-- ================== Carnet d’entraînement ================== -->
-<div class="card">
-  <div class="accordion-header" onclick="toggleAccordion(this)">
-    📝 Carnet d’entraînement <span>⬇️</span>
-  </div>
-  <div class="accordion-content" id="journalContent" style="padding:10px;">
-    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
-      <label>Choisir la date :
-        <input type="date" id="journalDate">
-      </label>
-      <button class="btn-primary" onclick="loadJournal()">Afficher</button>
-      <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
-    </div>
-    <div id="journalDetails" style="font-family:Arial;"></div>
-    <canvas id="journalChart" style="display:none; margin-top:10px;"></canvas>
-  </div>
-</div>
-
 <!-- ================== Moyennes par exercice ================== -->
 <div class="card">
   <h3>📊 Moyennes par exercice</h3>
@@ -801,160 +793,6 @@ function drawUVEvolutionChart(labels, data, uv) {
     },
     plugins: [ChartDataLabels]
   });
-}
-// ================== JOURNAL D’ENTRAÎNEMENT ==================
-let journalChartObj = null;
-
-async function loadJournal() {
-  const dateInput = document.getElementById("journalDate").value;
-  if (!dateInput) return alert("Sélectionne une date");
-
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
-
-  const dayData = data.filter(ev => ev.Date.startsWith(dateInput));
-  if (!dayData.length) {
-    document.getElementById("journalDetails").innerHTML =
-      "<p>Aucune séance pour cette date.</p>";
-    if (journalChartObj) journalChartObj.destroy();
-    document.getElementById("journalChart").style.display = "none";
-    return;
-  }
-
-  // Durées cumulées par exercice
-  const durationByEx = {};
-  dayData.forEach(ev => {
-    const crit = JSON.parse(ev.Critères);
-    const total = Object.values(crit).reduce((a, b) => a + b, 0);
-    durationByEx[ev.Exercice] = (durationByEx[ev.Exercice] || 0) + total;
-  });
-
-  // Moyennes par critère
-  const sumCrit = {}, countCrit = {};
-  dayData.forEach(ev => {
-    const crit = JSON.parse(ev.Critères);
-    for (const k in crit) {
-      sumCrit[k] = (sumCrit[k] || 0) + crit[k];
-      countCrit[k] = (countCrit[k] || 0) + 1;
-    }
-  });
-  const avgCrit = {};
-  for (const k in sumCrit) avgCrit[k] = (sumCrit[k] / countCrit[k]).toFixed(2);
-
-  // Notes écrites
-  const notesList = dayData
-    .map(ev => `<p style="font-family:'JBCursive'; margin:4px 0;">📍 ${ev.Notes || '–'}</p>`)
-    .join("");
-
-  // Génération HTML
-  const detailsDiv = document.getElementById("journalDetails");
-  let html = `<h2 style="font-family:'SuperMeatball'; font-size:26px; color:#fa709a;">
-                Carnet d’entraînement — ${dateInput}
-              </h2>`;
-
-  html += `<h3>⏱️ Durées par exercice</h3><ul>`;
-  for (const ex in durationByEx) {
-    html += `<li>${ex} : ${durationByEx[ex]} min</li>`;
-  }
-  html += `</ul>`;
-
-  html += `<h3>📝 Notes</h3>${notesList}`;
-
-  html += `<h3>📊 Moyennes par critère</h3><ul>`;
-  for (const k in avgCrit) {
-    html += `<li>${k} : ${avgCrit[k]}</li>`;
-  }
-  html += `</ul>`;
-
-  detailsDiv.innerHTML = html;
-
-  // Radar chart
-  const ctx = document.getElementById("journalChart").getContext("2d");
-  document.getElementById("journalChart").style.display = "block";
-  if (journalChartObj) journalChartObj.destroy();
-
-  journalChartObj = new Chart(ctx, {
-    type: "radar",
-    data: {
-      labels: Object.keys(avgCrit),
-      datasets: [{
-        label: "Moyenne par critère",
-        data: Object.values(avgCrit),
-        backgroundColor: "rgba(255, 99, 132, 0.25)",
-        borderColor: "#fa709a",
-        borderWidth: 2,
-        pointBackgroundColor: "#fa709a"
-      }]
-    },
-    options: {
-      scales: { r: { min: 0, max: 5, ticks: { stepSize: 1 } } },
-      plugins: { legend: { display: true } }
-    }
-  });
-}
-
-// PDF simple et joli (pas de polices custom)
-async function generateJournalPDF() {
-  const dateInput = document.getElementById("journalDate").value;
-  if (!dateInput) return alert("Sélectionne une date");
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p','mm','a4');
-
-  pdf.setFont("helvetica");
-  pdf.setFontSize(20);
-  pdf.setTextColor(250, 112, 154);
-  pdf.text(`Carnet d’entraînement — ${dateInput}`, 10, 20);
-
-  pdf.setFont("times");
-  pdf.setFontSize(12);
-  pdf.setTextColor(0,0,0);
-
-  let y = 30;
-  const details = document.getElementById("journalDetails").innerText.split("\n");
-  details.forEach(line => {
-    if (y > 280) { pdf.addPage(); y = 10; }
-    pdf.text(line, 10, y);
-    y += 6;
-  });
-
-  // Ajouter graphique
-  const chartCanvas = document.getElementById("journalChart");
-  const imgData = chartCanvas.toDataURL('image/png');
-  pdf.addImage(imgData, 'PNG', 10, y, 180, 100);
-
-  pdf.output("dataurlnewwindow"); // ouvre PDF dans nouvelle fenêtre
-}
-
-
-  // Ajout des polices
-  pdf.addFileToVFS("SuperMeatball.ttf","AAEAAA...BASE64..."); // coller Base64 complet
-  pdf.addFont("SuperMeatball.ttf","SuperMeatball","normal");
-  pdf.addFileToVFS("JBCursive.otf","T1RUTwA...BASE64...");
-  pdf.addFont("JBCursive.otf","JBCursive","normal");
-
-  pdf.setFont("SuperMeatball");
-  pdf.setFontSize(20);
-  pdf.text(`Carnet d’entraînement  —  ${dateInput}`, 10, 20);
-
-  pdf.setFont("JBCursive");
-  pdf.setFontSize(12);
-
-  let y = 30;
-  const details = document
-    .getElementById("journalDetails")
-    .innerText.split("\n");
-  details.forEach(line => {
-    pdf.text(line, 10, y);
-    y += 6;
-  });
-
-  // Graphique en image
-  const chartCanvas = document.getElementById("journalChart");
-  const imgData = chartCanvas.toDataURL('image/png');
-  pdf.addImage(imgData, 'PNG', 10, y, 180, 100);
-
-  pdf.output("dataurlnewwindow");
 }
 
 
