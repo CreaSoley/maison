@@ -104,6 +104,10 @@ textarea{width:100%;border-radius:12px;padding:8px}
   <button class="btn-secondary" onclick="compareUVRadar()">
   🧭 Comparer plusieurs UV
 </button>
+  
+<button class="btn-secondary" onclick="showUVEvolution()">
+  📈 Évolution d’une UV
+</button>
 
   <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
 </div>
@@ -516,6 +520,50 @@ function hideExerciseChart() {
   if (exerciseChartObj) exerciseChartObj.destroy();
   document.getElementById("exerciseChart").style.display = "none";
 }
+  async function showUVEvolution() {
+  const uv = prompt("Quelle UV ? (ex : UV1, UV2, UV3)");
+  if (!uv) return;
+
+  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
+  const to = toDateChart.value ? new Date(toDateChart.value) : null;
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  // Regroupement par date
+  const byDate = {};
+
+  data.forEach(ev => {
+    if (!ev.Exercice.startsWith(uv)) return;
+
+    const d = new Date(ev.Date);
+    if (from && d < from) return;
+    if (to && d > to) return;
+
+    const day = ev.Date.slice(0, 10); // YYYY-MM-DD
+    const crit = JSON.parse(ev.Critères);
+
+    byDate[day] ??= { sum: 0, count: 0 };
+
+    for (const c in crit) {
+      byDate[day].sum += crit[c];
+      byDate[day].count++;
+    }
+  });
+
+  const labels = Object.keys(byDate).sort();
+  const values = labels.map(d =>
+    (byDate[d].sum / byDate[d].count).toFixed(2)
+  );
+
+  if (!labels.length) {
+    alert("Aucune donnée pour cette UV sur la période.");
+    return;
+  }
+
+  drawUVEvolutionChart(labels, values, uv);
+}
+
 async function showRadarByExercise() {
   const exercice = document.getElementById("exerciseRadarSelect").value;
   const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
@@ -705,6 +753,45 @@ function drawMultiRadar(labels, datasets) {
         legend: { position: "top" }
       }
     }
+  });
+}
+let uvEvolutionChart = null;
+
+function drawUVEvolutionChart(labels, data, uv) {
+  const canvas = document.getElementById("exerciseChart");
+  canvas.style.display = "block";
+
+  const ctx = canvas.getContext("2d");
+  if (uvEvolutionChart) uvEvolutionChart.destroy();
+
+  uvEvolutionChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: `Évolution ${uv}`,
+        data,
+        tension: 0.3,
+        fill: false
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          min: 0,
+          max: 5,
+          ticks: { stepSize: 1 }
+        }
+      },
+      plugins: {
+        legend: { display: true },
+        datalabels: {
+          align: "top",
+          formatter: v => v
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
   });
 }
 
