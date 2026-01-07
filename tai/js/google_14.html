@@ -435,7 +435,9 @@ async function generatePDF(){
 
 /* ================= SAVE ÉVALUATION ================= */
 async function saveEvaluation(){
-  sendSessionToSheet(); // ✅ ENREGISTRE LA SESSION + NOTES
+  sendSessionToSheet();     // exercices + durées
+  await sendSessionNotes(); // 📝 UNE SEULE NOTE
+
   const dataByExercise = {};
 
   document
