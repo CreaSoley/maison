@@ -391,7 +391,7 @@ async function showExerciseAverages() {
     if (fromDateChart.value && d < from) return;
     if (toDateChart.value && d > to) return;
 
-    const crit = JSON.parse(ev.Critères);
+    const crit = JSON.parse(ev.Criteres);
     for (const k in crit) {
       sum[k] = (sum[k] || 0) + crit[k];
       count[k] = (count[k] || 0) + 1;
