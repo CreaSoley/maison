@@ -85,6 +85,9 @@ textarea{width:100%;border-radius:12px;padding:8px}
   <canvas id="statsChart"></canvas>
 </div>
 
+<button class="btn-secondary" onclick="showExerciseAverages()">📊 Moyennes par exercice</button>
+<canvas id="exerciseChart"></canvas>
+
 <!-- ÉVALUATION -->
 <div class="modal" id="evaluationModal">
   <div class="modal-content">
@@ -389,6 +392,46 @@ async function showStats(){
       datasets:[{label:"Moyenne",data:avg,backgroundColor:"#84fab0"}]
     },
     options:{scales:{y:{min:0,max:5}}}
+  });
+}
+async function showExerciseAverages(){
+  const r = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
+  const data = await r.json();
+
+  // Calcul des moyennes par exercice
+  const sum={}, count={};
+
+  data.forEach(ev=>{
+    const criteres = JSON.parse(ev.Critères || "{}");
+    const values = Object.values(criteres);
+    if(values.length === 0) return;
+    const total = values.reduce((a,b)=>a+b,0);
+    const avg = total / values.length;
+
+    const ex = ev.Exercice;
+    sum[ex] = (sum[ex]||0) + avg;
+    count[ex] = (count[ex]||0) + 1;
+  });
+
+  const labels = Object.keys(sum);
+  const averages = labels.map(ex => Math.round((sum[ex]/count[ex])*100)/100);
+
+  // Affichage graphique
+  const ctx = document.getElementById("exerciseChart").getContext("2d");
+  if(window.exerciseChartObj) window.exerciseChartObj.destroy(); // supprime ancien graphique si présent
+  window.exerciseChartObj = new Chart(ctx,{
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Moyenne par exercice',
+        data: averages,
+        backgroundColor: '#84fab0'
+      }]
+    },
+    options:{
+      scales:{y:{min:0,max:5}}
+    }
   });
 }
 
