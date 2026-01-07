@@ -162,32 +162,25 @@ const EXERCISES = [
  {name:'UV3 : Kata lent',criteria:['exactitude','kime','équilibre']},
  {name:'UV3 : Kata examen',criteria:['exactitude','kime','équilibre']},
  {name:'UV3 : Bunkaï',criteria:['exactitude','kime','équilibre']},
- {name:'UV4: Technique de base',criteria:['réalisme','zanchin','protection']},
+ {name:'UV4 : Technique de base',criteria:['réalisme','zanchin','protection']},
  {name:'UV5-6 : Self-defense arme',criteria:['réalisme','zanchin','protection']},
  {name:'UV5-6 : Self-defense atemi',criteria:['réalisme','zanchin','protection']},
  {name:'UV5-6 : Self-defense saisie',criteria:['réalisme','zanchin','protection']}
 ];
 
-let selection=[],currentIndex=0,timer=null,paused=false;
-let remainingExercise=0,remainingGlobal=0;
-
 /* ================= OBJECTIFS ================= */
 async function fetchObjectivesFromSheet(){
-  try{
-    const r=await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
-    const data=await r.json();
-    renderObjectives(data);
-  }catch(e){
-    document.getElementById("objectifs").innerHTML="Erreur chargement objectifs";
-  }
-}
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchObjectives");
+  const data = await r.json();
+  const div = document.getElementById("objectifs");
+  div.innerHTML = "";
 
-function renderObjectives(list){
-  const div=document.getElementById("objectifs");
-  div.innerHTML="";
-  list.forEach(o=>{
-    const pct=o.ObjectifHebdo?Math.round((o.Réalisé/o.ObjectifHebdo)*100):0;
-    div.innerHTML+=`
+  data.forEach(o => {
+    const pct = o.ObjectifHebdo
+      ? Math.round((o.Réalisé / o.ObjectifHebdo) * 100)
+      : 0;
+
+    div.innerHTML += `
       <strong>${o.Exercice}</strong>
       <div class="progress">
         <div class="progress-bar" style="width:${pct}%"></div>
@@ -197,301 +190,47 @@ function renderObjectives(list){
   });
 }
 
-/* ================= UI ================= */
-function toggleAccordion(h){
-  const c=h.nextElementSibling;
-  const a=h.querySelector("span");
-  const open=c.style.display==="block";
-  c.style.display=open?"none":"block";
-  a.textContent=open?"⬇️":"⬆️";
-}
-
+/* ================= BANQUE ================= */
 function renderBank(){
-  bank.innerHTML="";
+  const bank = document.getElementById("bank");
+  bank.innerHTML = "";
   EXERCISES.forEach(e=>{
-    bank.innerHTML+=`
-    <div class="exercise">
-      <span>${e.name}</span>
-      <button onclick="addExercise('${e.name}')">➕</button>
-    </div>`;
+    bank.innerHTML += `
+      <div class="exercise">
+        <span>${e.name}</span>
+        <button onclick="addExercise('${e.name}')">➕</button>
+      </div>
+    `;
   });
-}
-function populateRadarSelect() {
-  const select = document.getElementById("exerciseRadarSelect");
-  select.innerHTML = "";
-
-  EXERCISES.forEach(e => {
-    const opt = document.createElement("option");
-    opt.value = e.name;
-    opt.textContent = e.name;
-    select.appendChild(opt);
-  });
-}
-
-function addExercise(n){
-  selection.push({name:n,duration:10});
-  renderSelection();
-}
-
-function renderSelection(){
-  selectionDiv.innerHTML="";
-  selection.forEach((e,i)=>{
-    selectionDiv.innerHTML+=`
-    <div class="exercise ${i===currentIndex?'active':''}">
-      <span>${e.name}</span>
-      <input type="range" min="1" max="60" value="${e.duration}"
-        oninput="selection[${i}].duration=parseInt(this.value)">
-      <span>${e.duration} min</span>
-    </div>`;
-  });
-}
-
-function clearSelection(){selection=[];renderSelection()}
-
-/* ================= SESSION ================= */
-const ding=new Audio("ding.mp3");
-const beep=new Audio("beep.mp3");
-
-function speak(t){speechSynthesis.speak(new SpeechSynthesisUtterance(t))}
-
-// ==================== SYNTHÈSE ====================
-function startSession(){
-  if(!selection.length) return;
-  startBtn.disabled=true;
-  remainingGlobal = selection.reduce((s,e)=>s+e.duration*60,0);
-  speak("Bonjour, commençons l'entraînement !");
-  setTimeout(()=>runExerciseWithSpeech(0),2000);
-}
-
-function runExerciseWithSpeech(i){
-  if(i>=selection.length){endSession(); return;}
-  currentIndex=i;
-  renderSelection();
-  const ordinals=["premier","deuxième","troisième","quatrième","cinquième","sixième","septième","huitième","neuvième","dixième"];
-  speak(`${ordinals[i]||i+1} exercice, ${selection[i].name}`);
-  remainingExercise = selection[i].duration*60;
-
-  timer = setInterval(()=>{
-    if(!paused){
-      remainingExercise--; remainingGlobal--;
-      updateTimers(); updateProgress();
-      if(remainingExercise===10) speak("10 secondes");
-      if(remainingExercise<=0){
-        clearInterval(timer);
-        if(i<selection.length-1){
-          ding.play();
-          setTimeout(()=>runExerciseWithSpeech(i+1),500);
-        } else {
-          beep.play();
-          setTimeout(()=>endSessionSpeech(),3000);
-        }
-      }
-    }
-  },1000);
-}
-
-function endSessionSpeech(){
-  speak("Fin de l'entraînement, place à l'auto-évaluation");
-  evaluationModal.style.display="flex";
-  renderEvaluation();
-}
-
-/* ================= TIMER / PROGRESS ================= */
-function updateTimers(){ timers.textContent=`${fmt(remainingExercise)} | ${fmt(remainingGlobal)}` }
-function updateProgress(){
-  const total=selection.reduce((s,e)=>s+e.duration*60,0);
-  const done=total-remainingGlobal;
-  globalProgress.style.width=`${Math.round(done/total*100)}%`;
-}
-function pauseResume(){ paused=!paused; pauseBtn.textContent=paused?"Reprendre":"Pause"; pauseBtn.classList.toggle("active",paused); }
-function stopSession(){ clearInterval(timer); endSessionSpeech(); }
-function fmt(s){ return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0") }
-
-/* ================= GOOGLE SHEET ================= */
-function sendSessionToSheet(){
-  selection.forEach(ex=>{
-    const params = new URLSearchParams({
-      action:"addSession",
-      exercice:ex.name,
-      duree:ex.duration,
-      notes: notes.value || ""        // ✅ Ajout texte auto-évaluation
-    });
-    fetch(GOOGLE_API_URL + "?" + params.toString());
-  });
-}
-
-/* ================= ÉVALUATION ================= */
-function renderEvaluation(){
-  evaluation.innerHTML="";
-  selection.forEach(e=>{
-    const def=EXERCISES.find(x=>x.name===e.name);
-    if(!def) return;
-    evaluation.innerHTML+=`<h4>${e.name}</h4>`;
-    def.criteria.forEach(c=>{
-  evaluation.innerHTML += `
-    <div style="margin-bottom:10px">
-      <label style="font-size:13px;font-weight:600">
-        ${c} : <span id="val-${e.name}-${c}">3</span>/5
-      </label>
-      <input
-        type="range"
-        min="1"
-        max="5"
-        value="3"
-        step="1"
-        style="width:100%"
-        data-exercice="${e.name}"
-        data-critere="${c}"
-        oninput="document.getElementById('val-${e.name}-${c}').textContent=this.value"
-      >
-    </div>
-  `;
-});
-
-  });
-}
-
-/* ================= PDF ================= */
-async function generatePDF(){
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF();
-  let y=10;
-
-  pdf.setFontSize(16);
-  pdf.text("Bilan hebdomadaire Tai-Jitsu",10,y); y+=10;
-
-  // Objectifs
-  const r = await fetch(GOOGLE_API_URL+"?action=fetchObjectives");
-  const goals = await r.json();
-  pdf.setFontSize(12);
-  pdf.text("Objectifs hebdomadaires",10,y); y+=6;
-  goals.forEach(g=>{
-    const pct = Math.round((g.Réalisé/g.ObjectifHebdo)*100);
-    pdf.text(`${g.Exercice} : ${pct}%`,10,y);
-    pdf.rect(10,y+2,100,4);
-    pdf.rect(10,y+2,pct,4,"F");
-    y+=10;
-  });
-
-  // Notes 7 derniers jours
-  const e = await fetch(GOOGLE_API_URL+"?action=fetchEvaluations");
-  const evals = await e.json();
-  pdf.addPage(); y=10;
-  pdf.text("Notes – 7 derniers jours",10,y); y+=8;
-  evals.slice(-7).forEach(ev=>{
-    pdf.text(`${ev.Date} – ${ev.Exercice}`,10,y);
-    y+=5;
-    pdf.text(ev.Notes || "",12,y);     // ✅ texte auto-évaluation
-    y+=8;
-  });
-
-  pdf.save("bilan_tai_jitsu.pdf");
-}
-
-/* ================= SAVE ÉVALUATION ================= */
-async function saveEvaluation(){
-  sendSessionToSheet(); // ✅ ENREGISTRE LA SESSION + NOTES
-  const dataByExercise = {};
-
-  document
-  .querySelectorAll("#evaluation input[type=range]")
-  .forEach(r=>{
-
-      const ex = r.dataset.exercice;
-      const crit = r.dataset.critere;
-
-      if(!ex || !crit) return;
-
-      dataByExercise[ex] ??= {};
-      dataByExercise[ex][crit] = Number(r.value);
-    });
-
-  for(const ex in dataByExercise){
-    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
-      action: "addEvaluation",
-      exercice: ex,
-      criteres: JSON.stringify(dataByExercise[ex])
-    }));
-  }
-
-  location.reload();
 }
 
 /* ================= STATS ================= */
-let exerciseChartObj = null; // référence du graphique
+let chart = null;
 
-async function showAverageByExercise() {
-  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
-  const to = toDateChart.value ? new Date(toDateChart.value) : null;
-
+async function showAverageByExercise(){
   const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
   const data = await r.json();
 
-  const sum = {};
-  const count = {};
-
+  const sum = {}, count = {};
   data.forEach(ev => {
-    const d = new Date(ev.Date);
-    if (from && d < from) return;
-    if (to && d > to) return;
-
-    const criteres = JSON.parse(ev.Critères);
-    let total = 0;
-    let n = 0;
-
-    for (const c in criteres) {
-      total += criteres[c];
-      n++;
-    }
-
-    if (!n) return;
-
-    sum[ev.Exercice] = (sum[ev.Exercice] || 0) + total / n;
+    const crit = JSON.parse(ev.Critères);
+    const avg = Object.values(crit).reduce((a,b)=>a+b,0) / Object.keys(crit).length;
+    sum[ev.Exercice] = (sum[ev.Exercice] || 0) + avg;
     count[ev.Exercice] = (count[ev.Exercice] || 0) + 1;
   });
 
   const labels = Object.keys(sum);
-  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
+  const values = labels.map(l => (sum[l]/count[l]).toFixed(2));
 
-  drawBarChart(labels, averages, "Moyenne par exercice");
-}
-async function showAverageByCriteria() {
-  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
-  const to = toDateChart.value ? new Date(toDateChart.value) : null;
-
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
-
-  const sum = {};
-  const count = {};
-
-  data.forEach(ev => {
-    const d = new Date(ev.Date);
-    if (from && d < from) return;
-    if (to && d > to) return;
-
-    const criteres = JSON.parse(ev.Critères);
-
-    for (const c in criteres) {
-      sum[c] = (sum[c] || 0) + criteres[c];
-      count[c] = (count[c] || 0) + 1;
-    }
-  });
-
-  const labels = Object.keys(sum);
-  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
-
-  drawBarChart(labels, averages, "Moyenne par critère");
+  drawChart(labels, values, "Moyenne par exercice");
 }
 
-function drawBarChart(labels, data, title) {
+function drawChart(labels, data, title){
   const canvas = document.getElementById("exerciseChart");
-  const ctx = canvas.getContext("2d");
-
   canvas.style.display = "block";
-  if (exerciseChartObj) exerciseChartObj.destroy();
+  if(chart) chart.destroy();
 
-  exerciseChartObj = new Chart(ctx, {
+  chart = new Chart(canvas, {
     type: "bar",
     data: {
       labels,
@@ -501,475 +240,57 @@ function drawBarChart(labels, data, title) {
         backgroundColor: "#84fab0"
       }]
     },
-    plugins: [ChartDataLabels],
     options: {
-      responsive: true,
-      plugins: {
-        datalabels: {
-          anchor: "end",
-          align: "top",
-          formatter: v => v
-        }
-      },
-      scales: {
-        y: {
-          min: 0,
-          max: 5
-        }
-      }
+      scales: { y: { min: 0, max: 5 } }
     }
   });
 }
 
-function hideExerciseChart() {
-  if (exerciseChartObj) exerciseChartObj.destroy();
-  document.getElementById("exerciseChart").style.display = "none";
-}
-  async function showUVEvolution() {
-  const uv = prompt("Quelle UV ? (ex : UV1, UV2, UV3)");
-  if (!uv) return;
+/* ================= CARNET ================= */
+let journalChart = null;
 
-  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
-  const to = toDateChart.value ? new Date(toDateChart.value) : null;
-
+async function loadJournal(){
+  const date = document.getElementById("journalDate").value;
   const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
   const data = await r.json();
+  const daily = data.filter(ev => ev.Date.startsWith(date));
 
-  // Regroupement par date
-  const byDate = {};
+  const container = document.getElementById("journalDetails");
+  container.innerHTML = "";
 
-  data.forEach(ev => {
-    if (!ev.Exercice.startsWith(uv)) return;
-
-    const d = new Date(ev.Date);
-    if (from && d < from) return;
-    if (to && d > to) return;
-
-    const day = ev.Date.slice(0, 10); // YYYY-MM-DD
-    const crit = JSON.parse(ev.Critères);
-
-    byDate[day] ??= { sum: 0, count: 0 };
-
-    for (const c in crit) {
-      byDate[day].sum += crit[c];
-      byDate[day].count++;
-    }
-  });
-
-  const labels = Object.keys(byDate).sort();
-  const values = labels.map(d =>
-    (byDate[d].sum / byDate[d].count).toFixed(2)
-  );
-
-  if (!labels.length) {
-    alert("Aucune donnée pour cette UV sur la période.");
+  if(!daily.length){
+    container.innerHTML = "<em>Aucune donnée</em>";
     return;
   }
 
-  drawUVEvolutionChart(labels, values, uv);
-}
+  // Durées
+  const dur = {};
+  daily.forEach(ev=>{
+    dur[ev.Exercice] = (dur[ev.Exercice] || 0) + (ev.Durée || 0);
+  });
 
-async function showRadarByExercise() {
-  const exercice = document.getElementById("exerciseRadarSelect").value;
-  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
-  const to = toDateChart.value ? new Date(toDateChart.value) : null;
+  container.innerHTML += "<strong>Durées :</strong><br>";
+  Object.entries(dur).forEach(([k,v])=>{
+    container.innerHTML += `${k} : ${v} min<br>`;
+  });
 
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
-
-  const sum = {};
-  const count = {};
-
-  data.forEach(ev => {
-    if (ev.Exercice !== exercice) return;
-
-    const d = new Date(ev.Date);
-    if (from && d < from) return;
-    if (to && d > to) return;
-
-    const criteres = JSON.parse(ev.Critères);
-    for (const c in criteres) {
-      sum[c] = (sum[c] || 0) + criteres[c];
-      count[c] = (count[c] || 0) + 1;
+  // Notes
+  daily.forEach(ev=>{
+    if(ev.Notes){
+      container.innerHTML += `
+        <p style="font-family:JBCursive">${ev.Notes}</p>
+      `;
     }
   });
-
-  const labels = Object.keys(sum);
-  if (!labels.length) {
-    alert("Aucune donnée pour cet exercice sur la période.");
-    return;
-  }
-
-  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
-
-  drawRadarChart(labels, averages, exercice);
-}
-function drawRadarChart(labels, data, title) {
-  const canvas = document.getElementById("exerciseChart");
-  const ctx = canvas.getContext("2d");
-
-  canvas.style.display = "block";
-  if (exerciseChartObj) exerciseChartObj.destroy();
-
-  exerciseChartObj = new Chart(ctx, {
-    type: "radar",
-    data: {
-      labels,
-      datasets: [{
-        label: title,
-        data,
-        fill: true,
-        backgroundColor: "rgba(132,250,176,0.3)",
-        borderColor: "#84fab0",
-        pointBackgroundColor: "#fa709a"
-      }]
-    },
-    options: {
-      scales: {
-        r: {
-          min: 0,
-          max: 5,
-          ticks: { stepSize: 1 }
-        }
-      }
-    }
-  });
-}
-async function showRadarByUV() {
-  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
-  const to = toDateChart.value ? new Date(toDateChart.value) : null;
-
-  const uv = prompt("Quelle UV ? (ex : UV1, UV2, UV3, UV4, UV5-6)");
-  if (!uv) return;
-
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
-
-  const sum = {};
-  const count = {};
-
-  data.forEach(ev => {
-    if (!ev.Exercice.startsWith(uv)) return;
-
-    const d = new Date(ev.Date);
-    if (from && d < from) return;
-    if (to && d > to) return;
-
-    const criteres = JSON.parse(ev.Critères);
-    for (const c in criteres) {
-      sum[c] = (sum[c] || 0) + criteres[c];
-      count[c] = (count[c] || 0) + 1;
-    }
-  });
-
-  const labels = Object.keys(sum);
-  if (!labels.length) {
-    alert("Aucune donnée pour cette UV sur la période.");
-    return;
-  }
-
-  const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
-
-  drawRadarChart(labels, averages, `UV ${uv}`);
-}
-async function compareUVRadar() {
-  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
-  const to = toDateChart.value ? new Date(toDateChart.value) : null;
-
-  const input = prompt("UV à comparer (ex : UV1,UV2,UV3)");
-  if (!input) return;
-
-  const uvList = input.split(",").map(u => u.trim());
-
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
-
-  const uvData = {};
-  const allCriteria = new Set();
-
-  data.forEach(ev => {
-    const uv = uvList.find(u => ev.Exercice.startsWith(u));
-    if (!uv) return;
-
-    const d = new Date(ev.Date);
-    if (from && d < from) return;
-    if (to && d > to) return;
-
-    const crit = JSON.parse(ev.Critères);
-
-    uvData[uv] ??= { sum: {}, count: {} };
-
-    for (const c in crit) {
-      uvData[uv].sum[c] = (uvData[uv].sum[c] || 0) + crit[c];
-      uvData[uv].count[c] = (uvData[uv].count[c] || 0) + 1;
-      allCriteria.add(c);
-    }
-  });
-
-  const labels = Array.from(allCriteria);
-
-  if (!labels.length) {
-    alert("Aucune donnée pour ces UV sur la période.");
-    return;
-  }
-
-  const datasets = uvList.map((uv, i) => {
-    const dataUV = uvData[uv];
-    if (!dataUV) return null;
-
-    const values = labels.map(c =>
-      dataUV.sum[c]
-        ? (dataUV.sum[c] / dataUV.count[c]).toFixed(2)
-        : 0
-    );
-
-    return {
-      label: uv,
-      data: values,
-      fill: true
-    };
-  }).filter(Boolean);
-
-  drawMultiRadar(labels, datasets);
-}
-let radarChartObj = null;
-
-function drawMultiRadar(labels, datasets) {
-  const ctx = document.getElementById("exerciseChart").getContext("2d");
-  document.getElementById("exerciseChart").style.display = "block";
-
-  if (radarChartObj) radarChartObj.destroy();
-
-  radarChartObj = new Chart(ctx, {
-    type: "radar",
-    data: {
-      labels,
-      datasets
-    },
-    options: {
-      scales: {
-        r: {
-          min: 0,
-          max: 5,
-          ticks: { stepSize: 1 }
-        }
-      },
-      plugins: {
-        legend: { position: "top" }
-      }
-    }
-  });
-}
-let uvEvolutionChart = null;
-
-function drawUVEvolutionChart(labels, data, uv) {
-  const canvas = document.getElementById("exerciseChart");
-  canvas.style.display = "block";
-
-  const ctx = canvas.getContext("2d");
-  if (uvEvolutionChart) uvEvolutionChart.destroy();
-
-  uvEvolutionChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels,
-      datasets: [{
-        label: `Évolution ${uv}`,
-        data,
-        tension: 0.3,
-        fill: false
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          min: 0,
-          max: 5,
-          ticks: { stepSize: 1 }
-        }
-      },
-      plugins: {
-        legend: { display: true },
-        datalabels: {
-          align: "top",
-          formatter: v => v
-        }
-      }
-    },
-    plugins: [ChartDataLabels]
-  });
-}
-let journalChartObj = null;
-
-let journalChartObj = null;
-
-async function loadJournal() {
-  const date = journalDate.value;
-  if(!date) return alert("Sélectionne une date");
-
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
-
-  // Filtrer par date YYYY-MM-DD
-  const daily = data.filter(ev => ev.Date.slice(0,10) === date);
-
-  journalDetails.innerHTML = "";
-  journalChart.style.display = "none";
-  if(!daily.length) {
-    journalDetails.innerHTML = "<em>Aucune donnée pour cette date</em>";
-    return;
-  }
-
-  // 1️⃣ Durées cumulées par exercice (Arial)
-  const exerciseDurations = {};
-  daily.forEach(ev => {
-    exerciseDurations[ev.Exercice] = (exerciseDurations[ev.Exercice] || 0) + (ev.Duree || 0);
-  });
-
-  const durDiv = document.createElement("div");
-  durDiv.style.fontFamily = "Arial";
-  durDiv.style.marginBottom = "8px";
-  durDiv.innerHTML = "<strong>Durée cumulée par exercice :</strong><br>";
-  for(const ex in exerciseDurations){
-    durDiv.innerHTML += `${ex} : ${exerciseDurations[ex]} min<br>`;
-  }
-  journalDetails.appendChild(durDiv);
-
-  // 2️⃣ Notes (JBCursive)
-  daily.forEach(ev => {
-    if(ev.Notes && ev.Notes.trim() !== ""){
-      const p = document.createElement("p");
-      p.textContent = ev.Notes;
-      p.style.fontFamily = "JBCursive, cursive";
-      p.style.background = "#fff3cd";
-      p.style.padding = "6px";
-      p.style.borderRadius = "8px";
-      p.style.marginBottom = "4px";
-      journalDetails.appendChild(p);
-    }
-  });
-
-  // 3️⃣ Moyennes par critère → radar chart (arrondi 2 chiffres)
-  const criteriaSum = {}, criteriaCount = {};
-  daily.forEach(ev => {
-    const crit = JSON.parse(ev.Critères);
-    for(const k in crit){
-      criteriaSum[k] = (criteriaSum[k] || 0) + crit[k];
-      criteriaCount[k] = (criteriaCount[k] || 0) + 1;
-    }
-  });
-
-  const labels = Object.keys(criteriaSum);
-  const averages = labels.map(k => +(criteriaSum[k]/criteriaCount[k]).toFixed(2));
-
-  const ctx = journalChart.getContext("2d");
-  journalChart.style.display = "block";
-
-  if(journalChartObj) journalChartObj.destroy();
-  journalChartObj = new Chart(ctx, {
-    type: "radar",
-    data: {
-      labels,
-      datasets: [{
-        label: "Moyenne du jour",
-        data: averages,
-        backgroundColor: "rgba(132, 250, 176, 0.5)",
-        borderColor: "#84fab0",
-        borderWidth: 2
-      }]
-    },
-    options: { 
-      scales: { r: { min: 0, max: 5 } },
-      plugins: { 
-        legend: { position: "top" }
-      }
-    }
-  });
-}
-
-// ✅ PDF : Arial pour tout, moyennes arrondies à 2 chiffres
-async function generateJournalPDF() {
-  const date = journalDate.value;
-  if(!date) return alert("Sélectionne une date");
-
-  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const data = await r.json();
-  const daily = data.filter(ev => ev.Date.slice(0,10) === date);
-  if(!daily.length) return alert("Aucune donnée pour cette date");
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF();
-  let y = 10;
-
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(16);
-  pdf.text(`Carnet d’entraînement - ${date}`, 10, y); y += 10;
-
-  // 1️⃣ Durées cumulées
-  const exerciseDurations = {};
-  daily.forEach(ev => exerciseDurations[ev.Exercice] = (exerciseDurations[ev.Exercice]||0) + (ev.Duree||0));
-
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(12);
-  pdf.text("Durée cumulée par exercice:", 10, y); y+=6;
-  pdf.setFont("helvetica", "normal");
-  for(const ex in exerciseDurations){
-    pdf.text(`${ex} : ${exerciseDurations[ex]} min`, 12, y); y+=6;
-  }
-
-  // 2️⃣ Notes (Arial)
-  pdf.setFont("helvetica", "normal");
-  pdf.text("Notes du jour :", 10, y); y+=6;
-  daily.forEach(ev => {
-    if(ev.Notes && ev.Notes.trim() !== ""){
-      pdf.text(`${ev.Exercice} : ${ev.Notes}`, 12, y); 
-      y+=6;
-    }
-  });
-
-  // 3️⃣ Moyennes par critère (arrondies 2 chiffres)
-  const criteriaSum = {}, criteriaCount = {};
-  daily.forEach(ev => {
-    const crit = JSON.parse(ev.Critères);
-    for(const k in crit){
-      criteriaSum[k] = (criteriaSum[k]||0) + crit[k];
-      criteriaCount[k] = (criteriaCount[k]||0) + 1;
-    }
-  });
-  const labels = Object.keys(criteriaSum);
-  const averages = labels.map(k => +(criteriaSum[k]/criteriaCount[k]).toFixed(2));
-
-  pdf.setFont("helvetica", "bold");
-  pdf.text("Moyennes par critère :", 10, y); y+=6;
-  pdf.setFont("helvetica", "normal");
-  labels.forEach((k,i) => pdf.text(`${k} : ${averages[i]}`, 12, y+=6));
-
-  pdf.save(`Carnet_${date}.pdf`);
 }
 
 /* ================= INIT ================= */
-const bank=document.getElementById("bank");
-const selectionDiv=document.getElementById("selection");
-const timers=document.getElementById("timers");
-const globalProgress=document.getElementById("globalProgress");
-const startBtn=document.getElementById("startBtn");
-const pauseBtn=document.getElementById("pauseBtn");
-const evaluation=document.getElementById("evaluation");
-const evaluationModal=document.getElementById("evaluationModal");
-const notes=document.getElementById("notes");
-
 window.addEventListener("DOMContentLoaded", () => {
   renderBank();
   fetchObjectivesFromSheet();
-  flatpickr("#fromDateChart", { dateFormat: "Y-m-d" });
-  flatpickr("#toDateChart", { dateFormat: "Y-m-d" });
-  populateRadarSelect();
-
-  // ✅ Enregistrer le plugin DataLabels
-  Chart.register(ChartDataLabels);
 });
-
 </script>
+
 
 </body>
 </html>
