@@ -85,22 +85,23 @@ textarea{width:100%;border-radius:12px;padding:8px}
 </div>
 
 <!-- ÉVALUATION -->
-<div class="modal-content">
-<h2>📝 Auto-évaluation</h2>
+<div class="modal" id="evaluationModal">
+  <div class="modal-content">
+    <h2>📝 Auto-évaluation</h2>
 
-<p style="font-size:14px;margin-bottom:6px">
-  <strong>Quel est ton ressenti après cette séance ?</strong><br>
-  Bilan général, points à améliorer, ce qui a progressé, sensations…
-</p>
+    <p style="font-size:14px;margin-bottom:6px">
+      <strong>Quel est ton ressenti après cette séance ?</strong><br>
+      Bilan général, points à améliorer, ce qui a progressé, sensations…
+    </p>
 
-<textarea id="notes" rows="4"></textarea>
+    <textarea id="notes" rows="4"></textarea>
 
-<div id="evaluation"></div>
+    <div id="evaluation"></div>
 
-<button class="btn-primary" onclick="saveEvaluation()">Valider</button>
+    <button class="btn-primary" onclick="saveEvaluation()">Valider</button>
+  </div>
 </div>
 
-</div>
 
 <script>
 /* ================= CONFIG ================= */
