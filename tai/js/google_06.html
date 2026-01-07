@@ -269,7 +269,11 @@ function renderEvaluation(){
         ${c}
         ${[0,1,2,3,4,5].map(v=>`
           <label>
-            <input type="radio" name="${e.name}||${c}" value="${v}">
+            <input type="radio"
+       data-exercice="${e.name}"
+       data-critere="${c}"
+       value="${v}">
+
           </label>`).join("")}
       </div>`;
     });
@@ -332,9 +336,14 @@ async function saveEvaluation(){
   document
     .querySelectorAll("#evaluation input[type=radio]:checked")
     .forEach(r=>{
-      const [ex, crit] = r.name.split("||");
-      dataByExercise[ex] ??= {};
-      dataByExercise[ex][crit] = Number(r.value);
+      const ex = r.dataset.exercice;
+const crit = r.dataset.critere;
+
+if(!ex || !crit) return;
+
+dataByExercise[ex] ??= {};
+dataByExercise[ex][crit] = Number(r.value);
+
     });
 
   // 3️⃣ Envoi des évaluations
