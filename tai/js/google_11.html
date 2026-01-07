@@ -101,6 +101,10 @@ textarea{width:100%;border-radius:12px;padding:8px}
   🧭 Radar par UV
 </button>
 
+  <button class="btn-secondary" onclick="compareUVRadar()">
+  🧭 Comparer plusieurs UV
+</button>
+
   <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
 </div>
 <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
@@ -614,6 +618,94 @@ async function showRadarByUV() {
   const averages = labels.map(l => (sum[l] / count[l]).toFixed(2));
 
   drawRadarChart(labels, averages, `UV ${uv}`);
+}
+async function compareUVRadar() {
+  const from = fromDateChart.value ? new Date(fromDateChart.value) : null;
+  const to = toDateChart.value ? new Date(toDateChart.value) : null;
+
+  const input = prompt("UV à comparer (ex : UV1,UV2,UV3)");
+  if (!input) return;
+
+  const uvList = input.split(",").map(u => u.trim());
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  const uvData = {};
+  const allCriteria = new Set();
+
+  data.forEach(ev => {
+    const uv = uvList.find(u => ev.Exercice.startsWith(u));
+    if (!uv) return;
+
+    const d = new Date(ev.Date);
+    if (from && d < from) return;
+    if (to && d > to) return;
+
+    const crit = JSON.parse(ev.Critères);
+
+    uvData[uv] ??= { sum: {}, count: {} };
+
+    for (const c in crit) {
+      uvData[uv].sum[c] = (uvData[uv].sum[c] || 0) + crit[c];
+      uvData[uv].count[c] = (uvData[uv].count[c] || 0) + 1;
+      allCriteria.add(c);
+    }
+  });
+
+  const labels = Array.from(allCriteria);
+
+  if (!labels.length) {
+    alert("Aucune donnée pour ces UV sur la période.");
+    return;
+  }
+
+  const datasets = uvList.map((uv, i) => {
+    const dataUV = uvData[uv];
+    if (!dataUV) return null;
+
+    const values = labels.map(c =>
+      dataUV.sum[c]
+        ? (dataUV.sum[c] / dataUV.count[c]).toFixed(2)
+        : 0
+    );
+
+    return {
+      label: uv,
+      data: values,
+      fill: true
+    };
+  }).filter(Boolean);
+
+  drawMultiRadar(labels, datasets);
+}
+let radarChartObj = null;
+
+function drawMultiRadar(labels, datasets) {
+  const ctx = document.getElementById("exerciseChart").getContext("2d");
+  document.getElementById("exerciseChart").style.display = "block";
+
+  if (radarChartObj) radarChartObj.destroy();
+
+  radarChartObj = new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels,
+      datasets
+    },
+    options: {
+      scales: {
+        r: {
+          min: 0,
+          max: 5,
+          ticks: { stepSize: 1 }
+        }
+      },
+      plugins: {
+        legend: { position: "top" }
+      }
+    }
+  });
 }
 
 
