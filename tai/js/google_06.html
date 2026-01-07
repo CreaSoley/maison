@@ -344,20 +344,6 @@ async function saveEvaluation(){
   location.reload();
 }
 
-  // 3️⃣ Envoi des évaluations
-  for(const ex in dataByExercise){
-    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
-      action: "addEvaluation",
-      exercice: ex,
-      criteres: JSON.stringify(dataByExercise[ex])
-    }));
-  }
-
-  fetchObjectivesFromSheet();
-  location.reload();
-}
-
-
 /* ================= STATS ================= */
 async function showStats(){
   const from = new Date(fromDate.value);
