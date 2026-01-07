@@ -84,12 +84,14 @@ textarea{width:100%;border-radius:12px;padding:8px}
 <!-- ================== Moyennes par exercice ================== -->
 <div class="card">
   <h3>📊 Moyennes par exercice</h3>
-  <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+  <!-- Conteneur des filtres de dates et boutons -->
+<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px; flex-wrap: wrap;">
     <label>Du <input type="date" id="fromDateChart"></label>
     <label>Au <input type="date" id="toDateChart"></label>
     <button class="btn-primary" onclick="showExerciseAverages()">Afficher</button>
     <button class="btn-danger" onclick="hideExerciseChart()">❌ Replier</button>
-  </div>
+</div>
+
   <canvas id="exerciseChart" style="display:none"></canvas>
 </div>
 
@@ -454,8 +456,10 @@ window.addEventListener("DOMContentLoaded", () => {
   renderBank();
   fetchObjectivesFromSheet();
   flatpickr("#fromDateChart", { dateFormat: "Y-m-d" });
-flatpickr("#toDateChart", { dateFormat: "Y-m-d" });
+  flatpickr("#toDateChart", { dateFormat: "Y-m-d" });
 
+  // ✅ Enregistrer le plugin DataLabels
+  Chart.register(ChartDataLabels);
 });
 
 </script>
