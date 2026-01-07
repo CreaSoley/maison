@@ -881,6 +881,22 @@ journalDetails.innerHTML = "";
     document.getElementById("journalChart").style.display = "none";
     return;
   }
+// Affichage de la note unique de la séance (JBCursive)
+const sessionNotes = dayData
+  .map(s => s.Notes)
+  .find(n => n && n.trim());
+
+if (sessionNotes) {
+  const p = document.createElement("p");
+  p.textContent = sessionNotes;
+  p.style.fontFamily = "JBCursive, cursive";
+  p.style.fontSize = "18px";
+  p.style.background = "#fff3cd";
+  p.style.padding = "10px";
+  p.style.borderRadius = "12px";
+  p.style.marginTop = "10px";
+  journalDetails.appendChild(p);
+}
 
   /* ===== 1️⃣ DURÉES CUMULÉES PAR EXERCICE (Arial) ===== */
   const durations = {};
