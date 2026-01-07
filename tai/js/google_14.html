@@ -850,203 +850,164 @@ let journalChartObj = null;
 
 let journalRadarChart = null;
 
+/* ==================== CARNET CARD ==================== */
 async function loadJournal() {
   const date = document.getElementById("journalDate").value;
   if (!date) return alert("Choisis une date");
 
-  /* ===== FETCH DONNÉES ===== */
-  const sessions = await fetchSessions(); // feuille Sessions
-  const rEval = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const evaluations = await rEval.json(); // feuille Evaluations
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
 
-  console.log("SESSION", sessions[0]);
-  console.log("EVAL", evaluations[0]);
-
-  const journalDetails = document.getElementById("journalDetails");
-if (!journalDetails) {
-  console.error("❌ journalDetails introuvable dans le DOM");
-  return;
-}
-journalDetails.innerHTML = "";
-
-  /* ===== FILTRAGE PAR DATE ===== */
-  const daySessions = sessions.filter(s => s.Date.startsWith(date));
-  const dayEvals = evaluations.filter(e => e.Date.startsWith(date));
-
-  const journalDetails = document.getElementById("journalDetails");
+  // Filtrer la journée
+  const dayData = data.filter(ev => ev.Date.startsWith(date));
+  const journalDetails = document.getElementById("journalCard");
   journalDetails.innerHTML = "";
 
-  if (!daySessions.length && !dayEvals.length) {
+  if (!dayData.length) {
     journalDetails.innerHTML = "<em>Aucune donnée pour cette date.</em>";
-    document.getElementById("journalChart").style.display = "none";
+    document.getElementById("journalRadar").style.display = "none";
     return;
   }
-// Affichage de la note unique de la séance (JBCursive)
-const sessionNotes = dayData
-  .map(s => s.Notes)
-  .find(n => n && n.trim());
 
-if (sessionNotes) {
-  const p = document.createElement("p");
-  p.textContent = sessionNotes;
-  p.style.fontFamily = "JBCursive, cursive";
-  p.style.fontSize = "18px";
-  p.style.background = "#fff3cd";
-  p.style.padding = "10px";
-  p.style.borderRadius = "12px";
-  p.style.marginTop = "10px";
-  journalDetails.appendChild(p);
-}
-
-  /* ===== 1️⃣ DURÉES CUMULÉES PAR EXERCICE (Arial) ===== */
+  /* ===== Durées cumulées par exercice ===== */
   const durations = {};
-  daySessions.forEach(s => {
-    durations[s.Exercice] = (durations[s.Exercice] || 0) + Number(s.Duree || 0);
+  dayData.forEach(ev => {
+    durations[ev.Exercice] = (durations[ev.Exercice] || 0) + Number(ev.Duree || 0);
   });
 
   const durDiv = document.createElement("div");
-  durDiv.style.fontFamily = "Arial";
-  durDiv.innerHTML = "<strong>Durée cumulée par exercice :</strong><br>";
-  Object.entries(durations).forEach(([ex, min]) => {
-    durDiv.innerHTML += `${ex} : ${min} min<br>`;
-  });
+  durDiv.innerHTML = "<strong>Durées cumulées par exercice :</strong><br>" +
+    Object.entries(durations).map(([k,v])=>`${k} : ${v} min`).join("<br>");
+  durDiv.style.marginBottom = "10px";
   journalDetails.appendChild(durDiv);
 
-  /* ===== 2️⃣ NOTES (JBCursive) ===== */
-  daySessions.forEach(s => {
-    if (s.Notes && s.Notes.trim()) {
-      const p = document.createElement("p");
-      p.textContent = s.Notes;
-      p.style.fontFamily = "JBCursive, cursive";
-      p.style.background = "#fff3cd";
-      p.style.padding = "8px";
-      p.style.borderRadius = "10px";
-      p.style.marginTop = "6px";
-      journalDetails.appendChild(p);
-    }
-  });
+  /* ===== Note unique par séance (JBCursive) ===== */
+  const sessionNote = dayData.map(s => s.Notes).find(n => n && n.trim());
+  if (sessionNote) {
+    const p = document.createElement("p");
+    p.textContent = sessionNote;
+    p.style.fontFamily = "JBCursive, cursive";
+    p.style.fontSize = "18px";
+    p.style.background = "#fff3cd";
+    p.style.padding = "10px";
+    p.style.borderRadius = "12px";
+    p.style.marginBottom = "10px";
+    journalDetails.appendChild(p);
+  }
 
-  /* ===== 3️⃣ MOYENNES PAR CRITÈRE (RADAR) ===== */
+  /* ===== Moyennes par critère (radar chart) ===== */
   const sum = {}, count = {};
-  dayEvals.forEach(ev => {
+  dayData.forEach(ev => {
     const crit = JSON.parse(ev.Critères || "{}");
-    for (const k in crit) {
-      sum[k] = (sum[k] || 0) + crit[k];
-      count[k] = (count[k] || 0) + 1;
+    for (const c in crit) {
+      sum[c] = (sum[c] || 0) + crit[c];
+      count[c] = (count[c] || 0) + 1;
     }
   });
 
   const labels = Object.keys(sum);
-  const averages = labels.map(k => +(sum[k] / count[k]).toFixed(2));
+  const averages = labels.map(c => +(sum[c]/count[c]).toFixed(2));
 
   drawJournalRadar(labels, averages);
 }
 
-/* ===== RADAR ===== */
+/* ===== Radar journal ===== */
 function drawJournalRadar(labels, data) {
-  const canvas = document.getElementById("journalChart");
+  const canvas = document.getElementById("journalRadar");
   canvas.style.display = "block";
   const ctx = canvas.getContext("2d");
 
   if (journalRadarChart) journalRadarChart.destroy();
 
-  journalRadarChart = new Chart(ctx, {
-    type: "radar",
-    data: {
+  journalRadarChart = new Chart(ctx,{
+    type:"radar",
+    data:{
       labels,
-      datasets: [{
-        label: "Moyenne du jour",
+      datasets:[{
+        label:"Moyenne du jour",
         data,
-        backgroundColor: "rgba(132,250,176,0.4)",
-        borderColor: "#84fab0",
-        borderWidth: 2
+        fill:true,
+        backgroundColor:"rgba(250,112,154,0.3)",
+        borderColor:"#fa709a",
+        pointBackgroundColor:"#fa709a"
       }]
     },
-    options: {
-      scales: { r: { min: 0, max: 5 } }
+    options:{
+      scales:{ r:{ min:0,max:5,ticks:{stepSize:1} } },
+      plugins: { legend: { position: "top" } }
     }
   });
 }
 
-/* ===== PDF ===== */
+/* ==================== PDF CARNET ==================== */
 async function generateJournalPDF() {
   const date = document.getElementById("journalDate").value;
   if (!date) return alert("Choisis une date");
-
-  const sessions = await fetchSessions();
-  const rEval = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const evaluations = await rEval.json();
-
-  const daySessions = sessions.filter(s => s.Date.startsWith(date));
-  const dayEvals = evaluations.filter(e => e.Date.startsWith(date));
 
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF();
   let y = 10;
 
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+  const dayData = data.filter(ev => ev.Date.startsWith(date));
+
+  if (!dayData.length) return alert("Aucune donnée pour cette date");
+
+  pdf.setFontSize(18);
   pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(16);
-  pdf.text(`Carnet d’entraînement – ${date}`, 10, y);
-  y += 10;
-
-  /* Durées */
-  const durations = {};
-  daySessions.forEach(s => {
-    durations[s.Exercice] = (durations[s.Exercice] || 0) + Number(s.Duree || 0);
-  });
-
+  pdf.text("Carnet d’entraînement", 10, y); y+=8;
   pdf.setFontSize(12);
-  pdf.text("Durée cumulée par exercice :", 10, y);
-  y += 6;
+  pdf.text(date, 10, y); y+=10;
 
-  Object.entries(durations).forEach(([ex, min]) => {
-    pdf.text(`${ex} : ${min} min`, 12, y);
+  /* ===== Durées cumulées ===== */
+  const durations = {};
+  dayData.forEach(ev => durations[ev.Exercice] = (durations[ev.Exercice]||0) + Number(ev.Duree||0));
+
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Durées par exercice :", 10, y); y+=6;
+  pdf.setFont("helvetica", "normal");
+  Object.entries(durations).forEach(([k,v]) => {
+    pdf.text(`- ${k} : ${v} min`, 12, y);
+    y+=6;
+  });
+
+  /* ===== Note unique ===== */
+  const sessionNote = dayData.map(s => s.Notes).find(n => n && n.trim());
+  if (sessionNote) {
     y += 6;
-  });
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Ressenti de la séance :", 10, y); y+=6;
+    pdf.setFont("helvetica", "normal");
+    pdf.text(sessionNote, 12, y, { maxWidth: 180 });
+  }
 
-  /* Notes */
-  y += 4;
-  pdf.text("Notes :", 10, y);
-  y += 6;
-
-  daySessions.forEach(s => {
-    if (s.Notes && s.Notes.trim()) {
-      pdf.text(s.Notes, 12, y, { maxWidth: 180 });
-      y += 10;
-    }
-  });
-
-  /* Moyennes */
+  /* ===== Moyennes par critère ===== */
   const sum = {}, count = {};
-  dayEvals.forEach(ev => {
-    const crit = JSON.parse(ev.Critères || "{}");
-    for (const k in crit) {
-      sum[k] = (sum[k] || 0) + crit[k];
-      count[k] = (count[k] || 0) + 1;
+  dayData.forEach(ev => {
+    const crit = JSON.parse(ev.Critères||"{}");
+    for (const c in crit) {
+      sum[c] = (sum[c]||0) + crit[c];
+      count[c] = (count[c]||0) + 1;
     }
   });
 
-  y += 4;
-  pdf.text("Moyennes par critère :", 10, y);
-  y += 6;
+  const labels = Object.keys(sum);
+  const averages = labels.map(c => +(sum[c]/count[c]).toFixed(2));
 
-  Object.keys(sum).forEach(k => {
-    pdf.text(`${k} : ${(sum[k] / count[k]).toFixed(2)}`, 12, y);
+  if (labels.length) {
     y += 6;
-  });
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Moyennes par critère :", 10, y); y+=6;
+    pdf.setFont("helvetica", "normal");
+    labels.forEach((c,i) => {
+      pdf.text(`- ${c} : ${averages[i]}`, 12, y);
+      y+=6;
+    });
+  }
 
   pdf.save(`Carnet_${date}.pdf`);
 }
-async function sendSessionNotes() {
-  const text = notes.value?.trim();
-  if (!text) return;
-
-  await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
-    action: "addSessionNotes",
-    notes: text
-  }));
-}
-
 
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
