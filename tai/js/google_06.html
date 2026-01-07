@@ -230,8 +230,6 @@ function endSessionSpeech(){
   speak("Fin de l'entraînement, place à l'auto-évaluation");
   evaluationModal.style.display="flex";
   renderEvaluation();
-  sendSessionToSheet();       // ✅ envoie la session avec notes
-  fetchObjectivesFromSheet();
 }
 
 /* ================= TIMER / PROGRESS ================= */
@@ -317,25 +315,41 @@ async function generatePDF(){
 
 /* ================= SAVE ÉVALUATION ================= */
 async function saveEvaluation(){
+
+  // 1️⃣ Envoi des sessions AVEC notes texte
+  for(const ex of selection){
+    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
+      action: "addSession",
+      exercice: ex.name,
+      duree: ex.duration,
+      notes: notes.value || ""
+    }));
+  }
+
+  // 2️⃣ Récupération des critères d’auto-évaluation
   const dataByExercise = {};
 
-  document.querySelectorAll("#evaluation input[type=radio]:checked").forEach(r=>{
-    const [ex, crit] = r.name.split("||");
-    dataByExercise[ex] ??= {};
-    dataByExercise[ex][crit] = Number(r.value);
-  });
+  document
+    .querySelectorAll("#evaluation input[type=radio]:checked")
+    .forEach(r=>{
+      const [ex, crit] = r.name.split("||");
+      dataByExercise[ex] ??= {};
+      dataByExercise[ex][crit] = Number(r.value);
+    });
 
+  // 3️⃣ Envoi des évaluations
   for(const ex in dataByExercise){
     await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
       action: "addEvaluation",
       exercice: ex,
-      criteres: JSON.stringify(dataByExercise[ex]),
-      notes: notes.value || ""       // ✅ ajout texte auto-évaluation
+      criteres: JSON.stringify(dataByExercise[ex])
     }));
   }
 
+  fetchObjectivesFromSheet();
   location.reload();
 }
+
 
 /* ================= STATS ================= */
 async function showStats(){
@@ -377,8 +391,11 @@ const evaluation=document.getElementById("evaluation");
 const evaluationModal=document.getElementById("evaluationModal");
 const notes=document.getElementById("notes");
 
-renderBank();
-fetchObjectivesFromSheet();
+window.addEventListener("DOMContentLoaded", () => {
+  renderBank();
+  fetchObjectivesFromSheet();
+});
+
 </script>
 
 </body>
