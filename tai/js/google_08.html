@@ -7,7 +7,11 @@
 <title>Tai-Jitsu Coach</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 
 <style>
@@ -449,6 +453,9 @@ const notes=document.getElementById("notes");
 window.addEventListener("DOMContentLoaded", () => {
   renderBank();
   fetchObjectivesFromSheet();
+  flatpickr("#fromDateChart", { dateFormat: "Y-m-d" });
+flatpickr("#toDateChart", { dateFormat: "Y-m-d" });
+
 });
 
 </script>
