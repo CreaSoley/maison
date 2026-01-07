@@ -81,7 +81,23 @@ textarea{width:100%;border-radius:12px;padding:8px}
  <button class="btn-primary" onclick="generatePDF()">📄 Générer le bilan PDF</button>
 
 </div>
-<!-- ================== Moyennes par exercice ================== -->
+<div class="card">
+  <div class="accordion-header" onclick="toggleAccordion(this)">
+    📝 Carnet d’entraînement <span>⬇️</span>
+  </div>
+  <div class="accordion-content" id="journalContent" style="padding:10px;">
+    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
+      <label>Choisir la date :
+        <input type="date" id="journalDate">
+      </label>
+      <button class="btn-primary" onclick="loadJournal()">Afficher</button>
+      <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
+    </div>
+    <div id="journalDetails" style="font-family:Arial;"></div>
+    <canvas id="journalChart" style="display:none; margin-top:10px;"></canvas>
+  </div>
+</div>
+  <!-- ================== Moyennes par exercice ================== -->
 <div class="card">
   <h3>📊 Moyennes par exercice</h3>
   <!-- Conteneur des filtres de dates et boutons -->
@@ -794,7 +810,151 @@ function drawUVEvolutionChart(labels, data, uv) {
     plugins: [ChartDataLabels]
   });
 }
+let journalChartObj = null;
 
+async function loadJournal() {
+  const date = journalDate.value;
+  if(!date) return alert("Sélectionne une date");
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+
+  // Filtrer par date YYYY-MM-DD
+  const daily = data.filter(ev => ev.Date.slice(0,10) === date);
+
+  journalDetails.innerHTML = "";
+  journalChart.style.display = "none";
+  if(!daily.length) {
+    journalDetails.innerHTML = "<em>Aucune donnée pour cette date</em>";
+    return;
+  }
+
+  // 1️⃣ Durées cumulées par exercice (Arial)
+  const exerciseDurations = {};
+  daily.forEach(ev => {
+    exerciseDurations[ev.Exercice] = (exerciseDurations[ev.Exercice] || 0) + (ev.Duree || 0);
+  });
+
+  const durDiv = document.createElement("div");
+  durDiv.style.fontFamily = "Arial";
+  durDiv.style.marginBottom = "8px";
+  durDiv.innerHTML = "<strong>Durée cumulée par exercice :</strong><br>";
+  for(const ex in exerciseDurations){
+    durDiv.innerHTML += `${ex} : ${exerciseDurations[ex]} min<br>`;
+  }
+  journalDetails.appendChild(durDiv);
+
+  // 2️⃣ Notes (JBCursive)
+  daily.forEach(ev => {
+    if(ev.Notes && ev.Notes.trim() !== ""){
+      const p = document.createElement("p");
+      p.textContent = ev.Notes;
+      p.style.fontFamily = "JBCursive, cursive";
+      p.style.background = "#fff3cd";
+      p.style.padding = "6px";
+      p.style.borderRadius = "8px";
+      p.style.marginBottom = "4px";
+      journalDetails.appendChild(p);
+    }
+  });
+
+  // 3️⃣ Moyennes par critère → radar chart (arrondi 2 chiffres)
+  const criteriaSum = {}, criteriaCount = {};
+  daily.forEach(ev => {
+    const crit = JSON.parse(ev.Critères);
+    for(const k in crit){
+      criteriaSum[k] = (criteriaSum[k] || 0) + crit[k];
+      criteriaCount[k] = (criteriaCount[k] || 0) + 1;
+    }
+  });
+
+  const labels = Object.keys(criteriaSum);
+  const averages = labels.map(k => +(criteriaSum[k]/criteriaCount[k]).toFixed(2));
+
+  const ctx = journalChart.getContext("2d");
+  journalChart.style.display = "block";
+
+  if(journalChartObj) journalChartObj.destroy();
+  journalChartObj = new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels,
+      datasets: [{
+        label: "Moyenne du jour",
+        data: averages,
+        backgroundColor: "rgba(132, 250, 176, 0.5)",
+        borderColor: "#84fab0",
+        borderWidth: 2
+      }]
+    },
+    options: { 
+      scales: { r: { min: 0, max: 5 } },
+      plugins: { 
+        legend: { position: "top" }
+      }
+    }
+  });
+}
+
+// ✅ PDF : Arial pour tout, moyennes arrondies à 2 chiffres
+async function generateJournalPDF() {
+  const date = journalDate.value;
+  if(!date) return alert("Sélectionne une date");
+
+  const r = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const data = await r.json();
+  const daily = data.filter(ev => ev.Date.slice(0,10) === date);
+  if(!daily.length) return alert("Aucune donnée pour cette date");
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  let y = 10;
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(16);
+  pdf.text(`Carnet d’entraînement - ${date}`, 10, y); y += 10;
+
+  // 1️⃣ Durées cumulées
+  const exerciseDurations = {};
+  daily.forEach(ev => exerciseDurations[ev.Exercice] = (exerciseDurations[ev.Exercice]||0) + (ev.Duree||0));
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(12);
+  pdf.text("Durée cumulée par exercice:", 10, y); y+=6;
+  pdf.setFont("helvetica", "normal");
+  for(const ex in exerciseDurations){
+    pdf.text(`${ex} : ${exerciseDurations[ex]} min`, 12, y); y+=6;
+  }
+
+  // 2️⃣ Notes (Arial)
+  pdf.setFont("helvetica", "normal");
+  pdf.text("Notes du jour :", 10, y); y+=6;
+  daily.forEach(ev => {
+    if(ev.Notes && ev.Notes.trim() !== ""){
+      pdf.text(`${ev.Exercice} : ${ev.Notes}`, 12, y); 
+      y+=6;
+    }
+  });
+
+  // 3️⃣ Moyennes par critère (arrondies 2 chiffres)
+  const criteriaSum = {}, criteriaCount = {};
+  daily.forEach(ev => {
+    const crit = JSON.parse(ev.Critères);
+    for(const k in crit){
+      criteriaSum[k] = (criteriaSum[k]||0) + crit[k];
+      criteriaCount[k] = (criteriaCount[k]||0) + 1;
+    }
+  });
+  const labels = Object.keys(criteriaSum);
+  const averages = labels.map(k => +(criteriaSum[k]/criteriaCount[k]).toFixed(2));
+
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Moyennes par critère :", 10, y); y+=6;
+  pdf.setFont("helvetica", "normal");
+  labels.forEach((k,i) => pdf.text(`${k} : ${averages[i]}`, 12, y+=6));
+
+  pdf.save(`Carnet_${date}.pdf`);
+}
 
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
