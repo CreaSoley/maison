@@ -955,7 +955,8 @@ async function loadJournalCard() {
   const daySessions = sessions.filter(ev => ev.Date.startsWith(date));
   const dayEvals = evaluations.filter(ev => ev.Date.startsWith(date));
 
-  const container = document.getElementById("journalCard");
+  const container = document.getElementById("journalDetails");
+
   container.innerHTML = "";
 
   if (!daySessions.length && !dayEvals.length) {
@@ -984,7 +985,7 @@ async function loadJournalCard() {
 const notesByExercise = {};
 
 // Regroupement
-daySessions.forEach(ev => {
+dayEvals.forEach(ev => {
   if (ev.Notes && ev.Notes.trim() !== "") {
     notesByExercise[ev.Exercice] ??= [];
     notesByExercise[ev.Exercice].push(ev.Notes);
@@ -1100,7 +1101,36 @@ async function generateJournalPDF() {
   });
 
   // 4️⃣ Notes du jour
-  const sessionNote = daySessions.map(s => s.Notes).filter(n => n && n.trim());
+  const notesByExercise = {};
+
+dayEvals.forEach(ev => {
+  if (ev.Notes && ev.Notes.trim()) {
+    notesByExercise[ev.Exercice] ??= [];
+    notesByExercise[ev.Exercice].push(ev.Notes);
+  }
+});
+
+if (Object.keys(notesByExercise).length) {
+  y += 4;
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Carnet de bord :", 10, y);
+  y += 6;
+
+  for (const ex in notesByExercise) {
+    pdf.setFont("helvetica", "bold");
+    pdf.text(ex, 12, y);
+    y += 6;
+
+    pdf.setFont("helvetica", "normal");
+    notesByExercise[ex].forEach(note => {
+      pdf.text(note, 14, y, { maxWidth: 170 });
+      y += pdf.getTextDimensions(note, { maxWidth: 170 }).h + 4;
+    });
+
+    y += 4;
+  }
+}
+
   if (sessionNote.length) {
     y += 4;
     pdf.setFont("helvetica", "bold");
