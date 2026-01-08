@@ -209,6 +209,7 @@ const EXERCISES = [
 ];
 
 let selection=[],currentIndex=0,timer=null,paused=false;
+let elapsedGlobalSeconds = 0;
 let remainingExercise=0,remainingGlobal=0;
 
 /* ================= OBJECTIFS ================= */
@@ -280,16 +281,28 @@ function addExercise(n){
 
 function renderSelection(){
   selectionDiv.innerHTML="";
+
+  let totalSeconds = 0;
+
   selection.forEach((e,i)=>{
+    totalSeconds += e.duration * 60;
+
     selectionDiv.innerHTML+=`
     <div class="exercise ${i===currentIndex?'active':''}">
       <span>${e.name}</span>
       <input type="range" min="1" max="60" value="${e.duration}"
-        oninput="selection[${i}].duration=parseInt(this.value)">
+        oninput="
+          selection[${i}].duration=parseInt(this.value);
+          renderSelection();
+        ">
       <span>${e.duration} min</span>
     </div>`;
   });
+
+  // ✅ affichage immédiat du temps total sélectionné
+  timers.textContent = `--:-- | ${fmt(totalSeconds)}`;
 }
+
 
 function clearSelection(){selection=[];renderSelection()}
 
@@ -318,7 +331,10 @@ function runExerciseWithSpeech(i){
 
   timer = setInterval(()=>{
     if(!paused){
-      remainingExercise--; remainingGlobal--;
+      remainingExercise--;
+      remainingGlobal--;
+      elapsedGlobalSeconds++;
+
       updateTimers(); updateProgress();
       if(remainingExercise===10) speak("10 secondes");
       if(remainingExercise<=0){
@@ -349,17 +365,27 @@ function updateProgress(){
   globalProgress.style.width=`${Math.round(done/total*100)}%`;
 }
 function pauseResume(){ paused=!paused; pauseBtn.textContent=paused?"Reprendre":"Pause"; pauseBtn.classList.toggle("active",paused); }
-function stopSession(){ clearInterval(timer); endSessionSpeech(); }
+function stopSession(){
+  clearInterval(timer);
+  endSessionSpeech();
+}
 function fmt(s){ return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0") }
 
 /* ================= GOOGLE SHEET ================= */
 function sendSessionToSheet(){
+  const totalPlanned = selection.reduce((s,e)=>s+e.duration*60,0);
+  const ratio = totalPlanned ? elapsedGlobalSeconds / totalPlanned : 0;
+
   selection.forEach(ex=>{
+    const realSeconds = Math.round(ex.duration * 60 * ratio);
+    const realMinutes = Math.max(1, Math.round(realSeconds / 60));
+
     const params = new URLSearchParams({
       action:"addSession",
       exercice: ex.name,
-      duree: ex.duration
+      duree: realMinutes
     });
+
     fetch(GOOGLE_API_URL + "?" + params.toString());
   });
 }
@@ -393,6 +419,17 @@ function renderEvaluation(){
 });
 
   });
+}
+async function sendSessionNotes(){
+  const text = notes.value.trim();
+  if(!text) return;
+
+  const params = new URLSearchParams({
+    action: "addSessionNote",
+    notes: text
+  });
+
+  await fetch(GOOGLE_API_URL + "?" + params.toString());
 }
 
 /* ================= PDF ================= */
@@ -434,8 +471,8 @@ async function generatePDF(){
 
 /* ================= SAVE ÉVALUATION ================= */
 async function saveEvaluation(){
-  sendSessionToSheet();     // exercices + durées
-  await sendSessionNotes(); // 📝 UNE SEULE NOTE
+  sendSessionToSheet();      // durées
+await sendSessionNotes(); // note globale
 
   const dataByExercise = {};
 
@@ -895,7 +932,10 @@ async function loadJournalCard() {
       p.style.background = "#fff3cd";
       p.style.padding = "6px";
       p.style.borderRadius = "8px";
-      p.style.marginBottom = "4px";
+      p.style.marginBottom = "12px";
+      p.style.lineHeight = "1.6";
+      p.style.whiteSpace = "pre-wrap";
+
       container.appendChild(p);
     }
   });
@@ -992,7 +1032,8 @@ async function generateJournalPDF() {
     pdf.setFont("helvetica", "normal");
     sessionNote.forEach(n => {
       pdf.text(n, 12, y, { maxWidth: 180 });
-      y += 10;
+      y += pdf.getTextDimensions(n, { maxWidth: 180 }).h + 4;
+
     });
   }
 
