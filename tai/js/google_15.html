@@ -45,27 +45,55 @@ button.active{background-image:linear-gradient(to top,#30cfd0,#330867);color:#ff
 .modal-content{background:#fff;border-radius:18px;padding:14px;width:100%;max-height:90vh;overflow:auto}
 textarea{width:100%;border-radius:12px;padding:8px}
 .rating{display:flex;justify-content:space-between;font-size:12px}
-  .journal-title{
-  font-size:22px;
-  text-align:center;
-  margin-bottom:8px;
+ .journal-card {
+  background: #fffaf0;
+  border-radius: 16px;
+  padding: 14px;
 }
 
-.journal-exercises{
-  font-family:Arial;
-  font-size:14px;
-  margin-bottom:10px;
+.journal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
 }
 
-.journal-notes{
-  font-family: 'JBCursive', cursive;
-  font-size: 20px;
-  line-height: 1.4;
-  white-space: pre-wrap;
-  background: #fff9e6;
-  padding: 12px;
-  border-radius: 14px;
+.journal-nav span {
+  font-family: "Super Meatball", cursive;
+  font-size: 26px;
+  text-align: center;
+}
+
+.journal-total {
+  font-family: "Fredoka", sans-serif;
+  font-size: 18px;
+  margin: 8px 0;
+  text-align: center;
+}
+
+.journal-exercises {
+  font-family: Arial;
   margin-bottom: 10px;
+}
+
+.journal-notes-block {
+  margin-bottom: 10px;
+}
+
+.journal-notes-title {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.journal-note {
+  font-family: "JBCursive", cursive;
+  background: #fff3cd;
+  padding: 8px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+}
+
 }
 
 </style>
@@ -122,8 +150,27 @@ textarea{width:100%;border-radius:12px;padding:8px}
   <button class="btn-primary" onclick="loadJournalCard()">Afficher</button>
   <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
 
-  <div id="journalCard" style="margin-top:12px"></div>
-  <canvas id="journalRadar" style="display:none; margin-top:12px;"></canvas>
+ <div id="journalDetails" class="journal-card">
+  <!-- navigation -->
+  <div class="journal-nav">
+    <button onclick="navigateJournal(-1)">⬅️</button>
+    <span id="journalDateTitle"></span>
+    <button onclick="navigateJournal(1)">➡️</button>
+  </div>
+
+  <!-- durée totale -->
+  <div id="journalTotalDuration" class="journal-total"></div>
+
+  <!-- durées par exercice -->
+  <div id="journalDurations"></div>
+
+  <!-- carnet de bord -->
+  <div id="journalNotes"></div>
+
+  <!-- radar -->
+  <canvas id="journalChart" style="margin-top:12px;"></canvas>
+</div>
+
 </div>
 
   <!-- ================== Moyennes par exercice ================== -->
@@ -211,6 +258,7 @@ const EXERCISES = [
 let selection=[],currentIndex=0,timer=null,paused=false;
 let elapsedGlobalSeconds = 0;
 let remainingExercise=0,remainingGlobal=0;
+let journalCurrentDate = null;
 
 /* ================= OBJECTIFS ================= */
 async function fetchObjectivesFromSheet(){
@@ -305,6 +353,14 @@ function renderSelection(){
 
 
 function clearSelection(){selection=[];renderSelection()}
+
+  function navigateJournal(offset) {
+  const d = new Date(journalCurrentDate);
+  d.setDate(d.getDate() + offset);
+  journalCurrentDate = d.toISOString().slice(0,10);
+  document.getElementById("journalDate").value = journalCurrentDate;
+  loadJournal();
+}
 
 /* ================= SESSION ================= */
 const ding=new Audio("ding.mp3");
@@ -924,21 +980,41 @@ async function loadJournalCard() {
   container.appendChild(durDiv);
 
   // 3️⃣ Notes du jour (JBCursive)
-  daySessions.forEach(ev => {
-    if (ev.Notes && ev.Notes.trim() !== "") {
-      const p = document.createElement("p");
-      p.textContent = ev.Notes;
-      p.style.fontFamily = "JBCursive, cursive";
-      p.style.background = "#fff3cd";
-      p.style.padding = "6px";
-      p.style.borderRadius = "8px";
-      p.style.marginBottom = "12px";
-      p.style.lineHeight = "1.6";
-      p.style.whiteSpace = "pre-wrap";
+ // 3️⃣ Carnet de bord — notes regroupées par exercice
+const notesByExercise = {};
 
-      container.appendChild(p);
-    }
+// Regroupement
+daySessions.forEach(ev => {
+  if (ev.Notes && ev.Notes.trim() !== "") {
+    notesByExercise[ev.Exercice] ??= [];
+    notesByExercise[ev.Exercice].push(ev.Notes);
+  }
+});
+
+// Affichage
+for (const exercice in notesByExercise) {
+  const title = document.createElement("div");
+  title.textContent = exercice;
+  title.style.fontFamily = "Fredoka, Arial, sans-serif";
+  title.style.fontWeight = "600";
+  title.style.marginTop = "10px";
+  title.style.marginBottom = "4px";
+  container.appendChild(title);
+
+  notesByExercise[exercice].forEach(note => {
+    const p = document.createElement("p");
+    p.textContent = note;
+    p.style.fontFamily = "JBCursive, cursive";
+    p.style.fontSize = "20px";
+    p.style.lineHeight = "1.5";
+    p.style.background = "#fff9e6";
+    p.style.padding = "10px";
+    p.style.borderRadius = "12px";
+    p.style.marginBottom = "6px";
+    container.appendChild(p);
   });
+}
+
 
   // 4️⃣ Moyennes par critère (radar chart)
   const sum = {}, count = {};
