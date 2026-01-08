@@ -982,39 +982,34 @@ async function loadJournalCard() {
 
   // 3️⃣ Notes du jour (JBCursive)
  // 3️⃣ Carnet de bord — notes regroupées par exercice
-const notesByExercise = {};
+// 3️⃣ Carnet de bord — notes globales de la séance
+const notes = dayEvals
+  .map(ev => ev.Notes)
+  .filter(n => n && n.trim());
 
-// Regroupement
-dayEvals.forEach(ev => {
-  if (ev.Notes && ev.Notes.trim() !== "") {
-    notesByExercise[ev.Exercice] ??= [];
-    notesByExercise[ev.Exercice].push(ev.Notes);
-  }
-});
-
-// Affichage
-for (const exercice in notesByExercise) {
+if (notes.length) {
   const title = document.createElement("div");
-  title.textContent = exercice;
+  title.textContent = "Carnet de bord";
   title.style.fontFamily = "Fredoka, Arial, sans-serif";
   title.style.fontWeight = "600";
-  title.style.marginTop = "10px";
-  title.style.marginBottom = "4px";
+  title.style.marginTop = "12px";
+  title.style.marginBottom = "6px";
   container.appendChild(title);
 
-  notesByExercise[exercice].forEach(note => {
+  notes.forEach(note => {
     const p = document.createElement("p");
     p.textContent = note;
     p.style.fontFamily = "JBCursive, cursive";
     p.style.fontSize = "20px";
-    p.style.lineHeight = "1.5";
+    p.style.lineHeight = "1.6";
     p.style.background = "#fff9e6";
-    p.style.padding = "10px";
-    p.style.borderRadius = "12px";
-    p.style.marginBottom = "6px";
+    p.style.padding = "12px";
+    p.style.borderRadius = "14px";
+    p.style.marginBottom = "8px";
     container.appendChild(p);
   });
 }
+
 
 
   // 4️⃣ Moyennes par critère (radar chart)
@@ -1131,17 +1126,33 @@ if (Object.keys(notesByExercise).length) {
   }
 }
 
-  if (sessionNote.length) {
-    y += 4;
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Notes du jour :", 10, y); y += 6;
-    pdf.setFont("helvetica", "normal");
-    sessionNote.forEach(n => {
-      pdf.text(n, 12, y, { maxWidth: 180 });
-      y += pdf.getTextDimensions(n, { maxWidth: 180 }).h + 4;
+  // 3️⃣ Carnet de bord — notes globales de la séance
+const notes = dayEvals
+  .map(ev => ev.Notes)
+  .filter(n => n && n.trim());
 
-    });
-  }
+if (notes.length) {
+  const title = document.createElement("div");
+  title.textContent = "Carnet de bord";
+  title.style.fontFamily = "Fredoka, Arial, sans-serif";
+  title.style.fontWeight = "600";
+  title.style.marginTop = "12px";
+  title.style.marginBottom = "6px";
+  container.appendChild(title);
+
+  notes.forEach(note => {
+    const p = document.createElement("p");
+    p.textContent = note;
+    p.style.fontFamily = "JBCursive, cursive";
+    p.style.fontSize = "20px";
+    p.style.lineHeight = "1.6";
+    p.style.background = "#fff9e6";
+    p.style.padding = "12px";
+    p.style.borderRadius = "14px";
+    p.style.marginBottom = "8px";
+    container.appendChild(p);
+  });
+}
 
   // 5️⃣ Moyennes par critère
   const sum = {}, count = {};
