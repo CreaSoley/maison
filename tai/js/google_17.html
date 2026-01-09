@@ -182,9 +182,9 @@ textarea{width:100%;border-radius:12px;padding:8px}
  <div id="journalDetails" class="journal-card">
   <!-- navigation -->
   <div class="journal-nav">
-    <button onclick="navigateJournal(-1)">⬅️</button>
-    <span id="journalDateTitle"></span>
-    <button onclick="navigateJournal(1)">➡️</button>
+    <button id="prevDay" onclick="navigateJournal(-1)" style="display:none">◀</button>
+<button id="nextDay" onclick="navigateJournal(1)" style="display:none">▶</button>
+
   </div>
 
    <div id="journalDetails" class="journal-page"></div>
@@ -290,6 +290,8 @@ let selection=[],currentIndex=0,timer=null,paused=false;
 let elapsedGlobalSeconds = 0;
 let remainingExercise=0,remainingGlobal=0;
 let journalCurrentDate = null;
+let journalCurrentDate = null;
+
 
 /* ================= OBJECTIFS ================= */
 async function fetchObjectivesFromSheet(){
@@ -386,21 +388,26 @@ function renderSelection(){
 function clearSelection(){selection=[];renderSelection()}
 
   function navigateJournal(offset) {
-  const page = document.getElementById("journalDetails");
+  if (!journalCurrentDate) return;
 
-  page.classList.add(offset > 0 ? "turn-right" : "turn-left");
+  const page = document.getElementById("journalDetails");
+  if (!page) return;
+
+  const direction = offset > 0 ? "turn-right" : "turn-left";
+  page.classList.add(direction);
 
   setTimeout(() => {
-    const d = new Date(journalCurrentDate);
+    const d = new Date(journalCurrentDate + "T12:00:00"); // ⚠️ FIX TIMEZONE
     d.setDate(d.getDate() + offset);
-    journalCurrentDate = d.toISOString().slice(0,10);
+    journalCurrentDate = d.toISOString().slice(0, 10);
     document.getElementById("journalDate").value = journalCurrentDate;
 
     loadJournalCard();
 
-    page.classList.remove("turn-left", "turn-right");
+    page.classList.remove(direction);
   }, 350);
 }
+
 
 /* ================= SESSION ================= */
 const ding=new Audio("ding.mp3");
@@ -1005,140 +1012,134 @@ let journalChartObj = null;
 let journalRadarChart = null;
 
 async function loadJournalCard() {
-  const date = document.getElementById("journalDate").value;
-  if (!date) return alert("Choisis une date");
+  if (!journalCurrentDate) return;
 
-  // 1️⃣ Récupérer sessions et évaluations
-  const rSess = await fetch(GOOGLE_API_URL + "?action=fetchSessions");
-  const sessions = await rSess.json();
+  const container = document.getElementById("journalDetails");
+  const radarCanvas = document.getElementById("journalRadar");
+  const prevBtn = document.getElementById("prevDay");
+  const nextBtn = document.getElementById("nextDay");
+
+  if (!container) return;
+
+  // RESET
+  container.innerHTML = "";
+  if (radarCanvas) radarCanvas.style.display = "none";
+  if (prevBtn) prevBtn.style.display = "none";
+  if (nextBtn) nextBtn.style.display = "none";
+
+  // ================== FETCH DATA ==================
+  const rSessions = await fetch(GOOGLE_API_URL + "?action=fetchSessions");
+  const sessions = await rSessions.json();
+
   const rEval = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
   const evaluations = await rEval.json();
 
-  const daySessions = sessions.filter(ev => ev.Date.startsWith(date));
-  const dayEvals = evaluations.filter(ev => ev.Date.startsWith(date));
+  const daySessions = sessions.filter(s =>
+    s.Date && s.Date.slice(0, 10) === journalCurrentDate
+  );
 
-  const container = document.getElementById("journalDetails");
-
-  container.innerHTML = "";
+  const dayEvals = evaluations.filter(e =>
+    e.Date && e.Date.slice(0, 10) === journalCurrentDate
+  );
 
   if (!daySessions.length && !dayEvals.length) {
     container.innerHTML = "<em>Aucune donnée pour cette date.</em>";
-    document.getElementById("journalRadar").style.display = "none";
     return;
   }
 
-  // 2️⃣ Durées cumulées par exercice
+  // ================== TITRE ==================
+  container.innerHTML += `
+    <div style="text-align:center;font-family:'Meatball',sans-serif;font-size:22px;margin-bottom:10px;">
+      Carnet d’entraînement du ${journalCurrentDate}
+    </div>
+  `;
+
+  // ================== DURÉE TOTALE ==================
+  const totalDuration = daySessions.reduce(
+    (sum, s) => sum + Number(s.Duree || 0),
+    0
+  );
+
+  container.innerHTML += `
+    <div style="text-align:center;font-family:'Fredoka',sans-serif;font-size:16px;margin-bottom:14px;">
+      ⏱️ Durée totale : <strong>${totalDuration} min</strong>
+    </div>
+  `;
+
+  // ================== DURÉES PAR EXERCICE ==================
   const durations = {};
-  daySessions.forEach(ev => {
-    durations[ev.Exercice] = (durations[ev.Exercice] || 0) + Number(ev.Duree || 0);
+  daySessions.forEach(s => {
+    durations[s.Exercice] = (durations[s.Exercice] || 0) + Number(s.Duree || 0);
   });
 
-  const durDiv = document.createElement("div");
-  durDiv.style.fontFamily = "Arial, sans-serif";
-  durDiv.style.marginBottom = "8px";
-  durDiv.innerHTML = "<strong>Durées cumulées par exercice :</strong><br>";
-  for (const ex in durations) {
-    durDiv.innerHTML += `${ex} : ${durations[ex]} min<br>`;
-  }
-  container.appendChild(durDiv);
+  container.innerHTML += `
+    <div style="font-family:Arial;margin-bottom:16px;">
+      <strong>Durées cumulées par exercice :</strong><br>
+      ${Object.entries(durations)
+        .map(([ex, d]) => `${ex} : ${d} min`)
+        .join("<br>")}
+    </div>
+  `;
 
-// 3️⃣ Carnet de bord — notes regroupées par exercice (version améliorée)
-const notesByExercise = {};
-
-dayEvals.forEach(ev => {
-  if (ev.Notes && ev.Notes.trim()) {
-    notesByExercise[ev.Exercice] ??= [];
-    notesByExercise[ev.Exercice].push(ev.Notes);
-  }
-});
-
-if (Object.keys(notesByExercise).length) {
-  const title = document.createElement("div");
-  title.textContent = "📔 Carnet de bord";
-  title.style.fontFamily = "Fredoka, Arial, sans-serif";
-  title.style.fontWeight = "600";
-  title.style.fontSize = "18px";
-  title.style.marginTop = "16px";
-  title.style.marginBottom = "12px";
-  container.appendChild(title);
-
-  for (const ex in notesByExercise) {
-
-    // 🔹 Bloc exercice
-    const exBlock = document.createElement("div");
-    exBlock.style.marginTop = "20px";
-    exBlock.style.paddingTop = "12px";
-    exBlock.style.borderTop = "2px dashed #f3c4d6";
-
-    // 🔹 Titre exercice
-    const exTitle = document.createElement("div");
-    exTitle.innerHTML = `🥋 <span>${ex}</span>`;
-    exTitle.style.fontFamily = "Arial, sans-serif";
-    exTitle.style.fontWeight = "700";
-    exTitle.style.fontSize = "15px";
-    exTitle.style.marginBottom = "10px";
-    exTitle.style.color = "#444";
-
-    exBlock.appendChild(exTitle);
-
-    // 🔹 Notes
-    notesByExercise[ex].forEach(note => {
-      const p = document.createElement("div");
-      p.innerHTML = `✍️ ${note}`;
-      p.style.fontFamily = "JBCursive, cursive";
-      p.style.fontSize = "20px";
-      p.style.lineHeight = "1.7";
-      p.style.background = "#fff9e6";
-      p.style.padding = "12px 14px";
-      p.style.borderRadius = "16px";
-      p.style.marginBottom = "8px";
-      p.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)";
-      exBlock.appendChild(p);
-    });
-
-    container.appendChild(exBlock);
-  }
-}
-
-  // 4️⃣ Moyennes par critère (radar chart)
-  const sum = {}, count = {};
-  dayEvals.forEach(ev => {
-    const crit = JSON.parse(ev.Critères || "{}");
-    for (const c in crit) {
-      sum[c] = (sum[c] || 0) + crit[c];
-      count[c] = (count[c] || 0) + 1;
+  // ================== NOTES PAR EXERCICE ==================
+  const notesByExercise = {};
+  daySessions.forEach(s => {
+    if (s.Notes && s.Notes.trim()) {
+      notesByExercise[s.Exercice] ??= [];
+      notesByExercise[s.Exercice].push(s.Notes.trim());
     }
   });
 
-  const labels = Object.keys(sum);
-  const averages = labels.map(c => +(sum[c] / count[c]).toFixed(2));
+  Object.entries(notesByExercise).forEach(([ex, notes]) => {
+    container.innerHTML += `
+      <div style="margin-top:18px;">
+        <div style="
+          font-weight:bold;
+          margin-bottom:6px;
+          display:flex;
+          align-items:center;
+          gap:6px;
+        ">
+          ✍️ ${ex}
+        </div>
 
-  // Affichage radar chart
-  const canvas = document.getElementById("journalRadar");
-  canvas.style.display = labels.length ? "block" : "none";
-  const ctx = canvas.getContext("2d");
+        <div style="
+          font-family:'JBCursive',cursive;
+          background:#fff7e6;
+          padding:10px;
+          border-radius:10px;
+          line-height:1.5;
+        ">
+          ${notes.map(n => `• ${n}`).join("<br><br>")}
+        </div>
+      </div>
+    `;
+  });
 
-  if (journalRadarChart) journalRadarChart.destroy();
-  if (labels.length) {
-    journalRadarChart = new Chart(ctx, {
-      type: "radar",
-      data: {
-        labels,
-        datasets: [{
-          label: "Moyenne du jour",
-          data: averages,
-          fill: true,
-          backgroundColor: "rgba(250,112,154,0.3)",
-          borderColor: "#fa709a",
-          pointBackgroundColor: "#fa709a"
-        }]
-      },
-      options: {
-        scales: { r: { min: 0, max: 5, ticks: { stepSize: 1 } } },
-        plugins: { legend: { position: "top" } }
+  // ================== RADAR ==================
+  if (dayEvals.length && radarCanvas) {
+    const sum = {}, count = {};
+
+    dayEvals.forEach(ev => {
+      const crit = JSON.parse(ev.Critères || "{}");
+      for (const k in crit) {
+        sum[k] = (sum[k] || 0) + crit[k];
+        count[k] = (count[k] || 0) + 1;
       }
     });
+
+    const labels = Object.keys(sum);
+    const averages = labels.map(k =>
+      +(sum[k] / count[k]).toFixed(2)
+    );
+
+    radarCanvas.style.display = "block";
+    drawJournalRadar(labels, averages);
   }
+
+  // ================== NAVIGATION ==================
+  if (prevBtn) prevBtn.style.display = "inline-block";
+  if (nextBtn) nextBtn.style.display = "inline-block";
 }
 
 /* ==================== PDF CARNET ==================== */
