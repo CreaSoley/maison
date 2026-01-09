@@ -93,7 +93,22 @@ textarea{width:100%;border-radius:12px;padding:8px}
   margin-bottom: 6px;
   white-space: pre-wrap;
 }
+.note-block {
+  margin: 1rem 0;
+}
 
+.note-block h4 {
+  font-family: 'Fredoka', sans-serif;
+  margin-bottom: .3rem;
+}
+
+.note-block textarea {
+  width: 100%;
+  min-height: 80px;
+  font-family: 'JBCursive', cursive;
+  font-size: 1.1rem;
+  padding: .5rem;
+  border-radius: 10px;
 }
 
 </style>
@@ -225,7 +240,7 @@ textarea{width:100%;border-radius:12px;padding:8px}
       Bilan général, points à améliorer, ce qui a progressé, sensations…
     </p>
 
-    <textarea id="notes" rows="4"></textarea>
+  <div id="notesByExercise"></div>
 
     <div id="evaluation"></div>
 
@@ -476,14 +491,25 @@ function renderEvaluation(){
 
   });
 }
-async function sendSessionNotes(){
-  const text = notes.value.trim();
-  if(!text) return;
+function renderNotesByExercise() {
+  const container = document.getElementById("notesByExercise");
+  container.innerHTML = "";
 
-  const params = new URLSearchParams({
-    action: "addSessionNote",
-    notes: text
+  selection.forEach(ex => {
+    const block = document.createElement("div");
+    block.className = "note-block";
+
+    block.innerHTML = `
+      <h4>${ex.name}</h4>
+      <textarea
+        data-exercice="${ex.name}"
+        placeholder="Ressenti, points à améliorer..."
+      ></textarea>
+    `;
+
+    container.appendChild(block);
   });
+}
 
   await fetch(GOOGLE_API_URL + "?" + params.toString());
 }
@@ -528,22 +554,21 @@ async function generatePDF(){
 /* ================= SAVE ÉVALUATION ================= */
 async function saveEvaluation() {
 
-  // 🔑 dernier exercice de la séance
-  const lastExercise = selection[selection.length - 1]?.name;
-  if (!lastExercise) {
-    alert("Aucun exercice pour rattacher les notes.");
-    return;
-  }
+  sendSessionToSheet(); // durées réelles
 
-  // 🔑 texte des notes
-  const notesText = notes.value.trim();
+  // 🔑 récupérer les notes par exercice
+  const notesByExercise = {};
+  document
+    .querySelectorAll("#notesByExercise textarea")
+    .forEach(t => {
+      const ex = t.dataset.exercice;
+      if (t.value.trim()) {
+        notesByExercise[ex] = t.value.trim();
+      }
+    });
 
-  // 1️⃣ envoyer les durées réelles
-  sendSessionToSheet();
-
-  // 2️⃣ regrouper les critères par exercice
+  // 🔑 récupérer critères
   const dataByExercise = {};
-
   document
     .querySelectorAll("#evaluation input[type=range]")
     .forEach(r => {
@@ -555,24 +580,18 @@ async function saveEvaluation() {
       dataByExercise[ex][crit] = Number(r.value);
     });
 
-  // 3️⃣ envoyer les évaluations
+  // 🔑 envoi par exercice
   for (const ex in dataByExercise) {
-    const payload = new URLSearchParams({
+    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
       action: "addEvaluation",
       exercice: ex,
       criteres: JSON.stringify(dataByExercise[ex]),
-      // 👉 notes UNIQUEMENT pour le dernier exercice
-      notes: ex === lastExercise ? notesText : ""
-    });
-
-    await fetch(GOOGLE_API_URL + "?" + payload.toString());
+      notes: notesByExercise[ex] || ""
+    }));
   }
 
-  // reset
-  notes.value = "";
   location.reload();
 }
-
 
 /* ================= STATS ================= */
 let exerciseChartObj = null; // référence du graphique
