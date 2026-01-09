@@ -168,8 +168,6 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
 </div>
 
-  <!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
-<!-- Conteneur pour le carnet -->
 <!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
 <div class="journal-card">
   <h3>📔 Carnet d’entraînement</h3>
@@ -177,9 +175,8 @@ textarea{width:100%;border-radius:12px;padding:8px}
   <input type="date" id="journalDate">
 
   <div style="margin-bottom:10px;">
-    <button class="btn-primary" onclick="showJournalForSelectedDate()">
-      Afficher
-    </button>
+    <button class="btn-primary" onclick="loadJournalCard()">Afficher</button>
+
     <button class="btn-secondary" onclick="generateJournalPDF()">
       📄 PDF
     </button>
