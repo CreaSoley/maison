@@ -1082,12 +1082,13 @@ async function loadJournalCard() {
   /* ===== NOTES PAR EXERCICE ===== */
   const notesByExercise = {};
 
-  daySessions.forEach(s => {
-    if (s.Notes && s.Notes.trim()) {
-      notesByExercise[s.Exercice] ??= [];
-      notesByExercise[s.Exercice].push(s.Notes);
-    }
-  });
+dayEvals.forEach(ev => {
+  if (ev.Notes && ev.Notes.trim()) {
+    notesByExercise[ev.Exercice] ??= [];
+    notesByExercise[ev.Exercice].push(ev.Notes);
+  }
+});
+console.log("📝 Notes par exercice (card)", notesByExercise);
 
   if (Object.keys(notesByExercise).length) {
     const notesHTML = Object.entries(notesByExercise)
