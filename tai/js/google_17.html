@@ -170,23 +170,36 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
   <!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
 <!-- Conteneur pour le carnet -->
+<!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
 <div class="journal-card">
   <h3>📔 Carnet d’entraînement</h3>
+
   <input type="date" id="journalDate">
-  <button class="btn-primary" onclick="loadJournalCard()">Afficher</button>
-  <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
 
- <div class="journal-wrapper">
-  <button id="prevDay" onclick="navigateJournal(-1)">⬅️</button>
-
-  <div id="journalPage" class="journal-page"></div>
-
-  <button id="nextDay" onclick="navigateJournal(1)">➡️</button>
-</div>
-
-<canvas id="journalRadar" style="display:none"></canvas>
+  <div style="margin-bottom:10px;">
+    <button class="btn-primary" onclick="showJournalForSelectedDate()">
+      Afficher
+    </button>
+    <button class="btn-secondary" onclick="generateJournalPDF()">
+      📄 PDF
+    </button>
   </div>
+
+  <div class="journal-wrapper">
+    <button id="prevDay" onclick="navigateJournal(-1)" style="display:none">
+      ⬅️
+    </button>
+
+    <div id="journalPage" class="journal-page"></div>
+
+    <button id="nextDay" onclick="navigateJournal(1)" style="display:none">
+      ➡️
+    </button>
+  </div>
+
+  <canvas id="journalRadar" style="display:none"></canvas>
 </div>
+
 
 
   <!-- ================== Moyennes par exercice ================== -->
@@ -1237,6 +1250,16 @@ if (Object.keys(notesByExercise).length) {
   }
 
   pdf.save(`Carnet_${date}.pdf`);
+}
+function showJournalForSelectedDate() {
+  const input = document.getElementById("journalDate");
+  if (!input || !input.value) {
+    alert("Veuillez sélectionner une date");
+    return;
+  }
+
+  journalCurrentDate = input.value;
+  loadJournalCard();
 }
 
 /* ================= INIT ================= */
