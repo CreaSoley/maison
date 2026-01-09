@@ -12,9 +12,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<link href="https://fonts.googleapis.com/css2?family=JBCursive&display=swap" rel="stylesheet">
-
-
 
 <style>
   @font-face {
@@ -173,44 +170,24 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
   <!-- ================== CARNET D’ENTRAÎNEMENT ================== -->
 <!-- Conteneur pour le carnet -->
-<div class="card">
+<div class="journal-card">
   <h3>📔 Carnet d’entraînement</h3>
   <input type="date" id="journalDate">
   <button class="btn-primary" onclick="loadJournalCard()">Afficher</button>
   <button class="btn-secondary" onclick="generateJournalPDF()">📄 PDF</button>
 
- <div id="journalDetails" class="journal-card">
-  <!-- navigation -->
-  <div class="journal-nav">
-    <button id="prevDay" onclick="navigateJournal(-1)" style="display:none">◀</button>
-<button id="nextDay" onclick="navigateJournal(1)" style="display:none">▶</button>
+ <div class="journal-wrapper">
+  <button id="prevDay" onclick="navigateJournal(-1)">⬅️</button>
 
-  </div>
+  <div id="journalPage" class="journal-page"></div>
 
-   <div id="journalDetailsContainer" class="journal-card">
-  <!-- navigation -->
-  <div class="journal-nav">
-    <button id="prevDay" onclick="navigateJournal(-1)" style="display:none">◀</button>
-    <button id="nextDay" onclick="navigateJournal(1)" style="display:none">▶</button>
-  </div>
-
-  <div id="journalDetails" class="journal-page"></div> <!-- contenu du jour -->
-
-  <!-- durée totale -->
-  <div id="journalTotalDuration" class="journal-total"></div>
-
-  <!-- durées par exercice -->
-  <div id="journalDurations"></div>
-
-  <!-- carnet de bord -->
-  <div id="journalNotes"></div>
-
-  <!-- radar -->
-  <canvas id="journalRadar" style="margin-top:12px;"></canvas>
+  <button id="nextDay" onclick="navigateJournal(1)">➡️</button>
 </div>
 
-
+<canvas id="journalRadar" style="display:none"></canvas>
+  </div>
 </div>
+
 
   <!-- ================== Moyennes par exercice ================== -->
 <div class="card">
@@ -298,8 +275,6 @@ let selection=[],currentIndex=0,timer=null,paused=false;
 let elapsedGlobalSeconds = 0;
 let remainingExercise=0,remainingGlobal=0;
 let journalCurrentDate = null;
-let journalCurrentDate = null;
-
 
 /* ================= OBJECTIFS ================= */
 async function fetchObjectivesFromSheet(){
@@ -398,15 +373,17 @@ function clearSelection(){selection=[];renderSelection()}
   function navigateJournal(offset) {
   if (!journalCurrentDate) return;
 
-  const page = document.getElementById("journalDetails");
+  const page = document.getElementById("journalPage");
   if (!page) return;
 
+  // animation
   const direction = offset > 0 ? "turn-right" : "turn-left";
   page.classList.add(direction);
 
   setTimeout(() => {
-    const d = new Date(journalCurrentDate + "T12:00:00"); // ⚠️ FIX TIMEZONE
+    const d = new Date(journalCurrentDate);
     d.setDate(d.getDate() + offset);
+
     journalCurrentDate = d.toISOString().slice(0, 10);
     document.getElementById("journalDate").value = journalCurrentDate;
 
@@ -415,7 +392,6 @@ function clearSelection(){selection=[];renderSelection()}
     page.classList.remove(direction);
   }, 350);
 }
-
 
 /* ================= SESSION ================= */
 const ding=new Audio("ding.mp3");
@@ -1022,27 +998,32 @@ let journalRadarChart = null;
 async function loadJournalCard() {
   if (!journalCurrentDate) return;
 
-  const container = document.getElementById("journalDetails"); // contenu du jour
+  const container = document.getElementById("journalPage");
   const prevBtn = document.getElementById("prevDay");
   const nextBtn = document.getElementById("nextDay");
   const radarCanvas = document.getElementById("journalRadar");
 
   if (!container) return;
 
-  // ===== Reset affichage =====
+  // ===== RESET =====
   container.innerHTML = "";
   if (radarCanvas) radarCanvas.style.display = "none";
   if (prevBtn) prevBtn.style.display = "none";
   if (nextBtn) nextBtn.style.display = "none";
 
-  // ===== Fetch données =====
-  const rSessions = await fetch(GOOGLE_API_URL + "?action=fetchSessions");
-  const sessions = await rSessions.json();
-  const rEval = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
-  const evaluations = await rEval.json();
+  // ===== FETCH =====
+  const [sessions, evaluations] = await Promise.all([
+    fetch(GOOGLE_API_URL + "?action=fetchSessions").then(r => r.json()),
+    fetch(GOOGLE_API_URL + "?action=fetchEvaluations").then(r => r.json())
+  ]);
 
-  const daySessions = sessions.filter(s => s.Date && s.Date.slice(0, 10) === journalCurrentDate);
-  const dayEvals = evaluations.filter(e => e.Date && e.Date.slice(0, 10) === journalCurrentDate);
+  const daySessions = sessions.filter(
+    s => s.Date && s.Date.slice(0, 10) === journalCurrentDate
+  );
+
+  const dayEvals = evaluations.filter(
+    e => e.Date && e.Date.slice(0, 10) === journalCurrentDate
+  );
 
   if (!daySessions.length && !dayEvals.length) {
     container.innerHTML = "<em>Aucune donnée pour cette date.</em>";
@@ -1051,15 +1032,30 @@ async function loadJournalCard() {
 
   // ===== TITRE =====
   container.innerHTML += `
-    <div style="text-align:center;font-family:'Fredoka',sans-serif;font-size:20px;margin-bottom:12px;">
-      📔 Carnet d’entraînement du ${journalCurrentDate}
+    <div style="
+      text-align:center;
+      font-family:'Super Meatball', cursive;
+      font-size:26px;
+      margin-bottom:14px;
+    ">
+      Carnet d’entraînement<br>
+      <span style="font-size:18px">(${journalCurrentDate})</span>
     </div>
   `;
 
   // ===== DURÉE TOTALE =====
-  const totalDuration = daySessions.reduce((sum, s) => sum + Number(s.Duree || 0), 0);
+  const totalDuration = daySessions.reduce(
+    (sum, s) => sum + Number(s.Duree || 0),
+    0
+  );
+
   container.innerHTML += `
-    <div style="text-align:center;font-family:'Fredoka',sans-serif;font-size:16px;margin-bottom:16px;">
+    <div style="
+      text-align:center;
+      font-family:'Fredoka', sans-serif;
+      font-size:16px;
+      margin-bottom:18px;
+    ">
       ⏱️ Durée totale : <strong>${totalDuration} min</strong>
     </div>
   `;
@@ -1072,9 +1068,11 @@ async function loadJournalCard() {
 
   if (Object.keys(durations).length) {
     container.innerHTML += `
-      <div style="font-family:Arial;margin-bottom:16px;">
+      <div style="font-family:Arial;margin-bottom:18px;">
         <strong>Durées cumulées par exercice :</strong><br>
-        ${Object.entries(durations).map(([ex, d]) => `• ${ex} : ${d} min`).join("<br>")}
+        ${Object.entries(durations)
+          .map(([ex, d]) => `• ${ex} : ${d} min`)
+          .join("<br>")}
       </div>
     `;
   }
@@ -1090,24 +1088,25 @@ async function loadJournalCard() {
 
   Object.entries(notesByExercise).forEach(([ex, notes]) => {
     container.innerHTML += `
-      <div style="margin-top:18px;">
+      <div style="margin-top:22px;">
         <div style="
           font-weight:bold;
-          margin-bottom:6px;
+          margin-bottom:10px;
           display:flex;
           align-items:center;
-          gap:6px;
+          gap:8px;
         ">
-          ✍️ ${ex}
+          📘 ${ex}
         </div>
+
         <div style="
-          font-family:'JBCursive',cursive;
+          font-family:'JBCursive', cursive;
           background:#fff7e6;
-          padding:10px;
-          border-radius:10px;
-          line-height:1.5;
+          padding:12px;
+          border-radius:12px;
+          line-height:1.6;
         ">
-          ${notes.map(n => `• ${n}`).join("<br><br>")}
+          ${notes.map(n => `✍️ ${n}`).join("<br><br>")}
         </div>
       </div>
     `;
@@ -1116,6 +1115,7 @@ async function loadJournalCard() {
   // ===== RADAR =====
   if (dayEvals.length && radarCanvas) {
     const sum = {}, count = {};
+
     dayEvals.forEach(ev => {
       const crit = JSON.parse(ev.Critères || "{}");
       for (const k in crit) {
@@ -1125,7 +1125,9 @@ async function loadJournalCard() {
     });
 
     const labels = Object.keys(sum);
-    const averages = labels.map(k => +(sum[k] / count[k]).toFixed(2));
+    const averages = labels.map(
+      k => +(sum[k] / count[k]).toFixed(2)
+    );
 
     if (labels.length) {
       radarCanvas.style.display = "block";
@@ -1137,7 +1139,6 @@ async function loadJournalCard() {
   if (prevBtn) prevBtn.style.display = "inline-block";
   if (nextBtn) nextBtn.style.display = "inline-block";
 }
-
 
 /* ==================== PDF CARNET ==================== */
 async function generateJournalPDF() {
