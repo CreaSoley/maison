@@ -1009,6 +1009,7 @@ let journalChartObj = null;
 let journalRadarChart = null;
 
 async function loadJournalCard() {
+  console.log("📔 loadJournalCard", journalCurrentDate);
   if (!journalCurrentDate) return;
 
   const container = document.getElementById("journalPage");
