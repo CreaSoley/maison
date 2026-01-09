@@ -187,7 +187,14 @@ textarea{width:100%;border-radius:12px;padding:8px}
 
   </div>
 
-   <div id="journalDetails" class="journal-page"></div>
+   <div id="journalDetailsContainer" class="journal-card">
+  <!-- navigation -->
+  <div class="journal-nav">
+    <button id="prevDay" onclick="navigateJournal(-1)" style="display:none">◀</button>
+    <button id="nextDay" onclick="navigateJournal(1)" style="display:none">▶</button>
+  </div>
+
+  <div id="journalDetails" class="journal-page"></div> <!-- contenu du jour -->
 
   <!-- durée totale -->
   <div id="journalTotalDuration" class="journal-total"></div>
@@ -199,8 +206,9 @@ textarea{width:100%;border-radius:12px;padding:8px}
   <div id="journalNotes"></div>
 
   <!-- radar -->
-  <canvas id="journalChart" style="margin-top:12px;"></canvas>
+  <canvas id="journalRadar" style="margin-top:12px;"></canvas>
 </div>
+
 
 </div>
 
@@ -1014,74 +1022,64 @@ let journalRadarChart = null;
 async function loadJournalCard() {
   if (!journalCurrentDate) return;
 
-  const container = document.getElementById("journalDetails");
-  const radarCanvas = document.getElementById("journalRadar");
+  const container = document.getElementById("journalDetails"); // contenu du jour
   const prevBtn = document.getElementById("prevDay");
   const nextBtn = document.getElementById("nextDay");
+  const radarCanvas = document.getElementById("journalRadar");
 
   if (!container) return;
 
-  // RESET
+  // ===== Reset affichage =====
   container.innerHTML = "";
   if (radarCanvas) radarCanvas.style.display = "none";
   if (prevBtn) prevBtn.style.display = "none";
   if (nextBtn) nextBtn.style.display = "none";
 
-  // ================== FETCH DATA ==================
+  // ===== Fetch données =====
   const rSessions = await fetch(GOOGLE_API_URL + "?action=fetchSessions");
   const sessions = await rSessions.json();
-
   const rEval = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
   const evaluations = await rEval.json();
 
-  const daySessions = sessions.filter(s =>
-    s.Date && s.Date.slice(0, 10) === journalCurrentDate
-  );
-
-  const dayEvals = evaluations.filter(e =>
-    e.Date && e.Date.slice(0, 10) === journalCurrentDate
-  );
+  const daySessions = sessions.filter(s => s.Date && s.Date.slice(0, 10) === journalCurrentDate);
+  const dayEvals = evaluations.filter(e => e.Date && e.Date.slice(0, 10) === journalCurrentDate);
 
   if (!daySessions.length && !dayEvals.length) {
     container.innerHTML = "<em>Aucune donnée pour cette date.</em>";
     return;
   }
 
-  // ================== TITRE ==================
+  // ===== TITRE =====
   container.innerHTML += `
-    <div style="text-align:center;font-family:'Meatball',sans-serif;font-size:22px;margin-bottom:10px;">
-      Carnet d’entraînement du ${journalCurrentDate}
+    <div style="text-align:center;font-family:'Fredoka',sans-serif;font-size:20px;margin-bottom:12px;">
+      📔 Carnet d’entraînement du ${journalCurrentDate}
     </div>
   `;
 
-  // ================== DURÉE TOTALE ==================
-  const totalDuration = daySessions.reduce(
-    (sum, s) => sum + Number(s.Duree || 0),
-    0
-  );
-
+  // ===== DURÉE TOTALE =====
+  const totalDuration = daySessions.reduce((sum, s) => sum + Number(s.Duree || 0), 0);
   container.innerHTML += `
-    <div style="text-align:center;font-family:'Fredoka',sans-serif;font-size:16px;margin-bottom:14px;">
+    <div style="text-align:center;font-family:'Fredoka',sans-serif;font-size:16px;margin-bottom:16px;">
       ⏱️ Durée totale : <strong>${totalDuration} min</strong>
     </div>
   `;
 
-  // ================== DURÉES PAR EXERCICE ==================
+  // ===== DURÉES PAR EXERCICE =====
   const durations = {};
   daySessions.forEach(s => {
     durations[s.Exercice] = (durations[s.Exercice] || 0) + Number(s.Duree || 0);
   });
 
-  container.innerHTML += `
-    <div style="font-family:Arial;margin-bottom:16px;">
-      <strong>Durées cumulées par exercice :</strong><br>
-      ${Object.entries(durations)
-        .map(([ex, d]) => `${ex} : ${d} min`)
-        .join("<br>")}
-    </div>
-  `;
+  if (Object.keys(durations).length) {
+    container.innerHTML += `
+      <div style="font-family:Arial;margin-bottom:16px;">
+        <strong>Durées cumulées par exercice :</strong><br>
+        ${Object.entries(durations).map(([ex, d]) => `• ${ex} : ${d} min`).join("<br>")}
+      </div>
+    `;
+  }
 
-  // ================== NOTES PAR EXERCICE ==================
+  // ===== NOTES PAR EXERCICE =====
   const notesByExercise = {};
   daySessions.forEach(s => {
     if (s.Notes && s.Notes.trim()) {
@@ -1102,7 +1100,6 @@ async function loadJournalCard() {
         ">
           ✍️ ${ex}
         </div>
-
         <div style="
           font-family:'JBCursive',cursive;
           background:#fff7e6;
@@ -1116,10 +1113,9 @@ async function loadJournalCard() {
     `;
   });
 
-  // ================== RADAR ==================
+  // ===== RADAR =====
   if (dayEvals.length && radarCanvas) {
     const sum = {}, count = {};
-
     dayEvals.forEach(ev => {
       const crit = JSON.parse(ev.Critères || "{}");
       for (const k in crit) {
@@ -1129,18 +1125,19 @@ async function loadJournalCard() {
     });
 
     const labels = Object.keys(sum);
-    const averages = labels.map(k =>
-      +(sum[k] / count[k]).toFixed(2)
-    );
+    const averages = labels.map(k => +(sum[k] / count[k]).toFixed(2));
 
-    radarCanvas.style.display = "block";
-    drawJournalRadar(labels, averages);
+    if (labels.length) {
+      radarCanvas.style.display = "block";
+      drawJournalRadar(labels, averages);
+    }
   }
 
-  // ================== NAVIGATION ==================
+  // ===== NAVIGATION =====
   if (prevBtn) prevBtn.style.display = "inline-block";
   if (nextBtn) nextBtn.style.display = "inline-block";
 }
+
 
 /* ==================== PDF CARNET ==================== */
 async function generateJournalPDF() {
