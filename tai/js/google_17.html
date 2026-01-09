@@ -1152,7 +1152,114 @@ async function loadJournalCard() {
     });
   }
 }
+/* ==================== PDF CARNET ==================== */
+async function generateJournalPDF() {
+  const date = document.getElementById("journalDate").value;
+  if (!date) return alert("Choisis une date");
 
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  let y = 10;
+
+  // 1️⃣ Récupérer sessions et évaluations
+  const rSess = await fetch(GOOGLE_API_URL + "?action=fetchSessions");
+  const sessions = await rSess.json();
+  const rEval = await fetch(GOOGLE_API_URL + "?action=fetchEvaluations");
+  const evaluations = await rEval.json();
+
+  const daySessions = sessions.filter(ev => ev.Date.startsWith(date));
+  const dayEvals = evaluations.filter(ev => ev.Date.startsWith(date));
+
+  if (!daySessions.length && !dayEvals.length) return alert("Aucune donnée pour cette date");
+
+  // 2️⃣ Titre
+  pdf.setFontSize(18);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Carnet d’entraînement", 10, y); y += 8;
+  pdf.setFontSize(12);
+  pdf.setFont("helvetica", "normal");
+  pdf.text(date, 10, y); y += 10;
+
+  // 3️⃣ Durées cumulées par exercice
+  const durations = {};
+  daySessions.forEach(ev => {
+    durations[ev.Exercice] = (durations[ev.Exercice] || 0) + Number(ev.Duree || 0);
+  });
+
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Durées cumulées par exercice :", 10, y); y += 6;
+  pdf.setFont("helvetica", "normal");
+  Object.entries(durations).forEach(([k, v]) => {
+    pdf.text(`- ${k} : ${v} min`, 12, y);
+    y += 6;
+  });
+
+  // 4️⃣ Notes du jour
+  const notesByExercise = {};
+
+dayEvals.forEach(ev => {
+  if (ev.Notes && ev.Notes.trim()) {
+    notesByExercise[ev.Exercice] ??= [];
+    notesByExercise[ev.Exercice].push(ev.Notes);
+  }
+});
+
+if (Object.keys(notesByExercise).length) {
+  y += 4;
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Carnet de bord :", 10, y);
+  y += 6;
+
+  for (const ex in notesByExercise) {
+    pdf.setFont("helvetica", "bold");
+    pdf.text(ex, 12, y);
+    y += 6;
+
+    pdf.setFont("helvetica", "normal");
+    notesByExercise[ex].forEach(note => {
+      pdf.text(note, 14, y, { maxWidth: 170 });
+      y += pdf.getTextDimensions(note, { maxWidth: 170 }).h + 4;
+    });
+
+    y += 4;
+  }
+}
+
+  // 5️⃣ Moyennes par critère
+  const sum = {}, count = {};
+  dayEvals.forEach(ev => {
+    const crit = JSON.parse(ev.Critères || "{}");
+    for (const c in crit) {
+      sum[c] = (sum[c] || 0) + crit[c];
+      count[c] = (count[c] || 0) + 1;
+    }
+  });
+
+  const labels = Object.keys(sum);
+  if (labels.length) {
+    const averages = labels.map(c => +(sum[c]/count[c]).toFixed(2));
+    y += 4;
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Moyennes par critère :", 10, y); y += 6;
+    pdf.setFont("helvetica", "normal");
+    labels.forEach((c, i) => {
+      pdf.text(`- ${c} : ${averages[i]}`, 12, y);
+      y += 6;
+    });
+  }
+
+  pdf.save(`Carnet_${date}.pdf`);
+}
+function showJournalForSelectedDate() {
+  const input = document.getElementById("journalDate");
+  if (!input || !input.value) {
+    alert("Veuillez sélectionner une date");
+    return;
+  }
+
+  journalCurrentDate = input.value;
+  loadJournalCard();
+}
 /* ================= INIT ================= */
 const bank=document.getElementById("bank");
 const selectionDiv=document.getElementById("selection");
