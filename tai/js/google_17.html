@@ -110,6 +110,20 @@ textarea{width:100%;border-radius:12px;padding:8px}
   padding: .5rem;
   border-radius: 10px;
 }
+.journal-page {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  transform-origin: left center;
+}
+
+.journal-page.turn-left {
+  transform: rotateY(-12deg);
+  opacity: 0;
+}
+
+.journal-page.turn-right {
+  transform: rotateY(12deg);
+  opacity: 0;
+}
 
 </style>
 </head>
@@ -172,6 +186,8 @@ textarea{width:100%;border-radius:12px;padding:8px}
     <span id="journalDateTitle"></span>
     <button onclick="navigateJournal(1)">➡️</button>
   </div>
+
+   <div id="journalDetails" class="journal-page"></div>
 
   <!-- durée totale -->
   <div id="journalTotalDuration" class="journal-total"></div>
@@ -370,11 +386,20 @@ function renderSelection(){
 function clearSelection(){selection=[];renderSelection()}
 
   function navigateJournal(offset) {
-  const d = new Date(journalCurrentDate);
-  d.setDate(d.getDate() + offset);
-  journalCurrentDate = d.toISOString().slice(0,10);
-  document.getElementById("journalDate").value = journalCurrentDate;
-  loadJournal();
+  const page = document.getElementById("journalDetails");
+
+  page.classList.add(offset > 0 ? "turn-right" : "turn-left");
+
+  setTimeout(() => {
+    const d = new Date(journalCurrentDate);
+    d.setDate(d.getDate() + offset);
+    journalCurrentDate = d.toISOString().slice(0,10);
+    document.getElementById("journalDate").value = journalCurrentDate;
+
+    loadJournalCard();
+
+    page.classList.remove("turn-left", "turn-right");
+  }, 350);
 }
 
 /* ================= SESSION ================= */
