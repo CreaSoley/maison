@@ -528,19 +528,20 @@ async function generatePDF(){
 /* ================= SAVE ÉVALUATION ================= */
 async function saveEvaluation() {
 
-  // 🔑 Dernier exercice de la séance
+  // 🔑 dernier exercice de la séance
   const lastExercise = selection[selection.length - 1]?.name;
   if (!lastExercise) {
     alert("Aucun exercice pour rattacher les notes.");
     return;
   }
 
-  const sessionNotes = notes.value.trim();
+  // 🔑 texte des notes
+  const notesText = notes.value.trim();
 
-  // 1️⃣ Enregistrer les durées réellement effectuées
+  // 1️⃣ envoyer les durées réelles
   sendSessionToSheet();
 
-  // 2️⃣ Récupérer les critères par exercice
+  // 2️⃣ regrouper les critères par exercice
   const dataByExercise = {};
 
   document
@@ -554,20 +555,24 @@ async function saveEvaluation() {
       dataByExercise[ex][crit] = Number(r.value);
     });
 
-  // 3️⃣ Envoyer évaluations + notes (notes uniquement sur le dernier exercice)
+  // 3️⃣ envoyer les évaluations
   for (const ex in dataByExercise) {
-    await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
+    const payload = new URLSearchParams({
       action: "addEvaluation",
       exercice: ex,
       criteres: JSON.stringify(dataByExercise[ex]),
-      notes: ex === lastExercise ? sessionNotes : ""
-    }));
+      // 👉 notes UNIQUEMENT pour le dernier exercice
+      notes: ex === lastExercise ? notesText : ""
+    });
+
+    await fetch(GOOGLE_API_URL + "?" + payload.toString());
   }
 
-  // 4️⃣ Fermer la modale et rafraîchir
-  evaluationModal.style.display = "none";
+  // reset
+  notes.value = "";
   location.reload();
 }
+
 
 /* ================= STATS ================= */
 let exerciseChartObj = null; // référence du graphique
