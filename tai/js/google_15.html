@@ -526,33 +526,46 @@ async function generatePDF(){
 }
 
 /* ================= SAVE ÉVALUATION ================= */
-async function saveEvaluation(){
-  sendSessionToSheet();      // durées
-await sendSessionNotes(); // note globale
+async function saveEvaluation() {
 
+  // 🔑 Dernier exercice de la séance
+  const lastExercise = selection[selection.length - 1]?.name;
+  if (!lastExercise) {
+    alert("Aucun exercice pour rattacher les notes.");
+    return;
+  }
+
+  const sessionNotes = notes.value.trim();
+
+  // 1️⃣ Enregistrer les durées réellement effectuées
+  sendSessionToSheet();
+
+  // 2️⃣ Récupérer les critères par exercice
   const dataByExercise = {};
 
   document
-  .querySelectorAll("#evaluation input[type=range]")
-  .forEach(r=>{
-
+    .querySelectorAll("#evaluation input[type=range]")
+    .forEach(r => {
       const ex = r.dataset.exercice;
       const crit = r.dataset.critere;
-
-      if(!ex || !crit) return;
+      if (!ex || !crit) return;
 
       dataByExercise[ex] ??= {};
       dataByExercise[ex][crit] = Number(r.value);
     });
 
-  for(const ex in dataByExercise){
+  // 3️⃣ Envoyer évaluations + notes (notes uniquement sur le dernier exercice)
+  for (const ex in dataByExercise) {
     await fetch(GOOGLE_API_URL + "?" + new URLSearchParams({
       action: "addEvaluation",
       exercice: ex,
-      criteres: JSON.stringify(dataByExercise[ex])
+      criteres: JSON.stringify(dataByExercise[ex]),
+      notes: ex === lastExercise ? sessionNotes : ""
     }));
   }
 
+  // 4️⃣ Fermer la modale et rafraîchir
+  evaluationModal.style.display = "none";
   location.reload();
 }
 
