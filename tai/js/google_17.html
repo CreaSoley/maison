@@ -1005,17 +1005,12 @@ let journalChartObj = null;
 
 let journalRadarChart = null;
 
-async function loadJournalCard() {
-
-  console.log("📔 loadJournalCard", journalCurrentDate);
-
-  if (!journalCurrentDate) return;
-
+function loadJournalCard() {
   const container = document.getElementById("journalPage");
-  const radarCanvas = document.getElementById("journalRadar");
+  console.log("📔 journalPage =", container);
 
-  if (!container || !radarCanvas) {
-    console.error("❌ journalPage ou journalRadar introuvable");
+  if (!container) {
+    console.error("❌ journalPage introuvable dans le DOM");
     return;
   }
 
