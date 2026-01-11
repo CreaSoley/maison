@@ -1,0 +1,93 @@
+  @font-face {
+  font-family: 'JBCursive';
+  src: url('./JBCursive.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:'Fredoka',Arial,sans-serif;background-image:linear-gradient(120deg,#84fab0 0%,#8fd3f4 100%)}
+.container{padding:12px}
+.card{background:#fff;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 6px 12px rgba(0,0,0,.1)}
+h1,h2,h3{text-align:center}
+button{border:none;border-radius:14px;padding:10px 14px;font-family:'Fredoka';cursor:pointer;margin:4px 0}
+.btn-primary{background-image:linear-gradient(to right,#fa709a,#fee140);color:#fff}
+.btn-secondary{background:#84fab0;color:#fff}
+.btn-danger{background:#ff6b6b;color:#fff}
+button.active{background-image:linear-gradient(to top,#30cfd0,#330867);color:#fff}
+.accordion-header{font-weight:600;display:flex;justify-content:space-between;cursor:pointer}
+.accordion-content{display:none;margin-top:10px}
+.exercise{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #ddd}
+.exercise.active{background:#fff3cd;border-radius:10px;padding:6px}
+.progress{width:100%;height:10px;background:#eee;border-radius:10px;overflow:hidden;margin:6px 0}
+.progress-bar{height:100%;background-image:linear-gradient(to right,#fa709a,#fee140)}
+.timers{text-align:center;font-weight:600}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;justify-content:center;align-items:center;padding:12px}
+.modal-content{background:#fff;border-radius:18px;padding:14px;width:100%;max-height:90vh;overflow:auto}
+textarea{width:100%;border-radius:12px;padding:8px}
+.rating{display:flex;justify-content:space-between;font-size:12px}
+ .journal-card {
+  background: #fffaf0;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.journal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.journal-nav span {
+  font-family: "Super Meatball", cursive;
+  font-size: 26px;
+  text-align: center;
+}
+
+.journal-total {
+  font-family: "Fredoka", sans-serif;
+  font-size: 18px;
+  margin: 8px 0;
+  text-align: center;
+}
+
+.journal-exercises {
+  font-family: Arial;
+  margin-bottom: 10px;
+}
+
+.journal-notes-block {
+  margin-bottom: 10px;
+}
+
+.journal-notes-title {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.journal-note {
+  font-family: "JBCursive", cursive;
+  background: #fff3cd;
+  padding: 8px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+}
+.note-block {
+  margin: 1rem 0;
+}
+
+.note-block h4 {
+  font-family: 'Fredoka', sans-serif;
+  margin-bottom: .3rem;
+}
+
+.note-block textarea {
+  width: 100%;
+  min-height: 80px;
+  font-family: 'JBCursive', cursive;
+  font-size: 1.1rem;
+  padding: .5rem;
+  border-radius: 10px;
+}
