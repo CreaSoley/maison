@@ -142,6 +142,8 @@ button.pause{background:#999}
 <button id="start">▶ Lancer</button>
 <button id="pause" class="pause">⏸ Pause</button>
 <button id="stop" class="stop">⏹ Stop</button>
+<button id="reset" class="pause">🔄 Réinitialiser</button>
+
 
 </div>
 
@@ -155,7 +157,21 @@ button.pause{background:#999}
 
 <script>
 /* ===================== DATA ===================== */
-const DATA = {
+const modeSelect   = document.getElementById("mode");
+const categorieSel = document.getElementById("categorie");
+const countInput   = document.getElementById("count");
+
+const startBtn  = document.getElementById("start");
+const pauseBtn  = document.getElementById("pause");
+const stopBtn   = document.getElementById("stop");
+const resetBtn  = document.getElementById("reset");
+
+const visual    = document.getElementById("visual");
+const text      = document.getElementById("text");
+const countdown = document.getElementById("countdown");
+const interval  = document.getElementById("interval");
+
+  const DATA = {
   "3pas":[
     "Avancer en Soto Uke en Zenkutsu Dachi, sur place Gyaku Tsuki Chudan, Mae geri",
     "Avancer en Shuto Uke Kokutsu Dachi, sur place Gyaku Nukite Chudan en Zenkutsu Dachi",
@@ -217,18 +233,26 @@ async function runExercise(){
   }
 
   const ex = sequence[index];
+
   visual.className = BG[ex.cat];
   text.textContent = ex.text;
 
-  await speak("Catégorie " + ex.cat);
-  await speak(ex.text);
-  await speak("Hajimé", 0.7);
+  // 🔊 Annonces lentes
+  await speak("Catégorie " + ex.cat, 0.7);
 
+  await speak(ex.text, 0.7);
+  await speak(ex.text, 0.7); // 2 fois
+
+  // 🔊 Hajimé normal
+  await speak("Hajimé", 1);
+
+  // ⏱ TIMER DÉMARRE ICI
   let remaining = Number(interval.value);
   countdown.textContent = formatTime(remaining);
 
   timer = setInterval(() => {
     if(paused) return;
+
     remaining--;
     workedSeconds++;
     countdown.textContent = formatTime(remaining);
@@ -236,14 +260,33 @@ async function runExercise(){
     if(remaining <= 0){
       clearInterval(timer);
       index++;
+
       if(index < sequence.length){
-        speak("Exercice suivant").then(()=>setTimeout(runExercise,2000));
+        speak("Exercice suivant").then(() => {
+          setTimeout(runExercise, 2000);
+        });
       } else {
         runExercise();
       }
     }
-  },1000);
+  }, 1000);
 }
+  resetBtn.onclick = () => {
+  speechSynthesis.cancel();
+  clearInterval(timer);
+
+  index = 0;
+  paused = false;
+  workedSeconds = 0;
+
+  pauseBtn.classList.remove("active");
+  pauseBtn.textContent = "⏸ Pause";
+
+  visual.className = "";
+  text.textContent = "Prêt 🌸";
+  countdown.textContent = "";
+};
+
 
 /* ===================== EVENTS ===================== */
 start.onclick = () => {
