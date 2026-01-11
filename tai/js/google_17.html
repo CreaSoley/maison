@@ -982,6 +982,9 @@ let journalRadarChart = null;
   let journalCurrentDate = null;
 
 async function loadJournalCard(dateOverride = null) {
+  console.log("📔 loadJournalCard appelée");
+  console.log("journalPage =", document.getElementById("journalPage"));
+
   const input = document.getElementById("journalDate");
 
   // 📌 date active
