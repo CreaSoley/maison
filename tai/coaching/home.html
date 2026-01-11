@@ -128,6 +128,10 @@ button.pause{background:#999}
   <option value="surplace">Sur place</option>
   <option value="multi">Multidirectionnel</option>
 </select>
+<div class="range-wrap">
+  <label>Nombre d'enchaînements :</label>
+  <input type="number" id="count" min="1" value="3" style="width:80px">
+</div>
 
 <div class="range-wrap">
   <label>Intervalle :</label>
@@ -181,85 +185,109 @@ const BG = {
 };
 
 /* ===================== STATE ===================== */
-let sequence=[];
-let index=0;
-let timer=null;
-let startTime=null;
-let paused=false;
-let synth=window.speechSynthesis;
+let sequence = [];
+let index = 0;
+let timer = null;
+let paused = false;
+let startTime = null;
+
+const synth = window.speechSynthesis;
 
 /* ===================== UI ===================== */
-interval.oninput=()=>intervalVal.textContent=interval.value+"s";
+const intervalInput = document.getElementById("interval");
+const intervalVal = document.getElementById("intervalVal");
+intervalInput.oninput = () => intervalVal.textContent = intervalInput.value + "s";
 
-/* ===================== FUNCTIONS ===================== */
-function speak(text,cb){
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang="fr-FR";
-  u.onend=cb;
+/* ===================== SPEECH ===================== */
+function speak(text, onEnd){
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "fr-FR";
+  u.onend = onEnd;
   synth.speak(u);
 }
 
+/* ===================== CORE ===================== */
 function startExercise(){
-  if(index>=sequence.length){
+  if(index >= sequence.length){
     speak("Entraînement terminé");
-    alert("Temps réel travaillé : "+Math.round((Date.now()-startTime)/1000)+" secondes");
+    const realTime = Math.round((Date.now() - startTime) / 1000);
+    alert("Temps réel travaillé : " + realTime + " secondes");
     return;
   }
 
-  const ex=sequence[index];
-  visual.className=BG[ex.cat];
-  text.textContent=ex.text;
-  speak("Catégorie "+ex.cat,()=>{
+  const ex = sequence[index];
+
+  visual.className = BG[ex.cat];
+  text.textContent = ex.text;
+
+  speak("Catégorie " + ex.cat, () => {
     speak(ex.text);
   });
 
-  let remaining=+interval.value;
-  countdown.textContent=remaining+"s";
+  let remaining = Number(intervalInput.value);
+  countdown.textContent = remaining + "s";
 
-  timer=setInterval(()=>{
-    if(paused)return;
+  timer = setInterval(() => {
+    if(paused) return;
+
     remaining--;
-    countdown.textContent=remaining+"s";
-    if(remaining<=0){
+    countdown.textContent = remaining + "s";
+
+    if(remaining <= 0){
       clearInterval(timer);
       index++;
-      speak("Exercice suivant",()=>setTimeout(startExercise,2000));
+      speak("Exercice suivant", () => {
+        setTimeout(startExercise, 2000);
+      });
     }
-  },1000);
+  }, 1000);
 }
 
 /* ===================== EVENTS ===================== */
-start.onclick=()=>{
-  synth.cancel();
-  index=0;
-  startTime=Date.now();
-  paused=false;
-  sequence=[];
-
-  const mode=modeSelect.value;
-  if(mode==="1"){
-    Object.entries(DATA).forEach(([c,list])=>list.forEach(t=>sequence.push({cat:c,text:t})));
-    sequence.sort(()=>Math.random()-.5);
-  }
-  if(mode==="2"){
-    Object.entries(DATA).forEach(([c,list])=>{
-      sequence.push({cat:c,text:list[Math.floor(Math.random()*list.length)]});
-    });
-  }
-  if(mode==="3"){
-    DATA[categorie.value].forEach(t=>sequence.push({cat:categorie.value,text:t}));
-    sequence.sort(()=>Math.random()-.5);
-  }
-
-  setTimeout(startExercise,5000);
-};
-
-pause.onclick=()=>paused=!paused;
-
-stop.onclick=()=>{
+document.getElementById("start").onclick = () => {
   synth.cancel();
   clearInterval(timer);
-  alert("Temps travaillé : "+Math.round((Date.now()-startTime)/1000)+" secondes");
+
+  index = 0;
+  paused = false;
+  sequence = [];
+  startTime = Date.now();
+
+  const mode = document.getElementById("mode").value;
+  const cat = document.getElementById("categorie").value;
+  const count = Number(document.getElementById("count").value);
+
+  if(mode === "1"){
+    let all = [];
+    Object.entries(DATA).forEach(([c,list])=>{
+      list.forEach(t => all.push({cat:c,text:t}));
+    });
+    sequence = all.sort(()=>Math.random()-.5).slice(0,count);
+  }
+
+  if(mode === "2"){
+    Object.entries(DATA).forEach(([c,list])=>{
+      const t = list[Math.floor(Math.random()*list.length)];
+      sequence.push({cat:c,text:t});
+    });
+  }
+
+  if(mode === "3"){
+    const list = DATA[cat].slice().sort(()=>Math.random()-.5);
+    sequence = list.slice(0,count).map(t=>({cat:cat,text:t}));
+  }
+
+  setTimeout(startExercise, 5000);
+};
+
+document.getElementById("pause").onclick = () => paused = !paused;
+
+document.getElementById("stop").onclick = () => {
+  synth.cancel();
+  clearInterval(timer);
+  const realTime = Math.round((Date.now() - startTime) / 1000);
+  alert("Temps travaillé : " + realTime + " secondes");
 };
 </script>
 </body>
