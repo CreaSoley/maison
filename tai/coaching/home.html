@@ -157,40 +157,26 @@ button.pause{background:#999}
 
 <script>
 /* ===================== DATA ===================== */
-const modeSelect   = document.getElementById("mode");
-const categorieSel = document.getElementById("categorie");
-const countInput   = document.getElementById("count");
-
-const startBtn  = document.getElementById("start");
-const pauseBtn  = document.getElementById("pause");
-const stopBtn   = document.getElementById("stop");
-const resetBtn  = document.getElementById("reset");
-
-const visual    = document.getElementById("visual");
-const text      = document.getElementById("text");
-const countdown = document.getElementById("countdown");
-const interval  = document.getElementById("interval");
-
-  const DATA = {
+const DATA = {
   "3pas":[
-    "Avancer en Soto Uke en Zenkutsu Dachi, sur place Gyaku Tsuki Chudan, Mae geri",
-    "Avancer en Shuto Uke Kokutsu Dachi, sur place Gyaku Nukite Chudan en Zenkutsu Dachi",
+    "Avancer en Soto Uke en Zenkutsu Dachi, sur place Gyaku Tsuki Chudane, Mae geri",
+    "Avancer en Shuto Uke Kokutsu Dachi, sur place Gyaku Nukité Chudane en Zenkutsu Dachi",
     "Reculer Gedan Barai en Zenkutsu Dachi, Oï tsuki, avancer Mae geri",
     "Avancer Uchi uke en Zenkutsu Dachi, Yoko geri repose Kiba dachi, Yoko empi uchi sur place",
-    "Avancer sur 3 pas en Zenkutsu Dachi, Jodan Age uke, Haïto uchi, Tate empi uchi",
+    "Avancer sur 3 pas en Zenkutsu Dachi, Jodan Agué uke, Haïto uchi, Taté empi uchi",
     "Kiba dachi Uraken uchi, déplacement jambe avant Gyaku tsuki en Zenkutsu Dachi, retour Kiba dachi",
-    "Avancer Mae geri, poser Age uke suivi de Gyaku tsuki"
+    "Avancer Mae geri, poser Agué uke suivi de Gyaku tsuki"
   ],
   "surplace":[
     "Sur place à gauche et à droite : Mae geri jambe arrière repose devant, Kizami Tsuki, Gyaku Tsuki",
-    "Sur place à gauche et à droite : sursaut arrière Jodan Age Uke, Gyaku tsuki, Mae geri jambe arrière repose arrière",
+    "Sur place à gauche et à droite : sursaut arrière Jodan Agué Uke, Gyaku tsuki, Mae geri jambe arrière repose arrière",
     "Sur place à gauche et à droite : sursaut arrière Soto uke, Gyaku tsuki chudan, Mae geri jambe arrière repose arrière",
     "Sur place à gauche et à droite : sursaut Mae geri jambe avant, Oï Tsuki, Gyaku tsuki"
   ],
   "multi":[
-    "Multidirectionnel : Mae geri jambe arrière pose devant, Gyaku Tsuki Chudan sur place",
-    "Multidirectionnel : Pas chassé Gyaku Tsuki chudan, ressort pas chassé",
-    "Multidirectionnel : Avancer Mae geri, poser Age uke suivi de Gyaku tsuki"
+    "Multidirectionnel : Mae geri jambe arrière pose devant, Gyaku Tsuki Chudane sur place",
+    "Multidirectionnel : Pas chassé Gyaku Tsuki chudane, ressort pas chassé",
+    "Multidirectionnel : Avancer Mae geri, poser Agué uke suivi de Gyaku tsuki"
   ]
 };
 
@@ -200,11 +186,28 @@ const BG = {
   "multi":"bg-multi"
 };
 
+/* ===================== DOM ===================== */
+const modeSelect   = document.getElementById("mode");
+const categorieSel = document.getElementById("categorie");
+const countInput   = document.getElementById("count");
+const interval     = document.getElementById("interval");
+const intervalVal  = document.getElementById("intervalVal");
+
+const startBtn = document.getElementById("start");
+const pauseBtn = document.getElementById("pause");
+const stopBtn  = document.getElementById("stop");
+const resetBtn = document.getElementById("reset");
+
+const visual    = document.getElementById("visual");
+const text      = document.getElementById("text");
+const countdown = document.getElementById("countdown");
+
 /* ===================== STATE ===================== */
 let sequence = [];
 let index = 0;
-let paused = false;
 let timer = null;
+let paused = false;
+let stopped = false;
 let workedSeconds = 0;
 
 /* ===================== UTILS ===================== */
@@ -224,8 +227,15 @@ function formatTime(sec){
   return `${m}m ${s.toString().padStart(2,"0")}s`;
 }
 
+/* ===================== RANGE DISPLAY ===================== */
+interval.oninput = () => {
+  intervalVal.textContent = formatTime(Number(interval.value));
+};
+
 /* ===================== CORE ===================== */
 async function runExercise(){
+  if(stopped) return;
+
   if(index >= sequence.length){
     await speak("Entraînement terminé");
     alert("Temps travaillé : " + formatTime(workedSeconds));
@@ -237,21 +247,16 @@ async function runExercise(){
   visual.className = BG[ex.cat];
   text.textContent = ex.text;
 
-  // 🔊 Annonces lentes
   await speak("Catégorie " + ex.cat, 0.7);
-
   await speak(ex.text, 0.7);
-  await speak(ex.text, 0.7); // 2 fois
-
-  // 🔊 Hajimé normal
+  await speak(ex.text, 0.7);
   await speak("Hajimé", 1);
 
-  // ⏱ TIMER DÉMARRE ICI
   let remaining = Number(interval.value);
   countdown.textContent = formatTime(remaining);
 
   timer = setInterval(() => {
-    if(paused) return;
+    if(paused || stopped) return;
 
     remaining--;
     workedSeconds++;
@@ -263,7 +268,9 @@ async function runExercise(){
 
       if(index < sequence.length){
         speak("Exercice suivant").then(() => {
-          setTimeout(runExercise, 2000);
+          setTimeout(() => {
+            if(!stopped) runExercise();
+          }, 2000);
         });
       } else {
         runExercise();
@@ -271,41 +278,30 @@ async function runExercise(){
     }
   }, 1000);
 }
-  resetBtn.onclick = () => {
+
+/* ===================== EVENTS ===================== */
+startBtn.onclick = () => {
   speechSynthesis.cancel();
   clearInterval(timer);
 
-  index = 0;
+  stopped = false;
   paused = false;
+  index = 0;
   workedSeconds = 0;
 
   pauseBtn.classList.remove("active");
   pauseBtn.textContent = "⏸ Pause";
 
-  visual.className = "";
-  text.textContent = "Prêt 🌸";
-  countdown.textContent = "";
-};
-
-
-/* ===================== EVENTS ===================== */
-start.onclick = () => {
-  speechSynthesis.cancel();
-  clearInterval(timer);
-  index = 0;
-  workedSeconds = 0;
-  paused = false;
+  sequence = [];
 
   const mode = modeSelect.value;
-  const cat = categorie.value;
-  const count = Number(countInput.value);
-
-  sequence = [];
+  const cat  = categorieSel.value;
+  const qty  = Number(countInput.value);
 
   if(mode === "1"){
     let all=[];
     Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>all.push({cat:c,text:t})));
-    sequence = all.sort(()=>Math.random()-.5).slice(0,count);
+    sequence = all.sort(()=>Math.random()-.5).slice(0,qty);
   }
 
   if(mode === "2"){
@@ -315,23 +311,53 @@ start.onclick = () => {
   }
 
   if(mode === "3"){
-    sequence = DATA[cat].slice().sort(()=>Math.random()-.5)
-      .slice(0,count).map(t=>({cat,text:t}));
+    sequence = DATA[cat]
+      .slice().sort(()=>Math.random()-.5)
+      .slice(0,qty)
+      .map(t=>({cat:cat,text:t}));
   }
 
-  setTimeout(runExercise,5000);
+  setTimeout(() => {
+    if(!stopped) runExercise();
+  }, 5000);
 };
 
-pause.onclick = () => {
+pauseBtn.onclick = () => {
   paused = !paused;
-  pause.classList.toggle("active", paused);
-  pause.textContent = paused ? "▶ Reprendre" : "⏸ Pause";
+  pauseBtn.classList.toggle("active", paused);
+  pauseBtn.textContent = paused ? "▶ Reprendre" : "⏸ Pause";
 };
 
-stop.onclick = () => {
+stopBtn.onclick = () => {
+  stopped = true;
   speechSynthesis.cancel();
   clearInterval(timer);
+
+  visual.className = "";
+  text.textContent = "Séance arrêtée";
+  countdown.textContent = "";
+
+  pauseBtn.classList.remove("active");
+  pauseBtn.textContent = "⏸ Pause";
+
   alert("Temps travaillé : " + formatTime(workedSeconds));
+};
+
+resetBtn.onclick = () => {
+  speechSynthesis.cancel();
+  clearInterval(timer);
+
+  stopped = false;
+  paused = false;
+  index = 0;
+  workedSeconds = 0;
+
+  pauseBtn.classList.remove("active");
+  pauseBtn.textContent = "⏸ Pause";
+
+  visual.className = "";
+  text.textContent = "Prêt 🌸";
+  countdown.textContent = "";
 };
 </script>
 
