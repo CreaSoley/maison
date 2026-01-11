@@ -731,7 +731,7 @@ let journalRadarChart = null;
 
 async function loadJournalCard(dateOverride = null) {
   console.log("📔 loadJournalCard appelée");
-  console.log("journalPage =", document.getElementById("journalPage"));
+  console.log("journalDetails =", document.getElementById("journalDetails"));
 
   const input = document.getElementById("journalDate");
 
@@ -772,7 +772,7 @@ async function loadJournalCard(dateOverride = null) {
     ev.Date && ev.Date.startsWith(journalCurrentDate)
   );
 
-  const container = document.getElementById("journalPage");
+  const container = document.getElementById("journalDetails");
   container.innerHTML = "";
 
   if (!daySessions.length && !dayEvals.length) {
