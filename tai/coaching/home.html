@@ -157,24 +157,24 @@ button.pause{background:#999}
 /* ===================== DATA ===================== */
 const DATA = {
   "3pas":[
-    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae geri",
-    "Avancer Shuto Uke Kokutsu Dachi, Gyaku Nukite Chudan",
-    "Reculer Gedan Barai, Oi tsuki, Mae geri",
-    "Avancer Uchi uke, Yoko geri, Yoko empi",
-    "Avancer Age uke, Haito uchi, Tate empi",
-    "Kiba dachi Uraken, Gyaku tsuki",
-    "Avancer Mae geri, Age uke, Gyaku tsuki"
+    "Avancer en Soto Uke en Zenkutsu Dachi, sur place Gyaku Tsuki Chudan, Mae geri",
+    "Avancer en Shuto Uke Kokutsu Dachi, sur place Gyaku Nukite Chudan en Zenkutsu Dachi",
+    "Reculer Gedan Barai en Zenkutsu Dachi, Oï tsuki, avancer Mae geri",
+    "Avancer Uchi uke en Zenkutsu Dachi, Yoko geri repose Kiba dachi, Yoko empi uchi sur place",
+    "Avancer sur 3 pas en Zenkutsu Dachi, Jodan Age uke, Haïto uchi, Tate empi uchi",
+    "Kiba dachi Uraken uchi, déplacement jambe avant Gyaku tsuki en Zenkutsu Dachi, retour Kiba dachi",
+    "Avancer Mae geri, poser Age uke suivi de Gyaku tsuki"
   ],
   "surplace":[
-    "Mae geri jambe arrière, Kizami tsuki, Gyaku tsuki",
-    "Sursaut arrière Age uke, Gyaku tsuki, Mae geri",
-    "Sursaut arrière Soto uke, Gyaku tsuki, Mae geri",
-    "Sursaut Mae geri jambe avant, Oi tsuki, Gyaku tsuki"
+    "Sur place à gauche et à droite : Mae geri jambe arrière repose devant, Kizami Tsuki, Gyaku Tsuki",
+    "Sur place à gauche et à droite : sursaut arrière Jodan Age Uke, Gyaku tsuki, Mae geri jambe arrière repose arrière",
+    "Sur place à gauche et à droite : sursaut arrière Soto uke, Gyaku tsuki chudan, Mae geri jambe arrière repose arrière",
+    "Sur place à gauche et à droite : sursaut Mae geri jambe avant, Oï Tsuki, Gyaku tsuki"
   ],
   "multi":[
-    "Mae geri jambe arrière, Gyaku tsuki",
-    "Pas chassé Gyaku tsuki",
-    "Avancer Mae geri, Age uke, Gyaku tsuki"
+    "Multidirectionnel : Mae geri jambe arrière pose devant, Gyaku Tsuki Chudan sur place",
+    "Multidirectionnel : Pas chassé Gyaku Tsuki chudan, ressort pas chassé",
+    "Multidirectionnel : Avancer Mae geri, poser Age uke suivi de Gyaku tsuki"
   ]
 };
 
@@ -187,108 +187,110 @@ const BG = {
 /* ===================== STATE ===================== */
 let sequence = [];
 let index = 0;
-let timer = null;
 let paused = false;
-let startTime = null;
+let timer = null;
+let workedSeconds = 0;
 
-const synth = window.speechSynthesis;
+/* ===================== UTILS ===================== */
+function speak(text, rate = 1){
+  return new Promise(resolve => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "fr-FR";
+    u.rate = rate;
+    u.onend = resolve;
+    speechSynthesis.speak(u);
+  });
+}
 
-/* ===================== UI ===================== */
-const intervalInput = document.getElementById("interval");
-const intervalVal = document.getElementById("intervalVal");
-intervalInput.oninput = () => intervalVal.textContent = intervalInput.value + "s";
-
-/* ===================== SPEECH ===================== */
-function speak(text, onEnd){
-  synth.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "fr-FR";
-  u.onend = onEnd;
-  synth.speak(u);
+function formatTime(sec){
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}m ${s.toString().padStart(2,"0")}s`;
 }
 
 /* ===================== CORE ===================== */
-function startExercise(){
+async function runExercise(){
   if(index >= sequence.length){
-    speak("Entraînement terminé");
-    const realTime = Math.round((Date.now() - startTime) / 1000);
-    alert("Temps réel travaillé : " + realTime + " secondes");
+    await speak("Entraînement terminé");
+    alert("Temps travaillé : " + formatTime(workedSeconds));
     return;
   }
 
   const ex = sequence[index];
-
   visual.className = BG[ex.cat];
   text.textContent = ex.text;
 
-  speak("Catégorie " + ex.cat, () => {
-    speak(ex.text);
-  });
+  await speak("Catégorie " + ex.cat);
+  await speak(ex.text);
+  await speak("Hajimé", 0.7);
 
-  let remaining = Number(intervalInput.value);
-  countdown.textContent = remaining + "s";
+  let remaining = Number(interval.value);
+  countdown.textContent = formatTime(remaining);
 
   timer = setInterval(() => {
     if(paused) return;
-
     remaining--;
-    countdown.textContent = remaining + "s";
+    workedSeconds++;
+    countdown.textContent = formatTime(remaining);
 
     if(remaining <= 0){
       clearInterval(timer);
       index++;
-      speak("Exercice suivant", () => {
-        setTimeout(startExercise, 2000);
-      });
+      if(index < sequence.length){
+        speak("Exercice suivant").then(()=>setTimeout(runExercise,2000));
+      } else {
+        runExercise();
+      }
     }
-  }, 1000);
+  },1000);
 }
 
 /* ===================== EVENTS ===================== */
-document.getElementById("start").onclick = () => {
-  synth.cancel();
+start.onclick = () => {
+  speechSynthesis.cancel();
   clearInterval(timer);
-
   index = 0;
+  workedSeconds = 0;
   paused = false;
-  sequence = [];
-  startTime = Date.now();
 
-  const mode = document.getElementById("mode").value;
-  const cat = document.getElementById("categorie").value;
-  const count = Number(document.getElementById("count").value);
+  const mode = modeSelect.value;
+  const cat = categorie.value;
+  const count = Number(countInput.value);
+
+  sequence = [];
 
   if(mode === "1"){
-    let all = [];
-    Object.entries(DATA).forEach(([c,list])=>{
-      list.forEach(t => all.push({cat:c,text:t}));
-    });
+    let all=[];
+    Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>all.push({cat:c,text:t})));
     sequence = all.sort(()=>Math.random()-.5).slice(0,count);
   }
 
   if(mode === "2"){
-    Object.entries(DATA).forEach(([c,list])=>{
-      const t = list[Math.floor(Math.random()*list.length)];
-      sequence.push({cat:c,text:t});
+    Object.entries(DATA).forEach(([c,l])=>{
+      sequence.push({cat:c,text:l[Math.floor(Math.random()*l.length)]});
     });
   }
 
   if(mode === "3"){
-    const list = DATA[cat].slice().sort(()=>Math.random()-.5);
-    sequence = list.slice(0,count).map(t=>({cat:cat,text:t}));
+    sequence = DATA[cat].slice().sort(()=>Math.random()-.5)
+      .slice(0,count).map(t=>({cat,text:t}));
   }
 
-  setTimeout(startExercise, 5000);
+  setTimeout(runExercise,5000);
 };
 
-document.getElementById("pause").onclick = () => paused = !paused;
+pause.onclick = () => {
+  paused = !paused;
+  pause.classList.toggle("active", paused);
+  pause.textContent = paused ? "▶ Reprendre" : "⏸ Pause";
+};
 
-document.getElementById("stop").onclick = () => {
-  synth.cancel();
+stop.onclick = () => {
+  speechSynthesis.cancel();
   clearInterval(timer);
-  const realTime = Math.round((Date.now() - startTime) / 1000);
-  alert("Temps travaillé : " + realTime + " secondes");
+  alert("Temps travaillé : " + formatTime(workedSeconds));
 };
 </script>
+
 </body>
 </html>
