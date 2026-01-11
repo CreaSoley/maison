@@ -141,6 +141,50 @@ textarea{width:100%;border-radius:12px;padding:8px}
     padding: 8px 12px;
   }
 }
+/* ==== CARD GENERALE ==== */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;  /* espace entre les cards */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* ==== TITRES DE CARD ==== */
+.card h3, .card .accordion-header {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 12px; /* espace entre titre et contenu */
+}
+
+/* ==== CONTENU DES CARDS ==== */
+.card .accordion-content,
+.card div,
+.card p {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  margin-bottom: 8px; /* espace entre paragraphes et sections */
+}
+
+/* ==== CARNET D'ENTRAÎNEMENT ==== */
+.journal-card {
+  padding: 12px;
+}
+
+.journal-card > div, .journal-card canvas {
+  margin-bottom: 12px; /* espacement entre sections */
+}
+
+/* ==== TITRES D’EXERCICE DANS LE CARNET ==== */
+.journal-card .exercise-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #f0f0f0; /* sépare visuellement chaque exercice */
+  padding-bottom: 4px;
+}
 
 </style>
 </head>
@@ -1048,8 +1092,6 @@ async function loadJournalCard() {
   }
   container.appendChild(durDiv);
 
-  
- // 3️⃣ Carnet de bord — notes regroupées par exercice
 
 // 3️⃣ Carnet de bord — notes regroupées par exercice
 const notesByExercise = {};
@@ -1073,12 +1115,9 @@ if (Object.keys(notesByExercise).length) {
   for (const ex in notesByExercise) {
     // 🔹 Titre exercice
     const exTitle = document.createElement("div");
-    exTitle.textContent = ex;
-    exTitle.style.fontFamily = "Arial, sans-serif";
-    exTitle.style.fontWeight = "bold";
-    exTitle.style.marginTop = "10px";
-    exTitle.style.marginBottom = "4px";
-    container.appendChild(exTitle);
+exTitle.textContent = ex;
+exTitle.className = "exercise-title"; // applique le style CSS
+container.appendChild(exTitle);
 
     // 🔹 Notes de l’exercice
     notesByExercise[ex].forEach(note => {
@@ -1220,9 +1259,17 @@ async function generateJournalPDF() {
     for (const ex in notesByExercise) {
       writeText(ex, 12, 11, true, 4);
 
-      notesByExercise[ex].forEach(note => {
-        writeText("✍️ " + note, 14, 11, false, 6);
-      });
+     notesByExercise[ex].forEach(note => {
+  // Nettoyage du texte
+  let cleanNote = note
+    .replace(/\uFEFF/g, "")  // BOM
+    .replace(/[\u0000-\u001F]/g, "") // caractères invisibles
+    .trim();
+
+  // Ajout du texte avec indentation
+  writeText("✍️ " + cleanNote, 14, 11, false, 6);
+});
+
 
       y += 2;
     }
