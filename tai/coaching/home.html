@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>🌸 Kihon Trainer 🌸</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+
+<style>
+/* ===================== VARIABLES ===================== */
+:root{
+  --pink:#ff5fc1;
+  --hot-pink:#ff1493;
+  --bg:linear-gradient(180deg,#fff6fb,#ffeef6);
+  --radius:22px;
+  --shadow:0 12px 25px rgba(255,120,180,.25);
+}
+
+/* ===================== BASE ===================== */
+body{
+  margin:0;
+  font-family:'Fredoka',sans-serif;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+
+main{
+  max-width:800px;
+  width:100%;
+}
+
+/* ===================== CARD ===================== */
+.card{
+  background:white;
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+h1{
+  text-align:center;
+  color:var(--hot-pink);
+}
+
+/* ===================== CONTROLS ===================== */
+.controls{
+  display:grid;
+  gap:10px;
+}
+
+select,button,input{
+  padding:10px;
+  border-radius:12px;
+  border:2px solid #ffd6ec;
+  font-family:'Fredoka';
+}
+
+button{
+  background:var(--pink);
+  color:white;
+  cursor:pointer;
+}
+
+button.stop{background:#ff4d6d}
+button.pause{background:#999}
+
+.range-wrap{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+/* ===================== VISUAL ZONE ===================== */
+#visual{
+  margin-top:20px;
+  border-radius:20px;
+  padding:25px;
+  min-height:160px;
+  color:white;
+  text-align:center;
+  font-size:1.4rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+#countdown{
+  font-size:2rem;
+  margin-top:10px;
+}
+
+/* ===================== CATEGORY BACKGROUNDS ===================== */
+.bg-3pas{
+  background-image:linear-gradient(to top,#30cfd0,#330867);
+}
+.bg-surplace{
+  background:
+    linear-gradient(to bottom,rgba(255,255,255,.15),rgba(0,0,0,.15)),
+    radial-gradient(at top center,rgba(255,255,255,.4),rgba(0,0,0,.4)),
+    #989898;
+  background-blend-mode:multiply,multiply;
+}
+.bg-multi{
+  background-image:linear-gradient(to top,#f43b47,#453a94);
+}
+</style>
+</head>
+
+<body>
+<main>
+<div class="card">
+
+<h1>🥋 Kihon Trainer</h1>
+
+<div class="controls">
+
+<select id="mode">
+  <option value="1">🎲 Exercice 1 – Aléatoire global</option>
+  <option value="2">🎯 Exercice 2 – Par catégorie</option>
+  <option value="3">📂 Exercice 3 – Catégorie choisie</option>
+</select>
+
+<select id="categorie">
+  <option value="3pas">3 pas</option>
+  <option value="surplace">Sur place</option>
+  <option value="multi">Multidirectionnel</option>
+</select>
+
+<div class="range-wrap">
+  <label>Intervalle :</label>
+  <input type="range" min="30" max="240" value="60" id="interval">
+  <span id="intervalVal">60s</span>
+</div>
+
+<button id="start">▶ Lancer</button>
+<button id="pause" class="pause">⏸ Pause</button>
+<button id="stop" class="stop">⏹ Stop</button>
+
+</div>
+
+<div id="visual">
+  <div id="text">Prêt 🌸</div>
+  <div id="countdown"></div>
+</div>
+
+</div>
+</main>
+
+<script>
+/* ===================== DATA ===================== */
+const DATA = {
+  "3pas":[
+    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae geri",
+    "Avancer Shuto Uke Kokutsu Dachi, Gyaku Nukite Chudan",
+    "Reculer Gedan Barai, Oi tsuki, Mae geri",
+    "Avancer Uchi uke, Yoko geri, Yoko empi",
+    "Avancer Age uke, Haito uchi, Tate empi",
+    "Kiba dachi Uraken, Gyaku tsuki",
+    "Avancer Mae geri, Age uke, Gyaku tsuki"
+  ],
+  "surplace":[
+    "Mae geri jambe arrière, Kizami tsuki, Gyaku tsuki",
+    "Sursaut arrière Age uke, Gyaku tsuki, Mae geri",
+    "Sursaut arrière Soto uke, Gyaku tsuki, Mae geri",
+    "Sursaut Mae geri jambe avant, Oi tsuki, Gyaku tsuki"
+  ],
+  "multi":[
+    "Mae geri jambe arrière, Gyaku tsuki",
+    "Pas chassé Gyaku tsuki",
+    "Avancer Mae geri, Age uke, Gyaku tsuki"
+  ]
+};
+
+const BG = {
+  "3pas":"bg-3pas",
+  "surplace":"bg-surplace",
+  "multi":"bg-multi"
+};
+
+/* ===================== STATE ===================== */
+let sequence=[];
+let index=0;
+let timer=null;
+let startTime=null;
+let paused=false;
+let synth=window.speechSynthesis;
+
+/* ===================== UI ===================== */
+interval.oninput=()=>intervalVal.textContent=interval.value+"s";
+
+/* ===================== FUNCTIONS ===================== */
+function speak(text,cb){
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="fr-FR";
+  u.onend=cb;
+  synth.speak(u);
+}
+
+function startExercise(){
+  if(index>=sequence.length){
+    speak("Entraînement terminé");
+    alert("Temps réel travaillé : "+Math.round((Date.now()-startTime)/1000)+" secondes");
+    return;
+  }
+
+  const ex=sequence[index];
+  visual.className=BG[ex.cat];
+  text.textContent=ex.text;
+  speak("Catégorie "+ex.cat,()=>{
+    speak(ex.text);
+  });
+
+  let remaining=+interval.value;
+  countdown.textContent=remaining+"s";
+
+  timer=setInterval(()=>{
+    if(paused)return;
+    remaining--;
+    countdown.textContent=remaining+"s";
+    if(remaining<=0){
+      clearInterval(timer);
+      index++;
+      speak("Exercice suivant",()=>setTimeout(startExercise,2000));
+    }
+  },1000);
+}
+
+/* ===================== EVENTS ===================== */
+start.onclick=()=>{
+  synth.cancel();
+  index=0;
+  startTime=Date.now();
+  paused=false;
+  sequence=[];
+
+  const mode=modeSelect.value;
+  if(mode==="1"){
+    Object.entries(DATA).forEach(([c,list])=>list.forEach(t=>sequence.push({cat:c,text:t})));
+    sequence.sort(()=>Math.random()-.5);
+  }
+  if(mode==="2"){
+    Object.entries(DATA).forEach(([c,list])=>{
+      sequence.push({cat:c,text:list[Math.floor(Math.random()*list.length)]});
+    });
+  }
+  if(mode==="3"){
+    DATA[categorie.value].forEach(t=>sequence.push({cat:categorie.value,text:t}));
+    sequence.sort(()=>Math.random()-.5);
+  }
+
+  setTimeout(startExercise,5000);
+};
+
+pause.onclick=()=>paused=!paused;
+
+stop.onclick=()=>{
+  synth.cancel();
+  clearInterval(timer);
+  alert("Temps travaillé : "+Math.round((Date.now()-startTime)/1000)+" secondes");
+};
+</script>
+</body>
+</html>
