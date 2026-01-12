@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
 
 <style>
-/* ===================== VARIABLES ===================== */
 :root{
   --pink:#ff5fc1;
   --hot-pink:#ff1493;
@@ -18,7 +16,6 @@
   --shadow:0 12px 25px rgba(255,120,180,.25);
 }
 
-/* ===================== BASE ===================== */
 body{
   margin:0;
   font-family:'Fredoka',sans-serif;
@@ -28,12 +25,8 @@ body{
   padding:20px;
 }
 
-main{
-  max-width:800px;
-  width:100%;
-}
+main{max-width:800px;width:100%}
 
-/* ===================== CARD ===================== */
 .card{
   background:white;
   border-radius:var(--radius);
@@ -41,16 +34,9 @@ main{
   box-shadow:var(--shadow);
 }
 
-h1{
-  text-align:center;
-  color:var(--hot-pink);
-}
+h1{text-align:center;color:var(--hot-pink)}
 
-/* ===================== CONTROLS ===================== */
-.controls{
-  display:grid;
-  gap:10px;
-}
+.controls{display:grid;gap:10px}
 
 select,button,input{
   padding:10px;
@@ -59,22 +45,12 @@ select,button,input{
   font-family:'Fredoka';
 }
 
-button{
-  background:var(--pink);
-  color:white;
-  cursor:pointer;
-}
-
+button{background:var(--pink);color:white;cursor:pointer}
 button.stop{background:#ff4d6d}
 button.pause{background:#999}
 
-.range-wrap{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
+.range-wrap{display:flex;gap:10px;align-items:center}
 
-/* ===================== VISUAL ZONE ===================== */
 #visual{
   margin-top:20px;
   border-radius:20px;
@@ -88,15 +64,9 @@ button.pause{background:#999}
   justify-content:center;
 }
 
-#countdown{
-  font-size:2rem;
-  margin-top:10px;
-}
+#countdown{font-size:2rem;margin-top:10px}
 
-/* ===================== CATEGORY BACKGROUNDS ===================== */
-.bg-3pas{
-  background-image:linear-gradient(to top,#30cfd0,#330867);
-}
+.bg-3pas{background-image:linear-gradient(to top,#30cfd0,#330867)}
 .bg-surplace{
   background:
     linear-gradient(to bottom,rgba(255,255,255,.15),rgba(0,0,0,.15)),
@@ -104,9 +74,7 @@ button.pause{background:#999}
     #989898;
   background-blend-mode:multiply,multiply;
 }
-.bg-multi{
-  background-image:linear-gradient(to top,#f43b47,#453a94);
-}
+.bg-multi{background-image:linear-gradient(to top,#f43b47,#453a94)}
 </style>
 </head>
 
@@ -129,24 +97,22 @@ button.pause{background:#999}
   <option value="surplace">Sur place</option>
   <option value="multi">Multidirectionnel</option>
 </select>
+
 <div class="range-wrap">
-  <label>Nombre d'enchaînements :</label>
+  <label>Nombre :</label>
   <input type="number" id="count" min="1" value="3" style="width:80px">
 </div>
 
 <div class="range-wrap">
   <label>Intervalle :</label>
   <input type="range" min="30" max="240" value="60" id="interval">
-  <span id="intervalVal">60s</span>
+  <span id="intervalVal">1m 00s</span>
 </div>
-
 
 <button id="start">▶ Lancer</button>
 <button id="pause" class="pause">⏸ Pause</button>
 <button id="stop" class="stop">⏹ Stop</button>
 <button id="reset" class="pause">🔄 Réinitialiser</button>
-  <option value="exam">📝 Mode examen blanc</option>
-
 
 </div>
 
@@ -159,304 +125,134 @@ button.pause{background:#999}
 </main>
 
 <script>
-/* ===================== DATA ===================== */
-const DATA = {
+const DATA={
   "3pas":[
-    "Avancer en Soto Uke en Zenkutsu Dachi, sur place Gyaku Tsuki Chudane, Mae geri",
-    "Avancer en Shuto Uke Kokutsu Dachi, sur place Gyaku Nukité Chudane en Zenkutsu Dachi",
-    "Reculer Gedan Barai en Zenkutsu Dachi, Oï tsuki, avancer Mae geri",
-    "Avancer Uchi uke en Zenkutsu Dachi, Yoko geri repose Kiba dachi, Yoko empi uchi sur place",
-    "Avancer sur 3 pas en Zenkutsu Dachi, Jodan Agué uke, Haïto uchi, Taté empi uchi",
-    "Kiba dachi Uraken uchi, déplacement jambe avant Gyaku tsuki en Zenkutsu Dachi, retour Kiba dachi",
-    "Avancer Mae geri, poser Agué uke suivi de Gyaku tsuki"
+    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae geri",
+    "Avancer en Shuto Uke Kokutsu Dachi, Gyaku Nukité Chudan",
+    "Reculer Gedan Barai, Oï tsuki, Mae geri",
+    "Avancer Uchi uke, Yoko geri, Yoko empi uchi",
+    "Avancer 3 pas Jodan Age uke, Haïto uchi, Tate empi uchi"
   ],
   "surplace":[
-    "Sur place à gauche et à droite : Mae geri jambe arrière repose devant, Kizami Tsuki, Gyaku Tsuki",
-    "Sur place à gauche et à droite : sursaut arrière Jodan Agué Uke, Gyaku tsuki, Mae geri jambe arrière repose arrière",
-    "Sur place à gauche et à droite : sursaut arrière Soto uke, Gyaku tsuki chudan, Mae geri jambe arrière repose arrière",
-    "Sur place à gauche et à droite : sursaut Mae geri jambe avant, Oï Tsuki, Gyaku tsuki"
+    "Mae geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
+    "Sursaut arrière Jodan Age Uke, Gyaku tsuki, Mae geri",
+    "Sursaut Soto uke, Gyaku tsuki, Mae geri"
   ],
   "multi":[
-    "Multidirectionnel : Mae geri jambe arrière pose devant, Gyaku Tsuki Chudane sur place",
-    "Multidirectionnel : Pas chassé Gyaku Tsuki chudane, ressort pas chassé",
-    "Multidirectionnel : Avancer Mae geri, poser Agué uke suivi de Gyaku tsuki"
+    "Mae geri, Gyaku Tsuki",
+    "Pas chassé Gyaku Tsuki",
+    "Mae geri, Age uke, Gyaku tsuki"
   ]
 };
 
-const BG = {
-  "3pas":"bg-3pas",
-  "surplace":"bg-surplace",
-  "multi":"bg-multi"
-};
+const BG={3pas:"bg-3pas",surplace:"bg-surplace",multi:"bg-multi"};
 
-/* ===================== DOM ===================== */
-const modeSelect   = document.getElementById("mode");
-const categorieSel = document.getElementById("categorie");
-const countInput   = document.getElementById("count");
-const interval     = document.getElementById("interval");
-const intervalVal  = document.getElementById("intervalVal");
+const mode=document.getElementById("mode");
+const catSel=document.getElementById("categorie");
+const count=document.getElementById("count");
+const interval=document.getElementById("interval");
+const intervalVal=document.getElementById("intervalVal");
 
-const startBtn = document.getElementById("start");
-const pauseBtn = document.getElementById("pause");
-const stopBtn  = document.getElementById("stop");
-const resetBtn = document.getElementById("reset");
+const startBtn=document.getElementById("start");
+const pauseBtn=document.getElementById("pause");
+const stopBtn=document.getElementById("stop");
+const resetBtn=document.getElementById("reset");
 
-const visual    = document.getElementById("visual");
-const text      = document.getElementById("text");
-const countdown = document.getElementById("countdown");
+const visual=document.getElementById("visual");
+const text=document.getElementById("text");
+const countdown=document.getElementById("countdown");
 
-/* ===================== STATE ===================== */
-let sequence = [];
-let index = 0;
-let timer = null;
-let paused = false;
-let stopped = false;
-let workedSeconds = 0;
-let examMode = false;
-let examRecap = [];
+let seq=[],idx=0,timer=null,paused=false,stopped=false,worked=0;
 
-/* ===================== UTILS ===================== */
-function speak(text, rate = 1){
-  return new Promise(resolve => {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "fr-FR";
-    u.rate = rate;
-    u.onend = resolve;
+interval.oninput=()=>intervalVal.textContent=format(interval.value);
+
+function speak(t,r=1){
+  return new Promise(res=>{
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang="fr-FR";u.rate=r;u.onend=res;
     speechSynthesis.speak(u);
   });
 }
 
-function formatTime(sec){
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${m}m ${s.toString().padStart(2,"0")}s`;
+function format(s){
+  const m=Math.floor(s/60),sec=s%60;
+  return `${m}m ${sec.toString().padStart(2,"0")}s`;
 }
 
-/* ===================== RANGE DISPLAY ===================== */
-interval.oninput = () => {
-  intervalVal.textContent = formatTime(Number(interval.value));
-};
-
-/* ===================== CORE ===================== */
-async function runExercise(){
-  if(stopped) return;
-
-  if(index >= sequence.length){
+async function run(){
+  if(stopped||idx>=seq.length){
     await speak("Entraînement terminé");
-    alert("Temps travaillé : " + formatTime(workedSeconds));
+    alert("Temps travaillé : "+format(worked));
     return;
   }
 
-  const ex = sequence[index];
+  const ex=seq[idx];
+  visual.className=BG[ex.cat];
+  text.textContent=ex.text;
 
-  visual.className = BG[ex.cat];
-  text.textContent = ex.text;
+  await speak("Enchaînement",0.7);
+  await speak(ex.text,0.7);
+  await speak(ex.text,0.7);
+  await speak("Hajimé");
 
-  if(current.garde){
-  await speak("Garde à " + current.garde, 1);
-}
+  let remain=Number(interval.value);
+  countdown.textContent=format(remain);
 
-  await speak("Catégorie " + ex.cat, 0.7);
-  await speak(ex.text, 0.7);
-  await speak(ex.text, 0.7);
-  await speak("Hajimé", 1);
-
- let remaining = examMode ? current.duration : Number(interval.value);
-
-  countdown.textContent = formatTime(remaining);
-
-  timer = setInterval(() => {
-    if(paused || stopped) return;
-
-    remaining--;
-    workedSeconds++;
-    countdown.textContent = formatTime(remaining);
-
-    if(remaining <= 0){
+  timer=setInterval(()=>{
+    if(paused||stopped)return;
+    remain--;worked++;
+    countdown.textContent=format(remain);
+    if(remain<=0){
       clearInterval(timer);
-      index++;
-
-     if(!examMode && index < sequence.length - 1){
-  await speak("Exercice suivant",1);
-}
-          setTimeout(() => {
-            if(!stopped) runExercise();
-          }, 2000);
-        });
-      } else {
-        runExercise();
-      }
+      idx++;
+      setTimeout(run,2000);
     }
-  }, 1000);
+  },1000);
 }
 
-/* ===================== EVENTS ===================== */
-startBtn.onclick = () => {
+startBtn.onclick=()=>{
   speechSynthesis.cancel();
   clearInterval(timer);
+  stopped=false;paused=false;idx=0;worked=0;
 
-  stopped = false;
-  paused = false;
-  index = 0;
-  workedSeconds = 0;
-
-  pauseBtn.classList.remove("active");
-  pauseBtn.textContent = "⏸ Pause";
-
-  sequence = [];
-
-  const mode = modeSelect.value;
-  const cat  = categorieSel.value;
-  const qty  = Number(countInput.value);
-
-  if(mode === "1"){
+  seq=[];
+  if(mode.value==="1"){
     let all=[];
     Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>all.push({cat:c,text:t})));
-    sequence = all.sort(()=>Math.random()-.5).slice(0,qty);
+    seq=all.sort(()=>Math.random()-.5).slice(0,count.value);
   }
-
-  if(mode === "2"){
+  if(mode.value==="2"){
     Object.entries(DATA).forEach(([c,l])=>{
-      sequence.push({cat:c,text:l[Math.floor(Math.random()*l.length)]});
+      seq.push({cat:c,text:l[Math.floor(Math.random()*l.length)]});
     });
   }
-
-  if(mode === "3"){
-    sequence = DATA[cat]
-      .slice().sort(()=>Math.random()-.5)
-      .slice(0,qty)
-      .map(t=>({cat:cat,text:t}));
+  if(mode.value==="3"){
+    seq=DATA[catSel.value].slice().sort(()=>Math.random()-.5)
+      .slice(0,count.value).map(t=>({cat:catSel.value,text:t}));
   }
-
-  setTimeout(() => {
-    if(!stopped) runExercise();
-  }, 5000);
-};
-  if(mode === "exam"){
-  interval.disabled = true;
-  sequence = buildExamSequence();
-}
-
-
-pauseBtn.onclick = () => {
-  paused = !paused;
-  pauseBtn.classList.toggle("active", paused);
-  pauseBtn.textContent = paused ? "▶ Reprendre" : "⏸ Pause";
+  setTimeout(run,5000);
 };
 
-stopBtn.onclick = () => {
-  stopped = true;
+pauseBtn.onclick=()=>{
+  paused=!paused;
+  pauseBtn.textContent=paused?"▶ Reprendre":"⏸ Pause";
+};
+
+stopBtn.onclick=()=>{
+  stopped=true;
   speechSynthesis.cancel();
   clearInterval(timer);
-
-  visual.className = "";
-  text.textContent = "Séance arrêtée";
-  countdown.textContent = "";
-
-  pauseBtn.classList.remove("active");
-  pauseBtn.textContent = "⏸ Pause";
-
-  alert("Temps travaillé : " + formatTime(workedSeconds));
+  text.textContent="Séance arrêtée";
+  countdown.textContent="";
 };
 
-resetBtn.onclick = () => {
+resetBtn.onclick=()=>{
   speechSynthesis.cancel();
   clearInterval(timer);
-
-  stopped = false;
-  paused = false;
-  index = 0;
-  workedSeconds = 0;
-
-  pauseBtn.classList.remove("active");
-  pauseBtn.textContent = "⏸ Pause";
-
-  visual.className = "";
-  text.textContent = "Prêt 🌸";
-  countdown.textContent = "";
+  stopped=false;paused=false;idx=0;worked=0;
+  text.textContent="Prêt 🌸";
+  countdown.textContent="";
 };
-  function buildExamSequence(){
-  examMode = true;
-  examRecap = [];
-
-  const seq = [];
-
-  /* ========= PARTIE 1 — 3 PAS ========= */
-  const pas3 = DATA["3pas"]
-    .slice()
-    .sort(() => Math.random() - .5)
-    .slice(0, 3);
-
-  pas3.forEach(txt => {
-    seq.push({
-      cat: "3pas",
-      text: txt,
-      duration: 60,
-      repeat: 1,
-      garde: null
-    });
-  });
-
-  examRecap.push({
-    title: "Partie 1 – Enchaînements 3 pas",
-    items: pas3
-  });
-
-  /* ========= PARTIE 2 — SUR PLACE ========= */
-  const surPlace = DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
-
-  ["gauche","droite"].forEach(garde=>{
-    seq.push({
-      cat: "surplace",
-      text: surPlace,
-      duration: 60,
-      repeat: 1,
-      garde
-    });
-  });
-
-  examRecap.push({
-    title: "Partie 2 – Enchaînement sur place",
-    items: [surPlace]
-  });
-
-  /* ========= PARTIE 3 — MULTI ========= */
-  const multi = DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
-
-  ["gauche","droite"].forEach(garde=>{
-    seq.push({
-      cat: "multi",
-      text: multi,
-      duration: 120,
-      repeat: 1,
-      garde
-    });
-  });
-
-  examRecap.push({
-    title: "Partie 3 – Enchaînement multidirectionnel",
-    items: [multi]
-  });
-
-  return seq;
-}
-if(examMode){
-  let html = "<h3>📄 Récapitulatif de l'examen</h3>";
-
-  examRecap.forEach(part=>{
-    html += `<strong>${part.title}</strong><ul>`;
-    part.items.forEach(i=>{
-      html += `<li>${i}</li>`;
-    });
-    html += "</ul>";
-  });
-
-  document.getElementById("recap").innerHTML = html;
-  examMode = false;
-}
-
 </script>
-
 </body>
 </html>
-
