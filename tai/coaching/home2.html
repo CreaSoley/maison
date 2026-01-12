@@ -94,6 +94,8 @@ button.pause{background:#999}
 
 <input type="number" id="count" min="1" value="3">
 <input type="range" id="interval" min="30" max="240" value="60">
+  <span id="intervalVal">1:00</span>
+
 
 <div id="examControls" class="hidden">
   <button id="presentation">📢 Présentation de l'examen</button>
@@ -167,6 +169,20 @@ const recapDiv = document.getElementById("recap");
 let sequence=[], index=0, timer=null;
 let paused=false, stopped=false;
 let examRecap=[];
+
+  const intervalVal = document.getElementById("intervalVal");
+
+function formatTime(sec){
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2,"0")}`;
+}
+
+intervalInput.oninput = () => {
+  intervalVal.textContent = formatTime(Number(intervalInput.value));
+};
+intervalVal.textContent = formatTime(Number(intervalInput.value));
+
 /* ===================== VOICES ===================== */
 let VOICES = [];
 
@@ -290,6 +306,48 @@ function renderRecap(){
       p.items.map(i=>`<li>${i}</li>`).join("")+"</ul>";
   });
 }
+startBtn.onclick = async () => {
+  speechSynthesis.cancel();
+  clearInterval(timer);
+
+  stopped = false;
+  paused = false;
+  index = 0;
+  recapDiv.innerHTML = "";
+  sequence = [];
+
+  const mode = modeSelect.value;
+  const cat  = catSelect.value;
+  const qty  = Number(countInput.value);
+  const delay = Number(intervalInput.value);
+
+  if(mode === "1"){
+    let all = [];
+    Object.entries(DATA).forEach(([c,list])=>{
+      list.forEach(t=>all.push({cat:c,text:t,time:delay}));
+    });
+    sequence = all.sort(()=>Math.random()-.5).slice(0,qty);
+  }
+
+  if(mode === "2"){
+    Object.entries(DATA).forEach(([c,list])=>{
+      const t = list[Math.floor(Math.random()*list.length)];
+      sequence.push({cat:c,text:t,time:delay});
+    });
+  }
+
+  if(mode === "3"){
+    sequence = DATA[cat]
+      .slice()
+      .sort(()=>Math.random()-.5)
+      .slice(0,qty)
+      .map(t=>({cat:cat,text:t,time:delay}));
+  }
+
+  await speak("Préparez-vous",0.7);
+  await speak("Hajimé",1);
+  run();
+};
 
 /* ===================== EVENTS ===================== */
 startExamBtn.onclick=()=>{
