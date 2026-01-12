@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>🥋 Kihon Trainer – VoiceVox</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:sans-serif;background:#fff6fb;padding:20px;display:flex;justify-content:center}
+main{max-width:900px;width:100%}
+.card{background:white;padding:20px;border-radius:20px;box-shadow:0 12px 25px rgba(255,120,180,.25)}
+h1{text-align:center;color:#ff1493}
+.controls{display:grid;gap:10px;margin-bottom:15px}
+select,input,button{padding:10px;border-radius:12px;border:2px solid #ffd6ec;font-family:sans-serif}
+button{background:#ff5fc1;color:white;cursor:pointer}
+button.stop{background:#ff4d6d} button.pause{background:#999}
+#visual{margin-top:20px;padding:25px;min-height:160px;color:white;text-align:center;font-size:1.3rem;display:flex;flex-direction:column;justify-content:center;border-radius:20px}
+#countdown{font-size:2rem;margin-top:10px}
+.bg-3pas{background:linear-gradient(to top,#30cfd0,#330867)}
+.bg-surplace{background:linear-gradient(to top,#888,#444)}
+.bg-multi{background:linear-gradient(to top,#f43b47,#453a94)}
+#recap{margin-top:20px;background:#fff;padding:15px;border-radius:15px;box-shadow:0 12px 25px rgba(255,120,180,.25)}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<main>
+<div class="card">
+<h1>🥋 Kihon Trainer – VoiceVox</h1>
+
+<div class="controls">
+<select id="mode">
+  <option value="1">🎲 Exercice 1 – Aléatoire global</option>
+  <option value="2">🎯 Exercice 2 – Par catégorie</option>
+  <option value="3">📂 Exercice 3 – Catégorie choisie</option>
+  <option value="exam">📝 Mode examen blanc</option>
+</select>
+
+<select id="categorie">
+  <option value="3pas">3 pas</option>
+  <option value="surplace">Sur place</option>
+  <option value="multi">Multidirectionnel</option>
+</select>
+
+<input type="number" id="count" min="1" value="3">
+<input type="range" id="interval" min="30" max="240" value="60">
+<span id="intervalVal">60s</span>
+
+<div id="examControls" class="hidden">
+  <button id="presentation">📢 Présentation de l'examen</button>
+  <button id="startExam">▶ Démarrer l'examen</button>
+</div>
+
+<button id="start">▶ Lancer</button>
+<button id="pause" class="pause">⏸ Pause</button>
+<button id="stop" class="stop">⏹ Stop</button>
+<button id="reset" class="pause">🔄 Réinitialiser</button>
+</div>
+
+<div id="visual">
+  <div id="text">Prêt 🌸</div>
+  <div id="countdown"></div>
+  <audio id="audio" autoplay></audio>
+</div>
+
+<div id="recap"></div>
+</div>
+</main>
+
+<script>
+/* ===================== DATA ===================== */
+const DATA = {
+  "3pas":[
+    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae Geri",
+    "Avancer en Shuto Uke Kokutsu Dachi, Nukite Chudan",
+    "Reculer Gedan Barai en Zenkutsu Dachi, Oi Tsuki, Mae Geri",
+    "Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki",
+    "Kiba Dachi Uraken Uchi, déplacement jambe avant Gyaku Tsuki"
+  ],
+  "surplace":[
+    "Sur place : Mae Geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
+    "Sur place : sursaut arrière Soto Uke, Gyaku Tsuki, Mae Geri"
+  ],
+  "multi":[
+    "Multidirectionnel : Pas chassé Gyaku Tsuki, pivot",
+    "Multidirectionnel : Mae Geri, Gyaku Tsuki, pivot"
+  ]
+};
+
+const BG = {"3pas":"bg-3pas","surplace":"bg-surplace","multi":"bg-multi"};
+
+/* ===================== DOM ===================== */
+const modeSelect=document.getElementById("mode");
+const catSelect=document.getElementById("categorie");
+const countInput=document.getElementById("count");
+const intervalInput=document.getElementById("interval");
+const intervalVal=document.getElementById("intervalVal");
+
+const startBtn=document.getElementById("start");
+const pauseBtn=document.getElementById("pause");
+const stopBtn=document.getElementById("stop");
+const resetBtn=document.getElementById("reset");
+
+const examControls=document.getElementById("examControls");
+const presentationBtn=document.getElementById("presentation");
+const startExamBtn=document.getElementById("startExam");
+
+const text=document.getElementById("text");
+const countdown=document.getElementById("countdown");
+const visual=document.getElementById("visual");
+const recapDiv=document.getElementById("recap");
+const audioElem=document.getElementById("audio");
+
+/* ===================== STATE ===================== */
+let sequence=[], index=0, timer=null;
+let paused=false, stopped=false;
+let examRecap=[];
+
+/* ===================== UTILS ===================== */
+function fmt(sec){const m=Math.floor(sec/60);const s=sec%60;return `${m}m ${s.toString().padStart(2,"0")}s`;}
+
+async function voicevox(text,speaker=1){
+  // Audio query
+  const aqRes=await fetch(`http://localhost:50021/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`);
+  const aq=await aqRes.json();
+  // Synthesis
+  const synRes=await fetch(`http://localhost:50021/synthesis?speaker=${speaker}`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(aq)
+  });
+  const blob=await synRes.blob();
+  const url=URL.createObjectURL(blob);
+  return url;
+}
+
+/* ===================== RANGE DISPLAY ===================== */
+intervalInput.oninput=()=>{intervalVal.textContent=fmt(Number(intervalInput.value));}
+
+/* ===================== MODE SWITCH ===================== */
+modeSelect.onchange=()=>{
+  const exam=modeSelect.value==="exam";
+  examControls.classList.toggle("hidden",!exam);
+  startBtn.classList.toggle("hidden",exam);
+  catSelect.disabled=exam;
+  countInput.disabled=exam;
+  intervalInput.disabled=exam;
+};
+
+/* ===================== PRESENTATION ===================== */
+presentationBtn.onclick=async()=>{
+  const txt=`Vous avez choisi le mode examen blanc. La séance comporte trois parties. Première partie : enchaînement sur trois pas, trois fois en avançant puis trois fois en reculant. Deuxième partie : enchaînement sur place, changement de garde annoncé. Troisième partie : enchaînement multidirectionnel, changement de garde annoncé. La pause est autorisée.`;
+  const url=await voicevox(txt);
+  audioElem.src=url;
+};
+
+/* ===================== EXAM SEQUENCE ===================== */
+function buildExam(){
+  examRecap=[]; const seq=[];
+  const p1=[...DATA["3pas"]].sort(()=>Math.random()-.5).slice(0,3);
+  examRecap.push({title:"Partie 1 – 3 pas",items:p1}); p1.forEach(t=>seq.push({cat:"3pas",text:t,time:60}));
+  const p2=DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
+  examRecap.push({title:"Partie 2 – Sur place",items:[p2]});
+  ["gauche","droite"].forEach(g=>seq.push({cat:"surplace",text:p2,time:60,garde:g}));
+  const p3=DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
+  examRecap.push({title:"Partie 3 – Multidirectionnel",items:[p3]});
+  ["gauche","droite"].forEach(g=>seq.push({cat:"multi",text:p3,time:120,garde:g}));
+  return seq;
+}
+
+/* ===================== RUN SEQUENCE ===================== */
+async function run(){
+  if(stopped || index>=sequence.length){text.textContent="Fin de la séance";renderRecap(); return;}
+  const ex=sequence[index];
+  visual.className=BG[ex.cat];
+  text.textContent=ex.text;
+
+  if(ex.garde) {const url=await voicevox("Garde à "+ex.garde); audioElem.src=url; await new Promise(r=>audioElem.onended=r);}
+  let url=await voicevox(ex.text); audioElem.src=url; await new Promise(r=>audioElem.onended=r);
+  url=await voicevox(ex.text); audioElem.src=url; await new Promise(r=>audioElem.onended=r);
+  url=await voicevox("Hajimé"); audioElem.src=url; await new Promise(r=>audioElem.onended=r);
+
+  let t=ex.time; countdown.textContent=fmt(t);
+  timer=setInterval(()=>{if(paused||stopped)return;t--;countdown.textContent=fmt(t);if(t<=0){clearInterval(timer);index++;run();}},1000);
+}
+
+/* ===================== RECAP ===================== */
+function renderRecap(){
+  recapDiv.innerHTML="<h3>📄 Récapitulatif de la séance</h3>";
+  examRecap.forEach(p=>{recapDiv.innerHTML+=`<strong>${p.title}</strong><ul>`+p.items.map(i=>`<li>${i}</li>`).join("")+"</ul>";});
+}
+
+/* ===================== EVENTS ===================== */
+startExamBtn.onclick=()=>{
+  stopped=false;paused=false;index=0;sequence=buildExam();
+  run();
+};
+
+pauseBtn.onclick=()=>{
+  paused=!paused; pauseBtn.textContent=paused?"▶ Reprendre":"⏸ Pause";
+};
+stopBtn.onclick=()=>{
+  stopped=true;clearInterval(timer); audioElem.pause(); audioElem.src="";
+  text.textContent="Séance arrêtée";countdown.textContent="";
+};
+resetBtn.onclick=()=>{
+  stopped=true;paused=false;clearInterval(timer); audioElem.pause(); audioElem.src="";
+  text.textContent="Prêt 🌸";countdown.textContent="";recapDiv.innerHTML="";
+};
+</script>
+</body>
+</html>
