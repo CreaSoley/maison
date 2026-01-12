@@ -317,6 +317,10 @@ resetBtn.onclick=()=>{
 document.body.addEventListener("click", () => {
   speechSynthesis.cancel();
 }, { once: true });
+document.body.addEventListener("click", () => {
+  console.log("Audio déverrouillé");
+  speechSynthesis.cancel();
+}, { once: true });
 
 </script>
 </body>
