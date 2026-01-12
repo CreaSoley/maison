@@ -360,7 +360,7 @@ resetBtn.onclick = () => {
 
   stopped=true; paused=false; clearInterval(timer); speechSynthesis.cancel();
   text.textContent="Prêt 🌸"; countdown.textContent=""; recapDiv.innerHTML="";
-};
+
   function setActiveButton(btn){
   document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
   if(btn) btn.classList.add("active");
