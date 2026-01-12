@@ -222,13 +222,20 @@ function fmt(sec){const m=Math.floor(sec/60); const s=sec%60; return `${m}m ${s.
 async function speak(txt,rate=1){return new Promise(res=>{const u=new SpeechSynthesisUtterance(txt); u.lang="fr-FR"; u.rate=rate; u.onend=res; speechSynthesis.speak(u);});}
 intervalInput.oninput=()=>{intervalVal.textContent=fmt(Number(intervalInput.value));};
 
-modeSelect.onchange=()=>{
-  examMode = modeSelect.value==="exam";
-  examControls.classList.toggle("hidden",!examMode);
-  startBtn.classList.toggle("hidden",examMode);
-  catSelect.disabled = examMode;
-  countInput.disabled = examMode;
-  intervalInput.disabled = examMode;
+modeSelect.onchange = () => {
+  const exam = modeSelect.value === "exam";
+
+  if (examControls) {
+    examControls.classList.toggle("hidden", !exam);
+  }
+
+  if (startBtn) {
+    startBtn.classList.toggle("hidden", exam);
+  }
+
+  if (catSelect) catSelect.disabled = exam;
+  if (countInput) countInput.disabled = exam;
+  if (intervalInput) intervalInput.disabled = exam;
 };
 
 /* ================= Présentation examen ================= */
