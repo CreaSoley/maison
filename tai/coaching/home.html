@@ -44,6 +44,56 @@ button.examBtn{width:60px;height:60px;border:none;border-radius:12px;margin:5px;
 #recap ul{list-style:none;padding-left:0;background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);color:#333;border-radius:12px;margin:5px 0;padding:8px;}
 #recap li{margin:5px 0;}
 .examIcon{display:block;text-align:center;font-size:28px;margin-top:12px;}
+  /* ===== BARRE DE BOUTONS KAWAII ===== */
+.button-bar{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+
+/* Base commune */
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px;
+  font-size:0.95rem;
+  font-weight:600;
+  border:none;
+  border-radius:14px;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 20px rgba(255,120,180,.35);
+  transition:transform .15s, box-shadow .15s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 28px rgba(255,120,180,.45);
+}
+
+/* ===== Dégradé progressif ===== */
+.btn-train{
+  background-image:linear-gradient(135deg,#5f2c82,#9f5fff);
+}
+.btn-pause{
+  background-image:linear-gradient(135deg,#6a3093,#a044ff);
+}
+.btn-stop{
+  background-image:linear-gradient(135deg,#8e2de2,#ff416c);
+}
+.btn-present{
+  background-image:linear-gradient(135deg,#ff416c,#ff4b2b);
+}
+.btn-exam{
+  background-image:linear-gradient(135deg,#ff7a18,#ffb347);
+}
+.btn-reset{
+  background-image:linear-gradient(135deg,#f83600,#f9d423);
+}
+
 </style>
 </head>
 
@@ -70,16 +120,34 @@ button.examBtn{width:60px;height:60px;border:none;border-radius:12px;margin:5px;
 <input type="range" id="interval" min="30" max="240" value="60">
 <span id="intervalVal">60s</span>
 
-<div id="examControls" class="hidden">
-  <button id="presentation" class="examBtn" style="background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);"><span class="examIcon">📢</span></button>
-  <button id="startExam" class="examBtn" style="background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);"><span class="examIcon">▶</span></button>
+<div class="button-bar">
+
+  <button id="start" class="btn btn-train">
+    ▶️ Lancer l’entraînement
+  </button>
+
+  <button id="pause" class="btn btn-pause">
+    ⏸ Pause
+  </button>
+
+  <button id="stop" class="btn btn-stop">
+    ⏹ Stop
+  </button>
+
+  <button id="presentation" class="btn btn-present hidden">
+    📢 Présentation examen
+  </button>
+
+  <button id="startExam" class="btn btn-exam hidden">
+    📝 Lancer l’examen
+  </button>
+
+  <button id="reset" class="btn btn-reset">
+    🔄 Réinitialiser
+  </button>
+
 </div>
 
-<button id="start" class="start">▶ Lancer</button>
-<button id="pause" class="pause">⏸ Pause</button>
-<button id="stop" class="stop">⏹ Stop</button>
-<button id="reset" class="reset">🔄 Réinitialiser</button>
-</div>
 
 <div id="visual">
   <div id="text">Prêt 🌸</div>
