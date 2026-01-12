@@ -15,57 +15,27 @@
   --radius:22px;
   --shadow:0 12px 25px rgba(255,120,180,.25);
 }
-
 body{
-  margin:0;
-  font-family:'Fredoka',sans-serif;
-  background:var(--bg);
-  display:flex;
-  justify-content:center;
-  padding:20px;
+  margin:0;font-family:'Fredoka',sans-serif;
+  background:var(--bg);display:flex;justify-content:center;padding:20px;
 }
-
 main{max-width:800px;width:100%}
-
-.card{
-  background:white;
-  border-radius:var(--radius);
-  padding:20px;
-  box-shadow:var(--shadow);
-}
-
+.card{background:white;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
 h1{text-align:center;color:var(--hot-pink)}
-
 .controls{display:grid;gap:10px}
-
 select,button,input{
-  padding:10px;
-  border-radius:12px;
-  border:2px solid #ffd6ec;
-  font-family:'Fredoka';
+  padding:10px;border-radius:12px;border:2px solid #ffd6ec;font-family:'Fredoka'
 }
-
 button{background:var(--pink);color:white;cursor:pointer}
 button.stop{background:#ff4d6d}
 button.pause{background:#999}
-
 .range-wrap{display:flex;gap:10px;align-items:center}
-
 #visual{
-  margin-top:20px;
-  border-radius:20px;
-  padding:25px;
-  min-height:160px;
-  color:white;
-  text-align:center;
-  font-size:1.4rem;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
+  margin-top:20px;border-radius:20px;padding:25px;min-height:160px;
+  color:white;text-align:center;font-size:1.4rem;
+  display:flex;flex-direction:column;justify-content:center
 }
-
 #countdown{font-size:2rem;margin-top:10px}
-
 .bg-3pas{background-image:linear-gradient(to top,#30cfd0,#330867)}
 .bg-surplace{
   background:
@@ -75,6 +45,7 @@ button.pause{background:#999}
   background-blend-mode:multiply,multiply;
 }
 .bg-multi{background-image:linear-gradient(to top,#f43b47,#453a94)}
+#recap{margin-top:20px}
 </style>
 </head>
 
@@ -90,6 +61,7 @@ button.pause{background:#999}
   <option value="1">🎲 Exercice 1 – Aléatoire global</option>
   <option value="2">🎯 Exercice 2 – Par catégorie</option>
   <option value="3">📂 Exercice 3 – Catégorie choisie</option>
+  <option value="exam">📝 Mode examen blanc</option>
 </select>
 
 <select id="categorie">
@@ -109,7 +81,7 @@ button.pause{background:#999}
   <span id="intervalVal">1m 00s</span>
 </div>
 
-<button id="start">▶ Lancer</button>
+<button id="start">▶ Démarrer</button>
 <button id="pause" class="pause">⏸ Pause</button>
 <button id="stop" class="stop">⏹ Stop</button>
 <button id="reset" class="pause">🔄 Réinitialiser</button>
@@ -121,6 +93,8 @@ button.pause{background:#999}
   <div id="countdown"></div>
 </div>
 
+<div id="recap"></div>
+
 </div>
 </main>
 
@@ -130,18 +104,15 @@ const DATA={
     "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae geri",
     "Avancer en Shuto Uke Kokutsu Dachi, Gyaku Nukité Chudan",
     "Reculer Gedan Barai, Oï tsuki, Mae geri",
-    "Avancer Uchi uke, Yoko geri, Yoko empi uchi",
-    "Avancer 3 pas Jodan Age uke, Haïto uchi, Tate empi uchi"
+    "Avancer Uchi uke, Yoko geri, Yoko empi uchi"
   ],
   "surplace":[
     "Mae geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
-    "Sursaut arrière Jodan Age Uke, Gyaku tsuki, Mae geri",
-    "Sursaut Soto uke, Gyaku tsuki, Mae geri"
+    "Sursaut arrière Jodan Age Uke, Gyaku tsuki, Mae geri"
   ],
   "multi":[
     "Mae geri, Gyaku Tsuki",
-    "Pas chassé Gyaku Tsuki",
-    "Mae geri, Age uke, Gyaku tsuki"
+    "Pas chassé Gyaku Tsuki"
   ]
 };
 
@@ -161,8 +132,10 @@ const resetBtn=document.getElementById("reset");
 const visual=document.getElementById("visual");
 const text=document.getElementById("text");
 const countdown=document.getElementById("countdown");
+const recap=document.getElementById("recap");
 
 let seq=[],idx=0,timer=null,paused=false,stopped=false,worked=0;
+let examMode=false,examRecap=[];
 
 interval.oninput=()=>intervalVal.textContent=format(interval.value);
 
@@ -179,9 +152,36 @@ function format(s){
   return `${m}m ${sec.toString().padStart(2,"0")}s`;
 }
 
+function buildExam(){
+  examMode=true;examRecap=[];const s=[];
+  const p3=DATA["3pas"].slice().sort(()=>Math.random()-.5).slice(0,3);
+  p3.forEach(t=>s.push({cat:"3pas",text:t,duration:60}));
+  examRecap.push({title:"Partie 1 – 3 pas",items:p3});
+
+  const sp=DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
+  ["gauche","droite"].forEach(g=>s.push({cat:"surplace",text:sp,duration:60,garde:g}));
+  examRecap.push({title:"Partie 2 – Sur place",items:[sp]});
+
+  const m=DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
+  ["gauche","droite"].forEach(g=>s.push({cat:"multi",text:m,duration:120,garde:g}));
+  examRecap.push({title:"Partie 3 – Multidirectionnel",items:[m]});
+
+  return s;
+}
+
 async function run(){
   if(stopped||idx>=seq.length){
     await speak("Entraînement terminé");
+    if(examMode){
+      let html="<h3>📄 Récapitulatif examen</h3>";
+      examRecap.forEach(p=>{
+        html+=`<strong>${p.title}</strong><ul>`;
+        p.items.forEach(i=>html+=`<li>${i}</li>`);
+        html+="</ul>";
+      });
+      recap.innerHTML=html;
+      examMode=false;
+    }
     alert("Temps travaillé : "+format(worked));
     return;
   }
@@ -190,45 +190,41 @@ async function run(){
   visual.className=BG[ex.cat];
   text.textContent=ex.text;
 
-  await speak("Enchaînement",0.7);
-  await speak(ex.text,0.7);
-  await speak(ex.text,0.7);
+  if(ex.garde) await speak("Garde à "+ex.garde);
+  await speak(ex.text,0.7);await speak(ex.text,0.7);
   await speak("Hajimé");
 
-  let remain=Number(interval.value);
+  let remain=examMode?ex.duration:Number(interval.value);
   countdown.textContent=format(remain);
 
   timer=setInterval(()=>{
     if(paused||stopped)return;
-    remain--;worked++;
-    countdown.textContent=format(remain);
-    if(remain<=0){
-      clearInterval(timer);
-      idx++;
-      setTimeout(run,2000);
-    }
+    remain--;worked++;countdown.textContent=format(remain);
+    if(remain<=0){clearInterval(timer);idx++;setTimeout(run,2000);}
   },1000);
 }
 
 startBtn.onclick=()=>{
-  speechSynthesis.cancel();
-  clearInterval(timer);
-  stopped=false;paused=false;idx=0;worked=0;
-
+  speechSynthesis.cancel();clearInterval(timer);
+  stopped=false;paused=false;idx=0;worked=0;recap.innerHTML="";
   seq=[];
-  if(mode.value==="1"){
-    let all=[];
-    Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>all.push({cat:c,text:t})));
-    seq=all.sort(()=>Math.random()-.5).slice(0,count.value);
-  }
-  if(mode.value==="2"){
-    Object.entries(DATA).forEach(([c,l])=>{
-      seq.push({cat:c,text:l[Math.floor(Math.random()*l.length)]});
-    });
-  }
-  if(mode.value==="3"){
-    seq=DATA[catSel.value].slice().sort(()=>Math.random()-.5)
-      .slice(0,count.value).map(t=>({cat:catSel.value,text:t}));
+
+  if(mode.value==="exam"){
+    interval.disabled=true;count.disabled=true;catSel.disabled=true;
+    seq=buildExam();
+  }else{
+    interval.disabled=false;count.disabled=false;catSel.disabled=false;
+    if(mode.value==="1"){
+      let a=[];Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>a.push({cat:c,text:t})));
+      seq=a.sort(()=>Math.random()-.5).slice(0,count.value);
+    }
+    if(mode.value==="2"){
+      Object.entries(DATA).forEach(([c,l])=>seq.push({cat:c,text:l[Math.floor(Math.random()*l.length)]}));
+    }
+    if(mode.value==="3"){
+      seq=DATA[catSel.value].slice().sort(()=>Math.random()-.5)
+        .slice(0,count.value).map(t=>({cat:catSel.value,text:t}));
+    }
   }
   setTimeout(run,5000);
 };
@@ -239,19 +235,14 @@ pauseBtn.onclick=()=>{
 };
 
 stopBtn.onclick=()=>{
-  stopped=true;
-  speechSynthesis.cancel();
-  clearInterval(timer);
-  text.textContent="Séance arrêtée";
-  countdown.textContent="";
+  stopped=true;speechSynthesis.cancel();clearInterval(timer);
+  text.textContent="Séance arrêtée";countdown.textContent="";
 };
 
 resetBtn.onclick=()=>{
-  speechSynthesis.cancel();
-  clearInterval(timer);
-  stopped=false;paused=false;idx=0;worked=0;
-  text.textContent="Prêt 🌸";
-  countdown.textContent="";
+  speechSynthesis.cancel();clearInterval(timer);
+  stopped=false;paused=false;idx=0;worked=0;examMode=false;
+  text.textContent="Prêt 🌸";countdown.textContent="";recap.innerHTML="";
 };
 </script>
 </body>
