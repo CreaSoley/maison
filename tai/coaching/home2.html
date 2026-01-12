@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>🌸 Kihon Trainer 🌸</title>
+<title>🥋 Kihon Trainer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
@@ -15,37 +15,60 @@
   --radius:22px;
   --shadow:0 12px 25px rgba(255,120,180,.25);
 }
+
 body{
-  margin:0;font-family:'Fredoka',sans-serif;
-  background:var(--bg);display:flex;justify-content:center;padding:20px;
+  margin:0;
+  font-family:'Fredoka',sans-serif;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  padding:20px;
 }
+
 main{max-width:800px;width:100%}
-.card{background:white;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-h1{text-align:center;color:var(--hot-pink)}
-.controls{display:grid;gap:10px}
-select,button,input{
-  padding:10px;border-radius:12px;border:2px solid #ffd6ec;font-family:'Fredoka'
+
+.card{
+  background:white;
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
 }
+
+h1{text-align:center;color:var(--hot-pink)}
+
+.controls{display:grid;gap:10px}
+
+select,button,input{
+  padding:10px;
+  border-radius:12px;
+  border:2px solid #ffd6ec;
+  font-family:'Fredoka';
+}
+
 button{background:var(--pink);color:white;cursor:pointer}
 button.stop{background:#ff4d6d}
 button.pause{background:#999}
-.range-wrap{display:flex;gap:10px;align-items:center}
+
 #visual{
-  margin-top:20px;border-radius:20px;padding:25px;min-height:160px;
-  color:white;text-align:center;font-size:1.4rem;
-  display:flex;flex-direction:column;justify-content:center
+  margin-top:20px;
+  border-radius:20px;
+  padding:25px;
+  min-height:160px;
+  color:white;
+  text-align:center;
+  font-size:1.3rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
+
 #countdown{font-size:2rem;margin-top:10px}
-.bg-3pas{background-image:linear-gradient(to top,#30cfd0,#330867)}
-.bg-surplace{
-  background:
-    linear-gradient(to bottom,rgba(255,255,255,.15),rgba(0,0,0,.15)),
-    radial-gradient(at top center,rgba(255,255,255,.4),rgba(0,0,0,.4)),
-    #989898;
-  background-blend-mode:multiply,multiply;
-}
-.bg-multi{background-image:linear-gradient(to top,#f43b47,#453a94)}
-#recap{margin-top:20px}
+
+.bg-3pas{background:linear-gradient(to top,#30cfd0,#330867)}
+.bg-surplace{background:linear-gradient(to top,#999,#555)}
+.bg-multi{background:linear-gradient(to top,#f43b47,#453a94)}
+
+.hidden{display:none}
 </style>
 </head>
 
@@ -58,33 +81,22 @@ button.pause{background:#999}
 <div class="controls">
 
 <select id="mode">
-  <option value="1">🎲 Exercice 1 – Aléatoire global</option>
-  <option value="2">🎯 Exercice 2 – Par catégorie</option>
-  <option value="3">📂 Exercice 3 – Catégorie choisie</option>
+  <option value="normal">🎲 Entraînement libre</option>
   <option value="exam">📝 Mode examen blanc</option>
 </select>
 
-<select id="categorie">
-  <option value="3pas">3 pas</option>
-  <option value="surplace">Sur place</option>
-  <option value="multi">Multidirectionnel</option>
-</select>
-
-<div class="range-wrap">
-  <label>Nombre :</label>
-  <input type="number" id="count" min="1" value="3" style="width:80px">
+<div id="normalControls">
+  <input type="number" id="count" min="1" value="3">
+  <input type="range" id="interval" min="30" max="240" value="60">
 </div>
 
-<div class="range-wrap">
-  <label>Intervalle :</label>
-  <input type="range" min="30" max="240" value="60" id="interval">
-  <span id="intervalVal">1m 00s</span>
+<div id="examControls" class="hidden">
+  <button id="presentation">📢 Présentation de l'examen</button>
+  <button id="startExam">▶ Démarrer l'examen</button>
 </div>
 
-<button id="start">▶ Démarrer</button>
 <button id="pause" class="pause">⏸ Pause</button>
 <button id="stop" class="stop">⏹ Stop</button>
-<button id="reset" class="pause">🔄 Réinitialiser</button>
 
 </div>
 
@@ -93,156 +105,152 @@ button.pause{background:#999}
   <div id="countdown"></div>
 </div>
 
-<div id="recap"></div>
-
 </div>
 </main>
 
 <script>
-const DATA={
+/* ===================== DATA ===================== */
+const DATA = {
   "3pas":[
-    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae geri",
-    "Avancer en Shuto Uke Kokutsu Dachi, Gyaku Nukité Chudan",
-    "Reculer Gedan Barai, Oï tsuki, Mae geri",
-    "Avancer Uchi uke, Yoko geri, Yoko empi uchi"
+    "Avancer en Soto Uke, Gyaku Tsuki, Mae Geri",
+    "Avancer Shuto Uke Kokutsu Dachi, Nukite",
+    "Reculer Gedan Barai, Oi Tsuki, Mae Geri"
   ],
   "surplace":[
-    "Mae geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
-    "Sursaut arrière Jodan Age Uke, Gyaku tsuki, Mae geri"
+    "Mae Geri jambe arrière, Kizami Tsuki, Gyaku Tsuki"
   ],
   "multi":[
-    "Mae geri, Gyaku Tsuki",
-    "Pas chassé Gyaku Tsuki"
+    "Mae Geri, Gyaku Tsuki, pivot"
   ]
 };
 
-const BG={3pas:"bg-3pas",surplace:"bg-surplace",multi:"bg-multi"};
+const BG = {
+  "3pas":"bg-3pas",
+  "surplace":"bg-surplace",
+  "multi":"bg-multi"
+};
 
-const mode=document.getElementById("mode");
-const catSel=document.getElementById("categorie");
-const count=document.getElementById("count");
-const interval=document.getElementById("interval");
-const intervalVal=document.getElementById("intervalVal");
+/* ===================== DOM ===================== */
+const modeSelect = document.getElementById("mode");
+const normalControls = document.getElementById("normalControls");
+const examControls = document.getElementById("examControls");
 
-const startBtn=document.getElementById("start");
-const pauseBtn=document.getElementById("pause");
-const stopBtn=document.getElementById("stop");
-const resetBtn=document.getElementById("reset");
+const presentationBtn = document.getElementById("presentation");
+const startExamBtn = document.getElementById("startExam");
 
-const visual=document.getElementById("visual");
-const text=document.getElementById("text");
-const countdown=document.getElementById("countdown");
-const recap=document.getElementById("recap");
+const pauseBtn = document.getElementById("pause");
+const stopBtn = document.getElementById("stop");
 
-let seq=[],idx=0,timer=null,paused=false,stopped=false,worked=0;
-let examMode=false,examRecap=[];
+const text = document.getElementById("text");
+const countdown = document.getElementById("countdown");
+const visual = document.getElementById("visual");
 
-interval.oninput=()=>intervalVal.textContent=format(interval.value);
+/* ===================== STATE ===================== */
+let sequence = [];
+let index = 0;
+let timer = null;
+let paused = false;
+let stopped = false;
 
-function speak(t,r=1){
+/* ===================== UTILS ===================== */
+function speak(txt, rate=1){
   return new Promise(res=>{
-    const u=new SpeechSynthesisUtterance(t);
-    u.lang="fr-FR";u.rate=r;u.onend=res;
+    const u=new SpeechSynthesisUtterance(txt);
+    u.lang="fr-FR";
+    u.rate=rate;
+    u.onend=res;
     speechSynthesis.speak(u);
   });
 }
 
-function format(s){
-  const m=Math.floor(s/60),sec=s%60;
-  return `${m}m ${sec.toString().padStart(2,"0")}s`;
+function format(sec){
+  return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}`;
 }
 
+/* ===================== MODE SWITCH ===================== */
+modeSelect.onchange = () => {
+  const exam = modeSelect.value==="exam";
+  normalControls.classList.toggle("hidden", exam);
+  examControls.classList.toggle("hidden", !exam);
+};
+
+/* ===================== PRESENTATION EXAM ===================== */
+presentationBtn.onclick = async () => {
+  speechSynthesis.cancel();
+  await speak(
+    "Vous avez choisi le mode examen. " +
+    "La séance comporte trois parties. " +
+    "Première partie : trois enchaînements trois pas. " +
+    "Trois fois en avançant, puis trois fois en reculant. " +
+    "Deuxième partie : un enchaînement sur place, garde à gauche puis garde à droite. " +
+    "Troisième partie : un enchaînement multidirectionnel, garde à gauche puis garde à droite. " +
+    "La pause est autorisée. Vous disposez du temps réglementaire.",
+    0.7
+  );
+};
+
+/* ===================== BUILD EXAM ===================== */
 function buildExam(){
-  examMode=true;examRecap=[];const s=[];
-  const p3=DATA["3pas"].slice().sort(()=>Math.random()-.5).slice(0,3);
-  p3.forEach(t=>s.push({cat:"3pas",text:t,duration:60}));
-  examRecap.push({title:"Partie 1 – 3 pas",items:p3});
-
-  const sp=DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
-  ["gauche","droite"].forEach(g=>s.push({cat:"surplace",text:sp,duration:60,garde:g}));
-  examRecap.push({title:"Partie 2 – Sur place",items:[sp]});
-
-  const m=DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
-  ["gauche","droite"].forEach(g=>s.push({cat:"multi",text:m,duration:120,garde:g}));
-  examRecap.push({title:"Partie 3 – Multidirectionnel",items:[m]});
-
-  return s;
+  return [
+    {cat:"3pas",text:DATA["3pas"][0],time:60},
+    {cat:"3pas",text:DATA["3pas"][1],time:60},
+    {cat:"3pas",text:DATA["3pas"][2],time:60},
+    {cat:"surplace",text:DATA["surplace"][0],time:60,garde:"gauche"},
+    {cat:"surplace",text:DATA["surplace"][0],time:60,garde:"droite"},
+    {cat:"multi",text:DATA["multi"][0],time:120,garde:"gauche"},
+    {cat:"multi",text:DATA["multi"][0],time:120,garde:"droite"}
+  ];
 }
 
+/* ===================== RUN ===================== */
 async function run(){
-  if(stopped||idx>=seq.length){
-    await speak("Entraînement terminé");
-    if(examMode){
-      let html="<h3>📄 Récapitulatif examen</h3>";
-      examRecap.forEach(p=>{
-        html+=`<strong>${p.title}</strong><ul>`;
-        p.items.forEach(i=>html+=`<li>${i}</li>`);
-        html+="</ul>";
-      });
-      recap.innerHTML=html;
-      examMode=false;
-    }
-    alert("Temps travaillé : "+format(worked));
-    return;
-  }
+  if(stopped || index>=sequence.length) return;
 
-  const ex=seq[idx];
+  const ex=sequence[index];
   visual.className=BG[ex.cat];
   text.textContent=ex.text;
 
-  if(ex.garde) await speak("Garde à "+ex.garde);
-  await speak(ex.text,0.7);await speak(ex.text,0.7);
-  await speak("Hajimé");
+  if(ex.garde) await speak("Garde à "+ex.garde,1);
+  await speak(ex.text,0.7);
+  await speak(ex.text,0.7);
+  await speak("Hajimé",1);
 
-  let remain=examMode?ex.duration:Number(interval.value);
-  countdown.textContent=format(remain);
+  let t=ex.time;
+  countdown.textContent=format(t);
 
   timer=setInterval(()=>{
-    if(paused||stopped)return;
-    remain--;worked++;countdown.textContent=format(remain);
-    if(remain<=0){clearInterval(timer);idx++;setTimeout(run,2000);}
+    if(paused||stopped) return;
+    t--;
+    countdown.textContent=format(t);
+    if(t<=0){
+      clearInterval(timer);
+      index++;
+      run();
+    }
   },1000);
 }
 
-startBtn.onclick=()=>{
-  speechSynthesis.cancel();clearInterval(timer);
-  stopped=false;paused=false;idx=0;worked=0;recap.innerHTML="";
-  seq=[];
-
-  if(mode.value==="exam"){
-    interval.disabled=true;count.disabled=true;catSel.disabled=true;
-    seq=buildExam();
-  }else{
-    interval.disabled=false;count.disabled=false;catSel.disabled=false;
-    if(mode.value==="1"){
-      let a=[];Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>a.push({cat:c,text:t})));
-      seq=a.sort(()=>Math.random()-.5).slice(0,count.value);
-    }
-    if(mode.value==="2"){
-      Object.entries(DATA).forEach(([c,l])=>seq.push({cat:c,text:l[Math.floor(Math.random()*l.length)]}));
-    }
-    if(mode.value==="3"){
-      seq=DATA[catSel.value].slice().sort(()=>Math.random()-.5)
-        .slice(0,count.value).map(t=>({cat:catSel.value,text:t}));
-    }
-  }
-  setTimeout(run,5000);
+/* ===================== EVENTS ===================== */
+startExamBtn.onclick = () => {
+  speechSynthesis.cancel();
+  clearInterval(timer);
+  stopped=false;paused=false;
+  index=0;
+  sequence=buildExam();
+  run();
 };
 
-pauseBtn.onclick=()=>{
+pauseBtn.onclick = ()=>{
   paused=!paused;
   pauseBtn.textContent=paused?"▶ Reprendre":"⏸ Pause";
 };
 
-stopBtn.onclick=()=>{
-  stopped=true;speechSynthesis.cancel();clearInterval(timer);
-  text.textContent="Séance arrêtée";countdown.textContent="";
-};
-
-resetBtn.onclick=()=>{
-  speechSynthesis.cancel();clearInterval(timer);
-  stopped=false;paused=false;idx=0;worked=0;examMode=false;
-  text.textContent="Prêt 🌸";countdown.textContent="";recap.innerHTML="";
+stopBtn.onclick = ()=>{
+  stopped=true;
+  speechSynthesis.cancel();
+  clearInterval(timer);
+  text.textContent="Séance arrêtée";
+  countdown.textContent="";
 };
 </script>
 </body>
