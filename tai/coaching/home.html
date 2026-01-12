@@ -11,9 +11,11 @@
   --pink:#ff5fc1;
   --hot-pink:#ff1493;
   --purple:#8a2be2;
+  --blue1:#13547a;
+  --blue2:#80d0c7;
   --green:#4caf50;
-  --blue:#2196f3;
-  --yellow:#ffeb3b;
+  --orange1:#f83600;
+  --orange2:#f9d423;
   --bg:linear-gradient(180deg,#fff6fb,#ffeef6);
   --radius:22px;
   --shadow:0 12px 25px rgba(255,120,180,.25);
@@ -48,8 +50,17 @@ button{color:white;cursor:pointer;transition:0.2s;}
 button.start{background:var(--pink)}
 button.stop{background:#ff4d6d}
 button.pause{background:#999}
-button.reset{background:var(--purple)}
-button.examBtn{background:var(--green);margin:3px;padding:5px 10px;border:none;border-radius:12px;cursor:pointer;}
+button.reset{
+  background-image: linear-gradient(to right, #f83600 0%, #f9d423 100%);
+}
+button.examBtn{
+  background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+  margin:3px;
+  padding:5px 10px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+}
 .range-wrap{display:flex;gap:10px;align-items:center}
 #visual{
   margin-top:10px;
@@ -81,7 +92,8 @@ button.examBtn{background:var(--green);margin:3px;padding:5px 10px;border:none;b
 .bg-multi{background:linear-gradient(to top,#f43b47,#453a94)}
 #recap{
   margin-top:20px;
-  background:#fff;
+  background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+  color:white;
   padding:15px;
   border-radius:15px;
   box-shadow:var(--shadow);
@@ -115,7 +127,7 @@ button.examBtn{background:var(--green);margin:3px;padding:5px 10px;border:none;b
 <span id="intervalVal">60s</span>
 
 <div id="examControls" class="hidden">
-  <button id="presentation" class="start">📢 Présentation de l'examen</button>
+  <button id="presentation" class="examBtn">📢 Présentation de l'examen</button>
   <button id="startExam" class="start">▶ Démarrer l'examen</button>
 </div>
 
@@ -137,34 +149,22 @@ button.examBtn{background:var(--green);margin:3px;padding:5px 10px;border:none;b
 <script>
 const DATA={
 "3pas":[
-"Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudane, Maé Guéri",
-"Avancer en Shuto Uke Kokutsu Dachi, Nukité Chudane en Zenkutsu Dachi",
-"Avancer en Shuto Uke Kokutsu Dachi, Gyaku Tsuki Zenkutsu Dachi",
-"Reculer Guédane Baraï en Zenkutsu Dachi, Oï Tsuki, Maé Guéri",
-"Avancer Maé Guéri, poser Agué Uke suivi de Gyaku Tsuki",
-"Avancer Kiba Dachi Uraken Uchi, Zenkutsu Dachi Gyaku Tsuki",
-"Avancer sur 3 pas en Zenkutsu Dachi, Jodane Agué Uke, Haïto Uchi, Taté Empi Uchi",
-"Avancer Uchi Uke Zenkutsu Dachi, Yoko Guéri repose Kiba Dachi, Yoko Empi Uchi",
-"Avancer Kiba dachi, Yoko guéri, Zenkutsu dachi, Gyaku teïsho Uchi",
-"Avancer Zenkutsu dachi, Guédane Baraï, Gyaku tsuki, Jodane Agué Uke",
-"Avancer Zenkutsu dachi, Mawashi guéri, Uraken Uchi, Gyaku tsuki",
-"Avancer Kiba dachi, Tsugi ashi, Heiko Uke, Zenkutsu dachi, Gyaku Tsuki"  
+"Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae Geri",
+"Avancer en Shuto Uke Kokutsu Dachi, Nukite Chudan",
+"Reculer Gedan Barai en Zenkutsu Dachi, Oi Tsuki, Mae Geri",
+"Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki",
+"Kiba Dachi Uraken Uchi, déplacement jambe avant Gyaku Tsuki"
 ],
 "surplace":[
-"Sur place : Maé Guéri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
-"Sur place : sursaut arrière Soto Uke, Gyaku Tsuki, Maé Guéri",
-"Sur place : sursaut arrière Jodane Agué Uke, Gyaku Tsuki, Maé Guéri",
-"Sur place : sursaut Maé guéri jambe avant, Guédane Baraî,Gyaku Tsuki",
-"Sur place : sursaut Maé Guéri jambe avant, Oi Tsuki, Gyaku Tsuki"
+"Sur place : Mae Geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
+"Sur place : sursaut arrière Soto Uke, Gyaku Tsuki, Mae Geri",
+"Sur place : sursaut arrière Jodan Age Uke, Gyaku Tsuki, Mae Geri",
+"Sur place : sursaut Mae Geri jambe avant, Oi Tsuki, Gyaku Tsuki"
 ],
 "multi":[
-"Multidirectionnel : Maé Guéri Jambe arrière, Gyaku Tsuki Chudane",
-"Multidirectionnel : Oï tsuki, Gyaku tsuki",
-"Multidirectionnel : Avancer maé guéri, reculer guédane baraï, Gyaku Tsuki",
-"Multidirectionnel : Oï Tsuki, reculer Jodane Agué Uke, Gyaku tsuki",
-"Multidirectionnel : Pas chassé Gyaku Tsuki chudane, ressort pas chassé",
-"Multidirectionnel : Sursaut arrière soto uke, Gyaku Tsuki, Maé guéri jambe arrière repose devant ",
-"Multidirectionnel : Avancer Maé Guéri, poser Agué Uke suivi de Gyaku Tsuki"
+"Multidirectionnel : Mae Geri Jambe arrière, Gyaku Tsuki Chudan",
+"Multidirectionnel : Pas chassé Gyaku Tsuki chudan, ressort pas chassé",
+"Multidirectionnel : Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki"
 ]};
 const BG={"3pas":"bg-3pas","surplace":"bg-surplace","multi":"bg-multi"};
 
@@ -192,10 +192,8 @@ let sequence=[], index=0, timer=null;
 let paused=false, stopped=false, workedSeconds=0;
 let examRecap=[], examMode=false;
 
-/* ===================== UTILS ===================== */
 function fmt(sec){const m=Math.floor(sec/60); const s=sec%60; return `${m}m ${s.toString().padStart(2,"0")}s`;}
 async function speak(txt,rate=1){return new Promise(res=>{const u=new SpeechSynthesisUtterance(txt); u.lang="fr-FR"; u.rate=rate; u.onend=res; speechSynthesis.speak(u);});}
-
 intervalInput.oninput=()=>{intervalVal.textContent=fmt(Number(intervalInput.value));};
 
 modeSelect.onchange=()=>{
@@ -207,35 +205,33 @@ modeSelect.onchange=()=>{
   intervalInput.disabled = examMode;
 };
 
-/* ===================== PRESENTATION ===================== */
+/* Présentation */
 presentationBtn.onclick=async()=>{
   speechSynthesis.cancel();
-  await speak("Vous avez choisi le mode examen blanc. La séance comporte trois parties. Première partie : enchaînement sur trois pas. Trois fois en avançant puis trois fois en reculant. Deuxième partie : enchaînement sur place. Le changement de garde sera annoncé. Troisième partie : enchaînement multidirectionnel. Le changement de garde sera annoncé. La pause est autorisée.",0.7);
+  await speak("Vous avez choisi le mode examen blanc. La séance comporte trois parties. Première partie : enchaînement sur trois pas. Deuxième partie : enchaînement sur place, changement de garde annoncé. Troisième partie : multidirectionnel, changement de garde annoncé.",0.7);
 };
 
-/* ===================== BUILD EXAM ===================== */
+/* Build exam */
 function buildExam(){
   examRecap=[]; const seq=[];
-  // Partie 1 – 3 pas
   let p1 = [...DATA["3pas"]].sort(()=>Math.random()-.5).slice(0,3);
-  examRecap.push({title:"Partie 1 – 3 pas", items:p1});
+  examRecap.push({title:"Exercice 1 – 3 pas", items:p1});
   p1.forEach(t=>seq.push({cat:"3pas",text:t,time:60}));
 
-  // Partie 2 – Sur place
-  let p2 = DATA["surplace"].sort(()=>Math.random()-.5)[0]; 
-  examRecap.push({title:"Partie 2 – Sur place", items:[p2]});
+  let p2 = DATA["surplace"].sort(()=>Math.random()-.5)[0];
+  examRecap.push({title:"Exercice 2 – Sur place", items:[p2]});
   seq.push({cat:"surplace",text:p2,time:30,garde:"gauche"});
-  seq.push({cat:"surplace",text:"",time:30,garde:"droite"}); // pas le nom répété
+  seq.push({cat:"surplace",text:"",time:30,garde:"droite"});
 
-  // Partie 3 – Multidirectionnel
-  let p3 = DATA["multi"].sort(()=>Math.random()-.5)[0]; 
-  examRecap.push({title:"Partie 3 – Multidirectionnel", items:[p3]});
-  seq.push({cat:"multi",text:p3,time:45,garde:"gauche"});
-  seq.push({cat:"multi",text:"",time:45,garde:"droite"}); // pas le nom répété
+  let p3 = DATA["multi"].sort(()=>Math.random()-.5)[0];
+  examRecap.push({title:"Exercice 3 – Multidirectionnel", items:[p3]});
+  seq.push({cat:"multi",text:p3,time:60,garde:"gauche"});
+  seq.push({cat:"multi",text:"",time:60,garde:"droite"});
+
   return seq;
 }
 
-/* ===================== RUN SEQUENCE ===================== */
+/* Run sequence */
 async function run(){
   if(stopped) return;
   if(index>=sequence.length){
@@ -243,11 +239,9 @@ async function run(){
     renderRecap();
     return;
   }
-
   const ex=sequence[index];
   visual.className=BG[ex.cat];
   text.textContent = ex.text || `Garde à ${ex.garde}`;
-
   if(ex.partAnnounce) await speak(ex.partAnnounce,0.7);
   if(ex.garde) await speak("Garde à "+ex.garde,1);
   if(ex.text) await speak(ex.text,0.7);
@@ -262,29 +256,29 @@ async function run(){
     countdown.textContent=fmt(t);
     if(t<=0){
       clearInterval(timer);
-      if(!examMode) await speak("Fin de l'exercice",1);
+      if(!examMode) alert("Temps travaillé : "+fmt(workedSeconds));
       index++; run();
     }
   },1000);
 }
 
-/* ===================== RECAP ===================== */
+/* Recap */
 function renderRecap(){
   recapDiv.innerHTML="<h3>📄 Récapitulatif</h3>";
   examRecap.forEach(p=>{
     recapDiv.innerHTML+=`<strong>${p.title}</strong><ul>`+
-      p.items.map(i=>`<li><button class="examBtn" onclick="speak('${i}',0.7)">${i} (${fmt(30)})</button></li>`).join("")+
+      p.items.map(i=>`<li><button class="examBtn" onclick="speak('${i.replace(/'/g,"\\'")}',0.7)">${i}</button></li>`).join("")+
       "</ul>";
   });
 }
 
-/* ===================== EVENTS ===================== */
+/* Events */
 startExamBtn.onclick=()=>{
   stopped=false; paused=false; index=0; workedSeconds=0;
   sequence=buildExam();
-  if(sequence[0]) sequence[0].partAnnounce="Première partie : enchaînement sur trois pas";
-  if(sequence[2]) sequence[2].partAnnounce="Deuxième partie : enchaînement sur place";
-  if(sequence[4]) sequence[4].partAnnounce="Troisième partie : multidirectionnel";
+  if(sequence[0]) sequence[0].partAnnounce="Exercice 1 – 3 pas";
+  if(sequence[3]) sequence[3].partAnnounce="Exercice 2 – Sur place";
+  if(sequence[5]) sequence[5].partAnnounce="Exercice 3 – Multidirectionnel";
   run();
 };
 
@@ -297,7 +291,6 @@ startBtn.onclick=()=>{
 
   if(mode==="1"){
     let all=[]; Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>all.push({cat:c,text:t,time:Number(intervalInput.value)})));
-    // suppression doublons
     all = [...new Set(all.map(a=>JSON.stringify(a)))].map(a=>JSON.parse(a));
     sequence=all.sort(()=>Math.random()-.5).slice(0,qty);
   }
