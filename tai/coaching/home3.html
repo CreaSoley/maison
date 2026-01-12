@@ -2,30 +2,36 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>🥋 Kihon Trainer – VoiceVox</title>
+<title>🥋 Kihon Trainer 🌸</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
 <style>
-body{font-family:sans-serif;background:#fff6fb;padding:20px;display:flex;justify-content:center}
+:root{
+  --pink:#ff5fc1; --hot-pink:#ff1493; --bg:linear-gradient(180deg,#fff6fb,#ffeef6);
+  --radius:22px; --shadow:0 12px 25px rgba(255,120,180,.25);
+}
+body{margin:0;font-family:'Fredoka',sans-serif;background:var(--bg);display:flex;justify-content:center;padding:20px;}
 main{max-width:900px;width:100%}
-.card{background:white;padding:20px;border-radius:20px;box-shadow:0 12px 25px rgba(255,120,180,.25)}
-h1{text-align:center;color:#ff1493}
-.controls{display:grid;gap:10px;margin-bottom:15px}
-select,input,button{padding:10px;border-radius:12px;border:2px solid #ffd6ec;font-family:sans-serif}
-button{background:#ff5fc1;color:white;cursor:pointer}
-button.stop{background:#ff4d6d} button.pause{background:#999}
-#visual{margin-top:20px;padding:25px;min-height:160px;color:white;text-align:center;font-size:1.3rem;display:flex;flex-direction:column;justify-content:center;border-radius:20px}
-#countdown{font-size:2rem;margin-top:10px}
-.bg-3pas{background:linear-gradient(to top,#30cfd0,#330867)}
-.bg-surplace{background:linear-gradient(to top,#888,#444)}
-.bg-multi{background:linear-gradient(to top,#f43b47,#453a94)}
-#recap{margin-top:20px;background:#fff;padding:15px;border-radius:15px;box-shadow:0 12px 25px rgba(255,120,180,.25)}
-.hidden{display:none}
+.card{background:white;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+h1{text-align:center;color:var(--hot-pink);}
+.controls{display:grid;gap:10px;}
+select,button,input{padding:10px;border-radius:12px;border:2px solid #ffd6ec;font-family:'Fredoka';}
+button{background:var(--pink);color:white;cursor:pointer;}
+button.stop{background:#ff4d6d;}
+button.pause{background:#999;}
+.hidden{display:none;}
+#visual{margin-top:20px;border-radius:20px;padding:25px;min-height:160px;color:white;text-align:center;font-size:1.3rem;display:flex;flex-direction:column;justify-content:center;}
+#countdown{font-size:2rem;margin-top:10px;}
+.bg-3pas{background-image:linear-gradient(to top,#30cfd0,#330867);}
+.bg-surplace{background:linear-gradient(to top,#888,#444);}
+.bg-multi{background-image:linear-gradient(to top,#f43b47,#453a94);}
+#recap{margin-top:20px;background:#fff;padding:15px;border-radius:15px;box-shadow:var(--shadow);}
 </style>
 </head>
 <body>
 <main>
 <div class="card">
-<h1>🥋 Kihon Trainer – VoiceVox</h1>
+<h1>🥋 Kihon Trainer</h1>
 
 <div class="controls">
 <select id="mode">
@@ -59,9 +65,7 @@ button.stop{background:#ff4d6d} button.pause{background:#999}
 <div id="visual">
   <div id="text">Prêt 🌸</div>
   <div id="countdown"></div>
-  <audio id="audio" autoplay></audio>
 </div>
-
 <div id="recap"></div>
 </div>
 </main>
@@ -69,76 +73,66 @@ button.stop{background:#ff4d6d} button.pause{background:#999}
 <script>
 /* ===================== DATA ===================== */
 const DATA = {
-  "3pas":[
-    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae Geri",
-    "Avancer en Shuto Uke Kokutsu Dachi, Nukite Chudan",
-    "Reculer Gedan Barai en Zenkutsu Dachi, Oi Tsuki, Mae Geri",
-    "Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki",
-    "Kiba Dachi Uraken Uchi, déplacement jambe avant Gyaku Tsuki"
-  ],
-  "surplace":[
-    "Sur place : Mae Geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
-    "Sur place : sursaut arrière Soto Uke, Gyaku Tsuki, Mae Geri"
-  ],
-  "multi":[
-    "Multidirectionnel : Pas chassé Gyaku Tsuki, pivot",
-    "Multidirectionnel : Mae Geri, Gyaku Tsuki, pivot"
-  ]
+"3pas":[
+"Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae Geri",
+"Avancer en Shuto Uke Kokutsu Dachi, Nukite Chudan",
+"Reculer Gedan Barai en Zenkutsu Dachi, Oi Tsuki, Mae Geri",
+"Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki",
+"Kiba Dachi Uraken Uchi, déplacement jambe avant Gyaku Tsuki",
+"Avancer sur 3 pas en Zenkutsu Dachi, Jodan Age Uke, Haïto Uchi, Tate Empi Uchi",
+"Uchi Uke Zenkutsu Dachi, Yoko Geri repose Kiba Dachi, Yoko Empi Uchi"
+],
+"surplace":[
+"Sur place : Mae Geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
+"Sur place : sursaut arrière Soto Uke, Gyaku Tsuki, Mae Geri",
+"Sur place : sursaut arrière Jodan Age Uke, Gyaku Tsuki, Mae Geri",
+"Sur place : sursaut Mae Geri jambe avant, Oi Tsuki, Gyaku Tsuki"
+],
+"multi":[
+"Multidirectionnel : Mae Geri Jambe arrière, Gyaku Tsuki Chudan",
+"Multidirectionnel : Pas chassé Gyaku Tsuki chudan, ressort pas chassé",
+"Multidirectionnel : Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki"
+]
 };
 
 const BG = {"3pas":"bg-3pas","surplace":"bg-surplace","multi":"bg-multi"};
 
 /* ===================== DOM ===================== */
-const modeSelect=document.getElementById("mode");
-const catSelect=document.getElementById("categorie");
-const countInput=document.getElementById("count");
-const intervalInput=document.getElementById("interval");
-const intervalVal=document.getElementById("intervalVal");
+const modeSelect = document.getElementById("mode");
+const catSelect = document.getElementById("categorie");
+const countInput = document.getElementById("count");
+const intervalInput = document.getElementById("interval");
+const intervalVal = document.getElementById("intervalVal");
 
-const startBtn=document.getElementById("start");
-const pauseBtn=document.getElementById("pause");
-const stopBtn=document.getElementById("stop");
-const resetBtn=document.getElementById("reset");
+const startBtn = document.getElementById("start");
+const pauseBtn = document.getElementById("pause");
+const stopBtn = document.getElementById("stop");
+const resetBtn = document.getElementById("reset");
 
-const examControls=document.getElementById("examControls");
-const presentationBtn=document.getElementById("presentation");
-const startExamBtn=document.getElementById("startExam");
+const examControls = document.getElementById("examControls");
+const presentationBtn = document.getElementById("presentation");
+const startExamBtn = document.getElementById("startExam");
 
-const text=document.getElementById("text");
-const countdown=document.getElementById("countdown");
-const visual=document.getElementById("visual");
-const recapDiv=document.getElementById("recap");
-const audioElem=document.getElementById("audio");
+const text = document.getElementById("text");
+const countdown = document.getElementById("countdown");
+const visual = document.getElementById("visual");
+const recapDiv = document.getElementById("recap");
 
 /* ===================== STATE ===================== */
 let sequence=[], index=0, timer=null;
-let paused=false, stopped=false;
+let paused=false, stopped=false, workedSeconds=0;
 let examRecap=[];
 
 /* ===================== UTILS ===================== */
-function fmt(sec){const m=Math.floor(sec/60);const s=sec%60;return `${m}m ${s.toString().padStart(2,"0")}s`;}
-
-async function voicevox(text,speaker=1){
-  // Audio query
-  const aqRes=await fetch(`http://localhost:50021/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`);
-  const aq=await aqRes.json();
-  // Synthesis
-  const synRes=await fetch(`http://localhost:50021/synthesis?speaker=${speaker}`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(aq)
-  });
-  const blob=await synRes.blob();
-  const url=URL.createObjectURL(blob);
-  return url;
-}
+function fmt(sec){const m=Math.floor(sec/60); const s=sec%60; return `${m}m ${s.toString().padStart(2,"0")}s`;}
+async function speak(txt, rate=1){return new Promise(resolve=>{const u=new SpeechSynthesisUtterance(txt); u.lang="fr-FR"; u.rate=rate; u.onend=resolve; speechSynthesis.speak(u);});}
 
 /* ===================== RANGE DISPLAY ===================== */
-intervalInput.oninput=()=>{intervalVal.textContent=fmt(Number(intervalInput.value));}
+intervalInput.oninput=()=>{intervalVal.textContent=fmt(Number(intervalInput.value));};
 
 /* ===================== MODE SWITCH ===================== */
 modeSelect.onchange=()=>{
-  const exam=modeSelect.value==="exam";
+  const exam = modeSelect.value==="exam";
   examControls.classList.toggle("hidden",!exam);
   startBtn.classList.toggle("hidden",exam);
   catSelect.disabled=exam;
@@ -148,63 +142,116 @@ modeSelect.onchange=()=>{
 
 /* ===================== PRESENTATION ===================== */
 presentationBtn.onclick=async()=>{
-  const txt=`Vous avez choisi le mode examen blanc. La séance comporte trois parties. Première partie : enchaînement sur trois pas, trois fois en avançant puis trois fois en reculant. Deuxième partie : enchaînement sur place, changement de garde annoncé. Troisième partie : enchaînement multidirectionnel, changement de garde annoncé. La pause est autorisée.`;
-  const url=await voicevox(txt);
-  audioElem.src=url;
+  speechSynthesis.cancel();
+  await speak(
+    "Vous avez choisi le mode examen blanc. La séance comporte trois parties. " +
+    "Première partie : enchaînement sur trois pas. Trois fois en avançant puis trois fois en reculant. " +
+    "Deuxième partie : enchaînement sur place. Le changement de garde sera annoncé. " +
+    "Troisième partie : enchaînement multidirectionnel. Le changement de garde sera annoncé. " +
+    "La pause est autorisée.",0.7);
 };
 
-/* ===================== EXAM SEQUENCE ===================== */
+/* ===================== BUILD EXAM ===================== */
 function buildExam(){
   examRecap=[]; const seq=[];
-  const p1=[...DATA["3pas"]].sort(()=>Math.random()-.5).slice(0,3);
-  examRecap.push({title:"Partie 1 – 3 pas",items:p1}); p1.forEach(t=>seq.push({cat:"3pas",text:t,time:60}));
-  const p2=DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
-  examRecap.push({title:"Partie 2 – Sur place",items:[p2]});
-  ["gauche","droite"].forEach(g=>seq.push({cat:"surplace",text:p2,time:60,garde:g}));
-  const p3=DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
-  examRecap.push({title:"Partie 3 – Multidirectionnel",items:[p3]});
-  ["gauche","droite"].forEach(g=>seq.push({cat:"multi",text:p3,time:120,garde:g}));
+  const p1 = [...DATA["3pas"]].sort(()=>Math.random()-.5).slice(0,3);
+  examRecap.push({title:"Partie 1 – 3 pas", items:p1});
+  p1.forEach(t=>seq.push({cat:"3pas", text:t, time:60}));
+
+  const p2 = DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
+  examRecap.push({title:"Partie 2 – Sur place", items:[p2]});
+  ["gauche","droite"].forEach(g=>seq.push({cat:"surplace", text:p2, time:60, garde:g}));
+
+  const p3 = DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
+  examRecap.push({title:"Partie 3 – Multidirectionnel", items:[p3]});
+  ["gauche","droite"].forEach(g=>seq.push({cat:"multi", text:p3, time:120, garde:g}));
+
   return seq;
 }
 
 /* ===================== RUN SEQUENCE ===================== */
 async function run(){
-  if(stopped || index>=sequence.length){text.textContent="Fin de la séance";renderRecap(); return;}
+  if(stopped || index>=sequence.length){
+    await speak("Fin de l'examen",1);
+    renderRecap();
+    return;
+  }
   const ex=sequence[index];
-  visual.className=BG[ex.cat];
-  text.textContent=ex.text;
+  visual.className = BG[ex.cat];
+  text.textContent = ex.text;
 
-  if(ex.garde) {const url=await voicevox("Garde à "+ex.garde); audioElem.src=url; await new Promise(r=>audioElem.onended=r);}
-  let url=await voicevox(ex.text); audioElem.src=url; await new Promise(r=>audioElem.onended=r);
-  url=await voicevox(ex.text); audioElem.src=url; await new Promise(r=>audioElem.onended=r);
-  url=await voicevox("Hajimé"); audioElem.src=url; await new Promise(r=>audioElem.onended=r);
+  if(ex.partAnnounce) await speak(ex.partAnnounce,0.7);
+  if(ex.garde) await speak("Garde à "+ex.garde,1);
+  await speak(ex.text,0.7);
+  await speak(ex.text,0.7);
+  await speak("Hajimé",1);
 
-  let t=ex.time; countdown.textContent=fmt(t);
-  timer=setInterval(()=>{if(paused||stopped)return;t--;countdown.textContent=fmt(t);if(t<=0){clearInterval(timer);index++;run();}},1000);
+  let t = ex.time;
+  countdown.textContent = fmt(t);
+
+  timer = setInterval(()=>{
+    if(paused || stopped) return;
+    t--; workedSeconds++;
+    countdown.textContent = fmt(t);
+    if(t<=0){clearInterval(timer); index++; run();}
+  },1000);
 }
 
 /* ===================== RECAP ===================== */
 function renderRecap(){
-  recapDiv.innerHTML="<h3>📄 Récapitulatif de la séance</h3>";
-  examRecap.forEach(p=>{recapDiv.innerHTML+=`<strong>${p.title}</strong><ul>`+p.items.map(i=>`<li>${i}</li>`).join("")+"</ul>";});
+  recapDiv.innerHTML="<h3>📄 Récapitulatif</h3>";
+  examRecap.forEach(p=>{
+    recapDiv.innerHTML += `<strong>${p.title}</strong><ul>`+
+      p.items.map(i=>`<li>${i}</li>`).join("")+"</ul>";
+  });
 }
 
 /* ===================== EVENTS ===================== */
 startExamBtn.onclick=()=>{
-  stopped=false;paused=false;index=0;sequence=buildExam();
+  stopped=false; paused=false; index=0; workedSeconds=0;
+  sequence = buildExam();
+  if(sequence[0]) sequence[0].partAnnounce="Première partie : enchaînement sur trois pas";
+  if(sequence[3]) sequence[3].partAnnounce="Deuxième partie : enchaînement sur place";
+  if(sequence[5]) sequence[5].partAnnounce="Troisième partie : multidirectionnel";
   run();
 };
 
+startBtn.onclick=()=>{
+  stopped=false; paused=false; index=0; workedSeconds=0;
+  sequence=[];
+
+  const mode = modeSelect.value;
+  const cat = catSelect.value;
+  const qty = Number(countInput.value);
+
+  if(mode==="1"){ // Aléatoire global
+    let all=[];
+    Object.entries(DATA).forEach(([c,l])=>l.forEach(t=>all.push({cat:c,text:t,time:Number(intervalInput.value)})));
+    sequence = all.sort(()=>Math.random()-.5).slice(0,qty);
+  }
+  if(mode==="2"){ // Une par catégorie
+    Object.entries(DATA).forEach(([c,l])=>{
+      sequence.push({cat:c,text:l[Math.floor(Math.random()*l.length)],time:Number(intervalInput.value)});
+    });
+  }
+  if(mode==="3"){ // Catégorie choisie
+    sequence = DATA[cat].slice().sort(()=>Math.random()-.5).slice(0,qty).map(t=>({cat:cat,text:t,time:Number(intervalInput.value)}));
+  }
+
+  setTimeout(()=>{if(!stopped) run();},5000);
+};
+
 pauseBtn.onclick=()=>{
-  paused=!paused; pauseBtn.textContent=paused?"▶ Reprendre":"⏸ Pause";
+  paused=!paused;
+  pauseBtn.textContent = paused?"▶ Reprendre":"⏸ Pause";
 };
 stopBtn.onclick=()=>{
-  stopped=true;clearInterval(timer); audioElem.pause(); audioElem.src="";
-  text.textContent="Séance arrêtée";countdown.textContent="";
+  stopped=true; clearInterval(timer); speechSynthesis.cancel();
+  text.textContent="Séance arrêtée"; countdown.textContent="";
 };
 resetBtn.onclick=()=>{
-  stopped=true;paused=false;clearInterval(timer); audioElem.pause(); audioElem.src="";
-  text.textContent="Prêt 🌸";countdown.textContent="";recapDiv.innerHTML="";
+  stopped=true; paused=false; clearInterval(timer); speechSynthesis.cancel();
+  text.textContent="Prêt 🌸"; countdown.textContent=""; recapDiv.innerHTML="";
 };
 </script>
 </body>
