@@ -56,9 +56,9 @@ button.examBtn{width:60px;height:60px;border:none;border-radius:12px;margin:5px;
 .btn{
   display:flex;
   align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:12px;
+  justify-content:flex-start;   /* ⬅ alignement à gauche */
+  gap:10px;
+  padding:12px 14px;
   font-size:0.95rem;
   font-weight:600;
   border:none;
@@ -92,6 +92,15 @@ button.examBtn{width:60px;height:60px;border:none;border-radius:12px;margin:5px;
 }
 .btn-reset{
   background-image:linear-gradient(135deg,#f83600,#f9d423);
+}
+@keyframes pulseSoft {
+  0%   { box-shadow:0 0 0 0 rgba(255,255,255,.6); }
+  70%  { box-shadow:0 0 0 14px rgba(255,255,255,0); }
+  100% { box-shadow:0 0 0 0 rgba(255,255,255,0); }
+}
+
+.btn.active{
+  animation:pulseSoft 1.6s infinite;
 }
 
 </style>
@@ -295,13 +304,21 @@ function renderRecap(){
 }
 
 /* ================= Events ================= */
-startExamBtn.onclick=()=>{
+startExamBtn.onclick = () => {
+  setActiveButton(startExamBtn);
+  // logique existante inchangée
+};
+
   stopped=false; paused=false; index=0; workedSeconds=0;
   sequence=buildExam();
   run();
 };
 
-startBtn.onclick=()=>{
+startBtn.onclick = () => {
+  setActiveButton(startBtn);
+  // logique existante inchangée
+};
+
   stopped=false; paused=false; index=0; workedSeconds=0; sequence=[];
   const mode=modeSelect.value; const cat=catSelect.value; const qty=Number(countInput.value);
   if(mode==="1"){
@@ -321,18 +338,36 @@ startBtn.onclick=()=>{
   setTimeout(()=>{if(!stopped) run();},5000);
 };
 
-pauseBtn.onclick=()=>{
+pauseBtn.onclick = () => {
+  paused = !paused;
+  setActiveButton(paused ? pauseBtn : startBtn);
+  pauseBtn.textContent = paused ? "▶ Reprendre" : "⏸ Pause";
+};
+
   paused=!paused;
   pauseBtn.textContent=paused?"▶ Reprendre":"⏸ Pause";
 };
-stopBtn.onclick=()=>{
+stopBtn.onclick = () => {
+  setActiveButton(stopBtn);
+  // logique existante inchangée
+};
+
   stopped=true; clearInterval(timer); speechSynthesis.cancel();
   text.textContent="Séance arrêtée"; countdown.textContent="";
 };
-resetBtn.onclick=()=>{
+resetBtn.onclick = () => {
+  setActiveButton(null);
+  // logique existante inchangée
+};
+
   stopped=true; paused=false; clearInterval(timer); speechSynthesis.cancel();
   text.textContent="Prêt 🌸"; countdown.textContent=""; recapDiv.innerHTML="";
 };
+  function setActiveButton(btn){
+  document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+}
+
 </script>
 </body>
 </html>
