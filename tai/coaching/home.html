@@ -335,7 +335,6 @@ startBtn.onclick = () => {
     sequence=DATA[cat].slice().sort(()=>Math.random()-.5).slice(0,qty).map(t=>({cat:cat,text:t,time:Number(intervalInput.value)}));
   }
   setTimeout(()=>{if(!stopped) run();},5000);
-};
 
 pauseBtn.onclick = () => {
   paused = !paused;
