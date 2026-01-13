@@ -251,6 +251,9 @@ let workedSeconds = 0;
 let examRecapData = [];
 let trainingRecapData = [];
 
+window.onload = async () => {
+  await loadData();
+};
 
 /* ===================== UTILS ===================== */
 const fmt = s => `${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
