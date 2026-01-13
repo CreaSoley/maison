@@ -264,7 +264,9 @@ let paused = false;
 let stopped = false;
 let examMode = false;
 let workedSeconds = 0;
-let recapData = [];
+let examRecapData = [];
+let trainingRecapData = [];
+
 
 /* ===================== UTILS ===================== */
 const fmt = s => `${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
@@ -314,24 +316,24 @@ presentationBtn.onclick = async () => {
 /* ===================== BUILD EXAM ===================== */
 function buildExam(){
   const seq = [];
-  recapData = [];
+  const examRecapData = [];
 
   // Exercice 1 – 3 pas (3 enchaînements)
   const ex1 = [...DATA["3pas"]].sort(()=>Math.random()-0.5).slice(0,3);
-  recapData.push({title:"Exercice 1 – 3 pas", items:ex1, time:180});
+  examRecapData.push({title:"Exercice 1 – 3 pas", items:ex1, time:180});
   ex1.forEach((t,i)=>{
     seq.push({cat:"3pas", text:t, time:60, next:i<2});
   });
 
   // Exercice 2 – Sur place
   const ex2 = DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
-  recapData.push({title:"Exercice 2 – Sur place", items:[ex2], time:60});
+ examRecapData.push({title:"Exercice 2 – Sur place", items:[ex2], time:60});
   seq.push({cat:"surplace", text:ex2, garde:"gauche", time:30});
   seq.push({cat:"surplace", text:null, garde:"droite", time:30});
 
   // Exercice 3 – Multi
   const ex3 = DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
-  recapData.push({title:"Exercice 3 – Multidirectionnel", items:[ex3], time:120});
+ examRecapData.push({title:"Exercice 3 – Multidirectionnel", items:[ex3], time:120});
   seq.push({cat:"multi", text:ex3, garde:"gauche", time:60});
   seq.push({cat:"multi", text:null, garde:"droite", time:60});
 
@@ -350,16 +352,25 @@ async function run(){
   const ex = sequence[index];
   visual.className = ex.cat ? BG[ex.cat] : visual.className;
 
-  if(ex.text){
-    text.textContent = ex.text;
-    await speak(ex.text,0.7);
-    await speak(ex.text,0.7);
-  }
+  // Affichage + annonce de l'enchaînement (une seule fois)
+if(ex.text){
+  text.innerHTML = `<strong>${ex.text}</strong>`;
+  await speak(ex.text,0.7);
+  await speak(ex.text,0.7);
+}
 
-  if(ex.garde){
-    text.textContent = "Garde à " + ex.garde;
-    await speak("Garde à " + ex.garde,1);
+// Gestion des gardes (ex 2 & 3)
+if(ex.garde){
+  if(ex.text){
+    // garde gauche : déjà affiché avec texte
+    text.innerHTML = `Garde à ${ex.garde}<br><strong>${ex.text}</strong>`;
+  } else {
+    // garde droite : on conserve l'intitulé précédent
+    const prevText = sequence[index-1]?.text || "";
+    text.innerHTML = `Garde à ${ex.garde}<br><strong>${prevText}</strong>`;
   }
+  await speak("Garde à " + ex.garde,1);
+}
 
   await speak("Hajimé",1);
 
@@ -377,23 +388,30 @@ async function run(){
     }
   },1000);
 }
+trainingRecapData = [{
+  title: "Entraînement réalisé",
+  items: sequence.map(e => e.text),
+  time: workedSeconds
+}];
 
 /* ===================== RÉCAP ===================== */
 function showRecap(){
   recap.innerHTML = "<h3>📄 Récapitulatif</h3>";
-  recapData.forEach(r=>{
+
+  const source = examMode ? examRecapData : trainingRecapData;
+
+  source.forEach(r=>{
     recap.innerHTML += `
       <div class="recap-block">
         <strong>${r.title}</strong><br>
         <em>Durée : ${fmt(r.time)}</em>
-        ${r.items.map(i=>`
-          <button onclick="speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance('${i.replace(/'/g,"")}'))">
-            ${i}
-          </button>
-        `).join("")}
+        <ul>
+          ${r.items.map(i=>`<li>${i}</li>`).join("")}
+        </ul>
       </div>
     `;
   });
+
   recap.classList.remove("hidden");
 }
 
