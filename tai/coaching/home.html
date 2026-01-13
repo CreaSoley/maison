@@ -215,6 +215,7 @@ async function loadData(){
   DATA = await res.json();
 }
 
+
 const BG = {
   "3pas": "bg-3pas",
   "surplace": "bg-surplace",
@@ -306,7 +307,7 @@ function buildExam(){
   examRecapData.length = 0; // ✅ reset clair
 
 
-  // ================= PARTIE 1 — 3 PAS =================
+// ================= PARTIE 1 — 3 PAS =================
 const p1 = pickRandom("Sur trois pas", 3);
 examRecapData.push({ title:"Partie 1 – Enchaînement sur 3 pas", items:p1, time:180 });
 
@@ -320,8 +321,7 @@ p1.forEach((ex,i)=>{
   });
 });
 
-
- // ================= PARTIE 2 — SUR PLACE =================
+// ================= PARTIE 2 — SUR PLACE =================
 const p2 = pickRandom("Sur place",1)[0];
 examRecapData.push({ title:"Partie 2 – Enchaînement sur place", items:[p2], time:60 });
 
@@ -335,7 +335,7 @@ seq.push({
 });
 seq.push({ cat:"surplace", garde:"droite", time:30 });
 
-  // ================= PARTIE 3 — MULTI =================
+// ================= PARTIE 3 — MULTI =================
 const p3 = pickRandom("Multidirectionnel",1)[0];
 examRecapData.push({ title:"Partie 3 – Multidirectionnel", items:[p3], time:90 });
 
@@ -351,13 +351,13 @@ seq.push({ cat:"multi", garde:"droite", time:45 });
 
 // ================= PARTIE 4 — CIBLES =================
 const p4 = pickRandom("Cibles",1)[0];
-examRecapData.push({ title:"Partie 4 – Travail sur cibles", items:[p4], time:150 });
+examRecapData.push({ title:"Partie 4 – Travail sur cibles", items:[p4], time:60 });
 
 seq.push({
   cat:"cibles",
   display:p4.display,
   spoken:p4.spoken,
-  time:30,
+  time:60,
   announce:"Quatrième partie : travail sur cibles"
 });
 
@@ -367,6 +367,10 @@ return seq;
 /* ===================== RUN ===================== */
 async function run(){
   if(stopped) return;
+  if(ex.announce){
+  await speak(ex.announce, 0.7);
+}
+
   if(index >= sequence.length){
     await speak(examMode ? "Fin de l'examen" : "Fin de l'exercice", 1);
     showRecap();
@@ -413,13 +417,11 @@ if(ex.garde){
     }
   },1000);
 }
-if(!examMode){
-  trainingRecapData = [{
-    title: "Entraînement libre",
-    items: sequence.map(e => e.text),
-    time: workedSeconds
-  }];
-}
+trainingRecapData = [{
+  title: "Entraînement réalisé",
+  items: sequence.map(e => e.text),
+  time: workedSeconds
+}];
 
 /* ===================== RÉCAP ===================== */
 function showRecap(){
