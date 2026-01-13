@@ -313,11 +313,11 @@ function pickRandom(cat,n=1){
 presentationBtn.onclick = async () => {
   speechSynthesis.cancel();
   await speak(
-    "Vous avez choisi le mode examen blanc. " +
-    "Première partie : enchaînements sur trois pas. " +
-    "Deuxième partie : enchaînements sur place, garde annoncée. " +
-    "Troisième partie : multidirectionnel, garde annoncée. " +
-    "Quatrième partie : travail sur cibles. " +
+    "Vous avez choisi le mode examen blanc. La séance comporte quatre parties. " +
+    "Première partie : enchaînement sur trois pas. Effectuez l’enchaînement annoncé sur trois pas, avec soit un demi-tour au terme de l’aller, soit en reculant ensuite. Vous disposez de quarante-cinq secondes par enchaînement. " +
+    "Deuxième partie : enchaînement sur place. Sur place en position de combat, effectuez l’enchaînement annoncé. Le changement de garde sera annoncé. Vous disposez de trente secondes par côté. " +
+    "Troisième partie : enchaînement multidirectionnel. Un enchaînement va être annoncé. Le changement de garde sera annoncé. Vous disposez de quarante-cinq secondes par côté. " +
+    "Quatrième partie : travail sur cibles. Vous allez travailler sur un enchaînement de techniques qui doit être exécuté dans les quatre directions cardinales, en garde gauche puis en garde droite, avec retour à la position initiale. " +
     "La pause est autorisée.", 0.7
   );
 };
@@ -358,31 +358,56 @@ function buildExam(){
 let sequence=[],index=0,timer=null,paused=false,stopped=false,examMode=false;
 
 /* ===================== RUN ===================== */
-async function run(){
-  if(stopped||index>=sequence.length){
-    await speak("Fin",1);
+async function run() {
+  if (stopped || index >= sequence.length) {
+    await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
     return;
   }
 
-  const ex = sequence[index];
-  document.getElementById("visual").className = BG_MAP[ex.cat];
-  document.getElementById("text").innerHTML = `<strong>${ex.display}</strong>`;
+  const ex = sequence[index]; // ✅ TOUJOURS définir ex en premier
 
-  await speak(ex.spoken,0.8);
-  await speak("Hajimé",1);
+  /* ===== BACKGROUND ===== */
+  if (ex.cat && BG_MAP[ex.cat]) {
+    visual.className = BG_MAP[ex.cat];
+  }
 
-  let t=ex.time;
-  countdown.textContent=fmt(t);
+  /* ===== ANNONCE DE PARTIE (examen uniquement) ===== */
+  if (ex.announce) {
+    await speak(ex.announce, 0.7);
+  }
 
-  timer=setInterval(()=>{
-    if(paused||stopped)return;
-    t--; countdown.textContent=fmt(t);
-    if(t<=0){
+  /* ===== AFFICHAGE DE L’ENCHAÎNEMENT ===== */
+  if (ex.display) {
+    text.innerHTML = `<strong>${ex.display}</strong>`;
+    await speak(ex.spoken || ex.display, 0.8);
+  }
+
+  /* ===== GARDE ===== */
+  if (ex.garde) {
+    await speak("Garde à " + ex.garde, 1);
+  }
+
+  /* ===== DÉMARRAGE ===== */
+  await speak("Hajimé", 1);
+
+  let t = ex.time;
+  countdown.textContent = fmt(t);
+
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (paused || stopped) return;
+
+    t--;
+    countdown.textContent = fmt(t);
+
+    if (t <= 0) {
       clearInterval(timer);
-      index++; run();
+      index++;
+      run();
     }
-  },1000);
+  }, 1000);
 }
+
 
 /* ===================== RÉCAP ===================== */
 function showRecap(){
@@ -400,73 +425,132 @@ function showRecap(){
 }
 
 /* ===================== EVENTS ===================== */
-startExam.onclick=()=>{
-  examMode=true; stopped=false; index=0;
-  sequence=[];
 
-  pickRandom("3pas",3).forEach(e=>sequence.push({cat:"3pas",...e,time:60}));
-  const sp=pickRandom("surplace");
-  sequence.push({cat:"surplace",...sp,time:60});
-  const m=pickRandom("multi");
-  sequence.push({cat:"multi",...m,time:45});
-  const c=pickRandom("cibles");
-  sequence.push({cat:"cibles",...c,time:60});
+/* ===== LANCER MODE EXAMEN ===== */
+startExamBtn.onclick = async () => {
+  examMode = true;
+  stopped = false;
+  paused = false;
+  workedSeconds = 0;
+  index = 0;
 
-  run();
+  recap.classList.add("hidden");
+  setActive(startExamBtn);
+
+  sequence = buildExam();
+  await run();
 };
 
+/* ===== LANCER ENTRAÎNEMENT LIBRE ===== */
+startBtn.onclick = async () => {
+  examMode = false;
+  stopped = false;
+  paused = false;
+  workedSeconds = 0;
+  index = 0;
+  sequence = [];
 
-start.onclick=()=>{
-  examMode=false; stopped=false; index=0;
-  sequence=[];
-  const cat=categorie.value;
-  const qty=+count.value;
-  const time=+interval.value;
-  
-  if(m==="1"){
-    Object.entries(DATA).forEach(([c,l])=>l.forEach(x=>sequence.push({cat:c,display:x.display,spoken:x.spoken,time:t})));
-    sequence = sequence.sort(()=>Math.random()-0.5).slice(0,qty);
+  recap.classList.add("hidden");
+  setActive(startBtn);
+
+  const m = mode.value;
+  const cat = categorie.value;
+  const qty = +countInput.value;
+  const t = +intervalInput.value;
+
+  // Sécurité : données chargées ?
+  if (!DATA || Object.keys(DATA).length === 0) {
+    alert("Les données ne sont pas encore chargées.");
+    return;
   }
-  if(m==="2"){
-    Object.entries(DATA).forEach(([c,l])=>{
-      const x=l[Math.floor(Math.random()*l.length)];
-      sequence.push({cat:c,display:x.display,spoken:x.spoken,time:t});
+
+  /* ===== EXERCICE 1 – ALÉATOIRE GLOBAL ===== */
+  if (m === "1") {
+    Object.entries(DATA).forEach(([key, list]) => {
+      list.forEach(item => {
+        sequence.push({
+          cat: key,
+          display: item.display,
+          spoken: item.spoken,
+          time: t
+        });
+      });
+    });
+
+    sequence = sequence.sort(() => Math.random() - 0.5).slice(0, qty);
+  }
+
+  /* ===== EXERCICE 2 – UNE PAR CATÉGORIE ===== */
+  if (m === "2") {
+    Object.entries(DATA).forEach(([key, list]) => {
+      const item = list[Math.floor(Math.random() * list.length)];
+      sequence.push({
+        cat: key,
+        display: item.display,
+        spoken: item.spoken,
+        time: t
+      });
     });
   }
-  if(m==="3"){
-    sequence = (DATA[cat]||[]).sort(()=>Math.random()-0.5).slice(0,qty)
-      .map(x=>({cat:cat,display:x.display,spoken:x.spoken,time:t}));
+
+  /* ===== EXERCICE 3 – CATÉGORIE CHOISIE ===== */
+  if (m === "3") {
+    if (!DATA[cat]) {
+      alert("Catégorie inexistante.");
+      return;
+    }
+
+    sequence = [...DATA[cat]]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, qty)
+      .map(item => ({
+        cat: cat,
+        display: item.display,
+        spoken: item.spoken,
+        time: t
+      }));
   }
 
-  trainingRecapData=[{title:"Entraînement réalisé", items:sequence.map(e=>e.display), time:0}];
-
-  setActive(startBtn);
-  run();
+  await run();
 };
 
-pauseBtn.onclick = ()=>{
-  paused=!paused;
-  pauseBtn.textContent = paused?"▶️ Reprendre":"⏸ Pause";
-  setActive(paused?pauseBtn:null);
+/* ===== PAUSE ===== */
+pauseBtn.onclick = () => {
+  paused = !paused;
+  pauseBtn.textContent = paused ? "▶️ Reprendre" : "⏸ Pause";
+  setActive(paused ? pauseBtn : null);
 };
 
-stopBtn.onclick = ()=>{
-  stopped=true;
+/* ===== STOP ===== */
+stopBtn.onclick = () => {
+  stopped = true;
+  paused = false;
+
   clearInterval(timer);
   speechSynthesis.cancel();
-  text.textContent="Séance arrêtée";
-  countdown.textContent="";
+
+  text.textContent = "Séance arrêtée";
+  countdown.textContent = "";
+
   setActive(stopBtn);
 };
 
-resetBtn.onclick = ()=>{
-  stopped=true; paused=false;
+/* ===== RESET ===== */
+resetBtn.onclick = () => {
+  stopped = true;
+  paused = false;
+
   clearInterval(timer);
   speechSynthesis.cancel();
-  text.textContent="Prêt 🌸";
-  countdown.textContent="";
-  recap.innerHTML="";
+
+  index = 0;
+  sequence = [];
+
+  text.textContent = "Prêt 🌸";
+  countdown.textContent = "";
+  recap.innerHTML = "";
   recap.classList.add("hidden");
+
   setActive(null);
 };
 </script>
