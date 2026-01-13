@@ -3,62 +3,22 @@
     {
       "categorie": "sur 3 pas",
       "display": "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae Geri",
-      "spoken": "Avancéne soto ouké zèn koutssou datchi, guiakou tsouki tchoudane, maï guéri"
+      "spoken": "Avancer soto ouké zenkoutsou datchi, guiakou tsouki tchoudane, maé guéri"
     },
     {
       "categorie": "sur 3 pas",
       "display": "Avancer en Shuto Uke Kokutsu Dachi, Nukite Chudan en Zenkutsu Dachi",
-      "spoken": "Avancéne chouto ouké kokoutssou datchi, noukitè tchoudane zèn koutssou datchi"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer en Shuto Uke Kokutsu Dachi, Gyaku Tsuki Zenkutsu Dachi",
-      "spoken": "Avancéne chouto ouké kokoutssou datchi, guiakou tsouki zèn koutssou datchi"
+      "spoken": "Avancer chouto ouké kokoutsou datchi, noukitè tchoudane zenkoutsou datchi"
     },
     {
       "categorie": "sur 3 pas",
       "display": "Reculer Gedan Baraï en Zenkutsu Dachi, Oï Tsuki, Mae Geri",
-      "spoken": "Reculéne guédane baraï zèn koutssou datchi, oï tsouki, maï guéri"
+      "spoken": "Reculer guédane baraï zenkoutsou datchi, oï tsouki, maé guéri"
     },
     {
       "categorie": "sur 3 pas",
       "display": "Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki",
-      "spoken": "Avancéne maï guéri, poséne agué ouké, suivui de guiakou tsouki"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer Kiba Dachi Uraken Uchi, Zenkutsu Dachi Gyaku Tsuki",
-      "spoken": "Avancéne kiba datchi ourakène outchi, zèn koutssou datchi guiakou tsouki"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer sur 3 pas en Zenkutsu Dachi, Jodan Age Uke, Haïto Uchi, Tate Empi Uchi",
-      "spoken": "Avancéne sour trois pas zèn koutssou datchi, jodane agué ouké, haïto outchi, taté empi outchi"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer Uchi Uke Zenkutsu Dachi, Yoko Geri repose Kiba Dachi, Yoko Empi Uchi",
-      "spoken": "Avancéne outchi ouké zèn koutssou datchi, yoko guéri reposé kiba datchi, yoko empi outchi"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer Kiba Dachi, Yoko Geri, Zenkutsu Dachi, Gyaku Teisho Uchi",
-      "spoken": "Avancéne kiba datchi, yoko guéri, zèn koutssou datchi, guiakou téïcho outchi"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer Zenkutsu Dachi, Gedan Baraï, Gyaku Tsuki, Jodan Age Uke",
-      "spoken": "Avancéne zèn koutssou datchi, guédane baraï, guiakou tsouki, jodane agué ouké"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer Zenkutsu Dachi, Mawashi Geri, Uraken Uchi, Gyaku Tsuki",
-      "spoken": "Avancéne zèn koutssou datchi, maouachi guéri, ourakène outchi, guiakou tsouki"
-    },
-    {
-      "categorie": "sur 3 pas",
-      "display": "Avancer Kiba Dachi, Tsugi Ashi, Heïko Uke, Zenkutsu Dachi, Gyaku Tsuki",
-      "spoken": "Avancéne kiba datchi, tsougui achi, héïko ouké, zèn koutssou datchi, guiakou tsouki"
+      "spoken": "Avancer maé guéri, poser agué ouké, guiakou tsouki"
     }
   ],
 
@@ -66,27 +26,12 @@
     {
       "categorie": "sur place",
       "display": "Sur place : Mae Geri jambe arrière, Kizami Tsuki, Gyaku Tsuki",
-      "spoken": "Sour plass, maï guéri jamb arrièr, kizami tsouki, guiakou tsouki"
+      "spoken": "Sur place, maé guéri jambe arrière, kizami tsouki, guiakou tsouki"
     },
     {
       "categorie": "sur place",
       "display": "Sur place : sursaut arrière Soto Uke, Gyaku Tsuki, Mae Geri",
-      "spoken": "Sour plass, soursso arrièr soto ouké, guiakou tsouki, maï guéri"
-    },
-    {
-      "categorie": "sur place",
-      "display": "Sur place : sursaut arrière Jodan Age Uke, Gyaku Tsuki, Mae Geri",
-      "spoken": "Sour plass, soursso arrièr jodane agué ouké, guiakou tsouki, maï guéri"
-    },
-    {
-      "categorie": "sur place",
-      "display": "Sur place : sursaut Mae Geri jambe avant, Gedan Baraï, Gyaku Tsuki",
-      "spoken": "Sour plass, soursso maï guéri jamb avane, guédane baraï, guiakou tsouki"
-    },
-    {
-      "categorie": "sur place",
-      "display": "Sur place : sursaut Mae Geri jambe avant, Oï Tsuki, Gyaku Tsuki",
-      "spoken": "Sour plass, soursso maï guéri jamb avane, oï tsouki, guiakou tsouki"
+      "spoken": "Sur place, soursaut arrière soto ouké, guiakou tsouki, maé guéri"
     }
   ],
 
@@ -94,37 +39,40 @@
     {
       "categorie": "multidirectionnel",
       "display": "Multidirectionnel : Mae Geri jambe arrière, Gyaku Tsuki Chudan",
-      "spoken": "Moulti directionnel, maï guéri jamb arrièr, guiakou tsouki tchoudane"
-    },
-    {
-      "categorie": "multidirectionnel",
-      "display": "Multidirectionnel : Oï Tsuki, Gyaku Tsuki",
-      "spoken": "Moulti directionnel, oï tsouki, guiakou tsouki"
+      "spoken": "Multidirectionnel, maé guéri jambe arrière, guiakou tsouki tchoudane"
     },
     {
       "categorie": "multidirectionnel",
       "display": "Multidirectionnel : Avancer Mae Geri, reculer Gedan Baraï, Gyaku Tsuki",
-      "spoken": "Moulti directionnel, avancéne maï guéri, reculéne guédane baraï, guiakou tsouki"
+      "spoken": "Multidirectionnel, avancer maé guéri, reculer guédane baraï, guiakou tsouki"
+    }
+  ],
+
+  "cibles": [
+    {
+      "categorie": "cibles",
+      "display": "Mae Geri jambe arrière posée derrière, niveau chudan",
+      "spoken": "maé guéri jambe arrière posée derrière, tchoudane"
     },
     {
-      "categorie": "multidirectionnel",
-      "display": "Multidirectionnel : Oï Tsuki, reculer Jodan Age Uke, Gyaku Tsuki",
-      "spoken": "Moulti directionnel, oï tsouki, reculéne jodane agué ouké, guiakou tsouki"
+      "categorie": "cibles",
+      "display": "Mawashi Geri jambe arrière posée derrière, niveau jodan ou chudan",
+      "spoken": "maouachi guéri jambe arrière posée derrière, jodane ou tchoudane"
     },
     {
-      "categorie": "multidirectionnel",
-      "display": "Multidirectionnel : Pas chassé Gyaku Tsuki Chudan, ressort pas chassé",
-      "spoken": "Moulti directionnel, pa chassé guiakou tsouki tchoudane, reussor pa chassé"
+      "categorie": "cibles",
+      "display": "Mae Geri jambe avant avec sursaut, niveau chudan",
+      "spoken": "maé guéri jambe avant avec soursaut, tchoudane"
     },
     {
-      "categorie": "multidirectionnel",
-      "display": "Multidirectionnel : Sursaut arrière Soto Uke, Gyaku Tsuki, Mae Geri jambe arrière repose devant",
-      "spoken": "Moulti directionnel, soursso arrièr soto ouké, guiakou tsouki, maï guéri jamb arrièr reposé devane"
+      "categorie": "cibles",
+      "display": "Gyaku Tsuki chudan, Kizami Tsuki jodan, Gyaku Tsuki chudan",
+      "spoken": "guiakou tsouki tchoudane, kizami tsouki jodane, guiakou tsouki tchoudane"
     },
     {
-      "categorie": "multidirectionnel",
-      "display": "Multidirectionnel : Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki",
-      "spoken": "Moulti directionnel, avancéne maï guéri, poséne agué ouké, suivui de guiakou tsouki"
+      "categorie": "cibles",
+      "display": "Oï Tsuki niveau jodan, retour à l’arrière",
+      "spoken": "oï tsouki jodane, retour à l’arrière"
     }
   ]
 }
