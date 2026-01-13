@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>🥋 Kihon Trainer 🌸</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:linear-gradient(180deg,#fff6fb,#ffeef6);
+  --radius:22px;
+  --shadow:0 12px 25px rgba(255,120,180,.25);
+}
+body{
+  margin:0;
+  font-family:'Fredoka',sans-serif;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+main{max-width:900px;width:100%}
+.card{
+  background:white;
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+#visual{
+  margin-top:15px;
+  border-radius:20px;
+  padding:20px;
+  min-height:180px;
+  color:white;
+  text-align:center;
+  font-size:1.2rem;
+  position:relative;
+}
+#countdown{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:rgba(255,255,255,.3);
+  padding:6px 14px;
+  border-radius:14px;
+  font-weight:bold;
+}
+.bg-3pas{background:linear-gradient(to top,#30cfd0,#330867)}
+.bg-surplace{background:linear-gradient(to top,#888,#444)}
+.bg-multi{background:linear-gradient(to top,#f43b47,#453a94)}
+
+#recap{
+  margin-top:20px;
+  background:#4caf50;
+  color:white;
+  padding:15px;
+  border-radius:15px;
+}
+.recap-item{
+  background-image:linear-gradient(-225deg,#FFFEFF 0%,#D7FFFE 100%);
+  color:#444;
+  border-radius:12px;
+  padding:8px;
+  margin:6px 0;
+}
+</style>
+</head>
+
+<body>
+<main>
+<div class="card">
+<h1>🥋 Kihon Trainer 🌸</h1>
+
+<div id="visual">
+  <div id="text">Prêt 🌸</div>
+  <div id="subtitle"></div>
+  <div id="countdown"></div>
+</div>
+
+<div id="recap"></div>
+</div>
+</main>
+
+<script>
+let DATA=null;
+let sequence=[], index=0;
+let timer=null, paused=false, stopped=false;
+let workedSeconds=0;
+let currentRecap=[];
+
+const text=document.getElementById("text");
+const subtitle=document.getElementById("subtitle");
+const countdown=document.getElementById("countdown");
+const visual=document.getElementById("visual");
+const recap=document.getElementById("recap");
+
+function fmt(s){return `${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;}
+
+async function speak(t,r=1){
+  return new Promise(res=>{
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang="fr-FR"; u.rate=r; u.onend=res;
+    speechSynthesis.speak(u);
+  });
+}
+
+fetch("enchainements.json")
+.then(r=>r.json())
+.then(j=>DATA=j);
+
+async function run(){
+  if(stopped || index>=sequence.length){
+    renderRecap();
+    return;
+  }
+
+  const ex=sequence[index];
+  visual.className="bg-"+ex.cat;
+  text.textContent=ex.display;
+  subtitle.textContent=ex.garde?`Garde à ${ex.garde}`:"";
+
+  if(ex.say){
+    await speak(ex.say,0.7);
+    await speak("Hajimé",1);
+  }
+
+  let t=ex.time;
+  countdown.textContent=fmt(t);
+
+  timer=setInterval(async()=>{
+    if(paused || stopped) return;
+    t--; workedSeconds++;
+    countdown.textContent=fmt(t);
+    if(t<=0){
+      clearInterval(timer);
+      await speak(ex.exam?"Fin de l'examen":"Fin de l'exercice",1);
+      index++; run();
+    }
+  },1000);
+}
+
+function renderRecap(){
+  recap.innerHTML="<h3>📄 Récapitulatif</h3>";
+  currentRecap.forEach(r=>{
+    recap.innerHTML+=`
+      <div class="recap-item">
+        <strong>${r.cat}</strong><br>
+        ${r.display}<br>
+        ⏱ ${fmt(r.time)}
+      </div>`;
+  });
+}
+</script>
+</body>
+</html>
