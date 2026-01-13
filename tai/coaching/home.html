@@ -4,65 +4,157 @@
 <meta charset="UTF-8">
 <title>🥋 Kihon Trainer 🌸</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:linear-gradient(180deg,#fff6fb,#ffeef6);
   --radius:22px;
   --shadow:0 12px 25px rgba(255,120,180,.25);
 }
+
+/* ===== BASE ===== */
 body{
   margin:0;
   font-family:'Fredoka',sans-serif;
-  background:var(--bg);
+  background:linear-gradient(180deg,#fff6fb,#ffeef6);
   display:flex;
   justify-content:center;
   padding:20px;
 }
-main{max-width:900px;width:100%}
+main{max-width:980px;width:100%}
+
 .card{
   background:white;
   border-radius:var(--radius);
-  padding:20px;
+  padding:22px;
   box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
 }
+
+h1{
+  text-align:center;
+  color:#ff1493;
+  margin-bottom:5px;
+}
+
+/* ===== FORM CONTROLS ===== */
+.controls{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
+}
+
+select,input{
+  padding:10px;
+  border-radius:14px;
+  border:2px solid #ffd6ec;
+  font-family:'Fredoka';
+}
+
+/* ===== BUTTON BAR ===== */
+.button-bar{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-top:10px;
+}
+
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  padding:14px;
+  font-size:.95rem;
+  font-weight:600;
+  border:none;
+  border-radius:16px;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 20px rgba(255,120,180,.35);
+  transition:.2s;
+}
+
+.btn:hover{transform:translateY(-2px)}
+.btn.active{animation:pulse 1.6s infinite}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}
+  70%{box-shadow:0 0 0 16px rgba(255,255,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
+}
+
+/* ===== BUTTON COLORS ===== */
+.btn-train{background:linear-gradient(135deg,#5f2c82,#9f5fff)}
+.btn-pause{background:linear-gradient(135deg,#6a3093,#a044ff)}
+.btn-stop{background:linear-gradient(135deg,#8e2de2,#ff416c)}
+.btn-present{background:linear-gradient(to top,#ff0844,#ffb199)}
+.btn-exam{background:linear-gradient(135deg,#ff7a18,#ffb347)}
+.btn-reset{background:linear-gradient(135deg,#f83600,#f9d423)}
+
+.hidden{display:none}
+
+/* ===== VISUAL CARD ===== */
 #visual{
-  margin-top:15px;
+  position:relative;
+  min-height:200px;
   border-radius:20px;
   padding:20px;
-  min-height:180px;
   color:white;
+  font-size:1.25rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
   text-align:center;
-  font-size:1.2rem;
-  position:relative;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
 }
+
 #countdown{
   position:absolute;
-  top:10px;
-  right:10px;
-  background:rgba(255,255,255,.3);
+  top:12px;
+  right:12px;
+  font-size:1.8rem;
+  background:rgba(255,255,255,.25);
   padding:6px 14px;
-  border-radius:14px;
-  font-weight:bold;
+  border-radius:16px;
 }
+
+/* ===== BACKGROUNDS ===== */
 .bg-3pas{background:linear-gradient(to top,#30cfd0,#330867)}
 .bg-surplace{background:linear-gradient(to top,#888,#444)}
 .bg-multi{background:linear-gradient(to top,#f43b47,#453a94)}
 
+/* ===== RECAP ===== */
 #recap{
-  margin-top:20px;
-  background:#4caf50;
+  margin-top:18px;
+  padding:16px;
+  border-radius:18px;
+  background-image:linear-gradient(15deg,#13547a 0%,#80d0c7 100%);
   color:white;
-  padding:15px;
-  border-radius:15px;
+  box-shadow:var(--shadow);
 }
-.recap-item{
+
+#recap h3{margin-top:0}
+
+.recap-block{
   background-image:linear-gradient(-225deg,#FFFEFF 0%,#D7FFFE 100%);
   color:#444;
-  border-radius:12px;
+  border-radius:14px;
+  padding:10px;
+  margin:8px 0;
+}
+
+.recap-block button{
+  width:100%;
   padding:8px;
-  margin:6px 0;
+  border:none;
+  border-radius:12px;
+  background:#ffffffaa;
+  font-family:'Fredoka';
+  cursor:pointer;
 }
 </style>
 </head>
@@ -70,87 +162,334 @@ main{max-width:900px;width:100%}
 <body>
 <main>
 <div class="card">
+
 <h1>🥋 Kihon Trainer 🌸</h1>
 
-<div id="visual">
+<!-- ===== MODES ===== -->
+<div class="controls">
+  <select id="mode">
+    <option value="1">🎲 Exercice 1 – Aléatoire global</option>
+    <option value="2">🎯 Exercice 2 – Par catégorie</option>
+    <option value="3">📂 Exercice 3 – Catégorie choisie</option>
+    <option value="exam">📝 Mode examen blanc</option>
+  </select>
+
+  <select id="categorie">
+    <option value="3pas">3 pas</option>
+    <option value="surplace">Sur place</option>
+    <option value="multi">Multidirectionnel</option>
+  </select>
+
+  <input type="number" id="count" min="1" value="3">
+  <input type="range" id="interval" min="30" max="240" value="60">
+  <span id="intervalVal">1m 00s</span>
+</div>
+
+<!-- ===== BUTTONS ===== -->
+<div class="button-bar">
+  <button id="start" class="btn btn-train">▶️ Lancer l’entraînement</button>
+  <button id="pause" class="btn btn-pause">⏸ Pause</button>
+  <button id="stop" class="btn btn-stop">⏹ Stop</button>
+  <button id="presentationExam" class="btn btn-present hidden">📢 Présentation examen</button>
+  <button id="startExam" class="btn btn-exam hidden">📝 Lancer l’examen</button>
+  <button id="reset" class="btn btn-reset">🔄 Réinitialiser</button>
+</div>
+
+<!-- ===== VISUAL ===== -->
+<div id="visual" class="bg-3pas">
   <div id="text">Prêt 🌸</div>
-  <div id="subtitle"></div>
   <div id="countdown"></div>
 </div>
 
-<div id="recap"></div>
-</div>
+<!-- ===== RECAP ===== -->
+<div id="recap" class="hidden"></div>
+
 </main>
 
 <script>
-let DATA=null;
-let sequence=[], index=0;
-let timer=null, paused=false, stopped=false;
-let workedSeconds=0;
-let currentRecap=[];
+/* ===================== DATA COMPLÈTES ===================== */
+const DATA = {
+  "3pas": [
+    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae Geri",
+    "Avancer en Shuto Uke Kokutsu Dachi, Nukite Chudan",
+    "Reculer Gedan Barai en Zenkutsu Dachi, Oi Tsuki, Mae Geri",
+    "Avancer Uchi Uke en Zenkutsu Dachi, Yoko Geri repose Kiba Dachi, Yoko Empi Uchi sur place",
+    "Avancer sur 3 pas en Zenkutsu Dachi, Jodan Age Uke, Haito Uchi, Tate Empi Uchi",
+    "Kiba Dachi Uraken Uchi, déplacement jambe avant Gyaku Tsuki en Zenkutsu Dachi, retour Kiba Dachi",
+    "Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki"
+  ],
+  "surplace": [
+    "Sur place : Mae Geri jambe arrière repose devant, Kizami Tsuki, Gyaku Tsuki",
+    "Sur place : sursaut arrière Jodan Age Uke, Gyaku Tsuki, Mae Geri",
+    "Sur place : sursaut arrière Soto Uke, Gyaku Tsuki chudan, Mae Geri",
+    "Sur place : sursaut Mae Geri jambe avant, Oi Tsuki, Gyaku Tsuki"
+  ],
+  "multi": [
+    "Multidirectionnel : Mae Geri jambe arrière pose devant, Gyaku Tsuki Chudan",
+    "Multidirectionnel : Pas chassé Gyaku Tsuki chudan, ressort pas chassé",
+    "Multidirectionnel : Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki"
+  ]
+};
 
-const text=document.getElementById("text");
-const subtitle=document.getElementById("subtitle");
-const countdown=document.getElementById("countdown");
-const visual=document.getElementById("visual");
-const recap=document.getElementById("recap");
+const BG = {
+  "3pas": "bg-3pas",
+  "surplace": "bg-surplace",
+  "multi": "bg-multi"
+};
 
-function fmt(s){return `${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;}
+/* ===================== ELEMENTS ===================== */
+const mode = document.getElementById("mode");
+const categorie = document.getElementById("categorie");
+const countInput = document.getElementById("count");
+const intervalInput = document.getElementById("interval");
+const intervalVal = document.getElementById("intervalVal");
 
-async function speak(t,r=1){
+const startBtn = document.getElementById("start");
+const pauseBtn = document.getElementById("pause");
+const stopBtn = document.getElementById("stop");
+const resetBtn = document.getElementById("reset");
+const presentationBtn = document.getElementById("presentationExam");
+const startExamBtn = document.getElementById("startExam");
+
+const visual = document.getElementById("visual");
+const text = document.getElementById("text");
+const countdown = document.getElementById("countdown");
+const recap = document.getElementById("recap");
+
+/* ===================== ÉTAT ===================== */
+let sequence = [];
+let index = 0;
+let timer = null;
+let paused = false;
+let stopped = false;
+let examMode = false;
+let workedSeconds = 0;
+let examRecapData = [];
+let trainingRecapData = [];
+
+
+/* ===================== UTILS ===================== */
+const fmt = s => `${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
+
+function speak(t, rate = 1){
   return new Promise(res=>{
-    const u=new SpeechSynthesisUtterance(t);
-    u.lang="fr-FR"; u.rate=r; u.onend=res;
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = "fr-FR";
+    u.rate = rate;
+    u.onend = res;
     speechSynthesis.speak(u);
   });
 }
 
-fetch("enchainements.json")
-.then(r=>r.json())
-.then(j=>DATA=j);
+function setActive(btn){
+  document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+}
 
+intervalInput.oninput = () => {
+  intervalVal.textContent = fmt(+intervalInput.value);
+};
+
+/* ===================== MODE CHANGE ===================== */
+mode.onchange = () => {
+  const exam = mode.value === "exam";
+  presentationBtn.classList.toggle("hidden", !exam);
+  startExamBtn.classList.toggle("hidden", !exam);
+  startBtn.classList.toggle("hidden", exam);
+  categorie.disabled = exam;
+  countInput.disabled = exam;
+  intervalInput.disabled = exam;
+};
+
+/* ===================== PRÉSENTATION EXAMEN ===================== */
+presentationBtn.onclick = async () => {
+  speechSynthesis.cancel();
+  await speak(
+    "Vous avez choisi le mode examen blanc. " +
+    "Première partie : enchaînements sur trois pas. " +
+    "Deuxième partie : enchaînement sur place, garde annoncée. " +
+    "Troisième partie : multidirectionnel, garde annoncée. " +
+    "La pause est autorisée.", 0.7
+  );
+};
+
+/* ===================== BUILD EXAM ===================== */
+function buildExam(){
+  const seq = [];
+ 
+  examRecapData.length = 0; // reset propre
+
+  // Exercice 1 – 3 pas (3 enchaînements)
+  const ex1 = [...DATA["3pas"]].sort(()=>Math.random()-0.5).slice(0,3);
+  examRecapData.push({title:"Exercice 1 – 3 pas", items:ex1, time:180});
+  ex1.forEach((t,i)=>{
+    seq.push({cat:"3pas", text:t, time:60, next:i<2});
+  });
+
+  // Exercice 2 – Sur place
+  const ex2 = DATA["surplace"][Math.floor(Math.random()*DATA["surplace"].length)];
+ examRecapData.push({title:"Exercice 2 – Sur place", items:[ex2], time:60});
+  seq.push({cat:"surplace", text:ex2, garde:"gauche", time:30});
+  seq.push({cat:"surplace", text:null, garde:"droite", time:30});
+
+  // Exercice 3 – Multi
+  const ex3 = DATA["multi"][Math.floor(Math.random()*DATA["multi"].length)];
+ examRecapData.push({title:"Exercice 3 – Multidirectionnel", items:[ex3], time:90});
+  seq.push({cat:"multi", text:ex3, garde:"gauche", time:45});
+  seq.push({cat:"multi", text:null, garde:"droite", time:45});
+
+  return seq;
+}
+
+/* ===================== RUN ===================== */
 async function run(){
-  if(stopped || index>=sequence.length){
-    renderRecap();
+  if(stopped) return;
+  if(index >= sequence.length){
+    await speak(examMode ? "Fin de l'examen" : "Fin de l'exercice", 1);
+    showRecap();
     return;
   }
 
-  const ex=sequence[index];
-  visual.className="bg-"+ex.cat;
-  text.textContent=ex.display;
-  subtitle.textContent=ex.garde?`Garde à ${ex.garde}`:"";
+  const ex = sequence[index];
+  visual.className = ex.cat ? BG[ex.cat] : visual.className;
 
-  if(ex.say){
-    await speak(ex.say,0.7);
-    await speak("Hajimé",1);
+  // Affichage + annonce de l'enchaînement (une seule fois)
+if(ex.text){
+  text.innerHTML = `<strong>${ex.text}</strong>`;
+  await speak(ex.text,0.7);
+  await speak(ex.text,0.7);
+}
+
+// Gestion des gardes (ex 2 & 3)
+if(ex.garde){
+  if(ex.text){
+    // garde gauche : déjà affiché avec texte
+    text.innerHTML = `Garde à ${ex.garde}<br><strong>${ex.text}</strong>`;
+  } else {
+    // garde droite : on conserve l'intitulé précédent
+    const prevText = sequence[index-1]?.text || "";
+    text.innerHTML = `Garde à ${ex.garde}<br><strong>${prevText}</strong>`;
   }
+  await speak("Garde à " + ex.garde,1);
+}
 
-  let t=ex.time;
-  countdown.textContent=fmt(t);
+  await speak("Hajimé",1);
 
-  timer=setInterval(async()=>{
+  let t = ex.time;
+  countdown.textContent = fmt(t);
+
+  timer = setInterval(async ()=>{
     if(paused || stopped) return;
     t--; workedSeconds++;
-    countdown.textContent=fmt(t);
+    countdown.textContent = fmt(t);
     if(t<=0){
       clearInterval(timer);
-      await speak(ex.exam?"Fin de l'examen":"Fin de l'exercice",1);
+      if(ex.next) await speak("Exercice suivant",1);
       index++; run();
     }
   },1000);
 }
-
-function renderRecap(){
-  recap.innerHTML="<h3>📄 Récapitulatif</h3>";
-  currentRecap.forEach(r=>{
-    recap.innerHTML+=`
-      <div class="recap-item">
-        <strong>${r.cat}</strong><br>
-        ${r.display}<br>
-        ⏱ ${fmt(r.time)}
-      </div>`;
-  });
+if(!examMode){
+  trainingRecapData = [{
+    title: "Entraînement libre",
+    items: sequence.map(e => e.text),
+    time: workedSeconds
+  }];
 }
+
+/* ===================== RÉCAP ===================== */
+function showRecap(){
+  recap.innerHTML = "<h3>📄 Récapitulatif</h3>";
+
+  const source = examMode ? examRecapData : trainingRecapData;
+
+  source.forEach(r=>{
+    recap.innerHTML += `
+      <div class="recap-block">
+        <strong>${r.title}</strong><br>
+        <em>Durée : ${fmt(r.time)}</em>
+        <ul>
+          ${r.items.map(i=>`<li>${i}</li>`).join("")}
+        </ul>
+      </div>
+    `;
+  });
+
+  recap.classList.remove("hidden");
+}
+
+/* ===================== EVENTS ===================== */
+startExamBtn.onclick = ()=>{
+  examMode = true;
+  stopped = false;
+  paused = false;
+  workedSeconds = 0;
+  index = 0;
+  sequence = buildExam();
+  recap.classList.add("hidden");
+  setActive(startExamBtn);
+  run();
+};
+
+startBtn.onclick = ()=>{
+  examMode = false;
+  stopped = false;
+  paused = false;
+  workedSeconds = 0;
+  index = 0;
+  sequence = [];
+  recap.classList.add("hidden");
+
+  const m = mode.value;
+  const cat = categorie.value;
+  const qty = +countInput.value;
+  const t = +intervalInput.value;
+
+  if(m==="1"){
+    Object.entries(DATA).forEach(([c,l])=>l.forEach(x=>sequence.push({cat:c,text:x,time:t})));
+    sequence = sequence.sort(()=>Math.random()-0.5).slice(0,qty);
+  }
+  if(m==="2"){
+    Object.entries(DATA).forEach(([c,l])=>{
+      sequence.push({cat:c,text:l[Math.floor(Math.random()*l.length)],time:t});
+    });
+  }
+  if(m==="3"){
+    sequence = DATA[cat].sort(()=>Math.random()-0.5).slice(0,qty)
+      .map(x=>({cat:cat,text:x,time:t}));
+  }
+
+  setActive(startBtn);
+  run();
+};
+
+pauseBtn.onclick = ()=>{
+  paused = !paused;
+  pauseBtn.textContent = paused ? "▶️ Reprendre" : "⏸ Pause";
+  setActive(paused ? pauseBtn : null);
+};
+
+stopBtn.onclick = ()=>{
+  stopped = true;
+  clearRoInterval(timer);
+  speechSynthesis.cancel();
+  text.textContent = "Séance arrêtée";
+  countdown.textContent = "";
+  setActive(stopBtn);
+};
+
+resetBtn.onclick = ()=>{
+  stopped = true;
+  paused = false;
+  clearInterval(timer);
+  speechSynthesis.cancel();
+  text.textContent = "Prêt 🌸";
+  countdown.textContent = "";
+  recap.innerHTML = "";
+  recap.classList.add("hidden");
+  setActive(null);
+};
 </script>
+
 </body>
 </html>
