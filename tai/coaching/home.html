@@ -390,11 +390,12 @@ async function run(){
   visual.className = ex.cat ? BG[ex.cat] : visual.className;
 
   // Affichage + annonce de l'enchaînement (une seule fois)
-if(ex.text){
-  text.innerHTML = `<strong>${ex.text}</strong>`;
-  await speak(ex.text,0.7);
-  await speak(ex.text,0.7);
+if(ex.display){
+  text.innerHTML = `<strong>${ex.display}</strong>`;
+  await speak(ex.spoken || ex.display, 0.7);
+  await speak(ex.spoken || ex.display, 0.7);
 }
+
 
 // Gestion des gardes (ex 2 & 3)
 if(ex.garde){
