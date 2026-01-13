@@ -208,28 +208,12 @@ select,input{
 
 <script>
 /* ===================== DATA COMPLÈTES ===================== */
-const DATA = {
-  "3pas": [
-    "Avancer en Soto Uke en Zenkutsu Dachi, Gyaku Tsuki Chudan, Mae Geri",
-    "Avancer en Shuto Uke Kokutsu Dachi, Nukite Chudan",
-    "Reculer Gedan Barai en Zenkutsu Dachi, Oi Tsuki, Mae Geri",
-    "Avancer Uchi Uke en Zenkutsu Dachi, Yoko Geri repose Kiba Dachi, Yoko Empi Uchi sur place",
-    "Avancer sur 3 pas en Zenkutsu Dachi, Jodan Age Uke, Haito Uchi, Tate Empi Uchi",
-    "Kiba Dachi Uraken Uchi, déplacement jambe avant Gyaku Tsuki en Zenkutsu Dachi, retour Kiba Dachi",
-    "Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki"
-  ],
-  "surplace": [
-    "Sur place : Mae Geri jambe arrière repose devant, Kizami Tsuki, Gyaku Tsuki",
-    "Sur place : sursaut arrière Jodan Age Uke, Gyaku Tsuki, Mae Geri",
-    "Sur place : sursaut arrière Soto Uke, Gyaku Tsuki chudan, Mae Geri",
-    "Sur place : sursaut Mae Geri jambe avant, Oi Tsuki, Gyaku Tsuki"
-  ],
-  "multi": [
-    "Multidirectionnel : Mae Geri jambe arrière pose devant, Gyaku Tsuki Chudan",
-    "Multidirectionnel : Pas chassé Gyaku Tsuki chudan, ressort pas chassé",
-    "Multidirectionnel : Avancer Mae Geri, poser Age Uke suivi de Gyaku Tsuki"
-  ]
-};
+let DATA = {};
+
+async function loadData(){
+  const res = await fetch("enchainements.json");
+  DATA = await res.json();
+}
 
 const BG = {
   "3pas": "bg-3pas",
