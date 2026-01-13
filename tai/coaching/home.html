@@ -207,19 +207,28 @@ select,input{
 </main>
 
 <script>
-/* ===================== DATA COMPLÈTES ===================== */
+/* ===================== DATA ===================== */
 let DATA = {};
 
 async function loadData(){
   const res = await fetch("enchainements.json");
   DATA = await res.json();
+
+  // Ajout catégorie "Cibles" dans le select pour entraînement libre
+  if(!document.querySelector("#categorie option[value='cibles']")){
+    const opt = document.createElement("option");
+    opt.value = "cibles";
+    opt.textContent = "Cibles";
+    categorie.appendChild(opt);
+  }
 }
 
-
+/* ===================== BG ===================== */
 const BG = {
   "3pas": "bg-3pas",
   "surplace": "bg-surplace",
-  "multi": "bg-multi"
+  "multi": "bg-multi",
+  "cibles": "bg-multi" // même couleur que multi
 };
 
 /* ===================== ELEMENTS ===================== */
@@ -278,6 +287,13 @@ intervalInput.oninput = () => {
   intervalVal.textContent = fmt(+intervalInput.value);
 };
 
+/* ===================== PICK RANDOM ===================== */
+function pickRandom(category, n=1){
+  const list = DATA[category];
+  const shuffled = list.sort(()=>Math.random()-0.5);
+  return n===1 ? shuffled[0] : shuffled.slice(0,n);
+}
+
 /* ===================== MODE CHANGE ===================== */
 mode.onchange = () => {
   const exam = mode.value === "exam";
@@ -297,6 +313,7 @@ presentationBtn.onclick = async () => {
     "Première partie : enchaînements sur trois pas. " +
     "Deuxième partie : enchaînement sur place, garde annoncée. " +
     "Troisième partie : multidirectionnel, garde annoncée. " +
+    "Quatrième partie : travail sur cibles. " +
     "La pause est autorisée.", 0.7
   );
 };
@@ -304,131 +321,98 @@ presentationBtn.onclick = async () => {
 /* ===================== BUILD EXAM ===================== */
 function buildExam(){
   const seq = [];
-  examRecapData.length = 0; // ✅ reset clair
+  examRecapData.length = 0;
 
-
-// ================= PARTIE 1 — 3 PAS =================
-const p1 = pickRandom("Sur trois pas", 3);
-examRecapData.push({ title:"Partie 1 – Enchaînement sur 3 pas", items:p1, time:180 });
-
-p1.forEach((ex,i)=>{
-  seq.push({
-    cat:"3pas",
-    display:ex.display,
-    spoken:ex.spoken,
-    time:60,
-    announce: i === 0 ? "Première partie : enchaînement sur trois pas" : null
+  // ===== PARTIE 1 — 3 PAS =====
+  const p1 = pickRandom("Sur trois pas", 3);
+  examRecapData.push({ title:"Partie 1 – Enchaînements sur 3 pas", items:p1.map(x=>x.display), time:180 });
+  p1.forEach((ex,i)=>{
+    seq.push({
+      cat:"3pas",
+      display:ex,
+      spoken:ex, // ou phonétique si défini
+      time: +intervalInput.value, // durée individuelle
+      announce: i===0 ? "Première partie : enchaînements sur trois pas" : null,
+      shortText: "Concentrez-vous sur la posture et la précision."
+    });
   });
-});
 
-// ================= PARTIE 2 — SUR PLACE =================
-const p2 = pickRandom("Sur place",1)[0];
-examRecapData.push({ title:"Partie 2 – Enchaînement sur place", items:[p2], time:60 });
+  // ===== PARTIE 2 — SUR PLACE =====
+  const p2 = pickRandom("Sur place");
+  examRecapData.push({ title:"Partie 2 – Sur place", items:[p2.display||p2], time:60 });
+  seq.push({ cat:"surplace", display:p2, spoken:p2, garde:"gauche", time: +intervalInput.value, announce:"Deuxième partie : enchaînement sur place" });
+  seq.push({ cat:"surplace", garde:"droite", time:+intervalInput.value });
 
-seq.push({
-  cat:"surplace",
-  display:p2.display,
-  spoken:p2.spoken,
-  garde:"gauche",
-  time:30,
-  announce:"Deuxième partie : enchaînement sur place"
-});
-seq.push({ cat:"surplace", garde:"droite", time:30 });
+  // ===== PARTIE 3 — MULTI =====
+  const p3 = pickRandom("Multidirectionnel",1)[0];
+  examRecapData.push({ title:"Partie 3 – Multidirectionnel", items:[p3.display||p3], time:90 });
+  seq.push({
+    cat:"multi",
+    display:p3,
+    spoken:p3,
+    garde:"gauche",
+    time:+intervalInput.value,
+    announce:"Troisième partie : multidirectionnel",
+    shortText: "Travaillez les angles et la fluidité."
+  });
+  seq.push({ cat:"multi", garde:"droite", time:+intervalInput.value });
 
-// ================= PARTIE 3 — MULTI =================
-const p3 = pickRandom("Multidirectionnel",1)[0];
-examRecapData.push({ title:"Partie 3 – Multidirectionnel", items:[p3], time:90 });
+  // ===== PARTIE 4 — CIBLES =====
+  const p4 = pickRandom("Cibles");
+  examRecapData.push({ title:"Partie 4 – Travail sur cibles", items:[p4.display||p4], time:60 });
+  seq.push({ cat:"cibles", display:p4, spoken:p4, time:+intervalInput.value, announce:"Quatrième partie : travail sur cibles" });
 
-seq.push({
-  cat:"multi",
-  display:p3.display,
-  spoken:p3.spoken,
-  garde:"gauche",
-  time:45,
-  announce:"Troisième partie : enchaînement multidirectionnel"
-});
-seq.push({ cat:"multi", garde:"droite", time:45 });
-
-// ================= PARTIE 4 — CIBLES =================
-const p4 = pickRandom("Cibles",1)[0];
-examRecapData.push({ title:"Partie 4 – Travail sur cibles", items:[p4], time:60 });
-
-seq.push({
-  cat:"cibles",
-  display:p4.display,
-  spoken:p4.spoken,
-  time:60,
-  announce:"Quatrième partie : travail sur cibles"
-});
-
-return seq;
+  return seq;
 }
 
 /* ===================== RUN ===================== */
 async function run(){
   if(stopped) return;
-  if(ex.announce){
-  await speak(ex.announce, 0.7);
-}
-
   if(index >= sequence.length){
     await speak(examMode ? "Fin de l'examen" : "Fin de l'exercice", 1);
     showRecap();
     return;
   }
 
-  const ex = sequence[index];
-  visual.className = ex.cat ? BG[ex.cat] : visual.className;
+  const ex = sequence[index]; // ✅ déclaration avant usage
+  visual.className = BG[ex.cat] || visual.className;
 
-  // Affichage + annonce de l'enchaînement (une seule fois)
-if(ex.display){
-  text.innerHTML = `<strong>${ex.display}</strong>`;
-  await speak(ex.spoken || ex.display, 0.7);
-  await speak(ex.spoken || ex.display, 0.7);
-}
+  // Annonce partie si nécessaire
+  if(ex.announce) await speak(ex.announce, 0.7);
 
-
-// Gestion des gardes (ex 2 & 3)
-if(ex.garde){
-  if(ex.text){
-    // garde gauche : déjà affiché avec texte
-    text.innerHTML = `Garde à ${ex.garde}<br><strong>${ex.text}</strong>`;
-  } else {
-    // garde droite : on conserve l'intitulé précédent
-    const prevText = sequence[index-1]?.text || "";
-    text.innerHTML = `Garde à ${ex.garde}<br><strong>${prevText}</strong>`;
+  // Affichage + annonce
+  if(ex.display){
+    text.innerHTML = `<strong>${ex.display}</strong>` + (ex.shortText ? `<br><em>${ex.shortText}</em>` : "");
+    await speak(ex.spoken || ex.display, 0.7);
   }
-  await speak("Garde à " + ex.garde,1);
-}
 
-  await speak("Hajimé",1);
+  // Gestion gardes
+  if(ex.garde){
+    const prev = ex.display || sequence[index-1]?.display || "";
+    text.innerHTML = `Garde à ${ex.garde}<br><strong>${prev}</strong>`;
+    await speak("Garde à " + ex.garde, 1);
+  }
+
+  await speak("Hajimé", 1);
 
   let t = ex.time;
   countdown.textContent = fmt(t);
 
-  timer = setInterval(async ()=>{
+  timer = setInterval(()=>{
     if(paused || stopped) return;
     t--; workedSeconds++;
     countdown.textContent = fmt(t);
     if(t<=0){
       clearInterval(timer);
-      if(ex.next) await speak("Exercice suivant",1);
       index++; run();
     }
   },1000);
 }
-trainingRecapData = [{
-  title: "Entraînement réalisé",
-  items: sequence.map(e => e.text),
-  time: workedSeconds
-}];
 
 /* ===================== RÉCAP ===================== */
 function showRecap(){
   recap.innerHTML = "<h3>📄 Récapitulatif</h3>";
-
   const source = examMode ? examRecapData : trainingRecapData;
-
   source.forEach(r=>{
     recap.innerHTML += `
       <div class="recap-block">
@@ -440,17 +424,13 @@ function showRecap(){
       </div>
     `;
   });
-
   recap.classList.remove("hidden");
 }
 
 /* ===================== EVENTS ===================== */
 startExamBtn.onclick = ()=>{
   examMode = true;
-  stopped = false;
-  paused = false;
-  workedSeconds = 0;
-  index = 0;
+  stopped = false; paused = false; workedSeconds = 0; index = 0;
   sequence = buildExam();
   recap.classList.add("hidden");
   setActive(startExamBtn);
@@ -458,33 +438,33 @@ startExamBtn.onclick = ()=>{
 };
 
 startBtn.onclick = ()=>{
-  examMode = false;
-  stopped = false;
-  paused = false;
-  workedSeconds = 0;
-  index = 0;
-  sequence = [];
-  recap.classList.add("hidden");
-
-  const m = mode.value;
-  const cat = categorie.value;
-  const qty = +countInput.value;
-  const t = +intervalInput.value;
+  examMode = false; stopped = false; paused = false; workedSeconds = 0; index = 0;
+  sequence = []; recap.classList.add("hidden");
+  const m = mode.value, cat = categorie.value, qty = +countInput.value, t = +intervalInput.value;
 
   if(m==="1"){
-    Object.entries(DATA).forEach(([c,l])=>l.forEach(x=>sequence.push({cat:c,text:x,time:t})));
+    Object.entries(DATA).forEach(([c,l])=>l.forEach(x=>sequence.push({cat:c, display:x, spoken:x, time:t})));
     sequence = sequence.sort(()=>Math.random()-0.5).slice(0,qty);
   }
   if(m==="2"){
     Object.entries(DATA).forEach(([c,l])=>{
-      sequence.push({cat:c,text:l[Math.floor(Math.random()*l.length)],time:t});
+      const ex = l[Math.floor(Math.random()*l.length)];
+      sequence.push({cat:c, display:ex, spoken:ex, time:t});
     });
   }
   if(m==="3"){
     sequence = DATA[cat].sort(()=>Math.random()-0.5).slice(0,qty)
-      .map(x=>({cat:cat,text:x,time:t}));
+      .map(x=>({cat:cat, display:x, spoken:x, time:t}));
   }
 
+  // Ajout textes courts pour ex 1 et 3
+  sequence.forEach((ex,i)=>{
+    if(m==="1" || m==="3"){
+      ex.shortText = "Répétez avec concentration et précision.";
+    }
+  });
+
+  trainingRecapData = [{ title:"Entraînement réalisé", items:sequence.map(e=>e.display), time:0 }];
   setActive(startBtn);
   run();
 };
@@ -497,7 +477,7 @@ pauseBtn.onclick = ()=>{
 
 stopBtn.onclick = ()=>{
   stopped = true;
-  clearRoInterval(timer);
+  clearInterval(timer);
   speechSynthesis.cancel();
   text.textContent = "Séance arrêtée";
   countdown.textContent = "";
@@ -505,10 +485,8 @@ stopBtn.onclick = ()=>{
 };
 
 resetBtn.onclick = ()=>{
-  stopped = true;
-  paused = false;
-  clearInterval(timer);
-  speechSynthesis.cancel();
+  stopped = true; paused = false;
+  clearInterval(timer); speechSynthesis.cancel();
   text.textContent = "Prêt 🌸";
   countdown.textContent = "";
   recap.innerHTML = "";
