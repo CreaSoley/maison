@@ -218,22 +218,28 @@ select,input{
 </main>
 
 <script>
-/* ===================== DATA ===================== */
+/* ===== DATA ===== */
 let DATA = {};
+
+const CATEGORY_MAP = {
+  "3pas": "Sur trois pas",
+  "surplace": "Sur place",
+  "multi": "Multidirectionnel",
+  "cibles": "Cibles"
+};
+
+const BG_MAP = {
+  "3pas":"bg-3pas",
+  "surplace":"bg-surplace",
+  "multi":"bg-multi",
+  "cibles":"bg-cibles"
+};
 
 async function loadData(){
   const res = await fetch("enchainements.json");
   DATA = await res.json();
 }
-
-/* ===================== BG COLORS ===================== */
-const BG = {
-  "3pas": "bg-3pas",
-  "surplace": "bg-surplace",
-  "multi": "bg-multi",
-  "cibles": "bg-cibles"
-};
-
+loadData();
 /* ===================== ELEMENTS ===================== */
 const mode = document.getElementById("mode");
 const categorie = document.getElementById("categorie");
@@ -268,17 +274,15 @@ let trainingRecapData = [];
 window.onload = async () => { await loadData(); };
 
 /* ===================== UTILS ===================== */
-const fmt = s => `${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
 
-function speak(t, rate=1){
+function speak(t,rate=1){
   return new Promise(res=>{
-    const u = new SpeechSynthesisUtterance(t);
-    u.lang = "fr-FR";
-    u.rate = rate;
-    u.onend = res;
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang="fr-FR"; u.rate=rate; u.onend=res;
     speechSynthesis.speak(u);
   });
 }
+const fmt=s=>`${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
 
 function setActive(btn){
   document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
@@ -300,9 +304,9 @@ mode.onchange = () => {
 
 /* ===================== PICK RANDOM ===================== */
 function pickRandom(cat,n=1){
-  const list = DATA[cat] || [];
-  const shuffled = [...list].sort(()=>Math.random()-0.5);
-  return n===1 ? shuffled[0] : shuffled.slice(0,n);
+  const list = DATA[CATEGORY_MAP[cat]] || [];
+  const shuffled=[...list].sort(()=>Math.random()-0.5);
+  return n===1?shuffled[0]:shuffled.slice(0,n);
 }
 
 /* ===================== PRÉSENTATION EXAMEN ===================== */
@@ -350,47 +354,32 @@ function buildExam(){
 
   return seq;
 }
+/* ===== STATE ===== */
+let sequence=[],index=0,timer=null,paused=false,stopped=false,examMode=false;
 
 /* ===================== RUN ===================== */
 async function run(){
-  if(stopped) return;
-  if(index >= sequence.length){
-    await speak(examMode?"Fin de l'examen":"Fin de l'exercice",1);
-    showRecap();
+  if(stopped||index>=sequence.length){
+    await speak("Fin",1);
     return;
   }
 
   const ex = sequence[index];
-  if(ex.announce) await speak(ex.announce,0.7);
+  document.getElementById("visual").className = BG_MAP[ex.cat];
+  document.getElementById("text").innerHTML = `<strong>${ex.display}</strong>`;
 
-  visual.className = BG[ex.cat] || visual.className;
-  if(ex.display){ 
-    text.innerHTML = `<strong>${ex.display}</strong>`;
-    shortText.textContent = ex.shortText || "";
-    await speak(ex.spoken || ex.display,0.7);
-  }
-
-  // Gardes
-  if(ex.garde){
-    const prev = sequence[index-1]?.display || "";
-    text.innerHTML = `Garde à ${ex.garde}<br><strong>${ex.display || prev}</strong>`;
-    await speak("Garde à "+ex.garde,1);
-  }
-
+  await speak(ex.spoken,0.8);
   await speak("Hajimé",1);
 
-  let t = ex.time;
-  countdown.textContent = fmt(t);
+  let t=ex.time;
+  countdown.textContent=fmt(t);
 
-  clearInterval(timer);
-  timer = setInterval(()=>{
-    if(paused || stopped) return;
-    t--; workedSeconds++;
-    countdown.textContent = fmt(t);
+  timer=setInterval(()=>{
+    if(paused||stopped)return;
+    t--; countdown.textContent=fmt(t);
     if(t<=0){
       clearInterval(timer);
-      index++;
-      run();
+      index++; run();
     }
   },1000);
 }
@@ -411,22 +400,29 @@ function showRecap(){
 }
 
 /* ===================== EVENTS ===================== */
-startExamBtn.onclick = ()=>{
-  examMode = true;
-  stopped = false; paused = false; workedSeconds=0; index=0;
-  sequence = buildExam();
-  recap.classList.add("hidden");
-  setActive(startExamBtn);
+startExam.onclick=()=>{
+  examMode=true; stopped=false; index=0;
+  sequence=[];
+
+  pickRandom("3pas",3).forEach(e=>sequence.push({cat:"3pas",...e,time:60}));
+  const sp=pickRandom("surplace");
+  sequence.push({cat:"surplace",...sp,time:60});
+  const m=pickRandom("multi");
+  sequence.push({cat:"multi",...m,time:45});
+  const c=pickRandom("cibles");
+  sequence.push({cat:"cibles",...c,time:60});
+
   run();
 };
 
-startBtn.onclick = ()=>{
-  examMode = false;
-  stopped=false; paused=false; workedSeconds=0; index=0;
-  sequence = [];
-  recap.classList.add("hidden");
-  const m = mode.value, cat=categorie.value, qty=+countInput.value, t=+intervalInput.value;
 
+start.onclick=()=>{
+  examMode=false; stopped=false; index=0;
+  sequence=[];
+  const cat=categorie.value;
+  const qty=+count.value;
+  const time=+interval.value;
+  
   if(m==="1"){
     Object.entries(DATA).forEach(([c,l])=>l.forEach(x=>sequence.push({cat:c,display:x.display,spoken:x.spoken,time:t})));
     sequence = sequence.sort(()=>Math.random()-0.5).slice(0,qty);
