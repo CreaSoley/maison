@@ -170,10 +170,14 @@ select,input{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.45);
-  display:flex;
+  display:none;            /* 🔴 IMPORTANT */
   align-items:center;
   justify-content:center;
   z-index:999;
+}
+
+.modal.show{
+  display:flex;            /* 🔴 ouverture contrôlée */
 }
 
 .modal-content{
@@ -193,7 +197,9 @@ select,input{
 .modal-content ul{
   text-align:left;
   padding-left:18px;
+
 }
+.hidden{display:none}
 
 </style>
 </head>
@@ -231,7 +237,7 @@ select,input{
   <button id="start" class="btn btn-train">▶️ Lancer l’entraînement</button>
   <button id="pause" class="btn btn-pause">⏸ Pause</button>
   <button id="stop" class="btn btn-stop">⏹ Stop</button>
-  <button id="criteriaModal" class="modal hidden">📋 Critères d’évaluation</button>
+  <button id="criteria" class="btn btn-present">📋 Critères d’évaluation</button>
   <button id="presentationExam" class="btn btn-present hidden">📢 Présentation examen</button>
   <button id="startExam" class="btn btn-exam hidden">📝 Lancer l’examen</button>
   <button id="reset" class="btn btn-reset">🔄 Réinitialiser</button>
@@ -247,19 +253,16 @@ select,input{
 <div id="recap" class="hidden"></div>
 
   <!-- ===== MODAL CRITÈRES D’ÉVALUATION ===== -->
-<div id="criteriaModal" class="modal hidden">
+<div id="criteriaModal" class="modal">
   <div class="modal-content">
     <h2>📋 Critères d’évaluation</h2>
-
     <ul>
       <li>Posture stable et équilibrée</li>
-      <li>Respect des trajectoires</li>
-      <li>Précision des techniques</li>
-      <li>Coordination bras / jambes</li>
-      <li>Gestion du rythme et de la respiration</li>
-      <li>Regard et intention martiale</li>
+      <li>Trajectoires correctes</li>
+      <li>Précision et intention</li>
+      <li>Coordination</li>
+      <li>Respiration</li>
     </ul>
-
     <button id="closeCriteria" class="btn btn-reset">❌ Fermer</button>
   </div>
 </div>
@@ -314,13 +317,18 @@ const criteriaBtn = document.getElementById("criteria");
 const criteriaModal = document.getElementById("criteriaModal");
 const closeCriteria = document.getElementById("closeCriteria");
 
-criteriaBtn.onclick = () => {
-  criteriaModal.classList.remove("hidden");
-};
+/* sécurité */
+if(criteriaBtn && criteriaModal && closeCriteria){
 
-closeCriteria.onclick = () => {
-  criteriaModal.classList.add("hidden");
-};
+  criteriaBtn.addEventListener("click", () => {
+    criteriaModal.classList.add("show");
+  });
+
+  closeCriteria.addEventListener("click", () => {
+    criteriaModal.classList.remove("show");
+  });
+
+}
 /* ===================== ÉTAT ===================== */
 let sequence = [];
 let index = 0;
