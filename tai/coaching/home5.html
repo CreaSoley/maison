@@ -552,19 +552,31 @@ async function run() {
   }
 
   /* ===== ANNONCE CATÉGORIE (ENTRAÎNEMENT LIBRE SEULEMENT) ===== */
-  if (
-    !examMode &&
-    (!run._lastCat || run._lastCat !== ex.cat)
-  ) {
-    run._lastCat = ex.cat;
-    await speak(CATEGORY_MAP[normCat], 0.8);
+ /* ===== ANNONCE DE L’ENCHAÎNEMENT ===== */
+
+if (examMode) {
+
+  // Cas mutualisé (exercices 2 & 3)
+  if (ex.examGroup) {
+    run._spokenGroups ??= new Set();
+
+    if (!run._spokenGroups.has(ex.examGroup)) {
+      run._spokenGroups.add(ex.examGroup);
+      await speak(ex.spoken || ex.display, 0.7);
+      await speak(ex.spoken || ex.display, 0.7);
+    }
   }
 
- if (examMode && ex.examGroup) {
-  run._spokenGroups ??= new Set();
+  // Cas normal (parties 1 et 4)
+  else {
+    await speak(ex.spoken || ex.display, 0.7);
+    await speak(ex.spoken || ex.display, 0.7);
+  }
 
-  if (!run._spokenGroups.has(ex.examGroup)) {
-    run._spokenGroups.add(ex.examGroup);
+} else {
+  // Entraînement libre (comportement inchangé)
+  if (!ex._spokenOnce) {
+    ex._spokenOnce = true;
     await speak(ex.spoken || ex.display, 0.7);
     await speak(ex.spoken || ex.display, 0.7);
   }
