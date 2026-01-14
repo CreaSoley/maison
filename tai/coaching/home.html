@@ -165,6 +165,36 @@ select,input{
   font-family:'Fredoka';
   cursor:pointer;
 }
+  /* ===== MODAL ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.modal-content{
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  border-radius:22px;
+  padding:22px;
+  max-width:420px;
+  width:90%;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
+  text-align:center;
+}
+
+.modal-content h2{
+  margin-top:0;
+}
+
+.modal-content ul{
+  text-align:left;
+  padding-left:18px;
+}
+
 </style>
 </head>
 
@@ -216,6 +246,24 @@ select,input{
 <!-- ===== RECAP ===== -->
 <div id="recap" class="hidden"></div>
 
+  <!-- ===== MODAL CRITÈRES D’ÉVALUATION ===== -->
+<div id="criteriaModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>📋 Critères d’évaluation</h2>
+
+    <ul>
+      <li>Posture stable et équilibrée</li>
+      <li>Respect des trajectoires</li>
+      <li>Précision des techniques</li>
+      <li>Coordination bras / jambes</li>
+      <li>Gestion du rythme et de la respiration</li>
+      <li>Regard et intention martiale</li>
+    </ul>
+
+    <button id="closeCriteria" class="btn btn-reset">❌ Fermer</button>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -261,6 +309,18 @@ const text = document.getElementById("text");
 const countdown = document.getElementById("countdown");
 const recap = document.getElementById("recap");
 
+  /* ===================== FENETRE CRITERE ===================== */
+const criteriaBtn = document.getElementById("criteria");
+const criteriaModal = document.getElementById("criteriaModal");
+const closeCriteria = document.getElementById("closeCriteria");
+
+criteriaBtn.onclick = () => {
+  criteriaModal.classList.remove("hidden");
+};
+
+closeCriteria.onclick = () => {
+  criteriaModal.classList.add("hidden");
+};
 /* ===================== ÉTAT ===================== */
 let sequence = [];
 let index = 0;
@@ -302,14 +362,6 @@ mode.onchange = () => {
   countInput.disabled = exam;
   intervalInput.disabled = exam;
 };
-
-/* ===================== FENETRE CRITERE ===================== */
-const criteriaBtn = document.getElementById("criteria");
-const criteriaModal = document.getElementById("criteriaModal");
-const closeCriteria = document.getElementById("closeCriteria");
-
-criteriaBtn.onclick = () => criteriaModal.classList.remove("hidden");
-closeCriteria.onclick = () => criteriaModal.classList.add("hidden");
 
 /* ===================== PICK RANDOM ===================== */
 function pickRandom(cat,n=1){
@@ -593,6 +645,16 @@ mode.onchange = () => {
 
 categorie.onchange = () => {
   shortText.textContent = CATEGORY_TEXTS[categorie.value] || "";
+};
+const EXPLANATIONS = {
+  "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
+  "2": "Exercice 2 : travail aléatoire sur trois types d’enchaînements.",
+  "3": "Exercice 3 : travail sur une catégorie choisie.",
+  "exam": "Mode examen blanc : conditions proches de l’examen officiel."
+};
+
+mode.onchange = () => {
+  shortText.textContent = EXPLANATIONS[mode.value] || "";
 };
 
 </script>
