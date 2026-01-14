@@ -426,6 +426,27 @@ function buildExam(){
 
 /* ===================== RUN ===================== */
 async function run() {
+  // ===== LATENCE DE DÉMARRAGE (5s une seule fois) =====
+if (index === 0 && !run._started) {
+  run._started = true;
+
+  await speak("Préparez-vous", 0.9);
+
+  let prep = 5;
+  countdown.textContent = "5s";
+
+  await new Promise(resolve => {
+    const prepTimer = setInterval(() => {
+      prep--;
+      countdown.textContent = prep + "s";
+      if (prep <= 0) {
+        clearInterval(prepTimer);
+        resolve();
+      }
+    }, 1000);
+  });
+}
+
   if (stopped) return;
 
 if (index >= sequence.length) {
@@ -468,10 +489,21 @@ if (
 }
 
   /* ===== AFFICHAGE DE L’ENCHAÎNEMENT ===== */
-  if (ex.display) {
-    text.innerHTML = `<strong>${ex.display}</strong>`;
-    await speak(ex.spoken || ex.display, 0.8);
-  }
+
+if (
+  index === 0 ||
+  (sequence[index - 1] && sequence[index - 1].cat !== ex.cat)
+) {
+  await speak(ex.cat, 0.8);
+}
+
+/* ===== ENCHAÎNEMENT x2 ===== */
+await speak(ex.spoken || ex.display, 0.7);
+await speak(ex.spoken || ex.display, 0.7);
+
+/* ===== DÉMARRAGE ===== */
+await speak("Hajimé", 1);
+
 
   /* ===== GARDE ===== */
   if (ex.garde) {
@@ -530,6 +562,8 @@ startExamBtn.onclick = async () => {
   setActive(startExamBtn);
 
   sequence = buildExam();
+  run._started = false;
+
   await run();
 };
 
@@ -589,12 +623,16 @@ Object.entries(DATA).forEach(([key, list]) => {
 
   /* ===== EXERCICE 3 – CATÉGORIE CHOISIE ===== */
   if (m === "3") {
-    if (!DATA[cat]) {
-      alert("Catégorie inexistante.");
-      return;
+    const realCat = CATEGORY_MAP[cat];
+if (!DATA[realCat]) {
+  alert("Catégorie inexistante.");
+  return;
+}
+
     }
 
-    sequence = [...DATA[cat]]
+    sequence = [...DATA[realCat]]
+
       .sort(() => Math.random() - 0.5)
       .slice(0, qty)
       .map(item => ({
@@ -604,6 +642,7 @@ Object.entries(DATA).forEach(([key, list]) => {
         time: t
       }));
   }
+run._started = false;
 
   await run();
 };
