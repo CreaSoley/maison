@@ -416,10 +416,25 @@ function buildExam(){
   seq.push({cat:"multi", display:p3.display, spoken:p3.spoken, garde:"gauche", time:45, announce:"Troisième partie : multidirectionnel"});
   seq.push({cat:"multi", display:p3.display, spoken:p3.spoken, garde:"droite", time:45});
 
-  // Partie 4 — Cibles
-  const p4 = pickRandom("cibles", 5);
-  examRecapData.push({title:"Partie 4 – Travail sur cibles", items:[p4.display], time:100});
-  seq.push({cat:"cibles", display:p4.display, spoken:p4.spoken, time:20, announce:"Quatrième partie : travail sur cibles"});
+  // Partie 4 — Cibles (5 enchaînements)
+const p4 = pickRandom("cibles", 5);
+
+examRecapData.push({
+  title: "Partie 4 – Travail sur cibles",
+  items: p4.map(x => x.display),
+  time: 100
+});
+
+p4.forEach((ex, i) => {
+  seq.push({
+    cat: "cibles",
+    display: ex.display,
+    spoken: ex.spoken,
+    time: 20,
+    announce: i === 0 ? "Quatrième partie : travail sur cibles" : null
+  });
+});
+
 
   return seq;
 }
@@ -452,10 +467,21 @@ async function run() {
 
   /* ===== FIN ===== */
   if (index >= sequence.length) {
-    await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
-    showRecap();
-    return;
+
+  await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
+
+  if (!examMode) {
+    trainingRecapData = [{
+      title: "Entraînement libre",
+      time: workedSeconds,
+      items: sequence.map(e => `${CATEGORY_MAP[normalizeCat(e.cat)]} – ${e.display}`)
+    }];
   }
+
+  showRecap();
+  return;
+}
+
 
   const ex = sequence[index];
 
@@ -486,12 +512,15 @@ async function run() {
     await speak(CATEGORY_MAP[normCat], 0.8);
   }
 
-  /* ===== ANNONCE ENCHAÎNEMENT ===== */
   if (!ex._spokenOnce) {
-    ex._spokenOnce = true;
-    await speak(ex.spoken || ex.display, 0.7);
-    await speak(ex.spoken || ex.display, 0.7);
-  }
+  ex._spokenOnce = true;
+
+  // En examen : une seule annonce de l’enchaînement (au début)
+  // En entraînement libre : idem
+  await speak(ex.spoken || ex.display, 0.7);
+  await speak(ex.spoken || ex.display, 0.7);
+}
+
 
   /* ===== GARDE ===== */
   if (ex.garde) {
@@ -720,6 +749,13 @@ mode.onchange = () => {
   shortText.textContent = EXPLANATIONS[mode.value] || "";
 };
 
+mode.addEventListener("change", () => {
+  if (mode.value === "2") {
+    categorie.disabled = true;
+  } else if (mode.value !== "exam") {
+    categorie.disabled = false;
+  }
+});
 
 </script>
 
