@@ -360,17 +360,6 @@ function setActive(btn){
 
 intervalInput.oninput = () => { intervalVal.textContent = fmt(+intervalInput.value); };
 
-/* ===================== MODE CHANGE ===================== */
-mode.onchange = () => {
-  const exam = mode.value === "exam";
-  presentationBtn.classList.toggle("hidden", !exam);
-  startExamBtn.classList.toggle("hidden", !exam);
-  startBtn.classList.toggle("hidden", exam);
-  categorie.disabled = exam;
-  countInput.disabled = exam;
-  intervalInput.disabled = exam;
-};
-
 /* ===================== PICK RANDOM ===================== */
 function pickRandom(cat,n=1){
   const list = DATA[CATEGORY_MAP[cat]] || [];
@@ -501,9 +490,6 @@ if (
 await speak(ex.spoken || ex.display, 0.7);
 await speak(ex.spoken || ex.display, 0.7);
 
-/* ===== DÉMARRAGE ===== */
-await speak("Hajimé", 1);
-
 
   /* ===== GARDE ===== */
   if (ex.garde) {
@@ -621,27 +607,26 @@ Object.entries(DATA).forEach(([key, list]) => {
 
   }
 
-  /* ===== EXERCICE 3 – CATÉGORIE CHOISIE ===== */
-  if (m === "3") {
-    const realCat = CATEGORY_MAP[cat];
-if (!DATA[realCat]) {
-  alert("Catégorie inexistante.");
-  return;
+/* ===== EXERCICE 3 – CATÉGORIE CHOISIE ===== */
+if (m === "3") {
+  const realCat = CATEGORY_MAP[cat];
+
+  if (!DATA[realCat]) {
+    alert("Catégorie inexistante.");
+    return;
+  }
+
+  sequence = [...DATA[realCat]]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, qty)
+    .map(item => ({
+      cat: cat,
+      display: item.display,
+      spoken: item.spoken,
+      time: t
+    }));
 }
 
-    }
-
-    sequence = [...DATA[realCat]]
-
-      .sort(() => Math.random() - 0.5)
-      .slice(0, qty)
-      .map(item => ({
-        cat: cat,
-        display: item.display,
-        spoken: item.spoken,
-        time: t
-      }));
-  }
 run._started = false;
 
   await run();
@@ -667,6 +652,7 @@ stopBtn.onclick = () => {
 
   setActive(stopBtn);
 };
+mode.dispatchEvent(new Event("change"));
 
 /* ===== RESET ===== */
 resetBtn.onclick = () => {
@@ -699,25 +685,6 @@ const CATEGORY_TEXTS = {
   "cibles": "Cibles : effectuez la technique annoncée avec la garde de votre choix."
 };
 
-mode.onchange = () => {
-  shortText.textContent = EXERCISE_TEXTS[mode.value] || "";
-};
-
-categorie.onchange = () => {
-  shortText.textContent = CATEGORY_TEXTS[categorie.value] || "";
-};
-  mode.onchange = () => {
-  const exam = mode.value === "exam";
-
-  presentationBtn.classList.toggle("hidden", !exam);
-  startExamBtn.classList.toggle("hidden", !exam);
-  startBtn.classList.toggle("hidden", exam);
-
-  categorie.disabled = exam;
-  countInput.disabled = exam;
-  intervalInput.disabled = exam;
-};
-
 const EXPLANATIONS = {
   "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
   "2": "Exercice 2 : travail aléatoire sur trois types d’enchaînements.",
@@ -726,17 +693,22 @@ const EXPLANATIONS = {
 };
 
 mode.onchange = () => {
+  const exam = mode.value === "exam";
+
+  /* ===== BOUTONS MODE EXAMEN ===== */
+  presentationBtn.classList.toggle("hidden", !exam);
+  startExamBtn.classList.toggle("hidden", !exam);
+  startBtn.classList.toggle("hidden", exam);
+
+  /* ===== DÉSACTIVATION DES CHAMPS ===== */
+  categorie.disabled = exam;
+  countInput.disabled = exam;
+  intervalInput.disabled = exam;
+
+  /* ===== TEXTE COURT ===== */
   shortText.textContent = EXPLANATIONS[mode.value] || "";
 };
-// Forcer la mise à jour de l'UI au chargement
-mode.dispatchEvent(new Event("change"));
-function normalizeCat(cat){
-  if(cat === "Sur trois pas") return "3pas";
-  if(cat === "Sur place") return "surplace";
-  if(cat === "Multidirectionnel") return "multi";
-  if(cat === "Cibles") return "cibles";
-  return cat;
-}
+
 
 </script>
 
