@@ -167,6 +167,35 @@ select,input{
 }
 </style>
 </head>
+<div id="criteriaModal" class="hidden" style="
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;">
+  
+  <div style="
+    background-image:linear-gradient(15deg,#13547a 0%,#80d0c7 100%);
+    color:white;
+    padding:22px;
+    border-radius:22px;
+    max-width:520px;
+    box-shadow:0 12px 25px rgba(0,0,0,.3);">
+
+    <h3>📋 Critères d’évaluation</h3>
+    <ul>
+      <li>Stabilité et qualité des positions</li>
+      <li>Coordination bras / jambes</li>
+      <li>Précision des techniques</li>
+      <li>Gestion du rythme et du temps</li>
+      <li>Engagement et intention martiale</li>
+    </ul>
+
+    <button id="closeCriteria" class="btn btn-reset">Fermer</button>
+  </div>
+</div>
 
 <body>
 <main>
