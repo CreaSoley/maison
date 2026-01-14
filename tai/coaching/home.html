@@ -320,7 +320,24 @@ const visual = document.getElementById("visual");
 const text = document.getElementById("text");
 const countdown = document.getElementById("countdown");
 const recap = document.getElementById("recap");
+  
+ /* ===================== FENETRE CRITERE ===================== */
+const criteriaBtn = document.getElementById("criteria");
+const criteriaModal = document.getElementById("criteriaModal");
+const closeCriteria = document.getElementById("closeCriteria");
 
+/* sécurité */
+if(criteriaBtn && criteriaModal && closeCriteria){
+
+  criteriaBtn.addEventListener("click", () => {
+    criteriaModal.classList.add("show");
+  });
+
+  closeCriteria.addEventListener("click", () => {
+    criteriaModal.classList.remove("show");
+  });
+
+}
 /* ===================== ETAT ===================== */
 let sequence = [];
 let index = 0;
@@ -354,6 +371,18 @@ function pickRandom(cat, n = 1) {
   const list = DATA[cat] || [];
   return [...list].sort(() => Math.random() - 0.5).slice(0, n);
 }
+/* ===================== PRÉSENTATION EXAMEN ===================== */
+presentationBtn.onclick = async () => {
+  speechSynthesis.cancel();
+  await speak(
+    "Vous avez choisi le mode examen blanc. La séance comporte quatre parties. " +
+    "Première partie : enchaînement sur trois pas. Effectuez l’enchaînement annoncé sur trois pas, avec soit un demi-tour au terme de l’aller, soit en reculant ensuite. Vous disposez de trente secondes par enchaînement. " +
+    "Deuxième partie : enchaînement sur place. Sur place en position de combat, effectuez l’enchaînement annoncé. Le changement de garde sera annoncé. Vous disposez de trente secondes par côté. " +
+    "Troisième partie : enchaînement multidirectionnel. Vous allez travailler sur un enchaînement de techniques qui doit être exécuté dans les quatre directions cardinales, en garde gauche puis en garde droite, avec retour à la position initiale. Le changement de garde sera annoncé. Vous disposez de quarante-cinq secondes par côté. " +
+    "Quatrième partie : travail sur cibles. Cinq techniques vont êtes annoncées. Vous les réaliserez 3 fois chacune, garde de votre choix, avec retour à la position initiale après chaque exécution. Vous disposez de vingt secondes par techniques" +
+    "La pause est autorisée.", 0.7
+  );
+};
 
 /* ===================== BUILD EXAM ===================== */
 function buildExam() {
@@ -595,14 +624,44 @@ stopBtn.onclick = () => {
   clearInterval(timer);
   speechSynthesis.cancel();
 };
-
+/* ===== RESET ===== */
 resetBtn.onclick = () => {
   stopped = true;
+  paused = false;
+
   clearInterval(timer);
+  speechSynthesis.cancel();
+
   index = 0;
   sequence = [];
+
+  text.textContent = "Prêt 🌸";
+  countdown.textContent = "";
+  recap.innerHTML = "";
   recap.classList.add("hidden");
+
+  setActive(null);
 };
+  const EXERCISE_TEXTS = {
+  "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
+  "2": "Exercice 2 : travail aléatoire sur trois techniques : trois pas, sur place et multidirectionnel.",
+  "3": "Exercice 3 : travail sur la catégorie de votre choix."
+};
+
+const CATEGORY_TEXTS = {
+  "3pas": "Sur trois pas : effectuez l’enchaînement annoncé sur trois pas, avec demi-tour ou recul.",
+  "surplace": "Sur place : en position de combat, effectuez l’enchaînement annoncé.",
+  "multi": "Multidirectionnel : travaillez dans les quatre directions cardinales, garde gauche puis droite.",
+  "cibles": "Cibles : effectuez la technique annoncée avec la garde de votre choix."
+};
+
+const EXPLANATIONS = {
+  "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
+  "2": "Exercice 2 : travail aléatoire sur trois types d’enchaînements.",
+  "3": "Exercice 3 : travail sur une catégorie choisie.",
+  "exam": "Mode examen blanc : conditions proches de l’examen officiel."
+};
+
 
 /* ===================== MODE ===================== */
 mode.onchange = () => {
