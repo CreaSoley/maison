@@ -383,10 +383,10 @@ presentationBtn.onclick = async () => {
   speechSynthesis.cancel();
   await speak(
     "Vous avez choisi le mode examen blanc. La séance comporte quatre parties. " +
-    "Première partie : enchaînement sur trois pas. Effectuez l’enchaînement annoncé sur trois pas, avec soit un demi-tour au terme de l’aller, soit en reculant ensuite. Vous disposez de trente secondes par enchaînement. " +
+    "Première partie : enchaînement sur trois pas. Effectuez l’enchaînement annoncé sur trois pas, avec soit un demi-tour au terme de l’aller, soit en reculant ensuite. Vous disposez de quarante cinq secondes par enchaînement. " +
     "Deuxième partie : enchaînement sur place. Sur place en position de combat, effectuez l’enchaînement annoncé. Le changement de garde sera annoncé. Vous disposez de trente secondes par côté. " +
     "Troisième partie : enchaînement multidirectionnel. Vous allez travailler sur un enchaînement de techniques qui doit être exécuté dans les quatre directions cardinales, en garde gauche puis en garde droite, avec retour à la position initiale. Le changement de garde sera annoncé. Vous disposez de quarante-cinq secondes par côté. " +
-    "Quatrième partie : travail sur cibles. Cinq techniques vont êtes annoncées. Vous les réaliserez 3 fois chacune, garde de votre choix, avec retour à la position initiale après chaque exécution. Vous disposez de vingt secondes par techniques" +
+    "Quatrième partie : travail sur cibles. Cinq techniques vont êtes annoncées. Vous les réaliserez 3 fois chacune, garde de votre choix, avec retour à la position initiale après chaque exécution. Vous disposez de trente secondes par techniques" +
     "La pause est autorisée.", 0.7
   );
 };
@@ -398,9 +398,9 @@ function buildExam(){
 
   // Partie 1 — 3 pas
   const p1 = pickRandom("3pas", 3);
-  examRecapData.push({title:"Partie 1 – Enchaînements sur 3 pas", items:p1.map(x=>x.display), time:90});
+  examRecapData.push({title:"Partie 1 – Enchaînements sur 3 pas", items:p1.map(x=>x.display), time:135});
   p1.forEach((ex,i)=>seq.push({
-    cat:"3pas", display:ex.display, spoken:ex.spoken, time:30,
+    cat:"3pas", display:ex.display, spoken:ex.spoken, time:45,
     announce:i===0?"Première partie : enchaînements sur trois pas":null
   }));
 
@@ -422,7 +422,7 @@ const p4 = pickRandom("cibles", 5);
 examRecapData.push({
   title: "Partie 4 – Travail sur cibles",
   items: p4.map(x => x.display),
-  time: 100
+  time: 150
 });
 
 p4.forEach((ex, i) => {
@@ -430,7 +430,7 @@ p4.forEach((ex, i) => {
     cat: "cibles",
     display: ex.display,
     spoken: ex.spoken,
-    time: 20,
+    time: 30,
     announce: i === 0 ? "Quatrième partie : travail sur cibles" : null
   });
 });
