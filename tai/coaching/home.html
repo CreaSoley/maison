@@ -270,7 +270,7 @@ select,input{
 </main>
 
 <script>
-/* ===== DATA ===== */
+/* ===================== DATA ===================== */
 let DATA = {};
 
 const CATEGORY_MAP = {
@@ -281,23 +281,25 @@ const CATEGORY_MAP = {
 };
 
 const BG_MAP = {
-  "3pas":"bg-3pas",
-  "surplace":"bg-surplace",
-  "multi":"bg-multi",
-  "cibles":"bg-cibles"
+  "3pas": "bg-3pas",
+  "surplace": "bg-surplace",
+  "multi": "bg-multi",
+  "cibles": "bg-cibles"
 };
-function normalizeCat(cat){
-  if(cat === "Sur trois pas") return "3pas";
-  if(cat === "Sur place") return "surplace";
-  if(cat === "Multidirectionnel") return "multi";
-  if(cat === "Cibles") return "cibles";
+
+function normalizeCat(cat) {
+  if (cat === "Sur trois pas") return "3pas";
+  if (cat === "Sur place") return "surplace";
+  if (cat === "Multidirectionnel") return "multi";
+  if (cat === "Cibles") return "cibles";
   return cat;
 }
 
-async function loadData(){
+async function loadData() {
   const res = await fetch("enchainements.json");
   DATA = await res.json();
 }
+loadData();
 
 /* ===================== ELEMENTS ===================== */
 const mode = document.getElementById("mode");
@@ -308,35 +310,18 @@ const intervalVal = document.getElementById("intervalVal");
 const shortText = document.getElementById("shortText");
 
 const startBtn = document.getElementById("start");
+const startExamBtn = document.getElementById("startExam");
+const presentationBtn = document.getElementById("presentationExam");
 const pauseBtn = document.getElementById("pause");
 const stopBtn = document.getElementById("stop");
 const resetBtn = document.getElementById("reset");
-const presentationBtn = document.getElementById("presentationExam");
-const startExamBtn = document.getElementById("startExam");
 
 const visual = document.getElementById("visual");
 const text = document.getElementById("text");
 const countdown = document.getElementById("countdown");
 const recap = document.getElementById("recap");
 
-  /* ===================== FENETRE CRITERE ===================== */
-const criteriaBtn = document.getElementById("criteria");
-const criteriaModal = document.getElementById("criteriaModal");
-const closeCriteria = document.getElementById("closeCriteria");
-
-/* sécurité */
-if(criteriaBtn && criteriaModal && closeCriteria){
-
-  criteriaBtn.addEventListener("click", () => {
-    criteriaModal.classList.add("show");
-  });
-
-  closeCriteria.addEventListener("click", () => {
-    criteriaModal.classList.remove("show");
-  });
-
-}
-/* ===================== ÉTAT ===================== */
+/* ===================== ETAT ===================== */
 let sequence = [];
 let index = 0;
 let timer = null;
@@ -344,450 +329,293 @@ let paused = false;
 let stopped = false;
 let examMode = false;
 let workedSeconds = 0;
+
 let examRecapData = [];
 let trainingRecapData = [];
 
-window.onload = async () => { await loadData(); };
-
 /* ===================== UTILS ===================== */
-
-function speak(t,rate=1){
-  return new Promise(res=>{
-    const u=new SpeechSynthesisUtterance(t);
-    u.lang="fr-FR"; u.rate=rate; u.onend=res;
+function speak(t, rate = 1) {
+  return new Promise(res => {
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = "fr-FR";
+    u.rate = rate;
+    u.onend = res;
     speechSynthesis.speak(u);
   });
 }
-const fmt=s=>`${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
 
-function setActive(btn){
-  document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-}
+const fmt = s => `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;
 
-intervalInput.oninput = () => { intervalVal.textContent = fmt(+intervalInput.value); };
-
-/* ===================== PICK RANDOM ===================== */
-function pickRandom(cat, n = 1) {
-  const list = DATA[cat] || [];
-  const shuffled = [...list].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, n);
-}
-
-/* ===================== PRÉSENTATION EXAMEN ===================== */
-presentationBtn.onclick = async () => {
-  speechSynthesis.cancel();
-  await speak(
-    "Vous avez choisi le mode examen blanc. La séance comporte quatre parties. " +
-    "Première partie : enchaînement sur trois pas. Effectuez l’enchaînement annoncé sur trois pas, avec soit un demi-tour au terme de l’aller, soit en reculant ensuite. Vous disposez de quarante-cinq secondes par enchaînement. " +
-    "Deuxième partie : enchaînement sur place. Sur place en position de combat, effectuez l’enchaînement annoncé. Le changement de garde sera annoncé. Vous disposez de trente secondes par côté. " +
-    "Troisième partie : enchaînement multidirectionnel. Vous allez travailler sur un enchaînement de techniques qui doit être exécuté dans les quatre directions cardinales, en garde gauche puis en garde droite, avec retour à la position initiale. Le changement de garde sera annoncé. Vous disposez de quarante-cinq secondes par côté. " +
-    "Quatrième partie : travail sur cibles. Cinq techniques vont êtes annoncées. Vous les réaliserez 3 fois chacune, garde de votre choix, avec retour à la position initiale après chaque exécution. Vous disposez de trente secondes par techniques" +
-    "La pause est autorisée.", 0.7
-  );
+intervalInput.oninput = () => {
+  intervalVal.textContent = fmt(+intervalInput.value);
 };
 
+function pickRandom(cat, n = 1) {
+  const list = DATA[cat] || [];
+  return [...list].sort(() => Math.random() - 0.5).slice(0, n);
+}
+
 /* ===================== BUILD EXAM ===================== */
-function buildExam(){
+function buildExam() {
   const seq = [];
-  examRecapData.length = 0;
+  examRecapData = [];
 
-  // Partie 1 — 3 pas
+  /* Partie 1 — 3 pas */
   const p1 = pickRandom("3pas", 3);
-  examRecapData.push({title:"Partie 1 – Enchaînements sur 3 pas", items:p1.map(x=>x.display), time:135});
-  p1.forEach((ex,i)=>seq.push({
-    cat:"3pas", display:ex.display, spoken:ex.spoken, time:45,
-    announce:i===0?"Première partie : enchaînements sur trois pas":null
-  }));
-
-  // Partie 2 — Sur place
-const p2 = pickRandom("surplace", 1)[0];
-examRecapData.push({title:"Partie 2 – Enchaînements sur place", items:[p2.display], time:60});
-
-  seq.push({
-  cat: "surplace",
-  display: p2.display,
-  spoken: p2.spoken,
-  phases: [
-    { garde: "gauche", time: 30 },
-    { garde: "droite", time: 30 }
-  ],
-  announce: "Deuxième partie : enchaînement sur place"
-});
-
-
-  // Partie 3 — Multidirectionnel
-  const p3 = pickRandom("multi", 1)[0];
-  examRecapData.push({title:"Partie 3 – Multidirectionnel", items:[p3.display], time:90});
-  seq.push({
-  cat: "multi",
-  display: p3.display,
-  spoken: p3.spoken,
-  phases: [
-    { garde: "gauche", time: 45 },
-    { garde: "droite", time: 45 }
-  ],
-  announce: "Troisième partie : enchaînement multidirectionnel"
-});
-
-
-  // Partie 4 — Cibles (5 enchaînements)
-const p4 = pickRandom("cibles", 5);
-
-examRecapData.push({
-  title: "Partie 4 – Travail sur cibles",
-  items: p4.map(x => x.display),
-  time: 100
-});
-
-p4.forEach((ex, i) => {
-  seq.push({
-    cat: "cibles",
-    display: ex.display,
-    spoken: ex.spoken,
-    time: 20,
-    announce: i === 0 ? "Quatrième partie : travail sur cibles" : null
+  examRecapData.push({
+    title: "Partie 1 – Enchaînements sur 3 pas",
+    items: p1.map(x => x.display),
+    time: 135
   });
-});
 
+  p1.forEach((ex, i) => {
+    seq.push({
+      cat: "3pas",
+      display: ex.display,
+      spoken: ex.spoken,
+      time: 45,
+      announce: i === 0 ? "Première partie : enchaînements sur trois pas" : null
+    });
+  });
+
+  /* Partie 2 — Sur place */
+  const p2 = pickRandom("surplace", 1)[0];
+  examRecapData.push({
+    title: "Partie 2 – Enchaînement sur place",
+    items: [p2.display],
+    time: 60
+  });
+
+  seq.push({
+    cat: "surplace",
+    display: p2.display,
+    spoken: p2.spoken,
+    announce: "Deuxième partie : enchaînement sur place",
+    phases: [
+      { garde: "gauche", time: 30 },
+      { garde: "droite", time: 30 }
+    ]
+  });
+
+  /* Partie 3 — Multidirectionnel */
+  const p3 = pickRandom("multi", 1)[0];
+  examRecapData.push({
+    title: "Partie 3 – Multidirectionnel",
+    items: [p3.display],
+    time: 90
+  });
+
+  seq.push({
+    cat: "multi",
+    display: p3.display,
+    spoken: p3.spoken,
+    announce: "Troisième partie : enchaînement multidirectionnel",
+    phases: [
+      { garde: "gauche", time: 45 },
+      { garde: "droite", time: 45 }
+    ]
+  });
+
+  /* Partie 4 — Cibles */
+  const p4 = pickRandom("cibles", Math.min(5, DATA.cibles.length));
+  examRecapData.push({
+    title: "Partie 4 – Travail sur cibles",
+    items: p4.map(x => x.display),
+    time: 100
+  });
+
+  p4.forEach((ex, i) => {
+    seq.push({
+      cat: "cibles",
+      display: ex.display,
+      spoken: ex.spoken,
+      time: 20,
+      announce: i === 0 ? "Quatrième partie : travail sur cibles" : null
+    });
+  });
 
   return seq;
 }
 
 /* ===================== RUN ===================== */
 async function run() {
-
-  /* ===== LATENCE DE DÉMARRAGE (5s) ===== */
-  if (index === 0 && !run._started) {
-    run._started = true;
-
-    await speak("Préparez-vous", 0.9);
-
-    let prep = 5;
-    countdown.textContent = "5s";
-
-    await new Promise(resolve => {
-      const prepTimer = setInterval(() => {
-        prep--;
-        countdown.textContent = prep + "s";
-        if (prep <= 0) {
-          clearInterval(prepTimer);
-          resolve();
-        }
-      }, 1000);
-    });
-  }
-
   if (stopped) return;
 
-  /* ===== FIN ===== */
   if (index >= sequence.length) {
+    await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
 
-  await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
+    if (!examMode) {
+      trainingRecapData = [{
+        title: "Entraînement libre",
+        time: workedSeconds,
+        items: sequence.map(e => `${CATEGORY_MAP[e.cat]} – ${e.display}`)
+      }];
+    }
 
-  if (!examMode) {
-    trainingRecapData = [{
-      title: "Entraînement libre",
-      time: workedSeconds,
-    items: sequence.map(e => `${CATEGORY_MAP[normalizeCat(e.cat)]} – ${e.display}`)
-
-    }];
+    showRecap();
+    return;
   }
-
-  showRecap();
-  return;
-}
-
 
   const ex = sequence[index];
-  
-  // Gestion des phases (garde gauche / droite)
-if (ex.phases && !ex._phaseIndex) {
-  ex._phaseIndex = 0;
-}
 
-
-  /* ===== AFFICHAGE ===== */
-  text.textContent = ex.display || "";
-
-
-  /* ===== BACKGROUND ===== */
-  const normCat = normalizeCat(ex.cat);
-  if (BG_MAP[normCat]) {
-    visual.className = BG_MAP[normCat];
+  if (ex.phases && ex._phaseIndex === undefined) {
+    ex._phaseIndex = 0;
   }
 
-  /* =======================================================
-     🔊 ANNONCES
-     ======================================================= */
+  text.textContent = ex.display;
 
-  /* ===== ANNONCE PARTIE (EXAMEN SEULEMENT) ===== */
+  visual.className = BG_MAP[normalizeCat(ex.cat)] || "";
+
   if (examMode && ex.announce) {
     await speak(ex.announce, 0.7);
   }
 
-  /* ===== ANNONCE CATÉGORIE (ENTRAÎNEMENT LIBRE SEULEMENT) ===== */
-  if (
-    !examMode &&
-    (!run._lastCat || run._lastCat !== ex.cat)
-  ) {
-    run._lastCat = ex.cat;
-    await speak(CATEGORY_MAP[normCat], 0.8);
-  }
-
   if (!ex._spokenOnce) {
-  ex._spokenOnce = true;
+    ex._spokenOnce = true;
 
-  // En examen : une seule annonce de l’enchaînement (au début)
-  // En entraînement libre : idem
-  await speak(ex.spoken || ex.display, 0.7);
-  await speak(ex.spoken || ex.display, 0.7);
-}
+    if (!examMode) {
+      await speak(CATEGORY_MAP[ex.cat], 0.8);
+    }
 
-
-  /* ===== GARDE ===== */
-  if (ex.garde) {
-    await speak("Garde à " + ex.garde, 1);
+    await speak(ex.spoken || ex.display, 0.7);
+    await speak(ex.spoken || ex.display, 0.7);
   }
 
-  /* ===== DÉMARRAGE ===== */
+  const phase = ex.phases ? ex.phases[ex._phaseIndex] : ex;
+
+  if (phase.garde) {
+    await speak("Garde à " + phase.garde, 1);
+  }
+
   await speak("Hajimé", 1);
 
-  /* =======================================================
-     ⏱ TIMER
-     ======================================================= */
-
-const phase = ex.phases ? ex.phases[ex._phaseIndex] : ex;
-
-if (phase.garde) {
-  await speak("Garde à " + phase.garde, 1);
-}
-
-await speak("Hajimé", 1);
-
-let t = phase.time;
-countdown.textContent = fmt(t);
-
-clearInterval(timer);
-timer = setInterval(() => {
-  if (paused || stopped) return;
-
-  t--;
-  workedSeconds++;
+  let t = phase.time;
   countdown.textContent = fmt(t);
 
-  if (t <= 0) {
-    clearInterval(timer);
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (paused || stopped) return;
 
-    if (ex.phases && ex._phaseIndex < ex.phases.length - 1) {
-      ex._phaseIndex++;
-      run(); // même exercice, phase suivante
-    } else {
-      index++;
-      run(); // exercice suivant
+    t--;
+    workedSeconds++;
+    countdown.textContent = fmt(t);
+
+    if (t <= 0) {
+      clearInterval(timer);
+
+      if (ex.phases && ex._phaseIndex < ex.phases.length - 1) {
+        ex._phaseIndex++;
+        run();
+      } else {
+        index++;
+        run();
+      }
     }
-  }
-}, 1000);
+  }, 1000);
+}
 
-
-/* ===================== RÉCAP ===================== */
-function showRecap(){
+/* ===================== RECAP ===================== */
+function showRecap() {
   recap.innerHTML = "<h3>📄 Récapitulatif</h3>";
   const source = examMode ? examRecapData : trainingRecapData;
-  source.forEach(r=>{
+
+  source.forEach(r => {
     recap.innerHTML += `
       <div class="recap-block">
         <strong>${r.title}</strong><br>
         <em>Durée : ${fmt(r.time)}</em>
-        <ul>
-${r.items.map(i => `<li>${i}</li>`).join("")}
-
-</ul>
-
+        <ul>${r.items.map(i => `<li>${i}</li>`).join("")}</ul>
       </div>`;
   });
+
   recap.classList.remove("hidden");
 }
 
 /* ===================== EVENTS ===================== */
-
-/* ===== LANCER MODE EXAMEN ===== */
 startExamBtn.onclick = async () => {
   examMode = true;
   stopped = false;
   paused = false;
-  workedSeconds = 0;
   index = 0;
+  workedSeconds = 0;
+  run._lastCat = null;
 
   recap.classList.add("hidden");
-  setActive(startExamBtn);
-
   sequence = buildExam();
-  run._started = false;
 
   await run();
 };
 
-/* ===== LANCER ENTRAÎNEMENT LIBRE ===== */
 startBtn.onclick = async () => {
   examMode = false;
   stopped = false;
   paused = false;
-  workedSeconds = 0;
   index = 0;
-  sequence = [];
+  workedSeconds = 0;
+  run._lastCat = null;
 
   recap.classList.add("hidden");
-  setActive(startBtn);
+  sequence = [];
 
   const m = mode.value;
   const cat = categorie.value;
   const qty = +countInput.value;
   const t = +intervalInput.value;
 
-  // Sécurité : données chargées ?
-  if (!DATA || Object.keys(DATA).length === 0) {
-    alert("Les données ne sont pas encore chargées.");
-    return;
-  }
-
-  /* ===== EXERCICE 1 – ALÉATOIRE GLOBAL ===== */
-  if (m === "1") {
-    Object.entries(DATA).forEach(([key, list]) => {
-      list.forEach(item => {
-        sequence.push({
-          cat: key,
-          display: item.display,
-          spoken: item.spoken,
-          time: t
-        });
+  if (m === "2") {
+    Object.keys(DATA).forEach(key => {
+      const item = pickRandom(key, 1)[0];
+      sequence.push({
+        cat: key,
+        display: item.display,
+        spoken: item.spoken,
+        time: t
       });
     });
-
-    sequence = sequence.sort(() => Math.random() - 0.5).slice(0, qty);
   }
 
-  /* ===== EXERCICE 2 – UNE PAR CATÉGORIE ===== */
-  if (m === "2") {
-Object.entries(DATA).forEach(([key, list]) => {
-  const item = list[Math.floor(Math.random() * list.length)];
-  sequence.push({
-    cat: key,
-    display: item.display,
-    spoken: item.spoken,
-    time: t,
-    categoryAnnouncement: key
-  });
-});
-
-  }
-
-/* ===== EXERCICE 3 – CATÉGORIE CHOISIE ===== */
-if (m === "3") {
-  const realCat = CATEGORY_MAP[cat];
-
-  if (!DATA[realCat]) {
-    alert("Catégorie inexistante.");
-    return;
-  }
-
-  sequence = [...DATA[realCat]]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, qty)
-    .map(item => ({
-      cat: cat,
+  if (m === "3") {
+    sequence = pickRandom(cat, qty).map(item => ({
+      cat,
       display: item.display,
       spoken: item.spoken,
       time: t
     }));
-}
-
-run._started = false;
+  }
 
   await run();
 };
 
-/* ===== PAUSE ===== */
 pauseBtn.onclick = () => {
   paused = !paused;
-  pauseBtn.textContent = paused ? "▶️ Reprendre" : "⏸ Pause";
-  setActive(paused ? pauseBtn : null);
 };
 
-/* ===== STOP ===== */
 stopBtn.onclick = () => {
   stopped = true;
-  paused = false;
-
   clearInterval(timer);
   speechSynthesis.cancel();
-
-  text.textContent = "Séance arrêtée";
-  countdown.textContent = "";
-
-  setActive(stopBtn);
 };
-mode.dispatchEvent(new Event("change"));
 
-/* ===== RESET ===== */
 resetBtn.onclick = () => {
   stopped = true;
-  paused = false;
-
   clearInterval(timer);
-  speechSynthesis.cancel();
-
   index = 0;
   sequence = [];
-
-  text.textContent = "Prêt 🌸";
-  countdown.textContent = "";
-  recap.innerHTML = "";
   recap.classList.add("hidden");
-
-  setActive(null);
-};
-  const EXERCISE_TEXTS = {
-  "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
-  "2": "Exercice 2 : travail aléatoire sur trois techniques : trois pas, sur place et multidirectionnel.",
-  "3": "Exercice 3 : travail sur la catégorie de votre choix."
 };
 
-const CATEGORY_TEXTS = {
-  "3pas": "Sur trois pas : effectuez l’enchaînement annoncé sur trois pas, avec demi-tour ou recul.",
-  "surplace": "Sur place : en position de combat, effectuez l’enchaînement annoncé.",
-  "multi": "Multidirectionnel : travaillez dans les quatre directions cardinales, garde gauche puis droite.",
-  "cibles": "Cibles : effectuez la technique annoncée avec la garde de votre choix."
-};
-
-const EXPLANATIONS = {
-  "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
-  "2": "Exercice 2 : travail aléatoire sur trois types d’enchaînements.",
-  "3": "Exercice 3 : travail sur une catégorie choisie.",
-  "exam": "Mode examen blanc : conditions proches de l’examen officiel."
-};
-
+/* ===================== MODE ===================== */
 mode.onchange = () => {
   const exam = mode.value === "exam";
-if (mode.value === "2") {
-  categorie.disabled = true;
-}
 
-  /* ===== BOUTONS MODE EXAMEN ===== */
   presentationBtn.classList.toggle("hidden", !exam);
   startExamBtn.classList.toggle("hidden", !exam);
   startBtn.classList.toggle("hidden", exam);
 
-  /* ===== DÉSACTIVATION DES CHAMPS ===== */
-  categorie.disabled = exam;
+  categorie.disabled = exam || mode.value === "2";
   countInput.disabled = exam;
   intervalInput.disabled = exam;
-
-  /* ===== TEXTE COURT ===== */
-  shortText.textContent = EXPLANATIONS[mode.value] || "";
 };
-
-
 </script>
 
 </body>
