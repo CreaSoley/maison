@@ -426,81 +426,72 @@ function buildExam(){
 
 /* ===================== RUN ===================== */
 async function run() {
-  // ===== LATENCE DE DÉMARRAGE (5s une seule fois) =====
-if (index === 0 && !run._started) {
-  run._started = true;
 
-  await speak("Préparez-vous", 0.9);
+  /* ===== LATENCE DE DÉMARRAGE (5s) ===== */
+  if (index === 0 && !run._started) {
+    run._started = true;
 
-  let prep = 5;
-  countdown.textContent = "5s";
+    await speak("Préparez-vous", 0.9);
 
-  await new Promise(resolve => {
-    const prepTimer = setInterval(() => {
-      prep--;
-      countdown.textContent = prep + "s";
-      if (prep <= 0) {
-        clearInterval(prepTimer);
-        resolve();
-      }
-    }, 1000);
-  });
-}
+    let prep = 5;
+    countdown.textContent = "5s";
+
+    await new Promise(resolve => {
+      const prepTimer = setInterval(() => {
+        prep--;
+        countdown.textContent = prep + "s";
+        if (prep <= 0) {
+          clearInterval(prepTimer);
+          resolve();
+        }
+      }, 1000);
+    });
+  }
 
   if (stopped) return;
 
-if (index >= sequence.length) {
-  await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
-
-  if (!examMode) {
-    trainingRecapData = [{
-      title: "Entraînement libre",
-      time: workedSeconds,
-      items: sequence.map(e => e.display)
-    }];
+  /* ===== FIN ===== */
+  if (index >= sequence.length) {
+    await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
+    showRecap();
+    return;
   }
 
-  showRecap(); // ✅ ESSENTIEL
-  return;
-}
+  const ex = sequence[index];
 
-  const ex = sequence[index]; // ✅ TOUJOURS définir ex en premier
+  /* ===== AFFICHAGE ===== */
+  text.textContent = ex.display;
 
   /* ===== BACKGROUND ===== */
   const normCat = normalizeCat(ex.cat);
-if (normCat && BG_MAP[normCat]) {
-  visual.className = BG_MAP[normCat];
-}
-if (ex.categoryAnnouncement && !ex._catAnnounced) {
-  ex._catAnnounced = true;
-  await speak(ex.categoryAnnouncement, 0.8);
-}
+  if (BG_MAP[normCat]) {
+    visual.className = BG_MAP[normCat];
+  }
 
-  /* ===== ANNONCE DE PARTIE (examen uniquement) ===== */
-  if (ex.announce) {
+  /* =======================================================
+     🔊 ANNONCES
+     ======================================================= */
+
+  /* ===== ANNONCE PARTIE (EXAMEN SEULEMENT) ===== */
+  if (examMode && ex.announce) {
     await speak(ex.announce, 0.7);
   }
-if (
-  index > 0 &&
-  sequence[index - 1] &&
-  sequence[index - 1].cat === ex.cat
-) {
-  await speak("Exercice suivant", 0.9);
-}
 
-  /* ===== AFFICHAGE DE L’ENCHAÎNEMENT ===== */
+  /* ===== ANNONCE CATÉGORIE (ENTRAÎNEMENT LIBRE SEULEMENT) ===== */
+  if (
+    !examMode &&
+    (!run._lastCat || run._lastCat !== ex.cat)
+  ) {
+    run._lastCat = ex.cat;
+    await speak(CATEGORY_MAP[normCat], 0.8);
+  }
 
-if (
-  index === 0 ||
-  (sequence[index - 1] && sequence[index - 1].cat !== ex.cat)
-) {
-  await speak(ex.cat, 0.8);
-}
-
-/* ===== ENCHAÎNEMENT x2 ===== */
-await speak(ex.spoken || ex.display, 0.7);
-await speak(ex.spoken || ex.display, 0.7);
-
+  /* ===== ANNONCE ENCHAÎNEMENT ===== */
+  if (!ex._spokenOnce) {
+    ex._spokenOnce = true;
+    await speak(ex.spoken || ex.display, 0.7);
+    await speak(ex.spoken || ex.display, 0.7);
+  }
 
   /* ===== GARDE ===== */
   if (ex.garde) {
@@ -510,24 +501,26 @@ await speak(ex.spoken || ex.display, 0.7);
   /* ===== DÉMARRAGE ===== */
   await speak("Hajimé", 1);
 
+  /* =======================================================
+     ⏱ TIMER
+     ======================================================= */
+
   let t = ex.time;
   countdown.textContent = fmt(t);
 
   clearInterval(timer);
   timer = setInterval(() => {
-  if (paused || stopped) return;
+    if (paused || stopped) return;
 
-  t--;
-  workedSeconds++; // ✅ AJOUT ICI
-  countdown.textContent = fmt(t);
+    t--;
+    countdown.textContent = fmt(t);
 
-  if (t <= 0) {
-    clearInterval(timer);
-    index++;
-    run();
-  }
-}, 1000);
-
+    if (t <= 0) {
+      clearInterval(timer);
+      index++;
+      run();
+    }
+  }, 1000);
 }
 
 /* ===================== RÉCAP ===================== */
@@ -539,7 +532,14 @@ function showRecap(){
       <div class="recap-block">
         <strong>${r.title}</strong><br>
         <em>Durée : ${fmt(r.time)}</em>
-        <ul>${r.items.map(i=>`<li>${i}</li>`).join("")}</ul>
+        <ul>
+${r.items.map(i => `
+  <li>
+    <strong>${i.catLabel}</strong> : ${i.display}
+  </li>
+`).join("")}
+</ul>
+
       </div>`;
   });
   recap.classList.remove("hidden");
