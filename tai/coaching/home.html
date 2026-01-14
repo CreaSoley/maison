@@ -443,18 +443,29 @@ if (index >= sequence.length) {
   return;
 }
 
-
   const ex = sequence[index]; // ✅ TOUJOURS définir ex en premier
 
   /* ===== BACKGROUND ===== */
-  if (ex.cat && BG_MAP[ex.cat]) {
-    visual.className = BG_MAP[ex.cat];
-  }
+  const normCat = normalizeCat(ex.cat);
+if (normCat && BG_MAP[normCat]) {
+  visual.className = BG_MAP[normCat];
+}
+if (ex.categoryAnnouncement && !ex._catAnnounced) {
+  ex._catAnnounced = true;
+  await speak(ex.categoryAnnouncement, 0.8);
+}
 
   /* ===== ANNONCE DE PARTIE (examen uniquement) ===== */
   if (ex.announce) {
     await speak(ex.announce, 0.7);
   }
+if (
+  index > 0 &&
+  sequence[index - 1] &&
+  sequence[index - 1].cat === ex.cat
+) {
+  await speak("Exercice suivant", 0.9);
+}
 
   /* ===== AFFICHAGE DE L’ENCHAÎNEMENT ===== */
   if (ex.display) {
@@ -563,15 +574,17 @@ startBtn.onclick = async () => {
 
   /* ===== EXERCICE 2 – UNE PAR CATÉGORIE ===== */
   if (m === "2") {
-    Object.entries(DATA).forEach(([key, list]) => {
-      const item = list[Math.floor(Math.random() * list.length)];
-      sequence.push({
-        cat: key,
-        display: item.display,
-        spoken: item.spoken,
-        time: t
-      });
-    });
+Object.entries(DATA).forEach(([key, list]) => {
+  const item = list[Math.floor(Math.random() * list.length)];
+  sequence.push({
+    cat: key,
+    display: item.display,
+    spoken: item.spoken,
+    time: t,
+    categoryAnnouncement: key
+  });
+});
+
   }
 
   /* ===== EXERCICE 3 – CATÉGORIE CHOISIE ===== */
@@ -654,6 +667,18 @@ mode.onchange = () => {
 categorie.onchange = () => {
   shortText.textContent = CATEGORY_TEXTS[categorie.value] || "";
 };
+  mode.onchange = () => {
+  const exam = mode.value === "exam";
+
+  presentationBtn.classList.toggle("hidden", !exam);
+  startExamBtn.classList.toggle("hidden", !exam);
+  startBtn.classList.toggle("hidden", exam);
+
+  categorie.disabled = exam;
+  countInput.disabled = exam;
+  intervalInput.disabled = exam;
+};
+
 const EXPLANATIONS = {
   "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
   "2": "Exercice 2 : travail aléatoire sur trois types d’enchaînements.",
@@ -664,6 +689,15 @@ const EXPLANATIONS = {
 mode.onchange = () => {
   shortText.textContent = EXPLANATIONS[mode.value] || "";
 };
+// Forcer la mise à jour de l'UI au chargement
+mode.dispatchEvent(new Event("change"));
+function normalizeCat(cat){
+  if(cat === "Sur trois pas") return "3pas";
+  if(cat === "Sur place") return "surplace";
+  if(cat === "Multidirectionnel") return "multi";
+  if(cat === "Cibles") return "cibles";
+  return cat;
+}
 
 </script>
 
