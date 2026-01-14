@@ -298,7 +298,7 @@ async function loadData(){
   const res = await fetch("enchainements.json");
   DATA = await res.json();
 }
-loadData();
+
 /* ===================== ELEMENTS ===================== */
 const mode = document.getElementById("mode");
 const categorie = document.getElementById("categorie");
@@ -401,8 +401,9 @@ function buildExam(){
   }));
 
   // Partie 2 — Sur place
- const p2 = pickRandom("surplace", 1);
-  examRecapData.push({title:"Partie 2 – Enchaînements sur place", items:[p2.display], time:60});
+const p2 = pickRandom("surplace", 1)[0];
+examRecapData.push({title:"Partie 2 – Enchaînements sur place", items:[p2.display], time:60});
+
   seq.push({
   cat: "surplace",
   display: p2.display,
@@ -416,7 +417,7 @@ function buildExam(){
 
 
   // Partie 3 — Multidirectionnel
-  const p3 = pickRandom("multi", 1);
+  const p3 = pickRandom("multi", 1)[0];
   examRecapData.push({title:"Partie 3 – Multidirectionnel", items:[p3.display], time:90});
   seq.push({
   cat: "multi",
@@ -488,10 +489,7 @@ async function run() {
     trainingRecapData = [{
       title: "Entraînement libre",
       time: workedSeconds,
-      items: sequence.map(e => {
-  const cat = CATEGORY_MAP[e.cat] || e.cat;
-  return `${cat} – ${e.display || ""}`;
-})
+    items: sequence.map(e => `${CATEGORY_MAP[normalizeCat(e.cat)]} – ${e.display}`)
 
     }];
   }
@@ -510,7 +508,8 @@ if (ex.phases && !ex._phaseIndex) {
 
 
   /* ===== AFFICHAGE ===== */
-  text.textContent = ex.display;
+  text.textContent = ex.display || "";
+
 
   /* ===== BACKGROUND ===== */
   const normCat = normalizeCat(ex.cat);
@@ -601,11 +600,8 @@ function showRecap(){
         <strong>${r.title}</strong><br>
         <em>Durée : ${fmt(r.time)}</em>
         <ul>
-${r.items.map(i => `
-  <li>
-    <strong>${i.catLabel}</strong> : ${i.display}
-  </li>
-`).join("")}
+${r.items.map(i => `<li>${i}</li>`).join("")}
+
 </ul>
 
       </div>`;
@@ -773,6 +769,9 @@ const EXPLANATIONS = {
 
 mode.onchange = () => {
   const exam = mode.value === "exam";
+if (mode.value === "2") {
+  categorie.disabled = true;
+}
 
   /* ===== BOUTONS MODE EXAMEN ===== */
   presentationBtn.classList.toggle("hidden", !exam);
@@ -788,13 +787,6 @@ mode.onchange = () => {
   shortText.textContent = EXPLANATIONS[mode.value] || "";
 };
 
-mode.addEventListener("change", () => {
-  if (mode.value === "2") {
-    categorie.disabled = true;
-  } else if (mode.value !== "exam") {
-    categorie.disabled = false;
-  }
-});
 
 </script>
 
