@@ -572,7 +572,7 @@ await wait(5000);
 `;
 
     /* ----- ANNONCE DU KIHON ----- */
-    await speak(g.katakana, 0.7);   // japonais
+   await speakJP(g.jp_katakana, 0.7); // japonais
     await speak(g.fr, 1);           // français x1
    
 
@@ -994,6 +994,10 @@ mode.addEventListener("change", () => {
     categorie.disabled = false;
   }
 });
+function speakJP(text, rate = 0.7) {
+  const clean = text.replace(/\s+/g, "");
+  return speak(clean, rate, "ja-JP");
+}
 
 </script>
 
