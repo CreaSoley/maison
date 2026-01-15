@@ -201,6 +201,19 @@ select,input{
 }
 .hidden{display:none}
 
+  /* ===== GAMMES DISPLAY ===== */
+.gamme-romaji {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.gamme-fr {
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.95;
+}
+
 </style>
 </head>
 
@@ -542,7 +555,7 @@ await wait(5000);
 
   /* ===== RITUEL DE DÉBUT ===== */
   for (const word of ["Reï", "Yoï", "Kamaé"]) {
-    await speak(word, 0.7);
+    await speak(word, 0.65);
     await wait(1000);
     totalSeconds += 1;
   }
@@ -551,42 +564,40 @@ await wait(5000);
   for (const g of list) {
 
     // Affichage visuel
-    text.textContent = g.romaji;
-    shortText.textContent = g.fr;
+ console.log(g);
+
+    text.innerHTML = `
+  <div class="gamme-romaji">${g.romaji}</div>
+  <div class="gamme-fr">${g.fr}</div>
+`;
 
     /* ----- ANNONCE DU KIHON ----- */
     await speak(g.katakana, 0.7);   // japonais
-    await speak(g.fr, 1);           // français x2
-    await speak(g.fr, 1);
+    await speak(g.fr, 1);           // français x1
+   
 
     /* ----- COMPTAGE + MAWATE ----- */
     const countJP = ["Ichi", "Ni", "San", "Shi", "Go"];
 
-    // Premier passage
-    for (const n of countJP) {
-      await speak(n, 0.7);
-      await wait(COUNT_DELAY);
-totalSeconds += COUNT_SECONDS;
+     /* ----- PASSAGE ALLER + RETOUR ----- */
+   for (let round = 0; round < 2; round++) {
 
-    }
-
-    await speak("Mawate", 0.7);
+  for (const n of countJP) {
+    await speak(n, 0.7);
     await wait(COUNT_DELAY);
-totalSeconds += COUNT_SECONDS;
+    totalSeconds += COUNT_SECONDS;
+  }
 
+  await speak("Mawaté", 0.65);
+  await wait(COUNT_DELAY);
+  totalSeconds += COUNT_SECONDS;
+}
 
-    // Deuxième passage
-    for (const n of countJP) {
-      await speak(n, 0.7);
-      await wait(COUNT_DELAY);
-totalSeconds += COUNT_SECONDS;
-
-    }
   }
 
   /* ===== RITUEL DE FIN ===== */
   for (const word of ["Yamé", "Yassmé"]) {
-    await speak(word, 0.7);
+    await speak(word, 0.65);
     await wait(1000);
     totalSeconds += 1;
   }
@@ -955,6 +966,7 @@ const EXPLANATIONS = {
   "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
   "2": "Exercice 2 : travail aléatoire sur trois types d’enchaînements.",
   "3": "Exercice 3 : travail sur une catégorie choisie.",
+  "4": "Exercice 4 – Gammes : exercice destiné à perfectionner les kihon de base. Choisissez le nombre de techniques à travailler et le rythme.",
   "exam": "Mode examen blanc : conditions proches de l’examen officiel."
 };
 
