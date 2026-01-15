@@ -573,7 +573,6 @@ await wait(5000);
   for (const g of list) {
 
     // Affichage visuel
- console.log(g);
 
     text.innerHTML = `
   <div class="gamme-romaji">${g.romaji}</div>
@@ -581,7 +580,7 @@ await wait(5000);
 `;
 
     /* ----- ANNONCE DU KIHON ----- */
-   await speakJP(g.katakana, 0.7); // japonais
+   await speakJP(g.katakana, 0.50); // japonais
     await speak(g.fr, 1);           // français x1
    
 
