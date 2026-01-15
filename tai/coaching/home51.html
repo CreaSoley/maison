@@ -216,6 +216,7 @@ select,input{
     <option value="1">🎲 Exercice 1 – Aléatoire global</option>
     <option value="2">🎯 Exercice 2 – Par catégorie</option>
     <option value="3">📂 Exercice 3 – Catégorie choisie</option>
+    <option value="4">🎼 Exercice 4 – Gammes</option>
     <option value="exam">📝 Mode examen blanc</option>
   </select>
 
@@ -529,7 +530,51 @@ async function run() {
   }
 
   if (stopped) return;
+/* ===================== RUNGAMMES ===================== */
+async function runGammes(list){
 
+  // Rituel début
+  for (const word of ["Reï", "Yoï", "Kamaé"]) {
+    await speak(word, 0.7);
+    await wait(1000);
+  }
+
+  for (const g of list) {
+
+    // Affichage
+    text.textContent = g.romaji;
+    shortText.textContent = g.fr;
+
+    // Annonce kihon
+    await speak(g.katakana, 0.7);
+    await speak(g.fr, 1);
+    await speak(g.fr, 1);
+
+    // Comptage
+    for (let round = 0; round < 2; round++) {
+      for (const n of ["Ichi", "Ni", "San", "Shi", "Go"]) {
+        await speak(n, 0.7);
+        await wait(2000);
+      }
+      if (round === 0) {
+        await speak("Mawate", 0.7);
+      }
+    }
+  }
+
+  // Fin
+  for (const word of ["Yamé", "Yassmé"]) {
+    await speak(word, 0.7);
+    await wait(1000);
+  }
+
+  await speak("Fin de l'entraînement", 1);
+
+  buildGammesRecap(list);
+  showRecap();
+}
+
+  
   /* ===== FIN ===== */
   if (index >= sequence.length) {
 
@@ -638,6 +683,17 @@ if (examMode) {
       run();
     }
   }, 1000);
+}
+/* ===================== BUILDRÉCAPGAMMES ===================== */
+function buildGammesRecap(list){
+  trainingRecapData = [{
+    title: "Entraînement libre – Gammes",
+    time: list.length * 40, // approx
+    items: list.map(g => ({
+      catLabel: "Gamme",
+      display: `${g.romaji} – ${g.fr}`
+    }))
+  }];
 }
 
 /* ===================== RÉCAP ===================== */
@@ -757,7 +813,26 @@ if (m === "3") {
       time: t
     }));
 }
+ /* ===== EXERCICE 4 – GAMMES ===== */
 
+if (m === "4") {
+
+  if (!GAMMES.length) {
+    alert("Les gammes ne sont pas chargées.");
+    return;
+  }
+
+  sequence = [...GAMMES]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, qty)
+    .map(g => ({
+      exercise: "4",
+      katakana: g.jp_katakana,
+      romaji: g.jp_romaji,
+      fr: g.fr
+    }));
+}
+  
 run._started = false;
 
   await run();
