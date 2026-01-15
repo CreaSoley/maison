@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>🥋 Kihon Trainer 🌸</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --radius:22px;
+  --shadow:0 12px 25px rgba(255,120,180,.25);
+}
+
+/* ===== BASE ===== */
+body{
+  margin:0;
+  font-family:'Fredoka',sans-serif;
+  background:linear-gradient(180deg,#fff6fb,#ffeef6);
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+main{max-width:980px;width:100%}
+
+.card{
+  background:white;
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+h1{
+  text-align:center;
+  color:#ff1493;
+  margin-bottom:5px;
+}
+
+/* ===== FORM CONTROLS ===== */
+.controls{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
+}
+
+select,input{
+  padding:10px;
+  border-radius:14px;
+  border:2px solid #ffd6ec;
+  font-family:'Fredoka';
+}
+
+/* ===== BUTTON BAR ===== */
+.button-bar{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-top:10px;
+}
+
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  padding:14px;
+  font-size:.95rem;
+  font-weight:600;
+  border:none;
+  border-radius:16px;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 20px rgba(255,120,180,.35);
+  transition:.2s;
+}
+
+.btn:hover{transform:translateY(-2px)}
+.btn.active{animation:pulse 1.6s infinite}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}
+  70%{box-shadow:0 0 0 16px rgba(255,255,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
+}
+
+/* ===== BUTTON COLORS ===== */
+.btn-train{background:linear-gradient(135deg,#5f2c82,#9f5fff)}
+.btn-pause{background:linear-gradient(135deg,#6a3093,#a044ff)}
+.btn-stop{background:linear-gradient(135deg,#8e2de2,#ff416c)}
+.btn-present{background:linear-gradient(to top,#ff0844,#ffb199)}
+.btn-exam{background:linear-gradient(135deg,#ff7a18,#ffb347)}
+.btn-reset{background:linear-gradient(135deg,#f83600,#f9d423)}
+
+.hidden{display:none}
+
+/* ===== VISUAL CARD ===== */
+#visual{
+  position:relative;
+  min-height:200px;
+  border-radius:20px;
+  padding:20px;
+  color:white;
+  font-size:1.25rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+#countdown{
+  position:absolute;
+  top:12px;
+  right:12px;
+  font-size:1.8rem;
+  background:rgba(255,255,255,.25);
+  padding:6px 14px;
+  border-radius:16px;
+}
+
+/* ===== SHORT TEXTS ===== */
+#shortText{
+  margin-top:8px;
+  font-size:1rem;
+  text-align:center;
+  color:#333;
+}
+
+/* ===== BACKGROUNDS ===== */
+.bg-3pas{background:linear-gradient(to top,#30cfd0,#330867)}
+.bg-surplace{background:linear-gradient(to top,#888,#444)}
+.bg-multi{background:linear-gradient(to top,#f43b47,#453a94)}
+.bg-cibles{background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%)}
+
+/* ===== RECAP ===== */
+#recap{
+  margin-top:18px;
+  padding:16px;
+  border-radius:18px;
+  background-image:linear-gradient(15deg,#13547a 0%,#80d0c7 100%);
+  color:white;
+  box-shadow:var(--shadow);
+}
+
+#recap h3{margin-top:0}
+
+.recap-block{
+  background-image:linear-gradient(-225deg,#FFFEFF 0%,#D7FFFE 100%);
+  color:#444;
+  border-radius:14px;
+  padding:10px;
+  margin:8px 0;
+}
+
+.recap-block button{
+  width:100%;
+  padding:8px;
+  border:none;
+  border-radius:12px;
+  background:#ffffffaa;
+  font-family:'Fredoka';
+  cursor:pointer;
+}
+  /* ===== MODAL ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;            /* 🔴 IMPORTANT */
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.modal.show{
+  display:flex;            /* 🔴 ouverture contrôlée */
+}
+
+.modal-content{
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  border-radius:22px;
+  padding:22px;
+  max-width:420px;
+  width:90%;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
+  text-align:center;
+}
+
+.modal-content h2{
+  margin-top:0;
+}
+
+.modal-content ul{
+  text-align:left;
+  padding-left:18px;
+
+}
+.hidden{display:none}
+
+</style>
+</head>
+
+<body>
+<main>
+<div class="card">
+
+<h1>🥋 Kihon Trainer 🌸</h1>
+
+<!-- ===== MODES ===== -->
+<div class="controls">
+  <select id="mode">
+    <option value="1">🎲 Exercice 1 – Aléatoire global</option>
+    <option value="2">🎯 Exercice 2 – Par catégorie</option>
+    <option value="3">📂 Exercice 3 – Catégorie choisie</option>
+    <option value="exam">📝 Mode examen blanc</option>
+  </select>
+
+  <select id="categorie">
+    <option value="3pas">3 pas</option>
+    <option value="surplace">Sur place</option>
+    <option value="multi">Multidirectionnel</option>
+    <option value="cibles">Cibles</option>
+  </select>
+
+  <input type="number" id="count" min="1" value="3">
+  <input type="range" id="interval" min="30" max="240" value="60">
+  <span id="intervalVal">1m 00s</span>
+  <div id="shortText"></div>
+</div>
+
+<!-- ===== BUTTONS ===== -->
+<div class="button-bar">
+  <button id="start" class="btn btn-train">▶️ Lancer l’entraînement</button>
+  <button id="pause" class="btn btn-pause">⏸ Pause</button>
+  <button id="stop" class="btn btn-stop">⏹ Stop</button>
+  <button id="criteria" class="btn btn-present">📋 Critères d’évaluation</button>
+  <button id="presentationExam" class="btn btn-present hidden">📢 Présentation examen</button>
+  <button id="startExam" class="btn btn-exam hidden">📝 Lancer l’examen</button>
+  <button id="reset" class="btn btn-reset">🔄 Réinitialiser</button>
+</div>
+
+<!-- ===== VISUAL ===== -->
+<div id="visual" class="bg-3pas">
+  <div id="text">Prêt 🌸</div>
+  <div id="countdown"></div>
+</div>
+
+<!-- ===== RECAP ===== -->
+<div id="recap" class="hidden"></div>
+
+  <!-- ===== MODAL CRITÈRES D’ÉVALUATION ===== -->
+<div id="criteriaModal" class="modal">
+  <div class="modal-content">
+    <h2>📋 Critères d’évaluation</h2>
+    <ul>
+      <li>Posture stable et équilibrée</li>
+      <li>Trajectoires correctes</li>
+      <li>Précision et intention</li>
+      <li>Coordination</li>
+      <li>Respiration</li>
+    </ul>
+    <button id="closeCriteria" class="btn btn-reset">❌ Fermer</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+/* ===== DATA ===== */
+let DATA = {};
+
+const CATEGORY_MAP = {
+  "3pas": "Sur trois pas",
+  "surplace": "Sur place",
+  "multi": "Multidirectionnel",
+  "cibles": "Cibles"
+};
+
+const BG_MAP = {
+  "3pas":"bg-3pas",
+  "surplace":"bg-surplace",
+  "multi":"bg-multi",
+  "cibles":"bg-cibles"
+};
+function normalizeCat(cat){
+  if(cat === "Sur trois pas") return "3pas";
+  if(cat === "Sur place") return "surplace";
+  if(cat === "Multidirectionnel") return "multi";
+  if(cat === "Cibles") return "cibles";
+  return cat;
+}
+
+async function loadData(){
+  const res = await fetch("enchainements.json");
+  DATA = await res.json();
+}
+loadData();
+/* ===================== ELEMENTS ===================== */
+const mode = document.getElementById("mode");
+const categorie = document.getElementById("categorie");
+const countInput = document.getElementById("count");
+const intervalInput = document.getElementById("interval");
+const intervalVal = document.getElementById("intervalVal");
+const shortText = document.getElementById("shortText");
+
+const startBtn = document.getElementById("start");
+const pauseBtn = document.getElementById("pause");
+const stopBtn = document.getElementById("stop");
+const resetBtn = document.getElementById("reset");
+const presentationBtn = document.getElementById("presentationExam");
+const startExamBtn = document.getElementById("startExam");
+
+const visual = document.getElementById("visual");
+const text = document.getElementById("text");
+const countdown = document.getElementById("countdown");
+const recap = document.getElementById("recap");
+
+  /* ===================== FENETRE CRITERE ===================== */
+const criteriaBtn = document.getElementById("criteria");
+const criteriaModal = document.getElementById("criteriaModal");
+const closeCriteria = document.getElementById("closeCriteria");
+
+/* sécurité */
+if(criteriaBtn && criteriaModal && closeCriteria){
+
+  criteriaBtn.addEventListener("click", () => {
+    criteriaModal.classList.add("show");
+  });
+
+  closeCriteria.addEventListener("click", () => {
+    criteriaModal.classList.remove("show");
+  });
+
+}
+/* ===================== ÉTAT ===================== */
+let sequence = [];
+let index = 0;
+let timer = null;
+let paused = false;
+let stopped = false;
+let examMode = false;
+let workedSeconds = 0;
+let examRecapData = [];
+let trainingRecapData = [];
+
+window.onload = async () => { await loadData(); };
+
+/* ===================== UTILS ===================== */
+
+function speak(t,rate=1){
+  return new Promise(res=>{
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang="fr-FR"; u.rate=rate; u.onend=res;
+    speechSynthesis.speak(u);
+  });
+}
+const fmt=s=>`${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
+
+function setActive(btn){
+  document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+}
+
+intervalInput.oninput = () => { intervalVal.textContent = fmt(+intervalInput.value); };
+
+/* ===================== PICK RANDOM ===================== */
+function pickRandom(cat, n = 1){
+  const label = CATEGORY_MAP[cat];
+  const list = DATA[label] || [];
+
+  if (!list.length) return n === 1 ? null : [];
+
+  const shuffled = [...list].sort(() => Math.random() - 0.5);
+  return n === 1 ? shuffled[0] : shuffled.slice(0, n);
+}
+
+/* ===================== PRÉSENTATION EXAMEN ===================== */
+presentationBtn.onclick = async () => {
+  speechSynthesis.cancel();
+  await speak(
+    "Vous avez choisi le mode examen blanc. La séance comporte quatre parties. " +
+    "Première partie : enchaînement sur trois pas. Effectuez l’enchaînement annoncé sur trois pas, avec soit un demi-tour au terme de l’aller, soit en reculant ensuite. Vous disposez de quarante cinq secondes par enchaînement. " +
+    "Deuxième partie : enchaînement sur place. Sur place en position de combat, effectuez l’enchaînement annoncé. Le changement de garde sera annoncé. Vous disposez de trente secondes par côté. " +
+    "Troisième partie : enchaînement multidirectionnel. Vous allez travailler sur un enchaînement de techniques qui doit être exécuté dans les quatre directions cardinales, en garde gauche puis en garde droite, avec retour à la position initiale. Le changement de garde sera annoncé. Vous disposez de quarante-cinq secondes par côté. " +
+    "Quatrième partie : travail sur cibles. Cinq techniques vont êtes annoncées. Vous les réaliserez 3 fois chacune, garde de votre choix, avec retour à la position initiale après chaque exécution. Vous disposez de trente secondes par techniques" +
+    "La pause est autorisée.", 0.7
+  );
+};
+
+/* ===================== BUILD EXAM ===================== */
+function buildExam(){
+  const seq = [];
+  examRecapData.length = 0;
+
+  // Partie 1 — 3 pas
+  const p1 = pickRandom("3pas", 3);
+  examRecapData.push({title:"Partie 1 – Enchaînements sur 3 pas", items:p1.map(x=>x.display), time:135});
+  p1.forEach((ex,i)=>seq.push({
+    cat:"3pas", display:ex.display, spoken:ex.spoken, time:45,
+    announce:i===0?"Première partie : enchaînements sur trois pas":null
+  }));
+
+  // Partie 2 — Sur place
+ const p2 = pickRandom("surplace", 1);
+const ex2Id = crypto.randomUUID();
+
+examRecapData.push({
+  title:"Partie 2 – Enchaînements sur place",
+  items:[p2.display],
+  time:60
+});
+
+seq.push({
+  examGroup: ex2Id,
+  cat:"surplace",
+  display:p2.display,
+  spoken:p2.spoken,
+  garde:"gauche",
+  time:30,
+  announce:"Deuxième partie : enchaînements sur place"
+});
+
+seq.push({
+  examGroup: ex2Id,
+  cat:"surplace",
+  display:p2.display,
+  spoken:p2.spoken,
+  garde:"droite",
+  time:30
+});
+
+
+  // Partie 3 — Multidirectionnel
+ const p3 = pickRandom("multi", 1);
+const ex3Id = crypto.randomUUID();
+
+examRecapData.push({
+  title:"Partie 3 – Multidirectionnel",
+  items:[p3.display],
+  time:90
+});
+
+seq.push({
+  examGroup: ex3Id,
+  cat:"multi",
+  display:p3.display,
+  spoken:p3.spoken,
+  garde:"gauche",
+  time:45,
+  announce:"Troisième partie : multidirectionnel"
+});
+
+seq.push({
+  examGroup: ex3Id,
+  cat:"multi",
+  display:p3.display,
+  spoken:p3.spoken,
+  garde:"droite",
+  time:45
+});
+
+
+  // Partie 4 — Cibles (5 enchaînements)
+const p4 = pickRandom("cibles", 5);
+
+examRecapData.push({
+  title: "Partie 4 – Travail sur cibles",
+  items: p4.map(x => x.display),
+  time: 150
+});
+
+p4.forEach((ex, i) => {
+  seq.push({
+    cat: "cibles",
+    display: ex.display,
+    spoken: ex.spoken,
+    time: 30,
+    announce: i === 0 ? "Quatrième partie : travail sur cibles" : null
+  });
+});
+
+
+  return seq;
+}
+
+/* ===================== RUN ===================== */
+async function run() {
+
+  /* ===== LATENCE DE DÉMARRAGE (5s) ===== */
+  if (index === 0 && !run._started) {
+    run._started = true;
+
+    await speak("Préparez-vous", 0.9);
+
+    let prep = 5;
+    countdown.textContent = "5s";
+
+    await new Promise(resolve => {
+      const prepTimer = setInterval(() => {
+        prep--;
+        countdown.textContent = prep + "s";
+        if (prep <= 0) {
+          clearInterval(prepTimer);
+          resolve();
+        }
+      }, 1000);
+    });
+  }
+
+  if (stopped) return;
+
+  /* ===== FIN ===== */
+  if (index >= sequence.length) {
+
+  await speak(examMode ? "Fin de l'examen" : "Fin de l'entraînement", 1);
+
+  if (!examMode) {
+    trainingRecapData = [{
+      title: "Entraînement libre",
+      time: workedSeconds,
+      items: sequence.map(e => `${CATEGORY_MAP[normalizeCat(e.cat)]} – ${e.display}`)
+    }];
+  }
+
+  showRecap();
+  return;
+}
+
+
+  const ex = sequence[index];
+
+  /* ===== AFFICHAGE ===== */
+  text.textContent = ex.display;
+
+  /* ===== BACKGROUND ===== */
+  const normCat = normalizeCat(ex.cat);
+  if (BG_MAP[normCat]) {
+    visual.className = BG_MAP[normCat];
+  }
+
+  /* =======================================================
+     🔊 ANNONCES
+     ======================================================= */
+
+  /* ===== ANNONCE PARTIE (EXAMEN SEULEMENT) ===== */
+  if (examMode && ex.announce) {
+    await speak(ex.announce, 0.7);
+  }
+
+  /* ===== ANNONCE CATÉGORIE (ENTRAÎNEMENT LIBRE SEULEMENT) ===== */
+ /* ===== ANNONCE DE L’ENCHAÎNEMENT ===== */
+
+if (examMode) {
+
+  // Cas mutualisé (exercices 2 & 3)
+  if (ex.examGroup) {
+    run._spokenGroups ??= new Set();
+
+    if (!run._spokenGroups.has(ex.examGroup)) {
+      run._spokenGroups.add(ex.examGroup);
+      await speak(ex.spoken || ex.display, 0.7);
+      await speak(ex.spoken || ex.display, 0.7);
+    }
+  }
+
+  // Cas normal (parties 1 et 4)
+  else {
+    await speak(ex.spoken || ex.display, 0.7);
+    await speak(ex.spoken || ex.display, 0.7);
+  }
+
+} else {
+  // Entraînement libre (comportement inchangé)
+  if (!ex._spokenOnce) {
+    ex._spokenOnce = true;
+    await speak(ex.spoken || ex.display, 0.7);
+    await speak(ex.spoken || ex.display, 0.7);
+  }
+}
+
+
+  /* ===== GARDE ===== */
+  if (ex.garde) {
+    await speak("Garde à " + ex.garde, 1);
+  }
+
+  /* ===== DÉMARRAGE ===== */
+  await speak("Hajimé", 1);
+
+  /* =======================================================
+     ⏱ TIMER
+     ======================================================= */
+
+  let t = ex.time;
+  countdown.textContent = fmt(t);
+
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (paused || stopped) return;
+
+    t--;
+    countdown.textContent = fmt(t);
+
+    if (t <= 0) {
+      clearInterval(timer);
+      index++;
+      run();
+    }
+  }, 1000);
+}
+
+/* ===================== RÉCAP ===================== */
+function showRecap(){
+  recap.innerHTML = "<h3>📄 Récapitulatif</h3>";
+  const source = examMode ? examRecapData : trainingRecapData;
+  source.forEach(r=>{
+    recap.innerHTML += `
+      <div class="recap-block">
+        <strong>${r.title}</strong><br>
+        <em>Durée : ${fmt(r.time)}</em>
+        <ul>
+${r.items.map(i => `
+  <li>
+    <strong>${i.catLabel}</strong> : ${i.display}
+  </li>
+`).join("")}
+</ul>
+
+      </div>`;
+  });
+  recap.classList.remove("hidden");
+}
+
+/* ===================== EVENTS ===================== */
+
+/* ===== LANCER MODE EXAMEN ===== */
+startExamBtn.onclick = async () => {
+  examMode = true;
+  stopped = false;
+  paused = false;
+  workedSeconds = 0;
+  index = 0;
+
+  recap.classList.add("hidden");
+  setActive(startExamBtn);
+
+  sequence = buildExam();
+  run._started = false;
+
+  await run();
+};
+
+/* ===== LANCER ENTRAÎNEMENT LIBRE ===== */
+startBtn.onclick = async () => {
+  examMode = false;
+  stopped = false;
+  paused = false;
+  workedSeconds = 0;
+  index = 0;
+  sequence = [];
+
+  recap.classList.add("hidden");
+  setActive(startBtn);
+
+  const m = mode.value;
+  const cat = categorie.value;
+  const qty = +countInput.value;
+  const t = +intervalInput.value;
+
+  // Sécurité : données chargées ?
+  if (!DATA || Object.keys(DATA).length === 0) {
+    alert("Les données ne sont pas encore chargées.");
+    return;
+  }
+
+  /* ===== EXERCICE 1 – ALÉATOIRE GLOBAL ===== */
+  if (m === "1") {
+    Object.entries(DATA).forEach(([key, list]) => {
+      list.forEach(item => {
+        sequence.push({
+          cat: key,
+          display: item.display,
+          spoken: item.spoken,
+          time: t
+        });
+      });
+    });
+
+    sequence = sequence.sort(() => Math.random() - 0.5).slice(0, qty);
+  }
+
+  /* ===== EXERCICE 2 – UNE PAR CATÉGORIE ===== */
+  if (m === "2") {
+Object.entries(DATA).forEach(([key, list]) => {
+  const item = list[Math.floor(Math.random() * list.length)];
+  sequence.push({
+    cat: key,
+    display: item.display,
+    spoken: item.spoken,
+    time: t,
+    categoryAnnouncement: key
+  });
+});
+
+  }
+
+/* ===== EXERCICE 3 – CATÉGORIE CHOISIE ===== */
+if (m === "3") {
+  const realCat = CATEGORY_MAP[cat];
+
+  if (!DATA[realCat]) {
+    alert("Catégorie inexistante.");
+    return;
+  }
+
+  sequence = [...DATA[realCat]]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, qty)
+    .map(item => ({
+      cat: cat,
+      display: item.display,
+      spoken: item.spoken,
+      time: t
+    }));
+}
+
+run._started = false;
+
+  await run();
+};
+
+/* ===== PAUSE ===== */
+pauseBtn.onclick = () => {
+  paused = !paused;
+  pauseBtn.textContent = paused ? "▶️ Reprendre" : "⏸ Pause";
+  setActive(paused ? pauseBtn : null);
+};
+
+/* ===== STOP ===== */
+stopBtn.onclick = () => {
+  stopped = true;
+  paused = false;
+
+  clearInterval(timer);
+  speechSynthesis.cancel();
+
+  text.textContent = "Séance arrêtée";
+  countdown.textContent = "";
+
+  setActive(stopBtn);
+};
+mode.dispatchEvent(new Event("change"));
+
+/* ===== RESET ===== */
+resetBtn.onclick = () => {
+  stopped = true;
+  paused = false;
+
+  clearInterval(timer);
+  speechSynthesis.cancel();
+
+  index = 0;
+  sequence = [];
+
+  text.textContent = "Prêt 🌸";
+  countdown.textContent = "";
+  recap.innerHTML = "";
+  recap.classList.add("hidden");
+
+  setActive(null);
+};
+  const EXERCISE_TEXTS = {
+  "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
+  "2": "Exercice 2 : travail aléatoire sur trois techniques : trois pas, sur place et multidirectionnel.",
+  "3": "Exercice 3 : travail sur la catégorie de votre choix."
+};
+
+const CATEGORY_TEXTS = {
+  "3pas": "Sur trois pas : effectuez l’enchaînement annoncé sur trois pas, avec demi-tour ou recul.",
+  "surplace": "Sur place : en position de combat, effectuez l’enchaînement annoncé.",
+  "multi": "Multidirectionnel : travaillez dans les quatre directions cardinales, garde gauche puis droite.",
+  "cibles": "Cibles : effectuez la technique annoncée avec la garde de votre choix."
+};
+
+const EXPLANATIONS = {
+  "1": "Exercice 1 : travail sur un ensemble de techniques choisies aléatoirement.",
+  "2": "Exercice 2 : travail aléatoire sur trois types d’enchaînements.",
+  "3": "Exercice 3 : travail sur une catégorie choisie.",
+  "exam": "Mode examen blanc : conditions proches de l’examen officiel."
+};
+
+mode.onchange = () => {
+  const exam = mode.value === "exam";
+
+  /* ===== BOUTONS MODE EXAMEN ===== */
+  presentationBtn.classList.toggle("hidden", !exam);
+  startExamBtn.classList.toggle("hidden", !exam);
+  startBtn.classList.toggle("hidden", exam);
+
+  /* ===== DÉSACTIVATION DES CHAMPS ===== */
+  categorie.disabled = exam;
+  countInput.disabled = exam;
+  intervalInput.disabled = exam;
+
+  /* ===== TEXTE COURT ===== */
+  shortText.textContent = EXPLANATIONS[mode.value] || "";
+};
+
+mode.addEventListener("change", () => {
+  if (mode.value === "2") {
+    categorie.disabled = true;
+  } else if (mode.value !== "exam") {
+    categorie.disabled = false;
+  }
+});
+
+</script>
+
+</body>
+</html>
