@@ -273,6 +273,8 @@ select,input{
 <script>
 /* ===== DATA ===== */
 let DATA = {};
+let GAMMES = [];
+
 
 const CATEGORY_MAP = {
   "3pas": "Sur trois pas",
@@ -300,6 +302,12 @@ async function loadData(){
   DATA = await res.json();
 }
 loadData();
+
+  async function loadGammes(){
+  const res = await fetch("gammes.json");
+  GAMMES = await res.json();
+}
+
 /* ===================== ELEMENTS ===================== */
 const mode = document.getElementById("mode");
 const categorie = document.getElementById("categorie");
@@ -348,9 +356,13 @@ let workedSeconds = 0;
 let examRecapData = [];
 let trainingRecapData = [];
 
-window.onload = async () => { await loadData(); };
+window.onload = async () => {
+  await loadData();
+  await loadGammes();
+};
 
 /* ===================== UTILS ===================== */
+const wait = ms => new Promise(res => setTimeout(res, ms));
 
 function speak(t,rate=1){
   return new Promise(res=>{
@@ -504,9 +516,86 @@ p4.forEach((ex, i) => {
 
   return seq;
 }
+/* ===================== RUNGAMMES ===================== */
+async function runGammes(list) {
 
+  // Sécurité
+  if (!Array.isArray(list) || !list.length) return;
+
+  let totalSeconds = 0;
+
+  /* ===== RITUEL DE DÉBUT ===== */
+  for (const word of ["Reï", "Yoï", "Kamaé"]) {
+    await speak(word, 0.7);
+    await wait(1000);
+    totalSeconds += 1;
+  }
+
+  /* ===== BOUCLE SUR LES KIHON ===== */
+  for (const g of list) {
+
+    // Affichage visuel
+    text.textContent = g.romaji;
+    shortText.textContent = g.fr;
+
+    /* ----- ANNONCE DU KIHON ----- */
+    await speak(g.katakana, 0.7);   // japonais
+    await speak(g.fr, 1);           // français x2
+    await speak(g.fr, 1);
+
+    /* ----- COMPTAGE + MAWATE ----- */
+    const countJP = ["Ichi", "Ni", "San", "Shi", "Go"];
+
+    // Premier passage
+    for (const n of countJP) {
+      await speak(n, 0.7);
+      await wait(2000);
+      totalSeconds += 2;
+    }
+
+    await speak("Mawate", 0.7);
+    await wait(2000);
+    totalSeconds += 2;
+
+    // Deuxième passage
+    for (const n of countJP) {
+      await speak(n, 0.7);
+      await wait(2000);
+      totalSeconds += 2;
+    }
+  }
+
+  /* ===== RITUEL DE FIN ===== */
+  for (const word of ["Yamé", "Yassmé"]) {
+    await speak(word, 0.7);
+    await wait(1000);
+    totalSeconds += 1;
+  }
+
+  await speak("Fin de l'entraînement", 1);
+
+  /* ===== RÉCAP GAMMES ===== */
+  trainingRecapData = [{
+    title: "Entraînement libre – Gammes",
+    time: totalSeconds,
+    items: list.map(g => ({
+      catLabel: "Gamme",
+      display: `${g.romaji} – ${g.fr}`
+    }))
+  }];
+
+  showRecap();
+}
+
+  
 /* ===================== RUN ===================== */
 async function run() {
+  
+  // ===== EXERCICE 4 – GAMMES =====
+  if (!examMode && sequence[0]?.exercise === "4") {
+    await runGammes(sequence);
+    return;
+  }
 
   /* ===== LATENCE DE DÉMARRAGE (5s) ===== */
   if (index === 0 && !run._started) {
@@ -530,51 +619,7 @@ async function run() {
   }
 
   if (stopped) return;
-/* ===================== RUNGAMMES ===================== */
-async function runGammes(list){
 
-  // Rituel début
-  for (const word of ["Reï", "Yoï", "Kamaé"]) {
-    await speak(word, 0.7);
-    await wait(1000);
-  }
-
-  for (const g of list) {
-
-    // Affichage
-    text.textContent = g.romaji;
-    shortText.textContent = g.fr;
-
-    // Annonce kihon
-    await speak(g.katakana, 0.7);
-    await speak(g.fr, 1);
-    await speak(g.fr, 1);
-
-    // Comptage
-    for (let round = 0; round < 2; round++) {
-      for (const n of ["Ichi", "Ni", "San", "Shi", "Go"]) {
-        await speak(n, 0.7);
-        await wait(2000);
-      }
-      if (round === 0) {
-        await speak("Mawate", 0.7);
-      }
-    }
-  }
-
-  // Fin
-  for (const word of ["Yamé", "Yassmé"]) {
-    await speak(word, 0.7);
-    await wait(1000);
-  }
-
-  await speak("Fin de l'entraînement", 1);
-
-  buildGammesRecap(list);
-  showRecap();
-}
-
-  
   /* ===== FIN ===== */
   if (index >= sequence.length) {
 
@@ -595,8 +640,6 @@ async function runGammes(list){
   showRecap();
   return;
 }
-
-
   const ex = sequence[index];
 
   /* ===== AFFICHAGE ===== */
