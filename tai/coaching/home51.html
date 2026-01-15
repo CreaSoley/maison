@@ -412,69 +412,69 @@ function buildExam(){
     announce:i===0?"Première partie : enchaînements sur trois pas":null
   }));
 
-  // Partie 2 — Sur place
- const p2 = pickRandom("surplace", 1);
+// Partie 2 — Sur place
+const p2 = pickRandom("surplace", 1);
 const ex2Id = crypto.randomUUID();
 
 examRecapData.push({
   title: "Partie 2 – Enchaînements sur place",
   time: 60,
-  items: p2.map(x => ({
+  items: [{
     catLabel: "Sur place",
-    display: x.display
-  }))
-});
-seq.push({
-  examGroup: ex2Id,
-  cat:"surplace",
-  display:p2.display,
-  spoken:p2.spoken,
-  garde:"gauche",
-  time:30,
-  announce:"Deuxième partie : enchaînements sur place"
+    display: p2.display
+  }]
 });
 
 seq.push({
   examGroup: ex2Id,
-  cat:"surplace",
-  display:p2.display,
-  spoken:p2.spoken,
-  garde:"droite",
-  time:30
+  cat: "surplace",
+  display: p2.display,
+  spoken: p2.spoken,
+  garde: "gauche",
+  time: 30,
+  announce: "Deuxième partie : enchaînements sur place"
+});
+
+seq.push({
+  examGroup: ex2Id,
+  cat: "surplace",
+  display: p2.display,
+  spoken: p2.spoken,
+  garde: "droite",
+  time: 30
 });
 
 
-  // Partie 3 — Multidirectionnel
- const p3 = pickRandom("multi", 1);
+// Partie 3 — Multidirectionnel
+const p3 = pickRandom("multi", 1);
 const ex3Id = crypto.randomUUID();
 
 examRecapData.push({
   title: "Partie 3 – Multidirectionnel",
   time: 90,
-  items: p3.map(x => ({
+  items: [{
     catLabel: "Multidirectionnel",
-    display: x.display
-  }))
-});
-
-
-seq.push({
-  examGroup: ex3Id,
-  cat:"multi",
-  display:p3.display,
-  spoken:p3.spoken,
-  garde:"gauche",
-  time:45,
-  announce:"Troisième partie : multidirectionnel"
+    display: p3.display
+  }]
 });
 
 seq.push({
   examGroup: ex3Id,
-  cat:"multi",
-  display:p3.display,
-  spoken:p3.spoken,
-  garde:"droite",
-  time:45
+  cat: "multi",
+  display: p3.display,
+  spoken: p3.spoken,
+  garde: "gauche",
+  time: 45,
+  announce: "Troisième partie : multidirectionnel"
+});
+
+seq.push({
+  examGroup: ex3Id,
+  cat: "multi",
+  display: p3.display,
+  spoken: p3.spoken,
+  garde: "droite",
+  time: 45
 });
 
 
