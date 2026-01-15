@@ -233,6 +233,14 @@ select,input{
   <div id="shortText"></div>
 </div>
 
+  <label>
+  Rythme :
+  <select id="speedMode">
+    <option value="slow">Lent</option>
+    <option value="fast">Rapide</option>
+  </select>
+</label>
+
 <!-- ===== BUTTONS ===== -->
 <div class="button-bar">
   <button id="start" class="btn btn-train">▶️ Lancer l’entraînement</button>
@@ -518,15 +526,23 @@ p4.forEach((ex, i) => {
 }
 /* ===================== RUNGAMMES ===================== */
 async function runGammes(list) {
+const speedMode = list[0].speed || "slow";
+const COUNT_DELAY = speedMode === "fast" ? 1000 : 2000;
+const COUNT_SECONDS = COUNT_DELAY / 1000;
+
 
   // Sécurité
   if (!Array.isArray(list) || !list.length) return;
+
+  /* ===== INTRO COMMUNE ===== */
+await speak("Préparez-vous", 1);
+await wait(5000);
 
   let totalSeconds = 0;
 
   /* ===== RITUEL DE DÉBUT ===== */
   for (const word of ["Reï", "Yoï", "Kamaé"]) {
-    await speak(word, 0.7);
+    await speak(word, 0.65);
     await wait(1000);
     totalSeconds += 1;
   }
@@ -540,34 +556,31 @@ async function runGammes(list) {
 
     /* ----- ANNONCE DU KIHON ----- */
     await speak(g.katakana, 0.7);   // japonais
-    await speak(g.fr, 1);           // français x2
-    await speak(g.fr, 1);
+    await speak(g.fr, 1);           // français x1
+   
 
     /* ----- COMPTAGE + MAWATE ----- */
     const countJP = ["Ichi", "Ni", "San", "Shi", "Go"];
 
-    // Premier passage
-    for (const n of countJP) {
-      await speak(n, 0.7);
-      await wait(2000);
-      totalSeconds += 2;
-    }
+     /* ----- PASSAGE ALLER + RETOUR ----- */
+   for (let round = 0; round < 2; round++) {
 
-    await speak("Mawate", 0.7);
-    await wait(2000);
-    totalSeconds += 2;
+  for (const n of countJP) {
+    await speak(n, 0.7);
+    await wait(COUNT_DELAY);
+    totalSeconds += COUNT_SECONDS;
+  }
 
-    // Deuxième passage
-    for (const n of countJP) {
-      await speak(n, 0.7);
-      await wait(2000);
-      totalSeconds += 2;
-    }
+  await speak("Mawaté", 0.65);
+  await wait(COUNT_DELAY);
+  totalSeconds += COUNT_SECONDS;
+}
+
   }
 
   /* ===== RITUEL DE FIN ===== */
   for (const word of ["Yamé", "Yassmé"]) {
-    await speak(word, 0.7);
+    await speak(word, 0.65);
     await wait(1000);
     totalSeconds += 1;
   }
@@ -860,10 +873,7 @@ if (m === "3") {
 
 if (m === "4") {
 
-  if (!GAMMES.length) {
-    alert("Les gammes ne sont pas chargées.");
-    return;
-  }
+  const speed = document.getElementById("speedMode").value;
 
   sequence = [...GAMMES]
     .sort(() => Math.random() - 0.5)
@@ -872,7 +882,8 @@ if (m === "4") {
       exercise: "4",
       katakana: g.jp_katakana,
       romaji: g.jp_romaji,
-      fr: g.fr
+      fr: g.fr,
+      speed   // ⬅️ STOCKÉ ICI
     }));
 }
   
