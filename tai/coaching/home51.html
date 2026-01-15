@@ -401,6 +401,11 @@ function setActive(btn){
 
 intervalInput.oninput = () => { intervalVal.textContent = fmt(+intervalInput.value); };
 
+  function speakJP(text, rate = 0.7) {
+  const clean = text.replace(/\s+/g, "");
+  return speak(clean, rate, "ja-JP");
+}
+
 /* ===================== PICK RANDOM ===================== */
 function pickRandom(cat, n = 1){
   const label = CATEGORY_MAP[cat];
@@ -994,10 +999,6 @@ mode.addEventListener("change", () => {
     categorie.disabled = false;
   }
 });
-function speakJP(text, rate = 0.7) {
-  const clean = text.replace(/\s+/g, "");
-  return speak(clean, rate, "ja-JP");
-}
 
 </script>
 
