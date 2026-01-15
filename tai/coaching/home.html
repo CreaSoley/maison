@@ -233,6 +233,14 @@ select,input{
   <div id="shortText"></div>
 </div>
 
+  <label>
+  Rythme :
+  <select id="speedMode">
+    <option value="slow">Lent</option>
+    <option value="fast">Rapide</option>
+  </select>
+</label>
+
 <!-- ===== BUTTONS ===== -->
 <div class="button-bar">
   <button id="start" class="btn btn-train">▶️ Lancer l’entraînement</button>
@@ -518,9 +526,16 @@ p4.forEach((ex, i) => {
 }
 /* ===================== RUNGAMMES ===================== */
 async function runGammes(list) {
+const speedMode = list[0].speed || "slow";
+
+const COUNT_DELAY = speedMode === "fast" ? 1000 : 2000;
 
   // Sécurité
   if (!Array.isArray(list) || !list.length) return;
+
+  /* ===== INTRO COMMUNE ===== */
+await speak("Préparez-vous", 1);
+await wait(5000);
 
   let totalSeconds = 0;
 
