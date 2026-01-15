@@ -537,10 +537,14 @@ async function run() {
 
   if (!examMode) {
     trainingRecapData = [{
-      title: "Entraînement libre",
-      time: workedSeconds,
-      items: sequence.map(e => `${CATEGORY_MAP[normalizeCat(e.cat)]} – ${e.display}`)
-    }];
+  title: "Entraînement libre",
+  time: workedSeconds,
+  items: sequence.map(e => ({
+    catLabel: CATEGORY_MAP[normalizeCat(e.cat)],
+    display: e.display
+  }))
+}];
+
   }
 
   showRecap();
@@ -620,8 +624,9 @@ if (examMode) {
     if (paused || stopped) return;
 
     t--;
+     workedSeconds++;   // 👈 AJOUT ICI
     countdown.textContent = fmt(t);
-
+    
     if (t <= 0) {
       clearInterval(timer);
       index++;
