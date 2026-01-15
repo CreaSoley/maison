@@ -566,6 +566,11 @@ async function run() {
   /* =======================================================
      🔊 ANNONCES
      ======================================================= */
+/* ===== ANNONCE CATÉGORIE (ENTRAÎNEMENT LIBRE – EX 1 & 2) ===== */
+if (!examMode && (ex.exercise === "1" || ex.exercise === "2")) {
+  const normCat = normalizeCat(ex.cat);
+  await speak(CATEGORY_MAP[normCat], 0.8);
+}
 
   /* ===== ANNONCE PARTIE (EXAMEN SEULEMENT) ===== */
   if (examMode && ex.announce) {
@@ -573,7 +578,7 @@ async function run() {
   }
 
   /* ===== ANNONCE CATÉGORIE (ENTRAÎNEMENT LIBRE SEULEMENT) ===== */
- /* ===== ANNONCE DE L’ENCHAÎNEMENT ===== */
+
 
 if (examMode) {
 
@@ -704,11 +709,13 @@ startBtn.onclick = async () => {
     Object.entries(DATA).forEach(([key, list]) => {
       list.forEach(item => {
         sequence.push({
-          cat: key,
-          display: item.display,
-          spoken: item.spoken,
-          time: t
-        });
+  exercise: "1",
+  cat: key,
+  display: item.display,
+  spoken: item.spoken,
+  time: t
+});
+
       });
     });
 
@@ -720,12 +727,13 @@ startBtn.onclick = async () => {
 Object.entries(DATA).forEach(([key, list]) => {
   const item = list[Math.floor(Math.random() * list.length)];
   sequence.push({
-    cat: key,
-    display: item.display,
-    spoken: item.spoken,
-    time: t,
-    categoryAnnouncement: key
-  });
+  exercise: "2",
+  cat: key,
+  display: item.display,
+  spoken: item.spoken,
+  time: t
+});
+
 });
 
   }
