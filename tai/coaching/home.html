@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -398,33 +399,98 @@ function buildExam(){
 
   // Partie 1 — 3 pas
   const p1 = pickRandom("3pas", 3);
-  examRecapData.push({title:"Partie 1 – Enchaînements sur 3 pas", items:p1.map(x=>x.display), time:135});
+  examRecapData.push({
+  title: "Partie 1 – Enchaînements sur 3 pas",
+  time: 135,
+  items: p1.map(x => ({
+    catLabel: "Sur trois pas",
+    display: x.display
+  }))
+});
+
   p1.forEach((ex,i)=>seq.push({
     cat:"3pas", display:ex.display, spoken:ex.spoken, time:45,
     announce:i===0?"Première partie : enchaînements sur trois pas":null
   }));
 
-  // Partie 2 — Sur place
- const p2 = pickRandom("surplace", 1);
-  examRecapData.push({title:"Partie 2 – Enchaînements sur place", items:[p2.display], time:60});
-  seq.push({cat:"surplace", display:p2.display, spoken:p2.spoken, garde:"gauche", time:30, announce:"Deuxième partie : enchaînements sur place"});
-  seq.push({cat:"surplace", display:p2.display, spoken:p2.spoken, garde:"droite", time:30});
+// Partie 2 — Sur place
+const p2 = pickRandom("surplace", 1);
+const ex2Id = crypto.randomUUID();
 
-  // Partie 3 — Multidirectionnel
-  const p3 = pickRandom("multi", 1);
-  examRecapData.push({title:"Partie 3 – Multidirectionnel", items:[p3.display], time:90});
-  seq.push({cat:"multi", display:p3.display, spoken:p3.spoken, garde:"gauche", time:45, announce:"Troisième partie : multidirectionnel"});
-  seq.push({cat:"multi", display:p3.display, spoken:p3.spoken, garde:"droite", time:45});
+examRecapData.push({
+  title: "Partie 2 – Enchaînements sur place",
+  time: 60,
+  items: [{
+    catLabel: "Sur place",
+    display: p2.display
+  }]
+});
+
+seq.push({
+  examGroup: ex2Id,
+  cat: "surplace",
+  display: p2.display,
+  spoken: p2.spoken,
+  garde: "gauche",
+  time: 30,
+  announce: "Deuxième partie : enchaînements sur place"
+});
+
+seq.push({
+  examGroup: ex2Id,
+  cat: "surplace",
+  display: p2.display,
+  spoken: p2.spoken,
+  garde: "droite",
+  time: 30
+});
+
+
+// Partie 3 — Multidirectionnel
+const p3 = pickRandom("multi", 1);
+const ex3Id = crypto.randomUUID();
+
+examRecapData.push({
+  title: "Partie 3 – Multidirectionnel",
+  time: 90,
+  items: [{
+    catLabel: "Multidirectionnel",
+    display: p3.display
+  }]
+});
+
+seq.push({
+  examGroup: ex3Id,
+  cat: "multi",
+  display: p3.display,
+  spoken: p3.spoken,
+  garde: "gauche",
+  time: 45,
+  announce: "Troisième partie : multidirectionnel"
+});
+
+seq.push({
+  examGroup: ex3Id,
+  cat: "multi",
+  display: p3.display,
+  spoken: p3.spoken,
+  garde: "droite",
+  time: 45
+});
+
 
   // Partie 4 — Cibles (5 enchaînements)
 const p4 = pickRandom("cibles", 5);
 
 examRecapData.push({
   title: "Partie 4 – Travail sur cibles",
-  items: p4.map(x => x.display),
-  time: 150
+  time: 150,
+  items: p4.map(x => ({
+    catLabel: "Cibles",
+    display: x.display
+  }))
 });
-
+  
 p4.forEach((ex, i) => {
   seq.push({
     cat: "cibles",
@@ -472,10 +538,14 @@ async function run() {
 
   if (!examMode) {
     trainingRecapData = [{
-      title: "Entraînement libre",
-      time: workedSeconds,
-      items: sequence.map(e => `${CATEGORY_MAP[normalizeCat(e.cat)]} – ${e.display}`)
-    }];
+  title: "Entraînement libre",
+  time: workedSeconds,
+  items: sequence.map(e => ({
+    catLabel: CATEGORY_MAP[normalizeCat(e.cat)],
+    display: e.display
+  }))
+}];
+
   }
 
   showRecap();
@@ -504,21 +574,34 @@ async function run() {
   }
 
   /* ===== ANNONCE CATÉGORIE (ENTRAÎNEMENT LIBRE SEULEMENT) ===== */
-  if (
-    !examMode &&
-    (!run._lastCat || run._lastCat !== ex.cat)
-  ) {
-    run._lastCat = ex.cat;
-    await speak(CATEGORY_MAP[normCat], 0.8);
+ /* ===== ANNONCE DE L’ENCHAÎNEMENT ===== */
+
+if (examMode) {
+
+  // Cas mutualisé (exercices 2 & 3)
+  if (ex.examGroup) {
+    run._spokenGroups ??= new Set();
+
+    if (!run._spokenGroups.has(ex.examGroup)) {
+      run._spokenGroups.add(ex.examGroup);
+      await speak(ex.spoken || ex.display, 0.7);
+      await speak(ex.spoken || ex.display, 0.7);
+    }
   }
 
-  if (!ex._spokenOnce) {
-  ex._spokenOnce = true;
+  // Cas normal (parties 1 et 4)
+  else {
+    await speak(ex.spoken || ex.display, 0.7);
+    await speak(ex.spoken || ex.display, 0.7);
+  }
 
-  // En examen : une seule annonce de l’enchaînement (au début)
-  // En entraînement libre : idem
-  await speak(ex.spoken || ex.display, 0.7);
-  await speak(ex.spoken || ex.display, 0.7);
+} else {
+  // Entraînement libre (comportement inchangé)
+  if (!ex._spokenOnce) {
+    ex._spokenOnce = true;
+    await speak(ex.spoken || ex.display, 0.7);
+    await speak(ex.spoken || ex.display, 0.7);
+  }
 }
 
 
@@ -542,8 +625,9 @@ async function run() {
     if (paused || stopped) return;
 
     t--;
+     workedSeconds++;   // 👈 AJOUT ICI
     countdown.textContent = fmt(t);
-
+    
     if (t <= 0) {
       clearInterval(timer);
       index++;
