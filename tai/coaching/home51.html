@@ -398,7 +398,15 @@ function buildExam(){
 
   // Partie 1 — 3 pas
   const p1 = pickRandom("3pas", 3);
-  examRecapData.push({title:"Partie 1 – Enchaînements sur 3 pas", items:p1.map(x=>x.display), time:135});
+  examRecapData.push({
+  title: "Partie 1 – Enchaînements sur 3 pas",
+  time: 135,
+  items: p1.map(x => ({
+    catLabel: "Sur trois pas",
+    display: x.display
+  }))
+});
+
   p1.forEach((ex,i)=>seq.push({
     cat:"3pas", display:ex.display, spoken:ex.spoken, time:45,
     announce:i===0?"Première partie : enchaînements sur trois pas":null
@@ -409,11 +417,13 @@ function buildExam(){
 const ex2Id = crypto.randomUUID();
 
 examRecapData.push({
-  title:"Partie 2 – Enchaînements sur place",
-  items:[p2.display],
-  time:60
+  title: "Partie 2 – Enchaînements sur place",
+  time: 60,
+  items: p2.map(x => ({
+    catLabel: "Sur place",
+    display: x.display
+  }))
 });
-
 seq.push({
   examGroup: ex2Id,
   cat:"surplace",
@@ -439,10 +449,14 @@ seq.push({
 const ex3Id = crypto.randomUUID();
 
 examRecapData.push({
-  title:"Partie 3 – Multidirectionnel",
-  items:[p3.display],
-  time:90
+  title: "Partie 3 – Multidirectionnel",
+  time: 90,
+  items: p3.map(x => ({
+    catLabel: "Multidirectionnel",
+    display: x.display
+  }))
 });
+
 
 seq.push({
   examGroup: ex3Id,
@@ -469,10 +483,13 @@ const p4 = pickRandom("cibles", 5);
 
 examRecapData.push({
   title: "Partie 4 – Travail sur cibles",
-  items: p4.map(x => x.display),
-  time: 150
+  time: 150,
+  items: p4.map(x => ({
+    catLabel: "Cibles",
+    display: x.display
+  }))
 });
-
+  
 p4.forEach((ex, i) => {
   seq.push({
     cat: "cibles",
